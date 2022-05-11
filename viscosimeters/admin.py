@@ -14,8 +14,8 @@ class NoteAdmin(admin.ModelAdmin):
     # разрешить редактирование
     # list_editable = ("is_available",)
     # Поиск по выбранным полям
-    # search_fields = ['title', 'message', ]
-
+    search_fields = ['diameter', 'type', ]
+    list_filter = ['diameter', 'type', 'viscosity1000']
 
 
 admin.site.register(Manufacturer)
