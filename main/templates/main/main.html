@@ -1,0 +1,20 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}
+    Лабораторные журналы
+{% endblock %}
+
+
+{% block content %}
+    <h1>Лабораторные журналы</h1>
+    <br><br>
+        <a href="{% url 'prod' %}" >
+            <button class="btn btn-warning">Журналы приготовления</button>
+        </a>
+        <a href="{% url 'att' %}" class="ml-1">
+            <button class="btn btn-warning">Журналы аттестации</button>
+        </a>
+    <br><br>
+    <img src="{% static 'main/img/2.jpg' %}"  alt="Изображение на главной странице">
+
+{% endblock %}
