@@ -24,3 +24,13 @@ footer {
   width: 70%;
   margin-left: 15%;
 }
+
+.form-register.auth input {
+    display: block;
+    width: 96%;
+    margin-top: 5px;
+    border: 1px solid silver;
+    border-radius: 5px;
+    padding: 2%;
+
+}
