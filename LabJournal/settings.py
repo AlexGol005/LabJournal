@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'login',
     'viscosimeters',
     'viscosityattestation',
-    'users'
+    'users',
+    'rest_framework',
+    'api'
 ]
 
 MIDDLEWARE = [
