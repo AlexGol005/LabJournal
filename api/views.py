@@ -9,3 +9,7 @@ class ViscosimeterTypeListCreateApiView(APIView):
         objects = ViscosimeterType.objects.all()
         return Response(serializers.note_to_json(obj) for obj in objects)
 
+    def post(self, request):
+        pass
+
+
