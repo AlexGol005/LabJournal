@@ -2,6 +2,10 @@ body {
   background: rgba(123, 245, 244, 0.47);
 }
 
+/*aside {*/
+/*  background: #0c5460;*/
+/*}*/
+
 .alert-light {
   border-color: #bfbfbf;
 }

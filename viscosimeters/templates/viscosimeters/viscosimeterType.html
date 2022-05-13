@@ -1,0 +1,19 @@
+{#{% extends 'main/base.html' %}#}
+{#{% block title %}#}
+{#    Типы вискозиметров#}
+{#{% endblock %}#}
+{##}
+{#{% block content %}#}
+{#  {% for post in news %}#}
+{#    <div class="alert alert-light">#}
+{#      <h1> Номер пары: {{ viscosimeterType.pairNumber }}</h1>#}
+{#      <p>{{ viscosimeterType.diameter }}</p>#}
+{#      <span class="text-muted">{{ viscosimeterType.diameter }}</span>#}
+{#      {% if viscosimeterType.diameter %}#}
+{#        <p><b>Автор:</b> <mark>{{ viscosimeterType.diameter }}</mark></p>#}
+{#      {% else %}#}
+{#        <p><b>Автор:</b> <mark>Админ</mark></p>#}
+{#      {% endif %}#}
+{#    </div>#}
+{#  {% endfor %}#}
+{% endblock %}
