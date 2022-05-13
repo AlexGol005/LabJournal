@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'login',
     'viscosimeters',
     'viscosityattestation',
-    'users',
+    'users.apps.UsersConfig',
     'rest_framework',
     'api'
 ]
