@@ -5,3 +5,4 @@ urlpatterns = [
     path('viscosimeters/', views.ViscosimeterTypeView.as_view(), name='vt'),
 ]
 
+# path('viscosimeters/', views.ViscosimeterTypeView.as_view(), name='vt'),

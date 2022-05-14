@@ -4,16 +4,34 @@
 {% endblock %}
 
 {% block content %}
-  {% for post in viscosimeterType %}
-    <div class="alert alert-light">
-      <h1> Номер пары: {{ data.viscosimeterType }}</h1>
-      <p>{{ viscosimeterType.diameter }}</p>
-      <span class="text-muted">{{ data.viscosimeterType }}</span>
-      {% if viscosimeterType.diameter %}
-        <p><b>Автор:</b> <mark>{{ data.viscosimeterType }}</mark></p>
-      {% else %}
-        <p><b>Автор:</b> <mark>Админ</mark></p>
-      {% endif %}
-    </div>
-  {% endfor %}
+    <div style="text-align: center;"><h3>Вискозиметры ВПЖ-1</h3></div>
+    <div style="text-align: center;"><h6>Межповерочный интервал 4 года</h6></div>
+    <div style="text-align: center;"><h6>Госреестр: 54038-13</h6></div>
+<br>
+
+<table class="table table-bordered">
+
+<thead>
+
+    <tr>
+      <th> <div style="text-align: center;"> № пары </div></th>
+      <th> <div style="text-align: center;"> ⌀ </div></th>
+      <th> <div style="text-align: center;"> Вязкость за 1000 сек, сСт </div></th>
+      <th> <div style="text-align: center;"> Область измерений, сСт </div></th>
+    </tr>
+  </thead>
+
+  <tbody>
+{% for type in ViscosimeterTypeObjects %}
+
+    <tr>
+      <td align="center"> {{ type.pairNumber }}</td>
+      <td align="center"> {{ type.diameter }}</td>
+      <td align="center">{{ type.viscosity1000 }}</td>
+      <td align="center">{{ type.range }}</td>
+    </tr>
+
+{% endfor %}
+  </tbody>
+</table>
 {% endblock %}

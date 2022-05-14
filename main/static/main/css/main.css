@@ -38,3 +38,7 @@ footer {
     padding: 2%;
 
 }
+
+.table-bordered td, .table-bordered th{
+    border-color: #4d74bd !important;
+}
