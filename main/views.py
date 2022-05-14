@@ -10,4 +10,12 @@ class TextHelloView(View):
 
 class IndexView(View):
    def get(self, request):
-       return render(request, 'main/index.html')
+       return render(request, 'main/main.html')
+
+class AttestationJView(View):
+   def get(self, request):
+       return render(request, 'main/attestationJ.html')
+
+class ProductionJView(View):
+   def get(self, request):
+       return render(request, 'main/productionJ.html')

@@ -1,6 +1,10 @@
 body {
-  background: rgb(0, 219, 222);
+  background: rgba(123, 245, 244, 0.47);
 }
+
+/*aside {*/
+/*  background: #0c5460;*/
+/*}*/
 
 .alert-light {
   border-color: #bfbfbf;
@@ -23,4 +27,14 @@ body {
 footer {
   width: 70%;
   margin-left: 15%;
+}
+
+.form-register.auth input {
+    display: block;
+    width: 96%;
+    margin-top: 5px;
+    border: 1px solid silver;
+    border-radius: 5px;
+    padding: 2%;
+
 }

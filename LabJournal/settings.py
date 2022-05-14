@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'login',
     'viscosimeters',
     'viscosityattestation',
-    'users'
+    'users.apps.UsersConfig',
+    'rest_framework',
+    'api'
 ]
 
 MIDDLEWARE = [
@@ -109,9 +111,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -128,3 +130,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = 'profile'
+LOGIN_URL = 'user'
+
+MEDIA_URL = '/pictures/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'pictures')
