@@ -1,0 +1,62 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet"    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css"  href='{% static "main/css/main.css"%}'>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light rounded" aria-label="Eleventh navbar example">
+    <a class="navbar-brand" href="#">ChemJournal</a>
+    <ul class="collapse navbar-collapse" id="navbarsExample09">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Главная</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/attestation">Журналы аттестации</a>
+            </li>
+        </ul>
+        <a href="{% url 'reg' %}" >
+            <button class="btn btn-outline-warning">регистрация</button>
+        </a>
+        <a href="{% url 'user' %}" class="ml-2">
+            <button class="btn btn-outline-info">войти</button>
+        </a>
+    </ul>
+</nav>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+        {% if messages %}
+            {% for mess in messages %}
+                <div class="alert alert=success">{{ mess }}</div>
+            {% endfor %}
+        {% endif %}
+         {% block content %}
+
+         {% endblock %}
+       </div>
+       <aside class="col-md-4">
+            <h3>боковая часть</h3>
+           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+               dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+               aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+               in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+               Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+               deserunt mollit anim id est laborum.</p>
+           <h4 class="mt-2">Новости</h4>
+            <img src="https://i3.stat01.com/2/6998/169975066/075a3e/sdfrs.jpg?lc=1651563787" class="img_thumbnail" alt="текст">
+           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+               deserunt mollit anim id est laborum.</p>
+
+       </aside>
+    </div>
+</div>
+</body>
+</html>
