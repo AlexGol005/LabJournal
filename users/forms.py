@@ -60,6 +60,7 @@ class UserUdateForm(forms.ModelForm):
                                widget=forms.TextInput(attrs={'class': 'form-control',
                                'placeholder': 'ФамилияИО'}))
 
+
     class Meta:
         model = User
         fields = ['username', 'email']
