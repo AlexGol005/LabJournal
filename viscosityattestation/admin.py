@@ -3,3 +3,4 @@ from .models import ViscosityMJL
 
 
 admin.site.register(ViscosityMJL)
+
