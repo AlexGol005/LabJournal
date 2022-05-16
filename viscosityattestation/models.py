@@ -41,22 +41,22 @@ class ViscosityMJL(models.Model):
 
 
 
-    # def save(self, *args, **kwargs):
-    #     # set the full name whenever the object is saved
-    #     a = self.plustimemin11 * 60 + self.plustimesek11
-    #     b = self.plustimemin12 * 60 + self.plustimesek12
-    #     c = self.plustimemin21 * 60 + self.plustimesek21
-    #     d = self.plustimemin22 * 60 + self.plustimesek22
-    #     self.time11_sec = a
-    #     self.time12_sec = b
-    #     self.time21_sec = c
-    #     self.time22_sec = d
-    #     self.time1_avg = (a + c)/2
-    #     self.time2_avg = (b + d)/2
-    #     self.viscosity1 = self.Konstant1 * self.time1_avg
-    #     self.viscosity2 = self.Konstant2 * self.time2_avg
-    #
-    #     super(ViscosityMJL, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        # set the full name whenever the object is saved
+        a = self.plustimemin11 * 60 + self.plustimesek11
+        b = self.plustimemin12 * 60 + self.plustimesek12
+        c = self.plustimemin21 * 60 + self.plustimesek21
+        d = self.plustimemin22 * 60 + self.plustimesek22
+        self.time11_sec = a
+        self.time12_sec = b
+        self.time21_sec = c
+        self.time22_sec = d
+        self.time1_avg = (a + c)/2
+        self.time2_avg = (b + d)/2
+        self.viscosity1 = self.Konstant1 * self.time1_avg
+        self.viscosity2 = self.Konstant2 * self.time2_avg
+
+        super(ViscosityMJL, self).save(*args, **kwargs)
 
     def __str__(self):
         return f' {self.name}  п.{self.lot};  {self.temperature} t ℃;   {self.date}'
