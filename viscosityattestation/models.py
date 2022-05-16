@@ -1,7 +1,10 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
+
+
 
 
 class ViscosityMJL(models.Model):
@@ -75,6 +78,11 @@ class ViscosityMJL(models.Model):
 
     def __str__(self):
         return f' {self.name}  п.{self.lot};  {self.temperature} t ℃;   {self.date}'
+
+
+    def get_absolute_url(self):
+        """ Создание юрл объекта для перенаправления из вьюшки создания объекта """
+        return reverse('ViscosityMJLView', kwargs={'pk': self.pk})
 
 
     class Meta:

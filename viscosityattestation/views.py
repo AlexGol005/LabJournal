@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
 from .models import ViscosityMJL
@@ -17,7 +17,7 @@ class ViscosityMJLView(View):
         return render(request, 'viscosityattestation/vg_n.html', {'note': note})
 
 @login_required
-def ViscosityMJLCreation(request, pk):
+def ViscosityMJLCreation(request):
     if request.method == "POST":
         form = ViscosityMJLCreationForm(request.POST)
         if form.is_valid():
@@ -27,7 +27,7 @@ def ViscosityMJLCreation(request, pk):
             # form.save()
             name = form.cleaned_data.get('name')
             messages.success(request, f'Запись об аттестации СО {name} была успешно создана!')
-            return redirect('home')
+            return redirect(order)
     else:
         form = ViscosityMJLCreationForm()
 
