@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.utils import timezone
 from django.contrib.auth.models import User
 
@@ -12,8 +13,8 @@ class ViscosityMJL(models.Model):
                          ('оценка', 'оценка вязкости'))
     ndocument = models.CharField('Метод испытаний', max_length=100, choices=ndocumentoptional, default='МИ-01')
     temperature = models.DecimalField('Температура, ℃', max_digits=5, decimal_places=2, default='0')
-    # termostatition = models.BooleanField(verbose_name='Термостатировано не менее 20 минут', blank=True)
-    # temperatureCheck = models.BooleanField(verbose_name='Температура контролируется внешним поверенным термометром', blank=True)
+    termostatition = models.BooleanField(verbose_name='Термостатировано не менее 20 минут', blank=True)
+    temperatureCheck = models.BooleanField(verbose_name='Температура контролируется внешним поверенным термометром', blank=True)
     termometer = models.CharField('Внутренний номер термометра', max_length=10, default='0')
     ViscosimeterNumber1 = models.CharField('Заводской номер вискозиметра № 1', max_length=10, default='0')
     Konstant1 = models.DecimalField('Константа вискозиметра № 1', max_digits=20, decimal_places=10, default='0')
@@ -26,17 +27,18 @@ class ViscosityMJL(models.Model):
     plustimemin21 = models.DecimalField('Время истечения 21, + мин', max_digits=6, decimal_places=0, default='0')
     plustimesek21 = models.DecimalField('Время истечения 21, + cек', max_digits=5, decimal_places=2, default='0')
     plustimemin22 = models.DecimalField('Время истечения 22, + мин', max_digits=6, decimal_places=0, default='0')
-    plustimesek22 = models.DecimalField('Время истечения 22, + cек', max_digits=5, decimal_places=2, default='0')
+    plustimesek22 = models.DecimalField('Время истечения 22, + cек', max_digits=5, decimal_places=2, default='2')
     kriteriy = models.CharField('Критерий приемлемости измерений', max_length=4, default='0,2')
-    # performer = models.ForeignKey(User, verbose_name='Исполнитель', on_delete=models.PROTECT)
-    time11_sec = models.DecimalField('Время истечения 11, в секундах', max_digits=6, decimal_places=2, default='0')
-    time12_sec = models.DecimalField('Время истечения 11, в секундах', max_digits=6, decimal_places=2, default='0')
-    time21_sec = models.DecimalField('Время истечения 11, в секундах', max_digits=6, decimal_places=2, default='0')
-    time22_sec = models.DecimalField('Время истечения 11, в секундах', max_digits=6, decimal_places=2, default='0')
-    time1_avg = models.DecimalField('Время истечения среднее 1, в секундах', max_digits=6, decimal_places=2, default='0')
-    time2_avg = models.DecimalField('Время истечения среднее 2, в секундах', max_digits=6, decimal_places=2, default='0')
-    viscosity1 = models.DecimalField('Вязкость кинематическая 1', max_digits=20, decimal_places=6, default='0')
-    viscosity2 = models.DecimalField('Вязкость кинематическая 2', max_digits=20, decimal_places=6, default='0')
+    performer = models.ForeignKey('auth.User', on_delete=models.PROTECT,
+    null=True, verbose_name='Исполнитель')
+    # time11_sec = models.DecimalField('Время истечения 11, в секундах', max_digits=6, decimal_places=2, default='0')
+    # time12_sec = models.DecimalField('Время истечения 11, в секундах', max_digits=6, decimal_places=2, default='0')
+    # time21_sec = models.DecimalField('Время истечения 11, в секундах', max_digits=6, decimal_places=2, default='0')
+    # time22_sec = models.DecimalField('Время истечения 11, в секундах', max_digits=6, decimal_places=2, default='0')
+    # time1_avg = models.DecimalField('Время истечения среднее 1, в секундах', max_digits=6, decimal_places=2, default='0')
+    # time2_avg = models.DecimalField('Время истечения среднее 2, в секундах', max_digits=6, decimal_places=2, default='0')
+    # viscosity1 = models.DecimalField('Вязкость кинематическая 1', max_digits=20, decimal_places=6, default='0')
+    # viscosity2 = models.DecimalField('Вязкость кинематическая 2', max_digits=20, decimal_places=6, default='0')
 
 
 
