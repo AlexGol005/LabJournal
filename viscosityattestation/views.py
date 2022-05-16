@@ -16,10 +16,13 @@ class ViscosityMJLView(View):
 
 @login_required
 def ViscosityMJLCreation(request):
-    form = ViscosityMJLCreationForm(request.POST or None)
     if request.method == "POST":
+        form = ViscosityMJLCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            order = form.save(commit=False)
+            order.performer = request.user
+            order.save()
+            # form.save()
             name = form.cleaned_data.get('name')
             messages.success(request, f'Запись об аттестации СО {name} была успешно создана!')
             return redirect('home')
