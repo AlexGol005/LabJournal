@@ -52,9 +52,9 @@
 		</tr>
 		<tr>
 			<td colspan="3"><div style="text-align: center;">{{ note.plustimemin11}}:{{ note.plustimesek11}}</div></td>
-			<td></td>
+			<td><div style="text-align: center;">{{ note.time11_sec}}</div></td>
             <td colspan="3"><div style="text-align: center;">{{ note.plustimemin12}}:{{ note.plustimesek12}}</div></td>
-            <td></td>
+            <td><div style="text-align: center;">{{ note.time12_sec}}</div></td>
 		</tr>
 		<tr>
 			<th rowspan="2"><div style="text-align: center;">Время истечения 2, τ<sub>2</sub></div></th>
@@ -64,10 +64,10 @@
 			<th><div style="text-align: center;">τ<sub>22</sub>, секунд</div></th>
 		</tr>
 		<tr>
-			<td colspan="3"><div style="text-align: center;">{{ note.plustimemin11}}:{{ note.plustimesek11}}</div></td>
-			<td></td>
-            <td colspan="3"><div style="text-align: center;">{{ note.plustimemin12}}:{{ note.plustimesek12}}</div></td>
-            <td></td>
+			<td colspan="3"><div style="text-align: center;">{{ note.plustimemin21}}:{{ note.plustimesek21}}</div></td>
+			<td><div style="text-align: center;">{{ note.time21_sec}}</div></td>
+            <td colspan="3"><div style="text-align: center;">{{ note.plustimemin22}}:{{ note.plustimesek22}}</div></td>
+            <td><div style="text-align: center;">{{ note.time22_sec}}</div></td>
 		</tr>
 		<tr>
 			<th rowspan="2"><div style="text-align: center;">Время истечения среднее</div></th>
@@ -75,17 +75,17 @@
             <th colspan="4"><div style="text-align: center;">τ<sub>2</sub>, секунд</div></th>
 		</tr>
 		<tr>
-			<td colspan="4"><div style="text-align: center;"></div></td>
-            <td colspan="4"><div style="text-align: center;"></div></td>
+			<td colspan="4"><div style="text-align: center;">{{ note.time1_avg }}</div></td>
+            <td colspan="4"><div style="text-align: center;">{{ note.time2_avg }}</div></td>
 		</tr>
 		<tr>
-			<th rowspan="2"><div style="text-align: center;">Вязкость кинематическая  ν<sub>i</sub> = К<sub>i</sub> * τ<sub>i</sub>   </div></th>
+			<th rowspan="2"><div style="text-align: center;"> Вязкость кинематическая  ν<sub>i</sub> = К<sub>i</sub> * τ<sub>i</sub>   </div></th>
             <th colspan="4"><div style="text-align: center;">ν<sub>1</sub>, мм<sup>2</sup>/с</div></th>
             <th colspan="4"><div style="text-align: center;">ν<sub>2</sub>, мм<sup>2</sup>/с</div></th>
 		</tr>
 		<tr>
-		<td colspan="4"><div style="text-align: center;">{{ note.viscosity2 }}</div></td>
-            <td colspan="4"><div style="text-align: center;">ν</div></td>
+		<td colspan="4"><div style="text-align: center;">{{ note.viscosity1 }}</div></td>
+            <td colspan="4"><div style="text-align: center;">{{ note.viscosity2 }}</div></td>
 		</tr>
 		<tr>
 			<th colspan="9"><div style="text-align: center;">Обработка результатов</div></th>
@@ -104,13 +104,18 @@
 			<th colspan="2"><div style="text-align: center;">Критерий приемлемости измерений  Δ ≤ {{ note.kriteriy }}</div></th>
 		</tr>
 		<tr>
-			<td colspan="2"></td>
-			<td colspan="5"></td>
-			<td colspan="2"></td>
+			<td colspan="2"><div style="text-align: center;">{{ note.viscosityAVG }}</div></td>
+			<td colspan="5"><div style="text-align: center;">{{ note.accMeasurement }}</div></td>
+			<td colspan="2"><div style="text-align: center;">{{ note.delta }}</div></td>
 		</tr>
 		<tr>
 			<tr>
-			<th colspan="9">Результат измерений  уд/неуд:       Причина: </th>
+			<td colspan="9">Результат измерений:  {{ note.resultMeas }}
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <br>
+                {{ note.cause }} </td>
 		</tr>
 
         <tr>
