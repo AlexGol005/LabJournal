@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.urls import reverse
+
 from .models import ViscosityMJL
 from .forms import ViscosityMJLCreationForm
 from django.shortcuts import get_object_or_404
@@ -15,7 +17,7 @@ class ViscosityMJLView(View):
         return render(request, 'viscosityattestation/vg_n.html', {'note': note})
 
 @login_required
-def ViscosityMJLCreation(request):
+def ViscosityMJLCreation(request, pk):
     if request.method == "POST":
         form = ViscosityMJLCreationForm(request.POST)
         if form.is_valid():
@@ -28,6 +30,10 @@ def ViscosityMJLCreation(request):
             return redirect('home')
     else:
         form = ViscosityMJLCreationForm()
+
+    def get_success_url(self):
+        # Вот в этом методе у вас доступен self.object.id
+        return reverse('home')
 
     return render(
         request,
