@@ -29,7 +29,7 @@ class ViscosityMJL(models.Model):
     plustimemin22 = models.DecimalField('Время истечения 22, + мин', max_digits=6, decimal_places=0, default='0')
     plustimesek22 = models.DecimalField('Время истечения 22, + cек', max_digits=5, decimal_places=2, default='2')
     kriteriy = models.CharField('Критерий приемлемости измерений', max_length=4, default='0,2')
-    # performer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default='2')
+    performer = models.ForeignKey(User, on_delete=models.CASCADE)
     # time11_sec = models.DecimalField('Время истечения 11, в секундах', max_digits=6, decimal_places=2, default='0')
     # time12_sec = models.DecimalField('Время истечения 11, в секундах', max_digits=6, decimal_places=2, default='0')
     # time21_sec = models.DecimalField('Время истечения 11, в секундах', max_digits=6, decimal_places=2, default='0')
