@@ -19,9 +19,7 @@ def ViscosityMJLCreation(request):
     form = ViscosityMJLCreationForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
-            new_post = form.save(commit=False)
-            new_post.performer = request.user
-            new_post.save()
+            form.save()
             name = form.cleaned_data.get('name')
             messages.success(request, f'Запись об аттестации СО {name} была успешно создана!')
             return redirect('home')
