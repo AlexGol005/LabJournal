@@ -28,18 +28,21 @@ class ViscosityMJL(models.Model):
     plustimesek21 = models.DecimalField('Время истечения 21, + cек', max_digits=5, decimal_places=2, default='0')
     plustimemin22 = models.DecimalField('Время истечения 22, + мин', max_digits=6, decimal_places=0, default='0')
     plustimesek22 = models.DecimalField('Время истечения 22, + cек', max_digits=5, decimal_places=2, default='2')
-    kriteriy = models.CharField('Критерий приемлемости измерений', max_length=4, default='0,2')
+    kriteriy = models.DecimalField('Критерий приемлемости измерений', max_digits=2, decimal_places=1, default=0.2)
     performer = models.ForeignKey(User, on_delete=models.CASCADE)
-    # time11_sec = models.DecimalField('Время истечения 11, в секундах', max_digits=6, decimal_places=2, default='0')
-    # time12_sec = models.DecimalField('Время истечения 11, в секундах', max_digits=6, decimal_places=2, default='0')
-    # time21_sec = models.DecimalField('Время истечения 11, в секундах', max_digits=6, decimal_places=2, default='0')
-    # time22_sec = models.DecimalField('Время истечения 11, в секундах', max_digits=6, decimal_places=2, default='0')
-    # time1_avg = models.DecimalField('Время истечения среднее 1, в секундах', max_digits=6, decimal_places=2, default='0')
-    # time2_avg = models.DecimalField('Время истечения среднее 2, в секундах', max_digits=6, decimal_places=2, default='0')
-    # viscosity1 = models.DecimalField('Вязкость кинематическая 1', max_digits=20, decimal_places=6, default='0')
-    # viscosity2 = models.DecimalField('Вязкость кинематическая 2', max_digits=20, decimal_places=6, default='0')
-
-
+    time11_sec = models.DecimalField('Время истечения 11, в секундах', max_digits=6, decimal_places=2, default='0')
+    time12_sec = models.DecimalField('Время истечения 12, в секундах', max_digits=6, decimal_places=2, default='0')
+    time21_sec = models.DecimalField('Время истечения 21, в секундах', max_digits=6, decimal_places=2, default='0')
+    time22_sec = models.DecimalField('Время истечения 22, в секундах', max_digits=6, decimal_places=2, default='0')
+    time1_avg = models.DecimalField('Время истечения среднее 1, в секундах', max_digits=6, decimal_places=2, default='0')
+    time2_avg = models.DecimalField('Время истечения среднее 2, в секундах', max_digits=6, decimal_places=2, default='0')
+    viscosity1 = models.DecimalField('Вязкость кинематическая 1', max_digits=20, decimal_places=5, default='0')
+    viscosity2 = models.DecimalField('Вязкость кинематическая 2', max_digits=20, decimal_places=5, default='0')
+    viscosityAVG = models.DecimalField('Вязкость кинематическая среднее', max_digits=20, decimal_places=5, default='0')
+    accMeasurement = models.DecimalField('Оценка приемлемости измерений', max_digits=3, decimal_places=2, default='0')
+    resultMeas = models.CharField('Результат измерений уд/неуд', max_length=100,  default='неудовлетворительно')
+    cause = models.CharField('Причина', max_length=100)
+    delta = models.CharField('Не превышает Δ', max_length=100)
 
     def save(self, *args, **kwargs):
         # set the full name whenever the object is saved
@@ -55,6 +58,18 @@ class ViscosityMJL(models.Model):
         self.time2_avg = (b + d)/2
         self.viscosity1 = self.Konstant1 * self.time1_avg
         self.viscosity2 = self.Konstant2 * self.time2_avg
+        self.viscosityAVG = (self.viscosity1 + self.viscosity2)/2
+        self.accMeasurement = (abs(self.viscosity1 - self.viscosity2)/self.viscosityAVG) * 100
+        if self.accMeasurement < self.kriteriy:
+            self.resultMeas = 'удовлетворительно'
+            self.delta = 'да'
+        if self.accMeasurement > self.kriteriy:
+            self.resultMeas = '<font color="#808080">неудовлетворительно</font>'
+            self.cause = 'Причина: различие между измерениями превышает критерий приемлемости измерений'
+            self.delta = 'нет'
+
+
+
 
         super(ViscosityMJL, self).save(*args, **kwargs)
 
