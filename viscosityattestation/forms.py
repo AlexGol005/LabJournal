@@ -27,7 +27,6 @@ class ViscosityMJLCreationForm(forms.ModelForm):
 
     class Meta:
         model = ViscosityMJL
-        exclude = ["date", "performer"]
         fields = ['name', 'lot', 'temperature', 'termostatition', 'temperatureCheck', 'termometer',
                   'ViscosimeterNumber1', 'Konstant1', 'ViscosimeterNumber2', 'Konstant2',
                   'plustimemin11', 'plustimesek11',
