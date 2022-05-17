@@ -42,3 +42,9 @@ def ViscosityMJLCreation(request):
             'form': form
         })
 
+
+class ViscosityMJLAll(View):
+
+    def get(self, request):
+        ViscosityMJLObjects = ViscosityMJL.objects.all()
+        return render(request, 'viscosityattestation/all_obj_kvg.html', {'ViscosityMJLObjects': ViscosityMJLObjects})

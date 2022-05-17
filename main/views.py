@@ -1,6 +1,9 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.views import View
 from django.http import  HttpResponse, HttpRequest
+from django.shortcuts import get_object_or_404
+from .models import AttestationJ
 
 class TextHelloView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
@@ -12,10 +15,20 @@ class IndexView(View):
    def get(self, request):
        return render(request, 'main/main.html')
 
+# @login_required
 class AttestationJView(View):
    def get(self, request):
-       return render(request, 'main/attestationJ.html')
+       AttestationJObjects = AttestationJ.objects.all()
+       return render(request, 'main/attestationJ.html', {'AttestationJObjects': AttestationJObjects})
+
 
 class ProductionJView(View):
    def get(self, request):
        return render(request, 'main/productionJ.html')
+
+class AttestationJoneView(View):
+    """ Представление, которое позволяет вывести отдельную запись. """
+    def get(self, request, pk):
+        note = get_object_or_404(AttestationJ, pk=pk)
+        return render(request, 'main/Journal.html', {'note': note})
+

@@ -6,7 +6,33 @@
 
 
 {% block content %}
-    <div style="text-align: center;"><h3>Журналы аттестации</h3></div>
+    <div style="text-align: center;"><h4>Журналы аттестации</h4></div>
+<br>
 
+<table class="table table-bordered">
 
+<thead>
+
+    <tr>
+
+      <th> <div style="text-align: center;"> Наименование </div></th>
+      <th> <div style="text-align: center;"> Ответственный  </div></th>
+      <th> <div style="text-align: center;"> Открыть журнал  </div></th>
+
+    </tr>
+  </thead>
+
+  <tbody>
+{% for obj in AttestationJObjects %}
+
+    <tr>
+      <td align="center">{{ obj.name }}</td>
+      <td align="center"> {{ obj.performer }}</td>
+      <td align="center"><a href="{% url 'AttestationJone' obj.id %}" target="_blank" class="btn btn-outline-warning mt-3">открыть журнал</a></td>
+
+    </tr>
+
+{% endfor %}
+  </tbody>
+</table>
 {% endblock %}
