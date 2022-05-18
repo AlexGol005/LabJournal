@@ -3,6 +3,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
+from decimal import *
 
 
 
@@ -49,20 +50,20 @@ class ViscosityMJL(models.Model):
 
     def save(self, *args, **kwargs):
         # set the full name whenever the object is saved
-        a = self.plustimemin11 * 60 + self.plustimesek11
-        b = self.plustimemin12 * 60 + self.plustimesek12
-        c = self.plustimemin21 * 60 + self.plustimesek21
-        d = self.plustimemin22 * 60 + self.plustimesek22
+        a = self.plustimemin11 * Decimal(60) + self.plustimesek11
+        b = self.plustimemin12 * Decimal(60) + self.plustimesek12
+        c = self.plustimemin21 * Decimal(60) + self.plustimesek21
+        d = self.plustimemin22 * Decimal(60) + self.plustimesek22
         self.time11_sec = a
         self.time12_sec = b
         self.time21_sec = c
         self.time22_sec = d
-        self.time1_avg = (a + c)/2
-        self.time2_avg = (b + d)/2
+        self.time1_avg = (a + c)/Decimal(2)
+        self.time2_avg = (b + d)/Decimal(2)
         self.viscosity1 = self.Konstant1 * self.time1_avg
         self.viscosity2 = self.Konstant2 * self.time2_avg
-        self.viscosityAVG = (self.viscosity1 + self.viscosity2)/2
-        self.accMeasurement = (abs(self.viscosity1 - self.viscosity2)/self.viscosityAVG) * 100
+        self.viscosityAVG = (self.viscosity1 + self.viscosity2)/Decimal(2)
+        self.accMeasurement = (abs(self.viscosity1 - self.viscosity2)/self.viscosityAVG) * Decimal(100)
         if self.accMeasurement < self.kriteriy:
             self.resultMeas = 'удовлетворительно'
             self.delta = 'да'
