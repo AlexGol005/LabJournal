@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'viscosityattestation',
     'users.apps.UsersConfig',
     'rest_framework',
-    'api'
+    'api',
+    'attestationJ'
 ]
 
 MIDDLEWARE = [

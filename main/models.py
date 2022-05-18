@@ -12,6 +12,7 @@ class AttestationJ(models.Model):
     name = models.CharField('Наименование журнала', max_length=100, default='')
     ndocument = models.CharField('Методы испытаний', max_length=100, default='')
     performer = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='ответственный за ведение журнала')
+    for_url = models.CharField('Адрес журнала', max_length=100, default='')
 
 
     def __str__(self):
@@ -20,7 +21,7 @@ class AttestationJ(models.Model):
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта """
-        return reverse('AttestationJ', kwargs={'pk': self.pk})
+        return reverse(self.for_url)
 
 
     class Meta:

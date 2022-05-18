@@ -26,9 +26,15 @@ class ProductionJView(View):
    def get(self, request):
        return render(request, 'main/productionJ.html')
 
-class AttestationJoneView(View):
-    """ Представление, которое позволяет вывести отдельную запись. """
-    def get(self, request, pk):
-        note = get_object_or_404(AttestationJ, pk=pk)
-        return render(request, 'main/Journal.html', {'note': note})
+# class AttestationJoneView(View):
+#     """ Представление, которое позволяет вывести отдельную запись. """
+#     def get(self, request):
+#         note = AttestationJ.objects.all()
+#         return render(request, 'main/kinematicviscosity.html', {'note': note})
+#
+# class AttestationJoneView2(View):
+#     """ Представление, которое позволяет вывести отдельную запись. """
+#     def get(self, request):
+#         note = AttestationJ.objects.all()
+#         return render(request, 'main/kinematicviscosity.html', {'note': note})
 

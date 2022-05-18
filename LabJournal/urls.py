@@ -11,6 +11,8 @@ urlpatterns = [
     path('', include('viscosityattestation.urls')),
     path('', include('users.urls')),
     path('', include('api.urls')),
+    path('attestationJ/', include('attestationJ.urls')),
+
 ]
 
 if settings.DEBUG:

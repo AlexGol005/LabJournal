@@ -8,14 +8,14 @@
 {% block content %}
     <div style="text-align: center;"><h4>{{ note.name}}</h4></div>
     <br><br>
-         <div style="text-align: center;"><a href="{% url 'prod' %}" >
+         <div style="text-align: center;"><a href="journal/{{obj.for_url}}" >
             <button class="btn btn-warning">Смотреть записи</button>
         </a>
-        <a href="{% url 'att' %}" class="ml-5">
+        <a href="registration/{{obj.for_url}}" class="ml-5">
             <button class="btn btn-warning">  Внести запись  </button>
         </a></div>
     <br><br>
-    <div style="text-align: center;"><img src="{% static 'main/img/3.jpg' %}"
-                                          alt="Изображение на странице журнала аттестации"></div>
+{#    <div style="text-align: center;"><img src="{% static 'main/img/3.jpg' %}"#}
+{#                                          alt="Изображение на странице журнала аттестации"></div>#}
 
 {% endblock %}

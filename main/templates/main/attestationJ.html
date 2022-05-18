@@ -28,8 +28,7 @@
     <tr>
       <td align="center">{{ obj.name }}</td>
       <td align="center"> {{ obj.performer }}</td>
-      <td align="center"><a href="{% url 'AttestationJone' obj.id %}" target="_blank" class="btn btn-outline-warning mt-3">открыть журнал</a></td>
-
+      <td align="center"><a href="{{obj.for_url}}"  target="_blank" class="btn btn-outline-warning mt-3">открыть журнал</a></td>
     </tr>
 
 {% endfor %}
