@@ -1,0 +1,42 @@
+{% extends 'main/base.html' %}
+{% block title %}
+    Типы вискозиметров
+{% endblock %}
+
+{% block content %}
+    <div style="text-align: center;"><h3>Константы вискозиметров</h3></div>
+<br>
+
+<table class="table table-bordered">
+
+<thead>
+
+    <tr>
+      <th> <div style="text-align: center;"> Номер </div></th>
+      <th> <div style="text-align: center;"> Константа, мм<sup>2</sup>/с<sup>2</sup> </div></th>
+      <th> <div style="text-align: center;"> Вязкость за 1000 сек, мм<sup>2</sup>/с </div></th>
+      <th> <div style="text-align: center;"> Область измерений, мм<sup>2</sup>/с </div></th>
+      <th> <div style="text-align: center;"> ⌀ </div></th>
+      <th> <div style="text-align: center;"> Дата калибровки </div></th>
+      <th> <div style="text-align: center;"> Поверка до </div></th>
+
+    </tr>
+  </thead>
+
+  <tbody>
+{% for type in ViscosimetersObjects %}
+
+    <tr>
+      <td align="center"> {{ type.serialNumber }}</td>
+      <td align="center"> {{ type.diameter }}</td>
+      <td align="center"></td>
+      <td align="center"></td>
+      <td align="center"></td>
+      <td align="center">{{ type.dateCal }}</td>
+      <td align="center">{{ type.datePovDedlain }}</td>
+    </tr>
+
+{% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,20 +1,24 @@
 {% extends 'main/base.html' %}
 {% load static %}
 {% block title %}
-    {{ note.name}}
+    {% for i in note %}
+        {{ i.name}}
+    {% endfor %}
 {% endblock %}
 
 
 {% block content %}
-    <div style="text-align: center;"><h4>{{ note.name}}</h4></div>
+    {% for i in note %}
+    <div style="text-align: center;"><h4>{{ i.name}}</h4></div>
     <br><br>
-         <div style="text-align: center;"><a href="journal/{{obj.for_url}}" >
+         <div style="text-align: center;"><a href="attestation/" >
             <button class="btn btn-warning">Смотреть записи</button>
         </a>
-        <a href="registration/{{obj.for_url}}" class="ml-5">
+        <a href="registration/" class="ml-5">
             <button class="btn btn-warning">  Внести запись  </button>
         </a></div>
     <br><br>
+    {% endfor %}
 {#    <div style="text-align: center;"><img src="{% static 'main/img/3.jpg' %}"#}
 {#                                          alt="Изображение на странице журнала аттестации"></div>#}
 

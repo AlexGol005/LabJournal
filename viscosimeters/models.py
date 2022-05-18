@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from datetime import datetime
 
 
 class Manufacturer(models.Model):
@@ -44,8 +45,10 @@ class ViscosimeterType(models.Model):
 class Viscosimeters(models.Model):
     diameter = models.ForeignKey(ViscosimeterType, verbose_name='Диаметр', on_delete=models.CASCADE)
     serialNumber = models.CharField('Заводской номер', max_length=30)
-    datePov = models.DateField('Дата поверки')
-    datePovDedlain = models.DateField('Дата окончания поверки')
+    konstant = models.DecimalField('Константа', max_digits=10, decimal_places=6, default=0.000000)
+    datePov = models.DateField('Дата поверки', default=datetime.now())
+    dateCal = models.DateField('Дата калибровки', default=datetime.now())
+    datePovDedlain = models.DateField('Дата окончания поверки', default=datetime.now())
     status = models.ForeignKey(Status, verbose_name='Статус', on_delete=models.CASCADE)
     companyName = models.ForeignKey(Manufacturer, verbose_name='Производитель', on_delete=models.CASCADE)
 
