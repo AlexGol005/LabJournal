@@ -11,7 +11,7 @@ print(get_random_secret_key())
 # load_dotenv()
 
 # SECRET_KEY = os.getenv('SECRET_KEY')
-# DEBUG = os.getenv('DEBUG') == 'true'
+# DEBUG = os.getenv('DEBUG') == 'True'
 # ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS').split(',')]
 
 # SECRET_KEY = "(d$$n4g3ipi+$$*(!h4zljt14hrr*=h5o^m(n88)s-l+e8ugxt"
