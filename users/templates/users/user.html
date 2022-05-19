@@ -5,7 +5,7 @@
 
 
 {% block content %}
-    <h1>Страница авторизации</h1>
+    <div style="text-align: center;"><h3>Страница авторизации</h3></div>
     <form method="post" class="form-register auth">
         {% csrf_token %}
         {{ form.as_p }}

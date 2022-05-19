@@ -12,9 +12,9 @@ class UserRegisterForm(UserCreationForm):
                              )
     username = forms.CharField(label='Введите логин',
                                required=True,
-                               help_text='Фамилия и инициалы без пробелов',
+                               help_text='инициалы и фамилия без пробелов',
                                widget=forms.TextInput(attrs={'class': 'form-control',
-                               'placeholder': 'ФамилияИО'}))
+                               'placeholder': 'И.О.Фамилия'}))
     # userlastname = forms.CharField(label='Фамилия',
     #                                required=True,
     #                                widget=forms.TextInput(attrs={'class': 'form-control',
