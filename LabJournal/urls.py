@@ -8,11 +8,9 @@ urlpatterns = [
     path('', include('main.urls')),
     path('', include('login.urls')),
     path('', include('viscosimeters.urls')),
-    path('', include('viscosityattestation.urls')),
+    path('', include('kinematicviscosity.urls')),
     path('', include('users.urls')),
     path('', include('api.urls')),
-    path('attestationJ/', include('attestationJ.urls')),
-
 ]
 
 if settings.DEBUG:

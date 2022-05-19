@@ -27,14 +27,14 @@
   </thead>
 
   <tbody>
-{% for obj in ViscosityMJLObjects %}
+{% for obj in viscosityobjects %}
 
     <tr>
       <td align="center">{{ obj.date }}</td>
       <td align="center"> {{ obj.name }}</td>
       <td align="center"> {{ obj.lot }}</td>
       <td align="center">{{ obj.temperature }}</td>
-      <td align="center"><a href="{% url 'ViscosityMJLView' obj.id %}" target="_blank" class="btn btn-outline-warning mt-3">смотреть</a></td>
+      <td align="center"><a href="{% url 'StrKinematicviscosity' obj.id %}" target="_blank" class="btn btn-outline-warning mt-3">смотреть</a></td>
 
     </tr>
 

@@ -27,7 +27,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # DEBUG = True
 # ALLOWED_HOSTS = []
 SECRET_KEY = os.getenv('SECRET_KEY')
+
+
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG') == 'True'
+
+
 ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS').split(',')]
 
 # Application definition
@@ -42,11 +47,10 @@ INSTALLED_APPS = [
     'main',
     'login',
     'viscosimeters',
-    'viscosityattestation',
+    'kinematicviscosity',
     'users.apps.UsersConfig',
     'rest_framework',
     'api',
-    'attestationJ'
 ]
 
 MIDDLEWARE = [

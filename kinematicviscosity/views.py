@@ -8,16 +8,18 @@ from django.shortcuts import get_object_or_404
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from main.models import AttestationJ
 
 
-class ViscosityMJLView(View):
+class StrKinematicviscosityView(View):
     """ Представление, которое позволяет вывести отдельную запись. """
     def get(self, request, pk):
         note = get_object_or_404(ViscosityMJL, pk=pk)
-        return render(request, 'viscosityattestation/vg_n.html', {'note': note})
+        return render(request, 'kinematicviscosity/str.html', {'note': note})
 
 @login_required
-def ViscosityMJLCreation(request):
+def RegKinematicviscosityView(request):
+    """ Представление, которое выводит форму регистрации в журнале. """
     if request.method == "POST":
         form = ViscosityMJLCreationForm(request.POST)
         if form.is_valid():
@@ -37,14 +39,21 @@ def ViscosityMJLCreation(request):
 
     return render(
         request,
-        'viscosityattestation/registration.html',
+        'kinematicviscosity/registration.html',
         {
             'form': form
         })
 
 
-class ViscosityMJLAll(View):
-
+class AllKinematicviscosityView(View):
+    """ Представление, которое выводит все записи в журнале. """
     def get(self, request):
-        ViscosityMJLObjects = ViscosityMJL.objects.all()
-        return render(request, 'viscosityattestation/all_obj_kvg.html', {'ViscosityMJLObjects': ViscosityMJLObjects})
+        viscosityobjects = ViscosityMJL.objects.all()
+        return render(request, 'kinematicviscosity/journal.html', {'viscosityobjects': viscosityobjects})
+
+
+class AttestationJoneView(View):
+    """ Представление, которое выводит заглавную страницу журнала """
+    def get(self, request):
+        note = AttestationJ.objects.all().filter(for_url='kinematicviscosity')
+        return render(request, 'kinematicviscosity/head.html', {'note': note})
