@@ -9,14 +9,11 @@
     <div style="text-align: center;"><h3>Лабораторные журналы</h3></div>
     <br><br>
 
-        <div style="text-align: center;"> <a href="{% url 'prod' %}" >
+        <div style="text-align: center;">
+               <a href="{% url 'prod' %}" class="btn btn-warning mr-5 mt-3" >Журналы приготовления</a>
+               <a href="{% url 'att' %}" class="btn btn-warning  mt-3">Журналы аттестации</a>
 
-               <button class="btn btn-warning mr-4 mt-3">Журналы приготовления</button>
-        </a>
-
-        <a href="{% url 'att' %}">
-            <button class="btn btn-warning mt-3">  Журналы   аттестации  </button>
-        </a></div>
+       </div>
     <br><br>
     <div style="text-align: center;">
         <img src="{% static 'main/img/2.jpg' %}"
