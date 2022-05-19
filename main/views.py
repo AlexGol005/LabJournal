@@ -8,7 +8,7 @@ from .models import AttestationJ
 class TextHelloView(View):
     #просто страница для примера, адрес hello
     def get(self, request: HttpRequest) -> HttpResponse:
-        text = '<h1>Hello, World</h1>'
+        text = '<h1>Hello, World!!!</h1>'
         return HttpResponse(text)
 
 class IndexView(View):
