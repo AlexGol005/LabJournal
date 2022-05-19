@@ -1,0 +1,106 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet"    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href=" {% static 'main/css/main.css' %}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light rounded" aria-label="Eleventh navbar example">
+    <a href="/"><img src="{% static 'main/img/3.png' %}"  alt="Лого"></a>
+{#    <a class="navbar-brand" href="/">LabJournal</a>#}
+    <ul class="collapse navbar-collapse" id="navbarsExample09">
+        <ul class="navbar-nav mr-auto">
+
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">LabJournal</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'att' %}">Журналы аттестации</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'prod' %}">Журналы приготовления</a>
+            </li>
+        </ul>
+        {% if not user.is_authenticated %}
+        <a href="{% url 'reg' %}" >
+            <button class="btn btn-outline-warning">регистрация</button>
+        </a>
+        <a href="{% url 'user' %}" class="ml-2">
+            <button class="btn btn-outline-info">войти</button>
+        </a>
+        {% else %}
+        <a href="{% url 'profile' %}" >
+        <button class="btn btn-outline-warning">профиль</button>
+        </a>
+        <a href="{% url 'exit' %}" class="ml-2">
+            <button class="btn btn-outline-info">выйти</button>
+        </a>
+        {% endif %}
+    </ul>
+</nav>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+        {% if messages %}
+            {% for mess in messages %}
+                <div class="alert alert=success">{{ mess }}</div>
+            {% endfor %}
+        {% endif %}
+         {% block content %}
+
+           {% endblock %}
+        {% block uniccontent %}
+
+{% endblock %}
+       </div>
+
+       <aside class="col-md-3">
+           <div id="current_date_time_block"></div>
+<h3><p>
+<script type="text/javascript">
+
+    /* функция добавления ведущих нулей */
+    /* (если число меньше десяти, перед числом добавляем ноль) */
+    function zero_first_format(value)
+    {
+        if (value < 10)
+        {
+            value='0'+value;
+        }
+        return value;
+    }
+
+    /* функция получения текущей даты и времени */
+    function date_time()
+    {
+        var current_datetime = new Date();
+        var day = zero_first_format(current_datetime.getDate());
+        var month = zero_first_format(current_datetime.getMonth()+1);
+        var year = current_datetime.getFullYear();
+        var hours = zero_first_format(current_datetime.getHours());
+        var minutes = zero_first_format(current_datetime.getMinutes());
+        var seconds = zero_first_format(current_datetime.getSeconds());
+
+        return day+"."+month+"."+year+" "+hours+":"+minutes+":"+seconds;
+    }
+
+    /* выводим текущую дату и время на сайт в блок с id "current_date_time_block" */
+    document.getElementById('current_date_time_block').innerHTML = date_time();
+</script> </h3></p>
+            <h4>Объявления</h4>
+           <p>«Чем усерднее вы работаете, тем более удачливым вы становитесь».
+               <br> Томас Джефферсон
+</p>
+           <h4 class="mt-2">Новости</h4>
+            <img  src="{% static 'main/img/5.jpg' %}" class="img_thumbnail" alt="текст">
+           <br><br>
+           <p>Отсутствие новостей - хорошая новость</p>
+
+       </aside>
+    </div>
