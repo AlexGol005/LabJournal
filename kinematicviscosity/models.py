@@ -83,7 +83,7 @@ class ViscosityMJL(models.Model):
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
-        return reverse('StrKinematicviscosity', kwargs={'pk': self.pk})
+        return reverse('Str', kwargs={'pk': self.pk})
 
 
     class Meta:
