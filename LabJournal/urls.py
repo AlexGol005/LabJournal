@@ -7,7 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
     path('', include('viscosimeters.urls')),
-    path('', include('kinematicviscosity.urls')),
+    path('attestationJ/', include('kinematicviscosity.urls')),
     path('', include('users.urls')),
     path('', include('api.urls')),
 ]
