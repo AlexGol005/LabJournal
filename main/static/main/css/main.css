@@ -45,3 +45,10 @@ footer {
     background-color: rgb(245, 245, 246) !important;
 }
 
+.Badresult {
+  color: #FF0000;
+}
+
+.Goodresult {
+  color: #047c0a;
+}

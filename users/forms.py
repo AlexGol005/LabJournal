@@ -58,7 +58,7 @@ class UserUdateForm(forms.ModelForm):
                                required=True,
                                help_text='Фамилия и инициалы без пробелов',
                                widget=forms.TextInput(attrs={'class': 'form-control',
-                               'placeholder': 'ФамилияИО'}))
+                               'placeholder': 'И.О.Фамилия'}))
 
 
     class Meta:
