@@ -76,7 +76,7 @@ class ViscosityMJLCreationForm(forms.ModelForm):
                                          widget=forms.TextInput(attrs={'class': 'form-control',
                                                                        'placeholder': 'К2, τ2, секунды'}
                                                                 ))
-    constit = forms.ChoiceField(label='Состав пробы', choices=CHOICES)
+    constit = forms.ChoiceField(label='Состав пробы', widget=forms.RadioSelect,  choices=CHOICES, required=True)
 
     class Meta:
         model = ViscosityMJL
