@@ -53,12 +53,3 @@ footer {
   color: #047c0a;
 }
 
-.form-register.kinematicviscosity input {
-    display: block !important;
-    width: 96% !important;
-    margin-top: 5px;
-    border: 1px solid silver !important;
-    border-radius: 5px !important;
-    padding: 2% !important;
-
-}
