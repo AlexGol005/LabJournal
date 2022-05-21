@@ -33,10 +33,6 @@ def RegKinematicviscosityView(request):
     else:
         form = ViscosityMJLCreationForm()
 
-    def get_success_url(self):
-        # Вот в этом методе у вас доступен self.object.id
-        return reverse('home')
-
     return render(
         request,
         'kinematicviscosity/registration.html',
