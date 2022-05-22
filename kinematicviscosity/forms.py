@@ -32,15 +32,15 @@ class ViscosityMJLCreationForm(forms.ModelForm):
                                                                  ))
     Konstant1 = forms.DecimalField(label='Константа вискозиметра № 1', max_digits=20, decimal_places=10, required=True,
                                    widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                 'placeholder': 'Константа первого вискозиметра (через точку)'}
+                                                                 'placeholder': 'Константа через точку'}
                                                           ))
-    ViscosimeterNumber2 = forms.CharField(label='Заводской номер вискозиметра № 2', max_length=10, required=True,
+    ViscosimeterNumber2 = forms.CharField(label='Заводской номер вискозиметра № 2', max_length=10, required=False,
     widget = forms.TextInput(attrs={'class': 'form-control',
                                     'placeholder': '№ второго вискозиметра'}
                              ))
-    Konstant2 = forms.DecimalField(label='Константа вискозиметра № 2', max_digits=20, decimal_places=10, required=True,
+    Konstant2 = forms.DecimalField(label='Константа вискозиметра № 2', max_digits=20, decimal_places=10, required=False,
                                    widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                 'placeholder': 'Константа второго вискозиметра (через точку)'}
+                                                                 'placeholder': 'Константа через точку'}
                                                           ))
     plustimeminK1T1 = forms.DecimalField(label='τ1, минуты',
                                          max_digits=3, decimal_places=0, required=True,
@@ -57,28 +57,28 @@ class ViscosityMJLCreationForm(forms.ModelForm):
                                          widget=forms.TextInput(attrs={'class': 'form-control',
                                                                        'placeholder': 'мм'}
                                                                 ))
-    plustimesekK1T2 = forms.DecimalField(initial=0.0,
+    plustimesekK1T2 = forms.DecimalField(
                                          label='τ1, секунды',
                                          max_digits=5, decimal_places=2, required=False,
                                          widget=forms.TextInput(attrs={'class': 'form-control',
                                                                        'placeholder': 'сс.сс'}
                                                                 ))
     plustimeminK2T1 = forms.DecimalField(label='τ1, минуты',
-                                         max_digits=3, decimal_places=0, required=True,
-                                         widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                       'placeholder': 'мм'}
-                                                                ))
-    plustimesekK2T1 = forms.DecimalField(label='τ1, секунды',
-                                         max_digits=5, decimal_places=2, required=True,
-                                         widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                       'placeholder': 'сс.сс'}
-                                                                ))
-    plustimeminK2T2 = forms.DecimalField(initial=0, label='τ2, минуты',
                                          max_digits=3, decimal_places=0, required=False,
                                          widget=forms.TextInput(attrs={'class': 'form-control',
                                                                        'placeholder': 'мм'}
                                                                 ))
-    plustimesekK2T2 = forms.DecimalField(initial=0.0, label='τ2, секунды',
+    plustimesekK2T1 = forms.DecimalField(label='τ1, секунды',
+                                         max_digits=5, decimal_places=2, required=False,
+                                         widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                       'placeholder': 'сс.сс'}
+                                                                ))
+    plustimeminK2T2 = forms.DecimalField(label='τ2, минуты',
+                                         max_digits=3, decimal_places=0, required=False,
+                                         widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                       'placeholder': 'мм'}
+                                                                ))
+    plustimesekK2T2 = forms.DecimalField(label='τ2, секунды',
                                          max_digits=5, decimal_places=2, required=False,
                                          widget=forms.TextInput(attrs={'class': 'form-control',
                                                                        'placeholder': 'сс.сс'}
