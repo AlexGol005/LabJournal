@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'api',
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 
 
 
