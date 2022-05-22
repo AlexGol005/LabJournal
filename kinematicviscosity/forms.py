@@ -1,7 +1,14 @@
 from django import forms
 from django.contrib.auth.models import User
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Submit, Row, Column
 
+
+from django.utils.html import format_html
 from .models import ViscosityMJL, CHOICES
+
+
+
 
 class ViscosityMJLCreationForm(forms.ModelForm):
     name = forms.CharField(label='Наименование пробы', max_length=100, required=True,
@@ -25,7 +32,7 @@ class ViscosityMJLCreationForm(forms.ModelForm):
                                                                  ))
     Konstant1 = forms.DecimalField(label='Константа вискозиметра № 1', max_digits=20, decimal_places=10, required=True,
                                    widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                 'placeholder': 'Константа первого вискозиметра'}
+                                                                 'placeholder': 'Константа первого вискозиметра (через точку)'}
                                                           ))
     ViscosimeterNumber2 = forms.CharField(label='Заводской номер вискозиметра № 2', max_length=10, required=True,
     widget = forms.TextInput(attrs={'class': 'form-control',
@@ -33,50 +40,94 @@ class ViscosityMJLCreationForm(forms.ModelForm):
                              ))
     Konstant2 = forms.DecimalField(label='Константа вискозиметра № 2', max_digits=20, decimal_places=10, required=True,
                                    widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                 'placeholder': 'Константа второго вискозиметра'}
+                                                                 'placeholder': 'Константа второго вискозиметра (через точку)'}
                                                           ))
-    plustimeminK1T1 = forms.DecimalField(label='Время истечения 1 из вискозиметра 1, минут',
+    plustimeminK1T1 = forms.DecimalField(label='τ1, минуты',
                                          max_digits=3, decimal_places=0, required=True,
                                          widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                       'placeholder': 'К1, τ1, минуты'}
+                                                                       'placeholder': 'мм'}
                                                                 ))
-    plustimesekK1T1 = forms.DecimalField(label='Время истечения 1 из вискозиметра 1, секунд',
+    plustimesekK1T1 = forms.DecimalField(label='τ1, секунды',
                                          max_digits=5, decimal_places=2, required=True,
                                          widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                       'placeholder': 'К1, τ1, секунды'}
+                                                                       'placeholder': 'сс.сс'}
                                                                 ))
-    plustimeminK1T2 = forms.DecimalField(initial=0, label='Время истечения 2 из вискозиметра 1, минут',
+    plustimeminK1T2 = forms.DecimalField(label='τ2, минуты',
                                          max_digits=3, decimal_places=0, required=False,
                                          widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                       'placeholder': 'К1, τ1, минуты'}
+                                                                       'placeholder': 'мм'}
                                                                 ))
     plustimesekK1T2 = forms.DecimalField(initial=0.0,
-                                         label='Время истечения 2 из вискозиметра 1, cекунд',
+                                         label='τ1, секунды',
                                          max_digits=5, decimal_places=2, required=False,
                                          widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                       'placeholder': 'К2, τ1, секунды'}
+                                                                       'placeholder': 'сс.сс'}
                                                                 ))
-    plustimeminK2T1 = forms.DecimalField(label='Время истечения 1 из вискозиметра 2, минут',
+    plustimeminK2T1 = forms.DecimalField(label='τ1, минуты',
                                          max_digits=3, decimal_places=0, required=True,
                                          widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                       'placeholder': 'К1, τ1, минуты'}
+                                                                       'placeholder': 'мм'}
                                                                 ))
-    plustimesekK2T1 = forms.DecimalField(label='Время истечения 1 из вискозиметра 2, секунд',
+    plustimesekK2T1 = forms.DecimalField(label='τ1, секунды',
                                          max_digits=5, decimal_places=2, required=True,
                                          widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                       'placeholder': 'К2, τ1, секунды'}
+                                                                       'placeholder': 'сс.сс'}
                                                                 ))
-    plustimeminK2T2 = forms.DecimalField(initial=0, label='Время истечения 2 из вискозиметра 2, минут',
+    plustimeminK2T2 = forms.DecimalField(initial=0, label='τ2, минуты',
                                          max_digits=3, decimal_places=0, required=False,
                                          widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                       'placeholder': 'К2, τ2, минуты'}
+                                                                       'placeholder': 'мм'}
                                                                 ))
-    plustimesekK2T2 = forms.DecimalField(initial=0.0, label='Время истечения 2 из вискозиметра 2, секунд',
+    plustimesekK2T2 = forms.DecimalField(initial=0.0, label='τ2, секунды',
                                          max_digits=5, decimal_places=2, required=False,
                                          widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                       'placeholder': 'К2, τ2, секунды'}
+                                                                       'placeholder': 'сс.сс'}
                                                                 ))
     constit = forms.ChoiceField(label='Состав пробы', widget=forms.RadioSelect,  choices=CHOICES, required=True)
+
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('name', css_class='form-group col-md-4 mb-0'),
+                Column('lot', css_class='form-group col-md-4 mb-0'),
+                Column('temperature', css_class='form-group col-md-4 mb-0'),
+                css_class='form-row'
+            ),
+            'termostatition',
+            'temperatureCheck',
+            'constit',
+            Row(
+                Column('ViscosimeterNumber1', css_class='form-group col-md-6 mb-0'),
+                Column('Konstant1', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('plustimeminK1T1', css_class='form-group col-md-2 mb-0'),
+                Column('plustimesekK1T1', css_class='form-group col-md-2 mb-0'),
+                Column('plustimeminK1T2', css_class='form-group col-md-2 mb-0'),
+                Column('plustimesekK1T2', css_class='form-group col-md-2 mb-0'),
+
+            ),
+            Row(
+                Column('ViscosimeterNumber2', css_class='form-group col-md-6 mb-0'),
+                Column('Konstant2', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('plustimeminK2T1', css_class='form-group col-md-2 mb-0'),
+                Column('plustimesekK2T1', css_class='form-group col-md-2 mb-0'),
+                Column('plustimeminK2T2', css_class='form-group col-md-2 mb-0'),
+                Column('plustimesekK2T2', css_class='form-group col-md-2 mb-0'),
+
+            ),
+            Submit('submit', 'Внести запись в журнал')
+        )
+
+
 
     class Meta:
         model = ViscosityMJL
