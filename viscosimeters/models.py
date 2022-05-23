@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from datetime import datetime
 from django.utils.timezone import now
+from django.urls import reverse
 
 
 class Manufacturer(models.Model):
@@ -44,17 +45,28 @@ class ViscosimeterType(models.Model):
         verbose_name_plural = 'Типы вискозиметров'
 
 class Viscosimeters(models.Model):
-    diameter = models.ForeignKey(ViscosimeterType, verbose_name='Диаметр', on_delete=models.CASCADE)
     serialNumber = models.CharField('Заводской номер', max_length=30)
     konstant = models.DecimalField('Константа', max_digits=10, decimal_places=6, default=0.000000)
-    datePov = models.DateField('Дата поверки', default=timezone.now())
-    dateCal = models.DateField('Дата калибровки', default=timezone.now())
-    datePovDedlain = models.DateField('Дата окончания поверки', default=datetime.now())
-    status = models.ForeignKey(Status, verbose_name='Статус', on_delete=models.CASCADE)
+    diameter = models.ForeignKey(ViscosimeterType, related_name='diameter_diameter', verbose_name='Диаметр',
+                                 on_delete=models.PROTECT)
+    viscosity1000 = models.ForeignKey(ViscosimeterType, related_name='viscosity1000_on', verbose_name='вязкость/1000',
+                                 on_delete=models.PROTECT)
+    dateCal = models.DateField('Дата калибровки', auto_now_add=True)
+    datePov = models.DateField('Дата поверки', auto_now_add=True)
+    datePovDedlain = models.DateField('Дата окончания поверки', auto_now_add=True)
     companyName = models.ForeignKey(Manufacturer, verbose_name='Производитель', on_delete=models.CASCADE)
+    range = models.ForeignKey(ViscosimeterType, related_name='range_range', verbose_name='Область измерений, сСт',
+                              on_delete=models.PROTECT)
+    status = models.ForeignKey(Status, verbose_name='Статус', on_delete=models.CASCADE)
+
 
     def __str__(self):
         return f'№ {self.serialNumber}'
+
+    def get_absolute_url(self):
+        """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
+        return reverse('Str', kwargs={'pk': self.pk})
+
 
     class Meta:
         verbose_name = 'Вискозиметр'
