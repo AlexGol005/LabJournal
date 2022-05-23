@@ -16,12 +16,13 @@ from .forms import ViscosimetersCreationForm
 class ViscosimeterTypeView(View):
 
     def get(self, request):
-        ViscosimeterTypeObjects = ViscosimeterType.objects.all()
+        ViscosimeterTypeObjects = ViscosimeterType.objects.order_by('viscosimeterType__diameter')
         return render(request, 'viscosimeters/viscosimeterType.html', {'ViscosimeterTypeObjects': ViscosimeterTypeObjects})
 
 class ViscosimetersKonstantsView(View):
+    '''должна выводить список вискозиметров с актуальными константами'''
     def get(self, request):
-        ViscosimetersObjects = Viscosimeters.objects.all()
+        ViscosimetersObjects = Viscosimeters.objects.order_by('viscosimeterType_id')
         return render(request, 'viscosimeters/viscosimetersKonstants.html', {'ViscosimetersObjects': ViscosimetersObjects})
 
 

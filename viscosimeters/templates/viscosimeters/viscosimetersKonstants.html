@@ -1,6 +1,6 @@
 {% extends 'main/base.html' %}
 {% block title %}
-    Типы вискозиметров
+    Вискозиметры
 {% endblock %}
 
 {% block content %}
@@ -28,12 +28,12 @@
 
     <tr>
       <td align="center"> {{ type.serialNumber }}</td>
-      <td align="center"> {{ type.diameter }}</td>
+      <td align="center">{{ type.Kalibration.konstant }}</td>
+      <td align="center">{{ type.viscosimeterType.viscosity1000 }}</td>
+      <td align="center">{{ type.viscosimeterType.range }}</td>
+      <td align="center">{{ type.viscosimeterType.diameter }}</td>
       <td align="center"></td>
-      <td align="center"></td>
-      <td align="center"></td>
-      <td align="center">{{ type.dateCal }}</td>
-      <td align="center">{{ type.datePovDedlain }}</td>
+      <td align="center">{{ type.datePovDedlain|date:"m.Y" }}</td>
     </tr>
 
 {% endfor %}

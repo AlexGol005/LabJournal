@@ -46,17 +46,11 @@ class ViscosimeterType(models.Model):
 
 class Viscosimeters(models.Model):
     serialNumber = models.CharField('Заводской номер', max_length=30)
-    konstant = models.DecimalField('Константа', max_digits=10, decimal_places=6, default=0.000000)
-    diameter = models.ForeignKey(ViscosimeterType, related_name='diameter_diameter', verbose_name='Диаметр',
+    viscosimeterType = models.ForeignKey(ViscosimeterType,  verbose_name='Диаметр',
                                  on_delete=models.PROTECT)
-    viscosity1000 = models.ForeignKey(ViscosimeterType, related_name='viscosity1000_on', verbose_name='вязкость/1000',
-                                 on_delete=models.PROTECT)
-    dateCal = models.DateField('Дата калибровки', auto_now_add=True)
-    datePov = models.DateField('Дата поверки', auto_now_add=True)
-    datePovDedlain = models.DateField('Дата окончания поверки', auto_now_add=True)
-    companyName = models.ForeignKey(Manufacturer, verbose_name='Производитель', on_delete=models.CASCADE)
-    range = models.ForeignKey(ViscosimeterType, related_name='range_range', verbose_name='Область измерений, сСт',
-                              on_delete=models.PROTECT)
+    datePov = models.DateField('Дата  поверки', auto_now_add=True)
+    datePovDedlain = models.DateField('Дата окончания поверки')
+    Manufacturer = models.ForeignKey(Manufacturer, verbose_name='Производитель', on_delete=models.CASCADE)
     status = models.ForeignKey(Status, verbose_name='Статус', on_delete=models.CASCADE)
 
 
@@ -73,10 +67,11 @@ class Viscosimeters(models.Model):
         verbose_name_plural = 'Вискозиметры'
 
 
+
 class Kalibration(models.Model):
-    dateKalib = models.DateField('Дата калибровки', default=timezone.now)
-    konstant = models.CharField('Установленная константа', max_length=9)
-    dateKalibNext = models.DateField('Следующая дата калибровки')
+    dateKalib = models.DateField('Дата калибровки', auto_now_add=True)
+    konstant = models.DecimalField('Установленная константа', max_digits=7, decimal_places=6, default='0')
+    dateKalibNext = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     id_Viscosimeter = models.ForeignKey(Viscosimeters, verbose_name='Номер вискозиметра', on_delete=models.CASCADE)
 
     def __str__(self):
