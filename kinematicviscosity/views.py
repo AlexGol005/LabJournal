@@ -44,7 +44,7 @@ def RegKinematicviscosityView(request):
 class AllKinematicviscosityView(View):
     """ Представление, которое выводит все записи в журнале. """
     def get(self, request):
-        viscosityobjects = ViscosityMJL.objects.all()
+        viscosityobjects = ViscosityMJL.objects.order_by('-date')
         return render(request, 'kinematicviscosity/journal.html', {'viscosityobjects': viscosityobjects})
 
 

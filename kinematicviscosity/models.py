@@ -15,7 +15,7 @@ CHOICES = (
 
 
 class ViscosityMJL(models.Model):
-    date = models.DateField('Дата', default=timezone.now)
+    date = models.DateField('Дата', auto_now_add=True, db_index=True)
     name = models.CharField('Наименование', max_length=100, default='0')
     lot = models.CharField('Партия', max_length=100)
     ndocumentoptional = (('ГОСТ 33', 'ГОСТ 33'),
