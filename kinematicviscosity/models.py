@@ -7,7 +7,7 @@ from datetime import datetime
 from decimal import *
 
 from viscosimeters.models import Viscosimeters
-from formuls import mrerrow, rounder
+from formuls import mrerrow, rounder, numberDigits
 
 CHOICES = (
         ('да', 'Проба содержит октол/нефть'),
@@ -60,10 +60,18 @@ class ViscosityMJL(models.Model):
     relerror = models.DecimalField('Относительная  погрешность', max_digits=3, decimal_places=1, null=True, default=0.3)
     abserror = models.FloatField('Абсолютная  погрешность', null=True)
     abserror_text = models.CharField(max_length=300, default='', null=True)
+    certifiedValue = models.DecimalField('Аттестованное значение', max_digits=20, decimal_places=10, null=True)
+    certifiedValue_text = models.CharField(max_length=300, default='', null=True)
+    oldCertifiedValue = models.CharField('Предыдущее аттестованное значение', max_length=300, null=True,  default='')
+    deltaOldCertifiedValue = models.DecimalField('Оценка разницы с предыдущим значением',
+                                                 max_digits=4, decimal_places=2, null=True)
+    deltaOldCertifiedValue_text = models.CharField(max_length=300, default='', null=True)
+    resultWarning = models.CharField(max_length=300, default='', null=True)
 
     def save(self, *args, **kwargs):
-        if (self.plustimeminK1T2 and self.plustimesekK1T2 and self.plustimeminK2T1 and \
-                self.plustimesekK2T1 and self.plustimeminK2T2 and self.plustimesekK2T2 and self.plustimeminK1T1 and self.plustimesekK1T1):
+        if (self.plustimeminK1T2 and self.plustimesekK1T2 and self.plustimeminK2T1 and
+                self.plustimesekK2T1 and self.plustimeminK2T2 and self.plustimesekK2T2 and self.plustimeminK1T1 and
+                self.plustimesekK1T1):
             a = (self.plustimeminK1T1 * Decimal(60) + self.plustimesekK1T1).quantize(Decimal('1.00'), ROUND_HALF_UP)
             b = (self.plustimeminK1T2 * Decimal(60) + self.plustimesekK1T2).quantize(Decimal('1.00'), ROUND_HALF_UP)
             c = (self.plustimeminK2T1 * Decimal(60) + self.plustimesekK2T1).quantize(Decimal('1.00'), ROUND_HALF_UP)
@@ -128,11 +136,25 @@ class ViscosityMJL(models.Model):
         if self.termostatition:
             self.termostatition_words = 'V'
         if self.resultMeas == 'удовлетворительно':
-            self.abserror = float(mrerrow((Decimal(self.relerror) * self.viscosityAVG) / Decimal(100)))
+            self.abserror = mrerrow((Decimal(self.relerror) * self.viscosityAVG) / Decimal(100))
+            self.certifiedValue = numberDigits(self.viscosityAVG, self.abserror)
+            self.certifiedValue_text = str(self.certifiedValue)
+            if self.oldCertifiedValue:
+                self.deltaOldCertifiedValue =\
+                rounder(((((Decimal(self.oldCertifiedValue) - Decimal(self.certifiedValue)).copy_abs())
+                / ((Decimal(self.oldCertifiedValue) + Decimal(self.certifiedValue)) /Decimal(2)) * Decimal(100))), ('1.00'))
         if self.abserror == None:
             self.abserror_text = ''
         if self.abserror:
             self.abserror_text = str(self.abserror)
+        if self.deltaOldCertifiedValue == None:
+            self.deltaOldCertifiedValue_text = ''
+        if self.deltaOldCertifiedValue:
+            self.deltaOldCertifiedValue_text = str(self.deltaOldCertifiedValue)
+        if self.deltaOldCertifiedValue:
+            if self.deltaOldCertifiedValue > Decimal(0.7):
+                self.resultWarning = 'Измеренное АЗ отличается от предыдущего более чем на 0,7 %, проверьте условия эксперимента. \
+                                     Рекомендовано измерить повторно.'
 
 
 

@@ -169,13 +169,25 @@
                 Δν<sub>пред</sub> = (|ν<sub>1</sub> - ν<sub>2</sub>|/ν<sub>сред</sub>) * 100 %</th></th>
 		</tr>
 		<tr>
-			<td colspan="1"></td>
+			<td colspan="1"><div style="text-align: center;">{{ note.certifiedValue_text }}</div></td>
 			<td colspan="3"><div style="text-align: center;">{{ note.abserror_text }}</div></td>
-			<td colspan="2"></td>
-            <td colspan="3"></td>
+			<td colspan="2"><div style="text-align: center;">{{ note.oldCertifiedValue }}</div></td>
+            <td colspan="3"><div style="text-align: center;">{{ note.deltaOldCertifiedValue_text }}</div></td>
 		</tr>
         <tr>
-			<th colspan="9">Оценка разницы с предыдущим значением:  </th>
+        <td colspan="9">
+
+                <div class="TransactionAmount Badresult">
+                  <b>{{ note.resultWarning }}</b>
+                </div>
+
+
+            </td>
+
+{#			<th colspan="9"> {% if note.resultWarning == 'Измеренное АЗ отличается от предыдущего более чем на 0,7 %, проверьте условия эксперимента. Рекомендовано измерить повторно.' %}#}
+{#                                 <div class="TransactionAmount Badresult">#}
+{#                             {% endif %}#}
+{#                {{ note.resultWarning }}</div>> </th>#}
 		</tr>
 		<tr>
 			<th colspan="9">Исполнитель: {{ note.performer }} </th>

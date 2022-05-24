@@ -53,6 +53,19 @@ def mrerrow(abserror) -> Decimal:
                     k = '1.' + j * '0'
                     result = Decimal(result).quantize(Decimal(k), ROUND_HALF_UP)
                 return Decimal(result)
+def  numberDigits(avg: Decimal, abserror: Decimal) -> Decimal:
+    '''округляет АЗ СО в соответствии с абсолютной погрешностью
+    abserror: абсолютная погрешность
+    avg: среднее из 2 измерений без округления
+    return: АЗ СО в формате Decimal
+    '''
+    abserror = str(abserror)
+    index = abserror.find(".")
+    frac_abserror = abserror[index + 1:]
+    j = len(frac_abserror)
+    k = '1.' + j * '0'
+    certifiedValue = rounder(avg, k)
+    return certifiedValue
 
 
 

@@ -11,7 +11,7 @@ from .models import ViscosityMJL, CHOICES
 
 
 class ViscosityMJLCreationForm(forms.ModelForm):
-    name = forms.CharField(label='Наименование пробы', max_length=100, required=True,
+    name = forms.CharField(initial='ВЖ-2-ПА(100)', label='Наименование пробы', max_length=100, required=True,
                            widget=forms.TextInput(attrs={'class': 'form-control',
                                                          'placeholder': 'Наименование пробы'}
                                                   ))
@@ -84,6 +84,10 @@ class ViscosityMJLCreationForm(forms.ModelForm):
                                                                        'placeholder': 'сс.сс'}
                                                                 ))
     constit = forms.ChoiceField(label='Состав пробы', widget=forms.RadioSelect,  choices=CHOICES, required=True)
+    oldCertifiedValue = forms.CharField(label='Предыдущее аттестованное значение', required=False,
+                                         widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                       'placeholder': 'АЗ через точку'}
+                                                                ))
 
 
 
@@ -99,7 +103,12 @@ class ViscosityMJLCreationForm(forms.ModelForm):
             ),
             'termostatition',
             'temperatureCheck',
-            'constit',
+
+            Row(
+                Column('constit', css_class='form-group col-md-6 mb-0'),
+                Column('oldCertifiedValue', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row'
+            ),
             Row(
                 Column('ViscosimeterNumber1', css_class='form-group col-md-6 mb-0'),
                 Column('Konstant1', css_class='form-group col-md-6 mb-0'),
@@ -132,7 +141,7 @@ class ViscosityMJLCreationForm(forms.ModelForm):
     class Meta:
         model = ViscosityMJL
         fields = ['name', 'lot', 'temperature', 'termostatition', 'temperatureCheck',
-                  'constit',
+                  'constit', 'oldCertifiedValue',
                   'ViscosimeterNumber1', 'Konstant1',
                   'plustimeminK1T1', 'plustimesekK1T1',
                   'plustimeminK1T2', 'plustimesekK1T2',
