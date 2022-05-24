@@ -3,6 +3,7 @@ from django.utils import timezone
 from datetime import datetime
 from django.utils.timezone import now
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 class Manufacturer(models.Model):
@@ -71,9 +72,9 @@ class Viscosimeters(models.Model):
 
 class Kalibration(models.Model):
     dateKalib = models.DateField('Дата калибровки', auto_now_add=True)
-    konstant = models.DecimalField('Установленная константа', max_digits=7, decimal_places=6, default='0')
-    dateKalibNext = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    konstant = models.DecimalField('Установленная константа', max_digits=10, decimal_places=6, default='0')
     id_Viscosimeter = models.ForeignKey(Viscosimeters, verbose_name='Номер вискозиметра', on_delete=models.CASCADE)
+    performer = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'Константа {self.konstant}'
