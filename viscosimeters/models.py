@@ -7,7 +7,7 @@ from django.urls import reverse
 
 class Manufacturer(models.Model):
     companyName = models.CharField('Производитель', max_length=100)
-    companyAdress = models.CharField('Адрес', max_length=100, default='')
+    companyAdress = models.CharField('Адрес', max_length=100, default='', blank=True)
 
     def __str__(self):
         return self.companyName
