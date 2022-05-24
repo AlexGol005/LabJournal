@@ -3,23 +3,21 @@
 {% block title %}
  Измерение вязкости
 {% endblock %}
-{# {% block leftaside %}#}
-{#     <aside class="col-md-1">#}
-{# <div class="mt-5">#}
-{#<a href="/attestationJ/kinematicviscosity/registration/" class="btn btn-warning mt-3 mr-5">Внести ещё одну запись</a>#}
-{#        <a href="/attestationJ/kinematicviscosity/" class="btn btn-warning mt-3">В журнал</a>#}
-{#    </div>#}
-{#      </aside>#}
-{#{% endblock %}#}
+
 
 {% block content %}
-
-
+    <div class="row">
+<div class="col-md-2">
+      <a href="/attestationJ/kinematicviscosity/registration/" class="btn btn-warning mt-3 mr-5">&nbsp&nbspвнести&nbsp&nbsp&nbsp ещё </a>
+        <a href="/attestationJ/kinematicviscosity/" class="btn btn-warning mt-3">В  журнал</a>
+    </div>
+<div class="col-md-4">
     <table class="table table-bordered background-color">
 	<tbody>
         <tr>
-			<th colspan="9"><div style="text-align: center;">{{ note.date|date:"Y"}}-аттестация ВЖ-ПА,
-                СС-ТН-ПА
+			<th colspan="9"><div style="text-align: center;">Атт.-ВЖ-(МИ № 02-2018)-{{ note.date|date:"Y"}}
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
@@ -41,7 +39,7 @@
 			<th colspan="2"><div style="text-align: center;">Наименование</div></th>
 			<th colspan="2"><div style="text-align: center;"></div>Номер&nbsp&nbspпартии</th>
 			<th colspan="2"><div style="text-align: center;"></div>Т °C</th>
-			<th><div style="text-align: center;"></div>Термост. не менее 20 мин</th>
+			<th><div style="text-align: center;"></div>Термост. от 20 мин</th>
 			<th><div style="text-align: center;">Содержит&nbspнефть или октол</div></th>
 		</tr>
 		<tr>
@@ -122,12 +120,12 @@
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 ν<sub>сред</sub> = (ν<sub>1</sub> + ν<sub>2</sub>)/2</div></th>
-			<th colspan="5"><div style="text-align: center;">Оценка приемлемости
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp измерений
-               &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+			<th colspan="5"><div style="text-align: center;">Оценка&nbspприемлемости
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp измерений,
+               &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 
-                (|ν<sub>1</sub> - ν<sub>2</sub>|/ν<sub>сред</sub>) * 100 %</div></th>
-			<th colspan="2"><div style="text-align: center;">Критерий приемлемости измерений, r  (Δ ≤ r) </div></th>
+                Δ = (|ν<sub>1</sub> - ν<sub>2</sub>|/ν<sub>сред</sub>) * 100 %</div></th>
+			<th colspan="2"><div style="text-align: center;">Критерий приемлемости измерений, r  </div></th>
 		</tr>
 		<tr>
 			<td colspan="2"><div style="text-align: center;">{{ note.viscosityAVG }}</div></td>
@@ -142,14 +140,13 @@
                 {% else %}
                 <div class="TransactionAmount Goodresult">
                 {% endif %}
-                 Результат измерений: <b>{{ note.resultMeas }}</b>
+                 Результат измерений: <b>{{ note.resultMeas }} </b> {{ note.cause }}
 
 
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 </div>
-                {{ note.cause }}
 
             </td>
 		</tr>
@@ -190,10 +187,13 @@
 {#                {{ note.resultWarning }}</div>> </th>#}
 		</tr>
 		<tr>
-			<th colspan="9">Исполнитель: {{ note.performer }} </th>
+			<th colspan="5">Исполнитель: {{ note.performer }} </th>
+            <th colspan="4"><div style="text-align: center;"><a href="{% url 'reg' %}"  class="btn btn-outline-warning mt-3">комметарии</a></div></th>
+
 		</tr>
 
 	</tbody>
 </table>
-
+</div>
+    </div>
 {% endblock %}

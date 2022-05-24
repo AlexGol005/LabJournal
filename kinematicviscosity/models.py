@@ -64,7 +64,7 @@ class ViscosityMJL(models.Model):
     certifiedValue_text = models.CharField(max_length=300, default='', null=True)
     oldCertifiedValue = models.CharField('Предыдущее аттестованное значение', max_length=300, null=True,  default='')
     deltaOldCertifiedValue = models.DecimalField('Оценка разницы с предыдущим значением',
-                                                 max_digits=4, decimal_places=2, null=True)
+                                                 max_digits=10, decimal_places=4, null=True)
     deltaOldCertifiedValue_text = models.CharField(max_length=300, default='', null=True)
     resultWarning = models.CharField(max_length=300, default='', null=True)
 
@@ -132,7 +132,7 @@ class ViscosityMJL(models.Model):
                 self.cause = ''
             if self.accMeasurement > self.kriteriy:
                 self.resultMeas = 'неудовлетворительно'
-                self.cause = 'Причина: различие между измерениями Δ превышает критерий приемлемости измерений r'
+                self.cause = ':  Δ > r'
         if self.termostatition:
             self.termostatition_words = 'V'
         if self.resultMeas == 'удовлетворительно':
@@ -153,8 +153,8 @@ class ViscosityMJL(models.Model):
             self.deltaOldCertifiedValue_text = str(self.deltaOldCertifiedValue)
         if self.deltaOldCertifiedValue:
             if self.deltaOldCertifiedValue > Decimal(0.7):
-                self.resultWarning = 'Измеренное АЗ отличается от предыдущего более чем на 0,7 %, проверьте условия эксперимента. \
-                                     Рекомендовано измерить повторно.'
+                self.resultWarning = 'Результат отличается от предыдущего > 0,7 %. Рекомендовано измерить повторно.'
+
 
 
 

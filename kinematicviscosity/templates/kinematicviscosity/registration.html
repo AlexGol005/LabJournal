@@ -8,6 +8,11 @@
 
 
 {% block content %}
+    <a href="/attestationJ/kinematicviscosity/" class="btn btn-info mt-3 mr-3">перейти в журнал</a>
+    <a href="/viscosimetersKonstants/" class="btn btn-info mt-3 mr-3" target="blank">вискозиметры</a>
+    <a href="https://petroanalytica.sharepoint.com/sites/main/production/%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D0%B8%D0%BA%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B5%D0%BD%D0%B8%D0%B9/%D0%9C%D0%98%20%D0%92%D0%96-%D0%9F%D0%90%20%E2%84%96%20%D0%9C%D0%98-02-2018.pdf"
+       class="btn btn-info mt-3 mr-3" target="blank">методика</a>
+    <a href="#" class="btn btn-info mt-3 mr-3" target="blank">карточки на оборудование</a>
     <form method="post" class="form-register">
     {% csrf_token %}
      {% crispy form %}
