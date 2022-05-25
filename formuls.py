@@ -23,17 +23,18 @@ def mrerrow(abserror) -> Decimal:
     frac_abserror = abserror[index + 1:]
     if int(int_abserror) > 2:
         result = Decimal(abserror)
-        for j in range(len(frac_abserror), 0, -1):
-            k = '1.' + j * '0'
-            result = Decimal(result).quantize(Decimal(k), ROUND_HALF_UP)
-        result = Decimal(result).quantize(Decimal('1'), ROUND_HALF_UP)
-        return Decimal(result)
+        # for j in range(len(frac_abserror), 0, -1):
+        #     k = '1.' + j * '0'
+        #     result = Decimal(result).quantize(Decimal(k), ROUND_HALF_UP)
+        result = result.quantize(Decimal('1'), ROUND_HALF_UP)
+        return result
     if int(int_abserror) == 2 or int(int_abserror) == 1:
         result = Decimal(abserror)
-        for j in range(len(frac_abserror), 0, -1):
-            k = '1.' + j * '0'
-            result = Decimal(result).quantize(Decimal(k), ROUND_HALF_UP)
-        return Decimal(result)
+        # for j in range(len(frac_abserror), 0, -1):
+        j = len(frac_abserror)
+        k = '1.' + j * '0'
+        result = result.quantize(Decimal(k), ROUND_HALF_UP)
+        return result
     if int(int_abserror) == 0:
         i = 0
         while i < len(frac_abserror):
@@ -42,16 +43,18 @@ def mrerrow(abserror) -> Decimal:
             elif 0 < int(frac_abserror[i]) <= 2:
                 result = Decimal(abserror)
                 frac_index = i + 2
-                for j in range(len(frac_abserror), frac_index - 1, -1):
-                    k = '1.' + j * '0'
-                    result = Decimal(result).quantize(Decimal(k), ROUND_HALF_UP)
-                return Decimal(result)
+                # for j in range(len(frac_abserror), frac_index - 1, -1):
+                j = len(frac_abserror)
+                k = '1.' + j * '0'
+                result = result.quantize(Decimal(k), ROUND_HALF_UP)
+                return result
             elif int(frac_abserror[i]) > 2:
                 result = Decimal(abserror)
                 frac_index = i + 1
-                for j in range(len(frac_abserror), frac_index - 1, -1):
-                    k = '1.' + j * '0'
-                    result = Decimal(result).quantize(Decimal(k), ROUND_HALF_UP)
+                # for j in range(len(frac_abserror), frac_index - 1, -1):
+                j = len(frac_abserror)
+                k = '1.' + j * '0'
+                result = result.quantize(Decimal(k), ROUND_HALF_UP)
                 return Decimal(result)
 def  numberDigits(avg: Decimal, abserror: Decimal) -> Decimal:
     '''округляет АЗ СО в соответствии с абсолютной погрешностью
@@ -64,9 +67,10 @@ def  numberDigits(avg: Decimal, abserror: Decimal) -> Decimal:
     frac_abserror = abserror[index + 1:]
     j = len(frac_abserror)
     k = '1.' + j * '0'
-    certifiedValue = rounder(avg, k)
+    certifiedValue = avg.quantize(Decimal(k), ROUND_HALF_UP)
     return certifiedValue
 
 
 
 
+print(mrerrow(Decimal(0.26698)))

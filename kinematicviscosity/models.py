@@ -84,8 +84,8 @@ class ViscosityMJL(models.Model):
             self.timeK2_avg = ((c + d)/Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
             self.viscosity1 = (self.Konstant1 * self.timeK1_avg).quantize(Decimal('1.00000'), ROUND_HALF_UP)
             self.viscosity2 = (self.Konstant2 * self.timeK2_avg).quantize(Decimal('1.00000'), ROUND_HALF_UP)
-            self.viscosityAVG = rounder(((self.viscosity1 + self.viscosity2) / Decimal(2)), '1.0000000')
-            self.accMeasurement = rounder(((((self.viscosity1 - self.viscosity2).copy_abs()) / self.viscosityAVG) * Decimal(100)), ('1.0'))
+            self.viscosityAVG = ((self.viscosity1 + self.viscosity2) / Decimal(2)).quantize(Decimal('1.0000000'), ROUND_HALF_UP)
+            self.accMeasurement = ((((self.viscosity1 - self.viscosity2).copy_abs()) / self.viscosityAVG) * Decimal(100)).quantize(Decimal('1.0'), ROUND_HALF_UP)
             if self.constit == 'да':
                 self.kriteriy = Decimal(0.3)
             if self.constit == 'нет':
@@ -103,7 +103,7 @@ class ViscosityMJL(models.Model):
             a = (self.plustimeminK1T1 * Decimal(60) + self.plustimesekK1T1).quantize(Decimal('1.00'), ROUND_HALF_UP)
             self.timeK1T1_sec = a
             self.timeK1_avg = a
-            self.viscosity1 = rounder((self.Konstant1 * self.timeK1_avg), '1.00000')
+            self.viscosity1 = (self.Konstant1 * self.timeK1_avg).quantize(Decimal('1.00000'), ROUND_HALF_UP)
             self.viscosityAVG = self.viscosity1
             self.accMeasurement = 0
             self.resultMeas = 'экспрес оценка вязкости'
@@ -117,10 +117,10 @@ class ViscosityMJL(models.Model):
             self.timeK2T1_sec = c
             self.timeK1_avg = a
             self.timeK2_avg = c
-            self.viscosity1 = rounder((self.Konstant1 * self.timeK1_avg), '1.00000')
-            self.viscosity2 = rounder((self.Konstant2 * self.timeK2_avg), '1.00000')
-            self.viscosityAVG = rounder(((self.viscosity1 + self.viscosity2) / Decimal(2)), '1.0000000')
-            self.accMeasurement = rounder(((((self.viscosity1 - self.viscosity2).copy_abs()) / self.viscosityAVG) * Decimal(100)), ('1.0'))
+            self.viscosity1 = (self.Konstant1 * self.timeK1_avg).quantize(Decimal('1.00000'), ROUND_HALF_UP)
+            self.viscosity2 = (self.Konstant2 * self.timeK2_avg).quantize(Decimal('1.00000'), ROUND_HALF_UP)
+            self.viscosityAVG = ((self.viscosity1 + self.viscosity2) / Decimal(2)).quantize(Decimal('1.0000000'), ROUND_HALF_UP)
+            self.accMeasurement = ((((self.viscosity1 - self.viscosity2).copy_abs()) / self.viscosityAVG) * Decimal(100)).quantize(Decimal('1.0'), ROUND_HALF_UP)
             if self.constit == 'да':
                 self.kriteriy = Decimal(0.3)
             if self.constit == 'нет':
@@ -137,12 +137,12 @@ class ViscosityMJL(models.Model):
             self.termostatition_words = 'V'
         if self.resultMeas == 'удовлетворительно':
             self.abserror = mrerrow((Decimal(self.relerror) * self.viscosityAVG) / Decimal(100))
-            self.certifiedValue = numberDigits(self.viscosityAVG, self.abserror)
+            self.certifiedValue = numberDigits(self.viscosityAVG, Decimal(str(self.abserror_text)))
             self.certifiedValue_text = str(self.certifiedValue)
             if self.oldCertifiedValue:
                 self.deltaOldCertifiedValue =\
-                rounder(((((Decimal(self.oldCertifiedValue) - Decimal(self.certifiedValue)).copy_abs())
-                / ((Decimal(self.oldCertifiedValue) + Decimal(self.certifiedValue)) /Decimal(2)) * Decimal(100))), ('1.00'))
+               ((((Decimal(self.oldCertifiedValue) - Decimal(self.certifiedValue)).copy_abs())
+                / ((Decimal(self.oldCertifiedValue) + Decimal(self.certifiedValue)) /Decimal(2)) * Decimal(100))).quantize(Decimal('1.00'), ROUND_HALF_UP)
         if self.abserror == None:
             self.abserror_text = ''
         if self.abserror:

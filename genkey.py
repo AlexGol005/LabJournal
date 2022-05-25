@@ -27,3 +27,5 @@ print(get_random_secret_key())
 #
 # load_dotenv(os.path.join(path, '.env'))  # # load os environments from .env file
 
+# python3.9 manage.py collectstatic
+
