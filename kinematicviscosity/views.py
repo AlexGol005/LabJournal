@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
-from .models import ViscosityMJL
+from .models import ViscosityMJL, CommentsKinematicviscosity
 from .forms import ViscosityMJLCreationForm
 from django.shortcuts import get_object_or_404
 from django.views import View
@@ -53,3 +53,10 @@ class AttestationJoneView(View):
     def get(self, request):
         note = AttestationJ.objects.all().filter(for_url='kinematicviscosity')
         return render(request, 'kinematicviscosity/head.html', {'note': note})
+
+class CommentsKinematicviscosityView(View):
+    """ выводит комментарии к записи в журнале """
+    def get(self, request, pk):
+        note = CommentsKinematicviscosity.objects.filter(forNote=pk)
+        title = ViscosityMJL.objects.get(pk=pk)
+        return render(request, 'kinematicviscosity/comments.html', {'note': note, 'title': title})

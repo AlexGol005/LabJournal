@@ -173,4 +173,22 @@ class ViscosityMJL(models.Model):
         verbose_name = 'Измерение кинематической вязкости'
         verbose_name_plural = 'Измерения кинематической вязкости'
 
+class CommentsKinematicviscosity(models.Model):
+    date = models.DateField('Дата', auto_now_add=True, db_index=True)
+    name = models.TextField('Содержание', max_length=1000, default='')
+    forNote = models.ForeignKey(ViscosityMJL, verbose_name='К странице аттестации',  on_delete=models.CASCADE)
+    author = models.ForeignKey(User, verbose_name='Наименование', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f' {self.author.username} , {self.forNote.name},  {self.date}'
+
+    def get_absolute_url(self):
+        """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
+        return reverse('comm')
+
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+
 
