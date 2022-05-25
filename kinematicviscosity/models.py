@@ -137,7 +137,7 @@ class ViscosityMJL(models.Model):
             self.termostatition_words = 'V'
         if self.resultMeas == 'удовлетворительно':
             self.abserror = mrerrow((Decimal(self.relerror) * self.viscosityAVG) / Decimal(100))
-            self.certifiedValue = numberDigits(self.viscosityAVG, Decimal(str(self.abserror_text)))
+            self.certifiedValue = numberDigits(self.viscosityAVG, self.abserror)
             self.certifiedValue_text = str(self.certifiedValue)
             if self.oldCertifiedValue:
                 self.deltaOldCertifiedValue =\
