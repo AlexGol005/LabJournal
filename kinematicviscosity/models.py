@@ -175,7 +175,7 @@ class ViscosityMJL(models.Model):
 class CommentsKinematicviscosity(models.Model):
     date = models.DateField('Дата', auto_now_add=True, db_index=True)
     name = models.TextField('Содержание', max_length=1000, default='')
-    forNote = models.ForeignKey(ViscosityMJL, verbose_name='К странице аттестации',  on_delete=models.CASCADE)
+    forNote = models.ForeignKey(ViscosityMJL, verbose_name='К странице аттестации',  on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(User, verbose_name='Наименование', on_delete=models.CASCADE)
 
     def __str__(self):
