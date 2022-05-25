@@ -140,9 +140,8 @@ class ViscosityMJL(models.Model):
             self.certifiedValue = numberDigits(self.viscosityAVG, self.abserror)
             self.certifiedValue_text = str(self.certifiedValue)
             if self.oldCertifiedValue:
-                self.deltaOldCertifiedValue =\
-               ((((Decimal(self.oldCertifiedValue) - Decimal(self.certifiedValue)).copy_abs())
-                / ((Decimal(self.oldCertifiedValue) + Decimal(self.certifiedValue)) /Decimal(2)) * Decimal(100))).quantize(Decimal('1.00'), ROUND_HALF_UP)
+                self.deltaOldCertifiedValue = (((((Decimal(self.oldCertifiedValue) - self.certifiedValue).copy_abs())/((Decimal(self.oldCertifiedValue)
+                    + self.certifiedValue)/Decimal(2)))) * Decimal('100')).quantize(Decimal('1.00'), ROUND_HALF_UP)
         if self.abserror == None:
             self.abserror_text = ''
         if self.abserror:
