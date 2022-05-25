@@ -21,3 +21,9 @@ print(get_random_secret_key())
 # SECRET_KEY = "vs3umg+heg!)ljfeg2o^eu@3fk1ma!=ett2^9o2x8cwjl@0ixy"
 # DEBUG = True
 # ALLOWED_HOSTS = "*"
+
+#  Также нужно подгрузить переменные среды, находящиеся в файле .env (79 и 88 строка)
+# from dotenv import load_dotenv
+#
+# load_dotenv(os.path.join(path, '.env'))  # # load os environments from .env file
+
