@@ -72,6 +72,7 @@ class ViscosityMJL(models.Model):
         if (self.plustimeminK1T2 and self.plustimesekK1T2 and self.plustimeminK2T1 and
                 self.plustimesekK2T1 and self.plustimeminK2T2 and self.plustimesekK2T2 and self.plustimeminK1T1 and
                 self.plustimesekK1T1):
+            # a = self._get_avg_time(self.plustimeminK1T1, self.plustimesekK1T1)
             a = (self.plustimeminK1T1 * Decimal(60) + self.plustimesekK1T1).quantize(Decimal('1.00'), ROUND_HALF_UP)
             b = (self.plustimeminK1T2 * Decimal(60) + self.plustimesekK1T2).quantize(Decimal('1.00'), ROUND_HALF_UP)
             c = (self.plustimeminK2T1 * Decimal(60) + self.plustimesekK2T1).quantize(Decimal('1.00'), ROUND_HALF_UP)
@@ -154,13 +155,21 @@ class ViscosityMJL(models.Model):
             if self.deltaOldCertifiedValue > Decimal(0.7):
                 self.resultWarning = 'Результат отличается от предыдущего > 0,7 %. Рекомендовано измерить повторно.'
 
-
-
-
         super(ViscosityMJL, self).save(*args, **kwargs)
 
     def __str__(self):
         return f' {self.name}  п.{self.lot};  {self.temperature} t ℃;   {self.date}'
+
+    @staticmethod
+    def _get_avg_time(minutes: Decimal, seconds: Decimal):
+        """
+
+        :param minutes:
+        :param seconds:
+        :return:
+        """
+        time = (minutes * Decimal(60) + seconds).quantize(Decimal('1.00'), ROUND_HALF_UP)
+        return time
 
 
     def get_absolute_url(self):
