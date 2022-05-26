@@ -18,10 +18,11 @@
 
     <tr>
       <th> <div style="text-align: center;"> Дата </div></th>
-      <th> <div style="text-align: center;"> Наименование </div></th>
-      <th> <div style="text-align: center;"> Партия </div></th>
-      <th> <div style="text-align: center;"> Температура, ℃  </div></th>
-      <th> <div style="text-align: center;"> Подробности  </div></th>
+      <th> <div style="text-align: center;"> ГСО </div></th>
+      <th> <div style="text-align: center;"> п. </div></th>
+      <th> <div style="text-align: center;"> Т, ℃  </div></th>
+        <th> <div style="text-align: center;"> АЗ  </div></th>
+      <th> <div style="text-align: center;"> Подробнее  </div></th>
 
     </tr>
   </thead>
@@ -30,10 +31,11 @@
 {% for obj in viscosityobjects %}
 
     <tr>
-      <td align="center">{{ obj.date }}</td>
+      <td align="center">{{ obj.date|date:"d-m-Y" }}</td>
       <td align="center"> {{ obj.name }}</td>
       <td align="center"> {{ obj.lot }}</td>
       <td align="center">{{ obj.temperature }}</td>
+      <td align="center">{{ obj.certifiedValue_text }}</td>
       <td align="center"><a href="{% url 'Str' obj.id %}"  class="btn btn-outline-warning mt-3">смотреть</a></td>
 
     </tr>
