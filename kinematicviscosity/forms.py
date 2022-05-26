@@ -5,7 +5,7 @@ from crispy_forms.layout import Layout, Submit, Row, Column
 
 
 from django.utils.html import format_html
-from .models import ViscosityMJL, CHOICES
+from .models import ViscosityMJL, CHOICES, CommentsKinematicviscosity
 
 
 
@@ -148,3 +148,16 @@ class ViscosityMJLCreationForm(forms.ModelForm):
                   'ViscosimeterNumber2', 'Konstant2',
                   'plustimeminK2T1', 'plustimesekK2T1',
                   'plustimeminK2T2', 'plustimesekK2T2']
+
+class CommentCreationForm(forms.ModelForm):
+    name = forms.CharField(label='Комментировать', max_length=1000,
+                           widget=forms.Textarea(attrs={'class': 'form-control',
+                                                                       'placeholder': 'введите текст комментария'}
+                                                                ))
+
+
+
+    class Meta:
+        model = CommentsKinematicviscosity
+        fields = ['name']
+

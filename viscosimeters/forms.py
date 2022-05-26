@@ -37,3 +37,6 @@ class ViscosimetersCreationForm(forms.ModelForm):
     class Meta:
         model = Viscosimeters
         fields = '__all__'
+
+
+

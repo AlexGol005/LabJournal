@@ -97,7 +97,7 @@ class ViscosityMJL(models.Model):
                 self.cause = ''
             if self.accMeasurement > self.kriteriy:
                 self.resultMeas = 'неудовлетворительно'
-                self.cause = 'Причина: различие между измерениями Δ превышает критерий приемлемости измерений r'
+                self.cause = 'Δ > r'
         if (self.plustimeminK1T1 and self.plustimesekK1T1) and\
                 not (self.plustimeminK1T2 and self.plustimesekK1T2 and self.plustimeminK2T2 and self.plustimesekK2T2 and self.plustimeminK2T2 and self.plustimesekK2T2):
             a = (self.plustimeminK1T1 * Decimal(60) + self.plustimesekK1T1).quantize(Decimal('1.00'), ROUND_HALF_UP)
@@ -183,11 +183,12 @@ class CommentsKinematicviscosity(models.Model):
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
-        return reverse('comm')
+        return reverse('comm', kwargs={'pk': self.forNote.pk})
 
 
     class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
+        ordering = ['-pk']
 
 

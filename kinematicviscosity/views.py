@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
 from .models import ViscosityMJL, CommentsKinematicviscosity
-from .forms import ViscosityMJLCreationForm
+from .forms import ViscosityMJLCreationForm, CommentCreationForm
 from django.shortcuts import get_object_or_404
 from django.views import View
 from django.contrib import messages
@@ -55,8 +55,100 @@ class AttestationJoneView(View):
         return render(request, 'kinematicviscosity/head.html', {'note': note})
 
 class CommentsKinematicviscosityView(View):
-    """ выводит комментарии к записи в журнале """
+    """ выводит комментарии к записи в журнале и форму для добавления комментариев """
+    form_class = CommentCreationForm
+    initial = {'key': 'value'}
+    template_name = 'kinematicviscosity/comments.html'
     def get(self, request, pk):
         note = CommentsKinematicviscosity.objects.filter(forNote=pk)
         title = ViscosityMJL.objects.get(pk=pk)
-        return render(request, 'kinematicviscosity/comments.html', {'note': note, 'title': title})
+        form = CommentCreationForm()
+        return render(request, 'kinematicviscosity/comments.html', {'note': note, 'title': title, 'form': form})
+    def post(self, request, pk, *args, **kwargs):
+        form = CommentCreationForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.author = request.user
+            order.forNote = ViscosityMJL.objects.get(pk=pk)
+            order.save()
+            # form.save()
+            name = form.cleaned_data.get('name')
+            messages.success(request, f'Комментарий добавлен!')
+            return redirect(order)
+
+
+
+    # def post(self, request):
+    #     if request.method == "POST":
+    #         form = CommentCreationForm(request.POST)
+    #         if form.is_valid():
+    #             order = form.save(commit=False)
+    #             order.performer = request.user
+    #             order.save()
+    #             name = form.cleaned_data.get('name')
+    #             messages.success(request, f'Запись об аттестации СО {name} была успешно создана!')
+    #             return redirect(order)
+    #     else:
+    #         form = CommentCreationForm()
+    #
+    #     return render(
+    #         request,
+    #         'kinematicviscosity/comments.html',
+    #         {
+    #             'form': form
+    #         })
+
+# @login_required
+# def CommentCreationView(request, pk):
+#     if request.method == "POST":
+#         form = CommentCreationForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('profile')
+#
+#     else:
+#         form = CommentCreationForm(instance=request.   )
+#
+#     data = {'form': form,
+#         }
+#
+#     return render(request, 'kinematicviscosity/comments.html', data)
+
+# class CommentsKinematicviscosityView(View):
+#     """ выводит комментарии к записи в журнале и форму для добавления комментариев """
+#     form_class = CommentCreationForm
+#     initial = {'key': 'value'}
+#     template_name = 'kinematicviscosity/comments.html'
+#
+#     def get(self, reqest, *args, **kwargs):
+#         form = self.form_class(initial=self.initial)
+#         return render(reqest, self.template_name, {'form': form})
+#
+#     def post(self, reqest, *args, **kwargs):
+#         form = self.form_class(reqest.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('profile')
+#         return  render(reqest, self.template_name, {'form': form})
+#
+# def CommentsKinematicviscosityView(request):
+#     """ Представление, которое выводит форму регистрации в журнале. """
+#     if request.method == "POST":
+#         form = CommentCreationForm(request.POST)
+#         if form.is_valid():
+#             order = form.save(commit=False)
+#             order.performer = request.user
+#             order.save()
+#             # form.save()
+#             name = form.cleaned_data.get('name')
+#             messages.success(request, f'Запись об аттестации СО {name} была успешно создана!')
+#             return redirect('comm')
+#     else:
+#         form = CommentCreationForm()
+#
+#     return render(
+#         request,
+#         'kinematicviscosity/comments.html',
+#         {
+#             'form': form
+#         })
