@@ -28,7 +28,7 @@ class ViscosityMJL(models.Model):
     termostatition = models.BooleanField(verbose_name='Термостатировано не менее 20 минут', blank=True)
     temperatureCheck = models.BooleanField(verbose_name='Температура контролируется внешним поверенным термометром', blank=True)
     termometer = models.CharField('Внутренний номер термометра', max_length=10, default='0')
-    ViscosimeterNumber1 = models.CharField('Заводской номер вискозиметра № 1', max_length=10, default='0')
+    ViscosimeterNumber1 = models.CharField('Заводской номер вискозиметра № 1', max_length=10, default='0')  # todo ForeignKey
     Konstant1 = models.DecimalField('Константа вискозиметра № 1', max_digits=20, decimal_places=10, default='0')
     ViscosimeterNumber2 = models.CharField('Заводской номер вискозиметра № 2', max_length=10, default='0', null=True)
     Konstant2 = models.DecimalField('Константа вискозиметра № 2', max_digits=20, decimal_places=10, default='0', null=True)
@@ -117,7 +117,7 @@ class ViscosityMJL(models.Model):
             self.timeK2T1_sec = c
             self.timeK1_avg = a
             self.timeK2_avg = c
-            self.viscosity1 = (self.Konstant1 * self.timeK1_avg).quantize(Decimal('1.00000'), ROUND_HALF_UP)
+            self.viscosity1 = (self.Konstant1 * self.timeK1_avg).quantize(Decimal('1.00000'), ROUND_HALF_UP) # todo  self.Konstant1 -> self.ViscosimeterNumber1.Konstant1 когда поеле ForeignKey
             self.viscosity2 = (self.Konstant2 * self.timeK2_avg).quantize(Decimal('1.00000'), ROUND_HALF_UP)
             self.viscosityAVG = ((self.viscosity1 + self.viscosity2) / Decimal(2)).quantize(Decimal('1.0000000'), ROUND_HALF_UP)
             self.accMeasurement = ((((self.viscosity1 - self.viscosity2).copy_abs()) / self.viscosityAVG) * Decimal(100)).quantize(Decimal('1.0'), ROUND_HALF_UP)

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.views.generic import DetailView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
@@ -11,6 +12,15 @@ from django.contrib.auth.decorators import login_required
 from main.models import AttestationJ
 
 
+class StrKinematicviscosityDetailView(DetailView):
+    """ Представление, которое позволяет вывести отдельную запись. """
+    model = ViscosityMJL
+    pk_url_kwarg = "pk"
+    context_object_name = "note"
+
+    template_name = 'kinematicviscosity/str.html'
+
+#docs.djangoproject.com/en/4.0/topics/class-based-views/generic-display/
 class StrKinematicviscosityView(View):
     """ Представление, которое позволяет вывести отдельную запись. """
     def get(self, request, pk):
