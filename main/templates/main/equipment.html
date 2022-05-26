@@ -1,0 +1,21 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}
+    Оборудование
+{% endblock %}
+
+
+{% block content %}
+    <div style="text-align: center;"><h3>Лабораторное оборудование</h3></div>
+    <br><br>
+
+        <div style="text-align: center;">
+               <a href="{% url 'prod' %}" class="btn btn-warning mr-5 mt-3" >Вискозиметры</a>
+
+       </div>
+    <br><br>
+    <div style="text-align: center;">
+        <img src="{% static 'main/img/10.jpg' %}"
+             alt="Изображение на главной странице"></div>
+
+{% endblock %}

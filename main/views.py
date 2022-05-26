@@ -29,4 +29,9 @@ class ProductionJView(View):
    def get(self, request):
        return render(request, 'main/productionJ.html')
 
+class EquipmentView(View):
+    # страница оборудование
+   def get(self, request):
+       return render(request, 'main/equipment.html')
+
 
