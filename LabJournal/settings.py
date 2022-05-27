@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
-    # 'viscosimeters',
+    'viscosimeters',
     'kinematicviscosity',
     'users.apps.UsersConfig',
     'rest_framework',
