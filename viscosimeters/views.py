@@ -4,9 +4,9 @@ from django.http import  HttpResponse, HttpRequest
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import ViscosimeterType
-    # ,Viscosimeters, Kalibration
-# from .forms import KalibrationViscosimetersForm
+from .models import ViscosimeterType,Viscosimeters, Kalibration
+
+from .forms import KalibrationViscosimetersForm
 
 @login_required
 def KalibrationViscosimetersRegView(request):
