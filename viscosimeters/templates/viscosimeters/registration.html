@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-Внести запись
+Внести константу
 {% endblock %}
 
 
@@ -11,6 +11,6 @@
     <form method="post" class="form-register">
         {% csrf_token %}
         {{ form.as_p }}
-        <button class="btn btn-outline-warning" type="submit">Внести запись</button>
+        <button class="btn btn-outline-warning" type="submit">Внести константу</button>
     </form>
 {% endblock %}

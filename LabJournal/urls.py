@@ -10,6 +10,8 @@ urlpatterns = [
     path('attestationJ/', include('kinematicviscosity.urls')),
     path('', include('users.urls')),
     path('', include('api.urls')),
+    path('equipment/', include('equipment.urls')),
+
 ]
 
 if settings.DEBUG:

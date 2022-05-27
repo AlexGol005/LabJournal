@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 from datetime import datetime
 from decimal import *
 
-from viscosimeters.models import Viscosimeters
-from formuls import mrerrow, rounder, numberDigits
+
+from formuls import mrerrow, numberDigits
 
 CHOICES = (
         ('да', 'Проба содержит октол/нефть'),
