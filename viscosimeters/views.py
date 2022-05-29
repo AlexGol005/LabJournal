@@ -37,6 +37,7 @@ class ViscosimetersView(View):
         viscosimeters = Viscosimeters.objects.annotate(idactualkonst=Max('kalibration__id'))
         kal = Kalibration.objects.all()
         data = {'viscosimeters': viscosimeters, 'kal': kal}
+
         return render(request, 'viscosimeters/viscosimetersKonstants.html', data)
 
 
