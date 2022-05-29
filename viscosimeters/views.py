@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import ViscosimeterType,Viscosimeters, Kalibration
+from django.db.models import *
 
 from .forms import KalibrationViscosimetersForm
 
@@ -33,18 +34,17 @@ def KalibrationViscosimetersRegView(request):
 class ViscosimetersView(View):
     """ Представление, которое выводит все вискозиметры с константами. """
     def get(self, request):
-        viscosimeters = Viscosimeters.objects.order_by('viscosimeterType__diameter')
-        # konstants = Kalibration.objects.get(id=Kalibration.id_Viscosimeter)
-        return render(request, 'viscosimeters/viscosimetersKonstants.html',
-                      {'viscosimeters': viscosimeters,
-                       # 'konstants': konstants
-                       })
+        viscosimeters = Viscosimeters.objects.annotate(idactualkonst=Max('kalibration__id'))
+        kal = Kalibration.objects.all()
+        data = {'viscosimeters': viscosimeters, 'kal': kal}
+        return render(request, 'viscosimeters/viscosimetersKonstants.html', data)
 
 
 class ViscosimeterTypeView(View):
 
     def get(self, request):
-        ViscosimeterTypeObjects = ViscosimeterType.objects.order_by('viscosimeterType__diameter')
+        ViscosimeterTypeObjects = Viscosimeters.objects.annotate(actualkonst=Max('kalibration__id'))
+
         return render(request, 'viscosimeters/viscosimeterType.html', {'ViscosimeterTypeObjects': ViscosimeterTypeObjects})
 
 # class ViscosimetersKonstantsView(View):

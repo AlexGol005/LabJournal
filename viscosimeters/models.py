@@ -21,6 +21,7 @@ class ViscosimeterType(models.Model):
     create_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     update_at = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
 
+
     def __str__(self):
         return f'{self.diameter}'
 

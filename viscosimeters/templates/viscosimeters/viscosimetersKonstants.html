@@ -14,11 +14,13 @@
     <tr>
       <th> <div style="text-align: center;"> Номер </div></th>
       <th> <div style="text-align: center;"> Константа, мм<sup>2</sup>/с<sup>2</sup> </div></th>
-      <th> <div style="text-align: center;"> ν/1000 сек<sup>2</sup>/с </div></th>
+      <th> <div style="text-align: center;"> ν/1000 </div></th>
+      <th> <div style="text-align: center;"> Область измерений, мм<sup>2</sup>/с </div></th>
+      <th> <div style="text-align: center;"> ⌀ </div></th>
       <th> <div style="text-align: center;"> Поверка до </div></th>
       <th> <div style="text-align: center;"> Дата калибровки </div></th>
-      <th> <div style="text-align: center;"> ⌀ </div></th>
-      <th> <div style="text-align: center;"> Область измерений, мм<sup>2</sup>/с </div></th>
+
+
     </tr>
   </thead>
 
@@ -27,12 +29,13 @@
 
     <tr>
       <td> <div style="text-align: center;"> {{ note.equipment.lot }} </div></td>
-      <td> <div style="text-align: center;"> константа <sup>2</sup>/с<sup>2</sup> </div></td>
+      <td> <div style="text-align: center;"> {{ note.kalibration_set.max }}  </div></td>
       <td> <div style="text-align: center;"> {{ note.viscosimeterType.viscosity1000 }}<sup>2</sup>/с </div></td>
-      <td> <div style="text-align: center;"> Поверка до </div></td>
-      <td> <div style="text-align: center;"> дата </div></td>
-      <td> <div style="text-align: center;"> {{ note.viscosimeterType.diameter }} </div></td>
       <td> <div style="text-align: center;"> {{ note.viscosimeterType.range }}<sup>2</sup>/с </div></td>
+      <td> <div style="text-align: center;"> {{ note.viscosimeterType.diameter }} </div></td>
+      <td> <div style="text-align: center;"> пов до </div></td>
+      <td> <div style="text-align: center;"> калиб до </div></td>
+
     </tr>
 
 {% endfor %}
