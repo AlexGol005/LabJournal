@@ -10,6 +10,6 @@ admin.site.register(Rooms)
 
 admin.site.register(MeasurEquipmentCharakters)
 admin.site.register(Personchange)
-admin.site.register(MeasurEquipment)
+# admin.site.register(MeasurEquipment)
 admin.site.register(Equipment)
 
