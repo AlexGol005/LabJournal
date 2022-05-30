@@ -37,7 +37,7 @@ class Viscosimeters(models.Model):
 
 
     def __str__(self):
-        return f'№ {self.equipmentSM.equipment.lot} за 1000 сек ({self.viscosimeterType.viscosity1000})'
+        return f'№ {self.equipmentSM.equipment.lot} (за 1000 сек {self.viscosimeterType.viscosity1000} сСт)'
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
