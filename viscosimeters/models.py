@@ -32,12 +32,12 @@ class ViscosimeterType(models.Model):
 class Viscosimeters(models.Model):
     viscosimeterType = models.ForeignKey(ViscosimeterType,  verbose_name='Диаметр',
                                  on_delete=models.PROTECT)
-    equipmentSM = models.ForeignKey(MeasurEquipment, verbose_name='СИ',
-                                         on_delete=models.PROTECT, related_name='equipmentSM', blank=True, null=True)
-
-
-    def __str__(self):
-        return f'№ {self.equipmentSM.equipment.lot}'
+    # equipmentSM = models.ForeignKey(MeasurEquipment, verbose_name='СИ',
+    #                                      on_delete=models.PROTECT, related_name='equipmentSM', blank=True, null=True)
+    #
+    #
+    # def __str__(self):
+    #     return f'№ {self.equipmentSM.equipment.lot}'
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
