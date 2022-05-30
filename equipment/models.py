@@ -51,29 +51,29 @@ class Rooms(models.Model):
 
 
 
-class Equipment(models.Model):
-    exnumber = models.CharField('Внутренний номер', max_length=100, default='', blank=True, null=True)
-    name = models.CharField('Название прибора', max_length=100, default='')
-    modificname = models.CharField('Модификация прибора', max_length=100, default='', blank=True, null=True)
-    typename = models.CharField('Тип прибора', max_length=100, default='', blank=True, null=True)
-    lot = models.CharField('Заводской номер', max_length=100, default='')
-    yearmanuf = models.IntegerField('Год выпуска', default='', blank=True, null=True)
-    manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT, verbose_name='Производитель')
-    status = models.CharField(max_length=300, choices=CHOICES, default='В эксплуатации', null=True)
-    calinterval = models.IntegerField('МежМетрологический интервал, месяцев', default='', blank=True, null=True)
-    docs = models.CharField('Перечень документов и принадлежностей', max_length=1000, default='', blank=True, null=True)
-    yearintoservice = models.IntegerField('Год ввода в эксплуатацию', default='0', blank=True, null=True)
-    new = models.CharField('Новый или б/у', max_length=100, default='новый')
-    invnumber = models.CharField('Инвентарный номер', max_length=100, default='', blank=True, null=True)
-    kategory = models.CharField(max_length=300, choices=KATEGORY, default='Средство измерения', null=True)
-
-    def __str__(self):
-        return f'{self.name}{self.lot}'
-
-
-    class Meta:
-        verbose_name = 'Прибор'
-        verbose_name_plural = 'Приборы'
+# class Equipment(models.Model):
+#     exnumber = models.CharField('Внутренний номер', max_length=100, default='', blank=True, null=True)
+#     name = models.CharField('Название прибора', max_length=100, default='')
+#     modificname = models.CharField('Модификация прибора', max_length=100, default='', blank=True, null=True)
+#     typename = models.CharField('Тип прибора', max_length=100, default='', blank=True, null=True)
+#     lot = models.CharField('Заводской номер', max_length=100, default='')
+#     yearmanuf = models.IntegerField('Год выпуска', default='', blank=True, null=True)
+#     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT, verbose_name='Производитель')
+#     status = models.CharField(max_length=300, choices=CHOICES, default='В эксплуатации', null=True)
+#     calinterval = models.IntegerField('МежМетрологический интервал, месяцев', default='', blank=True, null=True)
+#     docs = models.CharField('Перечень документов и принадлежностей', max_length=1000, default='', blank=True, null=True)
+#     yearintoservice = models.IntegerField('Год ввода в эксплуатацию', default='0', blank=True, null=True)
+#     new = models.CharField('Новый или б/у', max_length=100, default='новый')
+#     invnumber = models.CharField('Инвентарный номер', max_length=100, default='', blank=True, null=True)
+#     kategory = models.CharField(max_length=300, choices=KATEGORY, default='Средство измерения', null=True)
+#
+#     def __str__(self):
+#         return f'{self.name}{self.lot}'
+#
+#
+#     class Meta:
+#         verbose_name = 'Прибор'
+#         verbose_name_plural = 'Приборы'
 
 # class Roomschange(models.Model):
 #     roomnumber = models.ForeignKey(Rooms, on_delete=models.PROTECT)
