@@ -20,8 +20,7 @@ class ViscosimeterType(models.Model):
     range = models.CharField('Область измерений, сСт', max_length=30)
     type = models.CharField('Тип', max_length=30, default='ВПЖ-1')
     intervalVerification = models.CharField('Межповерочный интервал', max_length=30, default='4 года')
-    create_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
-    update_at = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
+
 
 
     def __str__(self):
