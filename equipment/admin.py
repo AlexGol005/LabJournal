@@ -1,6 +1,7 @@
-# from django.contrib import admin
+from django.contrib import admin
 # from .models import Manufacturer, Rooms, \
 #     Equipment, Roomschange, Personchange, MeasurEquipmentCharakters, MeasurEquipment
+from .models import MeasurEquipmentCharakters
 #
 #
 # admin.site.register(Manufacturer)
@@ -9,6 +10,6 @@
 # admin.site.register(Roomschange)
 # admin.site.register(Personchange)
 # admin.site.register(MeasurEquipment)
-# admin.site.register(MeasurEquipmentCharakters)
+admin.site.register(MeasurEquipmentCharakters)
 
 
