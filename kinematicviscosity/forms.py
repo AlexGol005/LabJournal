@@ -30,7 +30,7 @@ class ViscosityMJLCreationForm(forms.ModelForm):
                                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                                         'placeholder': '№ первого вискозиметра'}
                                                                  ))
-    Konstant1 = forms.DecimalField(label='Константа вискозиметра № 1', max_digits=20, decimal_places=10, required=True,
+    Konstant1 = forms.DecimalField(label='Константа вискозиметра № 1', max_digits=20, decimal_places=6, required=True,
                                    widget=forms.TextInput(attrs={'class': 'form-control',
                                                                  'placeholder': 'Константа через точку'}
                                                           ))
@@ -38,7 +38,7 @@ class ViscosityMJLCreationForm(forms.ModelForm):
     widget = forms.TextInput(attrs={'class': 'form-control',
                                     'placeholder': '№ второго вискозиметра'}
                              ))
-    Konstant2 = forms.DecimalField(label='Константа вискозиметра № 2', max_digits=20, decimal_places=10, required=False,
+    Konstant2 = forms.DecimalField(label='Константа вискозиметра № 2', max_digits=20, decimal_places=6, required=False,
                                    widget=forms.TextInput(attrs={'class': 'form-control',
                                                                  'placeholder': 'Константа через точку'}
                                                           ))

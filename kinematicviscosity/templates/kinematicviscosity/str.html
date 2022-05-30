@@ -63,7 +63,7 @@
 		</tr>
 		<tr>
 			<td colspan="4"><div style="text-align: center;">{{ note.Konstant1}}</div></td>
-			<td colspan="4"><div style="text-align: center;">{{ note.Konstant2}}</div></td>
+			<td colspan="4"><div style="text-align: center;">{{ note.Konstant2|default_if_none:" "}}</div></td>
 		</tr>
 		<tr>
 			<th rowspan="2"><div style="text-align: center;">Время истечения 1, τ<sub>1</sub></div></th>
@@ -75,8 +75,8 @@
 		<tr>
 			<td colspan="3"><div style="text-align: center;">{{ note.plustimeminK1T1}}:{{ note.plustimesekK1T1}}</div></td>
 			<td><div style="text-align: center;">{{ note.timeK1T1_sec}}</div></td>
-            <td colspan="3"><div style="text-align: center;">{{ note.plustimeminK2T1}}:{{ note.plustimesekK2T1}}</div></td>
-            <td><div style="text-align: center;">{{ note.timeK2T1_sec}}</div></td>
+            <td colspan="3"><div style="text-align: center;">{{ note.plustimeminK2T1|default_if_none:" "}}:{{ note.plustimesekK2T1|default_if_none:" "}}</div></td>
+            <td><div style="text-align: center;">{{ note.timeK2T1_sec|default_if_none:" "}}</div></td>
 		</tr>
 		<tr>
 			<th rowspan="2"><div style="text-align: center;">Время истечения 2, τ<sub>2</sub></div></th>
@@ -86,10 +86,10 @@
 			<th><div style="text-align: center;">τ<sub>22</sub>, секунд</div></th>
 		</tr>
 		<tr>
-			<td colspan="3"><div style="text-align: center;">{{ note.plustimeminK1T2}}:{{ note.plustimesekK1T2}}</div></td>
-			<td><div style="text-align: center;">{{ note.timeK1T2_sec}}</div></td>
-            <td colspan="3"><div style="text-align: center;">{{ note.plustimeminK2T2}}:{{ note.plustimesekK2T2}}</div></td>
-            <td><div style="text-align: center;">{{ note.timeK2T2_sec}}</div></td>
+			<td colspan="3"><div style="text-align: center;">{{ note.plustimeminK1T2|default_if_none:" "}}:{{ note.plustimesekK1T2|default_if_none:" "}}</div></td>
+			<td><div style="text-align: center;">{{ note.timeK1T2_sec|default_if_none:" "}}</div></td>
+            <td colspan="3"><div style="text-align: center;">{{ note.plustimeminK2T2|default_if_none:" "}}:{{ note.plustimesekK2T2|default_if_none:" "}}</div></td>
+            <td><div style="text-align: center;">{{ note.timeK2T2_sec|default_if_none:" "}}</div></td>
 		</tr>
 		<tr>
 			<th rowspan="2"><div style="text-align: center;">Время истечения среднее</div></th>
