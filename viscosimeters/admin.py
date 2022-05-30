@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models  import  ViscosimeterType
-# Kalibration, Viscosimeters
+from .models  import  Viscosimeters, Kalibration, ViscosimeterType
+
 
 
 
@@ -13,7 +13,7 @@ class NoteAdmin(admin.ModelAdmin):
     list_display = ('diameter', 'pairNumber', 'viscosity1000', 'range', 'type', 'intervalVerification', 'test', 'create_at', 'update_at')
     fields = (('range', 'diameter'), 'pairNumber', 'viscosity1000', 'type', 'intervalVerification', 'create_at', 'update_at')
 
-    readonly_fields = ('create_at', 'update_at')
+#     readonly_fields = ('create_at', 'update_at')
     # вычисляемое поле - но как его отобразить при просмотре заполненных??
     # разрешить редактирование
     # list_editable = ("is_available",)
@@ -25,5 +25,5 @@ class NoteAdmin(admin.ModelAdmin):
 
 
 
-# admin.site.register(Viscosimeters)
-# admin.site.register(Kalibration)
+admin.site.register(Viscosimeters)
+admin.site.register(Kalibration)
