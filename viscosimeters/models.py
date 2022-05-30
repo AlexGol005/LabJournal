@@ -5,7 +5,7 @@ from django.utils.timezone import now
 from django.urls import reverse
 from django.contrib.auth.models import User
 
-from equipment.models import Manufacturer, Equipment,MeasurEquipment
+from equipment.models import Manufacturer, Equipment
 
 
 
