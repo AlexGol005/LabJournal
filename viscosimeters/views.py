@@ -56,6 +56,9 @@ class ViscosimeterTypeView(View):
 #         return render(request, 'viscosimeters/viscosimetersKonstants.html', {'ViscosimetersObjects': ViscosimetersObjects})
 
 
-
+class ViscosimetersHeadView(View):
+    """ выводит заглавную старницу вискозиметров """
+    def get(self, request):
+        return render(request, 'viscosimeters/head.html')
 
 

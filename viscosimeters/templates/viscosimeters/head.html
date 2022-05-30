@@ -1,0 +1,15 @@
+{% extends 'main/Journal.html' %}
+{% load static %}
+{% block uniccontent %}
+    <div style="text-align: center;"><h6> Вискозиметры ВПЖ-1 </h6></div>
+     <br>
+         <div style="text-align: center;">
+        <a href="{% url 'konstv' %}" class="btn btn-info mr-5 mt-3"> Константы вискозиметров </a>
+         <a href="{% url 'kalibrationviscosimetersreg' %}" class="btn btn-info mr-5 mt-3"> Внести константу </a>
+
+         </div>
+    <br>
+    <div style="text-align: center;"><img src="{% static 'main/img/11.jpg' %}"
+                                          alt="ВЖ"></div>
+
+{% endblock %}
