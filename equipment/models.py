@@ -100,19 +100,19 @@ class Rooms(models.Model):
 #         verbose_name = 'Дата изменения ответственного'
 #         verbose_name_plural = 'Даты изменения ответственных'
 
-# class MeasurEquipmentCharakters(models.Model):
-#     reestr = models.CharField('Номер в Госреестре', max_length=1000, default='', blank=True, null=True)
-#     measurydiapason = models.CharField('Диапазон измерений', max_length=1000, default='', blank=True, null=True)
-#     accuracity = models.CharField('Класс точности /(разряд/), погрешность и /(или/) неопределённость /(класс, разряд/)',
-#                               max_length=1000, default='', blank=True, null=True)
-#
-#
-#     def __str__(self):
-#         return f'госреестр: {self.reestr}'
-#
-#     class Meta:
-#         verbose_name = 'Средство измерения описание'
-#         verbose_name_plural = 'Средства измерения описания'
+class MeasurEquipmentCharakters(models.Model):
+    reestr = models.CharField('Номер в Госреестре', max_length=1000, default='', blank=True, null=True)
+    measurydiapason = models.CharField('Диапазон измерений', max_length=1000, default='', blank=True, null=True)
+    accuracity = models.CharField('Класс точности /(разряд/), погрешность и /(или/) неопределённость /(класс, разряд/)',
+                              max_length=1000, default='', blank=True, null=True)
+
+
+    def __str__(self):
+        return f'госреестр: {self.reestr}'
+
+    class Meta:
+        verbose_name = 'Средство измерения описание'
+        verbose_name_plural = 'Средства измерения описания'
 
 # class MeasurEquipment(models.Model):
 #     charakters = models.ForeignKey(MeasurEquipmentCharakters,  on_delete=models.PROTECT, verbose_name='Характеристики СИ', blank=True, null=True)
