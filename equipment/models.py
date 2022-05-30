@@ -119,7 +119,7 @@ class MeasurEquipment(models.Model):
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self):
-        return f' {self.equipment.name} {self.equipment.lot}{self.charakters.reestr}'
+        return f' {self.equipment.name} {self.equipment.lot} № {self.charakters.reestr}'
 
     class Meta:
         verbose_name = 'Средство измерения'
