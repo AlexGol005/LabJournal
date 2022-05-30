@@ -4,6 +4,7 @@ from django.http import  HttpResponse, HttpRequest
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.views.generic.edit import CreateView
 from .models import *
 from django.db.models import *
 
@@ -61,4 +62,13 @@ class ViscosimetersHeadView(View):
     def get(self, request):
         return render(request, 'viscosimeters/head.html')
 
-
+# рассмотреть этот вариант вьюшек
+# from .forms import BbForm
+# class BbCreateView(CreateView):
+# template_name = 'bboard/create.html’
+# form_class = BbForm
+# success_url = ’/bboard/’
+# def get_context_data(self, **kwargs):
+# context = super().get_context_data(**kwargs)
+# context[’rubrics’] = Rubric.objects.all()
+# return context
