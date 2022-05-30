@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models  import  ViscosimeterType \
-    # Kalibration, Viscosimeters
+from .models  import  ViscosimeterType, Kalibration, Viscosimeters
+
 
 
 @admin.register(ViscosimeterType)  # связываем админку с моделью
@@ -24,5 +24,5 @@ class NoteAdmin(admin.ModelAdmin):
 
 
 
-# admin.site.register(Viscosimeters)
-# admin.site.register(Kalibration)
+admin.site.register(Viscosimeters)
+admin.site.register(Kalibration)
