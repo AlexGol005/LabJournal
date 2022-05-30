@@ -55,7 +55,7 @@ class Kalibration(models.Model):
     performer = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'Константа {self.konstant}'
+        return f'{self.konstant}'
 
     class Meta:
         verbose_name = 'Калибровка'

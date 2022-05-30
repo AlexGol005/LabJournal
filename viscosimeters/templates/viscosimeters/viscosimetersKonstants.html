@@ -25,16 +25,22 @@
   </thead>
 
   <tbody>
-{% for note in v %}
+{% for note in viscosimeters %}
 
     <tr>
       <td> <div style="text-align: center;"> {{ note.equipment.lot }} </div></td>
-      <td> <div style="text-align: center;"> {{ note.kalibration_set }}  </div></td>
-      <td> <div style="text-align: center;"> {{ note.viscosimeterType.viscosity1000 }}<sup>2</sup>/с </div></td>
-      <td> <div style="text-align: center;"> {{ note.viscosimeterType.range }}<sup>2</sup>/с </div></td>
+      <td> <div style="text-align: center;">
+{#      {% with note.kalibration_set.all|first as image %}#}
+       {{ note.kalibration_set.all.last.konstant }}
+{#      {% endwith %}#}
+      </div></td>
+      <td> <div style="text-align: center;"> {{ note.viscosimeterType.viscosity1000 }}</div></td>
+      <td> <div style="text-align: center;"> {{ note.viscosimeterType.range }}</div></td>
       <td> <div style="text-align: center;"> {{ note.viscosimeterType.diameter }} </div></td>
-      <td> <div style="text-align: center;"> пов до </div></td>
-      <td> <div style="text-align: center;"> калиб до </div></td>
+      <td> <div style="text-align: center;">  </div></td>
+      <td> <div style="text-align: center;">
+      {{ note.kalibration_set.all.last.dateKalib }}
+      </div></td>
 
     </tr>
 
