@@ -5,7 +5,7 @@ from django.utils.timezone import now
 from django.urls import reverse
 from django.contrib.auth.models import User
 
-from equipment.models import Manufacturer, Equipment
+from equipment.models import Manufacturer, Equipment,MeasurEquipment
 
 
 
@@ -32,12 +32,12 @@ class ViscosimeterType(models.Model):
 class Viscosimeters(models.Model):
     viscosimeterType = models.ForeignKey(ViscosimeterType,  verbose_name='Диаметр',
                                  on_delete=models.PROTECT)
-    equipment = models.ForeignKey(Equipment, verbose_name='СИ',
-                                         on_delete=models.PROTECT, related_name='equipment')
+    equipmentSM = models.ForeignKey(MeasurEquipment, verbose_name='СИ',
+                                         on_delete=models.PROTECT, related_name='equipmentSM', blank=True, null=True)
 
 
     def __str__(self):
-        return f'№ {self.equipment.lot}'
+        return f'№ {self.equipmentSM.equipment.lot}'
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """

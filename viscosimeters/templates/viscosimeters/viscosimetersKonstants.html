@@ -28,7 +28,7 @@
 {% for note in viscosimeters %}
 
     <tr>
-      <td> <div style="text-align: center;"> {{ note.equipment.lot }} </div></td>
+      <td> <div style="text-align: center;"> {{ note.equipmentSM.equipment.lot }} </div></td>
       <td> <div style="text-align: center;">
 {#      {% with note.kalibration_set.all|first as image %}#}
        {{ note.kalibration_set.all.last.konstant }}
