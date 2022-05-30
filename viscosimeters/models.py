@@ -18,8 +18,7 @@ class ViscosimeterType(models.Model):
     diameter = models.CharField('Диаметр', max_length=5)
     viscosity1000 = models.CharField('Вязкость за 1000 сек, сСт', max_length=30)
     range = models.CharField('Область измерений, сСт', max_length=30)
-    type = models.CharField('Тип', max_length=30, default='ВПЖ-1')
-    intervalVerification = models.CharField('Межповерочный интервал', max_length=30, default='4 года')
+
 
 
 
@@ -37,8 +36,8 @@ class Viscosimeters(models.Model):
                                          on_delete=models.PROTECT, related_name='equipmentSM', blank=True, null=True)
 
 
-    # def __str__(self):
-    #     return f'№ {self.equipmentSM.equipment.lot}'
+    def __str__(self):
+        return f'№ {self.equipmentSM.equipment.lot}'
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
@@ -56,7 +55,7 @@ class Kalibration(models.Model):
     performer = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.konstant}'
+        return f' константа {self.konstant} к вискозиметру № {self.id_Viscosimeter.equipmentSM.equipment.lot}'
 
     class Meta:
         verbose_name = 'Калибровка'
