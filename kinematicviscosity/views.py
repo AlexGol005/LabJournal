@@ -74,6 +74,8 @@ class CommentsKinematicviscosityView(View):
         title = ViscosityMJL.objects.get(pk=pk)
         form = CommentCreationForm()
         return render(request, 'kinematicviscosity/comments.html', {'note': note, 'title': title, 'form': form})
+
+    @login_required
     def post(self, request, pk, *args, **kwargs):
         form = CommentCreationForm(request.POST)
         if form.is_valid():
