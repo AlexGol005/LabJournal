@@ -51,7 +51,7 @@ class Rooms(models.Model):
 
 
 
-class Equipments(models.Model):
+class Equipment(models.Model):
     exnumber = models.CharField('Внутренний номер', max_length=100, default='', blank=True, null=True)
     name = models.CharField('Название прибора', max_length=100, default='')
     modificname = models.CharField('Модификация прибора', max_length=100, default='', blank=True, null=True)
@@ -78,7 +78,7 @@ class Equipments(models.Model):
 class Roomschange(models.Model):
     roomnumber = models.ForeignKey(Rooms, on_delete=models.PROTECT)
     date = models.DateField('Дата перемещения', auto_now_add=True, db_index=True)
-    equipment = models.ForeignKey(Equipments, on_delete=models.PROTECT, blank=True, null=True)
+    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True)
 
 
     def __str__(self):
@@ -91,7 +91,7 @@ class Roomschange(models.Model):
 class Personchange(models.Model):
     person = models.ForeignKey(User, on_delete=models.PROTECT)
     date = models.DateField('Дата изменения ответственного', auto_now_add=True, db_index=True)
-    equipment = models.ForeignKey(Equipments, on_delete=models.PROTECT, blank=True, null=True)
+    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self):
         return f'Перемещено {self.date}'
@@ -116,7 +116,7 @@ class MeasurEquipmentCharakters(models.Model):
 
 class MeasurEquipment(models.Model):
     charakters = models.ForeignKey(MeasurEquipmentCharakters,  on_delete=models.PROTECT, verbose_name='Характеристики СИ', blank=True, null=True)
-    equipment = models.ForeignKey(Equipments, on_delete=models.PROTECT, blank=True, null=True)
+    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self):
         return f' {self.equipment.name} {self.equipment.lot}{self.charakters.reestr}'
