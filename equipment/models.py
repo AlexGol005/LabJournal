@@ -65,7 +65,7 @@ class Equipment(models.Model):
     yearintoservice = models.IntegerField('Год ввода в эксплуатацию', default='0', blank=True, null=True)
     new = models.CharField('Новый или б/у', max_length=100, default='новый')
     invnumber = models.CharField('Инвентарный номер', max_length=100, default='', blank=True, null=True)
-    kategory = models.CharField(max_length=300, choices=KATEGORY, default='Средство измерения', null=True)
+    # kategory = models.CharField(max_length=300, choices=KATEGORY, default='Средство измерения', null=True)
 
     def __str__(self):
         return f'{self.name}{self.lot}'
