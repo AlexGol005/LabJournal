@@ -11,7 +11,7 @@ class NoteAdmin(admin.ModelAdmin):
         return f"{(obj.pairNumber + obj.diameter)}"
 
     list_display = ('diameter', 'pairNumber', 'viscosity1000', 'range', 'type', 'intervalVerification', 'test')
-    fields = (('range', 'diameter'), 'pairNumber', 'viscosity1000', 'type', 'intervalVerification', 'create_at', 'update_at')
+    fields = (('range', 'diameter'), 'pairNumber', 'viscosity1000', 'type', 'intervalVerification')
 
 #     readonly_fields = ('create_at', 'update_at')
     # вычисляемое поле - но как его отобразить при просмотре заполненных??
