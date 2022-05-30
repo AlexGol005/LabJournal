@@ -67,13 +67,13 @@ class Equipment(models.Model):
     invnumber = models.CharField('Инвентарный номер', max_length=100, default='', blank=True, null=True)
     # kategory = models.CharField(max_length=300, choices=KATEGORY, default='Средство измерения', null=True)
 
-    def __str__(self):
-        return f'{self.name}{self.lot}'
-
-
-    class Meta:
-        verbose_name = 'Прибор'
-        verbose_name_plural = 'Приборы'
+    # def __str__(self):
+    #     return f'{self.name}{self.lot}'
+    #
+    #
+    # class Meta:
+    #     verbose_name = 'Прибор'
+    #     verbose_name_plural = 'Приборы'
 
 class Roomschange(models.Model):
     roomnumber = models.ForeignKey(Rooms, on_delete=models.PROTECT)
