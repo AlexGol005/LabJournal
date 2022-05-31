@@ -19,9 +19,9 @@ def KalibrationViscosimetersRegView(request):
             order = form.save(commit=False)
             order.performer = request.user
             order.save()
-            name = form.cleaned_data.get('id_Viscosimeter.equipmentSM.charakters.name')
+            name = form.cleaned_data.get('id_Viscosimeter')
             konstant = form.cleaned_data.get('konstant')
-            messages.success(request, f'Константа вискозиметра {konstant} внесена!')
+            messages.success(request, f'Константа {konstant} вискозиметра {name} внесена!')
             return redirect('/kalibrationviscosimetersreg/')
     else:
         form = KalibrationViscosimetersForm()
