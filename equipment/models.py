@@ -48,14 +48,24 @@ class Rooms(models.Model):
         verbose_name = 'Комната'
         verbose_name_plural = 'Комнаты'
 
+class ModificationsAndTypes(models.Model):
+    modificname = models.CharField('Модификация прибора', max_length=100, default='', blank=True, null=True)
+    typename = models.CharField('Тип прибора', max_length=100, default='', blank=True, null=True)
+    def __str__(self):
+        return f'Модификация {self.modificname} Тип {self.typename} '
+
+
+    class Meta:
+        verbose_name = 'Модификация и тип'
+        verbose_name_plural = 'Модификации и типы'
+
+
 
 
 
 class Equipment(models.Model):
     exnumber = models.CharField('Внутренний номер', max_length=100, default='', blank=True, null=True)
     name = models.CharField('Название прибора', max_length=100, default='')
-    modificname = models.CharField('Модификация прибора', max_length=100, default='', blank=True, null=True)
-    typename = models.CharField('Тип прибора', max_length=100, default='', blank=True, null=True)
     lot = models.CharField('Заводской номер', max_length=100, default='')
     yearmanuf = models.IntegerField('Год выпуска', default='', blank=True, null=True)
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT, verbose_name='Производитель')
@@ -68,7 +78,7 @@ class Equipment(models.Model):
     kategory = models.CharField(max_length=300, choices=KATEGORY, default='Средство измерения', null=True, verbose_name='Категория')
 
     def __str__(self):
-        return f'{self.name} {self.modificname} {self.typename} № {self.lot}'
+        return f'{self.name}  № {self.lot}'
 
 
     class Meta:
@@ -124,6 +134,8 @@ class MeasurEquipment(models.Model):
     class Meta:
         verbose_name = 'Средство измерения'
         verbose_name_plural = 'Средства измерения'
+
+
 
 
 
