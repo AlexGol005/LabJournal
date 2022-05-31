@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView
 from .models import *
 from django.db.models import *
-
+from .models import *
 from .forms import KalibrationViscosimetersForm
 
 @login_required
@@ -19,8 +19,9 @@ def KalibrationViscosimetersRegView(request):
             order = form.save(commit=False)
             order.performer = request.user
             order.save()
-            name = form.cleaned_data.get('name')
-            messages.success(request, f'Запись была успешно создана!')
+            name = form.cleaned_data.get('id_Viscosimeter.equipmentSM.charakters.name')
+            konstant = form.cleaned_data.get('konstant')
+            messages.success(request, f'Константа вискозиметра {konstant} внесена!')
             return redirect('/kalibrationviscosimetersreg/')
     else:
         form = KalibrationViscosimetersForm()
