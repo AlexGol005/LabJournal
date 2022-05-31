@@ -64,42 +64,28 @@ class ModificationsAndTypes(models.Model):
 
 
 class Equipment(models.Model):
-    exnumber = models.CharField('Внутренний номер', max_length=100, default='', blank=True, null=True)
-    name = models.CharField('Название прибора', max_length=100, default='')
+    exnumber = models.CharField('Внутренний номер', max_length=100, default='', blank=True, null=True, unique=True)
     lot = models.CharField('Заводской номер', max_length=100, default='')
     yearmanuf = models.IntegerField('Год выпуска', default='', blank=True, null=True)
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT, verbose_name='Производитель')
     status = models.CharField(max_length=300, choices=CHOICES, default='В эксплуатации', null=True, verbose_name='Статус')
-    calinterval = models.IntegerField('МежМетрологический интервал, месяцев', default='', blank=True, null=True)
     docs = models.TextField('Перечень документов и принадлежностей', max_length=1000, default='', blank=True, null=True)
     yearintoservice = models.IntegerField('Год ввода в эксплуатацию', default='0', blank=True, null=True)
     new = models.CharField('Новый или б/у', max_length=100, default='новый')
     invnumber = models.CharField('Инвентарный номер', max_length=100, default='', blank=True, null=True)
     kategory = models.CharField(max_length=300, choices=KATEGORY, default='Средство измерения', null=True, verbose_name='Категория')
 
+
     def __str__(self):
-        return f'{self.name}  № {self.lot}'
+        return f'Вн. № {self.exnumber} Зав. № {self.lot}'
 
 
     class Meta:
         verbose_name = 'Прибор'
         verbose_name_plural = 'Приборы'
 
-class Roomschange(models.Model):
-    roomnumber = models.ForeignKey(Rooms, on_delete=models.PROTECT)
-    date = models.DateField('Дата перемещения', auto_now_add=True, db_index=True)
-    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True)
-
-
-    def __str__(self):
-        return f'Перемещено {self.date}'
-
-    class Meta:
-        verbose_name = 'Дата перемещения прибора'
-        verbose_name_plural = 'Даты перемещения приборов'
-
 class Personchange(models.Model):
-    person = models.ForeignKey(User, on_delete=models.PROTECT)
+    person = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='Ответственный за оборудование')
     date = models.DateField('Дата изменения ответственного', auto_now_add=True, db_index=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True)
 
@@ -110,26 +96,44 @@ class Personchange(models.Model):
         verbose_name = 'Дата изменения ответственного'
         verbose_name_plural = 'Даты изменения ответственных'
 
+class Roomschange(models.Model):
+    roomnumber = models.ForeignKey(Rooms, on_delete=models.PROTECT)
+    date = models.DateField('Дата перемещения', auto_now_add=True, db_index=True)
+    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Оборудование')
+
+
+    def __str__(self):
+        return f'Перемещено {self.date}'
+
+    class Meta:
+        verbose_name = 'Дата перемещения прибора'
+        verbose_name_plural = 'Даты перемещения приборов'
+
+
+
 class MeasurEquipmentCharakters(models.Model):
+    name = models.CharField('Название прибора', max_length=100, default='')
+    modtype = models.ForeignKey(ModificationsAndTypes, on_delete=models.PROTECT, verbose_name='Тип и модификация')
     reestr = models.CharField('Номер в Госреестре', max_length=1000, default='', blank=True, null=True)
+    calinterval = models.IntegerField('МежМетрологический интервал, месяцев', default='', blank=True, null=True)
     measurydiapason = models.CharField('Диапазон измерений', max_length=1000, default='', blank=True, null=True)
     accuracity = models.CharField('Класс точности /(разряд/), погрешность и /(или/) неопределённость /(класс, разряд/)',
                               max_length=1000, default='', blank=True, null=True)
 
 
     def __str__(self):
-        return f'госреестр: {self.reestr}'
+        return f'госреестр: {self.reestr}, {self.name}, {self.modtype.modificname}, {self.modtype.typename}'
 
     class Meta:
-        verbose_name = 'Средство измерения описание'
-        verbose_name_plural = 'Средства измерения описания'
+        verbose_name = 'Средство измерения описание типа'
+        verbose_name_plural = 'Средства измерения описания типов'
 
 class MeasurEquipment(models.Model):
     charakters = models.ForeignKey(MeasurEquipmentCharakters,  on_delete=models.PROTECT, verbose_name='Характеристики СИ', blank=True, null=True)
-    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True)
+    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Оборудование')
 
     def __str__(self):
-        return f' {self.equipment.name} Зав №{self.equipment.lot} № реестр {self.charakters.reestr}'
+        return f' {self.charakters.name}  Зав №{self.equipment.lot}  № реестр {self.charakters.reestr}'
 
     class Meta:
         verbose_name = 'Средство измерения'
