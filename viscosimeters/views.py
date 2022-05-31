@@ -21,7 +21,7 @@ def KalibrationViscosimetersRegView(request):
             order.save()
             name = form.cleaned_data.get('name')
             messages.success(request, f'Запись была успешно создана!')
-            return redirect('/')
+            return redirect(order)
     else:
         form = KalibrationViscosimetersForm()
 
