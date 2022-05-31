@@ -36,7 +36,7 @@ class ViscosimetersView(View):
     """ Представление, которое выводит все вискозиметры с константами. """
     def get(self, request):
         viscosimeters = Viscosimeters.objects.all()
-        # viscosimeters = Viscosimeters.objects.annotate(idactualkonst=Max('kalibration__id'))
+        # viscosimeters = Viscosimeters.objects.annotate(idactualkonst=Max('kalibration__id')).values('kalibration__konstant', )
         data = {'viscosimeters': viscosimeters}
 
 

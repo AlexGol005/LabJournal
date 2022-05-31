@@ -30,9 +30,8 @@
     <tr>
       <td> <div style="text-align: center;"> {{ note.equipmentSM.equipment.lot }} </div></td>
       <td> <div style="text-align: center;">
-{#      {% with note.kalibration_set.all|first as image %}#}
+{#          {{ note.kalibration__konstant }}#}
        {{ note.kalibration_set.all.last.konstant }}
-{#      {% endwith %}#}
       </div></td>
       <td> <div style="text-align: center;"> {{ note.viscosimeterType.viscosity1000 }}</div></td>
       <td> <div style="text-align: center;"> {{ note.viscosimeterType.range }}</div></td>
