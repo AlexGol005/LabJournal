@@ -122,7 +122,7 @@ class MeasurEquipmentCharakters(models.Model):
 
 
     def __str__(self):
-        return f'госреестр: {self.reestr},  {self.name}  модификация/тип {self.modtype}'
+        return f'госреестр: {self.reestr},  {self.name}  {self.modtype}'
 
     class Meta:
         verbose_name = 'Средство измерения описание типа'
