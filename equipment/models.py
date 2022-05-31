@@ -77,7 +77,7 @@ class Equipment(models.Model):
 
 
     def __str__(self):
-        return f'Вн. № {self.exnumber} Зав. № {self.lot}'
+        return f'Вн. № {self.exnumber}    Зав. № {self.lot}'
 
 
     class Meta:
@@ -133,7 +133,7 @@ class MeasurEquipment(models.Model):
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Оборудование')
 
     def __str__(self):
-        return f' {self.charakters.name}  Зав №{self.equipment.lot}  № реестр {self.charakters.reestr}'
+        return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot}  № реестр {self.charakters.reestr}'
 
     class Meta:
         verbose_name = 'Средство измерения'
