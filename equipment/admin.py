@@ -12,4 +12,5 @@ admin.site.register(MeasurEquipmentCharakters)
 admin.site.register(Personchange)
 admin.site.register(MeasurEquipment)
 admin.site.register(Equipment)
+admin.site.register(ModificationsAndTypes)
 
