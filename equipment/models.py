@@ -115,7 +115,7 @@ class MeasurEquipmentCharakters(models.Model):
     name = models.CharField('Название прибора', max_length=100, default='')
     modtype = models.ForeignKey(ModificationsAndTypes, on_delete=models.PROTECT, verbose_name='Тип и модификация', default='')
     reestr = models.CharField('Номер в Госреестре', max_length=1000, default='', blank=True, null=True)
-    calinterval = models.IntegerField('МежМетрологический интервал, месяцев', default='', blank=True, null=True)
+    calinterval = models.IntegerField('МежМетрологический интервал, месяцев', default = 12, blank=True, null=True)
     measurydiapason = models.CharField('Диапазон измерений', max_length=1000, default='', blank=True, null=True)
     accuracity = models.CharField('Класс точности /(разряд/), погрешность и /(или/) неопределённость /(класс, разряд/)',
                               max_length=1000, default='', blank=True, null=True)
