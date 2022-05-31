@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'api',
     'crispy_forms',
-    'equipment'
+    'equipment',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -151,6 +151,8 @@ MEDIA_URL = '/pictures/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'pictures')
 
 SHORT_DATE_FORMAT = ' j . m. Y'
+
+
 
 
 

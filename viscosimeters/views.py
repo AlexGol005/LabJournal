@@ -1,13 +1,14 @@
 from django.shortcuts import render
+from django.db import connection
 from django.views import View
 from django.http import  HttpResponse, HttpRequest
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView
-from .models import *
+
 from django.db.models import *
-from .models import *
+from viscosimeters.models import Viscosimeters, Kalibration
 from .forms import KalibrationViscosimetersForm
 
 @login_required
@@ -37,7 +38,8 @@ class ViscosimetersView(View):
     """ Представление, которое выводит все вискозиметры с константами. """
     def get(self, request):
         viscosimeters = Viscosimeters.objects.all()
-        # viscosimeters = Viscosimeters.objects.annotate(idactualkonst=Max('kalibration__id')).values('kalibration__konstant', )
+        # viscosimeters = Kalibration.objects.select_related('id_Viscosimeter').values('id_Viscosimeter').annotate(total=Max('id'))
+        # viscosimeters = AllKonst.aggregate(Max('pk'))
         data = {'viscosimeters': viscosimeters}
 
 
