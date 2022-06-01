@@ -161,3 +161,13 @@ class CommentCreationForm(forms.ModelForm):
         model = CommentsKinematicviscosity
         fields = ['name']
 
+
+class ViscosityMJLUdateForm(forms.ModelForm):
+    fixation = forms.BooleanField(label='В ЖАЗ',  required=False)
+
+
+
+    class Meta:
+        model = ViscosityMJL
+        fields = ['fixation']
+

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'api',
     'crispy_forms',
     'equipment',
+    # 'debug_toolbar',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -67,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'LabJournal.urls'
@@ -151,6 +153,26 @@ MEDIA_URL = '/pictures/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'pictures')
 
 SHORT_DATE_FORMAT = ' j . m. Y'
+
+TOOLBAR_DEBUG = True
+
+if TOOLBAR_DEBUG:
+    try:
+        from LabJournal import local_settings
+
+        INSTALLED_APPS += local_settings.INSTALLED_APPS
+        MIDDLEWARE = local_settings.MIDDLEWARE + MIDDLEWARE
+
+        INTERNAL_IPS = local_settings.INTERNAL_IPS
+    except ImportError as e:
+        import logging
+
+        logger = logging.getLogger(__name__)
+        logger.warning(f"Ошибка импорта. {e}")
+
+if DEBUG:
+    import mimetypes
+    mimetypes.add_type("application/javascript", ".js", True)
 
 
 

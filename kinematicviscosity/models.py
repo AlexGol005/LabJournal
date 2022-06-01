@@ -18,18 +18,18 @@ CHOICES = (
 
 class ViscosityMJL(models.Model):
     date = models.DateField('Дата', auto_now_add=True, db_index=True)
-    name = models.CharField('Наименование', max_length=100, default='0')
-    lot = models.CharField('Партия', max_length=100)
+    name = models.CharField('Наименование', max_length=100, default='0', null=True)
+    lot = models.CharField('Партия', max_length=100, null=True)
     ndocumentoptional = (('ГОСТ 33', 'ГОСТ 33'),
                          ('МИ-01', 'МИ-01'),
                          ('оценка', 'оценка вязкости'))
     ndocument = models.CharField('Метод испытаний', max_length=100, choices=ndocumentoptional, default='МИ-01')
-    temperature = models.DecimalField('Температура, ℃', max_digits=5, decimal_places=2, default='0')
-    termostatition = models.BooleanField(verbose_name='Термостатировано не менее 20 минут', blank=True)
-    temperatureCheck = models.BooleanField(verbose_name='Температура контролируется внешним поверенным термометром', blank=True)
-    termometer = models.CharField('Внутренний номер термометра', max_length=10, default='0')
-    ViscosimeterNumber1 = models.CharField('Заводской номер вискозиметра № 1', max_length=10, default='0')  # todo ForeignKey
-    Konstant1 = models.DecimalField('Константа вискозиметра № 1', max_digits=20, decimal_places=6, default='0')
+    temperature = models.DecimalField('Температура, ℃', max_digits=5, decimal_places=2, default='0', null=True)
+    termostatition = models.BooleanField(verbose_name='Термостатировано не менее 20 минут', blank=True, null=True)
+    temperatureCheck = models.BooleanField(verbose_name='Температура контролируется внешним поверенным термометром', blank=True, null=True)
+    termometer = models.CharField('Внутренний номер термометра', max_length=10, default='0', null=True)
+    ViscosimeterNumber1 = models.CharField('Заводской номер вискозиметра № 1', max_length=10, default='0', null=True)  # todo ForeignKey
+    Konstant1 = models.DecimalField('Константа вискозиметра № 1', max_digits=20, decimal_places=6, default='0', null=True)
     ViscosimeterNumber2 = models.CharField('Заводской номер вискозиметра № 2', max_length=10, default='0', null=True)
     Konstant2 = models.DecimalField('Константа вискозиметра № 2', max_digits=20, decimal_places=6, default='0', null=True)
     plustimeminK1T1 = models.DecimalField('Время истечения K1T1, + мин', max_digits=3, decimal_places=0, null=True)
@@ -40,7 +40,7 @@ class ViscosityMJL(models.Model):
     plustimesekK2T1 = models.DecimalField('Время истечения K2T1, + cек', max_digits=5, decimal_places=2, null=True)
     plustimeminK2T2 = models.DecimalField('Время истечения K2T2, + мин', max_digits=3, decimal_places=0, null=True)
     plustimesekK2T2 = models.DecimalField('Время истечения K2T2, + cек', max_digits=5, decimal_places=2, null=True)
-    performer = models.ForeignKey(User, on_delete=models.CASCADE)
+    performer = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     timeK1T1_sec = models.DecimalField('Время истечения K1T1, в секундах', max_digits=7, decimal_places=2, default=0.00, null=True)
     timeK1T2_sec = models.DecimalField('Время истечения K1T2, в секундах', max_digits=7, decimal_places=2, default=0.00, null=True)
     timeK2T1_sec = models.DecimalField('Время истечения K2T1, в секундах', max_digits=7, decimal_places=2, default=0.00, null=True)
@@ -67,6 +67,7 @@ class ViscosityMJL(models.Model):
                                                  max_digits=10, decimal_places=4, null=True)
     deltaOldCertifiedValue_text = models.CharField(max_length=300, default='', null=True)
     resultWarning = models.CharField(max_length=300, default='', null=True)
+    fixation = models.BooleanField(verbose_name='Внесен ли результат в Журнал аттестованных значений?', default=False, null=True)
 
     def save(self, *args, **kwargs):
         if (self.plustimeminK1T2 and self.plustimesekK1T2 and self.plustimeminK2T1 and
