@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
@@ -11,6 +11,12 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from main.models import AttestationJ
 from .forms import ViscosityMJLUdateForm
+from journalcertvalues.models import VG
+
+class GenreYear:
+    def get_genres(self):
+        return ViscosityMJL.objects.all()
+
 
 
 class StrKinematicviscosityDetailView(DetailView):
@@ -30,13 +36,25 @@ class StrKinematicviscosityView(View):
         return render(request, 'kinematicviscosity/str.html', {'note': note, 'form': form})
 
 
+
+
     def post(self, request, pk, *args, **kwargs):
-        form = ViscosityMJLUdateForm(request.POST, instance=ViscosityMJL.objects.get(id=pk))
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.save()
-            # form.save()
+        if ViscosityMJL.objects.get(id=pk).performer == request.user:
+            form = ViscosityMJLUdateForm(request.POST, instance=ViscosityMJL.objects.get(id=pk))
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.save()
+                # form.save()
+            messages.success(request, f'АЗ записано ЖАЗ сайта!')
             return redirect(order)
+        else:
+            form = ViscosityMJLUdateForm(request.POST, instance=ViscosityMJL.objects.get(id=pk))
+            order = form.save(commit=False)
+            messages.success(request, f'Не отправлено! Отправить в ЖАЗ может только исполнитель данного измерения!')
+            return redirect(order)
+
+
+
 
 
 
@@ -65,11 +83,14 @@ def RegKinematicviscosityView(request):
         })
 
 
-class AllKinematicviscosityView(View):
+class AllKinematicviscosityView(GenreYear, View):
     """ Представление, которое выводит все записи в журнале. """
     def get(self, request):
         viscosityobjects = ViscosityMJL.objects.order_by('-date')
-        return render(request, 'kinematicviscosity/journal.html', {'viscosityobjects': viscosityobjects})
+        lots = VG.objects.all()
+        return render(request, 'kinematicviscosity/journal.html', {'viscosityobjects': viscosityobjects, 'lots': lots})
+
+
 
 
 class AttestationJoneView(View):
@@ -97,10 +118,15 @@ class CommentsKinematicviscosityView(View):
             order.author = request.user
             order.forNote = ViscosityMJL.objects.get(pk=pk)
             order.save()
-            # form.save()
-            name = form.cleaned_data.get('name')
             messages.success(request, f'Комментарий добавлен!')
             return redirect(order)
+
+class FilterMoviesView(GenreYear, ListView):
+    """ Представление, которое выводит фильтрует записи в журнале. """
+    def get_queryset(self):
+        queryset = ViscosityMJL.objects.filter(name__in=self.request.GET.getlist("name"))
+
+        return queryset
 
 
 

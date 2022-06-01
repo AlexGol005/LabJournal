@@ -3,9 +3,10 @@ from django.contrib.auth.decorators import login_required
 from . import views
 
 urlpatterns = [
-    path('attestation/<int:pk>/', views.StrKinematicviscosityView.as_view(), name='Str'),
+    path('attestation/<int:pk>/', login_required(views.StrKinematicviscosityView.as_view()), name='Str'),
+    path('filter/', views.AttestationJoneView.as_view(), name='filter'),
     path('registration/', views.RegKinematicviscosityView, name='Reg'),
-    path('attestation/', views.AllKinematicviscosityView.as_view(), name='All'),
+    path('attestation/', login_required(views.AllKinematicviscosityView.as_view()), name='All'),
     path('', views.AttestationJoneView.as_view(), name='kinematicviscosity'),
     path('attestation/<int:pk>/comments/', login_required(views.CommentsKinematicviscosityView.as_view()), name='comm'),
 
