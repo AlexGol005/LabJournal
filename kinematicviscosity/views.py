@@ -50,8 +50,8 @@ def RegKinematicviscosityView(request):
             order.performer = request.user
             order.save()
             # form.save()
-            name = form.cleaned_data.get('name')
-            messages.success(request, f'Запись об аттестации СО {name} была успешно создана!')
+            # name = form.cleaned_data.get('name')
+            # messages.success(request, f'Запись об аттестации СО {name} была успешно создана!')
             return redirect(order)
     else:
         form = ViscosityMJLCreationForm()
