@@ -30,13 +30,13 @@ class StrKinematicviscosityView(View):
         return render(request, 'kinematicviscosity/str.html', {'note': note, 'form': form})
 
 
-    # def post(self, request, pk, *args, **kwargs):
-    #     form = ViscosityMJLUdateForm(request.POST, instance=request.   )
-    #     if form.is_valid():
-    #         order = form.save(commit=False)
-    #         order.save()
-    #         # form.save()
-    #         return redirect(order)
+    def post(self, request, pk, *args, **kwargs):
+        form = ViscosityMJLUdateForm(request.POST, instance=ViscosityMJL.objects.get(id=pk))
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.save()
+            # form.save()
+            return redirect(order)
 
 
 

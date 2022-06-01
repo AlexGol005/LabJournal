@@ -37,9 +37,9 @@ def KalibrationViscosimetersRegView(request):
 class ViscosimetersView(View):
     """ Представление, которое выводит все вискозиметры с константами. """
     def get(self, request):
+        # viscosimeters = Kalibration.objects.select_related('id_Viscosimeter').values('id_Viscosimeter').annotate(total=Max('id')).values('total', 'konstant').filter(konstant__in=)
         viscosimeters = Viscosimeters.objects.filter(equipmentSM__equipment__status__exact='Э')
-            #
-        # .filter(equipmentSM__equipment__status='В эксплуатации')
+        # prefetch_related("kalibration_set").
         # viscosimeters = Kalibration.objects.select_related('id_Viscosimeter').values('id_Viscosimeter').annotate(total=Max('id'))
         # viscosimeters = AllKonst.aggregate(Max('pk'))
         data = {'viscosimeters': viscosimeters}
