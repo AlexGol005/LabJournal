@@ -154,7 +154,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'pictures')
 
 SHORT_DATE_FORMAT = ' j . m. Y'
 
-TOOLBAR_DEBUG = True
+TOOLBAR_DEBUG = False
 
 if TOOLBAR_DEBUG:
     try:
