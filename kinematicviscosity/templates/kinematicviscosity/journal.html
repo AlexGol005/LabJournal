@@ -1,4 +1,4 @@
-{% extends 'main/superbase.html' %}
+{% extends 'main/base.html' %}
 
 {% block title %}
  кинематическая вязкость
@@ -7,7 +7,7 @@
 {% block content %}
     <div class="row">
 
-    <div class="col-md-8 mt-2" >
+    <div class="col-md-9 mt-2" >
     <div style="text-align: center;"><h4><a href="/attestationJ/kinematicviscosity/"> Журнал аттестации кинематической вязкости </a></h4></div>
     <div style="text-align: center;">СО ВЖ-1-ПА ГСО 11296-2019,
         СО ВЖ-2-ПА ГСО 11297-2019, СО ВЖ-3-ПА ГСО 112986-2019</div>
@@ -35,11 +35,11 @@
 {% for obj in viscosityobjects %}
 
     <tr>
-      <td align="center">{{ obj.date|date:"d-m-Y" }}</td>
+      <td align="center">{{ obj.date|date:"d.m.Y" }}</td>
       <td align="center"> {{ obj.name }}</td>
-      <td align="center"> п. {{ obj.lot }}</td>
-      <td align="center">{{ obj.temperature }}℃ </td>
-      <td align="center">{{ obj.certifiedValue_text }} сСт </td>
+      <td align="center"> {{ obj.lot }}</td>
+      <td align="center">{{ obj.temperature }} </td>
+      <td align="center">{{ obj.certifiedValue_text }} </td>
       <td align="center"><a href="{% url 'Str' obj.id %}"  class="btn btn-outline-warning mt-3">смотреть</a></td>
 
     </tr>
@@ -51,42 +51,17 @@
 
     </div>
 
-<div class="col-md-4 mt-8" >
-    <div style="text-align: center;"><h4> Фильтр записей  </h4></div>
+<div class="col-md-3 mt-8" ><div style="text-align: center;"><h4> Фильтр записей  </h4></div>
+<div style="text-align: center;"><a href="{% url 'viscosityobjects_filter' pk=3 %}" class="btn  btn-warning  mt-3" >Все</a></div>
+<div style="text-align: center;"> <a href="{% url 'viscosityobjects_filter' pk=1 %}" class="btn  btn-primary  mt-3" >Неделя</a></div>
+<div style="text-align: center;"> <a href="{% url 'viscosityobjects_filter' pk=2 %}" class="btn  btn-primary  mt-3" >Сегодня</a></div>
+<div style="text-align: center;"> <a href="{% url 'viscosityobjects_filter' pk=4 %}" class="btn  btn-primary  mt-3" >С АЗ</a></div>
+<div style="text-align: center;"> <a href="{% url 'viscosityobjects_filter' pk=5 %}" class="btn  btn-primary  mt-3" >Мои записи</a></div>
+<div style="text-align: center;"> <a href="{% url 'viscosityobjects_filter' pk=6 %}" class="btn  btn-primary  mt-3" >Мои записи с АЗ</a></div>
+<div style="text-align: center;"> <a href="{% url 'viscosityobjects_filter' pk=6 %}" class="btn  btn-primary  mt-3" >Мои записи с АЗ сегодня</a></div>
 
-<form action="" method="get" class="form-register">
-        {{ filter.form.as_p }}
-        <input type="submit" />
-    </form>
+
+
        </div>
        </div>
-{% endblock %}
- {% block aside %}
-
-
-
-
-
-{#     <div class="search-bar w3layouts-newsletter">#}
-{##}
-{##}
-{#<form action="{% url 'filter' %}" method="get">#}
-{#    <div class="left-side my-4">#}
-{#        <h6>Названия</h6>#}
-{#        <ul class="w3layouts-box-list">#}
-{#            {% for genre in lots %}#}
-{#                <li class="editContent">#}
-{#                    <input type="checkbox" class="checked" name="name" value="{{ genre.name }}">#}
-{#                    <span class="span editContent">{{ genre.name }}</span>#}
-{#                </li>#}
-{#            {% endfor %}#}
-{#        </ul>#}
-{#    </div>#}
-{#<button type="submit">Найти</button>#}
-{#</form>#}
-{#    <!-- // preference -->#}
-{#    <!-- discounts -->#}
-{#</div>#}
-{##}
-{#     </div>#}
 {% endblock %}
