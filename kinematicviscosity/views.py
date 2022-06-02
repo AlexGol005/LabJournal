@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import DetailView, ListView
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-
+from datetime import datetime, timedelta
 from .models import ViscosityMJL, CommentsKinematicviscosity
 from .forms import ViscosityMJLCreationForm, CommentCreationForm
 from django.shortcuts import get_object_or_404
@@ -13,37 +13,6 @@ from main.models import AttestationJ
 from .forms import ViscosityMJLUdateForm
 from journalcertvalues.models import VG
 import django_filters
-
-# class GenreYear:
-#     def get_genres(self):
-#         return ViscosityMJL.objects.all()
-
-# class ProductFilter(django_filters.FilterSet):
-#     class Meta:
-#         model = ViscosityMJL
-#         fields = ['name', 'lot', 'temperature']
-
-# def product_list(request):
-#     filter = ProductFilter(request.GET, queryset=ViscosityMJL.objects.all())
-#     return render(request, 'my_app/template.html', {'filter': filter})
-
-class AllKinematicviscosityView(View):
-    """ Представление, которое выводит все записи в журнале. """
-    def get(self, request):
-        viscosityobjects = ViscosityMJL.objects.order_by('-date')
-        return render(request, 'kinematicviscosity/journal.html', {'viscosityobjects': viscosityobjects})
-
-# from django_filters.views import FilterView
-#
-# class CoursesFilters(django_filters.FilterSet):
-#     class Meta:
-#         model = ViscosityMJL
-#         exclude = ('name')
-#
-# class AllKinematicviscosityView(FilterView):
-#     model = ViscosityMJL
-#     template_name = 'kinematicviscosity/journal.html'
-#     filterset_class = CoursesFilters
 
 
 
@@ -141,12 +110,32 @@ class CommentsKinematicviscosityView(View):
             messages.success(request, f'Комментарий добавлен!')
             return redirect(order)
 
-# class FilterMoviesView(ListView):
-#     """ Представление, которое выводит фильтрует записи в журнале. """
-#     def get_queryset(self):
-#         queryset = ViscosityMJL.objects.filter(name__in=self.request.GET.getlist("name"))
-#
-#         return queryset
+class AllKinematicviscosityView(View):
+    """ Представление, которое выводит все записи в журнале. """
+    def get(self, request):
+        viscosityobjects = ViscosityMJL.objects.order_by('-date')
+        return render(request, 'kinematicviscosity/journal.html', {'viscosityobjects': viscosityobjects})
 
 
+def viscosityobjects_filter(request, pk):
+    """ Фильтр статей по дате
+    """
+    viscosityobjects = ViscosityMJL.objects.all()
+    if pk == 1:
+        now = datetime.now() - timedelta(minutes=60 * 24 * 7)
+        viscosityobjects = viscosityobjects.filter(date__gte=now)
+    elif pk == 2:
+        now = datetime.now()
+        viscosityobjects = viscosityobjects.filter(date__gte=now)
+    elif pk == 3:
+        viscosityobjects = viscosityobjects
+    elif pk == 4:
+        viscosityobjects = viscosityobjects.filter(fixation__exact=True)
+    elif pk == 5:
+        viscosityobjects = viscosityobjects.filter(performer=request.user)
+    elif pk == 6:
+        viscosityobjects = viscosityobjects.filter(performer=request.user).filter(fixation__exact=True)
+    elif pk == 7:
+        viscosityobjects = viscosityobjects.filter(performer=request.user).filter(fixation__exact=True).filter(date__gte=datetime.now())
 
+    return render(request, "kinematicviscosity/journal.html",  {'viscosityobjects': viscosityobjects})
