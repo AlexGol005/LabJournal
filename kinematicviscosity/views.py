@@ -123,19 +123,19 @@ def viscosityobjects_filter(request, pk):
     viscosityobjects = ViscosityMJL.objects.all()
     if pk == 1:
         now = datetime.now() - timedelta(minutes=60 * 24 * 7)
-        viscosityobjects = viscosityobjects.filter(date__gte=now)
+        viscosityobjects = viscosityobjects.filter(date__gte=now).order_by('-pk')
     elif pk == 2:
         now = datetime.now()
-        viscosityobjects = viscosityobjects.filter(date__gte=now)
+        viscosityobjects = viscosityobjects.filter(date__gte=now).order_by('-pk')
     elif pk == 3:
         viscosityobjects = viscosityobjects.order_by('-pk')
     elif pk == 4:
-        viscosityobjects = viscosityobjects.filter(fixation__exact=True)
+        viscosityobjects = viscosityobjects.filter(fixation__exact=True).order_by('-pk')
     elif pk == 5:
-        viscosityobjects = viscosityobjects.filter(performer=request.user)
+        viscosityobjects = viscosityobjects.filter(performer=request.user).order_by('-pk')
     elif pk == 6:
-        viscosityobjects = viscosityobjects.filter(performer=request.user).filter(fixation__exact=True)
+        viscosityobjects = viscosityobjects.filter(performer=request.user).filter(fixation__exact=True).order_by('-pk')
     elif pk == 7:
-        viscosityobjects = viscosityobjects.filter(performer=request.user).filter(fixation__exact=True).filter(date__gte=datetime.now())
+        viscosityobjects = viscosityobjects.filter(performer=request.user).filter(fixation__exact=True).filter(date__gte=datetime.now()).order_by('-pk')
 
     return render(request, "kinematicviscosity/journal.html",  {'viscosityobjects': viscosityobjects})
