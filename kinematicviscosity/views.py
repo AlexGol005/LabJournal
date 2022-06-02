@@ -128,7 +128,7 @@ def viscosityobjects_filter(request, pk):
         now = datetime.now()
         viscosityobjects = viscosityobjects.filter(date__gte=now)
     elif pk == 3:
-        viscosityobjects = viscosityobjects
+        viscosityobjects = viscosityobjects.order_by('-pk')
     elif pk == 4:
         viscosityobjects = viscosityobjects.filter(fixation__exact=True)
     elif pk == 5:
