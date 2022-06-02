@@ -7,7 +7,7 @@
 {% block content %}
     <div class="row">
 
-    <div class="col-md-10 mt-2" >
+    <div class="col-md-8 mt-2" >
     <div style="text-align: center;"><h4><a href="/attestationJ/kinematicviscosity/"> Журнал аттестации кинематической вязкости </a></h4></div>
     <div style="text-align: center;">СО ВЖ-1-ПА ГСО 11296-2019,
         СО ВЖ-2-ПА ГСО 11297-2019, СО ВЖ-3-ПА ГСО 112986-2019</div>
@@ -31,6 +31,7 @@
   </thead>
 
   <tbody>
+
 {% for obj in viscosityobjects %}
 
     <tr>
@@ -44,16 +45,25 @@
     </tr>
 
 {% endfor %}
+
   </tbody>
 </table>
 
     </div>
-    </div>
 
+<div class="col-md-4 mt-8" >
+    <div style="text-align: center;"><h4> Фильтр записей  </h4></div>
+
+<form action="" method="get" class="form-register">
+        {{ filter.form.as_p }}
+        <input type="submit" />
+    </form>
+       </div>
+       </div>
 {% endblock %}
  {% block aside %}
-     <div class="mt-2" >
-<div style="text-align: center;"><h4> Фильтр записей  </h4></div>
+
+
 
 
 
