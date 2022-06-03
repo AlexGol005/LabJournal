@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from main.models import AttestationJ
 from .forms import ViscosityMJLUdateForm
 from journalcertvalues.models import VG
-import django_filters
+
 
 
 

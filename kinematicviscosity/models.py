@@ -5,10 +5,10 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from datetime import datetime
 from decimal import *
-import django_filters
+
 from django import forms
 from django.db.models import Q
-from django_filters import Filter
+
 
 from formuls import mrerrow, numberDigits
 from viscosimeters.models import Viscosimeters
