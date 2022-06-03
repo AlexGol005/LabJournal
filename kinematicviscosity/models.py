@@ -11,6 +11,7 @@ from django.db.models import Q
 from django_filters import Filter
 
 from formuls import mrerrow, numberDigits
+from viscosimeters.models import Viscosimeters
 
 CHOICES = (
         ('да', 'Проба содержит октол/нефть'),
@@ -32,6 +33,8 @@ class ViscosityMJL(models.Model):
     temperatureCheck = models.BooleanField(verbose_name='Температура контролируется внешним поверенным термометром', blank=True, null=True)
     termometer = models.CharField('Внутренний номер термометра', max_length=10, default='0', null=True)
     ViscosimeterNumber1 = models.CharField('Заводской номер вискозиметра № 1', max_length=10, default='0', null=True)  # todo ForeignKey
+    # ViscosimeterNumber1 = models.ForeignKey(Viscosimeters, verbose_name='Заводской номер вискозиметра № 1', on_delete=models.PROTECT, null=True)  # todo ForeignKey
+
     Konstant1 = models.DecimalField('Константа вискозиметра № 1', max_digits=20, decimal_places=6, default='0', null=True)
     ViscosimeterNumber2 = models.CharField('Заводской номер вискозиметра № 2', max_length=10, default='0', null=True)
     Konstant2 = models.DecimalField('Константа вискозиметра № 2', max_digits=20, decimal_places=6, default='0', null=True)
@@ -73,6 +76,7 @@ class ViscosityMJL(models.Model):
     fixation = models.BooleanField(verbose_name='Внесен ли результат в Журнал аттестованных значений?', default=False, null=True)
 
     def save(self, *args, **kwargs):
+        # self.Konstant1 = self.ViscosimeterNumber1
         if (self.plustimeminK1T2 and self.plustimesekK1T2 and self.plustimeminK2T1 and
                 self.plustimesekK2T1 and self.plustimeminK2T2 and self.plustimesekK2T2 and self.plustimeminK1T1 and
                 self.plustimesekK1T1):

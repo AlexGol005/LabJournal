@@ -42,12 +42,12 @@ class StrKinematicviscosityView(View):
                 order = form.save(commit=False)
                 order.save()
                 # form.save()
-                messages.success(request, f'АЗ записано ЖАЗ сайта!')
+                messages.success(request, f'АЗ успешно подтверждено!')
                 return redirect(order)
         else:
             form = ViscosityMJLUdateForm(request.POST, instance=ViscosityMJL.objects.get(id=pk))
             order = form.save(commit=False)
-            messages.success(request, f'Не отправлено! Отправить в ЖАЗ может только исполнитель данного измерения!')
+            messages.success(request, f'АЗ не подтверждено! Подтвердить АЗ может только исполнитель данного измерения!')
             return redirect(order)
 
 
@@ -118,7 +118,7 @@ class AllKinematicviscosityView(View):
 
 
 def viscosityobjects_filter(request, pk):
-    """ Фильтр статей по дате
+    """ Фильтры записей об измерениях по дате, АЗ, мои записи и пр
     """
     viscosityobjects = ViscosityMJL.objects.all()
     if pk == 1:

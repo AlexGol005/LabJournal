@@ -28,19 +28,23 @@
 {% for note in viscosimeters %}
 
     <tr>
-      <td> <div style="text-align: center;"> {{ note.equipmentSM.equipment.lot }} </div></td>
       <td> <div style="text-align: center;">
-{#          {{ note.kalibration_set.all.konstant }}#}
-       {{ note.kalibration_set.all.last.konstant }}
-{#          {{ note.kalibration_set }}#}
-{#          {{ note.konstant }}#}
+{#           {{ note.konstant }}#}
+          {{ note.id_Viscosimeter.equipmentSM.equipment.lot }}
       </div></td>
-      <td> <div style="text-align: center;"> {{ note.viscosimeterType.viscosity1000 }}</div></td>
-      <td> <div style="text-align: center;"> {{ note.viscosimeterType.range }}</div></td>
-      <td> <div style="text-align: center;"> {{ note.viscosimeterType.diameter }} </div></td>
+      <td> <div style="text-align: center;">
+{#       {{ note.kalibration_set.all.last.konstant }}#}
+          {{ note.konstant }}
+      </div></td>
+      <td> <div style="text-align: center;"> {{ note.id_Viscosimeter.viscosimeterType.viscosity1000 }}</div></td>
+      <td> <div style="text-align: center;"> {{ note.id_Viscosimeter.viscosimeterType.range }}</div></td>
+      <td> <div style="text-align: center;">
+{#          {{ note.viscosimeterType.diameter }}#}
+          {{ note.id_Viscosimeter.viscosimeterType.diameter }}
+      </div></td>
       <td> <div style="text-align: center;">  </div></td>
       <td> <div style="text-align: center;">
-      {{ note.kalibration_set.all.last.dateKalib }}
+      {{ note.dateKalib|date:"d.m.Y" }}
       </div></td>
 
     </tr>

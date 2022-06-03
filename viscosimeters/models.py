@@ -51,7 +51,7 @@ class Viscosimeters(models.Model):
 
 class Kalibration(models.Model):
     dateKalib = models.DateField('Дата калибровки', auto_now_add=True)
-    konstant = models.DecimalField('Установленная константа', max_digits=10, decimal_places=6, default='0')
+    konstant = models.DecimalField('Установленная константа', max_digits=20, decimal_places=6, default='0')
     id_Viscosimeter = models.ForeignKey(Viscosimeters, verbose_name='Номер вискозиметра', on_delete=models.CASCADE)
     performer = models.ForeignKey(User, on_delete=models.CASCADE)
 

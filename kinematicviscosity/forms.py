@@ -163,7 +163,7 @@ class CommentCreationForm(forms.ModelForm):
 
 
 class ViscosityMJLUdateForm(forms.ModelForm):
-    fixation = forms.BooleanField(label='В ЖАЗ',  required=False)
+    fixation = forms.BooleanField(label='АЗ',  required=False)
 
 
 
