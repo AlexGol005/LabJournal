@@ -33,8 +33,7 @@ class ViscosityMJL(models.Model):
     termostatition = models.BooleanField(verbose_name='Термостатировано не менее 20 минут', blank=True, null=True)
     temperatureCheck = models.BooleanField(verbose_name='Температура контролируется внешним поверенным термометром', blank=True, null=True)
     termometer = models.CharField('Внутренний номер термометра', max_length=10, default='0', null=True)
-    # ViscosimeterNumber1 = models.CharField('Заводской номер вискозиметра № 1', max_length=10, default='0', null=True)  # todo ForeignKey
-    ViscosimeterNumber1 = models.ForeignKey(Viscosimeters, verbose_name='Заводской номер вискозиметра № 1', on_delete=models.PROTECT, null=True)  # todo ForeignKey
+    ViscosimeterNumber1 = models.CharField('Заводской номер вискозиметра № 1', max_length=10, default='0', null=True)  # todo ForeignKey
     Konstant1 = models.DecimalField('Константа вискозиметра № 1', max_digits=20, decimal_places=6, default='0', null=True)
     ViscosimeterNumber2 = models.CharField('Заводской номер вискозиметра № 2', max_length=10, default='0', null=True)
     Konstant2 = models.DecimalField('Константа вискозиметра № 2', max_digits=20, decimal_places=6, default='0', null=True)
