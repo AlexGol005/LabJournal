@@ -3,7 +3,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
-from datetime import datetime
+from datetime import *
 from decimal import *
 from django.db.models import Max
 
@@ -32,7 +32,7 @@ class ViscosityMJL(models.Model):
     temperatureCheck = models.BooleanField(verbose_name='Температура контролируется внешним поверенным термометром', blank=True, null=True)
     termometer = models.CharField('Внутренний номер термометра', max_length=10, default='0', null=True)
     # ViscosimeterNumber1 = models.CharField('Заводской номер вискозиметра № 1', max_length=10, default='0', null=True)  # todo ForeignKey
-    ViscosimeterNumber1 = models.ForeignKey(Viscosimeters, verbose_name='Заводской номер вискозиметра № 1', on_delete=models.PROTECT, null=True)  # todo ForeignKey
+    ViscosimeterNumber1 = models.ForeignKey(Viscosimeters, verbose_name='Заводской номер вискозиметра № 1', on_delete=models.PROTECT, null=True, blank=True)  # todo ForeignKey
     Konstant1 = models.DecimalField('Константа вискозиметра № 1', max_digits=20, decimal_places=6, default='0', null=True)
     ViscosimeterNumber2 = models.CharField('Заводской номер вискозиметра № 2', max_length=10, default='0', null=True)
     Konstant2 = models.DecimalField('Константа вискозиметра № 2', max_digits=20, decimal_places=6, default='0', null=True)
@@ -72,15 +72,18 @@ class ViscosityMJL(models.Model):
     deltaOldCertifiedValue_text = models.CharField(max_length=300, default='', null=True)
     resultWarning = models.CharField(max_length=300, default='', null=True)
     fixation = models.BooleanField(verbose_name='Внесен ли результат в Журнал аттестованных значений?', default=False, null=True)
+    test = models.CharField(max_length=300, default='', null=True)
+    testd = models.DateField(default=datetime.now)
 
     def save(self, *args, **kwargs):
         get_id_actualconstant = Kalibration.objects.select_related('id_Viscosimeter').\
-            filter(dateKalib__lte=self.date).filter(id_Viscosimeter__exact=self.ViscosimeterNumber1).\
+            filter(dateKalib__lte = self.testd).filter(id_Viscosimeter__exact=self.ViscosimeterNumber1).\
             values('id_Viscosimeter').annotate(id_actualkonstant=Max('id')).values('id_actualkonstant')
         list_ = list(get_id_actualconstant)
         set = list_[0].get('id_actualkonstant')
         aktualKalibration = Kalibration.objects.get(id=set)
-        self.Konstant1 = Decimal(aktualKalibration.konstant)
+        # self.Konstant1 = aktualKalibration.konstant
+        self.test = aktualKalibration.konstant
         if (self.plustimeminK1T2 and self.plustimesekK1T2 and self.plustimeminK2T1 and
                 self.plustimesekK2T1 and self.plustimeminK2T2 and self.plustimesekK2T2 and self.plustimeminK1T1 and
                 self.plustimesekK1T1):
