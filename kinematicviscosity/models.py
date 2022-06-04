@@ -73,11 +73,12 @@ class ViscosityMJL(models.Model):
     resultWarning = models.CharField(max_length=300, default='', null=True)
     fixation = models.BooleanField(verbose_name='Внесен ли результат в Журнал аттестованных значений?', default=False, null=True)
     test = models.CharField(max_length=300, default='', null=True)
-    testd = models.DateField(default=datetime.now)
+    testd1 = models.DateTimeField(default=datetime.now)
+
 
     def save(self, *args, **kwargs):
         get_id_actualconstant = Kalibration.objects.select_related('id_Viscosimeter').\
-            filter(dateKalib__lte = self.testd).filter(id_Viscosimeter__exact=self.ViscosimeterNumber1).\
+            filter(dateKalib__lte = self.testd1).filter(id_Viscosimeter__exact=self.ViscosimeterNumber1).\
             values('id_Viscosimeter').annotate(id_actualkonstant=Max('id')).values('id_actualkonstant')
         list_ = list(get_id_actualconstant)
         set = list_[0].get('id_actualkonstant')
