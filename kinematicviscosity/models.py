@@ -80,7 +80,7 @@ class ViscosityMJL(models.Model):
         list_ = list(get_id_actualconstant)
         set = list_[0].get('id_actualkonstant')
         aktualKalibration = Kalibration.objects.get(id=set)
-        self.Konstant1 = aktualKalibration.konstant
+        self.Konstant1 = Decimal(aktualKalibration.konstant)
         if (self.plustimeminK1T2 and self.plustimesekK1T2 and self.plustimeminK2T1 and
                 self.plustimesekK2T1 and self.plustimeminK2T2 and self.plustimesekK2T2 and self.plustimeminK1T1 and
                 self.plustimesekK1T1):
