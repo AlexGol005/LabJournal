@@ -111,7 +111,7 @@ class ViscosityMJLCreationForm(forms.ModelForm):
             ),
             Row(
                 Column('ViscosimeterNumber1', css_class='form-group col-md-6 mb-0'),
-                Column('Konstant1', css_class='form-group col-md-6 mb-0'),
+                # Column('Konstant1', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
             Row(
