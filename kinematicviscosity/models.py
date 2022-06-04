@@ -10,6 +10,8 @@ from django.db.models import Max
 
 from viscosimeters.models import Viscosimeters, Kalibration
 from formuls import mrerrow, numberDigits
+from datetime import datetime, timedelta
+
 
 
 CHOICES = (
@@ -31,8 +33,8 @@ class ViscosityMJL(models.Model):
     termostatition = models.BooleanField(verbose_name='Термостатировано не менее 20 минут', blank=True, null=True)
     temperatureCheck = models.BooleanField(verbose_name='Температура контролируется внешним поверенным термометром', blank=True, null=True)
     termometer = models.CharField('Внутренний номер термометра', max_length=10, default='0', null=True)
-    ViscosimeterNumber1 = models.CharField('Заводской номер вискозиметра № 1', max_length=10, default='0', null=True)  # todo ForeignKey
-    # ViscosimeterNumber1 = models.ForeignKey(Viscosimeters, verbose_name='Заводской номер вискозиметра № 1', on_delete=models.PROTECT, null=True)  # todo ForeignKey
+    # ViscosimeterNumber1 = models.CharField('Заводской номер вискозиметра № 1', max_length=10, default='0', null=True)  # todo ForeignKey
+    ViscosimeterNumber1 = models.ForeignKey(Viscosimeters, verbose_name='Заводской номер вискозиметра № 1', on_delete=models.PROTECT, null=True)  # todo ForeignKey
     Konstant1 = models.DecimalField('Константа вискозиметра № 1', max_digits=20, decimal_places=6, default='0', null=True)
     ViscosimeterNumber2 = models.CharField('Заводской номер вискозиметра № 2', max_length=10, default='0', null=True)
     Konstant2 = models.DecimalField('Константа вискозиметра № 2', max_digits=20, decimal_places=6, default='0', null=True)
@@ -74,16 +76,6 @@ class ViscosityMJL(models.Model):
     fixation = models.BooleanField(verbose_name='Внесен ли результат в Журнал аттестованных значений?', default=False, null=True)
 
     def save(self, *args, **kwargs):
-        # get_id_actualconstant = Kalibration.objects.filter(dateKalib__lt=self.date).select_related('id_Viscosimeter').values(
-        #     'id_Viscosimeter').annotate(id_actualkonstant=Max('id')).values('id_actualkonstant')
-        # list_ = list(get_id_actualconstant)
-        # set = []
-        # for n in list_:
-        #     set.append(n.get('id_actualkonstant'))
-        # viscosimeters = Kalibration.objects.select_related('id_Viscosimeter').filter(id__in=set).filter(
-        #     id_Viscosimeter__equipmentSM__equipment__status__exact='Э').order_by(
-        #     'id_Viscosimeter__viscosimeterType__diameter')
-        # self.Konstant1 = self.ViscosimeterNumber1
         if (self.plustimeminK1T2 and self.plustimesekK1T2 and self.plustimeminK2T1 and
                 self.plustimesekK2T1 and self.plustimeminK2T2 and self.plustimesekK2T2 and self.plustimeminK1T1 and
                 self.plustimesekK1T1):
