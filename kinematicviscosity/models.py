@@ -20,6 +20,7 @@ CHOICES = (
 
 
 class ViscosityMJL(models.Model):
+
     date = models.DateField('Дата', auto_now_add=True, db_index=True)
     name = models.CharField('Наименование', max_length=100, default='0', null=True)
     lot = models.CharField('Партия', max_length=100, null=True)
@@ -73,18 +74,20 @@ class ViscosityMJL(models.Model):
     resultWarning = models.CharField(max_length=300, default='', null=True)
     fixation = models.BooleanField(verbose_name='Внесен ли результат в Журнал аттестованных значений?', default=False, null=True)
     test = models.CharField(max_length=300, default='', null=True)
-    testd1 = models.DateTimeField(default=datetime.now)
+    date_for_konstant = models.DateTimeField(default=datetime.now(), blank=True, null=True)
 
-
-    def save(self, *args, **kwargs):
-        get_id_actualconstant = Kalibration.objects.select_related('id_Viscosimeter').\
-            filter(dateKalib__lte = self.testd1).filter(id_Viscosimeter__exact=self.ViscosimeterNumber1).\
+    def get_actual_k(self):
+        get_id_actualconstant = Kalibration.objects.select_related('id_Viscosimeter'). \
+            filter(dateKalib__lte=self.date_for_konstant).filter(id_Viscosimeter__exact=self.ViscosimeterNumber1). \
             values('id_Viscosimeter').annotate(id_actualkonstant=Max('id')).values('id_actualkonstant')
         list_ = list(get_id_actualconstant)
         set = list_[0].get('id_actualkonstant')
         aktualKalibration = Kalibration.objects.get(id=set)
         # self.Konstant1 = aktualKalibration.konstant
         self.test = aktualKalibration.konstant
+
+
+    def save(self, *args, **kwargs):
         if (self.plustimeminK1T2 and self.plustimesekK1T2 and self.plustimeminK2T1 and
                 self.plustimesekK2T1 and self.plustimeminK2T2 and self.plustimesekK2T2 and self.plustimeminK1T1 and
                 self.plustimesekK1T1):
