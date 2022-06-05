@@ -7,4 +7,6 @@ from .models import LotVG
 def create_profile(sender, instance, created, **kwargs):
     if created:
         LotVG.objects.create(viscosity=instance)
-        LotVG.lot = ViscosityMJL.lot
+
+
+
