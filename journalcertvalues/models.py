@@ -43,14 +43,16 @@ class LotVG(models.Model):
                                      verbose_name='Инициатор записи (заполнено, если измерение произошло раньше создания партии)')
     nameVG = models.ForeignKey(VG, verbose_name='СО', max_length=100, on_delete=models.PROTECT, null=True, blank=True)
     lot = models.CharField('Партия', max_length=5, null=True, blank=True)
-    person = models.ForeignKey(User, verbose_name='Изготовил', max_length=30,  on_delete=models.PROTECT, null=True, blank=True,  default='неизвестно')
+    person = models.ForeignKey(User, verbose_name='Изготовил', max_length=30,  on_delete=models.PROTECT, null=True, blank=True)
     date = models.DateField('Дата изготовления', max_length=30, null=True, blank=True)
 
-    # def save(self, *args, **kwargs):
-    #     self.lot = self.viscosity.lot
+    def save(self, *args, **kwargs):
+        self.lot = self.viscosity.lot
         # name = VG.objects.get(name=self.viscosity.name)
+        self.nameVG = VG.objects.get(name=self.viscosity.name)
 
-        # super(LotVG, self).save(*args, **kwargs)
+        super(LotVG, self).save(*args, **kwargs)
+
     # def __str__(self):
     #     return f'{self.nameVG.name} п. {self.lot} , изготовлено: {self.date}'
 
