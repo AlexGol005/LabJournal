@@ -110,11 +110,13 @@ class CommentsKinematicviscosityView(View):
             messages.success(request, f'Комментарий добавлен!')
             return redirect(order)
 
-class AllKinematicviscosityView(View):
+class AllKinematicviscosityView(ListView):
     """ Представление, которое выводит все записи в журнале. """
-    def get(self, request):
-        viscosityobjects = ViscosityMJL.objects.order_by('-date')
-        return render(request, 'kinematicviscosity/journal.html', {'viscosityobjects': viscosityobjects})
+    model = ViscosityMJL
+    template_name = 'kinematicviscosity/journal.html'
+    context_object_name = 'viscosityobjects'
+    ordering = ['-date']
+    paginate_by = 8
 
 
 def viscosityobjects_filter(request, pk):

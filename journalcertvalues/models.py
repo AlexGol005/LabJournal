@@ -41,10 +41,10 @@ class CharacterVG(models.Model):
 
 
 class LotVG(models.Model):
-    nameVG = models.ForeignKey(VG, verbose_name='СО', max_length=100, on_delete=models.PROTECT)
+    nameVG = models.ForeignKey(VG, verbose_name='СО', max_length=100, on_delete=models.PROTECT, null=True, blank=True)
     lot = models.CharField('Партия', max_length=5)
-    person = models.ForeignKey(User, verbose_name='Изготовил', max_length=30,  on_delete=models.PROTECT)
-    date = models.DateField('Дата изготовления', max_length=30)
+    person = models.ForeignKey(User, verbose_name='Изготовил', max_length=30,  on_delete=models.PROTECT, null=True, blank=True)
+    date = models.DateField('Дата изготовления', max_length=30, null=True, blank=True)
 
     def __str__(self):
         return f'{self.nameVG.name} п. {self.lot} , изготовлено: {self.date}'
