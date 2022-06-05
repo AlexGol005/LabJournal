@@ -1,17 +1,16 @@
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, ListView
-from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse
 from datetime import datetime, timedelta
-from .models import ViscosityMJL, CommentsKinematicviscosity
-from .forms import ViscosityMJLCreationForm, CommentCreationForm
 from django.shortcuts import get_object_or_404
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from main.models import AttestationJ
 from .forms import ViscosityMJLUdateForm
 from journalcertvalues.models import VG
+from .models import ViscosityMJL, CommentsKinematicviscosity
+from .forms import ViscosityMJLCreationForm, CommentCreationForm
 
 
 
@@ -141,3 +140,15 @@ def viscosityobjects_filter(request, pk):
         viscosityobjects = viscosityobjects.filter(performer=request.user).filter(fixation__exact=True).filter(date__gte=datetime.now()).order_by('-pk')
 
     return render(request, "kinematicviscosity/journal.html",  {'viscosityobjects': viscosityobjects})
+
+# class viscosityobjects_filterView(ListView):
+#     queryset = ViscosityMJL.objects.all()
+#     template_name = 'kinematicviscosity/journal.html'
+#     context_object_name = 'viscosityobjects'
+#     ordering = ['-date']
+#     paginate_by = 8
+#     def get_queryset(self, pk):
+#         context = super().get_context_data(**kwargs)
+#         if pk == 1:
+#             now = datetime.now() - timedelta(minutes=60 * 24 * 7)
+#             return ViscosityMJL.objects.filter(date__gte=now).order_by('-pk')

@@ -1,9 +1,7 @@
 from django.db import models
-from django.utils import timezone
-from datetime import datetime
-from django.utils.timezone import now
-from django.urls import reverse
 from django.contrib.auth.models import User
+
+from kinematicviscosity.models import ViscosityMJL
 
 CHOICES = (
         ('6', '6'),
@@ -41,13 +39,22 @@ class CharacterVG(models.Model):
 
 
 class LotVG(models.Model):
+    viscosity = models.OneToOneField(ViscosityMJL, on_delete=models.CASCADE, null=True, blank=True,
+                                     verbose_name='Инициатор записи (заполнено, если измерение произошло раньше создания партии)')
     nameVG = models.ForeignKey(VG, verbose_name='СО', max_length=100, on_delete=models.PROTECT, null=True, blank=True)
     lot = models.CharField('Партия', max_length=5)
-    person = models.ForeignKey(User, verbose_name='Изготовил', max_length=30,  on_delete=models.PROTECT, null=True, blank=True)
+    person = models.ForeignKey(User, verbose_name='Изготовил', max_length=30,  on_delete=models.PROTECT, null=True, blank=True ,  default='неизвестно')
     date = models.DateField('Дата изготовления', max_length=30, null=True, blank=True)
 
-    def __str__(self):
-        return f'{self.nameVG.name} п. {self.lot} , изготовлено: {self.date}'
+    def save(self, *args, **kwargs):
+        self.lot = self.viscosity.lot
+        # name = VG.objects.get(name=self.viscosity.name)
+
+        super(LotVG, self).save(*args, **kwargs)
+    # def __str__(self):
+    #     return f'{self.nameVG.name} п. {self.lot} , изготовлено: {self.date}'
+
+
 
     class Meta:
         verbose_name = 'Партия ВЖ'

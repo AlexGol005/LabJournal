@@ -6,3 +6,6 @@ class JournalcertvaluesConfig(AppConfig):
     name = 'journalcertvalues'
 
     verbose_name = _('Журнал аттестованных значений: ВЖ-ПА')
+
+    def ready(self):
+        import journalcertvalues.signals
