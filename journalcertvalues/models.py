@@ -48,8 +48,7 @@ class LotVG(models.Model):
 
     def save(self, *args, **kwargs):
         self.lot = self.viscosity.lot
-        # name = VG.objects.get(name=self.viscosity.name)
-        self.nameVG = VG.objects.get(name=self.viscosity.name)
+        # self.nameVG = VG.objects.get(name=self.viscosity.name)
 
         super(LotVG, self).save(*args, **kwargs)
 

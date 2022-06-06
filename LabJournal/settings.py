@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'equipment',
     'journalcertvalues',
+    'dinamicviscosity',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

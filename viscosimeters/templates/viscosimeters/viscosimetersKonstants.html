@@ -34,7 +34,7 @@
       </div></td>
       <td> <div style="text-align: center;">
 {#       {{ note.kalibration_set.all.last.konstant }}#}
-          {{ note.konstant }}
+          {{ note.konstant|striptags }}
       </div></td>
       <td> <div style="text-align: center;"> {{ note.id_Viscosimeter.viscosimeterType.viscosity1000 }}</div></td>
       <td> <div style="text-align: center;"> {{ note.id_Viscosimeter.viscosimeterType.range }}</div></td>
