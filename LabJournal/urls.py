@@ -9,7 +9,7 @@ urlpatterns = [
     path('', include('main.urls')),
     path('', include('viscosimeters.urls')),
     path('attestationJ/kinematicviscosity/', include('kinematicviscosity.urls')),
-    path('attestationJ/dinamicviscosity/', include('dinamicviscosity.urls')),
+    # path('attestationJ/dinamicviscosity/', include('dinamicviscosity.urls')),
     path('', include('users.urls')),
     path('api/', include('api.urls')),
     path('equipment/', include('equipment.urls')),

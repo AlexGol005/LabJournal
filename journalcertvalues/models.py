@@ -24,6 +24,23 @@ class VG(models.Model):
         verbose_name = 'Название ГСО ВЖ-ПА'
         verbose_name_plural = 'Названия  ГСО ВЖ-ПА'
 
+class VGrange(models.Model):
+    nameSM = models.ForeignKey(VG, verbose_name='СО', max_length=100, on_delete=models.CASCADE, null=True, blank=True)
+    rangeindex = models.CharField('Индекс ГСО', max_length=100, null=True, blank=True)
+    name = models.CharField('краткое название ГСО с индексом', max_length=100, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.name = f'{self.nameSM.name}({self.rangeindex})'
+        super(VGrange, self).save(*args, **kwargs)
+
+
+    def __str__(self):
+        return  f'{self.name}'
+
+    class Meta:
+        verbose_name = 'Диапазон ГСО ВЖ-ПА'
+        verbose_name_plural = 'Диапазоны  ГСО ВЖ-ПА'
+
 
 class CharacterVG(models.Model):
     name = models.CharField('Аттестуемая характеристика', max_length=100, null=True, blank=True, default='')
@@ -41,19 +58,20 @@ class CharacterVG(models.Model):
 class LotVG(models.Model):
     viscosity = models.OneToOneField(ViscosityMJL, on_delete=models.CASCADE, null=True, blank=True,
                                      verbose_name='Инициатор записи (заполнено, если измерение произошло раньше создания партии)')
-    nameVG = models.ForeignKey(VG, verbose_name='СО', max_length=100, on_delete=models.PROTECT, null=True, blank=True)
+    nameVG = models.ForeignKey(VGrange, verbose_name='СО', max_length=100, on_delete=models.PROTECT, null=True, blank=True)
     lot = models.CharField('Партия', max_length=5, null=True, blank=True)
     person = models.ForeignKey(User, verbose_name='Изготовил', max_length=30,  on_delete=models.PROTECT, null=True, blank=True)
     date = models.DateField('Дата изготовления', max_length=30, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        self.lot = self.viscosity.lot
-        # self.nameVG = VG.objects.get(name=self.viscosity.name)
+        if self.viscosity:
+            self.lot = self.viscosity.lot
+            self.nameVG = VGrange.objects.get(name=self.viscosity.name)
 
         super(LotVG, self).save(*args, **kwargs)
 
-    # def __str__(self):
-    #     return f'{self.nameVG.name} п. {self.lot} , изготовлено: {self.date}'
+    def __str__(self):
+        return f'{self.nameVG} п. {self.lot}'
 
 
 
