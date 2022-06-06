@@ -10,17 +10,25 @@ from .models import LotVG, VGrange
 def create_profile(sender, instance, created, **kwargs):
     if created:
         try:
-            trylot = LotVG.objects.get(lot=ViscosityMJL.lot)
-        except ObjectDoesNotExist:
-            trylot = None
-
-        try:
             tryname = VGrange.objects.get(name=ViscosityMJL.name)
         except ObjectDoesNotExist:
             tryname = None
 
-        if not trylot:
+        try:
+            trylot = LotVG.objects.get(lot=ViscosityMJL.lot)
+        except ObjectDoesNotExist:
+            trylot = None
+
+        if  (trylot and tryname):
             LotVG.objects.create(viscosity=instance)
+
+
+
+        # if created:
+        #     try:
+        #         LotVG.objects.get(lot=1, nameVG__name='ВЖ-2-ПА(2)')
+        #     except LotVG.DoesNotExist:
+        #         LotVG.objects.create(viscosity=instance)
 
 
 
