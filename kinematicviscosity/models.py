@@ -182,7 +182,7 @@ class ViscosityMJL(models.Model):
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
-        return reverse('Str', kwargs={'pk': self.pk})
+        return reverse('kinematicviscositystr', kwargs={'pk': self.pk})
 
 
     class Meta:
@@ -200,7 +200,7 @@ class CommentsKinematicviscosity(models.Model):
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
-        return reverse('comm', kwargs={'pk': self.forNote.pk})
+        return reverse('kinematicviscositycomm', kwargs={'pk': self.forNote.pk})
 
 
     class Meta:

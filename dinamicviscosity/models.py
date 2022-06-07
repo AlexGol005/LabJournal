@@ -114,7 +114,7 @@ class Dinamicviscosity(models.Model):
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
-        return reverse('str', kwargs={'pk': self.pk})
+        return reverse('dinamicviscositystr', kwargs={'pk': self.pk})
 
     class Meta:
         verbose_name = 'Измерение плотности и расчёт динамической вязкости'
@@ -133,7 +133,7 @@ class CommentsDinamicviscosity(models.Model):
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
-        return reverse('comm', kwargs={'pk': self.forNote.pk})
+        return reverse('dinamicviscositycomm', kwargs={'pk': self.forNote.pk})
 
     class Meta:
         verbose_name = 'Комментарий'

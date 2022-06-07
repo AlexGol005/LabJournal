@@ -1,13 +1,16 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
+
+
 from . import views
+from .views import URL
+
 
 urlpatterns = [
-    path('attestation/<int:pk>/', login_required(views.StrDinamicviscosityView.as_view()), name='str'),
-    path('registration/', views.RegDinamicviscosityView, name='reg_dinamicviscosity'),
-    path('attestation/', login_required(views.AllDinamicviscosityView.as_view()), name='all_dinamicviscosity'),
-    path('', views.DinamicviscosityJournalView.as_view(), name='dinamicviscosity'),
-    path('attestation/<int:pk>/comments/', login_required(views.CommentsKinematicviscosityView.as_view()), name='comm'),
-    path('filterd/<int:pk>', views.Dinamicviscosityobjects_filter, name="filter_dinamicviscosity"),
-
+    path('', views.HeadView.as_view(), name=URL),
+    path('attestation/<int:pk>/', login_required(views.StrJournalView.as_view()), name=URL + 'str'),
+    path('registration/', views.RegNoteJournalView, name=URL + 'reg'),
+    path('attestation/<int:pk>/comments/', login_required(views.CommentsView.as_view()), name=URL + 'comm'),
+    path('attestation/', login_required(views.AllStrView.as_view()), name=URL + 'all'),
+    path('filter/<int:pk>', views.filterview, name=URL + 'filter'),
 ]

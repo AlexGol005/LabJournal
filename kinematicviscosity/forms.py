@@ -1,17 +1,17 @@
 from django import forms
-from django.contrib.auth.models import User
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
 
-
-from django.utils.html import format_html
-from .models import ViscosityMJL, CHOICES, CommentsKinematicviscosity, ndocumentoptional
-from viscosimeters.models import Viscosimeters
+from .models import CHOICES, CommentsKinematicviscosity, ndocumentoptional, ViscosityMJL
 
 
+MODEL = ViscosityMJL
 
 
-class ViscosityMJLCreationForm(forms.ModelForm):
+class StrJournalCreationForm(forms.ModelForm):
+    """форма для внесения записи в журнал"""
+    """поменять: fields"""
     ndocument = forms.ChoiceField(label='Метод испытаний', required=True,
                                   choices=ndocumentoptional,
                                   widget=forms.Select(attrs={'class': 'form-control'}))
@@ -95,8 +95,6 @@ class ViscosityMJLCreationForm(forms.ModelForm):
                                                                 ))
 
 
-
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -146,9 +144,8 @@ class ViscosityMJLCreationForm(forms.ModelForm):
         )
 
 
-
     class Meta:
-        model = ViscosityMJL
+        model = MODEL
         fields = ['name', 'lot', 'temperature', 'termostatition', 'temperatureCheck',
                   'constit', 'oldCertifiedValue',
                   'ViscosimeterNumber1', 'Konstant1',
@@ -158,12 +155,24 @@ class ViscosityMJLCreationForm(forms.ModelForm):
                   'plustimeminK2T1', 'plustimesekK2T1',
                   'plustimeminK2T2', 'plustimesekK2T2', 'ndocument']
 
+
+
+class StrJournalUdateForm(forms.ModelForm):
+    """форма для  обновления записи в журнале: поле модели fixation для отправки записи в ЖАЗ"""
+    """стандартная"""
+    fixation = forms.BooleanField(label='АЗ',  required=False)
+
+    class Meta:
+        model = MODEL
+        fields = ['fixation']
+
+
+
 class CommentCreationForm(forms.ModelForm):
     name = forms.CharField(label='Комментировать', max_length=1000,
                            widget=forms.Textarea(attrs={'class': 'form-control',
-                                                                       'placeholder': 'введите текст комментария'}
+                                               'placeholder': 'введите текст комментария'}
                                                                 ))
-
 
 
     class Meta:
@@ -171,16 +180,8 @@ class CommentCreationForm(forms.ModelForm):
         fields = ['name']
 
 
-class ViscosityMJLUdateForm(forms.ModelForm):
-    fixation = forms.BooleanField(label='АЗ',  required=False)
 
 
 
-    class Meta:
-        model = ViscosityMJL
-        fields = ['fixation']
 
-
-class SearchForm(forms.Form):
-    query = forms.CharField()
 

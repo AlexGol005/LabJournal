@@ -5,100 +5,113 @@ from django.shortcuts import get_object_or_404
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from main.models import AttestationJ
-from .forms import DinamicviscosityUdateForm, CommentCreationForm, DinamicviscosityCreationForm
+from .forms import StrJournalUdateForm, CommentCreationForm, StrJournalCreationForm
 from .models import Dinamicviscosity, CommentsDinamicviscosity
 
 
-class DinamicviscosityJournalView(View):
+JOURNAL = AttestationJ
+MODEL = Dinamicviscosity
+COMMENTMODEL = CommentsDinamicviscosity
+URL = 'dinamicviscosity'
+
+
+class HeadView(View):
     """ Представление, которое выводит заглавную страницу журнала """
-
+    """ Стандартное """
     def get(self, request):
-        note = AttestationJ.objects.all().filter(for_url='dinamicviscosity')
-        return render(request, 'dinamicviscosity/head.html', {'note': note})
+        note = JOURNAL.objects.all().filter(for_url=URL)
+        return render(request, URL + '/head.html', {'note': note})
 
 
-class StrDinamicviscosityView(View):
-    """ выводит отдельную запись и форму добавления в ЖАЗ. (актуальная) """
+
+class StrJournalView(View):
+    """ выводит отдельную запись и форму добавления в ЖАЗ """
+    """Стандартное"""
 
     def get(self, request, pk):
-        note = get_object_or_404(Dinamicviscosity, pk=pk)
-        form = DinamicviscosityUdateForm()
-        return render(request, 'dinamicviscosity/str.html', {'note': note, 'form': form})
+        note = get_object_or_404(MODEL, pk=pk)
+        form = StrJournalUdateForm()
+        return render(request, URL + '/str.html', {'note': note, 'form': form})
 
     def post(self, request, pk, *args, **kwargs):
-        if Dinamicviscosity.objects.get(id=pk).performer == request.user:
-            form = DinamicviscosityUdateForm(request.POST, instance=Dinamicviscosity.objects.get(id=pk))
+        if MODEL.objects.get(id=pk).performer == request.user:
+            form = StrJournalUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
             if form.is_valid():
                 order = form.save(commit=False)
                 order.save()
                 return redirect(order)
         else:
-            form = DinamicviscosityUdateForm(request.POST, instance=Dinamicviscosity.objects.get(id=pk))
+            form = StrJournalUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
             order = form.save(commit=False)
             messages.success(request, f'АЗ не подтверждено! Подтвердить АЗ может только исполнитель данного измерения!')
             return redirect(order)
 
 
+
 @login_required
-def RegDinamicviscosityView(request):
+def RegNoteJournalView(request):
     """ Представление, которое выводит форму регистрации в журнале. """
+    """Стандартное"""
     if request.method == "POST":
-        form = DinamicviscosityCreationForm(request.POST)
+        form = StrJournalCreationForm(request.POST)
         if form.is_valid():
             order = form.save(commit=False)
             order.performer = request.user
             order.save()
             return redirect(order)
     else:
-        form = DinamicviscosityCreationForm()
-
-    return render(
-        request,
-        'dinamicviscosity/registration.html',
-        {
-            'form': form
-        })
+        form = StrJournalCreationForm()
+    return render(request, URL + '/registration.html', {'form': form})
 
 
 
-class CommentsKinematicviscosityView(View):
+class CommentsView(View):
     """ выводит комментарии к записи в журнале и форму для добавления комментариев """
+    """Стандартное"""
     form_class = CommentCreationForm
     initial = {'key': 'value'}
-    template_name = 'dinamicviscosity/comments.html'
+    template_name = URL + '/comments.html'
 
     def get(self, request, pk):
-        note = CommentsDinamicviscosity.objects.filter(forNote=pk)
-        title = Dinamicviscosity.objects.get(pk=pk)
+        note = COMMENTMODEL.objects.filter(forNote=pk)
+        title = MODEL.objects.get(pk=pk)
         form = CommentCreationForm()
-        return render(request, 'dinamicviscosity/comments.html', {'note': note, 'title': title, 'form': form})
+        return render(request, URL + '/comments.html', {'note': note, 'title': title, 'form': form})
 
     def post(self, request, pk, *args, **kwargs):
         form = CommentCreationForm(request.POST)
         if form.is_valid():
             order = form.save(commit=False)
             order.author = request.user
-            order.forNote = Dinamicviscosity.objects.get(pk=pk)
+            order.forNote = MODEL.objects.get(pk=pk)
             order.save()
             messages.success(request, f'Комментарий добавлен!')
             return redirect(order)
 
 
-class AllDinamicviscosityView(ListView):
+
+class AllStrView(ListView):
     """ Представление, которое выводит все записи в журнале. """
-    model = Dinamicviscosity
-    template_name = 'dinamicviscosity/journal.html'
+    """стандартное"""
+    model = MODEL
+    template_name = URL + '/journal.html'
     context_object_name = 'objects'
     ordering = ['-date']
     paginate_by = 8
 
+    def get_context_data(self, **kwargs):
+        context = super(AllStrView, self).get_context_data(**kwargs)
+        context['journal'] = JOURNAL.objects.filter(for_url=URL)
+        return context
 
-def Dinamicviscosityobjects_filter(request, pk):
-    """ Фильтры записей об измерениях по дате, АЗ, мои записи и пр
-    """
-    objects = Dinamicviscosity.objects.all()
+
+
+def filterview(request, pk):
+    """ Фильтры записей об измерениях по дате, АЗ, мои записи и пр """
+    """Стандартная"""
+    journal = JOURNAL.objects.filter(for_url=URL)
+    objects = MODEL.objects.all()
     if pk == 1:
        now = datetime.now() - timedelta(minutes=60 * 24 * 7)
        objects = objects.filter(date__gte=now).order_by('-pk')
@@ -116,5 +129,5 @@ def Dinamicviscosityobjects_filter(request, pk):
     elif pk == 7:
         objects = objects.filter(performer=request.user).filter(fixation__exact=True).filter(
             date__gte=datetime.now()).order_by('-pk')
-    return render(request, "dinamicviscosity/journal.html", {'objects': objects})
+    return render(request, URL + "/journal.html", {'objects': objects, 'journal': journal})
 

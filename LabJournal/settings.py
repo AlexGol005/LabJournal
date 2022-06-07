@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'api',
     'crispy_forms',
     'equipment',
-    'journalcertvalues',
+    'jouViscosity',
     'dinamicviscosity',
 ]
 
