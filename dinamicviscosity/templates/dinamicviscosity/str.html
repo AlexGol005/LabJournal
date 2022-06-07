@@ -49,7 +49,7 @@
 
 		<tr>
 			<th colspan="2"><div style="text-align: center;">V(пикн.), мл</div></th>
-            <td colspan="2"><div style="text-align: center;">{{ note.piknometer_volume|striptags }}</div></td>
+            <td colspan="2"><div style="text-align: center;">{{ note.piknometer_volume|default_if_none:" "|striptags }}</div></td>
 			<th colspan="2"><div style="text-align: center;">Измерение&nbsp1</div></th>
 			<th colspan="3"><div style="text-align: center;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspИзмерение&nbsp2&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></th>
 		</tr>
@@ -154,10 +154,6 @@
 
             </td>
 
-{#			<th colspan="9"> {% if note.resultWarning == 'Измеренная плотность отличается от предыдущего более чем на 0,7 %, проверьте условия эксперимента. Рекомендовано измерить повторно.' %}#}
-{#                                 <div class="TransactionAmount Badresult">#}
-{#                             {% endif %}#}
-{#                {{ note.resultWarning }}</div>> </th>#}
 		</tr>
         <tr>
 			<th colspan="3">Исполнитель </th>
