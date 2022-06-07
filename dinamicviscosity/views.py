@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect
-from django.views.generic import DetailView, ListView
+from django.views.generic import ListView
 from datetime import datetime, timedelta
 from django.shortcuts import get_object_or_404
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+
+
 from main.models import AttestationJ
 from .forms import StrJournalUdateForm, CommentCreationForm, StrJournalCreationForm
 from .models import Dinamicviscosity, CommentsDinamicviscosity
-
 
 JOURNAL = AttestationJ
 MODEL = Dinamicviscosity
@@ -19,10 +20,10 @@ URL = 'dinamicviscosity'
 class HeadView(View):
     """ Представление, которое выводит заглавную страницу журнала """
     """ Стандартное """
+
     def get(self, request):
         note = JOURNAL.objects.all().filter(for_url=URL)
         return render(request, URL + '/head.html', {'note': note})
-
 
 
 class StrJournalView(View):
@@ -48,7 +49,6 @@ class StrJournalView(View):
             return redirect(order)
 
 
-
 @login_required
 def RegNoteJournalView(request):
     """ Представление, которое выводит форму регистрации в журнале. """
@@ -63,7 +63,6 @@ def RegNoteJournalView(request):
     else:
         form = StrJournalCreationForm()
     return render(request, URL + '/registration.html', {'form': form})
-
 
 
 class CommentsView(View):
@@ -90,7 +89,6 @@ class CommentsView(View):
             return redirect(order)
 
 
-
 class AllStrView(ListView):
     """ Представление, которое выводит все записи в журнале. """
     """стандартное"""
@@ -106,15 +104,14 @@ class AllStrView(ListView):
         return context
 
 
-
 def filterview(request, pk):
     """ Фильтры записей об измерениях по дате, АЗ, мои записи и пр """
     """Стандартная"""
     journal = JOURNAL.objects.filter(for_url=URL)
     objects = MODEL.objects.all()
     if pk == 1:
-       now = datetime.now() - timedelta(minutes=60 * 24 * 7)
-       objects = objects.filter(date__gte=now).order_by('-pk')
+        now = datetime.now() - timedelta(minutes=60 * 24 * 7)
+        objects = objects.filter(date__gte=now).order_by('-pk')
     elif pk == 2:
         now = datetime.now()
         objects = objects.filter(date__gte=now).order_by('-pk')
@@ -130,4 +127,3 @@ def filterview(request, pk):
         objects = objects.filter(performer=request.user).filter(fixation__exact=True).filter(
             date__gte=datetime.now()).order_by('-pk')
     return render(request, URL + "/journal.html", {'objects': objects, 'journal': journal})
-

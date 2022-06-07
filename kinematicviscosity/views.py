@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import DetailView, ListView
+from django.views.generic import ListView
 from datetime import datetime, timedelta
 from django.shortcuts import get_object_or_404
 from django.views import View
@@ -11,7 +11,6 @@ from main.models import AttestationJ
 from .models import ViscosityMJL, CommentsKinematicviscosity
 from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm
 
-
 JOURNAL = AttestationJ
 MODEL = ViscosityMJL
 COMMENTMODEL = CommentsKinematicviscosity
@@ -21,15 +20,16 @@ URL = 'kinematicviscosity'
 class HeadView(View):
     """ Представление, которое выводит заглавную страницу журнала """
     """Стандартная"""
+
     def get(self, request):
         note = JOURNAL.objects.all().filter(for_url=URL)
         return render(request, URL + '/head.html', {'note': note})
 
 
-
 class StrJournalView(View):
     """ выводит отдельную запись и форму добавления в ЖАЗ """
     """Стандартная"""
+
     def get(self, request, pk):
         note = get_object_or_404(MODEL, pk=pk)
         form = StrJournalUdateForm()
@@ -49,7 +49,6 @@ class StrJournalView(View):
             return redirect(order)
 
 
-
 @login_required
 def RegNoteJournalView(request):
     """ Представление, которое выводит форму регистрации в журнале. """
@@ -64,7 +63,6 @@ def RegNoteJournalView(request):
     else:
         form = StrJournalCreationForm()
     return render(request, URL + '/registration.html', {'form': form})
-
 
 
 class CommentsView(View):
@@ -91,7 +89,6 @@ class CommentsView(View):
             return redirect(order)
 
 
-
 class AllStrView(ListView):
     """ Представление, которое выводит все записи в журнале. """
     """стандартное"""
@@ -107,15 +104,14 @@ class AllStrView(ListView):
         return context
 
 
-
 def filterview(request, pk):
     """ Фильтры записей об измерениях по дате, АЗ, мои записи и пр """
     """Стандартная"""
     journal = JOURNAL.objects.filter(for_url=URL)
     objects = MODEL.objects.all()
     if pk == 1:
-       now = datetime.now() - timedelta(minutes=60 * 24 * 7)
-       objects = objects.filter(date__gte=now).order_by('-pk')
+        now = datetime.now() - timedelta(minutes=60 * 24 * 7)
+        objects = objects.filter(date__gte=now).order_by('-pk')
     elif pk == 2:
         now = datetime.now()
         objects = objects.filter(date__gte=now).order_by('-pk')
@@ -132,8 +128,6 @@ def filterview(request, pk):
             date__gte=datetime.now()).order_by('-pk')
     return render(request, URL + "/journal.html", {'objects': objects, 'journal': journal})
 
-
-
 # class StrKinematicviscosityDetailView(DetailView):
 #     """ Представление, которое позволяет вывести отдельную запись (запасная версия). """
 #     model = MODEL
@@ -141,4 +135,4 @@ def filterview(request, pk):
 #     context_object_name = "note"
 #
 #     template_name = 'kinematicviscosity/str.html'
-#docs.djangoproject.com/en/4.0/topics/class-based-views/generic-display/
+# docs.djangoproject.com/en/4.0/topics/class-based-views/generic-display/
