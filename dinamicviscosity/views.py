@@ -33,8 +33,6 @@ class StrDinamicviscosityView(View):
             if form.is_valid():
                 order = form.save(commit=False)
                 order.save()
-                # form.save()
-                messages.success(request, f'АЗ успешно подтверждено!')
                 return redirect(order)
         else:
             form = DinamicviscosityUdateForm(request.POST, instance=Dinamicviscosity.objects.get(id=pk))
