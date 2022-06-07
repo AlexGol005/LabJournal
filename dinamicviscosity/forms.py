@@ -6,7 +6,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
 
 
-# from .models import Dinamicviscosity, CHOICES, CommentsDinamicviscosity, DOCUMENTS
+from .models import Dinamicviscosity, CHOICES, CommentsDinamicviscosity, DOCUMENTS, DENSITYE
 
 
 class DinamicviscosityCreationForm(forms.ModelForm):
@@ -32,16 +32,16 @@ class DinamicviscosityCreationForm(forms.ModelForm):
                                          widget=forms.TextInput(attrs={'class': 'form-control',
                                                                        'placeholder': 'АЗ через точку'}
                                                                 ))
-    performerdensity = forms.ModelChoiceField(label='Плотность измерил (если измерил другой исполнитель):', required=False,
+    performerdensity = forms.ModelChoiceField(label='Плотность измерил', required=False,
                                          queryset=User.objects.all(),
                                              widget=forms.Select(attrs={'class': 'form-control'}))
 
 
-    density1 = forms.DecimalField(label='плотность 1, г/мл (если измеряли денсиметром)', max_digits=7, decimal_places=4, required=False,
+    density1 = forms.DecimalField(label='плотность 1, г/мл (если измеряли денсиметром)', max_digits=7, decimal_places=5, required=False,
                                          widget=forms.TextInput(attrs={'class': 'form-control',
                                                                        'placeholder': 'плотность 1 через точку'}
                                                                 ))
-    density2 = forms.DecimalField(label='плотность 2, г/мл (если измеряли денсиметром)', max_digits=7, decimal_places=4, required=False,
+    density2 = forms.DecimalField(label='плотность 2, г/мл (если измеряли денсиметром)', max_digits=7, decimal_places=5, required=False,
                                          widget=forms.TextInput(attrs={'class': 'form-control',
                                                                        'placeholder': 'плотность 2 через точку'}
                                                                 ))
@@ -66,10 +66,12 @@ class DinamicviscosityCreationForm(forms.ModelForm):
                                                   widget=forms.TextInput(attrs={'class': 'form-control',
                                                                                 'placeholder': '0.0000'}
                                                                          ))
-    kinematicviscosity = forms.FloatField(label='Кинематическая вязкость при температуре измерений сСт', required=True,
+    kinematicviscosity = forms.FloatField(label='Кинемат. вязк. при T измерений', required=True,
                                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                                         'placeholder': 'АЗ через точку'}
                                                                  ))
+    equipment = forms.ChoiceField(label='Способ измерения плотности', choices=DENSITYE,
+                                 widget=forms.Select(attrs={'class': 'form-control'}))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -83,6 +85,7 @@ class DinamicviscosityCreationForm(forms.ModelForm):
             ),
             Row(
                 Column('kinematicviscosity', css_class='form-group col-md-6 mb-0'),
+                Column('ndocument', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
 
@@ -96,7 +99,11 @@ class DinamicviscosityCreationForm(forms.ModelForm):
                 Column('density2', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
-            'performerdensity',
+            Row(
+                Column('equipment', css_class='form-group col-md-6 mb-0'),
+                Column('performerdensity', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row'
+            ),
             Row(
                 Column('piknometer_volume', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
@@ -124,7 +131,8 @@ class DinamicviscosityCreationForm(forms.ModelForm):
                   'density1', 'density2',
                   'kinematicviscosity', 'performerdensity',
                   'piknometer_volume',
-                  'piknometer_mass1', 'piknometer_mass2'
+                  'piknometer_mass1', 'piknometer_mass2',
+                  'equipment', 'piknometer_plus_SM_mass1', 'piknometer_plus_SM_mass2'
 
                   ]
 

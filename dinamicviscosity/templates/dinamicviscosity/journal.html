@@ -1,14 +1,14 @@
 {% extends 'main/base.html' %}
 
 {% block title %}
- кинематическая вязкость
+ динамическая вязкость
 {% endblock %}
 
 {% block content %}
     <div class="row">
 
     <div class="col-md-9 mt-2" >
-    <div style="text-align: center;"><h4><a href="/attestationJ/kinematicviscosity/"> Журнал аттестации динамической вязкости </a></h4></div>
+    <div style="text-align: center;"><h4><a href="/attestationJ/dinamicviscosity/"> Журнал аттестации динамической вязкости </a></h4></div>
 
 <br>
 
@@ -21,23 +21,25 @@
       <th> <div style="text-align: center;"> ГСО </div></th>
       <th> <div style="text-align: center;"> п. </div></th>
       <th> <div style="text-align: center;"> Т, ℃  </div></th>
-        <th> <div style="text-align: center;"> АЗ  </div></th>
-      <th> <div style="text-align: center;"> Подробнее  </div></th>
+        <th> <div style="text-align: center;"> Дин.  </div></th>
+        <th> <div style="text-align: center;"> Плот.  </div></th>
+      <th> <div style="text-align: center;"> См.  </div></th>
 
     </tr>
   </thead>
 
   <tbody>
 
-{% for obj in dinamicviscosityobjects %}
+{% for obj in objects %}
 
     <tr>
       <td align="center">{{ obj.date|date:"d.m.Y" }}</td>
       <td align="center"> {{ obj.name }}</td>
       <td align="center"> {{ obj.lot }}</td>
       <td align="center">{{ obj.temperature }} </td>
-      <td align="center">{{ obj.certifiedValue_text }} </td>
-      <td align="center"><a href="{% url 'str' obj.id %}"  class="btn btn-outline-warning mt-3">смотреть</a></td>
+      <td align="center">{{ obj.certifiedValue|default_if_none:" " }} </td>
+      <td align="center">{{ obj.density_avg|default_if_none:" " }} </td>
+      <td align="center"><a href="{% url 'str' obj.id %}"  class="btn btn-outline-warning mt-3">см.</a></td>
 
     </tr>
 
@@ -57,14 +59,14 @@
   {% endif %}
     </div>
 
-{#<div class="col-md-3 mt-5" ><div style="text-align: center;"><h4> Фильтр записей  </h4></div>#}
-{#<div style="text-align: center;"><a href="{% url 'viscosityobjects_filter' pk=3 %}" class="btn  btn-warning  mt-3"  >&nbspВсе&nbsp</a></div>#}
-{#<div style="text-align: center;"> <a href="{% url 'viscosityobjects_filter' pk=2 %}" class="btn  btn-primary  mt-3" >Сегодня</a></div>#}
-{#<div style="text-align: center;"> <a href="{% url 'viscosityobjects_filter' pk=4 %}" class="btn  btn-primary  mt-3" >#}
-{#   &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspС&nbspАЗ&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</a></div>#}
-{#<div style="text-align: center;"> <a href="{% url 'viscosityobjects_filter' pk=5 %}" class="btn  btn-primary  mt-3" >&nbsp&nbsp&nbsp&nbspМои записи&nbsp&nbsp&nbsp&nbsp</a></div>#}
-{#<div style="text-align: center;"> <a href="{% url 'viscosityobjects_filter' pk=6 %}" class="btn  btn-primary  mt-3" >Мои записи с АЗ</a></div>#}
-{#<div style="text-align: center;"> <a href="{% url 'viscosityobjects_filter' pk=7 %}" class="btn  btn-primary  mt-3" >Мои записи с АЗ сегодня</a></div>#}
+<div class="col-md-3 mt-5" ><div style="text-align: center;"><h4> Фильтр записей  </h4></div>
+<div style="text-align: center;"><a href="{% url 'filter_dinamicviscosity' pk=3 %}" class="btn  btn-warning  mt-3"  >&nbspВсе&nbsp</a></div>
+<div style="text-align: center;"> <a href="{% url 'filter_dinamicviscosity' pk=2 %}" class="btn  btn-primary  mt-3" >Сегодня</a></div>
+<div style="text-align: center;"> <a href="{% url 'filter_dinamicviscosity' pk=4 %}" class="btn  btn-primary  mt-3" >
+   &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspС&nbspАЗ&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</a></div>
+<div style="text-align: center;"> <a href="{% url 'filter_dinamicviscosity' pk=5 %}" class="btn  btn-primary  mt-3" >&nbsp&nbsp&nbsp&nbspМои записи&nbsp&nbsp&nbsp&nbsp</a></div>
+<div style="text-align: center;"> <a href="{% url 'filter_dinamicviscosity' pk=6 %}" class="btn  btn-primary  mt-3" >Мои записи с АЗ</a></div>
+<div style="text-align: center;"> <a href="{% url 'filter_dinamicviscosity' pk=7 %}" class="btn  btn-primary  mt-3" >Мои записи с АЗ сегодня</a></div>
 
 
 

@@ -14,5 +14,5 @@ def get_avg(X1: Decimal, X2: Decimal, nums: int = 6):
 
 def get_acc_measurement(X1: Decimal, X2: Decimal, nums: int = 1 ):
     k = '1.' + nums * '0'
-    acc = ((((X1 - X2).copy_abs()) / get_avg(X1, X2)) * Decimal(100)).quantize(Decimal(k), ROUND_HALF_UP)
+    acc = ((X1 - X2).copy_abs() / get_avg(X1, X2) * Decimal(100)).quantize(Decimal(k), ROUND_HALF_UP)
     return acc

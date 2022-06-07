@@ -20,15 +20,17 @@ CHOICES = (
         ('другое', 'другое'),
     )
 
+ndocumentoptional = (
+                     ('МИ-02-2018', 'МИ-02-201'),
+                     ('оценка', 'оценка вязкости'),
+                    ('ГОСТ 33', 'ГОСТ 33'))
+
 
 class ViscosityMJL(models.Model):
     date = models.DateField('Дата', auto_now_add=True, db_index=True)
     name = models.CharField('Наименование', max_length=100, default='0', null=True)
     lot = models.CharField('Партия', max_length=100, null=True)
-    ndocumentoptional = (('ГОСТ 33', 'ГОСТ 33'),
-                         ('МИ-01', 'МИ-01'),
-                         ('оценка', 'оценка вязкости'))
-    ndocument = models.CharField('Метод испытаний', max_length=100, choices=ndocumentoptional, default='МИ-01')
+    ndocument = models.CharField('Метод испытаний', max_length=100, choices=ndocumentoptional, default='МИ-02-201', blank=True, null=True)
     temperature = models.DecimalField('Температура, ℃', max_digits=5, decimal_places=2, default='0', null=True)
     termostatition = models.BooleanField(verbose_name='Термостатировано не менее 20 минут', blank=True, null=True)
     temperatureCheck = models.BooleanField(verbose_name='Температура контролируется внешним поверенным термометром', blank=True, null=True)

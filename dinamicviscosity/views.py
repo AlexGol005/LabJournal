@@ -8,7 +8,15 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from main.models import AttestationJ
 from .forms import DinamicviscosityUdateForm, CommentCreationForm, DinamicviscosityCreationForm
-from .models import Dinamicviscosity
+from .models import Dinamicviscosity, CommentsDinamicviscosity
+
+
+class DinamicviscosityJournalView(View):
+    """ Представление, которое выводит заглавную страницу журнала """
+
+    def get(self, request):
+        note = AttestationJ.objects.all().filter(for_url='dinamicviscosity')
+        return render(request, 'dinamicviscosity/head.html', {'note': note})
 
 
 class StrDinamicviscosityView(View):
@@ -56,71 +64,59 @@ def RegDinamicviscosityView(request):
         })
 
 
-class DinamicviscosityJournalView(View):
-    """ Представление, которое выводит заглавную страницу журнала """
 
-    def get(self, request):
-        note = AttestationJ.objects.all().filter(for_url='dinamicviscosity')
-        return render(request, 'dinamicviscosity/head.html', {'note': note})
+class CommentsKinematicviscosityView(View):
+    """ выводит комментарии к записи в журнале и форму для добавления комментариев """
+    form_class = CommentCreationForm
+    initial = {'key': 'value'}
+    template_name = 'dinamicviscosity/comments.html'
+
+    def get(self, request, pk):
+        note = CommentsDinamicviscosity.objects.filter(forNote=pk)
+        title = Dinamicviscosity.objects.get(pk=pk)
+        form = CommentCreationForm()
+        return render(request, 'dinamicviscosity/comments.html', {'note': note, 'title': title, 'form': form})
+
+    def post(self, request, pk, *args, **kwargs):
+        form = CommentCreationForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.author = request.user
+            order.forNote = Dinamicviscosity.objects.get(pk=pk)
+            order.save()
+            messages.success(request, f'Комментарий добавлен!')
+            return redirect(order)
 
 
-# class CommentsKinematicviscosityView(View):
-#     """ выводит комментарии к записи в журнале и форму для добавления комментариев """
-#     form_class = CommentCreationForm
-#     initial = {'key': 'value'}
-#     template_name = 'kinematicviscosity/comments.html'
-#
-#     def get(self, request, pk):
-#         note = CommentsKinematicviscosity.objects.filter(forNote=pk)
-#         title = ViscosityMJL.objects.get(pk=pk)
-#         form = CommentCreationForm()
-#         return render(request, 'kinematicviscosity/comments.html', {'note': note, 'title': title, 'form': form})
-#
-#     def post(self, request, pk, *args, **kwargs):
-#         form = CommentCreationForm(request.POST)
-#         if form.is_valid():
-#             order = form.save(commit=False)
-#             order.author = request.user
-#             order.forNote = ViscosityMJL.objects.get(pk=pk)
-#             order.save()
-#             messages.success(request, f'Комментарий добавлен!')
-#             return redirect(order)
-#
-#
 class AllDinamicviscosityView(ListView):
     """ Представление, которое выводит все записи в журнале. """
     model = Dinamicviscosity
     template_name = 'dinamicviscosity/journal.html'
-    context_object_name = 'dinamicviscosityobjects'
+    context_object_name = 'objects'
     ordering = ['-date']
     paginate_by = 8
-#
-#
-# def viscosityobjects_filter(request, pk):
-#     """ Фильтры записей об измерениях по дате, АЗ, мои записи и пр
-#     """
-#     viscosityobjects = ViscosityMJL.objects.all()
-#     if pk == 1:
-#         now = datetime.now() - timedelta(minutes=60 * 24 * 7)
-#         viscosityobjects = viscosityobjects.filter(date__gte=now).order_by('-pk')
-#     elif pk == 2:
-#         now = datetime.now()
-#         viscosityobjects = viscosityobjects.filter(date__gte=now).order_by('-pk')
-#     elif pk == 3:
-#         viscosityobjects = viscosityobjects.order_by('-pk')
-#     elif pk == 4:
-#         viscosityobjects = viscosityobjects.filter(fixation__exact=True).order_by('-pk')
-#     elif pk == 5:
-#         viscosityobjects = viscosityobjects.filter(performer=request.user).order_by('-pk')
-#     elif pk == 6:
-#         viscosityobjects = viscosityobjects.filter(performer=request.user).filter(fixation__exact=True).order_by('-pk')
-#     elif pk == 7:
-#         viscosityobjects = viscosityobjects.filter(performer=request.user).filter(fixation__exact=True).filter(
-#             date__gte=datetime.now()).order_by('-pk')
-#
-#     return render(request, "kinematicviscosity/journal.html", {'viscosityobjects': viscosityobjects})
-#
-#
-# from django.shortcuts import render
-#
-# # Create your views here.
+
+
+def Dinamicviscosityobjects_filter(request, pk):
+    """ Фильтры записей об измерениях по дате, АЗ, мои записи и пр
+    """
+    objects = Dinamicviscosity.objects.all()
+    if pk == 1:
+       now = datetime.now() - timedelta(minutes=60 * 24 * 7)
+       objects = objects.filter(date__gte=now).order_by('-pk')
+    elif pk == 2:
+        now = datetime.now()
+        objects = objects.filter(date__gte=now).order_by('-pk')
+    elif pk == 3:
+        objects = objects.order_by('-pk')
+    elif pk == 4:
+        objects = objects.filter(fixation__exact=True).order_by('-pk')
+    elif pk == 5:
+        objects = objects.filter(performer=request.user).order_by('-pk')
+    elif pk == 6:
+        objects = objects.filter(performer=request.user).filter(fixation__exact=True).order_by('-pk')
+    elif pk == 7:
+        objects = objects.filter(performer=request.user).filter(fixation__exact=True).filter(
+            date__gte=datetime.now()).order_by('-pk')
+    return render(request, "dinamicviscosity/journal.html", {'objects': objects})
+

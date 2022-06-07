@@ -5,13 +5,16 @@ from crispy_forms.layout import Layout, Submit, Row, Column
 
 
 from django.utils.html import format_html
-from .models import ViscosityMJL, CHOICES, CommentsKinematicviscosity
+from .models import ViscosityMJL, CHOICES, CommentsKinematicviscosity, ndocumentoptional
 from viscosimeters.models import Viscosimeters
 
 
 
 
 class ViscosityMJLCreationForm(forms.ModelForm):
+    ndocument = forms.ChoiceField(label='Метод испытаний', required=True,
+                                  choices=ndocumentoptional,
+                                  widget=forms.Select(attrs={'class': 'form-control'}))
     name = forms.CharField(initial='ВЖ-2-ПА(100)', label='Наименование пробы', max_length=100, required=True,
                            widget=forms.TextInput(attrs={'class': 'form-control',
                                                          'placeholder': 'Наименование пробы'}
@@ -104,9 +107,12 @@ class ViscosityMJLCreationForm(forms.ModelForm):
                 Column('temperature', css_class='form-group col-md-4 mb-0'),
                 css_class='form-row'
             ),
-            'termostatition',
-            'temperatureCheck',
-
+            Row(
+                Column('ndocument', css_class='form-group col-md-4 mb-0'),
+                Column('termostatition', css_class='form-group col-md-4 mb-0'),
+                Column('temperatureCheck', css_class='form-group col-md-4 mb-0'),
+                css_class='form-row'
+            ),
             Row(
                 Column('constit', css_class='form-group col-md-6 mb-0'),
                 Column('oldCertifiedValue', css_class='form-group col-md-6 mb-0'),
@@ -150,7 +156,7 @@ class ViscosityMJLCreationForm(forms.ModelForm):
                   'plustimeminK1T2', 'plustimesekK1T2',
                   'ViscosimeterNumber2', 'Konstant2',
                   'plustimeminK2T1', 'plustimesekK2T1',
-                  'plustimeminK2T2', 'plustimesekK2T2']
+                  'plustimeminK2T2', 'plustimesekK2T2', 'ndocument']
 
 class CommentCreationForm(forms.ModelForm):
     name = forms.CharField(label='Комментировать', max_length=1000,

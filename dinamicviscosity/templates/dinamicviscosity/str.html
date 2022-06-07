@@ -19,89 +19,82 @@
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
                 № записи {{ note.id}}
                  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspСтр.&nbsp&nbsp&nbsp&nbsp </div></th>
 		</tr>
 
 		<tr>
-			<th colspan="10"><div style="text-align: center;">Определение плотности и расчёт динамической вязкости по {{ note.ndocument }} </div></th>
+			<th colspan="9"><div style="text-align: center;">Опр. плотности <b>  {{ note.equipment }}</b> и расчёт динамической вязкости по {{ note.ndocument }} </div></th>
 		</tr>
 		<tr>
-			<th colspan="3"><div style="text-align: center;">Дата измерения</div></th>
+			<th colspan="3"><div style="text-align: center;">Дата </div></th>
 			<th colspan="1"><div style="text-align: center;">Наименование</div></th>
-			<th colspan="1"><div style="text-align: center;">Номер&nbspпартии</div></th>
-			<th colspan="1"><div style="text-align: center;">
+			<th colspan="1"><div style="text-align: center;">Номер партии</div></th>
+			<th colspan="2"><div style="text-align: center;">
 
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspТ°C&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></th>
-			<th colspan="4"><div style="text-align: center;">Содержит&nbspнефть или октол</div></th>
+              &nbsp&nbspТ°C&nbsp&nbsp</div></th>
+			<th colspan="4"><div style="text-align: center;">Сод.&nbspнефть или октол</div></th>
 		</tr>
 		<tr>
 			<td colspan="3"><div style="text-align: center;">{{ note.date }}</div></td>
 			<td colspan="1"><div style="text-align: center;">{{ note.name}}</div></td>
 			<td colspan="1"><div style="text-align: center;">{{ note.lot}}</div></td>
-			<td colspan="1"><div style="text-align: center;">{{ note.temperature}}</div></td>
+			<td colspan="2"><div style="text-align: center;">{{ note.temperature|striptags}}</div></td>
 			<td colspan="4"><div style="text-align: center;">{{ note.constit}}</div></td>
 		</tr>
 		<tr>
-			<th colspan="10"><div style="text-align: center;">Проведение измерений плотности</div></th>
-		</tr>
-		<tr>
-			<th colspan="5"><div style="text-align: center;">Пикнометром</div></th>
-			<th colspan="5" rowspan="4"><div style="text-align: center;">Денсиметром</div></th>
-		</tr>
-        <tr>
-			<th colspan="5"><div style="text-align: center;">V(пикн.), мл</div></th>
-		</tr>
-        <tr>
-			<td colspan="6"></td>
-
-		</tr>
-		<tr>
-			<th colspan="1"></th>
-			<td colspan="2"><div style="text-align: center;">Измерение&nbsp1</div></td>
-			<td colspan="2"><div style="text-align: center;">&nbsp&nbsp&nbspИзмерение&nbsp2&nbsp&nbsp&nbsp</div></td>
+			<th colspan="9"><div style="text-align: center;">Измерение плотности</div></th>
 		</tr>
 
 		<tr>
-			<th colspan="1">m(пикн.), г</th>
-			<td colspan="2"></td>
-            <td colspan="2"></td>
+			<th colspan="2"><div style="text-align: center;">V(пикн.), мл</div></th>
+            <td colspan="2"><div style="text-align: center;">{{ note.piknometer_volume|striptags }}</div></td>
+			<th colspan="2"><div style="text-align: center;">Измерение&nbsp1</div></th>
+			<th colspan="3"><div style="text-align: center;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspИзмерение&nbsp2&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></th>
+		</tr>
+
+		<tr>
+			<th colspan="4"><div style="text-align: center;">m(пикн.), г</div></th>
+			<td colspan="2"><div style="text-align: center;">{{ note.piknometer_mass1|default_if_none:" "|striptags }}</div></td>
+            <td colspan="3"><div style="text-align: center;">{{ note.piknometer_mass2|default_if_none:" "|striptags }}</div></td>
 		</tr>
 		<tr>
-			<th colspan="1">m(СО + пикн.), г</th>
-			<td colspan="2"></td>
-			<td colspan="2"></td>
-            <th colspan="5"><div style="text-align: center;">плотность денсиметром измерил</div></th>
+			<th colspan="4"><div style="text-align: center;">m(СО + пикн.), г</div></th>
+			<td colspan="2"><div style="text-align: center;">{{ note.piknometer_plus_SM_mass1|default_if_none:" "|striptags }}</div></td>
+			<td colspan="3"><div style="text-align: center;">{{ note.piknometer_plus_SM_mass2|default_if_none:" "|striptags }}</div></td>
+
 		</tr>
 		<tr>
-			<th colspan="1"> m(СО), г</th>
-			<td colspan="2"></td>
-			<td colspan="2"></td>
-            <td colspan="4"></td>
+			<th colspan="4"><div style="text-align: center;"> m(СО), г</div></th>
+			<td colspan="2"><div style="text-align: center;">{{ note.SM_mass1|default_if_none:" "|striptags }}</div></td>
+			<td colspan="3"><div style="text-align: center;">{{ note.SM_mass2|default_if_none:" "|striptags }}</div></td>
 		</tr>
 		<tr>
 			<th colspan="4"><div style="text-align: center;">ρ<sub>1</sub>, г/мл</div></th>
-			<td colspan="5"><div style="text-align: center;"></div></td>
+			<td colspan="5"><div style="text-align: center;">{{ note.density1|default_if_none:" "|striptags }}</div></td>
 		</tr>
         <tr>
 			<th colspan="4"><div style="text-align: center;">ρ<sub>2</sub>, г/м</div></th>
-			<td colspan="5"><div style="text-align: center;"></div></td>
+			<td colspan="5"><div style="text-align: center;">{{ note.density2|default_if_none:" "|striptags }}</div></td>
+		</tr>
+        <tr>
+			<th colspan="4"><div style="text-align: center;">плотность  измерил</div></th>
+			<td colspan="5"><div style="text-align: center;">{{ note.performerdensity|default_if_none:" "|striptags }}</div></td>
 		</tr>
 		<tr>
 			<th colspan="9"><div style="text-align: center;">Обработка результатов</div></th>
 		</tr>
 		<tr>
-			<th colspan="3"><div style="text-align: center;">Средняя плотность, ρ,&nbsp&nbsp&nbsp г/мл</div></th>
-			<th colspan="4"><div style="text-align: center;">Оц.&nbspприемл. измерений&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+			<th colspan="3"><div style="text-align: center;">Сред. плотн., ρ, г/мл</div></th>
+			<th colspan="4"><div style="text-align: center;">Оценка приемлемости измерений &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 Δ = (|ρ<sub>1</sub> - ρ<sub>2</sub>|/ρ<sub>сред</sub>) * 100 %</div></th>
-			<th colspan="2"><div style="text-align: center;">Крит. приемл. измерений, r  </div></th>
+			<th colspan="2"><div style="text-align: center;">Критерий приемл. измерений, r  </div></th>
 		</tr>
 		<tr>
-			<td colspan="3"><div style="text-align: center;">{{ note.viscosityAVG }}</div></td>
-			<td colspan="4"><div style="text-align: center;">{{ note.accMeasurement|default:" " }}</div></td>
-			<td colspan="2"><div style="text-align: center;">{{ note.kriteriy|default:" " }}</div></td>
+			<td colspan="3"><div style="text-align: center;">{{ note.density_avg|default_if_none:" "|striptags }}</div></td>
+			<td colspan="4"><div style="text-align: center;">{{ note.accMeasurement|default_if_none:" "|striptags }}</div></td>
+			<td colspan="2"><div style="text-align: center;">{{ note.kriteriy|default_if_none:" "|striptags}}</div></td>
 		</tr>
 		<tr>
 			<tr>
@@ -129,14 +122,14 @@
 			<th colspan="5"><div style="text-align: center;">Вязкость динамическая, ν<sub>дин</sub> = ν * ρ<sub>сред</sub> , Па*с </div></th>
 		</tr>
 		<tr>
-			<td colspan="4"><div style="text-align: center;">{{ note.viscosityAVG }}</div></td>
-			<td colspan="5"><div style="text-align: center;">{{ note.accMeasurement|default:" " }}</div></td>
+			<td colspan="4"><div style="text-align: center;">{{ note.kinematicviscosity|default_if_none:" "|striptags }}</div></td>
+			<td colspan="5"><div style="text-align: center;">{{ note.dinamicviscosity_not_rouned|default_if_none:" "|striptags }}</div></td>
 		</tr>
         <tr>
 			<th colspan="9"><div style="text-align: center;">Фиксация результатов</div></th>
 		</tr>
 		<tr>
-			<th colspan="1"><div style="text-align: center;">АЗ, Дим. вязкость, Па * с</div></th>
+			<th colspan="1"><div style="text-align: center;">АЗ, Дин. вязк., Па * с</div></th>
 			<th colspan="3"><div style="text-align: center;">
                 Абс.&nbspпогр.&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 (ν<sub>дин</sub> <sub>сред</sub> * 0,3)/ 100</div></th>
@@ -146,10 +139,10 @@
                 Δρ<sub>пред</sub> = (|ρ<sub>изм</sub> - ρ<sub>пред</sub>|/ρ<sub>сред</sub>) * 100 %</th></th>
 		</tr>
 		<tr>
-			<td colspan="1"><div style="text-align: center;">{{ note.certifiedValue_text }}</div></td>
-			<td colspan="3"><div style="text-align: center;">{{ note.abserror_text }}</div></td>
-			<td colspan="1"><div style="text-align: center;">{{ note.oldCertifiedValue }}</div></td>
-            <td colspan="4"><div style="text-align: center;">{{ note.deltaOldCertifiedValue_text }}</div></td>
+			<td colspan="1"><div style="text-align: center;">{{ note.certifiedValue|default_if_none:" "|striptags }}</div></td>
+			<td colspan="3"><div style="text-align: center;">{{ note.abserror|default_if_none:" "|striptags }}</div></td>
+			<td colspan="1"><div style="text-align: center;">{{ note.olddensity|default_if_none:" "|striptags }}</div></td>
+            <td colspan="4"><div style="text-align: center;">{{ note.deltaolddensity|default_if_none:" "|striptags }}</div></td>
 		</tr>
         <tr>
         <td colspan="9">
@@ -161,7 +154,7 @@
 
             </td>
 
-{#			<th colspan="9"> {% if note.resultWarning == 'Измеренное АЗ отличается от предыдущего более чем на 0,7 %, проверьте условия эксперимента. Рекомендовано измерить повторно.' %}#}
+{#			<th colspan="9"> {% if note.resultWarning == 'Измеренная плотность отличается от предыдущего более чем на 0,7 %, проверьте условия эксперимента. Рекомендовано измерить повторно.' %}#}
 {#                                 <div class="TransactionAmount Badresult">#}
 {#                             {% endif %}#}
 {#                {{ note.resultWarning }}</div>> </th>#}
@@ -202,7 +195,7 @@
 
             </div></td>
             <th colspan="1">
-{#                <a href="{% url 'comm_' note.id %}"  class="btn btn-outline-warning mt-3">комметарии</a></th>#}
+                <a href="{% url 'comm' note.id %}"  class="btn btn-outline-warning mt-3">комметарии</a></th>
 
 		</tr>
 

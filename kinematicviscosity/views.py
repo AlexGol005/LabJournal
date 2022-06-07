@@ -40,8 +40,6 @@ class StrKinematicviscosityView(View):
             if form.is_valid():
                 order = form.save(commit=False)
                 order.save()
-                # form.save()
-                messages.success(request, f'АЗ успешно подтверждено!')
                 return redirect(order)
         else:
             form = ViscosityMJLUdateForm(request.POST, instance=ViscosityMJL.objects.get(id=pk))

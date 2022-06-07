@@ -15,7 +15,12 @@ CHOICES = (
     ('другое', 'другое'),
 )
 
-DOCUMENTS = (('МИ-ПА', 'МИ-02-2018'),)
+DENSITYE = (
+    ('денсиметром', 'денсиметром'),
+    ('пикнометром', 'пикнометром'),
+)
+
+DOCUMENTS = (('МИ-02-2018', 'МИ-02-2018'),)
 
 RELERROR = 0.3  # относительная погрешность СО из описания типа
 
@@ -42,8 +47,8 @@ class Dinamicviscosity(models.Model):
                                                    null=True, blank=True)
     SM_mass1 = models.DecimalField('Масса СО -  1, г', max_digits=7, decimal_places=4, null=True, blank=True)
     SM_mass2 = models.DecimalField('Масса СО -  2, г', max_digits=7, decimal_places=4, null=True, blank=True)
-    density1 = models.DecimalField('плотность 1, г/мл', max_digits=7, decimal_places=4, null=True, blank=True)
-    density2 = models.DecimalField('плотность 2, г/мл', max_digits=7, decimal_places=4, null=True, blank=True)
+    density1 = models.DecimalField('плотность 1, г/мл', max_digits=7, decimal_places=5, null=True, blank=True)
+    density2 = models.DecimalField('плотность 2, г/мл', max_digits=7, decimal_places=5, null=True, blank=True)
     density_avg = models.DecimalField('плотность 2, г/мл', max_digits=7, decimal_places=4, null=True, blank=True)
     delta = models.CharField('Не превышает Δ', max_length=100, null=True, blank=True)
     kriteriy = models.DecimalField('Критерий приемлемости измерений', max_digits=2, decimal_places=1, null=True,
@@ -52,26 +57,23 @@ class Dinamicviscosity(models.Model):
                                            blank=True)
     dinamicviscosity_not_rouned = models.DecimalField('Динамическая вязкость неокругленная', max_digits=20,
                                                       decimal_places=6, null=True, blank=True)
-    relerror = models.DecimalField('Относительная  погрешность', max_digits=3, decimal_places=1, null=True,
+    relerror = models.DecimalField('Относительная  погрешность', max_digits=3, decimal_places=1, null=True,  blank=True,
                                    default=RELERROR)
-    certifiedValue = models.DecimalField('Аттестованное значение динамической вязкости', max_digits=20, decimal_places=10, null=True,
+    certifiedValue = models.FloatField('Аттестованное значение динамической вязкости', null=True,
                                          blank=True)
-    # certifiedValue_text = models.CharField('Аттестованное значение текстом', max_length=300, default='', null=True,
-    #                                        blank=True)
     resultMeas = models.CharField('Результат измерений уд/неуд', max_length=100, default='неудовлетворительно',
                                   null=True, blank=True)
     cause = models.CharField('Причина', max_length=100, default='', null=True, blank=True)
     accMeasurement = models.DecimalField('Оценка приемлемости измерений плотности', max_digits=5, decimal_places=1, null=True,
                                          blank=True)
     abserror = models.FloatField('Абсолютная  погрешность', null=True, blank=True)
-    abserror_text = models.CharField(max_length=300, default='', null=True, blank=True)
     olddensity = models.CharField('Предыдущее значение плотности', max_length=300, null=True, default='', blank=True)
     deltaolddensity = models.DecimalField('Оценка разницы с предыдущим значением плотности',
-                                                 max_digits=10, decimal_places=4, null=True, blank=True)
-    # deltaOldCertifiedValue_text = models.CharField(max_length=300, default='', null=True, blank=True)
+                                                 max_digits=10, decimal_places=2, null=True, blank=True)
     resultWarning = models.CharField(max_length=300, default='', null=True, blank=True)
     fixation = models.BooleanField(verbose_name='Внесен ли результат в Журнал аттестованных значений?', default=False,
                                    null=True, blank=True)
+    equipment = models.CharField('Способ измерения плотности', max_length=300, choices=DENSITYE, default='денсиметром', null=True,  blank=True)
 
     def save(self, *args, **kwargs):
         if not (self.density1 and self.density2):
@@ -80,13 +82,12 @@ class Dinamicviscosity(models.Model):
             self.density1 = self.SM_mass1 / self.piknometer_volume
             self.density2 = self.SM_mass2 / self.piknometer_volume
         self.density_avg = get_avg(self.density1, self.density2, 4)
-        self.dinamicviscosity_not_rouned = Decimal(self.kinematicviscosity) * self.density_avg
         if self.constit == 'да':
-            self.kriteriy = Decimal(RELERROR)
+            self.kriteriy = Decimal(0.3)
         if self.constit == 'нет':
-            self.kriteriy = Decimal(RELERROR)
+            self.kriteriy = Decimal(0.2)
         if self.constit == 'другое':
-            self.kriteriy = Decimal(RELERROR)
+            self.kriteriy = Decimal(0.3)
         self.accMeasurement = get_acc_measurement(self.density1, self.density2)
         if self.accMeasurement < self.kriteriy:
             self.resultMeas = 'удовлетворительно'
@@ -101,7 +102,7 @@ class Dinamicviscosity(models.Model):
             self.certifiedValue = numberDigits(self.dinamicviscosity_not_rouned, self.abserror)
         # если указано предыдущее значение плотности, и есть измеренное АЗ, то вычисляем разницу с ним:
         if self.olddensity and self.certifiedValue:
-            self.deltaolddensity = get_acc_measurement(Decimal(self.olddensity), self.certifiedValue)
+            self.deltaolddensity = get_acc_measurement(Decimal(self.olddensity), self.density_avg)
             if self.deltaolddensity > Decimal(0.7):
                 self.resultWarning = 'плотность отличается от предыдущей на > 0,7 %. Рекомендовано измерить повторно'
         super(Dinamicviscosity, self).save(*args, **kwargs)
