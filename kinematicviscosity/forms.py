@@ -7,7 +7,7 @@ from .models import CHOICES, CommentsKinematicviscosity, ndocumentoptional, Visc
 
 
 MODEL = ViscosityMJL
-
+COMMENTMODEL = CommentsKinematicviscosity
 
 class StrJournalCreationForm(forms.ModelForm):
     """форма для внесения записи в журнал"""
@@ -176,7 +176,7 @@ class CommentCreationForm(forms.ModelForm):
 
 
     class Meta:
-        model = CommentsKinematicviscosity
+        model = COMMENTMODEL
         fields = ['name']
 
 

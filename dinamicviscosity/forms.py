@@ -8,6 +8,7 @@ from .models import Dinamicviscosity, CHOICES, CommentsDinamicviscosity, DOCUMEN
 
 
 MODEL = Dinamicviscosity
+COMMENTMODEL = CommentsDinamicviscosity
 
 
 class StrJournalCreationForm(forms.ModelForm):
@@ -156,5 +157,5 @@ class CommentCreationForm(forms.ModelForm):
                                                  ))
 
     class Meta:
-        model = CommentsDinamicviscosity
+        model = COMMENTMODEL
         fields = ['name']
