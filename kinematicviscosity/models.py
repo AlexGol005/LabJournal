@@ -45,11 +45,11 @@ class ViscosityMJL(models.Model):
     certifiedValue = models.DecimalField('Аттестованное значение', max_digits=20, decimal_places=10, null=True)
     certifiedValue_text = models.CharField(max_length=300, default='', null=True)
     # уникальные поля (первичные данные)
+    oldCertifiedValue = models.CharField('Предыдущее аттестованное значение',  null=True, blank=True, max_length=300, default='')
     termostatition = models.BooleanField(verbose_name='Термостатировано не менее 20 минут', blank=True, null=True)
     temperatureCheck = models.BooleanField(verbose_name='Температура контролируется внешним поверенным термометром',
                                            blank=True, null=True)
     constit = models.CharField(max_length=300, choices=CHOICES, default='Проба содержит октол/нефть', null=True)
-    oldCertifiedValue = models.CharField('Предыдущее аттестованное значение', max_length=300, null=True, default='')
     temperature = models.DecimalField('Температура, ℃', max_digits=5, decimal_places=2, default='0', null=True)
     ViscosimeterNumber1 = models.CharField('Заводской номер вискозиметра № 1', max_length=10, default='0',
                                            null=True)  # todo ForeignKey
@@ -142,9 +142,10 @@ class ViscosityMJL(models.Model):
         if self.oldCertifiedValue and self.certifiedValue:
             self.deltaOldCertifiedValue = \
                 get_acc_measurement(Decimal(self.oldCertifiedValue), self.certifiedValue, 2)
-        if self.deltaOldCertifiedValue:
-            if self.deltaOldCertifiedValue > Decimal(0.7):
-                self.resultWarning = 'Результат отличается от предыдущего > 0,7 %. Рекомендовано измерить повторно.'
+            if self.deltaOldCertifiedValue:
+                if self.deltaOldCertifiedValue > Decimal(0.7):
+                    self.resultWarning = 'Результат отличается от предыдущего > 0,7 %. Рекомендовано измерить повторно.'
+
 
         super(ViscosityMJL, self).save(*args, **kwargs)
 

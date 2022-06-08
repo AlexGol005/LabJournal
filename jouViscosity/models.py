@@ -66,7 +66,7 @@ class LotVG(models.Model):
     def save(self, *args, **kwargs):
         if self.viscosity:
             self.lot = self.viscosity.lot
-            self.nameVG = VGrange.objects.get(name=self.viscosity.name)
+            # self.nameVG = VGrange.objects.get(name=self.viscosity.name)
 
         super(LotVG, self).save(*args, **kwargs)
 
@@ -81,20 +81,4 @@ class LotVG(models.Model):
 
 
 
-class KinematicviscosityVG(models.Model):
-    namelot = models.ForeignKey(LotVG, verbose_name='Партия и название',  on_delete=models.PROTECT)
-    character = models.ForeignKey(CharacterVG, verbose_name='Аттестуемая характеристика', max_length=100,  on_delete=models.PROTECT)
-    temperature = models.DecimalField('Температура', max_digits=5, decimal_places=2, null=True)
-    person = models.ForeignKey(User, verbose_name='Исполнитель аттестации', max_length=30,  on_delete=models.PROTECT)
-    date = models.DateField('Дата аттестации', max_length=30)
-    cv = models.CharField('Аттестованное значение', max_length=30)
-
-
-
-    def __str__(self):
-        return f'{self.namelot.nameVG} п. {self.namelot.lot}  Т {self.temperature} °С АЗ {self.cv}, дата аттестации {self.date}'
-
-    class Meta:
-        verbose_name = 'Аттестация ВЖ'
-        verbose_name_plural = 'Аттестации ВЖ'
 
