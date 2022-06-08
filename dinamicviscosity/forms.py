@@ -151,6 +151,8 @@ class StrJournalUdateForm(forms.ModelForm):
 
 
 class CommentCreationForm(forms.ModelForm):
+    """форма для  комментариев"""
+    """стандартная"""
     name = forms.CharField(label='Комментировать', max_length=1000,
                            widget=forms.Textarea(attrs={'class': 'form-control',
                                                         'placeholder': 'введите текст комментария'}

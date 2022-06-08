@@ -3,6 +3,7 @@ from .models import ViscosityMJL, CommentsKinematicviscosity
 
 
 # admin.site.register(ViscosityMJL)
+
 @admin.register(ViscosityMJL)  # связываем админку с моделью
 class NoteAdmin(admin.ModelAdmin):
     # exclude = ('performer',)  # скрыть performer поле, чтобы оно не отображалось в форме изменений

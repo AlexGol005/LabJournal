@@ -3,6 +3,7 @@ from .models import Dinamicviscosity, CommentsDinamicviscosity
 
 
 # admin.site.register(ViscosityMJL)
+
 @admin.register(Dinamicviscosity)
 class NoteAdmin(admin.ModelAdmin):
 
@@ -18,5 +19,7 @@ class NoteAdmin(admin.ModelAdmin):
         if not obj.pk:
             obj.author = request.user
         super().save_model(request, obj, form, change)
+
+
 
 

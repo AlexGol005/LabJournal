@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
 from datetime import datetime, timedelta
@@ -15,6 +16,7 @@ JOURNAL = AttestationJ
 MODEL = ViscosityMJL
 COMMENTMODEL = CommentsKinematicviscosity
 URL = 'kinematicviscosity'
+NAME = 'кинематика'
 
 
 class HeadView(View):
@@ -33,7 +35,12 @@ class StrJournalView(View):
     def get(self, request, pk):
         note = get_object_or_404(MODEL, pk=pk)
         form = StrJournalUdateForm()
-        return render(request, URL + '/str.html', {'note': note, 'form': form})
+        try:
+            counter = COMMENTMODEL.objects.filter(forNote=note.id)
+        except ObjectDoesNotExist:
+            counter = None
+        return render(request, URL + '/str.html',
+                      {'note': note, 'form': form, 'URL': URL, 'NAME': NAME, 'counter': counter})
 
     def post(self, request, pk, *args, **kwargs):
         if MODEL.objects.get(id=pk).performer == request.user:
@@ -76,7 +83,7 @@ class CommentsView(View):
         note = COMMENTMODEL.objects.filter(forNote=pk)
         title = MODEL.objects.get(pk=pk)
         form = CommentCreationForm()
-        return render(request, URL + '/comments.html', {'note': note, 'title': title, 'form': form})
+        return render(request, 'main/comments.html', {'note': note, 'title': title, 'form': form, 'URL': URL})
 
     def post(self, request, pk, *args, **kwargs):
         form = CommentCreationForm(request.POST)

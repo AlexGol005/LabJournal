@@ -1,9 +1,7 @@
 {% extends 'main/base.html' %}
 {% load static %}
 {% block title %}
-
-        {{ i.name}}
-
+{% for i in note %}{{ i.name}}{% endfor %}
 {% endblock %}
 
 

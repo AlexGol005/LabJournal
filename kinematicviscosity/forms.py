@@ -5,9 +5,9 @@ from crispy_forms.layout import Layout, Submit, Row, Column
 
 from .models import CHOICES, CommentsKinematicviscosity, ndocumentoptional, ViscosityMJL
 
-
 MODEL = ViscosityMJL
 COMMENTMODEL = CommentsKinematicviscosity
+
 
 class StrJournalCreationForm(forms.ModelForm):
     """форма для внесения записи в журнал"""
@@ -29,9 +29,9 @@ class StrJournalCreationForm(forms.ModelForm):
                                                             ))
     termostatition = forms.BooleanField(label='Термостатировано не менее 20 минут', required=True)
     temperatureCheck = forms.BooleanField(label='Температура контролируется внешним поверенным термометром',
-                                            required=True)
+                                          required=True)
 
-    ViscosimeterNumber1 = forms.CharField(label='Заводской номер вискозиметра № 1', max_length=10,  required=True,
+    ViscosimeterNumber1 = forms.CharField(label='Заводской номер вискозиметра № 1', max_length=10, required=True,
                                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                                         'placeholder': '№ первого вискозиметра'}
                                                                  ))
@@ -40,9 +40,9 @@ class StrJournalCreationForm(forms.ModelForm):
                                                                  'placeholder': 'Константа через точку'}
                                                           ))
     ViscosimeterNumber2 = forms.CharField(label='Заводской номер вискозиметра № 2', max_length=10, required=False,
-    widget = forms.TextInput(attrs={'class': 'form-control',
-                                    'placeholder': '№ второго вискозиметра'}
-                             ))
+                                          widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                        'placeholder': '№ второго вискозиметра'}
+                                                                 ))
     Konstant2 = forms.DecimalField(label='Константа вискозиметра № 2', max_digits=20, decimal_places=6, required=False,
                                    widget=forms.TextInput(attrs={'class': 'form-control',
                                                                  'placeholder': 'Константа через точку'}
@@ -63,11 +63,11 @@ class StrJournalCreationForm(forms.ModelForm):
                                                                        'placeholder': 'мм'}
                                                                 ))
     plustimesekK1T2 = forms.DecimalField(
-                                         label='τ1, секунды',
-                                         max_digits=5, decimal_places=2, required=False,
-                                         widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                       'placeholder': 'сс.сс'}
-                                                                ))
+        label='τ1, секунды',
+        max_digits=5, decimal_places=2, required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control',
+                                      'placeholder': 'сс.сс'}
+                               ))
     plustimeminK2T1 = forms.DecimalField(label='τ1, минуты',
                                          max_digits=3, decimal_places=0, required=False,
                                          widget=forms.TextInput(attrs={'class': 'form-control',
@@ -88,12 +88,11 @@ class StrJournalCreationForm(forms.ModelForm):
                                          widget=forms.TextInput(attrs={'class': 'form-control',
                                                                        'placeholder': 'сс.сс'}
                                                                 ))
-    constit = forms.ChoiceField(label='Состав пробы', widget=forms.RadioSelect,  choices=CHOICES, required=True)
+    constit = forms.ChoiceField(label='Состав пробы', widget=forms.RadioSelect, choices=CHOICES, required=True)
     oldCertifiedValue = forms.CharField(label='Предыдущее аттестованное значение', required=False,
-                                         widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                       'placeholder': 'АЗ через точку'}
-                                                                ))
-
+                                        widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                      'placeholder': 'АЗ через точку'}
+                                                               ))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -143,7 +142,6 @@ class StrJournalCreationForm(forms.ModelForm):
             Submit('submit', 'Внести запись в журнал')
         )
 
-
     class Meta:
         model = MODEL
         fields = ['name', 'lot', 'temperature', 'termostatition', 'temperatureCheck',
@@ -156,32 +154,23 @@ class StrJournalCreationForm(forms.ModelForm):
                   'plustimeminK2T2', 'plustimesekK2T2', 'ndocument']
 
 
-
 class StrJournalUdateForm(forms.ModelForm):
     """форма для  обновления записи в журнале: поле модели fixation для отправки записи в ЖАЗ"""
     """стандартная"""
-    fixation = forms.BooleanField(label='АЗ',  required=False)
+    fixation = forms.BooleanField(label='АЗ', required=False)
 
     class Meta:
         model = MODEL
         fields = ['fixation']
 
 
-
 class CommentCreationForm(forms.ModelForm):
+    """форма для  комментариев"""
+    """стандартная"""
     name = forms.CharField(label='Комментировать', max_length=1000,
                            widget=forms.Textarea(attrs={'class': 'form-control',
-                                               'placeholder': 'введите текст комментария'}
-                                                                ))
-
+                                                        'placeholder': 'введите текст комментария'}))
 
     class Meta:
         model = COMMENTMODEL
         fields = ['name']
-
-
-
-
-
-
-

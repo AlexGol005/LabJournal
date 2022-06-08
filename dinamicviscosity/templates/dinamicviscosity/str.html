@@ -1,17 +1,20 @@
 {% extends 'main/superbase.html' %}
 
 {% block title %}
- плотность и динамика
+{{ NAME }}
 {% endblock %}
 
-
+{#кнопки слева странички#}
 {% block content %}
-    <div class="row">
+<div class="row">
 <div class="col-md-2">
-      <a href="{% url 'dinamicviscosityreg'  %}" class="btn btn-warning mt-3 mr-5">&nbsp&nbspвнести&nbsp&nbsp&nbsp ещё </a>
-        <a href='{% url 'dinamicviscosity'  %}' class="btn btn-warning mt-3">В  журнал</a>
-        <a href='{% url 'dinamicviscosityall'  %}' class="btn btn-warning mt-3">Все записи</a>
-    </div>
+    <a href="/attestationJ/{{ URL }}/registration/" class="btn btn-warning mt-3 mr-5">&nbsp&nbspвнести&nbsp&nbsp&nbsp ещё </a>
+    <a href='/attestationJ/{{ URL }}/' class="btn btn-warning mt-3">В  журнал</a>
+    <a href='/attestationJ/{{ URL }}/attestation/' class="btn btn-warning mt-3">Все записи</a>
+</div>
+
+{#уникальная таблица#}
+{#полустандартный верх таблицы#}
 <div class="col-md-4 mt-1" >
     <table class="table table-bordered background-color">
 	<tbody>
@@ -20,11 +23,9 @@
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-
                 № записи {{ note.id}}
                  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspСтр.&nbsp&nbsp&nbsp&nbsp </div></th>
 		</tr>
-
 		<tr>
 			<th colspan="9"><div style="text-align: center;">Опр. плотности <b>  {{ note.equipment }}</b> и расчёт динамической вязкости по {{ note.ndocument }} </div></th>
 		</tr>
@@ -44,6 +45,8 @@
 			<td colspan="2"><div style="text-align: center;">{{ note.temperature|striptags}}</div></td>
 			<td colspan="4"><div style="text-align: center;">{{ note.constit}}</div></td>
 		</tr>
+{# конец полустандартного верха таблицы#}
+{# совсем уникальная часть таблицы#}
 		<tr>
 			<th colspan="9"><div style="text-align: center;">Измерение плотности</div></th>
 		</tr>
@@ -97,6 +100,7 @@
 			<td colspan="4"><div style="text-align: center;">{{ note.accMeasurement|default_if_none:" "|striptags }}</div></td>
 			<td colspan="2"><div style="text-align: center;">{{ note.kriteriy|default_if_none:" "|striptags}}</div></td>
 		</tr>
+{# блок оценки результатов #}
 		<tr>
 			<tr>
 			<td colspan="9">
@@ -112,10 +116,10 @@
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 </div>
-
             </td>
-		</tr>
+		    </tr>
         <tr>
+{# конец блока оценки результатов #}
 			<th colspan="9"><div style="text-align: center;">Расчёт динамической вязкости</div></th>
 		</tr>
 		<tr>
@@ -151,11 +155,11 @@
                 <div class="TransactionAmount Badresult">
                   <b>{{ note.resultWarning }}</b>
                 </div>
-
-
             </td>
-
 		</tr>
+{#конец уникальной части таблицы #}
+
+{# полустандартный низ таблицы с формой фиксации АЗ и кнопкой "комментарии" #}
         <tr>
 			<th colspan="3">Исполнитель </th>
             <th colspan="1"><div style="text-align: center;">внесено</div></th>
@@ -169,37 +173,34 @@
             <td colspan="1"><div style="text-align: center;"></div></td>
             <td colspan="1"><div style="text-align: center;">
                 {% if note.resultMeas == 'удовлетворительно' and not note.fixation %}
-                 <form method="post" >
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button class="btn btn-outline-warning" type="submit">Подтвердить</button>
-    </form>
+                <form method="post" >
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-outline-warning" type="submit">Подтвердить</button>
+                </form>
                 {% elif note.resultMeas == 'удовлетворительно' and  note.fixation %}
 
 {#                    АЗ Записано в ЖАЗ сайта#}
-                    АЗ подтверждено
-
-                 {% else %}
-                    нет АЗ
+                АЗ подтверждено
+                {% else %}
+                нет АЗ
                 {% endif %}
-
-
-
             </div></td>
-
             <td colspan="3"><div style="text-align: center;">
-
-
             </div></td>
             <th colspan="1">
-                <a href="{% url 'dinamicviscositycomm' note.id %}"  class="btn btn-outline-warning mt-3">комметарии</a></th>
-
-		</tr>
-
+                {% if not counter %}
+                <a href="/attestationJ/{{ URL }}/attestation/{{ note.id }}/comments/"  class="btn btn-outline-warning mt-3">комментировать</a>
+                {% elif counter %}
+                <a href="/attestationJ/{{ URL }}/attestation/{{ note.id }}/comments/"  class="btn btn-outline-warning mt-3">смотреть комментарии</a></th>
+                {% endif %}
+            </tr>
+{# конец низа #}
 	</tbody>
 </table>
 </div>
-    </div>
+{#конец  таблицы#}
+</div>
     &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
@@ -213,8 +214,6 @@
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
     &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-
-
-
+{#кнопка печать #}
     <a href="javascript:(print());" class="btn btn-warning mt-1">Распечатать</a>
 {% endblock %}
