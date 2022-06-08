@@ -8,8 +8,9 @@
 {% block content %}
     <div class="row">
 <div class="col-md-2">
-      <a href="{% url "kinematicviscosityreg" %}" class="btn btn-warning mt-3 mr-5">&nbsp&nbspвнести&nbsp&nbsp&nbsp ещё </a>
+        <a href="{% url "kinematicviscosityreg" %}" class="btn btn-warning mt-3 mr-5">&nbsp&nbspвнести&nbsp&nbsp&nbsp ещё </a>
         <a href="/attestationJ/kinematicviscosity/" class="btn btn-warning mt-3">В  журнал</a>
+        <a href='{% url 'kinematicviscosityall'  %}' class="btn btn-warning mt-3">Все записи</a>
     </div>
 <div class="col-md-4 mt-1" >
     <table class="table table-bordered background-color">
