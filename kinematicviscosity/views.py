@@ -11,12 +11,15 @@ from django.contrib.auth.decorators import login_required
 from main.models import AttestationJ
 from .models import ViscosityMJL, CommentsKinematicviscosity
 from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm
+from view_attestationj import AllStrView
 
 JOURNAL = AttestationJ
 MODEL = ViscosityMJL
 COMMENTMODEL = CommentsKinematicviscosity
 URL = 'kinematicviscosity'
 NAME = 'кинематика'
+
+AllStrView(MODEL, URL, JOURNAL)
 
 
 class HeadView(View):
@@ -96,19 +99,19 @@ class CommentsView(View):
             return redirect(order)
 
 
-class AllStrView(ListView):
-    """ Представление, которое выводит все записи в журнале. """
-    """стандартное"""
-    model = MODEL
-    template_name = URL + '/journal.html'
-    context_object_name = 'objects'
-    ordering = ['-date']
-    paginate_by = 8
-
-    def get_context_data(self, **kwargs):
-        context = super(AllStrView, self).get_context_data(**kwargs)
-        context['journal'] = JOURNAL.objects.filter(for_url=URL)
-        return context
+# class AllStrView(ListView):
+#     """ Представление, которое выводит все записи в журнале. """
+#     """стандартное"""
+#     model = MODEL
+#     template_name = URL + '/journal.html'
+#     context_object_name = 'objects'
+#     ordering = ['-date']
+#     paginate_by = 8
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(AllStrView, self).get_context_data(**kwargs)
+#         context['journal'] = JOURNAL.objects.filter(for_url=URL)
+#         return context
 
 
 def filterview(request, pk):
