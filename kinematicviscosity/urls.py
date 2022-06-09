@@ -13,4 +13,6 @@ urlpatterns = [
     path('attestation/<int:pk>/comments/', login_required(views.CommentsView.as_view()), name=URL + 'comm'),
     path('attestation/', login_required(views.AllStrView.as_view()), name=URL + 'all'),
     path('filter/<int:pk>', views.filterview, name=URL + 'filter'),
+    path('test/', views.AdvancedSearchView.as_view(), name=URL + 'test'),
+    path('/search_location/result/', views.SearchResultView.as_view(), name='search_result'),
 ]

@@ -1,0 +1,11 @@
+{% extends 'main/Journal.html' %}
+{% load static %}
+{% block uniccontent %}
+
+{% for location in locations_searched %}
+       {{ location }}<br>
+       {{ location.name }}<br>
+       {{ location.lot }}<br>
+{% endfor %}
+
+{% endblock %}

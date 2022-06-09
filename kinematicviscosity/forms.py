@@ -174,3 +174,6 @@ class CommentCreationForm(forms.ModelForm):
     class Meta:
         model = COMMENTMODEL
         fields = ['name']
+class AdvancedSearchForm(forms.Form):
+    name = forms.CharField()
+    lot = forms.CharField()
