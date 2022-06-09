@@ -102,6 +102,7 @@ class Dinamicviscosity(models.Model):
             self.certifiedValue = numberDigits(self.dinamicviscosity_not_rouned, self.abserror)
         # если указано предыдущее значение плотности, и есть измеренное АЗ, то вычисляем разницу с ним:
         if self.olddensity and self.certifiedValue:
+            self.olddensity = self.olddensity.replace(',', '.')
             self.deltaolddensity = get_acc_measurement(Decimal(self.olddensity), self.density_avg)
             if self.deltaolddensity > Decimal(0.7):
                 self.resultWarning = 'плотность отличается от предыдущей на > 0,7 %. Рекомендовано измерить повторно'

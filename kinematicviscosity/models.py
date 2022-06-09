@@ -140,6 +140,7 @@ class ViscosityMJL(models.Model):
             self.certifiedValue = numberDigits(self.viscosityAVG, self.abserror)
             self.certifiedValue_text = str(self.certifiedValue)
         if self.oldCertifiedValue and self.certifiedValue:
+            self.oldCertifiedValue = self.oldCertifiedValue.replace(',', '.')
             self.deltaOldCertifiedValue = \
                 get_acc_measurement(Decimal(self.oldCertifiedValue), self.certifiedValue, 2)
             if self.deltaOldCertifiedValue:
