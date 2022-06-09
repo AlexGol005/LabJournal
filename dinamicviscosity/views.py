@@ -59,7 +59,7 @@ class StrJournalView(View):
 @login_required
 def RegNoteJournalView(request):
     """ Представление, которое выводит форму регистрации в журнале. """
-    """Стандартное кроме old"""
+    """Стандартное"""
     if request.method == "POST":
         form = StrJournalCreationForm(request.POST)
         if form.is_valid():

@@ -21,7 +21,7 @@ NAME = 'кинематика'
 
 class HeadView(View):
     """ Представление, которое выводит заглавную страницу журнала """
-    """Стандартная"""
+    """ Стандартное """
 
     def get(self, request):
         note = JOURNAL.objects.all().filter(for_url=URL)

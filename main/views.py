@@ -35,3 +35,5 @@ class EquipmentView(View):
        return render(request, 'main/equipment.html')
 
 
+
+
