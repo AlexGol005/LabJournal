@@ -15,11 +15,11 @@
 
 <div class="row">
 <div class="col-md-9 mt-2" >
-<div style="text-align: center;"><h4><a href="/attestationJ/kinematicviscosity/"> {% for item in journal %}{{ item.name }}{% endfor %}</a></h4></div>
+<div style="text-align: center;"><h4><a href="/attestationJ/{{ URL }}/"> {% for item in journal %}{{ item.name }}{% endfor %}</a></h4></div>
 <br>
 
 {#форма для поиска#}
-    <form action="{% url 'search_result' %}" method="GET">
+    <form action="/attestationJ/{{ URL }}/searchresult/" method="GET">
         {% csrf_token %}
         {% crispy form %}
     </form>

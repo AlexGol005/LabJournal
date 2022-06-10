@@ -25,7 +25,7 @@ class HeadView(View):
 
     def get(self, request):
         note = JOURNAL.objects.all().filter(for_url=URL)
-        return render(request, URL + '/head.html', {'note': note})
+        return render(request, URL + '/head.html', {'note': note, 'URL': URL})
 
 
 class StrJournalView(View):
@@ -110,15 +110,8 @@ class AllStrView(ListView):
         context = super(AllStrView, self).get_context_data(**kwargs)
         context['journal'] = JOURNAL.objects.filter(for_url=URL)
         context['form'] = SearchForm()
+        context['URL']= URL
         return context
-
-
-class SearchView(FormView):
-    """ Представление, которое выводит форму поиска на странице со всеми записями журнала. """
-    """стандартное"""
-    form_class = SearchForm
-    template_name = 'kinematicviscosity/test.html'
-    success_url = '/search_location/result/'
 
 class SearchResultView(TemplateView):
     """ Представление, которое выводит результаты поиска на странице со всеми записями журнала. """
@@ -145,6 +138,7 @@ class SearchResultView(TemplateView):
             context['objects'] = objects
         context['journal'] = JOURNAL.objects.filter(for_url=URL)
         context['form'] = SearchForm(initial={'name': name, 'lot': lot, 'temperature': temperature})
+        context['URL']= URL
         return context
 
 def filterview(request, pk):

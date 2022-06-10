@@ -105,6 +105,7 @@ class AllStrView(ListView):
     def get_context_data(self, **kwargs):
         context = super(AllStrView, self).get_context_data(**kwargs)
         context['journal'] = JOURNAL.objects.filter(for_url=URL)
+        context['URL']: URL
         return context
 
 
