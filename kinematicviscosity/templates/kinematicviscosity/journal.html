@@ -17,10 +17,14 @@
 <div class="col-md-9 mt-2" >
 <div style="text-align: center;"><h4><a href="/attestationJ/kinematicviscosity/"> {% for item in journal %}{{ item.name }}{% endfor %}</a></h4></div>
 <br>
+
+{#форма для поиска#}
     <form action="{% url 'search_result' %}" method="GET">
         {% csrf_token %}
         {% crispy form %}
     </form>
+{#конец формы для поиска#}
+
 {#основная таблица#}
 <table class="table table-bordered">
     <thead>
