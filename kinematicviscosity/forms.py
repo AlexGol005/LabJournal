@@ -11,7 +11,7 @@ COMMENTMODEL = CommentsKinematicviscosity
 
 class StrJournalCreationForm(forms.ModelForm):
     """форма для внесения записи в журнал"""
-    """поменять: fields"""
+    """поменять: fields, initial"""
     ndocument = forms.ChoiceField(label='Метод испытаний', required=True,
                                   choices=ndocumentoptional,
                                   widget=forms.Select(attrs={'class': 'form-control'}))
@@ -174,6 +174,19 @@ class CommentCreationForm(forms.ModelForm):
     class Meta:
         model = COMMENTMODEL
         fields = ['name']
-class AdvancedSearchForm(forms.Form):
-    name = forms.CharField()
-    lot = forms.CharField()
+class SearchForm(forms.Form):
+    name = forms.CharField(label='Название', initial='ВЖ-2-ПА(100)')
+    lot = forms.CharField(label='Партия', initial='1', required=False)
+    temperature = forms.CharField(label='Температура', initial='20', required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('name', css_class='form-group col-md-4 mb-0'),
+                Column('lot', css_class='form-group col-md-2 mb-0'),
+                Column('temperature', css_class='form-group col-md-3 mb-0'),
+                Submit('submit', 'Найти', css_class='btn  btn-info col-md-2 mb-3 mt-4 ml-4'),
+                css_class='form-row'
+            ))

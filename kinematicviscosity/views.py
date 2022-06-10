@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 
 from main.models import AttestationJ
 from .models import ViscosityMJL, CommentsKinematicviscosity
-from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm, AdvancedSearchForm
+from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm, SearchForm
 
 JOURNAL = AttestationJ
 MODEL = ViscosityMJL
@@ -109,17 +109,50 @@ class AllStrView(ListView):
     def get_context_data(self, **kwargs):
         context = super(AllStrView, self).get_context_data(**kwargs)
         context['journal'] = JOURNAL.objects.filter(for_url=URL)
-        context['form'] = AdvancedSearchForm()
+        context['form'] = SearchForm()
         return context
 
 
+class SearchView(FormView):
+    """ Представление, которое выводит форму поиска на странице со всеми записями журнала. """
+    """стандартное"""
+    form_class = SearchForm
+    template_name = 'kinematicviscosity/test.html'
+    success_url = '/search_location/result/'
 
+class SearchResultView(TemplateView):
+    """ Представление, которое выводит результаты поиска на странице со всеми записями журнала. """
+    """нестандартное"""
+
+    template_name = URL + '/journal.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchResultView, self).get_context_data(**kwargs)
+        name = self.request.GET['name']
+        lot = self.request.GET['lot']
+        temperature = self.request.GET['temperature']
+        if name and lot and temperature:
+            objects = MODEL.objects.filter(name=name).filter(lot=lot).filter(temperature=temperature).filter(fixation=True)
+            context['objects'] = objects
+        if name and lot and not temperature:
+            objects = MODEL.objects.filter(name=name).filter(lot=lot).filter(fixation=True)
+            context['objects'] = objects
+        if name and not lot and not temperature:
+            objects = MODEL.objects.filter(name=name).filter(fixation=True)
+            context['objects'] = objects
+        if name and temperature and not lot:
+            objects = MODEL.objects.filter(name=name).filter(temperature=temperature).filter(fixation=True)
+            context['objects'] = objects
+        context['journal'] = JOURNAL.objects.filter(for_url=URL)
+        context['form'] = SearchForm(initial={'name': name, 'lot': lot, 'temperature': temperature})
+        return context
 
 def filterview(request, pk):
     """ Фильтры записей об измерениях по дате, АЗ, мои записи и пр """
     """Стандартная"""
     journal = JOURNAL.objects.filter(for_url=URL)
     objects = MODEL.objects.all()
+    form = SearchForm
     if pk == 1:
         now = datetime.now() - timedelta(minutes=60 * 24 * 7)
         objects = objects.filter(date__gte=now).order_by('-pk')
@@ -137,7 +170,7 @@ def filterview(request, pk):
     elif pk == 7:
         objects = objects.filter(performer=request.user).filter(fixation__exact=True).filter(
             date__gte=datetime.now()).order_by('-pk')
-    return render(request, URL + "/journal.html", {'objects': objects, 'journal': journal})
+    return render(request, URL + "/journal.html", {'objects': objects, 'journal': journal, 'form': form})
 
 # class StrKinematicviscosityDetailView(DetailView):
 #     """ Представление, которое позволяет вывести отдельную запись (запасная версия). """
@@ -157,22 +190,6 @@ def filterview(request, pk):
 #     def form_valid(self, form):
 #         form.instance.user = self.request.user
 #         return super(CreateWork, self).form_valid(form)
-class AdvancedSearchView(FormView):
-    form_class = AdvancedSearchForm
-    template_name = "kinematicviscosity/test.html"
-    success_url = '/search_location/result/'
+
 
 # url of this view is 'search_result'
-class SearchResultView(TemplateView):
-    template_name = "kinematicviscosity/testresult.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(SearchResultView, self).get_context_data(**kwargs)
-        location = self.request.GET['name']
-        location = location.upper()
-        keywords = self.request.GET['lot']
-        # how should I use keywords (string of words split by commas)
-        # in order to get locations_searched by name and keywords simultaneously
-        locations_searched = MODEL.objects.filter(name=location)
-        context['locations_searched'] = locations_searched
-        return context

@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.shortcuts import render
 from django.db import connection
 from django.views import View
