@@ -4,20 +4,24 @@
 {#{% url 'kinematicviscosityfilter' pk=3 %}#}
 
 {% extends 'main/base.html' %}
-
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
 
 {% block title %}
 {% for item in journal %}{{ item.name }}{% endfor %}
 {% endblock %}
 
 {% block content %}
+
 <div class="row">
 <div class="col-md-9 mt-2" >
 <div style="text-align: center;"><h4><a href="/attestationJ/kinematicviscosity/"> {% for item in journal %}{{ item.name }}{% endfor %}</a></h4></div>
 <br>
-
+    <form action="{% url 'search_result' %}" method="GET">
+        {% csrf_token %}
+        {% crispy form %}
+    </form>
 {#основная таблица#}
-
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -67,6 +71,7 @@
 <div style="text-align: center;"> <a href="{% url 'kinematicviscosityfilter' pk=5 %}" class="btn  btn-primary  mt-3" >&nbsp&nbsp&nbspМои&nbsp&nbsp&nbsp</a></div>
 <div style="text-align: center;"> <a href="{% url 'kinematicviscosityfilter' pk=6 %}" class="btn  btn-primary  mt-3" >Мои с АЗ</a></div>
 <div style="text-align: center;"> <a href="{% url 'kinematicviscosityfilter' pk=7 %}" class="btn  btn-primary  mt-3" >Мои с АЗ <br>сегод.</a></div>
+
 </div>
 </div>
 

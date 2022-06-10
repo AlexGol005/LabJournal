@@ -1,7 +1,6 @@
-
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView, FormView, TemplateView
 from datetime import datetime, timedelta
 from django.shortcuts import get_object_or_404
 from django.views import View
@@ -11,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 
 from main.models import AttestationJ
 from .models import ViscosityMJL, CommentsKinematicviscosity
-from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm
+from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm, SearchForm
 
 JOURNAL = AttestationJ
 MODEL = ViscosityMJL
@@ -106,17 +105,54 @@ class AllStrView(ListView):
     ordering = ['-date']
     paginate_by = 8
 
+
     def get_context_data(self, **kwargs):
         context = super(AllStrView, self).get_context_data(**kwargs)
         context['journal'] = JOURNAL.objects.filter(for_url=URL)
+        context['form'] = SearchForm()
         return context
 
+
+class SearchView(FormView):
+    """ Представление, которое выводит форму поиска на странице со всеми записями журнала. """
+    """стандартное"""
+    form_class = SearchForm
+    template_name = 'kinematicviscosity/test.html'
+    success_url = '/search_location/result/'
+
+class SearchResultView(TemplateView):
+    """ Представление, которое выводит результаты поиска на странице со всеми записями журнала. """
+    """нестандартное"""
+
+    template_name = URL + '/journal.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchResultView, self).get_context_data(**kwargs)
+        name = self.request.GET['name']
+        lot = self.request.GET['lot']
+        temperature = self.request.GET['temperature']
+        if name and lot and temperature:
+            objects = MODEL.objects.filter(name=name).filter(lot=lot).filter(temperature=temperature).filter(fixation=True)
+            context['objects'] = objects
+        if name and lot and not temperature:
+            objects = MODEL.objects.filter(name=name).filter(lot=lot).filter(fixation=True)
+            context['objects'] = objects
+        if name and not lot and not temperature:
+            objects = MODEL.objects.filter(name=name).filter(fixation=True)
+            context['objects'] = objects
+        if name and temperature and not lot:
+            objects = MODEL.objects.filter(name=name).filter(temperature=temperature).filter(fixation=True)
+            context['objects'] = objects
+        context['journal'] = JOURNAL.objects.filter(for_url=URL)
+        context['form'] = SearchForm(initial={'name': name, 'lot': lot, 'temperature': temperature})
+        return context
 
 def filterview(request, pk):
     """ Фильтры записей об измерениях по дате, АЗ, мои записи и пр """
     """Стандартная"""
     journal = JOURNAL.objects.filter(for_url=URL)
     objects = MODEL.objects.all()
+    form = SearchForm
     if pk == 1:
         now = datetime.now() - timedelta(minutes=60 * 24 * 7)
         objects = objects.filter(date__gte=now).order_by('-pk')
@@ -134,7 +170,7 @@ def filterview(request, pk):
     elif pk == 7:
         objects = objects.filter(performer=request.user).filter(fixation__exact=True).filter(
             date__gte=datetime.now()).order_by('-pk')
-    return render(request, URL + "/journal.html", {'objects': objects, 'journal': journal})
+    return render(request, URL + "/journal.html", {'objects': objects, 'journal': journal, 'form': form})
 
 # class StrKinematicviscosityDetailView(DetailView):
 #     """ Представление, которое позволяет вывести отдельную запись (запасная версия). """
@@ -144,3 +180,16 @@ def filterview(request, pk):
 #
 #     template_name = 'kinematicviscosity/str.html'
 # docs.djangoproject.com/en/4.0/topics/class-based-views/generic-display/
+# class CreateWork(CreateView):
+#     model = MODEL
+#     fields = ['name',  'lot']
+#     template_name = 'kinematicviscosity/test.html'
+#     success_url = '/'
+#
+#
+#     def form_valid(self, form):
+#         form.instance.user = self.request.user
+#         return super(CreateWork, self).form_valid(form)
+
+
+# url of this view is 'search_result'

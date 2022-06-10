@@ -12,5 +12,8 @@ urlpatterns = [
     path('registration/', views.RegNoteJournalView, name=URL + 'reg'),
     path('attestation/<int:pk>/comments/', login_required(views.CommentsView.as_view()), name=URL + 'comm'),
     path('attestation/', login_required(views.AllStrView.as_view()), name=URL + 'all'),
+    path('/search_location/result/', views.SearchResultView.as_view(), name=URL + 'search'),
     path('filter/<int:pk>', views.filterview, name=URL + 'filter'),
+
 ]
+# path('/search_location/result/', views.SearchResultView.as_view(), name=URL + 'search'),

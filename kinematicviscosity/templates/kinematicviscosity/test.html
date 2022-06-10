@@ -1,0 +1,9 @@
+{% extends 'main/Journal.html' %}
+{% load static %}
+{% block uniccontent %}
+<form action="{% url 'search_result' %}" method="GET">{% csrf_token %}
+       {{ form }}
+       <button class="btn btn-default" type="submit">Find</button>
+</form>
+
+{% endblock %}
