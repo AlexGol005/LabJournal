@@ -70,7 +70,7 @@ def RegNoteJournalView(request):
             return redirect(order)
     else:
         form = StrJournalCreationForm()
-    return render(request, URL + '/registration.html', {'form': form})
+    return render(request, URL + '/registration.html', {'form': form, 'URL': URL})
 
 
 class CommentsView(View):
