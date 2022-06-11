@@ -1,3 +1,4 @@
+import datetime
 from django import forms
 
 from crispy_forms.helper import FormHelper
@@ -174,7 +175,11 @@ class CommentCreationForm(forms.ModelForm):
     class Meta:
         model = COMMENTMODEL
         fields = ['name']
+
+
 class SearchForm(forms.Form):
+    "форма для поиска по полям журнала ГСО, партия, температура"
+    "при копировании поменять поля на нужные"
     name = forms.CharField(label='Название', initial='ВЖ-2-ПА(100)')
     lot = forms.CharField(label='Партия', initial='1', required=False)
     temperature = forms.CharField(label='Температура', initial='20', required=False)
@@ -190,3 +195,22 @@ class SearchForm(forms.Form):
                 Submit('submit', 'Найти', css_class='btn  btn-info col-md-2 mb-3 mt-4 ml-4'),
                 css_class='form-row'
             ))
+
+
+class SearchDateForm(forms.Form):
+    "форма для поиска записей по датам"
+    "стандартная"
+    datestart = forms.DateField(label='От', initial=datetime.date.today,
+                                    widget=forms.DateInput(attrs={'placeholder': datetime.date.today}))
+    datefinish = forms.DateField(label='До', initial=datetime.date.today,
+                                     widget=forms.DateInput(attrs={'placeholder': datetime.date.today}))
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+                Row(Column('datestart', css_class='form-group col-md-9 mb-1 ml-4')),
+                Row(Column('datefinish', css_class='form-group col-md-9 mb-1 ml-4')),
+                Row(Submit('submit', 'Найти', css_class='btn  btn-info col-md-9 mb-3 mt-4 ml-4')))
+

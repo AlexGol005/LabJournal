@@ -1,31 +1,34 @@
-{#"""замены:#}
-{#href="{% url 'kinematicviscositystr' obj.id %}"#}
-{#href="/attestationJ/kinematicviscosity/"#}
-{#{% url 'kinematicviscosityfilter' pk=3 %}#}
-
 {% extends 'main/base.html' %}
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
 
+{#название страницы#}
+{#стандартная#}
 {% block title %}
 {% for item in journal %}{{ item.name }}{% endfor %}
 {% endblock %}
+{#конец названия страницы#}
 
 {% block content %}
 
+{#заголовок с ссылкой#}
+{#стандартная#}
 <div class="row">
 <div class="col-md-9 mt-2" >
 <div style="text-align: center;"><h4><a href="/attestationJ/{{ URL }}/"> {% for item in journal %}{{ item.name }}{% endfor %}</a></h4></div>
 <br>
+{#конец заголовка со ссылкой#}
 
-{#форма для поиска#}
+{#форма для поиска по ГСО#}
+{#стандартная#}
     <form action="/attestationJ/{{ URL }}/searchresult/" method="GET">
         {% csrf_token %}
-        {% crispy form %}
+        {% crispy formSM %}
     </form>
-{#конец формы для поиска#}
+{#конец формы для поиска по ГСО#}
 
 {#основная таблица#}
+{# уникальная #}
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -45,7 +48,7 @@
         <td align="center"> {{ obj.lot }}</td>
         <td align="center">{{ obj.temperature }} </td>
         <td align="center">{{ obj.certifiedValue_text }} </td>
-        <td align="center"><a href="{% url 'kinematicviscositystr' obj.id %}"  class="btn btn-outline-warning mt-3">смотреть</a></td>
+        <td align="center"><a href="/attestationJ/{{ URL }}/attestation/{{ obj.id }}/"  class="btn btn-outline-warning mt-3">смотреть</a></td>
     </tr>
     {% endfor %}
     </tbody>
@@ -53,6 +56,7 @@
 {#конец основной таблицы#}
 
 {#пагинация#}
+{# стандартная #}
 {% if is_paginated %}
     {% if page_obj.has_previous %}
        <a href="?page=1" class="btn btn-outline-primary">Начало</a>
@@ -67,15 +71,34 @@
 </div>
 
 {#фильтры#}
+{# уникальные, менять url #}
 <div class="col-md-3 mt-5" ><div style="text-align: center;"><h4> Фильтр записей  </h4></div>
-<div style="text-align: center;"><a href="{% url 'kinematicviscosityfilter' pk=3 %}" class="btn  btn-warning  mt-3"  >&nbspВсе&nbsp</a></div>
+<div style="text-align: center;"><a href="/attestationJ/{{ URL }}/attestation/" class="btn  btn-warning  mt-3"  >&nbspВсе&nbsp</a></div>
 <div style="text-align: center;"> <a href="{% url 'kinematicviscosityfilter' pk=2 %}" class="btn  btn-primary  mt-3" >Сегодня</a></div>
 <div style="text-align: center;"> <a href="{% url 'kinematicviscosityfilter' pk=4 %}" class="btn  btn-primary  mt-3" >
  &nbsp&nbspС&nbspАЗ&nbsp&nbsp&nbsp&nbsp</a></div>
 <div style="text-align: center;"> <a href="{% url 'kinematicviscosityfilter' pk=5 %}" class="btn  btn-primary  mt-3" >&nbsp&nbsp&nbspМои&nbsp&nbsp&nbsp</a></div>
 <div style="text-align: center;"> <a href="{% url 'kinematicviscosityfilter' pk=6 %}" class="btn  btn-primary  mt-3" >Мои с АЗ</a></div>
 <div style="text-align: center;"> <a href="{% url 'kinematicviscosityfilter' pk=7 %}" class="btn  btn-primary  mt-3" >Мои с АЗ <br>сегод.</a></div>
+{# конец фильров #}
 
+
+{#форма для поиска по датам записей и вывод ошибки формата даты#}
+{#стандартная#}
+<br>
+    <div >
+<div style="text-align: center;" class="TransactionAmount Badresult"> <b> {{ Date }}</b> </div>
+<div style="text-align: center;" class="TransactionAmount Badresult"> <b> {{ format }}</b> </div>
+<br>
+<div style="text-align: center;">
+    <form action="/attestationJ/{{ URL }}/datesearchresult/" method="GET">
+        {% csrf_token %}
+        {% crispy formdate %}
+    </form>
+</div>
+{#конец формы для поиска по датам записей#}
+
+</div>
 </div>
 </div>
 

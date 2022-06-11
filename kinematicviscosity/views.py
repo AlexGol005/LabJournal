@@ -1,6 +1,7 @@
-from django.core.exceptions import ObjectDoesNotExist
+# все стандратно кроме поиска по полям, импорта моделей и констант
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, CreateView, FormView, TemplateView
+from django.views.generic import ListView, TemplateView
 from datetime import datetime, timedelta
 from django.shortcuts import get_object_or_404
 from django.views import View
@@ -10,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 
 from main.models import AttestationJ
 from .models import ViscosityMJL, CommentsKinematicviscosity
-from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm, SearchForm
+from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm, SearchForm, SearchDateForm
 
 JOURNAL = AttestationJ
 MODEL = ViscosityMJL
@@ -109,8 +110,9 @@ class AllStrView(ListView):
     def get_context_data(self, **kwargs):
         context = super(AllStrView, self).get_context_data(**kwargs)
         context['journal'] = JOURNAL.objects.filter(for_url=URL)
-        context['form'] = SearchForm()
-        context['URL']= URL
+        context['formSM'] = SearchForm()
+        context['formdate'] = SearchDateForm()
+        context['URL'] = URL
         return context
 
 class SearchResultView(TemplateView):
@@ -125,28 +127,59 @@ class SearchResultView(TemplateView):
         lot = self.request.GET['lot']
         temperature = self.request.GET['temperature']
         if name and lot and temperature:
-            objects = MODEL.objects.filter(name=name).filter(lot=lot).filter(temperature=temperature).filter(fixation=True)
+            objects = MODEL.objects.filter(name=name).filter(lot=lot).filter(temperature=temperature).filter(fixation=True).order_by('-pk')
             context['objects'] = objects
         if name and lot and not temperature:
-            objects = MODEL.objects.filter(name=name).filter(lot=lot).filter(fixation=True)
+            objects = MODEL.objects.filter(name=name).filter(lot=lot).filter(fixation=True).order_by('-pk')
             context['objects'] = objects
         if name and not lot and not temperature:
-            objects = MODEL.objects.filter(name=name).filter(fixation=True)
+            objects = MODEL.objects.filter(name=name).filter(fixation=True).order_by('-pk')
             context['objects'] = objects
         if name and temperature and not lot:
-            objects = MODEL.objects.filter(name=name).filter(temperature=temperature).filter(fixation=True)
+            objects = MODEL.objects.filter(name=name).filter(temperature=temperature).filter(fixation=True).order_by('-pk')
             context['objects'] = objects
         context['journal'] = JOURNAL.objects.filter(for_url=URL)
-        context['form'] = SearchForm(initial={'name': name, 'lot': lot, 'temperature': temperature})
-        context['URL']= URL
+        context['formSM'] = SearchForm(initial={'name': name, 'lot': lot, 'temperature': temperature})
+        context['formdate'] = SearchDateForm()
+        context['URL'] = URL
         return context
+
+class DateSearchResultView(TemplateView):
+    """ Представление, которое выводит результаты поиска на странице со всеми записями журнала. """
+    """стандартное"""
+
+    template_name = URL + '/journal.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DateSearchResultView, self).get_context_data(**kwargs)
+        datestart = self.request.GET['datestart']
+        datefinish = self.request.GET['datefinish']
+        try:
+            objects = MODEL.objects.all().filter(date__range=(datestart, datefinish)).order_by('-pk')
+            context['objects'] = objects
+            context['journal'] = JOURNAL.objects.filter(for_url=URL)
+            context['formSM'] = SearchForm()
+            context['formdate'] = SearchDateForm(initial={'datestart': datestart, 'datefinish': datefinish})
+            context['URL'] = URL
+            return context
+        except ValidationError:
+            objects = MODEL.objects.all()
+            context['objects'] = objects
+            context['journal'] = JOURNAL.objects.filter(for_url=URL)
+            context['formSM'] = SearchForm()
+            context['formdate'] = SearchDateForm(initial={'datestart': datestart, 'datefinish': datefinish})
+            context['URL'] = URL
+            context['Date'] = 'введите даты в формате'
+            context['format'] = 'ГГГГ-ММ-ДД'
+            return context
 
 def filterview(request, pk):
     """ Фильтры записей об измерениях по дате, АЗ, мои записи и пр """
     """Стандартная"""
     journal = JOURNAL.objects.filter(for_url=URL)
     objects = MODEL.objects.all()
-    form = SearchForm
+    formSM = SearchForm()
+    formdate = SearchDateForm()
     if pk == 1:
         now = datetime.now() - timedelta(minutes=60 * 24 * 7)
         objects = objects.filter(date__gte=now).order_by('-pk')
@@ -164,7 +197,8 @@ def filterview(request, pk):
     elif pk == 7:
         objects = objects.filter(performer=request.user).filter(fixation__exact=True).filter(
             date__gte=datetime.now()).order_by('-pk')
-    return render(request, URL + "/journal.html", {'objects': objects, 'journal': journal, 'form': form})
+    return render(request, URL + "/journal.html", {'objects': objects, 'journal': journal, 'formSM': formSM, 'URL': URL,
+                                                   'formdate': formdate})
 
 # class StrKinematicviscosityDetailView(DetailView):
 #     """ Представление, которое позволяет вывести отдельную запись (запасная версия). """
