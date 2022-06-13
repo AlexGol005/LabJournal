@@ -59,3 +59,8 @@ footer {
     background-color: rgb(245, 245, 246)1;
 }
 
+.navbar {
+  display: flex;
+  color: white;
+}
+
