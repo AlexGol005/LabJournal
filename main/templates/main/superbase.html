@@ -42,14 +42,14 @@
             <button class="btn btn-outline-warning">регистрация</button>
         </a>
         <a href="{% url 'user' %}" class="ml-2">
-            <button class="btn btn-outline-info">войти</button>
+            <button class="btn btn-outline-info mt-2">войти</button>
         </a>
         {% else %}
         <a href="{% url 'profile' %}" >
         <button class="btn btn-outline-warning">профиль</button>
         </a>
         <a href="{% url 'exit' %}" class="ml-2">
-            <button class="btn btn-outline-info">выйти</button>
+            <button class="btn btn-outline-info mt-2">выйти</button>
         </a>
         {% endif %}
     </ul>
