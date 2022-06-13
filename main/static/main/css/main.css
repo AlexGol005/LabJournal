@@ -59,5 +59,7 @@ footer {
     background-color: rgb(245, 245, 246)1;
 }
 
-
+.navbar-collapse.collapse.in {
+        display: block!important;
+    }
 
