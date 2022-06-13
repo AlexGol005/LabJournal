@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from decimal import *
 
 from viscosimeters.models import Viscosimeters, Kalibration
+from jouViscosity.models import LotVG, VGrange, VG
 from formuls import mrerrow, numberDigits
 from metods import get_sec, get_avg, get_acc_measurement
 
@@ -22,7 +23,7 @@ CHOICES = (
 
 
 class ViscosityMJL(models.Model):
-    """уникальный класс, хранит первичные данные измерения и выяисляет результаты"""
+    """уникальный класс, хранит первичные данные измерения и вычисляет результаты"""
     # поля для всех моделей
     performer = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     date = models.DateField('Дата', auto_now_add=True, db_index=True)
@@ -35,6 +36,7 @@ class ViscosityMJL(models.Model):
                                    default=RELERROR)
     fixation = models.BooleanField(verbose_name='Внесен ли результат в Журнал аттестованных значений?', default=False,
                                    null=True)
+    for_lot_and_name = models.ForeignKey(LotVG, verbose_name='Измерение для: ГСО и партия', on_delete=models.PROTECT, blank=True, null=True)
     # вычисляемые поля для всех моделей
     kriteriy = models.DecimalField('Критерий приемлемости измерений', max_digits=2, decimal_places=1, null=True)
     accMeasurement = models.DecimalField('Оценка приемлемости измерений', max_digits=5, decimal_places=1, null=True)
@@ -100,7 +102,7 @@ class ViscosityMJL(models.Model):
             self.timeK2_avg = get_avg(self.timeK2T1_sec, self.timeK2T2_sec, 3)
             self.viscosity1 = (self.Konstant1 * self.timeK1_avg).quantize(Decimal('1.00000'), ROUND_HALF_UP)
             self.viscosity2 = (self.Konstant2 * self.timeK2_avg).quantize(Decimal('1.00000'), ROUND_HALF_UP)
-            # стандартные вычисления среднего
+    # стандартные вычисления среднего
             self.viscosityAVG = get_avg(self.viscosity1, self.viscosity2, 5)
         if (self.plustimeminK1T1 and self.plustimesekK1T1) and not (self.plustimeminK1T2
                                                                     and self.plustimesekK1T2 and self.plustimeminK2T2
@@ -146,7 +148,13 @@ class ViscosityMJL(models.Model):
             if self.deltaOldCertifiedValue:
                 if self.deltaOldCertifiedValue > Decimal(0.7):
                     self.resultWarning = 'Результат отличается от предыдущего > 0,7 %. Рекомендовано измерить повторно.'
-
+    # связь с конкретной партией
+        if self.name[0:3] == 'ВЖ':
+            pk_VG = VG.objects.get(name=self.name[0:7])
+            a = VGrange.objects.get_or_create(rangeindex=self.name[8:-1], nameSM=pk_VG)
+            b = a[0]
+            LotVG.objects.get_or_create(lot=self.lot, nameVG=b)
+            self.for_lot_and_name = LotVG.objects.get(lot=self.lot, nameVG=b)
 
         super(ViscosityMJL, self).save(*args, **kwargs)
 

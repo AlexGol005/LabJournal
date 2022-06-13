@@ -13,6 +13,7 @@ urlpatterns = [
     path('', include('users.urls')),
     path('api/', include('api.urls')),
     path('equipment/', include('equipment.urls')),
+    path('jouViscosity/', include('jouViscosity.urls')),
 
 ]
 

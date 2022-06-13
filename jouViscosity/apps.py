@@ -7,5 +7,3 @@ class JournalcertvaluesConfig(AppConfig):
 
     verbose_name = _('Журнал аттестованных значений: ВЖ-ПА')
 
-    def ready(self):
-        import jouViscosity.signals

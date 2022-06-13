@@ -1,0 +1,52 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+{{ NAME }}
+{% endblock %}
+
+{#кнопки слева странички#}
+{% block content %}
+{#<div class="row">#}
+{#<div class="col-md-2">#}
+{#    <a href="/attestationJ/{{ URL }}/registration/" class="btn btn-warning mt-3 mr-5">&nbsp&nbspвнести&nbsp&nbsp&nbsp ещё </a>#}
+{#    <a href='/attestationJ/{{ URL }}/' class="btn btn-warning mt-3">В  журнал</a>#}
+{#    <a href='/attestationJ/{{ URL }}/attestation/' class="btn btn-warning mt-3">Все записи</a>#}
+{#</div>#}
+
+{#уникальная таблица#}
+<div style="text-align: center;"><h5>{% autoescape off %}{{ TABLENAME }}{% endautoescape %} </h5></div>
+<br>
+<div class="col-md-4 mt-1" >
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspВЖ&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+			<td>п.</td>
+			<td>20&nbsp&nbsp°C</td>
+			<td>25&nbsp&nbsp°C</td>
+			<td>40&nbsp&nbsp°C</td>
+			<td>50&nbsp&nbsp°C</td>
+			<td>80&nbsp&nbsp°C</td>
+			<td>100&nbsp&nbsp°C</td>
+         </tr>
+    </thead>
+    <tbody>
+    {% for obj in objects %}
+    <tr>
+        <td>{{ obj.for_lot_and_name.nameVG.name }}</td>
+			<td>{{ obj.for_lot_and_name.lot }}</td>
+			<td>{{ obj.certifiedValue }}</td>
+			<td>{{ obj.t25 }}</td>
+			<td>{{ obj.t40 }}</td>
+			<td>{{ obj.t50 }}</td>
+			<td>{{ obj.t80 }}</td>
+			<td>{{ obj.t100 }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{#конец  таблицы#}
+{#</div>#}
+
+{% endblock %}
