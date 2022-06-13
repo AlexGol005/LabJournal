@@ -14,18 +14,23 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a href="/"><img src="{% static 'main/img/3.png' %}"  alt="Лого"></a>
-
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
     <ul class="navbar-nav">
       <li class="nav-item active">
+
         <a class="nav-link active" aria-current="page" href="/">LabJournal</a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'att' %}">Журналы аттестации</a>
+          <a class="navbar-brand" href="{% url 'att' %}"><button type="button" class="btn btn-outline-primary"><em>Журналы аттестации</em></button></a>
+{#        <a class="nav-link" href="{% url 'att' %}">Журналы аттестации</a>#}
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'prod' %}">Журналы приготовления</a>
+          <a class="navbar-brand" href="{% url 'prod' %}"><button type="button" class="btn btn-outline-primary"><em>Журналы приготовления</em></button></a>
+{#        <a class="nav-link" href="{% url 'prod' %}">Журналы приготовления</a>#}
       </li>
     <li class="nav-item">
         <a class="nav-link" href="{% url 'eq' %}">Оборудование</a>
