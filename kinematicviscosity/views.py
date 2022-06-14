@@ -67,6 +67,7 @@ def RegNoteJournalView(request):
             order = form.save(commit=False)
             order.performer = request.user
             order.save()
+            messages.success(request, f'Запись внесена, подтвердите АЗ!')
             return redirect(order)
     else:
         form = StrJournalCreationForm()
@@ -163,7 +164,7 @@ class DateSearchResultView(TemplateView):
             context['URL'] = URL
             return context
         except ValidationError:
-            objects = MODEL.objects.all()
+            objects = MODEL.objects.filter(id=1)
             context['objects'] = objects
             context['journal'] = JOURNAL.objects.filter(for_url=URL)
             context['formSM'] = SearchForm()

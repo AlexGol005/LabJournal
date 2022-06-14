@@ -34,7 +34,8 @@ class Viscosimeters(models.Model):
     viscosimeterType = models.ForeignKey(ViscosimeterType,  verbose_name='Диаметр',
                                  on_delete=models.PROTECT)
     equipmentSM = models.ForeignKey(MeasurEquipment, verbose_name='СИ',
-                                         on_delete=models.PROTECT, related_name='equipmentSM', blank=True, null=True)
+                                         on_delete=models.PROTECT, related_name='equipmentSM', blank=True, null=True,
+                                   )
 
 
     def __str__(self):
@@ -52,7 +53,8 @@ class Viscosimeters(models.Model):
 class Kalibration(models.Model):
     dateKalib = models.DateField('Дата калибровки', auto_now_add=True)
     konstant = models.DecimalField('Установленная константа', max_digits=20, decimal_places=6, default='0')
-    id_Viscosimeter = models.ForeignKey(Viscosimeters, verbose_name='Номер вискозиметра', on_delete=models.CASCADE)
+    id_Viscosimeter = models.ForeignKey(Viscosimeters, verbose_name='Номер вискозиметра', on_delete=models.CASCADE,
+                                        )
     performer = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):

@@ -149,9 +149,9 @@ class ViscosityMJL(models.Model):
                 if self.deltaOldCertifiedValue > Decimal(0.7):
                     self.resultWarning = 'Результат отличается от предыдущего > 0,7 %. Рекомендовано измерить повторно.'
     # связь с конкретной партией
-        if self.name[0:3] == 'ВЖ':
+        if self.name[0:2] == 'ВЖ':
             pk_VG = VG.objects.get(name=self.name[0:7])
-            a = VGrange.objects.get_or_create(rangeindex=self.name[8:-1], nameSM=pk_VG)
+            a = VGrange.objects.get_or_create(rangeindex=int(self.name[8:-1]), nameSM=pk_VG)
             b = a[0]
             LotVG.objects.get_or_create(lot=self.lot, nameVG=b)
             self.for_lot_and_name = LotVG.objects.get(lot=self.lot, nameVG=b)

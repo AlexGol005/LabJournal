@@ -26,7 +26,7 @@ class VG(models.Model):
 
 class VGrange(models.Model):
     nameSM = models.ForeignKey(VG, verbose_name='СО', max_length=100, on_delete=models.CASCADE, null=True, blank=True)
-    rangeindex = models.IntegerField('Индекс ГСО', max_length=100, null=True, blank=True)
+    rangeindex = models.IntegerField('Индекс ГСО', null=True, blank=True)
     name = models.CharField('краткое название ГСО с индексом', max_length=100, null=True, blank=True)
 
     def save(self, *args, **kwargs):

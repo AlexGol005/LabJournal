@@ -39,18 +39,15 @@ def KalibrationViscosimetersRegView(request):
 class ViscosimetersView(View):
     """ Представление, которое выводит все вискозиметры с константами. """
     def get(self, request):
-        # viscosimeters = Kalibration.objects.select_related('id_Viscosimeter').values('id_Viscosimeter').annotate(id_actualkonstant=Max('id')).values('id_actualkonstant')
-        # viscosimeters = Viscosimeters.objects.filter(equipmentSM__equipment__status__exact='Э')
-        # prefetch_related("kalibration_set").
-        # viscosimeters = Kalibration.objects.select_related('id_Viscosimeter').values('id_Viscosimeter').annotate(total=Max('id'))
-        # viscosimeters = AllKonst.aggregate(Max('pk'))
-
-        get_id_actualconstant = Kalibration.objects.select_related('id_Viscosimeter').values('id_Viscosimeter').annotate(id_actualkonstant=Max('id')).values('id_actualkonstant')
+        get_id_actualconstant = Kalibration.objects.select_related('id_Viscosimeter').values('id_Viscosimeter').\
+            annotate(id_actualkonstant=Max('id')).values('id_actualkonstant')
         list_ = list(get_id_actualconstant)
         set = []
         for n in list_:
             set.append(n.get('id_actualkonstant'))
-        viscosimeters = Kalibration.objects.select_related('id_Viscosimeter').filter(id__in=set).filter(id_Viscosimeter__equipmentSM__equipment__status__exact='Э').order_by('id_Viscosimeter__viscosimeterType__diameter')
+        viscosimeters = Kalibration.objects.select_related('id_Viscosimeter').filter(id__in=set).\
+            filter(id_Viscosimeter__equipmentSM__equipment__status__exact='Э').\
+            order_by('id_Viscosimeter__viscosimeterType__diameter')
         data = {'viscosimeters': viscosimeters}
 
 

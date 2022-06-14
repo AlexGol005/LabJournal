@@ -164,7 +164,7 @@ class DateSearchResultView(TemplateView):
             context['URL'] = URL
             return context
         except ValidationError:
-            objects = MODEL.objects.all()
+            objects = MODEL.objects.filter(id=1)
             context['objects'] = objects
             context['journal'] = JOURNAL.objects.filter(for_url=URL)
             context['formSM'] = SearchForm()
