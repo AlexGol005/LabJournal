@@ -43,7 +43,7 @@ class ViscosityMJL(models.Model):
     accMeasurement = models.DecimalField('Оценка приемлемости измерений', max_digits=5, decimal_places=1, null=True)
     resultMeas = models.CharField('Результат измерений уд/неуд', max_length=100, default='неудовлетворительно',
                                   null=True)
-    cause = models.CharField('Причина', max_length=100, default='', null=True)
+    cause = models.CharField('Причина', max_length=100, default='', null=True, blank=True)
     abserror = models.FloatField('Абсолютная  погрешность', null=True)
     certifiedValue = models.DecimalField('Аттестованное значение', max_digits=20, decimal_places=10, null=True)
     certifiedValue_text = models.CharField(max_length=300, default='', null=True)
@@ -89,8 +89,8 @@ class ViscosityMJL(models.Model):
     viscosityAVG = models.DecimalField('Вязкость кинематическая среднее', max_digits=20, decimal_places=5,
                                        default=0.0000000, null=True)
     deltaOldCertifiedValue = models.DecimalField('Оценка разницы с предыдущим значением',
-                                                 max_digits=10, decimal_places=2, null=True)
-    resultWarning = models.CharField(max_length=300, default='', null=True)
+                                                 max_digits=10, decimal_places=2, null=True, blank=True)
+    resultWarning = models.CharField(max_length=300, default='', null=True,  blank=True)
 
     def save(self, *args, **kwargs):
         if (self.plustimeminK1T2 and self.plustimesekK1T2 and self.plustimeminK2T1 and self.plustimesekK2T1
