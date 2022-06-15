@@ -78,7 +78,7 @@ class AllKinematicviscosityView(ListView):
         # set = []
         # for n in list_:
         #     set.append(n.get('ac'))
-        queryset = ViscosityMJL.objects.filter(id__in=set)
+        queryset = ViscosityMJL.objects.filter(id__in=set).order_by('temperature')
         return queryset
 
 # .annotate(ac=Max('viscositymjl_set'))
