@@ -62,6 +62,11 @@ class LotVG(models.Model):
     lot = models.CharField('Партия', max_length=5, null=True, blank=True)
     person = models.ForeignKey(User, verbose_name='Изготовил', max_length=30,  on_delete=models.PROTECT, null=True, blank=True)
     date = models.DateField('Дата изготовления', max_length=30, null=True, blank=True)
+    name = models.CharField('имя и партия', max_length=1000, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.name = f'{self.nameVG.name} п. {str(self.lot)}'
+        super(LotVG, self).save(*args, **kwargs)
 
 
     # def save(self, *args, **kwargs):
