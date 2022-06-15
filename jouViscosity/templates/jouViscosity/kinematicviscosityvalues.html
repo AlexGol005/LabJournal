@@ -1,8 +1,10 @@
 {% extends 'main/base.html' %}
 
+
 {% block title %}
 {{ NAME }}
 {% endblock %}
+
 
 {#кнопки слева странички#}
 {% block content %}
@@ -31,18 +33,21 @@
          </tr>
     </thead>
     <tbody>
-    {% for obj in objects %}
-    <tr>
-        <td>{{ obj.for_lot_and_name.nameVG.name }}</td>
-			<td>{{ obj.for_lot_and_name.lot }}</td>
-			<td>{{ obj.certifiedValue_text }}</td>
-			<td>{{ obj.temperature }}</td>
-			<td>{{ obj.t40 }}</td>
-			<td>{{ obj.t50 }}</td>
-			<td>{{ obj.t80 }}</td>
-			<td>{{ obj.t100 }}</td>
-    </tr>
-    {% endfor %}
+
+{% regroup objects by name as name_list %}
+<tr>
+{% for name in name_list %}
+<td>{{ name.grouper }}</td>
+    <td></td>
+{% for vg in name.list %}
+
+<td>{{ vg.temperature }}: {{ vg.cv }}</td>
+
+{% endfor %}
+</tr>
+{% endfor %}
+
+
     </tbody>
 </table>
 </div>
