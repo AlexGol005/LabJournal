@@ -15,26 +15,26 @@ class AllKinematicviscosityView(ListView):
     template_name = 'jouViscosity/kinematicviscosityvalues.html'
     context_object_name = 'objects'
     def get_queryset(self):
-        get_id_t20 = ViscosityMJL.objects.filter(fixation=True).filter(temperature=20).select_related('for_lot_and_name')\
+        get_id_t20 = ViscosityMJL.objects.filter(temperature=20).select_related('for_lot_and_name')\
             .values('for_lot_and_name'). \
             annotate(t20=Max('id')).values('t20')
-        get_id_t25 = ViscosityMJL.objects.filter(fixation=True).filter(temperature=25).select_related(
+        get_id_t25 = ViscosityMJL.objects.filter(temperature=25).select_related(
             'for_lot_and_name') \
             .values('for_lot_and_name'). \
             annotate(t25=Max('id')).values('t25')
-        get_id_t40 = ViscosityMJL.objects.filter(fixation=True).filter(temperature=40).select_related(
+        get_id_t40 = ViscosityMJL.objects.filter(temperature=40).select_related(
             'for_lot_and_name') \
             .values('for_lot_and_name'). \
             annotate(t40=Max('id')).values('t40')
-        get_id_t50 = ViscosityMJL.objects.filter(fixation=True).filter(temperature=50).select_related(
+        get_id_t50 = ViscosityMJL.objects.filter(temperature=50).select_related(
             'for_lot_and_name') \
             .values('for_lot_and_name'). \
             annotate(t50=Max('id')).values('t50')
-        get_id_t80 = ViscosityMJL.objects.filter(fixation=True).filter(temperature=80).select_related(
+        get_id_t80 = ViscosityMJL.objects.filter(temperature=80).select_related(
             'for_lot_and_name') \
             .values('for_lot_and_name'). \
             annotate(t80=Max('id')).values('t80')
-        get_id_t100 = ViscosityMJL.objects.filter(fixation=True).filter(temperature=100).select_related(
+        get_id_t100 = ViscosityMJL.objects.filter(temperature=100).select_related(
             'for_lot_and_name') \
             .values('for_lot_and_name'). \
             annotate(t100=Max('id')).values('t100')
@@ -78,7 +78,7 @@ class AllKinematicviscosityView(ListView):
         # set = []
         # for n in list_:
         #     set.append(n.get('ac'))
-        queryset = ViscosityMJL.objects.filter(id__in=set)
+        queryset = ViscosityMJL.objects.filter(id__in=set).filter(fixation=True)
         return queryset
 
 # .annotate(ac=Max('viscositymjl_set'))
