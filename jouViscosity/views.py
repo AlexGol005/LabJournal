@@ -65,11 +65,17 @@ class AllKinematicviscosityView(ListView):
         # for n in list_:
         #     set.append(n.get('ac'))
         # queryset = LotVG.objects.prefetch_related("queryset1_set")
-        queryset = [{'name': 'ВЖ1 п 1', 'cv': 200, 'lot': 1, 'temperature': 20},
-                    {'name': 'ВЖ1 п 1', 'cv': 100, 'lot': 1, 'temperature': 50},
-                    {'name': 'ВЖ2', 'cv': 2000, 'lot': 1, 'temperature': 20},
-                    {'name': 'ВЖ3', 'cv': 5, 'lot': 1, 'temperature': 20}]
-
+        # queryset = [{'name': 'ВЖ1 п 1', 'cv': 200, 'lot': 1, 'temperature': 20},
+        #             {'name': 'ВЖ1 п 1', 'cv': 100, 'lot': 1, 'temperature': 50},
+        #             {'name': 'ВЖ2', 'cv': 2000, 'lot': 1, 'temperature': 20},
+        #             {'name': 'ВЖ3', 'cv': 5, 'lot': 1, 'temperature': 20}]
+        get_id = ViscosityMJL.objects.filter(fixation=True).values('name', 'lot', 'temperature').\
+            annotate(ac_id=Max('id')).values('name', 'lot', 'temperature', 'ac_id')
+        list_ = list(get_id)
+        set = []
+        for n in list_:
+            set.append(n.get('ac_id'))
+        queryset = ViscosityMJL.objects.filter(id__in=set).order_by('name')
         return queryset
 # .annotate(ac=Max('viscositymjl_set'))
     # order_by('nameVG__rangeindex', 'lot')
