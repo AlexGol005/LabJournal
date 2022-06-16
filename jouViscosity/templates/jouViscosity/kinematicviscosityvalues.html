@@ -22,31 +22,31 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspВЖ&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
-			<td>п.</td>
-			<td>20&nbsp&nbsp°C</td>
-			<td>25&nbsp&nbsp°C</td>
-			<td>40&nbsp&nbsp°C</td>
-			<td>50&nbsp&nbsp°C</td>
-			<td>80&nbsp&nbsp°C</td>
-			<td>100&nbsp&nbsp°C</td>
+            <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspВЖ&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+			<td>T&nbsp&nbsp°C:&nbspАЗ </td>
+			<td>T&nbsp&nbsp°C:&nbspАЗ </td>
+			<td>T&nbsp&nbsp°C:&nbspАЗ </td>
+			<td>T&nbsp&nbsp°C:&nbspАЗ </td>
+			<td>T&nbsp&nbsp°C:&nbspАЗ </td>
+			<td>T&nbsp&nbsp°C:&nbspАЗ </td>
          </tr>
     </thead>
     <tbody>
 
-{% regroup objects by name as name_list %}
+{% regroup objects by for_lot_and_name.name as name_list %}
 <tr>
 {% for name in name_list %}
 <td>{{ name.grouper }}</td>
-    <td></td>
 {% for vg in name.list %}
 
-<td>{{ vg.temperature }}: {{ vg.cv }}</td>
+<td>{{ vg.temperature }}&nbsp°C: {{ vg.certifiedValue_text }}</td>
+
+
 
 {% endfor %}
+
 </tr>
 {% endfor %}
-
 
     </tbody>
 </table>
