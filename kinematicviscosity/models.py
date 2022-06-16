@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Max
 from django.urls import reverse
 from django.contrib.auth.models import User
 from decimal import *
@@ -54,13 +55,14 @@ class ViscosityMJL(models.Model):
                                            blank=True, null=True)
     constit = models.CharField(max_length=300, choices=CHOICES, default='Проба содержит октол/нефть', null=True)
     temperature = models.DecimalField('Температура, ℃', max_digits=5, decimal_places=2, default='0', null=True)
-    ViscosimeterNumber1 = models.CharField('Заводской номер вискозиметра № 1', max_length=10, default='0',
-                                           null=True)  # todo ForeignKey
+    ViscosimeterNumber1 = models.ForeignKey(Viscosimeters, verbose_name='Заводской номер вискозиметра № 1',
+                                            on_delete=models.PROTECT, related_name='k1', blank=True)
     Konstant1 = models.DecimalField('Константа вискозиметра № 1', max_digits=20, decimal_places=6, default='0',
-                                    null=True)
-    ViscosimeterNumber2 = models.CharField('Заводской номер вискозиметра № 2', max_length=10, default='0', null=True)
+                                    null=True, blank=True)
+    ViscosimeterNumber2 = models.ForeignKey(Viscosimeters, verbose_name='Заводской номер вискозиметра № 2',
+                                            on_delete=models.PROTECT, related_name='k2', blank=True)
     Konstant2 = models.DecimalField('Константа вискозиметра № 2', max_digits=20, decimal_places=6, default='0',
-                                    null=True)
+                                    null=True, blank=True)
     plustimeminK1T1 = models.DecimalField('Время истечения K1T1, + мин', max_digits=3, decimal_places=0, null=True)
     plustimesekK1T1 = models.DecimalField('Время истечения K1T1, + cек', max_digits=5, decimal_places=2, null=True)
     plustimeminK1T2 = models.DecimalField('Время истечения K1T2, + мин', max_digits=3, decimal_places=0, null=True)
@@ -91,6 +93,7 @@ class ViscosityMJL(models.Model):
     deltaOldCertifiedValue = models.DecimalField('Оценка разницы с предыдущим значением',
                                                  max_digits=10, decimal_places=2, null=True, blank=True)
     resultWarning = models.CharField(max_length=300, default='', null=True,  blank=True)
+
 
     def save(self, *args, **kwargs):
         if (self.plustimeminK1T2 and self.plustimesekK1T2 and self.plustimeminK2T1 and self.plustimesekK2T1
@@ -150,12 +153,12 @@ class ViscosityMJL(models.Model):
                 if self.deltaOldCertifiedValue > Decimal(0.7):
                     self.resultWarning = 'Результат отличается от предыдущего > 0,7 %. Рекомендовано измерить повторно.'
     # связь с конкретной партией
-    #     if self.name[0:2] == 'ВЖ':
-        pk_VG = VG.objects.get(name=self.name[0:7])
-        a = VGrange.objects.get_or_create(rangeindex=int(self.name[8:-1]), nameSM=pk_VG)
-        b = a[0]
-        LotVG.objects.get_or_create(lot=self.lot, nameVG=b)
-        self.for_lot_and_name = LotVG.objects.get(lot=self.lot, nameVG=b)
+        if self.name[0:2] == 'ВЖ':
+            pk_VG = VG.objects.get(name=self.name[0:7])
+            a = VGrange.objects.get_or_create(rangeindex=int(self.name[8:-1]), nameSM=pk_VG)
+            b = a[0]
+            LotVG.objects.get_or_create(lot=self.lot, nameVG=b)
+            self.for_lot_and_name = LotVG.objects.get(lot=self.lot, nameVG=b)
 
         super(ViscosityMJL, self).save(*args, **kwargs)
 

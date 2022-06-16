@@ -9,6 +9,11 @@ class NoteAdmin(admin.ModelAdmin):
     list_display = ('diameter', 'pairNumber', 'viscosity1000', 'range')
     fields = (('range', 'diameter'), 'pairNumber', 'viscosity1000',)
 
+@admin.register(Viscosimeters)  # связываем админку с моделью
+class NoteAdmin(admin.ModelAdmin):
+    list_display = ('id',)
+
+
 
     # def test(self, obj: ViscosimeterType) -> str:
     #     return f"{(obj.pairNumber + obj.diameter)}"
@@ -27,5 +32,5 @@ class NoteAdmin(admin.ModelAdmin):
 
 
 
-admin.site.register(Viscosimeters)
+
 admin.site.register(Kalibration)

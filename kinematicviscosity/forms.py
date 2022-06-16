@@ -4,6 +4,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
 
+from viscosimeters.models import Viscosimeters
 from .models import CHOICES, CommentsKinematicviscosity, ndocumentoptional, ViscosityMJL
 
 MODEL = ViscosityMJL
@@ -31,15 +32,17 @@ class StrJournalCreationForm(forms.ModelForm):
     termostatition = forms.BooleanField(label='Термостатировано не менее 20 минут', required=True)
     temperatureCheck = forms.BooleanField(label='Температура контролируется внешним поверенным термометром',
                                           required=True)
-
-    ViscosimeterNumber1 = forms.CharField(label='Заводской номер вискозиметра № 1', max_length=10, required=True,
-                                          widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                        'placeholder': '№ первого вискозиметра'}
-                                                                 ))
-    Konstant1 = forms.DecimalField(label='Константа вискозиметра № 1', max_digits=20, decimal_places=6, required=False,
-                                   widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                 'placeholder': 'Константа через точку'}
-                                                          ))
+    ViscosimeterNumber1 = forms.ModelChoiceField(label='номер 1', required=True,
+                                  queryset=Viscosimeters.objects.all(),
+                                  widget=forms.Select(attrs={'class': 'form-control'}))
+    # ViscosimeterNumber1 = forms.CharField(label='Заводской номер вискозиметра № 1', max_length=10, required=True,
+    #                                       widget=forms.TextInput(attrs={'class': 'form-control',
+    #                                                                     'placeholder': '№ первого вискозиметра'}
+    #                                                              ))
+    # Konstant1 = forms.DecimalField(label='Константа вискозиметра № 1', max_digits=20, decimal_places=6, required=False,
+    #                                widget=forms.TextInput(attrs={'class': 'form-control',
+    #                                                              'placeholder': 'Константа через точку'}
+    #                                                       ))
     ViscosimeterNumber2 = forms.CharField(label='Заводской номер вискозиметра № 2', max_length=10, required=False,
                                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                                         'placeholder': '№ второго вискозиметра'}
@@ -118,7 +121,7 @@ class StrJournalCreationForm(forms.ModelForm):
             ),
             Row(
                 Column('ViscosimeterNumber1', css_class='form-group col-md-6 mb-0'),
-                Column('Konstant1', css_class='form-group col-md-6 mb-0'),
+                # Column('Konstant1', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -147,12 +150,14 @@ class StrJournalCreationForm(forms.ModelForm):
         model = MODEL
         fields = ['name', 'lot', 'temperature', 'termostatition', 'temperatureCheck',
                   'constit', 'oldCertifiedValue',
-                  'ViscosimeterNumber1', 'Konstant1',
+                  'ViscosimeterNumber1',
                   'plustimeminK1T1', 'plustimesekK1T1',
                   'plustimeminK1T2', 'plustimesekK1T2',
                   'ViscosimeterNumber2', 'Konstant2',
                   'plustimeminK2T1', 'plustimesekK2T1',
-                  'plustimeminK2T2', 'plustimesekK2T2', 'ndocument']
+                  'plustimeminK2T2', 'plustimesekK2T2', 'ndocument',
+                  # 'Konstant1'
+                  ]
 
 
 class StrJournalUdateForm(forms.ModelForm):

@@ -1,5 +1,6 @@
 # все стандратно кроме поиска по полям, импорта моделей и констант
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db.models import Max
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, TemplateView
 from datetime import datetime, timedelta
@@ -10,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 
 
 from main.models import AttestationJ
+from viscosimeters.models import Kalibration
 from .models import ViscosityMJL, CommentsKinematicviscosity
 from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm, SearchForm, SearchDateForm
 
@@ -57,6 +59,7 @@ class StrJournalView(View):
             return redirect(order)
 
 
+
 @login_required
 def RegNoteJournalView(request):
     """ Представление, которое выводит форму регистрации в журнале. """
@@ -66,6 +69,13 @@ def RegNoteJournalView(request):
         if form.is_valid():
             order = form.save(commit=False)
             order.performer = request.user
+            get_id_actualconstant = Kalibration.objects.select_related('id_Viscosimeter'). \
+                filter(id_Viscosimeter__exact=order.ViscosimeterNumber1). \
+                values('id_Viscosimeter').annotate(id_actualkonstant=Max('id')).values('id_actualkonstant')
+            list_ = list(get_id_actualconstant)
+            set = list_[0].get('id_actualkonstant')
+            aktualKalibration = Kalibration.objects.get(id=set)
+            order.Konstant1 = aktualKalibration.konstant
             order.save()
             messages.success(request, f'Запись внесена, подтвердите АЗ!')
             return redirect(order)
