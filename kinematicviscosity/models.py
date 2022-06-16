@@ -38,7 +38,7 @@ class ViscosityMJL(models.Model):
     fixation = models.BooleanField(verbose_name='Внесен ли результат в Журнал аттестованных значений?', default=False,
                                    null=True)
     for_lot_and_name = models.ForeignKey(LotVG, verbose_name='Измерение для: ГСО и партия', on_delete=models.PROTECT, blank=True, null=True)
-    # exp =
+    exp = models.IntegerField('Срок годности, месяцев',  blank=True, null=True)
     # вычисляемые поля для всех моделей
     kriteriy = models.DecimalField('Критерий приемлемости измерений', max_digits=2, decimal_places=1, null=True)
     accMeasurement = models.DecimalField('Оценка приемлемости измерений', max_digits=5, decimal_places=1, null=True)
@@ -96,6 +96,10 @@ class ViscosityMJL(models.Model):
 
 
     def save(self, *args, **kwargs):
+        if int(self.name[8:-1]) <= 10:
+            self.name = 6
+        if int(self.name[8:-1]) > 10:
+            self.name = 12
         if (self.plustimeminK1T2 and self.plustimesekK1T2 and self.plustimeminK2T1 and self.plustimesekK2T1
                 and self.plustimeminK2T2 and self.plustimesekK2T2 and self.plustimeminK1T1 and self.plustimesekK1T1):
             self.timeK1T1_sec = get_sec(self.plustimeminK1T1, self.plustimesekK1T1)
