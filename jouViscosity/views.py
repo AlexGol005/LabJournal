@@ -75,7 +75,8 @@ class AllKinematicviscosityView(ListView):
         set = []
         for n in list_:
             set.append(n.get('ac_id'))
-        queryset = ViscosityMJL.objects.filter(id__in=set).order_by('name')
+        queryset = ViscosityMJL.objects.filter(id__in=set)
+        # Kalibration.objects.select_related('id_Viscosimeter').filter(id__in=set)
         return queryset
 # .annotate(ac=Max('viscositymjl_set'))
     # order_by('nameVG__rangeindex', 'lot')
