@@ -36,7 +36,7 @@ class ViscosityMJL(models.Model):
                                    default=RELERROR)
     fixation = models.BooleanField(verbose_name='Внесен ли результат в Журнал аттестованных значений?', default=False,
                                    null=True)
-    for_lot_and_name = models.ForeignKey(LotVG, verbose_name='Измерение для: ГСО и партия', on_delete=models.PROTECT, blank=True, null=True)
+    for_lot_and_name = models.ForeignKey(LotVG, verbose_name='Измерение для: ГСО и партия', on_delete=models.SET_NULL, blank=True, null=True)
     # exp =
     # вычисляемые поля для всех моделей
     kriteriy = models.DecimalField('Критерий приемлемости измерений', max_digits=2, decimal_places=1, null=True)
