@@ -69,13 +69,20 @@ def RegNoteJournalView(request):
         if form.is_valid():
             order = form.save(commit=False)
             order.performer = request.user
-            get_id_actualconstant = Kalibration.objects.select_related('id_Viscosimeter'). \
+            get_id_actualconstant1 = Kalibration.objects.select_related('id_Viscosimeter'). \
                 filter(id_Viscosimeter__exact=order.ViscosimeterNumber1). \
                 values('id_Viscosimeter').annotate(id_actualkonstant=Max('id')).values('id_actualkonstant')
-            list_ = list(get_id_actualconstant)
+            list_ = list(get_id_actualconstant1)
             set = list_[0].get('id_actualkonstant')
-            aktualKalibration = Kalibration.objects.get(id=set)
-            order.Konstant1 = aktualKalibration.konstant
+            aktualKalibration1 = Kalibration.objects.get(id=set)
+            get_id_actualconstant2 = Kalibration.objects.select_related('id_Viscosimeter'). \
+                filter(id_Viscosimeter__exact=order.ViscosimeterNumber2). \
+                values('id_Viscosimeter').annotate(id_actualkonstant=Max('id')).values('id_actualkonstant')
+            list_ = list(get_id_actualconstant2)
+            set = list_[0].get('id_actualkonstant')
+            aktualKalibration2 = Kalibration.objects.get(id=set)
+            order.Konstant1 = aktualKalibration1.konstant
+            order.Konstant2 = aktualKalibration2.konstant
             order.save()
             messages.success(request, f'Запись внесена, подтвердите АЗ!')
             return redirect(order)
