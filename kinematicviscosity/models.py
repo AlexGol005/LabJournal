@@ -36,7 +36,7 @@ class ViscosityMJL(models.Model):
                                    default=RELERROR)
     fixation = models.BooleanField(verbose_name='Внесен ли результат в Журнал аттестованных значений?', default=False,
                                    null=True)
-    for_lot_and_name = models.ForeignKey(LotVG, verbose_name='Измерение для: ГСО и партия', on_delete=models.SET_NULL, blank=True, null=True)
+    for_lot_and_name = models.ForeignKey(LotVG, verbose_name='Измерение для: ГСО и партия', on_delete=models.PROTECT, blank=True, null=True)
     # exp =
     # вычисляемые поля для всех моделей
     kriteriy = models.DecimalField('Критерий приемлемости измерений', max_digits=2, decimal_places=1, null=True)
@@ -150,12 +150,12 @@ class ViscosityMJL(models.Model):
                 if self.deltaOldCertifiedValue > Decimal(0.7):
                     self.resultWarning = 'Результат отличается от предыдущего > 0,7 %. Рекомендовано измерить повторно.'
     # связь с конкретной партией
-    #     if self.name[0:2] == 'ВЖ':
-    #         pk_VG = VG.objects.get(name=self.name[0:7])
-    #         a = VGrange.objects.get_or_create(rangeindex=int(self.name[8:-1]), nameSM=pk_VG)
-    #         b = a[0]
-    #         LotVG.objects.get_or_create(lot=self.lot, nameVG=b)
-    #         self.for_lot_and_name = LotVG.objects.get(lot=self.lot, nameVG=b)
+        if self.name[0:2] == 'ВЖ':
+            pk_VG = VG.objects.get(name=self.name[0:7])
+            a = VGrange.objects.get_or_create(rangeindex=int(self.name[8:-1]), nameSM=pk_VG)
+            b = a[0]
+            LotVG.objects.get_or_create(lot=self.lot, nameVG=b)
+            self.for_lot_and_name = LotVG.objects.get(lot=self.lot, nameVG=b)
 
         super(ViscosityMJL, self).save(*args, **kwargs)
 
