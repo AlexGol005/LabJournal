@@ -100,6 +100,8 @@ class ViscosityMJL(models.Model):
             self.exp = 6
         if int(self.name[8:-1]) > 10:
             self.exp = 12
+        else:
+            self.exp = 12
         if (self.plustimeminK1T2 and self.plustimesekK1T2 and self.plustimeminK2T1 and self.plustimesekK2T1
                 and self.plustimeminK2T2 and self.plustimesekK2T2 and self.plustimeminK1T1 and self.plustimesekK1T1):
             self.timeK1T1_sec = get_sec(self.plustimeminK1T1, self.plustimesekK1T1)
