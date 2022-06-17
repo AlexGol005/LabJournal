@@ -4,7 +4,7 @@ from .models import*
 
 admin.site.register(VG)
 admin.site.register(CharacterVG)
-admin.site.register(LotVG)
+
 admin.site.register(VGrange)
 admin.site.register(CvKinematicviscosityVG)
 @admin.register(LotVG)  # связываем админку с моделью
