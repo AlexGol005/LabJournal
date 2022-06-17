@@ -169,8 +169,8 @@ class ViscosityMJL(models.Model):
 
     # вносим АЗ в ЖАЗ
         if self.name[0:2] == 'ВЖ' and self.fixation:
-           note = CvKinematicviscosityVG.objects.get_or_create(namelot=self.for_lot_and_name)
-           note.update(cvt20 = self.certifiedValue_text)
+           CvKinematicviscosityVG.objects.get_or_create(namelot=self.for_lot_and_name)
+           CvKinematicviscosityVG.objects.get(namelot=1)
 
 
             # if self.temperature == 20.00:
