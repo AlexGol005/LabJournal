@@ -2,7 +2,7 @@
 
 
 {% block title %}
-{{ NAME }}
+{{ NAME2 }}
 {% endblock %}
 
 
@@ -16,9 +16,11 @@
 {#</div>#}
 
 {#уникальная таблица#}
-<div style="text-align: center;"><h5>{% autoescape off %}{{ TABLENAME }}{% endautoescape %} </h5></div>
+
 <br>
 <div class="col-md-4 mt-1" >
+<div style="text-align: center;"><h5>{% autoescape off %}{{ TABLENAME2 }}{% endautoescape %} </h5></div>
+<br>
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -50,7 +52,9 @@
 
     </tbody>
 </table>
-
+<br><br>
+<div style="text-align: center;"><h5>{% autoescape off %}{{ TABLENAME3 }}{% endautoescape %} </h5></div>
+<br>
 <table class="table table-bordered">
     <thead>
         <tr>
