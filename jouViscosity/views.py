@@ -30,7 +30,7 @@ class AllKinematicviscosityView(ListView):
         context = super(AllKinematicviscosityView, self).get_context_data(**kwargs)
         context['NAME'] = NAME
         context['TABLENAME'] = TABLENAME
-        context['now_date'] = datetime.now() - timedelta(minutes=60 * 24 * CvKinematicviscosityVG.cvt20exp)
+        context['now_date'] = datetime.now()
 
         return context
 
