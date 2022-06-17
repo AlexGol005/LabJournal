@@ -23,7 +23,7 @@ class AllKinematicviscosityView(ListView):
     template_name = 'jouViscosity/kinematicviscosityvalues.html'
     context_object_name = 'objects'
     def get_queryset(self):
-        queryset = CvKinematicviscosityVG.objects.all().order_by('namelot__nameVG', 'namelot__lot')
+        queryset = CvKinematicviscosityVG.objects.all().order_by(int(str('namelot__nameVG')[8:-1]), 'namelot__lot')
         return queryset
     def get_context_data(self, **kwargs):
         context = super(AllKinematicviscosityView, self).get_context_data(**kwargs)
