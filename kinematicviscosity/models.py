@@ -182,6 +182,41 @@ class ViscosityMJL(models.Model):
                     note.cvt25date = self.date
                     note.cvt25exp = self.exp
                     note.save()
+                if self.temperature == 40:
+                    note.cvt40 = self.certifiedValue_text
+                    note.cvt40date = self.date
+                    note.cvt40exp = self.exp
+                    note.save()
+                if self.temperature == 50:
+                    note.cvt50 = self.certifiedValue_text
+                    note.cvt50date = self.date
+                    note.cvt50exp = self.exp
+                    note.save()
+                if self.temperature == 60:
+                    note.cvt60 = self.certifiedValue_text
+                    note.cvt60date = self.date
+                    note.cvt60exp = self.exp
+                    note.save()
+                if self.temperature == 80:
+                    note.cvt80 = self.certifiedValue_text
+                    note.cvt80date = self.date
+                    note.cvt80exp = self.exp
+                    note.save()
+                if self.temperature == 100:
+                    note.cvt100 = self.certifiedValue_text
+                    note.cvt100date = self.date
+                    note.cvt100exp = self.exp
+                    note.save()
+                if self.temperature == 150:
+                    note.cvt150 = self.certifiedValue_text
+                    note.cvt150date = self.date
+                    note.cvt150exp = self.exp
+                    note.save()
+                if self.temperature == -20:
+                    note.cvtminus20 = self.certifiedValue_text
+                    note.cvtminus20date = self.date
+                    note.cvtminus20exp = self.exp
+                    note.save()
 
 
 

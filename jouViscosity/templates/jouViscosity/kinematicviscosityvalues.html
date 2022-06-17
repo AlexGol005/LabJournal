@@ -1,10 +1,8 @@
 {% extends 'main/base.html' %}
 
-
 {% block title %}
 {{ NAME }}
 {% endblock %}
-
 
 {#кнопки слева странички#}
 {% block content %}
@@ -22,32 +20,29 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspВЖ&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
-			<td>T&nbsp&nbsp°C:&nbspАЗ </td>
-			<td>T&nbsp&nbsp°C:&nbspАЗ </td>
-			<td>T&nbsp&nbsp°C:&nbspАЗ </td>
-			<td>T&nbsp&nbsp°C:&nbspАЗ </td>
-			<td>T&nbsp&nbsp°C:&nbspАЗ </td>
-			<td>T&nbsp&nbsp°C:&nbspАЗ </td>
+            <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspВЖ&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+			<td>п.</td>
+			<td>20&nbsp&nbsp°C</td>
+			<td>25&nbsp&nbsp°C</td>
+			<td>40&nbsp&nbsp°C</td>
+			<td>50&nbsp&nbsp°C</td>
+			<td>80&nbsp&nbsp°C</td>
+			<td>100&nbsp&nbsp°C</td>
          </tr>
     </thead>
     <tbody>
-
-{% regroup objects by for_lot_and_name.name as name_list %}
-<tr>
-{% for name in name_list %}
-<td>{{ name.grouper }}</td>
-{% for vg in name.list %}
-
-<td>{{ vg.temperature }}&nbsp°C: {{ vg.certifiedValue_text }}</td>
-
-
-
-{% endfor %}
-
-</tr>
-{% endfor %}
-
+    {% for obj in objects %}
+    <tr>
+        <td>{{ obj.namelot.namelot }}</td>
+			<td>{{ obj.namelot.lot }}</td>
+			<td>{{ obj.cv20 }}</td>
+			<td>{{ obj.cvt25 }}</td>
+			<td>{{ obj.cvt40 }}</td>
+			<td>{{ obj.cvt50 }}</td>
+			<td>{{ obj.cvt80 }}</td>
+			<td>{{ obj.cvt100 }}</td>
+    </tr>
+    {% endfor %}
     </tbody>
 </table>
 </div>

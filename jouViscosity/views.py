@@ -19,17 +19,7 @@ class AllKinematicviscosityView(ListView):
     """полустандартное"""
     template_name = 'jouViscosity/kinematicviscosityvalues.html'
     context_object_name = 'objects'
-    def get_queryset(self):
-        get_id = ViscosityMJL.objects.filter(fixation=True).values('name', 'lot', 'temperature').\
-            annotate(ac_id=Max('id')).values('ac_id')
-        list_ = list(get_id)
-        set = []
-        for n in list_:
-            set.append(n.get('ac_id'))
-        queryset = ViscosityMJL.objects.filter(id__in=set).select_related('for_lot_and_name')
-
-        return queryset
-
+    model = CvKinematicviscosityVG
     def get_context_data(self, **kwargs):
         context = super(AllKinematicviscosityView, self).get_context_data(**kwargs)
         context['NAME'] = NAME
