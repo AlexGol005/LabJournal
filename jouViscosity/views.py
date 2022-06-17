@@ -46,8 +46,8 @@ class AllDinamicviscosityView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(AllDinamicviscosityView, self).get_context_data(**kwargs)
-        context['NAME'] = NAME2
-        context['TABLENAME'] = TABLENAME2
+        context['NAME2'] = NAME2
+        context['TABLENAME2'] = TABLENAME2
         context['now_date'] = datetime.now()
         return context
 
