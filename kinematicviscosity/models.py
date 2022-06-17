@@ -174,6 +174,7 @@ class ViscosityMJL(models.Model):
                 note = CvKinematicviscosityVG.objects.get(namelot=note.namelot)
                 if note:
                     note.cvt20 = 10
+                    note.save()
 
 
 
