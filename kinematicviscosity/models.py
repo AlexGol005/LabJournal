@@ -172,7 +172,8 @@ class ViscosityMJL(models.Model):
             cv = 'cvt20'
 
         if self.name[0:2] == 'ВЖ' and self.fixation:
-            CvKinematicviscosityVG.objects.get_or_create(namelot=self.for_lot_and_name, cvt20date=self.date, cvt20exp = self.exp)
+            CvKinematicviscosityVG.objects.get_or_create(
+                namelot=self.for_lot_and_name, cvt20date=self.date, cvt20exp=self.exp, cvt20=self.certifiedValue_text)
 
 
 
