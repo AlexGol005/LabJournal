@@ -169,7 +169,7 @@ class ViscosityMJL(models.Model):
 
     # вносим АЗ в ЖАЗ
         if self.name[0:2] == 'ВЖ' and self.fixation:
-            CvKinematicviscosityVG.namelot = self.for_lot_and_name
+            CvKinematicviscosityVG.objects.get_or_create(namelot=self.for_lot_and_name)
 
 
 
