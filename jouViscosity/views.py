@@ -26,7 +26,7 @@ class AllKinematicviscosityView(ListView):
         set = []
         for n in list_:
             set.append(n.get('ac_id'))
-        queryset = ViscosityMJL.objects.filter(id__in=set).select_related('for_lot_and_name')
+        queryset = ViscosityMJL.objects.filter(id__in=set)
 
         return queryset
 
