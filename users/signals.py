@@ -22,4 +22,4 @@ def create_viscosityMJL(sender, instance, created, **kwargs):
     instance = CvKinematicviscosityVG.objects.get(namelot=26)
     if ViscosityMJL.fixation:
         if created:
-            instance.create(cvt20=ViscosityMJL.certifiedValue_text)
+            instance.cvt20 = ViscosityMJL.certifiedValue_text
