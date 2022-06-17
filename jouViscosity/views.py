@@ -14,8 +14,8 @@ TABLENAME = 'Кинематическая вязкость ВЖ-ПА (мм<sup>2
 TABLENAME2 = 'Плотность ВЖ-ПА (г/мл)'
 TABLENAME3 = 'Динамическая вязкость ВЖ-ПА  (Па*с)'
 MODEL = LotVG
-now_date = datetime.now()
-now_date =
+# now_date = datetime.now()
+
 
 
 class AllKinematicviscosityView(ListView):
