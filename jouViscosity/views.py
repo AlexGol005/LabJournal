@@ -21,13 +21,12 @@ class AllKinematicviscosityView(ListView):
     context_object_name = 'objects'
     def get_queryset(self):
         get_id = ViscosityMJL.objects.filter(fixation=True).values('name', 'lot', 'temperature').\
-            annotate(ac_id=Max('id')).values('name', 'lot', 'temperature', 'ac_id')
+            annotate(ac_id=Max('id')).values('ac_id')
         list_ = list(get_id)
         set = []
         for n in list_:
             set.append(n.get('ac_id'))
-        queryset = ViscosityMJL.objects.filter(id__in=set)
-            # .select_related('for_lot_and_name')
+        queryset = ViscosityMJL.objects.filter(id__in=set).select_related('for_lot_and_name')
 
         return queryset
 
@@ -45,13 +44,13 @@ class AllDinamicviscosityView(ListView):
     context_object_name = 'objects'
     def get_queryset(self):
         get_id = Dinamicviscosity.objects.filter(fixation=True).values('name', 'lot', 'temperature').\
-            annotate(ac_id=Max('id')).values('name', 'lot', 'temperature', 'ac_id')
+            annotate(ac_id=Max('id')).values('ac_id')
         list_ = list(get_id)
         set = []
         for n in list_:
             set.append(n.get('ac_id'))
-        queryset = Dinamicviscosity.objects.filter(id__in=set).select_related('for_lot_and_name').\
-            order_by('for_lot_and_name__dinamicviscosity__name', 'for_lot_and_name__dinamicviscosity__lot', 'temperature')
+        queryset = Dinamicviscosity.objects.filter(id__in=set).select_related('for_lot_and_name')
+
         return queryset
 
 
