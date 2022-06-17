@@ -170,7 +170,7 @@ class ViscosityMJL(models.Model):
     # вносим АЗ в ЖАЗ
         if self.name[0:2] == 'ВЖ' and self.fixation:
             pk = CvKinematicviscosityVG.objects.get_or_create(namelot=self.for_lot_and_name)
-            note = CvKinematicviscosityVG.objects.get(pk=pk)
+            note = CvKinematicviscosityVG.objects.get(pk=pk).pk
             if self.temperature == 20.00:
                 note.cvt20 = self.certifiedValue_text
                 note.cvt20date = self.date
