@@ -9,8 +9,8 @@ admin.site.register(VGrange)
 
 @admin.register(LotVG)  # связываем админку с моделью
 class NoteAdmin(admin.ModelAdmin):
-    list_display = ('id',)
+    list_display = ('id', 'name')
 
 @admin.register(CvKinematicviscosityVG)  # связываем админку с моделью
 class NoteAdmin(admin.ModelAdmin):
-    list_display = ('id',)
+    list_display = ('id', 'namelot')

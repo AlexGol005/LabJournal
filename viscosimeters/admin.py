@@ -11,7 +11,7 @@ class NoteAdmin(admin.ModelAdmin):
 
 @admin.register(Viscosimeters)  # связываем админку с моделью
 class NoteAdmin(admin.ModelAdmin):
-    list_display = ('id',)
+    list_display = ('id', )
 
 
 
