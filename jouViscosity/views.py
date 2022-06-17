@@ -21,7 +21,7 @@ class AllKinematicviscosityView(ListView):
     """ Представление, которое выводит все последние измеренные значения кинматической вязкости """
     """полустандартное"""
     template_name = 'jouViscosity/kinematicviscosityvalues.html'
-
+    context_object_name = 'objects'
     def get_queryset(self):
         queryset = CvKinematicviscosityVG.objects.all().order_by('namelot__nameVG', 'namelot__lot')
         return queryset
