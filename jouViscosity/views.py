@@ -8,9 +8,9 @@ from kinematicviscosity.models import ViscosityMJL
 NAME = 'Кинематика АЗ'
 NAME2 = 'Плотность и динамика АЗ'
 
-TABLENAME = 'Кинематическая вязкость ВЖ-ПА при популярных температурах (мм<sup>2</sup>/с)'
-TABLENAME2 = 'Плотность ВЖ-ПА при популярных температурах (г/мл)'
-TABLENAME3 = 'Кинематическая вязкость ВЖ-ПА при популярных температурах (Па*с)'
+TABLENAME = 'Кинематическая вязкость ВЖ-ПА (мм<sup>2</sup>/с)'
+TABLENAME2 = 'Плотность ВЖ-ПА  (г/мл)'
+TABLENAME3 = 'Динамическая вязкость ВЖ-ПА  (Па*с)'
 MODEL = LotVG
 
 
@@ -49,7 +49,8 @@ class AllDinamicviscosityView(ListView):
         set = []
         for n in list_:
             set.append(n.get('ac_id'))
-        queryset = Dinamicviscosity.objects.filter(id__in=set).select_related('for_lot_and_name')
+        queryset = Dinamicviscosity.objects.filter(id__in=set).select_related('for_lot_and_name').\
+            order_by('for_lot_and_name__dinamicviscosity__name', 'for_lot_and_name__dinamicviscosity__lot', 'temperature')
         return queryset
 
 
