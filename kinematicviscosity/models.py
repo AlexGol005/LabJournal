@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from decimal import *
 
 from viscosimeters.models import Viscosimeters, Kalibration
-from jouViscosity.models import LotVG, VGrange, VG
+from jouViscosity.models import LotVG, VGrange, VG, CvKinematicviscosityVG
 from formuls import mrerrow, numberDigits
 from metods import get_sec, get_avg, get_acc_measurement
 
@@ -166,6 +166,14 @@ class ViscosityMJL(models.Model):
             b = a[0]
             LotVG.objects.get_or_create(lot=self.lot, nameVG=b)
             self.for_lot_and_name = LotVG.objects.get(lot=self.lot, nameVG=b)
+
+    # вносим АЗ в ЖАЗ
+        if self.name[0:2] == 'ВЖ' and self.fixation:
+            CvKinematicviscosityVG.namelot = self.for_lot_and_name
+
+
+
+
 
         super(ViscosityMJL, self).save(*args, **kwargs)
 
