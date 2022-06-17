@@ -107,7 +107,7 @@ class CvKinematicviscosityVG(models.Model):
     cvtminus20exp = models.IntegerField('Кинематика при -20 - срок годности', blank=True, null=True)
 
     def __str__(self):
-        return f'{self.namelot}'
+        return f'кинематика АЗ для {self.namelot}'
 
     class Meta:
         verbose_name = 'ВЖ-ПА, кинематика'
