@@ -50,6 +50,7 @@ class StrJournalView(View):
             if form.is_valid():
                 order = form.save(commit=False)
                 order.save()
+                messages.success(request, f'Запись внесена, подтвердите АЗ!')
                 return redirect(order)
         else:
             form = StrJournalUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
