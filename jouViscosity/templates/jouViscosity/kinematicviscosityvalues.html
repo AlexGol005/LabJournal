@@ -31,16 +31,27 @@
          </tr>
     </thead>
     <tbody>
-    {% for obj in objects %}
-    <tr>
-        <td>{{ obj.namelot.nameVG }}</td>
-			<td>{{ obj.namelot.lot }}</td>
-			<td>{{ obj.cvt20 }}</td>
-			<td>{{ obj.cvt25 }}</td>
-			<td>{{ obj.cvt40 }}</td>
-			<td>{{ obj.cvt50 }}</td>
-			<td>{{ obj.cvt80 }}</td>
-			<td>{{ obj.cvt100 }}</td>
+{% for obj in objects %}
+<tr>
+    <td>{{ obj.namelot.nameVG }}</td>
+    <td>{{ obj.namelot.lot }}</td>
+    <td>
+        {% if obj.cvt20date == 'неудовлетворительно' %}
+        <div class="TransactionAmount Badresult">
+        {% else %}
+        <div class="TransactionAmount Goodresult">
+        {% endif %}
+        {{ obj.cvt20|default_if_none:" " }}
+    </div></td>
+
+
+
+
+			<td>{{ obj.cvt25|default_if_none:" " }}</td>
+			<td>{{ obj.cvt40|default_if_none:" " }}</td>
+			<td>{{ obj.cvt50|default_if_none:" " }}</td>
+			<td>{{ obj.cvt80|default_if_none:" " }}</td>
+			<td>{{ obj.cvt100|default_if_none:" " }}</td>
     </tr>
     {% endfor %}
     </tbody>
