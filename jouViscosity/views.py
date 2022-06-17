@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db.models import Max
 from django.views.generic import ListView
 
@@ -12,6 +14,7 @@ TABLENAME = 'Кинематическая вязкость ВЖ-ПА (мм<sup>2
 TABLENAME2 = 'Плотность ВЖ-ПА (г/мл)'
 TABLENAME3 = 'Динамическая вязкость ВЖ-ПА  (Па*с)'
 MODEL = LotVG
+now_date = datetime.now()
 
 
 class AllKinematicviscosityView(ListView):
@@ -26,6 +29,8 @@ class AllKinematicviscosityView(ListView):
         context = super(AllKinematicviscosityView, self).get_context_data(**kwargs)
         context['NAME'] = NAME
         context['TABLENAME'] = TABLENAME
+        context['now_date'] = now_date
+
         return context
 
 

@@ -36,7 +36,7 @@
     <td>{{ obj.namelot.nameVG }}</td>
     <td>{{ obj.namelot.lot }}</td>
     <td>
-        {% if obj.cvt20date == datetime.now %}
+        {% if obj.cvt20date == now_date %}
         <div class="TransactionAmount Badresult">
         {% else %}
         <div class="TransactionAmount Goodresult">
