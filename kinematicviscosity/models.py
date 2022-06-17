@@ -168,12 +168,17 @@ class ViscosityMJL(models.Model):
             self.for_lot_and_name = LotVG.objects.get(lot=self.lot, nameVG=b)
 
     # вносим АЗ в ЖАЗ
-        if self.temperature == 20:
-            cv = 'cvt20'
-
         if self.name[0:2] == 'ВЖ' and self.fixation:
-            CvKinematicviscosityVG.objects.get_or_create(
-                namelot=self.for_lot_and_name, cvt20date=self.date, cvt20exp=self.exp, cvt20=self.certifiedValue_text)
+            pk = CvKinematicviscosityVG.objects.get_or_create(namelot=self.for_lot_and_name)
+            note = CvKinematicviscosityVG.objects.get(pk=pk)
+            if self.temperature == 20.00:
+                note.cvt20 = self.certifiedValue_text
+                note.cvt20date = self.date
+                note.cvt20exp = self.exp
+            if self.temperature == 25.00:
+                note.cvt25 = self.certifiedValue_text
+                note.cvt25date = self.date
+                note.cvt25exp = self.exp
 
 
 
