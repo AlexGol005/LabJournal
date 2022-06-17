@@ -14,3 +14,7 @@ class NoteAdmin(admin.ModelAdmin):
 @admin.register(CvKinematicviscosityVG)  # связываем админку с моделью
 class NoteAdmin(admin.ModelAdmin):
     list_display = ('id', 'namelot')
+
+@admin.register(CvDensityVG)  # связываем админку с моделью
+class NoteAdmin(admin.ModelAdmin):
+    list_display = ('id', 'namelot')
