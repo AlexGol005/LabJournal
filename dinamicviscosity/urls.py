@@ -16,5 +16,6 @@ urlpatterns = [
     path('searchresult/', views.SearchResultView.as_view(), name=URL + 'search'),
     path('datesearchresult/', views.DateSearchResultView.as_view(), name=URL + 'datesearch'),
     path('filter/<int:pk>', views.filterview, name=URL + 'filter'),
+    path('picnometer/', views.PicnometerView.as_view(), name='picnometer'),
 
 ]

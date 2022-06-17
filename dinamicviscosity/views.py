@@ -201,3 +201,11 @@ def filterview(request, pk):
             date__gte=datetime.now()).order_by('-pk')
     return render(request, URL + "/journal.html", {'objects': objects, 'journal': journal, 'formSM': formSM, 'URL': URL,
                                                    'formdate': formdate})
+
+
+class PicnometerView(View):
+    """ Представление, которое выводит табличку с объёмами пикнометра """
+    """ уникальное """
+
+    def get(self, request):
+        return render(request, 'dinamicviscosity/picnometer.html')
