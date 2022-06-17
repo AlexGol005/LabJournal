@@ -172,8 +172,15 @@ class ViscosityMJL(models.Model):
                 a = CvKinematicviscosityVG.objects.get_or_create(namelot=self.for_lot_and_name)
                 note = a[0]
                 note = CvKinematicviscosityVG.objects.get(namelot=note.namelot)
-                if note:
-                    note.cvt20 = 10
+                if self.temperature == 20:
+                    note.cvt20 = self.certifiedValue_text
+                    note.cvt20date = self.date
+                    note.cvt20exp = self.exp
+                    note.save()
+                if self.temperature == 25:
+                    note.cvt25 = self.certifiedValue_text
+                    note.cvt25date = self.date
+                    note.cvt25exp = self.exp
                     note.save()
 
 
