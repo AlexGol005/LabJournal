@@ -35,17 +35,15 @@
 <tr>
     <td>{{ obj.namelot.nameVG }}</td>
     <td>{{ obj.namelot.lot }}</td>
-
-        {% if obj.cvt20date == now_date %}
-             <td>
+    <td>
+        {% if obj.cvt20date == now %}
         <div class="TransactionAmount Badresult">
         {% else %}
         <div class="TransactionAmount Goodresult">
         {% endif %}
         {{ obj.cvt20|default_if_none:" " }}
-
-    </div></td>
-
+    </div>
+    </td>
 
 
 
