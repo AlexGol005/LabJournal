@@ -17,9 +17,9 @@ def create_profile(sender, instance, created, **kwargs):
 def save_profile(sender, instance, **kwargs):
     instance.profile.save()
 
-# @receiver(post_save, sender=ViscosityMJL)
-# def create_viscosityMJL(sender, instance, created, **kwargs):
-#     instance = CvKinematicviscosityVG.objects.get(namelot=ViscosityMJL.for_lot_and_name.id)
-#     if ViscosityMJL.fixation:
-#         if created:
-#             instance.cvt20 = ViscosityMJL.certifiedValue_text
+@receiver(post_save, sender=ViscosityMJL)
+def create_viscosityMJL(sender, instance, created, **kwargs):
+    instance = CvKinematicviscosityVG.objects.get(namelot=26)
+    if ViscosityMJL.fixation:
+        if created:
+            instance.cvt20 = ViscosityMJL.certifiedValue_text
