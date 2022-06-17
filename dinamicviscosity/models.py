@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from decimal import *
 
-from jouViscosity.models import VG, VGrange, LotVG
+from jouViscosity.models import VG, VGrange, LotVG, CvDensityVG
 from metods import get_avg, get_acc_measurement
 from formuls import mrerrow, numberDigits
 
@@ -126,7 +126,56 @@ class Dinamicviscosity(models.Model):
             LotVG.objects.get_or_create(lot=self.lot, nameVG=b)
             self.for_lot_and_name = LotVG.objects.get(lot=self.lot, nameVG=b)
         super(Dinamicviscosity, self).save(*args, **kwargs)
-
+        # вносим АЗ в ЖАЗ
+        if self.name[0:2] == 'ВЖ' and self.fixation:
+            a = CvDensityVG.objects.get_or_create(namelot=self.for_lot_and_name)
+            note = a[0]
+            note = CvDensityVG.objects.get(namelot=note.namelot)
+            if self.temperature == 20:
+                note.cvt20 = self.density_avg
+                note.cvt20date = self.date
+                note.cvt20exp = self.exp
+                note.save()
+            if self.temperature == 25:
+                note.cvt25 = self.density_avg
+                note.cvt25date = self.date
+                note.cvt25exp = self.exp
+                note.save()
+            if self.temperature == 40:
+                note.cvt40 = self.density_avg
+                note.cvt40date = self.date
+                note.cvt40exp = self.exp
+                note.save()
+            if self.temperature == 50:
+                note.cvt50 = self.density_avg
+                note.cvt50date = self.date
+                note.cvt50exp = self.exp
+                note.save()
+            if self.temperature == 60:
+                note.cvt60 = self.density_avg
+                note.cvt60date = self.date
+                note.cvt60exp = self.exp
+                note.save()
+            if self.temperature == 80:
+                note.cvt80 = self.density_avg
+                note.cvt80date = self.date
+                note.cvt80exp = self.exp
+                note.save()
+            if self.temperature == 100:
+                note.cvt100 = self.density_avg
+                note.cvt100date = self.date
+                note.cvt100exp = self.exp
+                note.save()
+            if self.temperature == 150:
+                note.cvt150 = self.density_avg
+                note.cvt150date = self.date
+                note.cvt150exp = self.exp
+                note.save()
+            if self.temperature == -20:
+                note.cvtminus20 = self.density_avg
+                note.cvtminus20date = self.date
+                note.cvtminus20exp = self.exp
+                note.save()
 
 
     def __str__(self):

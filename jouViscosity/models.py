@@ -113,6 +113,44 @@ class CvKinematicviscosityVG(models.Model):
         verbose_name = 'ВЖ-ПА, кинематика'
         verbose_name_plural = 'ВЖ-ПА, кинематика'
 
+class CvDensityVG(models.Model):
+    namelot = models.ForeignKey(LotVG, verbose_name='плотность для СО:',
+                                on_delete=models.PROTECT, null=True, blank=True)
+    cvt20 = models.CharField('плотность при 20 - АЗ', max_length=30, blank=True, null=True)
+    cvt20date = models.DateField('плотность при 20 - дата измерения', blank=True, null=True)
+    cvt20exp = models.IntegerField('плотность при 20 - срок годности', blank=True, null=True)
+    cvt25 = models.CharField('плотность при 25 - АЗ', max_length=30, blank=True, null=True)
+    cvt25date = models.DateField('плотность при 25 - дата измерения', blank=True, null=True)
+    cvt25exp = models.IntegerField('плотность при 25 - срок годности', blank=True, null=True)
+    cvt40 = models.CharField('плотность при 40 - АЗ', max_length=30, blank=True, null=True)
+    cvt40date = models.DateField('плотность при 40 - дата измерения', blank=True, null=True)
+    cvt40exp = models.IntegerField('плотность при 40 - срок годности', blank=True, null=True)
+    cvt50 = models.CharField('плотность при 50 - АЗ', max_length=30, blank=True, null=True)
+    cvt50date = models.DateField('плотность при 50 - дата измерения', blank=True, null=True)
+    cvt50exp = models.IntegerField('плотность при 50 - срок годности', blank=True, null=True)
+    cvt60 = models.CharField('плотность при 60 - АЗ', max_length=30, blank=True, null=True)
+    cvt60date = models.DateField('плотность при 60 - дата измерения', blank=True, null=True)
+    cvt60exp = models.IntegerField('плотность при 60 - срок годности', blank=True, null=True)
+    cvt80 = models.CharField('плотность при 80 - АЗ', max_length=30, blank=True, null=True)
+    cvt80date = models.DateField('плотность при 80 - дата измерения', blank=True, null=True)
+    cvt80exp = models.IntegerField('плотность при 80 - срок годности', blank=True, null=True)
+    cvt100 = models.CharField('плотность при 100 - АЗ', max_length=30, blank=True, null=True)
+    cvt100date = models.DateField('плотность при 100 - дата измерения', blank=True, null=True)
+    cvt100exp = models.IntegerField('плотность при 100 - срок годности', blank=True, null=True)
+    cvt150 = models.CharField('плотность при 150 - АЗ', max_length=30, blank=True, null=True)
+    cvt150date = models.DateField('плотность при 150 - дата измерения', blank=True, null=True)
+    cvt150exp = models.IntegerField('м при 150 - срок годности', blank=True, null=True)
+    cvtminus20 = models.CharField('плотность при -20 - АЗ', max_length=30, blank=True, null=True)
+    cvtminus20date = models.DateField('плотность при -20 - дата измерения', blank=True, null=True)
+    cvtminus20exp = models.IntegerField('плотность при -20 - срок годности', blank=True, null=True)
+
+    def __str__(self):
+        return f'плотность АЗ для {self.namelot}'
+
+    class Meta:
+        verbose_name = 'ВЖ-ПА, плотность'
+        verbose_name_plural = 'ВЖ-ПА, плотность'
+
 
 
 

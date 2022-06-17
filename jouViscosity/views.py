@@ -31,31 +31,23 @@ class AllKinematicviscosityView(ListView):
         context['NAME'] = NAME
         context['TABLENAME'] = TABLENAME
         context['now_date'] = datetime.now()
-
         return context
 
 
 class AllDinamicviscosityView(ListView):
-    """ Представление, которое выводит все последние измеренные значения плотности и динамики в двух табличках """
+    """ Представление, которое выводит все последние измеренные значения плотности"""
     """полустандартное"""
     template_name = 'jouViscosity/dinamicviscosityvalues.html'
     context_object_name = 'objects'
+
     def get_queryset(self):
-        get_id = Dinamicviscosity.objects.filter(fixation=True).values('name', 'lot', 'temperature').\
-            annotate(ac_id=Max('id')).values('ac_id')
-        list_ = list(get_id)
-        set = []
-        for n in list_:
-            set.append(n.get('ac_id'))
-        queryset = Dinamicviscosity.objects.filter(id__in=set).select_related('for_lot_and_name')
-
+        queryset = CvDensityVG.objects.all().order_by('namelot__nameVG__rangeindex', 'namelot__lot')
         return queryset
-
 
     def get_context_data(self, **kwargs):
         context = super(AllDinamicviscosityView, self).get_context_data(**kwargs)
-        context['NAME2'] = NAME2
-        context['TABLENAME2'] = TABLENAME2
-        context['TABLENAME3'] = TABLENAME3
+        context['NAME'] = NAME2
+        context['TABLENAME'] = TABLENAME2
+        context['now_date'] = datetime.now()
         return context
 

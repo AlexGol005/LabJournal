@@ -1,10 +1,8 @@
-{% extends 'main/superbase.html' %}
-
+{% extends 'main/base.html' %}
 
 {% block title %}
 {{ NAME2 }}
 {% endblock %}
-
 
 {#кнопки слева странички#}
 {% block content %}
@@ -16,76 +14,50 @@
 {#</div>#}
 
 {#уникальная таблица#}
-
-<br>
-<div style="text-align: center;"><h5>Плотность и динамическая вязкость ВЖ-ПА</h5></div>
-<br>
-<div class="col-md-4 mt-1" >
 <div style="text-align: center;"><h5>{% autoescape off %}{{ TABLENAME2 }}{% endautoescape %} </h5></div>
 <br>
+<div class="col-md-4 mt-1" >
 <table class="table table-bordered">
     <thead>
         <tr>
-            <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspВЖ&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
-			<td>T&nbsp&nbsp°C:плотность </td>
-			<td>T&nbsp&nbsp°C:плотность </td>
-			<td>T&nbsp&nbsp°C:плотность </td>
-			<td>T&nbsp&nbsp°C:плотность </td>
-			<td>T&nbsp&nbsp°C:плотность </td>
-			<td>T&nbsp&nbsp°C:плотность </td>
+            <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspВЖ&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+			<td>п.</td>
+			<td>20&nbsp&nbsp°C</td>
+			<td>25&nbsp&nbsp°C</td>
+			<td>40&nbsp&nbsp°C</td>
+			<td>50&nbsp&nbsp°C</td>
+			<td>80&nbsp&nbsp°C</td>
+			<td>100&nbsp&nbsp°C</td>
          </tr>
     </thead>
     <tbody>
-
-{% regroup objects by for_lot_and_name.name as name_list %}
+{% for obj in objects %}
 <tr>
-{% for name in name_list %}
-<td>{{ name.grouper }}</td>
-{% for vg in name.list %}
-
-<td>{{ vg.temperature }}&nbsp°C: {{ vg.density_avg }}</td>
+    <td>{{ obj.namelot.nameVG }}</td>
+    <td>{{ obj.namelot.lot }}</td>
+    <td>
 
 
+            {% if obj.cvt20date|date:'dmy' == now_date|date:'dmy' %}
 
-{% endfor %}
-
-</tr>
-{% endfor %}
-
-    </tbody>
-</table>
-<br><br>
-<div style="text-align: center;"><h5>{% autoescape off %}{{ TABLENAME3 }}{% endautoescape %} </h5></div>
-<br>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspВЖ&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
-			<td>T&nbsp&nbsp°C:динамика </td>
-			<td>T&nbsp&nbsp°C:динамика </td>
-			<td>T&nbsp&nbsp°C:динамика </td>
-			<td>T&nbsp&nbsp°C:динамика </td>
-			<td>T&nbsp&nbsp°C:динамика </td>
-			<td>T&nbsp&nbsp°C:динамика </td>
-         </tr>
-    </thead>
-    <tbody>
-
-{% regroup objects by for_lot_and_name.name as name_list %}
-<tr>
-{% for name in name_list %}
-<td>{{ name.grouper }}</td>
-{% for vg in name.list %}
-
-<td>{{ vg.temperature }}&nbsp°C: {{ vg.certifiedValue }}</td>
+        <div class="TransactionAmount Badresult">
+        {% else %}
+        <div class="TransactionAmount Goodresult">
+        {% endif %}
+        {{ obj.cvt20|default_if_none:" " }}
+    </div>
+    </td>
 
 
 
-{% endfor %}
 
-</tr>
-{% endfor %}
-
+			<td>{{ obj.cvt25|default_if_none:" " }}</td>
+			<td>{{ obj.cvt40|default_if_none:" " }}</td>
+			<td>{{ obj.cvt50|default_if_none:" " }}</td>
+			<td>{{ obj.cvt80|default_if_none:" " }}</td>
+			<td>{{ obj.cvt100|default_if_none:" " }}</td>
+    </tr>
+    {% endfor %}
     </tbody>
 </table>
 </div>
