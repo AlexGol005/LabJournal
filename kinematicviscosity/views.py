@@ -63,12 +63,13 @@ class StrJournalView(View):
 @login_required
 def RegNoteJournalView(request):
     """ Представление, которое выводит форму регистрации в журнале. """
-    """Стандартное"""
+    """Стандартное, но со вставкой по поводу констант"""
     if request.method == "POST":
         form = StrJournalCreationForm(request.POST)
         if form.is_valid():
             order = form.save(commit=False)
             order.performer = request.user
+            """вставка начало"""
             get_id_actualconstant1 = Kalibration.objects.select_related('id_Viscosimeter'). \
                 filter(id_Viscosimeter__exact=order.ViscosimeterNumber1). \
                 values('id_Viscosimeter').annotate(id_actualkonstant=Max('id')).values('id_actualkonstant')
@@ -83,6 +84,7 @@ def RegNoteJournalView(request):
             aktualKalibration2 = Kalibration.objects.get(id=set)
             order.Konstant1 = aktualKalibration1.konstant
             order.Konstant2 = aktualKalibration2.konstant
+            """вставка окончание"""
             order.save()
             messages.success(request, f'Запись внесена, подтвердите АЗ!')
             return redirect(order)

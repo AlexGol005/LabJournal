@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from decimal import *
 
+from jouViscosity.models import VG, VGrange, LotVG
 from metods import get_avg, get_acc_measurement
 from formuls import mrerrow, numberDigits
 
@@ -26,6 +27,9 @@ RELERROR = 0.3  # относительная погрешность СО из о
 
 
 class Dinamicviscosity(models.Model):
+    for_lot_and_name = models.ForeignKey(LotVG, verbose_name='Измерение для: ГСО и партия', on_delete=models.PROTECT,
+                                         blank=True, null=True)
+    exp = models.IntegerField('Срок годности, месяцев', blank=True, null=True)
     date = models.DateField('Дата', auto_now_add=True, db_index=True, blank=True)
     performer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='performer', blank=True)
     performerdensity = models.ForeignKey(User, verbose_name='Плотность измерил', on_delete=models.CASCADE, null=True, related_name='performerdensity', blank=True)
@@ -76,6 +80,13 @@ class Dinamicviscosity(models.Model):
     equipment = models.CharField('Способ измерения плотности', max_length=300, choices=DENSITYE, default='денсиметром', null=True,  blank=True)
 
     def save(self, *args, **kwargs):
+        if self.name[0:2] == 'ВЖ':
+            if int(self.name[8:-1]) <= 10:
+                self.exp = 6
+            if 1000 > int(self.name[8:-1]) > 10:
+                self.exp = 12
+            if int(self.name[8:-1]) >= 1000:
+                self.exp = 24
         if not (self.density1 and self.density2):
             self.SM_mass1 = self.piknometer_plus_SM_mass1 - self.piknometer_mass1
             self.SM_mass2 = self.piknometer_plus_SM_mass2 - self.piknometer_mass2
@@ -106,6 +117,14 @@ class Dinamicviscosity(models.Model):
             self.deltaolddensity = get_acc_measurement(Decimal(self.olddensity), self.density_avg)
             if self.deltaolddensity > Decimal(0.7):
                 self.resultWarning = 'плотность отличается от предыдущей на > 0,7 %. Рекомендовано измерить повторно'
+
+        # связь с конкретной партией
+        if self.name[0:2] == 'ВЖ':
+            pk_VG = VG.objects.get(name=self.name[0:7])
+            a = VGrange.objects.get_or_create(rangeindex=int(self.name[8:-1]), nameSM=pk_VG)
+            b = a[0]
+            LotVG.objects.get_or_create(lot=self.lot, nameVG=b)
+            self.for_lot_and_name = LotVG.objects.get(lot=self.lot, nameVG=b)
         super(Dinamicviscosity, self).save(*args, **kwargs)
 
 
