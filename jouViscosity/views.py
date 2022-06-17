@@ -15,6 +15,7 @@ TABLENAME2 = 'Плотность ВЖ-ПА (г/мл)'
 TABLENAME3 = 'Динамическая вязкость ВЖ-ПА  (Па*с)'
 MODEL = LotVG
 now_date = datetime.now()
+now_date =
 
 
 class AllKinematicviscosityView(ListView):
@@ -29,7 +30,7 @@ class AllKinematicviscosityView(ListView):
         context = super(AllKinematicviscosityView, self).get_context_data(**kwargs)
         context['NAME'] = NAME
         context['TABLENAME'] = TABLENAME
-        context['now_date'] = now_date
+        context['now_date'] = datetime.now() - timedelta(minutes=60 * 24 * CvKinematicviscosityVG.cvt20exp)
 
         return context
 
