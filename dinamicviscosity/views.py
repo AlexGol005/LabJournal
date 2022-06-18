@@ -1,5 +1,6 @@
 # все стандратно кроме поиска по полям, импорта моделей и констант
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db.models import Max
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, TemplateView
 from datetime import datetime, timedelta
@@ -8,10 +9,12 @@ from django.views import View
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-
+from jouViscosity.models import CvKinematicviscosityVG
+from kinematicviscosity.models import ViscosityMJL
 from main.models import AttestationJ
 from .models import Dinamicviscosity, CommentsDinamicviscosity
-from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm, SearchForm, SearchDateForm
+from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm, SearchForm, SearchDateForm, \
+    StrKinematicaForm
 
 JOURNAL = AttestationJ
 MODEL = Dinamicviscosity
@@ -37,16 +40,26 @@ class StrJournalView(View):
     def get(self, request, pk):
         note = get_object_or_404(MODEL, pk=pk)
         form = StrJournalUdateForm()
+        formkinematica = StrKinematicaForm()
+        # initial = {'kinematicviscosity': 'нет'}
         try:
             counter = COMMENTMODEL.objects.filter(forNote=note.id)
         except ObjectDoesNotExist:
             counter = None
         return render(request, URL + '/str.html',
-                      {'note': note, 'form': form, 'URL': URL, 'NAME': NAME, 'counter': counter})
+                      {'note': note, 'form': form, 'URL': URL, 'NAME': NAME, 'counter': counter,
+                       # 'formkinematica': formkinematica
+                       })
 
     def post(self, request, pk, *args, **kwargs):
+        formkinematica = StrKinematicaForm(request.POST, instance=MODEL.objects.get(id=pk))
+        form = StrJournalUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
         if MODEL.objects.get(id=pk).performer == request.user:
-            form = StrJournalUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
+            # if formkinematica.is_valid():
+            #     order = formkinematica.save(commit=False)
+            #     order.save()
+            #     messages.success(request, f'Динамика рассчитана')
+            #     return redirect(order)
             if form.is_valid():
                 order = form.save(commit=False)
                 order.save()
@@ -62,12 +75,27 @@ class StrJournalView(View):
 @login_required
 def RegNoteJournalView(request):
     """ Представление, которое выводит форму регистрации в журнале. """
-    """Стандартное"""
+    """Полустандартное со уникальной вставкой"""
     if request.method == "POST":
         form = StrJournalCreationForm(request.POST)
         if form.is_valid():
             order = form.save(commit=False)
             order.performer = request.user
+            # """вставка начало"""
+            # try:
+            #     get_id = ViscosityMJL.objects.\
+            #         filter(name__exact=order.name).filter(lot__exact=order.lot).filter(temperature=order.temperature).filter(fixation=True). \
+            #         values('id').annotate(id_actual=Max('id')).values('id')
+            #     CvKinematicviscosityVG.objects.filter(namelot__nameVG__name=order.name).filter(namelot__lot=order.lot).\
+            #         filter(temperature=order.temperature)
+            #     list_ = list(get_id)
+            #     set = list_[0].get('id')
+            #     actualkinematicviscosity = ViscosityMJL.objects.get(id=set)
+            #     order.kinematicviscosity = actualkinematicviscosity.certifiedValue
+            #     """вставка окончание"""
+            # except IndexError:
+            #     pass
+
             order.save()
             return redirect(order)
     else:

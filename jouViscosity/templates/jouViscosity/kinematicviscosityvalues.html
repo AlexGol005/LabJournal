@@ -1,4 +1,5 @@
 {% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
 
 {% block title %}
 {{ NAME }}
@@ -16,7 +17,17 @@
 {#уникальная таблица#}
 <div style="text-align: center;"><h5>{% autoescape off %}{{ TABLENAME }}{% endautoescape %} </h5></div>
 <br>
+<br>
+    {#форма для поиска по ГСО#}
+{#стандартная#}
+    <form action="/jouViscosity/kinematicаsearchresult/" method="GET">
+        {% csrf_token %}
+        {% crispy form %}
+    </form>
+{#конец формы для поиска по ГСО#}
+<br>
 <div class="col-md-4 mt-1" >
+
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -35,27 +46,91 @@
 <tr>
     <td>{{ obj.namelot.nameVG }}</td>
     <td>{{ obj.namelot.lot }}</td>
-    <td>
-
-
-            {% if obj.cvt20date|date:'dmy' == now_date|date:'dmy' %}
-
-        <div class="TransactionAmount Goodresult">
-        {% else %}
-        <div class="TransactionAmount Goodresult">
+{#поля с АЗ#}
+    <td class="
+    {% if obj.cvt20dead > now and  now_date_plusmonth < obj.cvt20dead %}green{% endif %}
+    {% if now_date_plusmonth > obj.cvt20dead and obj.cvt20dead > now %}orange{% endif %}
+    {% if obj.cvt20dead < now %}red{% endif %}">
+        {% if obj.cvt20dead > now and  now_date_plusmonth < obj.cvt20dead %}
+        <a href="/" style="color: green"><b>
+        {% elif now_date_plusmonth > obj.cvt20dead and obj.cvt20dead > now %}
+        <a href="/" style="color: darkorange">
+        {% elif obj.cvt20dead < now %}
+        <a href="/" style="color: red">
         {% endif %}
-        {{ obj.cvt20|default_if_none:" " }}
-    </div>
+        {{ obj.cvt20|default_if_none:" " }}</a>
     </td>
 
+    <td class="
+    {% if obj.cvt25dead > now and  now_date_plusmonth < obj.cvt25dead %}green{% endif %}
+    {% if now_date_plusmonth > obj.cvt25dead and obj.cvt25dead > now %}orange{% endif %}
+    {% if obj.cvt25dead < now %}red{% endif %}">
+        {% if obj.cvt25dead > now and  now_date_plusmonth < obj.cvt25dead %}
+        <div class="TransactionAmount Goodresult"><b>
+        {% elif now_date_plusmonth > obj.cvt25dead and obj.cvt20dead > now %}
+        <div class="TransactionAmount Middleresult">
+        {% elif obj.cvt25dead < now %}
+        <div class="TransactionAmount Badresult">
+        {% endif %}
+        {{ obj.cvt25|default_if_none:" " }}
+    </div></td>
 
+    <td class="
+    {% if obj.cvt40dead > now and  now_date_plusmonth < obj.cvt40dead %}green{% endif %}
+    {% if now_date_plusmonth > obj.cvt40dead and obj.cvt40dead > now %}orange{% endif %}
+    {% if obj.cvt40dead < now %}red{% endif %}">
+        {% if obj.cvt40dead > now and  now_date_plusmonth < obj.cvt40dead %}
+        <div class="TransactionAmount Goodresult"><b>
+        {% elif now_date_plusmonth > obj.cvt40dead and obj.cvt40dead > now %}
+        <div class="TransactionAmount Middleresult">
+        {% elif obj.cvt40dead < now %}
+        <div class="TransactionAmount Badresult">
+        {% endif %}
+        {{ obj.cvt40|default_if_none:" " }}
+    </div></td>
 
+    <td class="
+    {% if obj.cvt50dead > now and  now_date_plusmonth < obj.cvt50dead %}green{% endif %}
+    {% if now_date_plusmonth > obj.cvt50dead and obj.cvt50dead > now %}orange{% endif %}
+    {% if obj.cvt50dead < now %}red{% endif %}">
+        {% if obj.cvt50dead > now and  now_date_plusmonth < obj.cvt50dead %}
+        <div class="TransactionAmount Goodresult"><b>
+        {% elif now_date_plusmonth > obj.cvt50dead and obj.cvt50dead > now %}
+        <div class="TransactionAmount Middleresult">
+        {% elif obj.cvt50dead < now %}
+        <div class="TransactionAmount Badresult">
+        {% endif %}
+        {{ obj.cvt50|default_if_none:" " }}
+    </div></td>
 
-			<td>{{ obj.cvt25|default_if_none:" " }}</td>
-			<td>{{ obj.cvt40|default_if_none:" " }}</td>
-			<td>{{ obj.cvt50|default_if_none:" " }}</td>
-			<td>{{ obj.cvt80|default_if_none:" " }}</td>
-			<td>{{ obj.cvt100|default_if_none:" " }}</td>
+    <td class="
+    {% if obj.cvt80dead > now and  now_date_plusmonth < obj.cvt80dead %}green{% endif %}
+    {% if now_date_plusmonth > obj.cvt80dead and obj.cvt20dead > now %}orange{% endif %}
+    {% if obj.cvt50dead < now %}red{% endif %}">
+        {% if obj.cvt80dead > now and  now_date_plusmonth < obj.cvt80dead %}
+        <div class="TransactionAmount Goodresult"><b>
+        {% elif now_date_plusmonth > obj.cvt80dead and obj.cvt80dead > now %}
+        <div class="TransactionAmount Middleresult">
+        {% elif obj.cvt80dead < now %}
+        <div class="TransactionAmount Badresult">
+        {% endif %}
+        {{ obj.cvt80|default_if_none:" " }}
+    </div></td>
+
+    <td class="
+    {% if obj.cvt100dead > now and  now_date_plusmonth < obj.cvt100dead %}green{% endif %}
+    {% if now_date_plusmonth > obj.cvt100dead and obj.cvt100dead > now %}orange{% endif %}
+    {% if obj.cvt100dead < now %}red{% endif %}">
+        {% if obj.cvt100dead > now and  now_date_plusmonth < obj.cvt100dead %}
+        <div class="TransactionAmount Goodresult"><b>
+        {% elif now_date_plusmonth > obj.cvt100dead and obj.cvt100dead > now %}
+        <div class="TransactionAmount Middleresult">
+        {% elif obj.cvt100dead < now %}
+        <div class="TransactionAmount Badresult">
+        {% endif %}
+        {{ obj.cvt100|default_if_none:" " }}
+    </div></td>
+{#конец полей с АЗ#}
     </tr>
     {% endfor %}
     </tbody>

@@ -127,7 +127,17 @@
 			<th colspan="5"><div style="text-align: center;">Вязкость динамическая, ν<sub>дин</sub> = ν * ρ<sub>сред</sub> , Па*с </div></th>
 		</tr>
 		<tr>
-			<td colspan="4"><div style="text-align: center;">{{ note.kinematicviscosity|default_if_none:" "|striptags }}</div></td>
+			<td colspan="4">
+                 {% if note.kinematicviscosity %}
+                  {{ note.kinematicviscosity|default_if_none:" "|striptags }}
+{#                {% elif not note.kinematicviscosity %}#}
+{#                    <form method="post">#}
+{#                {% csrf_token %}#}
+{#                {{ formkinematica.as_p }}#}
+{#                <button class="btn btn-outline-warning" type="submit" name="btnform1">Посчитать динамику</button>#}
+{#                </form>#}
+                {% endif %}
+            </td>
 			<td colspan="5"><div style="text-align: center;">{{ note.dinamicviscosity_not_rouned|default_if_none:" "|striptags }}</div></td>
 		</tr>
         <tr>
@@ -171,21 +181,19 @@
 		<tr>
 			<th colspan="3">{{ note.performer }} </th>
             <td colspan="1"><div style="text-align: center;"></div></td>
-            <td colspan="1"><div style="text-align: center;">
+            <td colspan="1">
                 {% if note.resultMeas == 'удовлетворительно' and not note.fixation %}
                 <form method="post" >
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button class="btn btn-outline-warning" type="submit">Подтвердить</button>
+                <button class="btn btn-outline-warning" type="submit" name="btnform2">Подтвердить</button>
                 </form>
                 {% elif note.resultMeas == 'удовлетворительно' and  note.fixation %}
-
-{#                    АЗ Записано в ЖАЗ сайта#}
-                АЗ подтверждено
+                   <a href="/jouViscosity/dinamicviscosityvalues/" target="blank"> плотность записана в ЖАЗ сайта </a>
                 {% else %}
                 нет АЗ
                 {% endif %}
-            </div></td>
+            </td>
             <td colspan="3"><div style="text-align: center;">
             </div></td>
             <th colspan="1">

@@ -73,12 +73,13 @@ class StrJournalCreationForm(forms.ModelForm):
                                                   widget=forms.TextInput(attrs={'class': 'form-control',
                                                                                 'placeholder': '0.0000'}
                                                                          ))
-    kinematicviscosity = forms.FloatField(label='Кинемат. вязк. при T измерений', required=True,
+
+    equipment = forms.ChoiceField(label='Способ измерения плотности', choices=DENSITYE,
+                                  widget=forms.Select(attrs={'class': 'form-control'}))
+    kinematicviscosity = forms.FloatField(label='Кинемат. вязк. при T измерений', required=False,
                                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                                         'placeholder': 'АЗ через точку'}
                                                                  ))
-    equipment = forms.ChoiceField(label='Способ измерения плотности', choices=DENSITYE,
-                                  widget=forms.Select(attrs={'class': 'form-control'}))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -134,10 +135,11 @@ class StrJournalCreationForm(forms.ModelForm):
                   'name', 'lot', 'temperature',
                   'constit', 'olddensity',
                   'density1', 'density2',
-                  'kinematicviscosity', 'performerdensity',
+                   'performerdensity',
                   'piknometer_volume',
                   'piknometer_mass1', 'piknometer_mass2',
-                  'equipment', 'piknometer_plus_SM_mass1', 'piknometer_plus_SM_mass2'
+                  'equipment', 'piknometer_plus_SM_mass1', 'piknometer_plus_SM_mass2',
+                  'kinematicviscosity'
                   ]
 
 
@@ -149,6 +151,19 @@ class StrJournalUdateForm(forms.ModelForm):
     class Meta:
         model = MODEL
         fields = ['fixation']
+
+
+class StrKinematicaForm(forms.ModelForm):
+    """форма для  добавления кинематики в разработке"""
+    """уникальная"""
+
+    kinematicviscosity = forms.FloatField(label='Кинемат. вязк. при T измерений', required=False,
+                                          widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                        'placeholder': 'АЗ через точку'}
+                                                                 ))
+    class Meta:
+        model = MODEL
+        fields = ['kinematicviscosity']
 
 
 class CommentCreationForm(forms.ModelForm):

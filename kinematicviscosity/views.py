@@ -165,7 +165,7 @@ class SearchResultView(TemplateView):
         return context
 
 class DateSearchResultView(TemplateView):
-    """ Представление, которое выводит результаты поиска на странице со всеми записями журнала. """
+    """ Представление, которое выводит результаты поиска по датам на странице со всеми записями журнала. """
     """стандартное"""
 
     template_name = URL + '/journal.html'

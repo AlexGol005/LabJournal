@@ -46,6 +46,16 @@ footer {
     text-align: center !important;
 }
 
+td.red {
+    background-color: rgb(252, 236, 236) !important;
+}
+td.orange {
+    background-color: rgb(248, 237, 230) !important;
+}
+td.green {
+    background-color: rgb(221, 246, 221) !important;
+}
+
 .Badresult {
   color: #FF0000;
 }
@@ -54,12 +64,16 @@ footer {
   color: #047c0a;
 }
 
+.Middleresult {
+  color: orange;
+}
+
+
+
+
 .alert-light {
   color: #04147c;
     background-color: rgb(245, 245, 246);
 }
 
-.navbar-collapse.collapse.in {
-        display: block!important;
-    }
 

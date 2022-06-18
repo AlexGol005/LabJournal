@@ -106,11 +106,13 @@ class Dinamicviscosity(models.Model):
         if self.accMeasurement > self.kriteriy:
             self.resultMeas = 'неудовлетворительно'
             self.cause = 'Δ > r'
+        # если результаты сходимы, то вычисляем АЗ плотности:
         if self.resultMeas == 'удовлетворительно':
-            #если результаты сходимы, то вычисляем АЗ:
-            self.dinamicviscosity_not_rouned = Decimal(self.kinematicviscosity) * self.density_avg
-            self.abserror = mrerrow((Decimal(self.relerror) * self.dinamicviscosity_not_rouned) / Decimal(100))
-            self.certifiedValue = numberDigits(self.dinamicviscosity_not_rouned, self.abserror)
+            # если есть кинематика, то вычисляем динамику:
+            if self.kinematicviscosity:
+                self.dinamicviscosity_not_rouned = Decimal(self.kinematicviscosity) * self.density_avg
+                self.abserror = mrerrow((Decimal(self.relerror) * self.dinamicviscosity_not_rouned) / Decimal(100))
+                self.certifiedValue = numberDigits(self.dinamicviscosity_not_rouned, self.abserror)
         # если указано предыдущее значение плотности, и есть измеренное АЗ, то вычисляем разницу с ним:
         if self.olddensity and self.certifiedValue:
             self.olddensity = self.olddensity.replace(',', '.')

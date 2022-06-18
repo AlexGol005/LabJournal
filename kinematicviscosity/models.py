@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.db import models
 from django.db.models import Max
 from django.urls import reverse
@@ -96,13 +98,13 @@ class ViscosityMJL(models.Model):
 
 
     def save(self, *args, **kwargs):
+    # срок годности зависит от диапазона ВЖ
         if self.name[0:2] == 'ВЖ':
-
             if int(self.name[8:-1]) <= 10:
                 self.exp = 6
             if int(self.name[8:-1]) > 10:
                 self.exp = 12
-
+    # переводим минуты в секунды
         if (self.plustimeminK1T2 and self.plustimesekK1T2 and self.plustimeminK2T1 and self.plustimesekK2T1
                 and self.plustimeminK2T2 and self.plustimesekK2T2 and self.plustimeminK1T1 and self.plustimesekK1T1):
             self.timeK1T1_sec = get_sec(self.plustimeminK1T1, self.plustimesekK1T1)
@@ -176,60 +178,56 @@ class ViscosityMJL(models.Model):
                     note.cvt20 = self.certifiedValue_text
                     note.cvt20date = self.date
                     note.cvt20exp = self.exp
+                    note.cvt20dead = self.date + timedelta(days=30*self.exp)
                     note.save()
                 if self.temperature == 25:
                     note.cvt25 = self.certifiedValue_text
                     note.cvt25date = self.date
                     note.cvt25exp = self.exp
+                    note.cvt25dead = self.date + timedelta(days=30 * self.exp)
                     note.save()
                 if self.temperature == 40:
                     note.cvt40 = self.certifiedValue_text
                     note.cvt40date = self.date
                     note.cvt40exp = self.exp
+                    note.cvt40dead = self.date + timedelta(days=30 * self.exp)
                     note.save()
                 if self.temperature == 50:
                     note.cvt50 = self.certifiedValue_text
                     note.cvt50date = self.date
                     note.cvt50exp = self.exp
+                    note.cvt50dead = self.date + timedelta(days=30 * self.exp)
                     note.save()
                 if self.temperature == 60:
                     note.cvt60 = self.certifiedValue_text
                     note.cvt60date = self.date
                     note.cvt60exp = self.exp
+                    note.cvt60dead = self.date + timedelta(days=30 * self.exp)
                     note.save()
                 if self.temperature == 80:
                     note.cvt80 = self.certifiedValue_text
                     note.cvt80date = self.date
                     note.cvt80exp = self.exp
+                    note.cvt80dead = self.date + timedelta(days=30 * self.exp)
                     note.save()
                 if self.temperature == 100:
                     note.cvt100 = self.certifiedValue_text
                     note.cvt100date = self.date
                     note.cvt100exp = self.exp
+                    note.cvt100dead = self.date + timedelta(days=30 * self.exp)
                     note.save()
                 if self.temperature == 150:
                     note.cvt150 = self.certifiedValue_text
                     note.cvt150date = self.date
                     note.cvt150exp = self.exp
+                    note.cvt150dead = self.date + timedelta(days=30 * self.exp)
                     note.save()
                 if self.temperature == -20:
                     note.cvtminus20 = self.certifiedValue_text
                     note.cvtminus20date = self.date
                     note.cvtminus20exp = self.exp
+                    note.cvtminus20dead = self.date + timedelta(days=30 * self.exp)
                     note.save()
-
-
-
-           #     note.cvt20 = self.certifiedValue_text
-           #     note.cvt20date = self.date
-           #     note.cvt20exp = self.exp
-           # if self.temperature == 25.00:
-           #     note.cvt25 = self.certifiedValue_text
-           #     note.cvt25date = self.date
-           #     note.cvt25exp = self.exp
-
-
-
 
         super(ViscosityMJL, self).save(*args, **kwargs)
 

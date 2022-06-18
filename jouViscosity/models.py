@@ -1,3 +1,5 @@
+from datetime import timedelta, datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -56,8 +58,6 @@ class CharacterVG(models.Model):
 
 
 class LotVG(models.Model):
-    # viscosity = models.OneToOneField(ViscosityMJL, on_delete=models.CASCADE, null=True, blank=True,
-    #                                  verbose_name='Инициатор записи (заполнено, если измерение произошло раньше создания партии)')
     nameVG = models.ForeignKey(VGrange, verbose_name='СО', max_length=100, on_delete=models.PROTECT, null=True, blank=True)
     lot = models.CharField('Партия', max_length=5, null=True, blank=True)
     person = models.ForeignKey(User, verbose_name='Изготовил', max_length=30,  on_delete=models.PROTECT, null=True, blank=True)
@@ -76,35 +76,44 @@ class LotVG(models.Model):
         verbose_name_plural = 'Партии ВЖ'
 
 class CvKinematicviscosityVG(models.Model):
-    namelot = models.ForeignKey(LotVG, verbose_name='Кинематическая вязкость для СО:',
+    namelot = models.OneToOneField(LotVG, verbose_name='Кинематическая вязкость для СО:',
                                 on_delete=models.PROTECT, null=True, blank=True)
     cvt20 = models.CharField('Кинематика при 20 - АЗ', max_length=30, blank=True, null=True)
     cvt20date = models.DateField('Кинематика при 20 - дата измерения', blank=True, null=True)
     cvt20exp = models.IntegerField('Кинематика при 20 - срок годности', blank=True, null=True)
+    cvt20dead = models.DateField('20 годен до', blank=True, null=True)
     cvt25 = models.CharField('Кинематика при 25 - АЗ', max_length=30, blank=True, null=True)
     cvt25date = models.DateField('Кинематика при 25 - дата измерения', blank=True, null=True)
     cvt25exp = models.IntegerField('Кинематика при 25 - срок годности', blank=True, null=True)
+    cvt25dead = models.DateField('25 годен до', blank=True, null=True)
     cvt40 = models.CharField('Кинематика при 40 - АЗ', max_length=30, blank=True, null=True)
     cvt40date = models.DateField('Кинематика при 40 - дата измерения', blank=True, null=True)
     cvt40exp = models.IntegerField('Кинематика при 40 - срок годности', blank=True, null=True)
+    cvt40dead = models.DateField('40 годен до', blank=True, null=True)
     cvt50 = models.CharField('Кинематика при 50 - АЗ', max_length=30, blank=True, null=True)
     cvt50date = models.DateField('Кинематика при 50 - дата измерения', blank=True, null=True)
     cvt50exp = models.IntegerField('Кинематика при 50 - срок годности', blank=True, null=True)
+    cvt50dead = models.DateField('50 годен до', blank=True, null=True)
     cvt60 = models.CharField('Кинематика при 60 - АЗ', max_length=30, blank=True, null=True)
     cvt60date = models.DateField('Кинематика при 60 - дата измерения', blank=True, null=True)
     cvt60exp = models.IntegerField('Кинематика при 60 - срок годности', blank=True, null=True)
+    cvt60dead = models.DateField('60 годен до', blank=True, null=True)
     cvt80 = models.CharField('Кинематика при 80 - АЗ', max_length=30, blank=True, null=True)
     cvt80date = models.DateField('Кинематика при 80 - дата измерения', blank=True, null=True)
     cvt80exp = models.IntegerField('Кинематика при 80 - срок годности', blank=True, null=True)
+    cvt80dead = models.DateField('80 годен до', blank=True, null=True)
     cvt100 = models.CharField('Кинематика при 100 - АЗ', max_length=30, blank=True, null=True)
     cvt100date = models.DateField('Кинематика при 100 - дата измерения', blank=True, null=True)
     cvt100exp = models.IntegerField('Кинематика при 100 - срок годности', blank=True, null=True)
+    cvt100dead = models.DateField('100 годен до', blank=True, null=True)
     cvt150 = models.CharField('Кинематика при 150 - АЗ', max_length=30, blank=True, null=True)
     cvt150date = models.DateField('Кинематика при 150 - дата измерения', blank=True, null=True)
     cvt150exp = models.IntegerField('Кинематика при 150 - срок годности', blank=True, null=True)
+    cvt150dead = models.DateField('150 годен до', blank=True, null=True)
     cvtminus20 = models.CharField('Кинематика при -20 - АЗ', max_length=30, blank=True, null=True)
     cvtminus20date = models.DateField('Кинематика при -20 - дата измерения', blank=True, null=True)
     cvtminus20exp = models.IntegerField('Кинематика при -20 - срок годности', blank=True, null=True)
+    cvtminus20dead = models.DateField('-20 годен до', blank=True, null=True)
 
     def __str__(self):
         return f'кинематика АЗ для {self.namelot}'
