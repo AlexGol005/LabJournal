@@ -111,7 +111,7 @@ class StrJournalCreationForm(forms.ModelForm):
             ),
             Row(
                 Column('constit', css_class='form-group col-md-6 mb-0'),
-                Column('oldCertifiedValue', css_class='form-group col-md-6 mb-0'),
+                # Column('oldCertifiedValue', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -144,14 +144,14 @@ class StrJournalCreationForm(forms.ModelForm):
     class Meta:
         model = MODEL
         fields = ['name', 'lot', 'temperature', 'termostatition', 'temperatureCheck',
-                  'constit', 'oldCertifiedValue',
+                  'constit',
                   'ViscosimeterNumber1',
                   'plustimeminK1T1', 'plustimesekK1T1',
                   'plustimeminK1T2', 'plustimesekK1T2',
                   'ViscosimeterNumber2',
                   'plustimeminK2T1', 'plustimesekK2T1',
                   'plustimeminK2T2', 'plustimesekK2T2', 'ndocument',
-                  # 'Konstant1', 'Konstant2',
+                  # 'Konstant1', 'Konstant2', 'oldCertifiedValue',
                   ]
 
 

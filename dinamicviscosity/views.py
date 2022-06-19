@@ -40,8 +40,6 @@ class StrJournalView(View):
     def get(self, request, pk):
         note = get_object_or_404(MODEL, pk=pk)
         form = StrJournalUdateForm()
-        formkinematica = StrKinematicaForm()
-        # initial = {'kinematicviscosity': 'нет'}
         try:
             counter = COMMENTMODEL.objects.filter(forNote=note.id)
         except ObjectDoesNotExist:

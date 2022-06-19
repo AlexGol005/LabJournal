@@ -9,7 +9,7 @@ from django.views import View
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-
+from jouViscosity.models import CvKinematicviscosityVG
 from main.models import AttestationJ
 from viscosimeters.models import Kalibration
 from .models import ViscosityMJL, CommentsKinematicviscosity
@@ -63,7 +63,7 @@ class StrJournalView(View):
 @login_required
 def RegNoteJournalView(request):
     """ Представление, которое выводит форму регистрации в журнале. """
-    """Стандартное, но со вставкой по поводу констант"""
+    """Стандартное, но со вставкой по поводу констант и предыдущего значения"""
     if request.method == "POST":
         form = StrJournalCreationForm(request.POST)
         if form.is_valid():
@@ -84,6 +84,36 @@ def RegNoteJournalView(request):
             aktualKalibration2 = Kalibration.objects.get(id=set)
             order.Konstant1 = aktualKalibration1.konstant
             order.Konstant2 = aktualKalibration2.konstant
+            try:
+                oldvalue = CvKinematicviscosityVG.objects.get(namelot__nameVG__name=order.name, namelot__lot=order.lot)
+                if order.temperature == 20:
+                    order.oldCertifiedValue = oldvalue.cvt20
+
+                if order.temperature == 25:
+                    order.oldCertifiedValue = oldvalue.cvt25
+
+                if order.temperature == 40:
+                    order.oldCertifiedValue = oldvalue.cvt40
+
+                if order.temperature == 50:
+                    order.oldCertifiedValue = oldvalue.cvt50
+
+                if order.temperature == 60:
+                    order.oldCertifiedValue = oldvalue.cvt60
+
+                if order.temperature == 80:
+                    order.oldCertifiedValue = oldvalue.cvt80
+
+                if order.temperature == 100:
+                    order.oldCertifiedValue = oldvalue.cvt100
+
+                if order.temperature == 150:
+                    order.oldCertifiedValue = oldvalue.cvt150
+
+                if order.temperature == -20:
+                    order.oldCertifiedValue = oldvalue.cvtminus20
+            except ObjectDoesNotExist:
+                pass
             """вставка окончание"""
             order.save()
             messages.success(request, f'Запись внесена, подтвердите АЗ!')
