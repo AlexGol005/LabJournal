@@ -36,8 +36,6 @@
 			<td>50&nbsp&nbsp°C</td>
 			<td>80&nbsp&nbsp°C</td>
 			<td>100&nbsp&nbsp°C</td>
-			<td>150&nbsp&nbsp°C</td>
-			<td>-20&nbsp&nbsp°C</td>
          </tr>
     </thead>
     <tbody>
@@ -359,4 +357,55 @@ red{% endif %}">
 {#конец  таблицы#}
 {#</div>#}
 
+{#Таблица кинематика вж-1 и вж-3 с заголовком#}
+<br>
+<div style="text-align: center;"><h5><a href="{% url 'kinematicviscosityall' %}">Кинематическая вязкость ВЖ-1-ПА и ВЖ-3-ПА (мм2/с)</a> </h5></div>
+<br>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspВЖ&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+			<td>п.</td>
+			<td>-20&nbsp&nbsp°C</td>
+			<td>150&nbsp&nbsp°C</td>
+         </tr>
+    </thead>
+    <tbody>
+{% for obj in objects3 %}
+<tr>
+    <td>{{ obj.namelot.nameVG }}</td>
+    <td>{{ obj.namelot.lot }}</td>
+{#поля с АЗ кинематика#}
+    <td class="
+    {% if obj.cvtminus20dead > now and  now_date_plusmonth < obj.cvtminus20dead %}green{% endif %}
+    {% if now_date_plusmonth > obj.cvtminus20dead and obj.cvtminus20dead > now %}orange{% endif %}
+    {% if obj.cvtminus20dead < now %}red{% endif %}">
+        {% if obj.cvtminus20dead > now and  now_date_plusmonth < obj.cvtminus20dead %}
+        <a href="{% url 'detailkinematic' obj.namelot.nameVG.name obj.namelot.lot '-20' %}" style="color: green"><b>
+        {% elif now_date_plusmonth > obj.cvtminus20dead and obj.cvtminus20dead > now %}
+        <a href="{%  url 'detailkinematic' obj.namelot.nameVG.name obj.namelot.lot '-20' %}" style="color: darkorange">
+        {% elif obj.cvtminus20dead < now %}
+        <a href="{%  url 'detailkinematic' obj.namelot.nameVG.name  obj.namelot.lot '-20' %}" style="color: red">
+        {% endif %}
+        {{ obj.cvtminus20|default_if_none:" " }}</a>
+    </td>
+
+    <td class="
+    {% if obj.cvt150dead > now and  now_date_plusmonth < obj.cvt150dead %}green{% endif %}
+    {% if now_date_plusmonth > obj.cvt150dead and obj.cvt150dead > now %}orange{% endif %}
+    {% if obj.cvt150dead < now %}red{% endif %}">
+        {% if obj.cvt150dead > now and  now_date_plusmonth < obj.cvt150dead %}
+        <a href="{% url 'detailkinematic' obj.namelot.nameVG.name obj.namelot.lot '150' %}" style="color: green"><b>
+        {% elif now_date_plusmonth > obj.cvt150dead and obj.cvt150dead > now %}
+        <a href="{%  url 'detailkinematic' obj.namelot.nameVG.name obj.namelot.lot '150' %}" style="color: darkorange">
+        {% elif obj.cvt150dead < now %}
+        <a href="{%  url 'detailkinematic' obj.namelot.nameVG.name  obj.namelot.lot '150' %}" style="color: red">
+        {% endif %}
+        {{ obj.cvt150|default_if_none:" " }}</a>
+    </td>
+{% endfor %}
+</tbody>
+</table>
+
+{#конец  таблицы#}
 {% endblock %}

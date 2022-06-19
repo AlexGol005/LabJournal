@@ -25,12 +25,14 @@ class AllKinematicviscosityView(ListView):
     template_name = 'jouViscosity/kinematicviscosityvalues.html'
     context_object_name = 'objects'
     def get_queryset(self):
-        queryset = MODEL.objects.all().order_by('namelot__nameVG__rangeindex', 'namelot__lot')
+        queryset = MODEL.objects.filter(namelot__nameVG__nameSM__name='ВЖ-2-ПА').order_by('namelot__nameVG__rangeindex', 'namelot__lot')
         return queryset
     def get_context_data(self, **kwargs):
         context = super(AllKinematicviscosityView, self).get_context_data(**kwargs)
         objects2 = MODEL2.objects.all().order_by('namelot__nameVG__rangeindex', 'namelot__lot')
+        objects3 = MODEL.objects.exclude(namelot__nameVG__nameSM__name='ВЖ-2-ПА').order_by('namelot__nameVG__nameSM__name', 'namelot__nameVG__rangeindex', 'namelot__lot')
         context['objects2'] = objects2
+        context['objects3'] = objects3
         context['NAME'] = NAME
         context['TABLENAME'] = TABLENAME
         context['TABLENAME2'] = TABLENAME2
@@ -51,19 +53,28 @@ class SearchKinematicResultView(TemplateView):
         lot = self.request.GET['lot']
         context = super(SearchKinematicResultView, self).get_context_data(**kwargs)
         if name and lot:
-            objects = MODEL.objects.filter(namelot__nameVG__name=name, namelot__lot=lot).order_by(
+            objects = MODEL.objects.filter(namelot__nameVG__nameSM__name='ВЖ-2-ПА').filter(namelot__nameVG__name=name, namelot__lot=lot).order_by(
                 'namelot__nameVG__rangeindex', 'namelot__lot')
             objects2 = MODEL2.objects.filter(namelot__nameVG__name=name, namelot__lot=lot).order_by(
                 'namelot__nameVG__rangeindex', 'namelot__lot')
+            objects3 = MODEL.objects.exclude(namelot__nameVG__nameSM__name='ВЖ-2-ПА').\
+                filter(namelot__nameVG__name=name, namelot__lot=lot).order_by(
+                'namelot__nameVG__rangeindex', 'namelot__lot')
             context['objects'] = objects
             context['objects2'] = objects2
+            context['objects3'] = objects3
         if name and not lot:
-            objects = MODEL.objects.filter(namelot__nameVG__name=name).order_by('namelot__nameVG__rangeindex',
+            objects = MODEL.objects.filter(namelot__nameVG__nameSM__name='ВЖ-2-ПА').\
+                filter(namelot__nameVG__name=name).order_by('namelot__nameVG__rangeindex',
                                                                                 'namelot__lot')
             objects2 = MODEL2.objects.filter(namelot__nameVG__name=name).order_by('namelot__nameVG__rangeindex',
                                                                                 'namelot__lot')
+            objects3 = MODEL.objects.exclude(namelot__nameVG__nameSM__name='ВЖ-2-ПА').\
+                filter(namelot__nameVG__name=name).order_by('namelot__nameVG__rangeindex', 'namelot__lot')
+
             context['objects'] = objects
             context['objects2'] = objects2
+            context['objects3'] = objects3
         context['NAME'] = NAME
         context['TABLENAME'] = TABLENAME
         context['TABLENAME2'] = TABLENAME2
