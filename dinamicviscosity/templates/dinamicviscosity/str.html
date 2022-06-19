@@ -39,7 +39,7 @@
 			<th colspan="4"><div style="text-align: center;">Сод.&nbspнефть или октол</div></th>
 		</tr>
 		<tr>
-			<td colspan="3"><div style="text-align: center;">{{ note.date }}</div></td>
+			<td colspan="3"><div style="text-align: center;">{{ note.date|date:"d.m.Y" }}</div></td>
 			<td colspan="1"><div style="text-align: center;">{{ note.name}}</div></td>
 			<td colspan="1"><div style="text-align: center;">{{ note.lot}}</div></td>
 			<td colspan="2"><div style="text-align: center;">{{ note.temperature|striptags}}</div></td>
@@ -128,14 +128,8 @@
 		</tr>
 		<tr>
 			<td colspan="4">
-                 {% if note.kinematicviscosity %}
+                 {% if note.kinematicviscosity|striptags %}
                   {{ note.kinematicviscosity|default_if_none:" "|striptags }}
-{#                {% elif not note.kinematicviscosity %}#}
-{#                    <form method="post">#}
-{#                {% csrf_token %}#}
-{#                {{ formkinematica.as_p }}#}
-{#                <button class="btn btn-outline-warning" type="submit" name="btnform1">Посчитать динамику</button>#}
-{#                </form>#}
                 {% endif %}
             </td>
 			<td colspan="5"><div style="text-align: center;">{{ note.dinamicviscosity_not_rouned|default_if_none:" "|striptags }}</div></td>
@@ -163,7 +157,8 @@
         <td colspan="9">
 
                 <div class="TransactionAmount Badresult">
-                  <b>{{ note.resultWarning }}</b>
+                  <b>{{ note.resultWarning|default_if_none:" " }}</b>
+                    <b>{{ note.resultWarningkinematic|default_if_none:" " }}</b>
                 </div>
             </td>
 		</tr>
@@ -182,14 +177,16 @@
 			<th colspan="3">{{ note.performer }} </th>
             <td colspan="1"><div style="text-align: center;"></div></td>
             <td colspan="1">
-                {% if note.resultMeas == 'удовлетворительно' and not note.fixation %}
+                {% if note.resultMeas == 'удовлетворительно'  and not note.fixation %}
                 <form method="post" >
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button class="btn btn-outline-warning" type="submit" name="btnform2">Подтвердить</button>
                 </form>
-                {% elif note.resultMeas == 'удовлетворительно' and  note.fixation %}
-                   <a href="/jouViscosity/dinamicviscosityvalues/" target="blank"> плотность записана в ЖАЗ сайта </a>
+                {% elif note.resultMeas == 'удовлетворительно'  and  note.fixation %}
+                   <a href="/jouViscosity/dinamicviscosityvalues/" target="blank"> АЗ записано в ЖАЗ сайта </a>
+                {% elif note.resultMeas == 'удовлетворительно'  and  note.fixation %}
+                   <a href="/jouViscosity/dinamicviscosityvalues/" target="blank"> АЗ записано в ЖАЗ сайта </a>
                 {% else %}
                 нет АЗ
                 {% endif %}

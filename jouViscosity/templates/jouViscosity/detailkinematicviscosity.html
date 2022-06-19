@@ -6,26 +6,28 @@
 
 
 {% block content %}
-    <div style="text-align: center;"><h4>История измерений</h4></div>
+    <div style="text-align: center;"><h5><a href="{% url 'kinematicviscosityvalues' %}">История измерений {{ name.name }}, п. {{ name.lot }}, {{ name.temperature }} °C</a></h5></div>
 <br>
 
 <table class="table table-bordered">
 <thead>
     <tr>
-        <th>Дата измерения</th>
-        <th>АЗ</th>
-        <th>Разница с предыдущим, %</th>
-        <th>Смотреть запись</th>
+        <th>Дата<br> измерения <br> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>
+        <th>Годен<br> до <br> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>
+        <th>АЗ, &nbspмм<sup>2</sup>/с <br> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>
+        <th>Разница <br> с предыдущим <br> АЗ, %</th>
+        <th>Смотреть <br> в журнале <br> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>
     </tr>
 </thead>
 
 <tbody>
 {% for obj in objects %}
 <tr>
-    <td>{{ obj.date }}</td>
+    <td>{{ obj.date|date:"d-m-Y" }}</td>
+    <td>{{ obj.date_exp|date:"d-m-Y" }}</td>
     <td> {{ obj.certifiedValue_text }}</td>
-    <td> {{ obj.deltaOldCertifiedValue }}</td>
-    <td><a href="{{obj.for_url}}"  class="btn btn-outline-warning mt-3">смотреть в журнале</a></td>
+    <td> {{ obj.deltaOldCertifiedValue|default_if_none:" " }}</td>
+    <td><a href="/attestationJ/kinematicviscosity/attestation/{{ obj.id }}/"  class="btn btn-outline-warning mt-3">смотреть</a></td>
 </tr>
 {% endfor %}
 </tbody>

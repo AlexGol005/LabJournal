@@ -3,13 +3,13 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, TemplateView
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from django.shortcuts import get_object_or_404
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from jouViscosity.models import CvKinematicviscosityVG
+from jouViscosity.models import CvKinematicviscosityVG, CvDensityDinamicVG
 from kinematicviscosity.models import ViscosityMJL
 from main.models import AttestationJ
 from .models import Dinamicviscosity, CommentsDinamicviscosity
@@ -52,14 +52,8 @@ class StrJournalView(View):
                        })
 
     def post(self, request, pk, *args, **kwargs):
-        formkinematica = StrKinematicaForm(request.POST, instance=MODEL.objects.get(id=pk))
         form = StrJournalUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
         if MODEL.objects.get(id=pk).performer == request.user:
-            # if formkinematica.is_valid():
-            #     order = formkinematica.save(commit=False)
-            #     order.save()
-            #     messages.success(request, f'Динамика рассчитана')
-            #     return redirect(order)
             if form.is_valid():
                 order = form.save(commit=False)
                 order.save()
@@ -81,20 +75,80 @@ def RegNoteJournalView(request):
         if form.is_valid():
             order = form.save(commit=False)
             order.performer = request.user
-            # """вставка начало"""
-            # try:
-            #     get_id = ViscosityMJL.objects.\
-            #         filter(name__exact=order.name).filter(lot__exact=order.lot).filter(temperature=order.temperature).filter(fixation=True). \
-            #         values('id').annotate(id_actual=Max('id')).values('id')
-            #     CvKinematicviscosityVG.objects.filter(namelot__nameVG__name=order.name).filter(namelot__lot=order.lot).\
-            #         filter(temperature=order.temperature)
-            #     list_ = list(get_id)
-            #     set = list_[0].get('id')
-            #     actualkinematicviscosity = ViscosityMJL.objects.get(id=set)
-            #     order.kinematicviscosity = actualkinematicviscosity.certifiedValue
-            #     """вставка окончание"""
-            # except IndexError:
-            #     pass
+            """вставка начало"""
+            try:
+                olddencity = CvDensityDinamicVG.objects.get(namelot__nameVG__name=order.name, namelot__lot=order.lot)
+                if order.temperature == 20:
+                    order.olddensity = olddencity.cvt20
+
+                if order.temperature == 25:
+                    order.olddensity = olddencity.cvt25
+
+                if order.temperature == 40:
+                    order.olddensity = olddencity.cvt40
+
+                if order.temperature == 50:
+                    order.olddensity = olddencity.cvt50
+
+                if order.temperature == 60:
+                    order.olddensity = olddencity.cvt60
+
+                if order.temperature == 80:
+                    order.olddensity = olddencity.cvt80
+
+                if order.temperature == 100:
+                    order.olddensity = olddencity.cvt100
+
+                if order.temperature == 150:
+                    order.olddensity = olddencity.cvt150
+
+                if order.temperature == -20:
+                    order.olddensity = olddencity.cvtminus20
+            except ObjectDoesNotExist:
+                pass
+
+            try:
+                kinematicviscosity = CvKinematicviscosityVG.objects.get(namelot__nameVG__name=order.name,
+                                                                        namelot__lot=order.lot)
+                if order.temperature == 20:
+                    if kinematicviscosity.cvt20dead >= date.today():
+                        order.kinematicviscosity = kinematicviscosity.cvt20
+                        order.kinematicviscositydead = kinematicviscosity.cvt20dead
+                if order.temperature == 25:
+                    if kinematicviscosity.cvt25dead >= date.today():
+                        order.kinematicviscosity = kinematicviscosity.cvt25
+                        order.kinematicviscositydead = kinematicviscosity.cvt25dead
+                if order.temperature == 40:
+                    if kinematicviscosity.cvt40dead >= date.today():
+                        order.kinematicviscosity = kinematicviscosity.cvt40
+                        order.kinematicviscositydead = kinematicviscosity.cvt40dead
+                if order.temperature == 50:
+                    if kinematicviscosity.cvt50dead >= date.today():
+                        order.kinematicviscosity = kinematicviscosity.cvt50
+                        order.kinematicviscositydead = kinematicviscosity.cvt50dead
+                if order.temperature == 60:
+                    if kinematicviscosity.cvt60dead >= date.today():
+                        order.kinematicviscosity = kinematicviscosity.cvt60
+                        order.kinematicviscositydead = kinematicviscosity.cvt60dead
+                if order.temperature == 80:
+                    if kinematicviscosity.cvt80dead >= date.today():
+                        order.kinematicviscosity = kinematicviscosity.cvt80
+                        order.kinematicviscositydead = kinematicviscosity.cvt80dead
+                if order.temperature == 100:
+                    if kinematicviscosity.cvt20dead >= date.today():
+                        order.kinematicviscosity = kinematicviscosity.cvt100
+                        order.kinematicviscositydead = kinematicviscosity.cvt100dead
+                if order.temperature == 150:
+                    if kinematicviscosity.cvt150dead >= date.today():
+                        order.kinematicviscosity = kinematicviscosity.cvt150
+                        order.kinematicviscositydead = kinematicviscosity.cvt150dead
+                if order.temperature == -20:
+                    if kinematicviscosity.cvtminus20dead >= date.today():
+                        order.kinematicviscosity = kinematicviscosity.cvtminus20
+                        order.kinematicviscositydead = kinematicviscosity.cvtminus20dead
+            except ObjectDoesNotExist:
+                pass
+            """вставка окончание"""
 
             order.save()
             return redirect(order)

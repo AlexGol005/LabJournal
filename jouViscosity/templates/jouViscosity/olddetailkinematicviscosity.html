@@ -1,0 +1,54 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}
+История измерений
+{% endblock %}
+
+
+{% block content %}
+
+
+<div style="text-align: center;"><h5><a href="{% url 'kinematicviscosityvalues' %}">Все АЗ кинематики для {% for obj in objects %}{{ obj.namelot }}{% endfor %}</a></h5></div>
+<br>
+<br>
+<i>Вы попали на эту страницу, так как АЗ СО при этой температуре
+      было внесено вручную и в электронном журнале аттестации кинематической вязкости для него нет записей.
+    <br>
+Ниже данные для этой партии из журнала аттестованных значений.
+</i>
+
+<br>
+<br>
+{% for obj in objects %}
+
+<b>Кинематика 20 °C:</b>&nbsp&nbsp&nbspАЗ =  <b>{{ obj.cvt20|default_if_none:"нет данных" }} мм<sup>2</sup>/с</b>, измерено: {{ obj.cvt20date|date:"d-m-Y" }}, годен до: {{ obj.cvt20dead|date:"d-m-Y" }}
+    <br>
+    <br>
+<b>Кинематика 25 °C:</b>&nbsp&nbsp&nbspАЗ =  <b>{{ obj.cvt25|default_if_none:"нет данных " }} мм<sup>2</sup>/с</b>, измерено: {{ obj.cvt25date|date:"d-m-Y" }}, годен до: {{ obj.cvt25dead|date:"d-m-Y" }}
+    <br>
+    <br>
+<b>Кинематика 40 °C:</b>&nbsp&nbsp&nbspАЗ =  <b>{{ obj.cvt40|default_if_none:"нет данных " }} мм<sup>2</sup>/с</b>, измерено: {{ obj.cvt40date|date:"d-m-Y" }}, годен до: {{ obj.cvt40dead|date:"d-m-Y" }}
+    <br>
+    <br>
+<b>Кинематика 50 °C:</b>&nbsp&nbsp&nbspАЗ =  <b>{{ obj.cvt50|default_if_none:" нет данных" }} мм<sup>2</sup>/с</b>, измерено: {{ obj.cvt50date|date:"d-m-Y" }}, годен до: {{ obj.cvt50dead|date:"d-m-Y" }}
+    <br>
+    <br>
+<b>Кинематика 60 °C:</b>&nbsp&nbsp&nbspАЗ =  <b>{{ obj.cvt60|default_if_none:"нет данных " }} мм<sup>2</sup>/с</b>, измерено: {{ obj.cvt60date|date:"d-m-Y" }}, годен до: {{ obj.cvt60dead|date:"d-m-Y" }}
+    <br>
+    <br>
+<b>Кинематика 80 °C:</b>&nbsp&nbsp&nbspАЗ =  <b>{{ obj.cvt80|default_if_none:"нет данных " }} мм<sup>2</sup>/с</b>, измерено: {{ obj.cvt80date|date:"d-m-Y" }}, годен до: {{ obj.cvt80dead|date:"d-m-Y" }}
+    <br>
+    <br>
+<b>Кинематика 100 °C:</b>&nbsp&nbsp&nbspАЗ =  <b>{{ obj.cvt100|default_if_none:"нет данных" }} мм<sup>2</sup>/с</b>, измерено: {{ obj.cvt100date|date:"d-m-Y" }}, годен до: {{ obj.cvt100dead|date:"d-m-Y" }}
+    <br>
+    <br>
+<b>Кинематика 150 °C:</b>&nbsp&nbsp&nbspАЗ =  <b>{{ obj.cvt150|default_if_none:"нет данных " }} мм<sup>2</sup>/с</b>, измерено: {{ obj.cvt150date|date:"d-m-Y" }}, годен до: {{ obj.cvt150dead|date:"d-m-Y" }}
+    <br>
+    <br>
+<b>Кинематика -20 °C:</b>&nbsp&nbsp&nbspАЗ =  <b>{{ obj.cvtminus20|default_if_none:"нет данных " }} мм<sup>2</sup>/с</b>, измерено: {{ obj.cvtminus20date|date:"d-m-Y" }}, годен до: {{ obj.cvtminus20dead|date:"d-m-Y" }}
+<br>
+{% endfor %}
+
+
+
+{% endblock %}

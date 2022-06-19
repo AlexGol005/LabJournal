@@ -1,0 +1,84 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}
+История измерений
+{% endblock %}
+
+
+{% block content %}
+
+
+<div style="text-align: center;"><h5><a href="{% url 'dinamicviscosityvalues' %}">Все АЗ динамики и плотности для {% for obj in objects %}{{ obj.namelot }}{% endfor %}</a></h5></div>
+<br>
+<br>
+<i>Вы попали на эту страницу, так как АЗ СО при этой температуре
+      было внесено вручную и в электронном журнале аттестации кинематической вязкости для него нет записей.
+    <br>
+Ниже данные для этой партии из журнала аттестованных значений.
+</i>
+
+<br>
+<br>
+{% for obj in objects %}
+
+<b>Дин. 20 °C:</b>&nbsp&nbsp&nbspДинамика =  <b>{{ obj.cvtdinamic20|default_if_none:"нет данных" }} мм<sup>2</sup>/с</b>
+    <br>
+<b>Плотность 20 °C:</b> &nbsp&nbsp&nbsp{{ obj.cvt20|default_if_none:"нет данных" }} г/мл,
+    измерено: {{ obj.cvt20date|date:"d-m-Y" }}, годен до: {{ obj.cvt20dead|date:"d-m-Y" }}
+    <br>
+    <br>
+<b>Дин. 25 °C:</b>&nbsp&nbsp&nbspАЗ =  <b>{{ obj.cvtdinamic25|default_if_none:"нет данных " }} мм<sup>2</sup>/с</b>
+    <br>
+    <b>Плотность 25 °C:</b> &nbsp&nbsp&nbsp{{ obj.cvt25|default_if_none:"нет данных" }} г/мл,
+    измерено: {{ obj.cvt25date|date:"d-m-Y" }}, годен до: {{ obj.cvt25dead|date:"d-m-Y" }}
+    <br>
+    <br>
+<b>Дин. 40 °C:</b>&nbsp&nbsp&nbspАЗ =  <b>{{ obj.cvtdinamic40|default_if_none:"нет данных " }} мм<sup>2</sup>/с</b>
+
+    <br>
+    <b>Плотность 40 °C:</b> &nbsp&nbsp&nbsp{{ obj.cvt40|default_if_none:"нет данных" }} г/мл,
+    измерено: {{ obj.cvt40date|date:"d-m-Y" }}, годен до: {{ obj.cvt40dead|date:"d-m-Y" }}
+    <br>
+    <br>
+<b>Дин. 50 °C:</b>&nbsp&nbsp&nbspАЗ =  <b>{{ obj.cvtdinamic50|default_if_none:" нет данных" }} мм<sup>2</sup>/с</b>
+    <br>
+    <b>Плотность 50 °C:</b> &nbsp&nbsp&nbsp{{ obj.cvt50|default_if_none:"нет данных" }} г/мл,
+    измерено: {{ obj.cvt50date|date:"d-m-Y" }}, годен до: {{ obj.cvt50dead|date:"d-m-Y" }}
+    <br>
+    <br>
+<b>Дин. 60 °C:</b>&nbsp&nbsp&nbspАЗ =  <b>{{ obj.cvtdinamic60|default_if_none:"нет данных " }} мм<sup>2</sup>/с</b>,
+    <br>
+    <b>Плотность 60 °C:</b> &nbsp&nbsp&nbsp{{ obj.cvt60|default_if_none:"нет данных" }} г/мл,
+    измерено: {{ obj.cvt60date|date:"d-m-Y" }}, годен до: {{ obj.cvt60dead|date:"d-m-Y" }}
+    <br>
+    <br>
+<b>Дин. 80 °C:</b>&nbsp&nbsp&nbspАЗ =  <b>{{ obj.cvtdinamic80|default_if_none:"нет данных " }} мм<sup>2</sup>/с</b>
+
+    <br>
+    <b>Плотность 80 °C:</b> &nbsp&nbsp&nbsp{{ obj.cvt80|default_if_none:"нет данных" }} г/мл,
+    измерено: {{ obj.cvt80date|date:"d-m-Y" }}, годен до: {{ obj.cvt80dead|date:"d-m-Y" }}
+    <br>
+    <br>
+<b>Дин. 100 °C:</b>&nbsp&nbsp&nbspАЗ =  <b>{{ obj.cvtdinamic100|default_if_none:"нет данных" }} мм<sup>2</sup>/с</b>
+
+    <br>
+    <b>Плотность 100 °C:</b> &nbsp&nbsp&nbsp{{ obj.cvt100|default_if_none:"нет данных" }} г/мл,
+    измерено: {{ obj.cvt100date|date:"d-m-Y" }}, годен до: {{ obj.cvt100dead|date:"d-m-Y" }}
+    <br>
+    <br>
+<b>Дин. 150 °C:</b>&nbsp&nbsp&nbspАЗ =  <b>{{ obj.cvtdinamic150|default_if_none:"нет данных " }} мм<sup>2</sup>/с</b>
+
+    <br>
+    <b>Плотность 150 °C:</b> &nbsp&nbsp&nbsp{{ obj.cvt150|default_if_none:"нет данных" }} г/мл,
+    измерено: {{ obj.cvt150date|date:"d-m-Y" }}, годен до: {{ obj.cvt150dead|date:"d-m-Y" }}
+    <br>
+    <br>
+<b>Дин. -20 °C:</b>&nbsp&nbsp&nbspАЗ =  <b>{{ obj.cvtdinamicminus20|default_if_none:"нет данных " }} мм<sup>2</sup>/с</b>,
+
+    <br>
+    <b>Плотность -20 °C:</b> &nbsp&nbsp&nbsp{{ obj.cvtminus20|default_if_none:"нет данных" }} г/мл,
+    измерено: {{ obj.cvtminus20date|date:"d-m-Y" }}, годен до: {{ obj.cvtminus20dead|date:"d-m-Y" }}
+<br>
+{% endfor %}
+
+{% endblock %}

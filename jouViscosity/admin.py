@@ -15,6 +15,6 @@ class NoteAdmin(admin.ModelAdmin):
 class NoteAdmin(admin.ModelAdmin):
     list_display = ('id', 'namelot')
 
-@admin.register(CvDensityVG)  # связываем админку с моделью
+@admin.register(CvDensityDinamicVG)  # связываем админку с моделью
 class NoteAdmin(admin.ModelAdmin):
     list_display = ('id', 'namelot')

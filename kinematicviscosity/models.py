@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, date
 
 from django.db import models
 from django.db.models import Max
@@ -41,14 +41,15 @@ class ViscosityMJL(models.Model):
                                    null=True)
     for_lot_and_name = models.ForeignKey(LotVG, verbose_name='Измерение для: ГСО и партия', on_delete=models.PROTECT, blank=True, null=True)
     exp = models.IntegerField('Срок годности, месяцев',  blank=True, null=True)
+    date_exp = models.DateField('Годен до', blank=True, null=True)
     # вычисляемые поля для всех моделей
     kriteriy = models.DecimalField('Критерий приемлемости измерений', max_digits=2, decimal_places=1, null=True)
     accMeasurement = models.DecimalField('Оценка приемлемости измерений', max_digits=5, decimal_places=1, null=True)
     resultMeas = models.CharField('Результат измерений уд/неуд', max_length=100, default='неудовлетворительно',
                                   null=True)
     cause = models.CharField('Причина', max_length=100, default='', null=True, blank=True)
-    abserror = models.FloatField('Абсолютная  погрешность', null=True)
-    certifiedValue = models.DecimalField('Аттестованное значение', max_digits=20, decimal_places=10, null=True)
+    abserror = models.CharField('Абсолютная  погрешность',  max_length=100, null=True)
+    certifiedValue = models.DecimalField('Аттестованное значение', max_digits=100, decimal_places=10, null=True)
     certifiedValue_text = models.CharField(max_length=300, default='', null=True)
     # уникальные поля (первичные данные)
     oldCertifiedValue = models.CharField('Предыдущее аттестованное значение',  null=True, blank=True, max_length=300, default='')
@@ -153,7 +154,7 @@ class ViscosityMJL(models.Model):
         if self.resultMeas == 'удовлетворительно':
             self.abserror = mrerrow((Decimal(self.relerror) * self.viscosityAVG) / Decimal(100))
             self.certifiedValue = numberDigits(self.viscosityAVG, self.abserror)
-            self.certifiedValue_text = str(self.certifiedValue)
+            self.certifiedValue_text = self.certifiedValue
         if self.oldCertifiedValue and self.certifiedValue:
             self.oldCertifiedValue = self.oldCertifiedValue.replace(',', '.')
             self.deltaOldCertifiedValue = \
@@ -161,6 +162,9 @@ class ViscosityMJL(models.Model):
             if self.deltaOldCertifiedValue:
                 if self.deltaOldCertifiedValue > Decimal(0.7):
                     self.resultWarning = 'Результат отличается от предыдущего > 0,7 %. Рекомендовано измерить повторно.'
+    # срок годности
+        self.date_exp = date.today() + timedelta(days=30*self.exp)
+
     # связь с конкретной партией
         if self.name[0:2] == 'ВЖ':
             pk_VG = VG.objects.get(name=self.name[0:7])

@@ -19,7 +19,7 @@ def rounder(value: Decimal, m: str) -> Decimal:
 
 def mrerrow(abserror) -> Decimal:
     '''округляет абсолютную погрешность в соответствии с правилами метрологии (правило двойки)'''
-    if abserror > Decimal(str(K)):
+    if abserror > K:
         return Decimal(abserror).quantize(Decimal('1'), ROUND_HALF_UP)
     abserror = str(abserror)
     index = abserror.find(".")
@@ -54,6 +54,9 @@ def  numberDigits(avg: Decimal, abserror: Decimal) -> Decimal:
     avg: среднее из 2 измерений без округления
     return: АЗ СО в формате Decimal
     '''
+    if abserror > K+1:
+        certifiedValue = Decimal(avg).quantize(Decimal(1), ROUND_HALF_UP)
+        return certifiedValue
     abserror = str(abserror)
     index = abserror.find(".")
     if index > 0:

@@ -81,6 +81,7 @@ class StrJournalCreationForm(forms.ModelForm):
                                                                         'placeholder': 'АЗ через точку'}
                                                                  ))
 
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -89,17 +90,18 @@ class StrJournalCreationForm(forms.ModelForm):
                 Column('name', css_class='form-group col-md-4 mb-0'),
                 Column('lot', css_class='form-group col-md-4 mb-0'),
                 Column('temperature', css_class='form-group col-md-4 mb-0'),
+
                 css_class='form-row'
             ),
             Row(
-                Column('kinematicviscosity', css_class='form-group col-md-6 mb-0'),
+                # Column('kinematicviscosity', css_class='form-group col-md-6 mb-0'),
                 Column('ndocument', css_class='form-group col-md-6 mb-0'),
+
                 css_class='form-row'
             ),
 
             Row(
                 Column('constit', css_class='form-group col-md-6 mb-0'),
-                Column('olddensity', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -133,13 +135,13 @@ class StrJournalCreationForm(forms.ModelForm):
         model = MODEL
         fields = ['ndocument',
                   'name', 'lot', 'temperature',
-                  'constit', 'olddensity',
+                  'constit',
                   'density1', 'density2',
                    'performerdensity',
                   'piknometer_volume',
                   'piknometer_mass1', 'piknometer_mass2',
                   'equipment', 'piknometer_plus_SM_mass1', 'piknometer_plus_SM_mass2',
-                  'kinematicviscosity'
+                  # 'olddensity',
                   ]
 
 
