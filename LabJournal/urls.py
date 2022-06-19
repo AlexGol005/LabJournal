@@ -14,7 +14,6 @@ urlpatterns = [
     path('api/', include('api.urls')),
     path('equipment/', include('equipment.urls')),
     path('CertifiedValueJ/', include('jouViscosity.urls')),
-jouViscosity
 ]
 
 if settings.DEBUG:

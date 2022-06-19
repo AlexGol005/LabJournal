@@ -1,11 +1,29 @@
 {% extends 'main/base.html' %}
 {% load static %}
 {% block title %}
-    Журналы приготовления
+Журналы приготовления
 {% endblock %}
 
 
 {% block content %}
-    <div style="text-align: center;"><h3>Журналы приготовления...</h3></div>
-
+    <div style="text-align: center;"><h4>Журналы приготовления</h4></div>
+<br>
+<table class="table table-bordered">
+<thead>
+    <tr>
+      <th> Наименование </th>
+      <th>  Ответственный  </th>
+      <th>  Открыть журнал  </th>
+    </tr>
+  </thead>
+  <tbody>
+{% for obj in objects %}
+    <tr>
+      <td>{{ obj.name }}</td>
+      <td> {{ obj.performer }}</td>
+      <td><a href="{{obj.for_url}}"  class="btn btn-outline-warning mt-3">открыть журнал</a></td>
+    </tr>
+{% endfor %}
+</tbody>
+</table>
 {% endblock %}

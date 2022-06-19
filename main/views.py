@@ -3,7 +3,8 @@ from django.shortcuts import render
 from django.views import View
 from django.http import  HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404
-from .models import AttestationJ
+from .models import AttestationJ, ProductionJ, CertifiedValueJ
+
 
 class TextHelloView(View):
     #просто страница для примера, адрес hello
@@ -20,14 +21,23 @@ class IndexView(View):
 class AttestationJView(View):
     # страница Журналы аттестации
    def get(self, request):
-       AttestationJObjects = AttestationJ.objects.all()
-       return render(request, 'main/attestationJ.html', {'AttestationJObjects': AttestationJObjects})
+       objects = AttestationJ.objects.all()
+       return render(request, 'main/attestationJ.html', {'objects': objects})
 
 
 class ProductionJView(View):
     # страница Журналы приготовления
+
    def get(self, request):
-       return render(request, 'main/productionJ.html')
+       objects = ProductionJ.objects.all()
+       return render(request, 'main/productionJ.html', {'objects': objects})
+
+
+class CertifiedValueJView(View):
+    # страница Журналы аттестованных значений
+    def get(self, request):
+        objects = CertifiedValueJ.objects.all()
+        return render(request, 'main/certifiedvalueJ.html', {'objects': objects})
 
 class EquipmentView(View):
     # страница оборудование

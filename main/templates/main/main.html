@@ -6,18 +6,22 @@
 
 
 {% block content %}
-    <div style="text-align: center;"><h3>Лабораторные журналы</h3></div>
-    <br><br>
+<div style="text-align: center;"><h3>Производство</h3></div>
+<br><br>
 
-        <div style="text-align: center;">
-               <a href="{% url 'prod' %}" class="btn btn-warning mr-5 mt-3" >Журналы приготовления</a>
-               <a href="{% url 'att' %}" class="btn btn-warning  mt-3">Журналы аттестации</a>
+<div style="text-align: center;">
+<a href="{% url 'prod' %}" class="btn btn-warning mr-5 mt-3">Журналы приготовления</a>
+<a href="{% url 'att' %}" class="btn btn-warning  mt-3">Журналы аттестации</a>
+</div>
+<div style="text-align: center;">
+<a href="{% url 'cv' %}" class="btn btn-warning  mr-5 mt-3">Журналы аттестованных значений</a>
+<a href="{% url 'eq' %}" class="btn btn-warning  mt-3">Оборудование</a>
+</div>
 
-       </div>
-    <br><br>
-    <div style="text-align: center;">
-        <img src="{% static 'main/img/2.jpg' %}"
-             alt="Изображение на главной странице"></div>
+
+<br><br>
+<div style="text-align: center;">
+<img src="{% static 'main/img/2.jpg' %}"
+alt="Изображение на главной странице"></div>
 
 {% endblock %}
-</html>
