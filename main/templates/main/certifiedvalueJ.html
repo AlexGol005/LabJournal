@@ -12,7 +12,7 @@
 <thead>
     <tr>
       <th>  Наименование </th>
-      <th>  Ответственный  </th>
+      <th>  СО  </th>
       <th> <div style="text-align: center;"> Открыть журнал  </div></th>
     </tr>
   </thead>
@@ -20,7 +20,7 @@
 {% for obj in objects %}
     <tr>
       <td>{{ obj.name }}</td>
-      <td> {{ obj.performer }}</td>
+      <td> {{ obj.CM }}</td>
       <td><a href="{{obj.for_url}}"  class="btn btn-outline-warning mt-3">открыть журнал</a></td>
     </tr>
 {% endfor %}
