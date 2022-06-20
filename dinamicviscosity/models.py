@@ -161,9 +161,9 @@ class Dinamicviscosity(models.Model):
             if self.temperature == 20:
                 note.cvt20 = self.density_avg
                 note.cvtdinamic20 = self.certifiedValue
-                note.cvt20date = self.date
-                note.cvt20exp = self.exp
                 if not self.havedensity:
+                    note.cvt20date = self.date
+                    note.cvt20exp = self.exp
                     note.cvt20dead = self.date + timedelta(days=30 * self.exp)
                 if self.havedensity:
                     note.cvt20dead = self.densitydead
@@ -172,9 +172,9 @@ class Dinamicviscosity(models.Model):
             if self.temperature == 25:
                 note.cvt25 = self.density_avg
                 note.cvtdinamic25 = self.certifiedValue
-                note.cvt25date = self.date
-                note.cvt25exp = self.exp
                 if not self.havedensity:
+                    note.cvt25date = self.date
+                    note.cvt25exp = self.exp
                     note.cvt25dead = self.date + timedelta(days=30 * self.exp)
                 if self.havedensity:
                     note.cvt250dead = self.densitydead
@@ -183,9 +183,9 @@ class Dinamicviscosity(models.Model):
             if self.temperature == 40:
                 note.cvt40 = self.density_avg
                 note.cvtdinamic40 = self.certifiedValue
-                note.cvt40date = self.date
-                note.cvt40exp = self.exp
                 if not self.havedensity:
+                    note.cvt40date = self.date
+                    note.cvt40exp = self.exp
                     note.cvt40dead = self.date + timedelta(days=30 * self.exp)
                 if self.havedensity:
                     note.cvt40dead = self.densitydead
@@ -194,9 +194,9 @@ class Dinamicviscosity(models.Model):
             if self.temperature == 50:
                 note.cvt50 = self.density_avg
                 note.cvtdinamic50 = self.certifiedValue
-                note.cvt50date = self.date
-                note.cvt50exp = self.exp
                 if not self.havedensity:
+                    note.cvt50date = self.date
+                    note.cvt50exp = self.exp
                     note.cvt50dead = self.date + timedelta(days=30 * self.exp)
                 if self.havedensity:
                     note.cvt50dead = self.densitydead
@@ -205,9 +205,9 @@ class Dinamicviscosity(models.Model):
             if self.temperature == 60:
                 note.cvt60 = self.density_avg
                 note.cvtdinamic60 = self.certifiedValue
-                note.cvt60date = self.date
-                note.cvt60exp = self.exp
                 if not self.havedensity:
+                    note.cvt60date = self.date
+                    note.cvt60exp = self.exp
                     note.cvt60dead = self.date + timedelta(days=30 * self.exp)
                 if self.havedensity:
                     note.cvt60dead = self.densitydead
@@ -216,9 +216,9 @@ class Dinamicviscosity(models.Model):
             if self.temperature == 80:
                 note.cvt80 = self.density_avg
                 note.cvtdinamic80 = self.certifiedValue
-                note.cvt80date = self.date
-                note.cvt80exp = self.exp
                 if not self.havedensity:
+                    note.cvt80date = self.date
+                    note.cvt80exp = self.exp
                     note.cvt80dead = self.date + timedelta(days=30 * self.exp)
                 if self.havedensity:
                     note.cvt80dead = self.densitydead
@@ -227,9 +227,9 @@ class Dinamicviscosity(models.Model):
             if self.temperature == 100:
                 note.cvt100 = self.density_avg
                 note.cvtdinamic100 = self.certifiedValue
-                note.cvt100date = self.date
-                note.cvt100exp = self.exp
                 if not self.havedensity:
+                    note.cvt100date = self.date
+                    note.cvt100exp = self.exp
                     note.cvt100dead = self.date + timedelta(days=30 * self.exp)
                 if self.havedensity:
                     note.cvt100dead = self.densitydead
@@ -238,9 +238,9 @@ class Dinamicviscosity(models.Model):
             if self.temperature == 150:
                 note.cvt150 = self.density_avg
                 note.cvtdinamic150 = self.certifiedValue
-                note.cvt150date = self.date
-                note.cvt150exp = self.exp
                 if not self.havedensity:
+                    note.cvt150date = self.date
+                    note.cvt150exp = self.exp
                     note.cvt150dead = self.date + timedelta(days=30 * self.exp)
                 if self.havedensity:
                     note.cvt150dead = self.densitydead
@@ -249,9 +249,9 @@ class Dinamicviscosity(models.Model):
             if self.temperature == -20:
                 note.cvtminus20 = self.density_avg
                 note.cvtdinamicminus20 = self.certifiedValue
-                note.cvtminus20date = self.date
-                note.cvtminus20exp = self.exp
                 if not self.havedensity:
+                    note.cvtminus20date = self.date
+                    note.cvtminus20exp = self.exp
                     note.cvtminus20dead = self.date + timedelta(days=30 * self.exp)
                 if self.havedensity:
                     note.cvtminus20dead = self.densitydead
