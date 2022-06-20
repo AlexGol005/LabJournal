@@ -60,7 +60,7 @@ class Dinamicviscosity(models.Model):
     delta = models.CharField('Не превышает Δ', max_length=100, null=True, blank=True)
     kriteriy = models.DecimalField('Критерий приемлемости измерений', max_digits=2, decimal_places=1, null=True,
                                    blank=True)
-    kinematicviscosity = models.FloatField('Кинематическая вязкость при температуре измерений сСт', null=True,
+    kinematicviscosity = models.CharField('Кинематическая вязкость при температуре измерений сСт', null=True,
                                            blank=True)
     dinamicviscosity_not_rouned = models.DecimalField('Динамическая вязкость неокругленная', max_digits=20,
                                                       decimal_places=6, null=True, blank=True)
@@ -119,14 +119,14 @@ class Dinamicviscosity(models.Model):
                     self.kriteriy = Decimal(0.3)
         # сравниваем с критерием сходимости:
                 self.accMeasurement = get_acc_measurement(self.density1, self.density2)
-                if self.accMeasurement < self.kriteriy:
+                if (self.accMeasurement < self.kriteriy) or self.havedensity:
                     self.resultMeas = 'удовлетворительно'
                     self.cause = ''
                 if self.accMeasurement > self.kriteriy:
                     self.resultMeas = 'неудовлетворительно'
                     self.cause = 'Δ > r'
         # если результаты сходимы, то вычисляем АЗ плотности:
-        if self.resultMeas == 'удовлетворительно' or  self.havedensity:
+        if self.resultMeas == 'удовлетворительно' or self.havedensity:
             # если есть кинематика, то вычисляем динамику:
             if self.kinematicviscosity:
                 self.dinamicviscosity_not_rouned = Decimal(self.kinematicviscosity) * self.density_avg
