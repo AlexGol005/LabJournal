@@ -144,7 +144,7 @@ def RegNoteJournalView(request):
                     if kinematicviscosity.cvtminus20dead >= date.today():
                         order.kinematicviscosity = kinematicviscosity.cvtminus20
                         order.kinematicviscositydead = kinematicviscosity.cvtminus20dead
-            except ObjectDoesNotExist:
+            except:
                 pass
             """вставка окончание"""
 
