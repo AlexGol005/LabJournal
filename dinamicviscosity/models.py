@@ -83,6 +83,9 @@ class Dinamicviscosity(models.Model):
     equipment = models.CharField('Способ измерения плотности', max_length=300, choices=DENSITYE, default='денсиметром', null=True,  blank=True)
     resultWarningkinematic = models.CharField('Если нет кинематики', max_length=300, null=True,  blank=True)
     kinematicviscositydead = models.DateField('кинематика годна до:', blank=True, null=True)
+    havedensity = models.BooleanField(verbose_name='Есть значение плотности, измеренное ранее', default=False, blank=True)
+    densitydead = models.DateField('Плотность, измеренная ранее, годна до:', null=True, blank=True)
+
 
     def save(self, *args, **kwargs):
         # если не указана кинематика:
@@ -90,38 +93,39 @@ class Dinamicviscosity(models.Model):
             self.resultWarningkinematic = 'Нет актуального значения кинематической вязкости. Динамика не рассчитана. ' \
                                           'Измерьте динамику и заполните новую форму'
         # определяем срок годности исходя из индекса СО:
-        if self.name[0:2] == 'ВЖ':
-            if int(self.name[8:-1]) <= 10:
-                self.exp = 6
-            if 1000 > int(self.name[8:-1]) > 10:
-                self.exp = 12
-            if int(self.name[8:-1]) >= 1000:
-                self.exp = 24
+        if not self.havedensity:
+            if self.name[0:2] == 'ВЖ':
+                if int(self.name[8:-1]) <= 10:
+                    self.exp = 6
+                if 1000 > int(self.name[8:-1]) > 10:
+                    self.exp = 12
+                if int(self.name[8:-1]) >= 1000:
+                    self.exp = 24
         # расчёт плотности пикнометром:
-        if not (self.density1 and self.density2):
-            self.SM_mass1 = self.piknometer_plus_SM_mass1 - self.piknometer_mass1
-            self.SM_mass2 = self.piknometer_plus_SM_mass2 - self.piknometer_mass2
-            self.density1 = self.SM_mass1 / self.piknometer_volume
-            self.density2 = self.SM_mass2 / self.piknometer_volume
+            if not (self.density1 and self.density2):
+                self.SM_mass1 = self.piknometer_plus_SM_mass1 - self.piknometer_mass1
+                self.SM_mass2 = self.piknometer_plus_SM_mass2 - self.piknometer_mass2
+                self.density1 = self.SM_mass1 / self.piknometer_volume
+                self.density2 = self.SM_mass2 / self.piknometer_volume
         # рассчитываем плотность:
-        self.density_avg = get_avg(self.density1, self.density2, 4)
+            self.density_avg = get_avg(self.density1, self.density2, 4)
         # определяем критерий сходимости:
-        if self.constit == 'да':
-            self.kriteriy = Decimal(0.3)
-        if self.constit == 'нет':
-            self.kriteriy = Decimal(0.2)
-        if self.constit == 'другое':
-            self.kriteriy = Decimal(0.3)
+            if self.constit == 'да':
+                self.kriteriy = Decimal(0.3)
+            if self.constit == 'нет':
+                self.kriteriy = Decimal(0.2)
+            if self.constit == 'другое':
+                self.kriteriy = Decimal(0.3)
         # сравниваем с критерием сходимости:
-        self.accMeasurement = get_acc_measurement(self.density1, self.density2)
-        if self.accMeasurement < self.kriteriy:
-            self.resultMeas = 'удовлетворительно'
-            self.cause = ''
-        if self.accMeasurement > self.kriteriy:
-            self.resultMeas = 'неудовлетворительно'
-            self.cause = 'Δ > r'
+            self.accMeasurement = get_acc_measurement(self.density1, self.density2)
+            if self.accMeasurement < self.kriteriy:
+                self.resultMeas = 'удовлетворительно'
+                self.cause = ''
+            if self.accMeasurement > self.kriteriy:
+                self.resultMeas = 'неудовлетворительно'
+                self.cause = 'Δ > r'
         # если результаты сходимы, то вычисляем АЗ плотности:
-        if self.resultMeas == 'удовлетворительно':
+        if self.resultMeas == 'удовлетворительно' or not self.havedensity:
             # если есть кинематика, то вычисляем динамику:
             if self.kinematicviscosity:
                 self.dinamicviscosity_not_rouned = Decimal(self.kinematicviscosity) * self.density_avg
@@ -134,7 +138,9 @@ class Dinamicviscosity(models.Model):
             if self.deltaolddensity > Decimal(0.7):
                 self.resultWarning = 'плотность отличается от предыдущей на > 0,7 %. Рекомендовано измерить повторно'
         # срок годности
-        self.date_exp = date.today() + timedelta(days=30 * self.exp)
+        if not self.havedensity:
+            self.date_exp = date.today() + timedelta(days=30 * self.exp)
+
         # связь с конкретной партией
         if self.name[0:2] == 'ВЖ':
             pk_VG = VG.objects.get(name=self.name[0:7])
@@ -153,7 +159,10 @@ class Dinamicviscosity(models.Model):
                 note.cvtdinamic20 = self.certifiedValue
                 note.cvt20date = self.date
                 note.cvt20exp = self.exp
-                note.cvt20dead = self.date + timedelta(days=30 * self.exp)
+                if not self.havedensity:
+                    note.cvt20dead = self.date + timedelta(days=30 * self.exp)
+                if self.havedensity:
+                    note.cvt20dead = self.densitydead
                 note.kinematicviscosityfordinamicdead20 = self.kinematicviscositydead
                 note.save()
             if self.temperature == 25:
@@ -161,7 +170,10 @@ class Dinamicviscosity(models.Model):
                 note.cvtdinamic25 = self.certifiedValue
                 note.cvt25date = self.date
                 note.cvt25exp = self.exp
-                note.cvt25dead = self.date + timedelta(days=30 * self.exp)
+                if not self.havedensity:
+                    note.cvt25dead = self.date + timedelta(days=30 * self.exp)
+                if self.havedensity:
+                    note.cvt250dead = self.densitydead
                 note.kinematicviscosityfordinamicdead25 = self.kinematicviscositydead
                 note.save()
             if self.temperature == 40:
@@ -169,7 +181,10 @@ class Dinamicviscosity(models.Model):
                 note.cvtdinamic40 = self.certifiedValue
                 note.cvt40date = self.date
                 note.cvt40exp = self.exp
-                note.cvt40dead = self.date + timedelta(days=30 * self.exp)
+                if not self.havedensity:
+                    note.cvt40dead = self.date + timedelta(days=30 * self.exp)
+                if self.havedensity:
+                    note.cvt40dead = self.densitydead
                 note.kinematicviscosityfordinamicdead40 = self.kinematicviscositydead
                 note.save()
             if self.temperature == 50:
@@ -177,7 +192,10 @@ class Dinamicviscosity(models.Model):
                 note.cvtdinamic50 = self.certifiedValue
                 note.cvt50date = self.date
                 note.cvt50exp = self.exp
-                note.cvt50dead = self.date + timedelta(days=30 * self.exp)
+                if not self.havedensity:
+                    note.cvt50dead = self.date + timedelta(days=30 * self.exp)
+                if self.havedensity:
+                    note.cvt50dead = self.densitydead
                 note.kinematicviscosityfordinamicdead50 = self.kinematicviscositydead
                 note.save()
             if self.temperature == 60:
@@ -185,7 +203,10 @@ class Dinamicviscosity(models.Model):
                 note.cvtdinamic60 = self.certifiedValue
                 note.cvt60date = self.date
                 note.cvt60exp = self.exp
-                note.cvt60dead = self.date + timedelta(days=30 * self.exp)
+                if not self.havedensity:
+                    note.cvt60dead = self.date + timedelta(days=30 * self.exp)
+                if self.havedensity:
+                    note.cvt60dead = self.densitydead
                 note.kinematicviscosityfordinamicdead60 = self.kinematicviscositydead
                 note.save()
             if self.temperature == 80:
@@ -193,7 +214,10 @@ class Dinamicviscosity(models.Model):
                 note.cvtdinamic80 = self.certifiedValue
                 note.cvt80date = self.date
                 note.cvt80exp = self.exp
-                note.cvt80dead = self.date + timedelta(days=30 * self.exp)
+                if not self.havedensity:
+                    note.cvt80dead = self.date + timedelta(days=30 * self.exp)
+                if self.havedensity:
+                    note.cvt80dead = self.densitydead
                 note.kinematicviscosityfordinamicdead80 = self.kinematicviscositydead
                 note.save()
             if self.temperature == 100:
@@ -201,7 +225,10 @@ class Dinamicviscosity(models.Model):
                 note.cvtdinamic100 = self.certifiedValue
                 note.cvt100date = self.date
                 note.cvt100exp = self.exp
-                note.cvt100dead = self.date + timedelta(days=30 * self.exp)
+                if not self.havedensity:
+                    note.cvt100dead = self.date + timedelta(days=30 * self.exp)
+                if self.havedensity:
+                    note.cvt100dead = self.densitydead
                 note.kinematicviscosityfordinamicdead100 = self.kinematicviscositydead
                 note.save()
             if self.temperature == 150:
@@ -209,7 +236,10 @@ class Dinamicviscosity(models.Model):
                 note.cvtdinamic150 = self.certifiedValue
                 note.cvt150date = self.date
                 note.cvt150exp = self.exp
-                note.cvt150dead = self.date + timedelta(days=30 * self.exp)
+                if not self.havedensity:
+                    note.cvt150dead = self.date + timedelta(days=30 * self.exp)
+                if self.havedensity:
+                    note.cvt150dead = self.densitydead
                 note.kinematicviscosityfordinamicdead150 = self.kinematicviscositydead
                 note.save()
             if self.temperature == -20:
@@ -217,7 +247,10 @@ class Dinamicviscosity(models.Model):
                 note.cvtdinamicminus20 = self.certifiedValue
                 note.cvtminus20date = self.date
                 note.cvtminus20exp = self.exp
-                note.cvtminus20dead = self.date + timedelta(days=30 * self.exp)
+                if not self.havedensity:
+                    note.cvtminus20dead = self.date + timedelta(days=30 * self.exp)
+                if self.havedensity:
+                    note.cvtminus20dead = self.densitydead
                 note.kinematicviscosityfordinamicdeadminus20 = self.kinematicviscositydead
                 note.save()
 
