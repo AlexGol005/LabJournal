@@ -88,6 +88,9 @@ class Dinamicviscosity(models.Model):
 
 
     def save(self, *args, **kwargs):
+        if  self.havedensity:
+            self.resultMeas = 'плотность измерена ранее'
+
         # если не указана кинематика:
         if not self.kinematicviscosity:
             self.resultWarningkinematic = 'Нет актуального значения кинематической вязкости. Динамика не рассчитана. ' \
