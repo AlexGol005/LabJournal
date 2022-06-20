@@ -111,7 +111,7 @@ class Dinamicviscosity(models.Model):
                 self.density1 = self.SM_mass1 / self.piknometer_volume
                 self.density2 = self.SM_mass2 / self.piknometer_volume
         # рассчитываем плотность:
-                self.density_avg = get_avg(self.density1, self.density2, 4)
+            self.density_avg = get_avg(self.density1, self.density2, 4)
         # определяем критерий сходимости:
 
                 if self.constit == 'да':
