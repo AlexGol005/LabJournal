@@ -88,15 +88,66 @@ class Dinamicviscosity(models.Model):
 
 
     def save(self, *args, **kwargs):
-        if  self.havedensity:
+        if self.havedensity and self.density_avg and self.densitydead:
             self.resultMeas = 'плотность измерена ранее'
-
-        # если не указана кинематика:
-        if not self.kinematicviscosity:
-            self.resultWarningkinematic = 'Нет актуального значения кинематической вязкости. Динамика не рассчитана. ' \
-                                          'Измерьте динамику и заполните новую форму'
-        # определяем срок годности исходя из индекса СО:
-        if not self.havedensity:
+            if not self.kinematicviscosity:
+                self.resultWarningkinematic = 'Нет актуального значения кинематической вязкости. Динамика не рассчитана. ' \
+                                              'Измерьте динамику и заполните новую форму'
+            if self.kinematicviscosity:
+                self.dinamicviscosity_not_rouned = Decimal(self.kinematicviscosity) * self.density_avg
+                self.abserror = mrerrow((Decimal(self.relerror) * self.dinamicviscosity_not_rouned) / Decimal(100))
+                self.certifiedValue = numberDigits(self.dinamicviscosity_not_rouned, self.abserror)
+        if not self.havedensity and not self.density_avg and not self.densitydead:
+            if not (self.density1 and self.density2):
+                self.SM_mass1 = self.piknometer_plus_SM_mass1 - self.piknometer_mass1
+                self.SM_mass2 = self.piknometer_plus_SM_mass2 - self.piknometer_mass2
+                self.density1 = self.SM_mass1 / self.piknometer_volume
+                self.density2 = self.SM_mass2 / self.piknometer_volume
+                if self.constit == 'да':
+                    self.kriteriy = Decimal(0.3)
+                if self.constit == 'нет':
+                    self.kriteriy = Decimal(0.2)
+                if self.constit == 'другое':
+                    self.kriteriy = Decimal(0.3)
+                self.accMeasurement = get_acc_measurement(self.density1, self.density2)
+                if self.accMeasurement < self.kriteriy:
+                    self.resultMeas = 'удовлетворительно'
+                    self.cause = ''
+                    self.density_avg = get_avg(self.density1, self.density2, 4)
+                    if not self.kinematicviscosity:
+                        self.resultWarningkinematic = 'Нет актуального значения кинематической вязкости. Динамика не рассчитана. ' \
+                                                      'Измерьте динамику и заполните новую форму'
+                    if self.kinematicviscosity:
+                        self.dinamicviscosity_not_rouned = Decimal(self.kinematicviscosity) * self.density_avg
+                        self.abserror = mrerrow(
+                            (Decimal(self.relerror) * self.dinamicviscosity_not_rouned) / Decimal(100))
+                        self.certifiedValue = numberDigits(self.dinamicviscosity_not_rouned, self.abserror)
+                if self.accMeasurement > self.kriteriy:
+                    self.resultMeas = 'неудовлетворительно'
+                    self.cause = 'Δ > r'
+            if self.density1 and self.density2:
+                if self.constit == 'да':
+                    self.kriteriy = Decimal(0.3)
+                if self.constit == 'нет':
+                    self.kriteriy = Decimal(0.2)
+                if self.constit == 'другое':
+                    self.kriteriy = Decimal(0.3)
+                self.accMeasurement = get_acc_measurement(self.density1, self.density2)
+                if self.accMeasurement < self.kriteriy:
+                    self.resultMeas = 'удовлетворительно'
+                    self.cause = ''
+                    self.density_avg = get_avg(self.density1, self.density2, 4)
+                    if not self.kinematicviscosity:
+                        self.resultWarningkinematic = 'Нет актуального значения кинематической вязкости. Динамика не рассчитана. ' \
+                                                      'Измерьте динамику и заполните новую форму'
+                    if self.kinematicviscosity:
+                        self.dinamicviscosity_not_rouned = Decimal(self.kinematicviscosity) * self.density_avg
+                        self.abserror = mrerrow(
+                            (Decimal(self.relerror) * self.dinamicviscosity_not_rouned) / Decimal(100))
+                        self.certifiedValue = numberDigits(self.dinamicviscosity_not_rouned, self.abserror)
+                if self.accMeasurement > self.kriteriy:
+                    self.resultMeas = 'неудовлетворительно'
+                    self.cause = 'Δ > r'
             if self.name[0:2] == 'ВЖ':
                 if int(self.name[8:-1]) <= 10:
                     self.exp = 6
@@ -104,47 +155,13 @@ class Dinamicviscosity(models.Model):
                     self.exp = 12
                 if int(self.name[8:-1]) >= 1000:
                     self.exp = 24
-        # расчёт плотности пикнометром:
-            if not (self.density1 and self.density2):
-                self.SM_mass1 = self.piknometer_plus_SM_mass1 - self.piknometer_mass1
-                self.SM_mass2 = self.piknometer_plus_SM_mass2 - self.piknometer_mass2
-                self.density1 = self.SM_mass1 / self.piknometer_volume
-                self.density2 = self.SM_mass2 / self.piknometer_volume
-        # рассчитываем плотность:
-            self.density_avg = get_avg(self.density1, self.density2, 4)
-        # определяем критерий сходимости:
-
-            if self.constit == 'да':
-                self.kriteriy = Decimal(0.3)
-            if self.constit == 'нет':
-                self.kriteriy = Decimal(0.2)
-            if self.constit == 'другое':
-                self.kriteriy = Decimal(0.3)
-        # сравниваем с критерием сходимости:
-            self.accMeasurement = get_acc_measurement(self.density1, self.density2)
-            if (self.accMeasurement < self.kriteriy) or self.havedensity:
-                self.resultMeas = 'удовлетворительно'
-                self.cause = ''
-            if self.accMeasurement > self.kriteriy:
-                self.resultMeas = 'неудовлетворительно'
-                self.cause = 'Δ > r'
-        # если результаты сходимы, то вычисляем АЗ плотности:
-        if self.resultMeas == 'удовлетворительно' or self.havedensity:
-            # если есть кинематика, то вычисляем динамику:
-            if self.kinematicviscosity:
-                self.dinamicviscosity_not_rouned = Decimal(self.kinematicviscosity) * self.density_avg
-                self.abserror = mrerrow((Decimal(self.relerror) * self.dinamicviscosity_not_rouned) / Decimal(100))
-                self.certifiedValue = numberDigits(self.dinamicviscosity_not_rouned, self.abserror)
-        # если указано предыдущее значение плотности, и есть измеренное АЗ, то вычисляем разницу с ним:
         if self.olddensity and self.density_avg:
             self.olddensity = self.olddensity.replace(',', '.')
             self.deltaolddensity = get_acc_measurement(Decimal(self.olddensity), self.density_avg)
             if self.deltaolddensity > Decimal(0.7):
                 self.resultWarning = 'плотность отличается от предыдущей на > 0,7 %. Рекомендовано измерить повторно'
-        # срок годности
         if not self.havedensity:
             self.date_exp = date.today() + timedelta(days=30 * self.exp)
-
         # связь с конкретной партией
         if self.name[0:2] == 'ВЖ':
             pk_VG = VG.objects.get(name=self.name[0:7])
