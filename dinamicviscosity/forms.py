@@ -80,7 +80,21 @@ class StrJournalCreationForm(forms.ModelForm):
                                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                                         'placeholder': 'АЗ через точку'}
                                                                  ))
-
+    density_avg = forms.DecimalField(label='Плотность(если измерена ранее)', max_digits=7, decimal_places=5,
+                                  required=False,
+                                  widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                'placeholder': '0.0000'}
+                                                         ))
+    densitydead = forms.DateField(label='Плотность годна до (если измерена ранее)',
+                                  required=False,
+                                  widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                'placeholder': 'ГГГ-ММ-ДД'}
+                                                         ))
+    havedensity = forms.BooleanField(label='У меня есть плотность, измеренная ранее',
+                                  required=False,
+                                  widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                'placeholder': 'ГГГ-ММ-ДД'}
+                                                         ))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -102,6 +116,12 @@ class StrJournalCreationForm(forms.ModelForm):
 
             Row(
                 Column('constit', css_class='form-group col-md-6 mb-0'),
+                Column('havedensity', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('density_avg', css_class='form-group col-md-6 mb-0'),
+                Column('densitydead', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -141,7 +161,7 @@ class StrJournalCreationForm(forms.ModelForm):
                   'piknometer_volume',
                   'piknometer_mass1', 'piknometer_mass2',
                   'equipment', 'piknometer_plus_SM_mass1', 'piknometer_plus_SM_mass2',
-                  # 'olddensity',
+                  'density_avg', 'densitydead', 'havedensity'
                   ]
 
 
