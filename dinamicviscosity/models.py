@@ -108,24 +108,25 @@ class Dinamicviscosity(models.Model):
                 self.density1 = self.SM_mass1 / self.piknometer_volume
                 self.density2 = self.SM_mass2 / self.piknometer_volume
         # рассчитываем плотность:
-            self.density_avg = get_avg(self.density1, self.density2, 4)
+                self.density_avg = get_avg(self.density1, self.density2, 4)
         # определяем критерий сходимости:
-            if self.constit == 'да':
-                self.kriteriy = Decimal(0.3)
-            if self.constit == 'нет':
-                self.kriteriy = Decimal(0.2)
-            if self.constit == 'другое':
-                self.kriteriy = Decimal(0.3)
+
+                if self.constit == 'да':
+                    self.kriteriy = Decimal(0.3)
+                if self.constit == 'нет':
+                    self.kriteriy = Decimal(0.2)
+                if self.constit == 'другое':
+                    self.kriteriy = Decimal(0.3)
         # сравниваем с критерием сходимости:
-            self.accMeasurement = get_acc_measurement(self.density1, self.density2)
-            if self.accMeasurement < self.kriteriy:
-                self.resultMeas = 'удовлетворительно'
-                self.cause = ''
-            if self.accMeasurement > self.kriteriy:
-                self.resultMeas = 'неудовлетворительно'
-                self.cause = 'Δ > r'
+                self.accMeasurement = get_acc_measurement(self.density1, self.density2)
+                if self.accMeasurement < self.kriteriy:
+                    self.resultMeas = 'удовлетворительно'
+                    self.cause = ''
+                if self.accMeasurement > self.kriteriy:
+                    self.resultMeas = 'неудовлетворительно'
+                    self.cause = 'Δ > r'
         # если результаты сходимы, то вычисляем АЗ плотности:
-        if self.resultMeas == 'удовлетворительно' or not self.havedensity:
+        if self.resultMeas == 'удовлетворительно' or  self.havedensity:
             # если есть кинематика, то вычисляем динамику:
             if self.kinematicviscosity:
                 self.dinamicviscosity_not_rouned = Decimal(self.kinematicviscosity) * self.density_avg

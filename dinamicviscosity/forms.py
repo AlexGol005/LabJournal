@@ -76,7 +76,7 @@ class StrJournalCreationForm(forms.ModelForm):
 
     equipment = forms.ChoiceField(label='Способ измерения плотности', choices=DENSITYE,
                                   widget=forms.Select(attrs={'class': 'form-control'}))
-    kinematicviscosity = forms.FloatField(label='Кинемат. вязк. при T измерений', required=False,
+    kinematicviscosity = forms.CharField(label='Кинемат. вязк. при T измерений', required=False,
                                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                                         'placeholder': 'АЗ через точку'}
                                                                  ))
@@ -88,7 +88,7 @@ class StrJournalCreationForm(forms.ModelForm):
     densitydead = forms.DateField(label='Плотность годна до (если измерена ранее)',
                                   required=False,
                                   widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                'placeholder': 'ГГГ-ММ-ДД'}
+                                                                'placeholder': 'ГГГГ-ММ-ДД'}
                                                          ))
     havedensity = forms.BooleanField(label='У меня есть плотность, измеренная ранее',
                                   required=False)
