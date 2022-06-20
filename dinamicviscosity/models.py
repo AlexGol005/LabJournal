@@ -60,7 +60,7 @@ class Dinamicviscosity(models.Model):
     delta = models.CharField('Не превышает Δ', max_length=100, null=True, blank=True)
     kriteriy = models.DecimalField('Критерий приемлемости измерений', max_digits=2, decimal_places=1, null=True,
                                    blank=True)
-    kinematicviscosity = models.CharField('Кинематическая вязкость при температуре измерений сСт', null=True,
+    kinematicviscosity = models.CharField('Кинематическая вязкость при температуре измерений сСт', max_length=300, null=True,
                                            blank=True)
     dinamicviscosity_not_rouned = models.DecimalField('Динамическая вязкость неокругленная', max_digits=20,
                                                       decimal_places=6, null=True, blank=True)
