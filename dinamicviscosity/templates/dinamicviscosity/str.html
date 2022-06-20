@@ -183,9 +183,7 @@
                 {{ form.as_p }}
                 <button class="btn btn-outline-warning" type="submit" name="btnform2">Подтвердить</button>
                 </form>
-                {% elif note.resultMeas == 'удовлетворительно'  and  note.fixation %}
-                   <a href="/CertifiedValueJ/dinamicviscosityvalues/" target="blank"> АЗ записано в ЖАЗ сайта </a>
-                {% elif note.resultMeas == 'удовлетворительно'  and  note.fixation %}
+                {% elif  note.resultMeas == 'удовлетворительно' and note.fixation or note.resultMeas == 'плотность измерена ранее'  and note.fixation %}
                    <a href="/CertifiedValueJ/dinamicviscosityvalues/" target="blank"> АЗ записано в ЖАЗ сайта </a>
                 {% else %}
                 нет АЗ
