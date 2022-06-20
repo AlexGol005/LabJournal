@@ -91,10 +91,8 @@ class StrJournalCreationForm(forms.ModelForm):
                                                                 'placeholder': 'ГГГ-ММ-ДД'}
                                                          ))
     havedensity = forms.BooleanField(label='У меня есть плотность, измеренная ранее',
-                                  required=False,
-                                  widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                'placeholder': 'ГГГ-ММ-ДД'}
-                                                         ))
+                                  required=False)
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
