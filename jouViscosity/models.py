@@ -79,7 +79,7 @@ class LotVG(models.Model):
     def save(self, *args, **kwargs):
         self.name = f'{self.nameVG.name} п. {str(self.lot)}'
         super(LotVG, self).save(*args, **kwargs)
-        unique_together = ('name', 'lot')
+        unique_together = ('nameVG', 'lot')
 
     def __str__(self):
         return f'{self.nameVG} п. {self.lot}'
