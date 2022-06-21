@@ -18,6 +18,9 @@ class VG(models.Model):
     fullname = models.CharField('Название СО полное', max_length=100, null=True, blank=True, default='')
     number = models.CharField('Номер ГСО', max_length=100, null=True, blank=True, default='')
     expiration = models.CharField('Срок годности ГСО', max_length=100, null=True, blank=True, default='')
+    typebegin = models.FloatField('Диапазон по описанию типа от', null=True, blank=True)
+    typeend = models.FloatField('Диапазон по описанию типа до', null=True, blank=True)
+    relerror = models.FloatField('Относительная погрешность', null=True, blank=True)
 
     def __str__(self):
         return f'{self.name} № ГСО {self.number}'
@@ -32,9 +35,7 @@ class VGrange(models.Model):
     name = models.CharField('краткое название ГСО с индексом', max_length=100, null=True, blank=True)
     pricebegin = models.IntegerField('Диапазон по прайсу от', null=True, blank=True)
     priceend = models.FloatField('Диапазон по прайсу до', null=True, blank=True)
-    typebegin = models.FloatField('Диапазон по описанию типа от', null=True, blank=True)
-    typeend = models.FloatField('Диапазон по описанию типа до', null=True, blank=True)
-    relerror = models.FloatField('Относительная погрешность', null=True, blank=True)
+
 
     def save(self, *args, **kwargs):
         self.name = f'{self.nameSM.name}({str(self.rangeindex)})'
