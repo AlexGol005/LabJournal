@@ -31,10 +31,10 @@ class VGrange(models.Model):
     rangeindex = models.IntegerField('Индекс ГСО', null=True, blank=True)
     name = models.CharField('краткое название ГСО с индексом', max_length=100, null=True, blank=True)
     pricebegin = models.IntegerField('Диапазон по прайсу от', null=True, blank=True)
-    priceend = models.IntegerField('Диапазон по прайсу до', null=True, blank=True)
-    typebegin = models.IntegerField('Диапазон по описанию типа от', null=True, blank=True)
-    typeend = models.IntegerField('Диапазон по описанию типа до', null=True, blank=True)
-    relerror = models.IntegerField('Относительная погрешность', null=True, blank=True)
+    priceend = models.FloatField('Диапазон по прайсу до', null=True, blank=True)
+    typebegin = models.FloatField('Диапазон по описанию типа от', null=True, blank=True)
+    typeend = models.FloatField('Диапазон по описанию типа до', null=True, blank=True)
+    relerror = models.FloatField('Относительная погрешность', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.name = f'{self.nameSM.name}({str(self.rangeindex)})'
