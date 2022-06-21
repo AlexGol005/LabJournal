@@ -66,6 +66,7 @@ class CharacterVG(models.Model):
         verbose_name_plural = 'Аттестуемые характеристики'
 
 
+
 class LotVG(models.Model):
     nameVG = models.ForeignKey(VGrange, verbose_name='СО', max_length=100, on_delete=models.PROTECT, null=True, blank=True)
     lot = models.CharField('Партия', max_length=5, null=True, blank=True)
@@ -78,6 +79,7 @@ class LotVG(models.Model):
     def save(self, *args, **kwargs):
         self.name = f'{self.nameVG.name} п. {str(self.lot)}'
         super(LotVG, self).save(*args, **kwargs)
+        unique_together = ('nameVG', 'lot')
 
     def __str__(self):
         return f'{self.nameVG} п. {self.lot}'
