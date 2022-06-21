@@ -79,7 +79,7 @@ class LotVG(models.Model):
     def save(self, *args, **kwargs):
         self.name = f'{self.nameVG.name} п. {str(self.lot)}'
         super(LotVG, self).save(*args, **kwargs)
-        unique_together = ('nameVG', 'lot')
+
 
     def __str__(self):
         return f'{self.nameVG} п. {self.lot}'
@@ -87,6 +87,7 @@ class LotVG(models.Model):
     class Meta:
         verbose_name = 'Партия ВЖ'
         verbose_name_plural = 'Партии ВЖ'
+        unique_together = ('nameVG', 'lot')
 
 class CvKinematicviscosityVG(models.Model):
     namelot = models.OneToOneField(LotVG, verbose_name='Кинематическая вязкость для СО:',
