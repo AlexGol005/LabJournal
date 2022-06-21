@@ -161,7 +161,7 @@ class CvDensityDinamicVG(models.Model):
     cvt25dead = models.DateField('25 плотность годен до', blank=True, null=True)
     kinematicviscosityfordinamicdead25 = models.DateField('кинематика 25 годен до', blank=True, null=True)
     cvt40 = models.CharField('Плотность при 40 - АЗ', max_length=30, blank=True, null=True)
-    cvtdinamic40 = models.CharField('Динамика при 20 - АЗ', max_length=30, blank=True, null=True)
+    cvtdinamic40 = models.CharField('Динамика при 40 - АЗ', max_length=30, blank=True, null=True)
     cvt40date = models.DateField('Плотность при 40 - дата измерения', blank=True, null=True)
     cvt40exp = models.IntegerField('Плотность при 40 - срок годности', blank=True, null=True)
     cvt40dead = models.DateField('40 плотность годен до', blank=True, null=True)
