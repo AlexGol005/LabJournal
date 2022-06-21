@@ -25,7 +25,7 @@ KATEGORY = (
     )
 
 class Manufacturer(models.Model):
-    companyName = models.CharField('Производитель', max_length=100)
+    companyName = models.CharField('Производитель', max_length=100, unique=True)
     companyAdress = models.CharField('Адрес', max_length=200, default='', blank=True)
     country = models.CharField('Страна', max_length=200, default='Россия', blank=True)
     telnumber = models.CharField('Телефон', max_length=200, default='', blank=True)
@@ -38,7 +38,7 @@ class Manufacturer(models.Model):
         verbose_name_plural = 'Производители'
 
 class Rooms(models.Model):
-    roomnumber = models.CharField('Номер комнаты', max_length=10, default='')
+    roomnumber = models.CharField('Номер комнаты', max_length=10, default='', unique=True)
     person = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self):
@@ -114,8 +114,8 @@ class Roomschange(models.Model):
 class MeasurEquipmentCharakters(models.Model):
     name = models.CharField('Название прибора', max_length=100, default='')
     modtype = models.ForeignKey(ModificationsAndTypes, on_delete=models.PROTECT, verbose_name='Тип и модификация', default='', blank=True, null=True)
-    reestr = models.CharField('Номер в Госреестре', max_length=1000, default='', blank=True, null=True)
-    calinterval = models.IntegerField('МежМетрологический интервал, месяцев', default = 12, blank=True, null=True)
+    reestr = models.CharField('Номер в Госреестре', max_length=1000, default='', blank=True, null=True, unique=True)
+    calinterval = models.IntegerField('МежМетрологический интервал, месяцев', default=12, blank=True, null=True)
     measurydiapason = models.CharField('Диапазон измерений', max_length=1000, default='', blank=True, null=True)
     accuracity = models.CharField('Класс точности /(разряд/), погрешность и /(или/) неопределённость /(класс, разряд/)',
                               max_length=1000, default='', blank=True, null=True)

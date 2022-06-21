@@ -14,7 +14,7 @@ CHOICES = (
 
 
 class VG(models.Model):
-    name = models.CharField('Название СО краткое', max_length=100, null=True, blank=True, default='')
+    name = models.CharField('Название СО краткое', max_length=100, null=True, blank=True, default='', unique=True)
     fullname = models.CharField('Название СО полное', max_length=100, null=True, blank=True, default='')
     number = models.CharField('Номер ГСО', max_length=100, null=True, blank=True, default='')
     expiration = models.CharField('Срок годности ГСО', max_length=100, null=True, blank=True, default='')
@@ -53,19 +53,6 @@ class VGrange(models.Model):
         unique_together = ('nameSM', 'rangeindex')
 
 
-class CharacterVG(models.Model):
-    name = models.CharField('Аттестуемая характеристика', max_length=100, null=True, blank=True, default='')
-    expiration = models.CharField(max_length=300, choices=CHOICES, default='6', null=True, verbose_name='Срок годности аттестуемой характеристики в месяцах')
-
-
-    def __str__(self):
-        return f'{self.name} годен {self.expiration} месяцев'
-
-    class Meta:
-        verbose_name = 'Аттестуемая характеристика'
-        verbose_name_plural = 'Аттестуемые характеристики'
-
-
 
 class LotVG(models.Model):
     nameVG = models.ForeignKey(VGrange, verbose_name='СО', max_length=100, on_delete=models.PROTECT, null=True, blank=True)
@@ -91,7 +78,7 @@ class LotVG(models.Model):
 
 class CvKinematicviscosityVG(models.Model):
     namelot = models.OneToOneField(LotVG, verbose_name='Кинематическая вязкость для СО:',
-                                on_delete=models.PROTECT, null=True, blank=True)
+                                on_delete=models.PROTECT, null=True, blank=True, unique=True)
     cvt20 = models.CharField('Кинематика при 20 - АЗ', max_length=30, blank=True, null=True)
     cvt20date = models.DateField('Кинематика при 20 - дата измерения', blank=True, null=True)
     cvt20exp = models.IntegerField('Кинематика при 20 - срок годности', blank=True, null=True)
@@ -147,7 +134,7 @@ class CvKinematicviscosityVG(models.Model):
 
 class CvDensityDinamicVG(models.Model):
     namelot = models.OneToOneField(LotVG, verbose_name='Плотность и динамика для СО:',
-                                   on_delete=models.PROTECT, null=True, blank=True)
+                                   on_delete=models.PROTECT, null=True, blank=True, unique=True)
     cvt20 = models.CharField('Плотность при 20 - АЗ', max_length=30, blank=True, null=True)
     cvtdinamic20 = models.CharField('Динамика при 20 - АЗ', max_length=30, blank=True, null=True)
     cvt20date = models.DateField('Плотность при 20 - дата измерения', blank=True, null=True)

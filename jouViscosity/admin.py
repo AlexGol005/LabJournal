@@ -3,7 +3,6 @@ from .models import*
 
 
 admin.site.register(VG)
-admin.site.register(CharacterVG)
 
 admin.site.register(VGrange)
 
