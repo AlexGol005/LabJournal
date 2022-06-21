@@ -29,12 +29,14 @@ class VG(models.Model):
         verbose_name = 'Название ГСО ВЖ-ПА'
         verbose_name_plural = 'Названия  ГСО ВЖ-ПА'
 
+
 class VGrange(models.Model):
     nameSM = models.ForeignKey(VG, verbose_name='СО', max_length=100, on_delete=models.CASCADE, null=True, blank=True)
     rangeindex = models.IntegerField('Индекс ГСО', null=True, blank=True)
     name = models.CharField('краткое название ГСО с индексом', max_length=100, null=True, blank=True)
     pricebegin = models.FloatField('Диапазон по прайсу от', null=True, blank=True)
     priceend = models.FloatField('Диапазон по прайсу до', null=True, blank=True)
+
 
 
     def save(self, *args, **kwargs):
@@ -48,6 +50,7 @@ class VGrange(models.Model):
     class Meta:
         verbose_name = 'Диапазон ГСО ВЖ-ПА'
         verbose_name_plural = 'Диапазоны  ГСО ВЖ-ПА'
+        unique_together = ('nameSM', 'rangeindex')
 
 
 class CharacterVG(models.Model):
