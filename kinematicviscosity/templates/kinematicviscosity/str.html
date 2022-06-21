@@ -29,7 +29,7 @@
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                № записи {{ note.id}}
+{#                № записи {{ note.id}}#}
                  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspСтр.&nbsp&nbsp&nbsp&nbsp </div></th>
 		</tr>
 		<tr>
@@ -163,7 +163,7 @@
 		<tr>
 			<td colspan="1"><div style="text-align: center;">{{ note.certifiedValue_text }}</div></td>
 			<td colspan="3"><div style="text-align: center;">{{ note.abserror|default_if_none:" "|striptags }}</div></td>
-			<td colspan="2"><div style="text-align: center;">{{ note.oldCertifiedValue }}</div></td>
+			<td colspan="2"><div style="text-align: center;">{{ note.oldCertifiedValue|default:" " }}</div></td>
             <td colspan="3"><div style="text-align: center;">{{ note.deltaOldCertifiedValue|default_if_none:" "|striptags }}</div></td>
 		</tr>
         <tr>
