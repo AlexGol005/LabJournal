@@ -30,6 +30,11 @@ class VGrange(models.Model):
     nameSM = models.ForeignKey(VG, verbose_name='СО', max_length=100, on_delete=models.CASCADE, null=True, blank=True)
     rangeindex = models.IntegerField('Индекс ГСО', null=True, blank=True)
     name = models.CharField('краткое название ГСО с индексом', max_length=100, null=True, blank=True)
+    pricebegin = models.IntegerField('Диапазон по прайсу от', null=True, blank=True)
+    priceend = models.IntegerField('Диапазон по прайсу до', null=True, blank=True)
+    typebegin = models.IntegerField('Диапазон по описанию типа от', null=True, blank=True)
+    typeend = models.IntegerField('Диапазон по описанию типа до', null=True, blank=True)
+    relerror = models.IntegerField('Относительная погрешность', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.name = f'{self.nameSM.name}({str(self.rangeindex)})'
@@ -64,6 +69,7 @@ class LotVG(models.Model):
     date = models.DateField('Дата изготовления', max_length=30, null=True, blank=True)
     name = models.CharField('имя и партия', max_length=1000, null=True, blank=True)
     availability = models.BooleanField('наличие партии на складе', null=True, blank=True, default=True)
+
 
     def save(self, *args, **kwargs):
         self.name = f'{self.nameVG.name} п. {str(self.lot)}'
