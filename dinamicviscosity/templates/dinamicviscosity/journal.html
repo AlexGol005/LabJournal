@@ -49,7 +49,11 @@
         <td align="center"> {{ obj.lot }}</td>
         <td align="center">{{ obj.temperature }} </td>
         <td align="center">{{ obj.certifiedValue|default_if_none:" " }} </td>
-        <td align="center">{{ obj.density_avg|default_if_none:" " }} </td>
+        <td align="center">
+            {% if obj.densitydead >= obj.kinematicviscositydead %}
+            {{ obj.density_avg|default_if_none:" " }}
+            {% endif %}
+        </td>
         <td align="center"><a href="/attestationJ/{{ URL }}/attestation/{{ obj.id }}/"  class="btn btn-outline-warning mt-3">см.</a></td>
     </tr>
     {% endfor %}
