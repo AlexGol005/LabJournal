@@ -50,7 +50,7 @@
         <td align="center">{{ obj.temperature }} </td>
         <td align="center">{{ obj.certifiedValue|default_if_none:" " }} </td>
         <td align="center">
-            {% if obj.densitydead >= obj.kinematicviscositydead %}
+            {% if obj.havedensity %}
             {{ obj.density_avg|default_if_none:" " }}
             {% endif %}
         </td>
