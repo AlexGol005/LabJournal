@@ -14,6 +14,8 @@ urlpatterns = [
     path('api/', include('api.urls')),
     path('equipment/', include('equipment.urls')),
     path('CertifiedValueJ/', include('jouViscosity.urls')),
+    path('CertifiedValueJ/', include('jouChlorineOilProducts.urls')),
+    path('CertifiedValueJ/', include('jouPetroleumChlorineImpurityWater.urls')),
     path('attestationJ/clorinesalts/', include('clorinesalts.urls')),
 ]
 

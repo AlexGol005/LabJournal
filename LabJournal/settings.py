@@ -52,7 +52,9 @@ INSTALLED_APPS = [
     'equipment',
     'jouViscosity',
     'dinamicviscosity',
-    'clorinesalts'
+    'clorinesalts',
+    'jouPetroleumChlorineImpurityWater',
+    'jouChlorineOilProducts'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

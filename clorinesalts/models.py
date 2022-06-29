@@ -31,8 +31,8 @@ SOLVENTS = (('орто-ксилол', 'орто-ксилол'))
 
 
 class Clorinesalts(models.Model):
-    for_lot_and_name = models.ForeignKey(LotRM, verbose_name='Измерение для: СО и партия', on_delete=models.PROTECT,
-                                         blank=True, null=True)
+    # for_lot_and_name = models.ForeignKey(LotRM, verbose_name='Измерение для: СО и партия', on_delete=models.PROTECT,
+    #                                      blank=True, null=True)
     ndocument = models.CharField('Метод испытаний', max_length=100, choices=DOCUMENTS, default='ГОСТ 21534 (Метод А)',
                                  blank=True)
     date = models.DateField('Дата', auto_now_add=True, db_index=True, blank=True)
@@ -310,10 +310,10 @@ class Clorinesalts(models.Model):
         verbose_name_plural = 'Измерения плотности и расчёт динамической вязкост'
 
 
-class CommentsDinamicviscosity(models.Model):
+class CommentsClorinesalts(models.Model):
     date = models.DateField('Дата', auto_now_add=True, db_index=True)
     name = models.TextField('Содержание', max_length=1000, default='')
-    forNote = models.ForeignKey(Dinamicviscosity, verbose_name='К странице аттестации', on_delete=models.CASCADE,
+    forNote = models.ForeignKey(Clorinesalts, verbose_name='К странице аттестации', on_delete=models.CASCADE,
                                 related_name='comments')
     author = models.ForeignKey(User, verbose_name='Наименование', on_delete=models.CASCADE)
 
