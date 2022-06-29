@@ -124,6 +124,9 @@ class Clorinesalts(models.Model):
     fixation = models.BooleanField(verbose_name='Внесен ли результат в Журнал аттестованных значений?', default=False,
                                    null=True, blank=True)
 
+    # def get_cs(self, backvolume, ):
+
+
     def save(self, *args, **kwargs):
         # связь с конкретной партией
         if self.name == 'СС-ТН-ПА-1':
@@ -150,6 +153,8 @@ class Clorinesalts(models.Model):
             volume15 = self.V1E5 - self.backvolume
             volume24 = self.V2E4 - self.backvolume
             volume25 = self.V2E5 - self.backvolume
+
+
 
 
 

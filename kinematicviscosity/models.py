@@ -163,7 +163,8 @@ class ViscosityMJL(models.Model):
                 if self.deltaOldCertifiedValue > Decimal(0.7):
                     self.resultWarning = 'Результат отличается от предыдущего > 0,7 %. Рекомендовано измерить повторно.'
     # срок годности
-        self.date_exp = date.today() + timedelta(days=30*self.exp)
+        if self.name[0:2] == 'ВЖ':
+            self.date_exp = date.today() + timedelta(days=30*self.exp)
 
     # связь с конкретной партией
         if self.name[0:2] == 'ВЖ':
