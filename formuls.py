@@ -19,7 +19,7 @@ def rounder(value: Decimal, m: str) -> Decimal:
 
 def mrerrow(abserror) -> Decimal:
     '''округляет абсолютную погрешность в соответствии с правилами метрологии (правило двойки)'''
-    if abserror > K:
+    if abserror > K + 1:
         return Decimal(abserror).quantize(Decimal('1'), ROUND_HALF_UP)
     abserror = str(abserror)
     index = abserror.find(".")
