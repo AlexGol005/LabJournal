@@ -74,7 +74,7 @@ class LotSSTN(models.Model):
         verbose_name_plural = 'Партии СС-ТН-ПА(ХПВS)'
         unique_together = ('nameSM', 'lot')
 
-class CVclorinesaltsSSTN(models.Model):
+class CVforSSTN(models.Model):
     namelot = models.OneToOneField(LotSSTN, verbose_name='для СО:',
                                 on_delete=models.PROTECT, null=True, blank=True, unique=True)
     cvCS = models.CharField('Содержание хлористых солей', max_length=30, blank=True, null=True)

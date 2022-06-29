@@ -5,17 +5,16 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from decimal import *
 
-from jouViscosity.models import VG, VGrange, LotVG, CvDensityDinamicVG
+from jouChlorineOilProducts.models import LotCSN, CSN
+from jouPetroleumChlorineImpurityWater.models import LotSSTN, SSTN, SSTNrange
+
 from metods import get_avg, get_acc_measurement
 from formuls import mrerrow, numberDigits
 
-from viscosimeters.models import Viscosimeters, Kalibration
-
-
-DENSITYE = (
-    ('денсиметром', 'денсиметром'),
-    ('пикнометром', 'пикнометром'),
-)
+MATERIAL = (('ХСН-ПА-1', 'ХСН-ПА-1'),
+           ('ХСН-ПА-2', 'ХСН-ПА-2'),
+           ('СС-ТН-ПА-1', 'СС-ТН-ПА-1'),
+           ('другое', 'другое'))
 
 DOCUMENTS = (('ГОСТ 21534 (Метод А)', 'ГОСТ 21534 (Метод А)'),)
 
@@ -31,35 +30,43 @@ SOLVENTS = (('орто-ксилол', 'орто-ксилол'))
 
 
 class Clorinesalts(models.Model):
-    # for_lot_and_name = models.ForeignKey(LotRM, verbose_name='Измерение для: СО и партия', on_delete=models.PROTECT,
-    #                                      blank=True, null=True)
+    for_lot_and_nameLotCSN = models.ForeignKey(LotCSN, verbose_name='Измерение для: СО и партия', on_delete=models.PROTECT,
+                                         blank=True, null=True)
+    for_lot_and_nameLotSSTN = models.ForeignKey(LotSSTN, verbose_name='Измерение для: СО и партия',
+                                               on_delete=models.PROTECT,
+                                               blank=True, null=True)
     ndocument = models.CharField('Метод испытаний', max_length=100, choices=DOCUMENTS, default='ГОСТ 21534 (Метод А)',
                                  blank=True)
     date = models.DateField('Дата', auto_now_add=True, db_index=True, blank=True)
     performer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='performer', blank=True)
-    name = models.CharField('Наименование', max_length=90, null=True, blank=True)
+    name = models.CharField('Наименование', max_length=100, choices=MATERIAL, default='ХСН-ПА-1',
+                                 blank=True)
+    namedop = models.CharField('Наименование другое', max_length=100, null=True, blank=True)
     lot = models.CharField('Партия', max_length=90, null=True, blank=True)
     constit = models.CharField('Диапазон содержания хлористых солей', max_length=300, choices=CHOICES,
                                default= 'до 50 мг/л', null=True, blank=True)
     projectconc = models.CharField('Расчётное содержания хлористых солей', max_length=300, null=True, blank=True)
     solvent = models.CharField('Растворитель', max_length=90, choices=SOLVENTS, default='орто-ксилол',
                                blank=True)
+    truevolume = models.BooleanField('Для каждой экстракции использовали горячей воды: на экстракцию -  100 мл, промывка  + 35 мл, промывка фильтра - 15 мл')
 
-    exp = models.IntegerField('Срок годности измерения, месяцев', blank=True, null=True)
+    exp = models.IntegerField('Срок годности измерения, месяцев', blank=True, null=True, default=24)
     date_exp = models.DateField('Измерение годно до', blank=True, null=True)
     ndocconvergence = models.CharField('Сходимость, мг/л', max_length=90, null=True, blank=True)
 
     aliquotvolume = models.DecimalField('Аликвота пробы, мл', max_digits=3, decimal_places=0, null=True, blank=True)
     solventvolume = models.DecimalField('Объём растворителя, мл', max_digits=3, decimal_places=0, null=True, blank=True)
+
     lotHg = models.CharField('Партия раствора нитрата ртути', max_length=90, null=True, blank=True)
     titerHg = models.DecimalField('Титр нитрата ртути, мг/см3', max_digits=5, decimal_places=4, null=True, blank=True)
     Hgdate = models.DateField('Дата изготовления нитрата ртути', null=True, blank=True)
     titerHgdate = models.DateField('Дата установки титра', null=True, blank=True)
     titerHgdead = models.DateField('Титр годен до', null=True, blank=True)
+
     dfkdate = models.DateField('Дата изготовления дифенилкарбазида', null=True, blank=True)
     dfkdead = models.DateField('Дифенилкарбазид  годен до', null=True, blank=True)
 
-    backgroundsamplevolume = models.DecimalField('Объём холостой пробы, мл', max_digits=4, decimal_places=2,
+    backvolume = models.DecimalField('Объём холостой пробы, мл', max_digits=4, decimal_places=2,
                                                  null=True, blank=True)
     V1E1 = models.DecimalField('Воронка1, экстракт1', max_digits=4, decimal_places=2, null=True, blank=True)
     V1E2 = models.DecimalField('Воронка1, экстракт2', max_digits=4, decimal_places=2, null=True, blank=True)
@@ -72,7 +79,17 @@ class Clorinesalts(models.Model):
     V2E4 = models.DecimalField('Воронка2, экстракт4', max_digits=4, decimal_places=2, null=True, blank=True)
     V2E5 = models.DecimalField('Воронка2, экстракт5', max_digits=4, decimal_places=2, null=True, blank=True)
 
-    a = models.DecimalField('А', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
+    aV1E1 = models.DecimalField('А в1э1', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
+    aV1E2 = models.DecimalField('А в1э2', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
+    aV1E3 = models.DecimalField('А в1э3', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
+    aV1E4 = models.DecimalField('А в1э4', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
+    aV1E5 = models.DecimalField('А в1э5', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
+    aV2E1 = models.DecimalField('А в2э1', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
+    aV23E2 = models.DecimalField('А в2э2', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
+    aV2E3 = models.DecimalField('А в2э3', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
+    aV2E4 = models.DecimalField('А в2э4', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
+    aV2E5 = models.DecimalField('А в2э5', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
+
     x1 = models.DecimalField('X1', max_digits=7, decimal_places=3, null=True, blank=True)
     x2 = models.DecimalField('X2', max_digits=7, decimal_places=3, null=True, blank=True)
     factconvergence = models.CharField('Расхождение между результатами Х1-Х2, мг/л', max_length=90, null=True, blank=True)
@@ -107,9 +124,59 @@ class Clorinesalts(models.Model):
     fixation = models.BooleanField(verbose_name='Внесен ли результат в Журнал аттестованных значений?', default=False,
                                    null=True, blank=True)
 
-
-
     def save(self, *args, **kwargs):
+        # связь с конкретной партией
+        if self.name == 'СС-ТН-ПА-1':
+            pk_SSTN = SSTN.objects.get(name=self.name[0:10])
+            a = SSTNrange.objects.get_or_create(rangeindex=self.name[11:-1], nameSM=pk_SSTN)
+            b = a[0]
+            LotSSTN.objects.get_or_create(lot=self.lot, nameSM=b)
+            self.for_lot_and_nameSSTN = LotSSTN.objects.get(lot=self.lot, nameSM=b)
+        if self.name == 'ХСН-ПА-1' or self.name == 'ХСН-ПА-2':
+            pk_CSN = CSN.objects.get(name=self.name[0:8])
+            a = SSTNrange.objects.get_or_create(rangeindex=self.name[9:-1], nameSM=pk_CSN)
+            b = a[0]
+            LotCSN.objects.get_or_create(lot=self.lot, nameSM=b)
+            self.for_lot_and_nameCSN = LotCSN.objects.get(lot=self.lot, nameSM=b)
+        # расчёты первичные
+        volume11 = self.V1E1 - self.backvolume
+        volume12 = self.V1E2 - self.backvolume
+        volume13 = self.V1E3 - self.backvolume
+        volume21 = self.V2E1 - self.backvolume
+        volume22 = self.V2E2 - self.backvolume
+        volume23 = self.V2E3 - self.backvolume
+        if self.V1E4 or self.V1E5 or self.V2E4 or self.V2E5:
+            volume14 = self.V1E4 - self.backvolume
+            volume15 = self.V1E5 - self.backvolume
+            volume24 = self.V2E4 - self.backvolume
+            volume25 = self.V2E5 - self.backvolume
+
+
+
+
+
+
+
+
+
+
+
+
+        super(Clorinesalts, self).save(*args, **kwargs)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         if self.havedensity and self.density_avg and self.densitydead:
             self.resultMeas = 'плотность измерена ранее'
             if not self.kinematicviscosity:

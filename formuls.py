@@ -54,7 +54,7 @@ def  numberDigits(avg: Decimal, abserror: Decimal) -> Decimal:
     avg: среднее из 2 измерений без округления
     return: АЗ СО в формате Decimal
     '''
-    if abserror > K+1:
+    if abserror >= K+1:
         certifiedValue = Decimal(avg).quantize(Decimal(1), ROUND_HALF_UP)
         return certifiedValue
     abserror = str(abserror)
