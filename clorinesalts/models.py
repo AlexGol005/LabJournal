@@ -26,7 +26,7 @@ CHOICES = (('до 50 мг/л', 'до 50 мг/л'),
            ('200 - 500 мг/л', '200 - 500 мг/л'),
            ('500 - 1000 мг/л', '500 - 1000 мг/л'))
 
-SOLVENTS = (('орто-ксилол', 'орто-ксилол'))
+SOLVENTS = (('орто-ксилол', 'орто-ксилол'),)
 
 
 class Clorinesalts(models.Model):
@@ -38,7 +38,7 @@ class Clorinesalts(models.Model):
     ndocument = models.CharField('Метод испытаний', max_length=100, choices=DOCUMENTS, default='ГОСТ 21534 (Метод А)',
                                  blank=True)
     date = models.DateField('Дата', auto_now_add=True, db_index=True, blank=True)
-    performer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='performer', blank=True)
+    performer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='performercs', blank=True)
     name = models.CharField('Наименование', max_length=100, choices=MATERIAL, default='ХСН-ПА-1',
                                  blank=True)
     namedop = models.CharField('Наименование другое', max_length=100, null=True, blank=True)
@@ -100,7 +100,7 @@ class Clorinesalts(models.Model):
 
     x3 = models.DecimalField('X3', max_digits=7, decimal_places=3, null=True, blank=True)
     x4 = models.DecimalField('X4', max_digits=7, decimal_places=3, null=True, blank=True)
-    performer2 = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='performer', blank=True)
+    performer2 = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='performer2cs', blank=True)
     reproducibility = models.CharField('Воспроизводимость, мг/л', max_length=90, null=True, blank=True)
     cd = models.CharField('Критическая разность, мг/л', max_length=90, null=True, blank=True)
     x_avg = models.DecimalField('Xсреднее', max_digits=7, decimal_places=3, null=True, blank=True)
