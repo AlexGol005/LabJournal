@@ -19,7 +19,7 @@ from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationF
 JOURNAL = AttestationJ
 MODEL = Dinamicviscosity
 COMMENTMODEL = CommentsDinamicviscosity
-URL = 'clorinesalts'
+URL = 'dinamicviscosity'
 NAME = 'динамика'
 
 
