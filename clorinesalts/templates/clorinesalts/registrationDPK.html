@@ -1,0 +1,23 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Внести запись
+{% endblock %}
+
+
+{% block content %}
+{#кнопки#}
+{#нестандартная#}
+<a href="/attestationJ/{{ URL }}/" class="btn btn-info mt-3 mr-3">перейти в журнал</a>
+{#конец кнопок#}
+
+{#форма регистрации#}
+{#стандартная#}
+<form method="post" class="form-register">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-outline-warning" type="submit">Записать</button>
+    </form>
+{% endblock %}

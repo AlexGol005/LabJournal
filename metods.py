@@ -23,3 +23,8 @@ def get_sec(minutes: Decimal, secundes: Decimal):
     k = '1.00'
     sec = (minutes * Decimal(60) + secundes).quantize(Decimal(k), ROUND_HALF_UP)
     return Decimal(sec)
+
+def get_abserror(x_avg: Decimal, relerror: Decimal) -> Decimal:
+    """находит абсолютную погрешность исходя из Хсреднего и относительной погрешности"""
+    abserror = (x_avg * relerror) / Decimal('100')
+    return abserror

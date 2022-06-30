@@ -284,8 +284,8 @@ class Dinamicviscosity(models.Model):
         return reverse('dinamicviscositystr', kwargs={'pk': self.pk})
 
     class Meta:
-        verbose_name = 'Измерение плотности и расчёт динамической вязкости'
-        verbose_name_plural = 'Измерения плотности и расчёт динамической вязкост'
+        verbose_name = 'Динамика и плотность: аттестация'
+        verbose_name_plural = 'Динамика и плотность: аттестация'
 
 
 class CommentsDinamicviscosity(models.Model):

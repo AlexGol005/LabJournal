@@ -244,8 +244,8 @@ class ViscosityMJL(models.Model):
         return reverse('kinematicviscositystr', kwargs={'pk': self.pk})
 
     class Meta:
-        verbose_name = 'Измерение кинематической вязкости'
-        verbose_name_plural = 'Измерения кинематической вязкости'
+        verbose_name = 'Кинематика: аттестация'
+        verbose_name_plural = 'Кинематика: аттестация'
 
 
 class CommentsKinematicviscosity(models.Model):

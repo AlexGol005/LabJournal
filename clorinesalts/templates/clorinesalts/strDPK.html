@@ -1,0 +1,61 @@
+{% extends 'main/superbase.html' %}
+
+{% block title %}
+ДФК
+{% endblock %}
+
+{#кнопки слева странички#}
+{% block content %}
+<div class="row">
+<div class="col-md-2">
+    <a href="/attestationJ/{{ URL }}/registration/" class="btn btn-warning mt-3 mr-5">&nbsp&nbspвнести&nbsp&nbsp&nbsp ещё </a>
+    <a href='/attestationJ/{{ URL }}/' class="btn btn-warning mt-3">В  журнал</a>
+    <a href='/attestationJ/{{ URL }}/attestation/' class="btn btn-warning mt-3">Все записи</a>
+</div>
+
+{#уникальная таблица#}
+{#полустандартный верх таблицы#}
+<div class="col-md-4 mt-1" >
+    <table class="table table-bordered background-color">
+	<tbody>
+		<tr>
+			<th>Реактив</th>
+			<th>Производство и партия</th>
+			<th>Количество</th>
+		</tr>
+		<tr>
+			<td>Дифенилкарбазид</td>
+			<td>{obj.lotreakt}</td>
+			<td>{obj.mass} г</td>
+		</tr>
+		<tr>
+			<td>Этиловый ректифицированный спирт</td>
+			<td>{obj.lotreakt}</td>
+			<td>{obj.volume} см3</td>
+		</tr>
+		<tr>
+			<th>Дата изготовления: {obj.date}</th>
+			<th>Годен до: {obj.datedead}</th>
+			<th>Приготовил: {obj.performer}</th>
+		</tr>
+	</tbody>
+</table>
+</div>
+{#конец  таблицы#}
+</div>
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+{#кнопка печать #}
+    <a href="javascript:(print());" class="btn btn-warning mt-1">Распечатать</a>
+{% endblock %}

@@ -24,17 +24,18 @@ class SSTN(models.Model):
         return f'{self.name} № ГСО {self.number}'
 
     class Meta:
-        verbose_name = 'Название ГСО СС-ТН-ПА(ХПВS)'
-        verbose_name_plural = 'Названия  ГСО СС-ТН-ПА(ХПВS)'
+        verbose_name = 'Название СС-ТН-ПА-1(ХПВС)'
+        verbose_name_plural = 'Названия  СС-ТН-ПА-1(ХПВС)'
 
 
 class SSTNrange(models.Model):
     nameSM = models.ForeignKey(SSTN, verbose_name='СО', max_length=100, on_delete=models.CASCADE, null=True, blank=True)
-    rangeindex = models.CharField('Индекс ГСО', null=True, blank=True)
-    name = models.CharField('краткое название ГСО с индексом', max_length=100, null=True, blank=True)
+    rangeindex = models.CharField('Индекс ГСО', max_length=90, null=True, blank=True)
+    name = models.CharField('краткое название ГСО с индексом', max_length=90, null=True, blank=True)
+
 
     def save(self, *args, **kwargs):
-        self.name = f'{self.nameSM.name}({str(self.rangeindex)})'
+        self.name = f'{self.nameSM.name}({self.rangeindex})'
         super(SSTNrange, self).save(*args, **kwargs)
 
 
@@ -43,7 +44,7 @@ class SSTNrange(models.Model):
 
     class Meta:
         verbose_name = 'подтип ГСО СС-ТН-ПА-1'
-        verbose_name_plural = 'подтипы  ГСО СС-ТН-ПА-1)'
+        verbose_name_plural = 'подтипы  ГСО СС-ТН-ПА-1'
         unique_together = ('nameSM', 'rangeindex')
 
 
@@ -67,7 +68,7 @@ class LotSSTN(models.Model):
 
     class Meta:
         verbose_name = 'Партия СС-ТН-ПА-1'
-        verbose_name_plural = 'Партии СС-ТН-ПА-1)'
+        verbose_name_plural = 'Партии СС-ТН-ПА-1'
         unique_together = ('nameSM', 'lot')
 
 class CVforSSTN(models.Model):
@@ -87,7 +88,7 @@ class CVforSSTN(models.Model):
     cvdeadI = models.DateField('Годен до мехпримесей', blank=True, null=True)
     cvW = models.CharField('Содержание вода', max_length=30, blank=True, null=True)
     cvdateW = models.DateField('Дата измерения вода', blank=True, null=True)
-    cvexpW = models.IntegerField('Срок годности водай', blank=True, null=True)
+    cvexpW = models.IntegerField('Срок годности вода', blank=True, null=True)
     cvdeadW = models.DateField('Годен до вода', blank=True, null=True)
 
     def __str__(self):
