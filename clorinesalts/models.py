@@ -18,7 +18,10 @@ MATERIAL = (('ХСН-ПА-1', 'ХСН-ПА-1'),
 
 DOCUMENTS = (('ГОСТ 21534 (Метод А)', 'ГОСТ 21534 (Метод А)'),)
 
-RELERROR = 0.3  # относительная погрешность СО из описания типа
+RELERROR_XSN_1 = 5  # относительная погрешность ХС ХСН-ПА-1 из описания типа, %
+RELERROR_XSN_2 = 2  # относительная погрешность ХС ХСН-ПА-2 из описания типа, %
+RELERROR_SSTN = 1  # относительная погрешность ХС СС-ТН-ПА-1 из описания типа, %
+RELERROR_GK = 3  # относительная погрешность ХС ГК-ПА-2 из описания типа, %
 
 CHOICES = (('до 50 мг/л', 'до 50 мг/л'),
            ('50 - 100 мг/л', '50 - 100 мг/л'),
@@ -27,6 +30,13 @@ CHOICES = (('до 50 мг/л', 'до 50 мг/л'),
            ('500 - 1000 мг/л', '500 - 1000 мг/л'))
 
 SOLVENTS = (('орто-ксилол', 'орто-ксилол'),)
+
+BEHAVIOUR = (('Расслаивается', 'Расслаивается'),
+           ('Плохо расслаивается', 'Плохо расслаивается'),
+           ('Добавлен деэмульгатор', 'Добавлен деэмульгатор'),
+           ('Другое (см комментарии)', 'Другое (см комментарии)'),)
+
+
 
 
 class Clorinesalts(models.Model):
@@ -49,6 +59,7 @@ class Clorinesalts(models.Model):
     solvent = models.CharField('Растворитель', max_length=90, choices=SOLVENTS, default='орто-ксилол',
                                blank=True)
     truevolume = models.BooleanField('Для каждой экстракции использовали горячей воды: на экстракцию -  100 мл, промывка  + 35 мл, промывка фильтра - 15 мл')
+    behaviour = models.CharField('Поведение пробы', max_length=100, choices=BEHAVIOUR, default='Расслаивается')
 
     exp = models.IntegerField('Срок годности измерения, месяцев', blank=True, null=True, default=24)
     date_exp = models.DateField('Измерение годно до', blank=True, null=True)
@@ -85,7 +96,7 @@ class Clorinesalts(models.Model):
     aV1E4 = models.DecimalField('А в1э4', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
     aV1E5 = models.DecimalField('А в1э5', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
     aV2E1 = models.DecimalField('А в2э1', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
-    aV23E2 = models.DecimalField('А в2э2', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
+    aV2E2 = models.DecimalField('А в2э2', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
     aV2E3 = models.DecimalField('А в2э3', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
     aV2E4 = models.DecimalField('А в2э4', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
     aV2E5 = models.DecimalField('А в2э5', max_digits=1, decimal_places=0, null=True, blank=True, default=1)
@@ -97,17 +108,15 @@ class Clorinesalts(models.Model):
                                   null=True, blank=True)
     cause = models.CharField('Причина', max_length=100, default='', null=True, blank=True)
 
-
     x3 = models.DecimalField('X3', max_digits=7, decimal_places=3, null=True, blank=True)
     x4 = models.DecimalField('X4', max_digits=7, decimal_places=3, null=True, blank=True)
     performer2 = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='performer2cs', blank=True)
-    reproducibility = models.CharField('Воспроизводимость, мг/л', max_length=90, null=True, blank=True)
-    cd = models.CharField('Критическая разность, мг/л', max_length=90, null=True, blank=True)
+    ndocreproducibility = models.CharField('Воспроизводимость, мг/л', max_length=90, null=True, blank=True)
+    ndoccd = models.CharField('Критическая разность, мг/л', max_length=90, null=True, blank=True)
     x_avg = models.DecimalField('Xсреднее', max_digits=7, decimal_places=3, null=True, blank=True)
     x_avg_cd = models.BooleanField('Результаты измерений входят в диапазон Xсреднее+-CD ', blank=True)
     x_cd_warning = models.CharField('Если входят не все Х', max_length=300, default='', null=True, blank=True)
     x_dimension = models.DecimalField('(Xmax + Xmin)/2', max_digits=7, decimal_places=3, null=True, blank=True)
-
 
     relerror = models.DecimalField('Относительная  погрешность', max_digits=3, decimal_places=1, null=True,  blank=True,
                                    default=RELERROR)
@@ -124,9 +133,6 @@ class Clorinesalts(models.Model):
     fixation = models.BooleanField(verbose_name='Внесен ли результат в Журнал аттестованных значений?', default=False,
                                    null=True, blank=True)
 
-    # def get_cs(self, backvolume, ):
-
-
     def save(self, *args, **kwargs):
         # связь с конкретной партией
         if self.name == 'СС-ТН-ПА-1':
@@ -142,17 +148,74 @@ class Clorinesalts(models.Model):
             LotCSN.objects.get_or_create(lot=self.lot, nameSM=b)
             self.for_lot_and_nameCSN = LotCSN.objects.get(lot=self.lot, nameSM=b)
         # расчёты первичные
-        volume11 = self.V1E1 - self.backvolume
-        volume12 = self.V1E2 - self.backvolume
-        volume13 = self.V1E3 - self.backvolume
-        volume21 = self.V2E1 - self.backvolume
-        volume22 = self.V2E2 - self.backvolume
-        volume23 = self.V2E3 - self.backvolume
-        if self.V1E4 or self.V1E5 or self.V2E4 or self.V2E5:
-            volume14 = self.V1E4 - self.backvolume
-            volume15 = self.V1E5 - self.backvolume
-            volume24 = self.V2E4 - self.backvolume
-            volume25 = self.V2E5 - self.backvolume
+        clearvolume11 = self.V1E1 - self.backvolume
+        clearvolume12 = self.V1E2 - self.backvolume
+        clearvolume13 = self.V1E3 - self.backvolume
+        clearvolume21 = self.V2E1 - self.backvolume
+        clearvolume22 = self.V2E2 - self.backvolume
+        clearvolume23 = self.V2E3 - self.backvolume
+
+        cV1E1 = (clearvolume11 * self.titerHg * Decimal(1000) * self.aV1E1) / self.aliquotvolume
+        cV1E2 = (clearvolume12 * self.titerHg * Decimal(1000) * self.aV1E2) / self.aliquotvolume
+        cV1E3 = (clearvolume13 * self.titerHg * Decimal(1000) * self.aV1E3) / self.aliquotvolume
+        cV2E1 = (clearvolume21 * self.titerHg * Decimal(1000) * self.aV2E1) / self.aliquotvolume
+        cV2E2 = (clearvolume22 * self.titerHg * Decimal(1000) * self.aV2E2) / self.aliquotvolume
+        cV2E3 = (clearvolume23 * self.titerHg * Decimal(1000) * self.aV2E3) / self.aliquotvolume
+        self.x1 = cV1E1 + cV1E2 + cV1E3
+        self.x2 = cV2E1 + cV2E2 + cV2E3
+        if self.V1E4:
+            clearvolume14 = self.V1E4 - self.backvolume
+            cV1E4 = (clearvolume14 * self.titerHg * Decimal(1000) * self.aV1E1) / self.aliquotvolume
+            self.x1 = self.x1 + cV1E4
+        if self.V2E4:
+            clearvolume24 = self.V2E4 - self.backvolume
+            cV2E4 = (clearvolume24 * self.titerHg * Decimal(1000) * self.aV1E5) / self.aliquotvolume
+            self.x2 = self.x2 + cV2E4
+        if self.V1E5:
+            clearvolume15 = self.V1E5 - self.backvolume
+            cV1E5 = (clearvolume15 * self.titerHg * Decimal(1000) * self.aV1E5) / self.aliquotvolume
+            self.x1 = self.x1 + cV1E5
+        if self.V2E5:
+            clearvolume25 = self.V2E5 - self.backvolume
+            cV2E5 = (clearvolume25 * self.titerHg * Decimal(1000) * self.aV1E1) / self.aliquotvolume
+            self.x2 = self.x2 + cV2E5
+        # определяем сходимость, воспроизводимость и CD, соответствующие диапазону, сначала вычисляем среднее:
+        self.x_avg = get_avg(self.x1, self.x2, 4)
+        if self.x_avg < Decimal(10):
+            self.ndocconvergence = '1.5'
+            self.ndocreproducibility = '3.0'
+            self.ndoccd = '2.0'
+        if Decimal(10) <= self.x_avg < Decimal(50):
+            self.ndocconvergence = '3.0'
+            self.ndocreproducibility = '6.0'
+            self.ndoccd = '4.0'
+        if Decimal(50) <= self.x_avg < Decimal(200):
+            self.ndocconvergence = '6'
+            self.ndocreproducibility = '12'
+            self.ndoccd = '8'
+        if Decimal(200) <= self.x_avg:
+            self.ndocconvergence = '25'
+            self.ndocreproducibility = '50'
+            self.ndoccd = '33'
+
+        # сравниваем х1-х2 со сходимостью и комментируем результат измерений
+        if (self.x1 - self.x2).copy_abs() > Decimal(self.ndocconvergence):
+            self.resultMeas = 'Неудовлетворительно.'
+            self.cause = 'Разница между Х1 и Х2 превышает сходимость.'
+        if (self.x1 - self.x2).copy_abs() <= Decimal(self.ndocconvergence):
+            self.resultMeas = 'Удовлетворительно'
+
+        # рассчитываем аз если результат измерений удовлетворительный
+        if self.resultMeas == 'Удовлетворительно':
+            pass
+
+
+
+
+
+
+
+
 
 
 

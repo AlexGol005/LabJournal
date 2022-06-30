@@ -30,12 +30,8 @@ class SSTN(models.Model):
 
 class SSTNrange(models.Model):
     nameSM = models.ForeignKey(SSTN, verbose_name='СО', max_length=100, on_delete=models.CASCADE, null=True, blank=True)
-    rangeindex = models.IntegerField('Индекс ГСО', null=True, blank=True)
+    rangeindex = models.CharField('Индекс ГСО', null=True, blank=True)
     name = models.CharField('краткое название ГСО с индексом', max_length=100, null=True, blank=True)
-    pricebegin = models.FloatField('Диапазон по прайсу от', null=True, blank=True)
-    priceend = models.FloatField('Диапазон по прайсу до', null=True, blank=True)
-
-
 
     def save(self, *args, **kwargs):
         self.name = f'{self.nameSM.name}({str(self.rangeindex)})'
@@ -46,8 +42,8 @@ class SSTNrange(models.Model):
         return  f'{self.name}'
 
     class Meta:
-        verbose_name = 'Диапазон ГСО СС-ТН-ПА(ХПВS)'
-        verbose_name_plural = 'Диапазоны  ГСО СС-ТН-ПА(ХПВS)'
+        verbose_name = 'подтип ГСО СС-ТН-ПА-1'
+        verbose_name_plural = 'подтипы  ГСО СС-ТН-ПА-1)'
         unique_together = ('nameSM', 'rangeindex')
 
 
@@ -70,8 +66,8 @@ class LotSSTN(models.Model):
         return f'{self.nameSM} п. {self.lot}'
 
     class Meta:
-        verbose_name = 'Партия СС-ТН-ПА(ХПВS)'
-        verbose_name_plural = 'Партии СС-ТН-ПА(ХПВS)'
+        verbose_name = 'Партия СС-ТН-ПА-1'
+        verbose_name_plural = 'Партии СС-ТН-ПА-1)'
         unique_together = ('nameSM', 'lot')
 
 class CVforSSTN(models.Model):
@@ -95,8 +91,8 @@ class CVforSSTN(models.Model):
     cvdeadW = models.DateField('Годен до вода', blank=True, null=True)
 
     def __str__(self):
-        return f'Содержание ХПВS АЗ для {self.namelot}'
+        return f'АЗ для {self.namelot}'
 
     class Meta:
-        verbose_name = 'СС-ТН-ПА(ХПВS), АЗ'
-        verbose_name_plural = 'СС-ТН-ПА(ХПВS), АЗ'
+        verbose_name = 'СС-ТН-ПА-1, АЗ'
+        verbose_name_plural = 'СС-ТН-ПА-1, АЗ'
