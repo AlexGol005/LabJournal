@@ -1,0 +1,54 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+ДФК
+{% endblock %}
+
+{#кнопки слева странички#}
+{% block content %}
+{#<div class="row">#}
+{#<div class="col-md-2">#}
+{#    <a href="/attestationJ/{{ URL }}/registration/" class="btn btn-warning mt-3 mr-5">&nbsp&nbspвнести&nbsp&nbsp&nbsp ещё </a>#}
+{#    <a href='/attestationJ/{{ URL }}/' class="btn btn-warning mt-3">В  журнал</a>#}
+{#    <a href='/attestationJ/{{ URL }}/attestation/' class="btn btn-warning mt-3">Все записи</a>#}
+{#</div>#}
+<div style="text-align: center;"><h4><a href="{% url 'clorinesalts' %}"> Установка титра раствора нитрата ртути </a> </h4></div>
+    <br>
+{#уникальная таблица#}
+{#полустандартный верх таблицы#}
+<div class="col-md-4 mt-1" >
+    <table class="table table-bordered background-color">
+	<tbody>
+		<tr>
+			<td colspan="3"><b>Установка титра  {{obj.lot}}</b> </td>
+		</tr>
+		<tr>
+			<td>Дата:&nbsp&nbsp{{obj.date|date:"d.m.Y"}}&nbsp&nbsp&nbsp&nbsp</td>
+			<td>Исп.:&nbsp{{obj.performer}}</td>
+			<td>&nbsp&nbspVхол&nbsp=&nbsp{{obj.backvolume}}&nbspмл&nbsp&nbsp&nbsp&nbsp</td>
+		</tr>
+		<tr>
+			<td>V1 = {{obj.volumeHGNO1}} мл</td>
+			<td>V2 = {{obj.volumeHGNO2}} мл</td>
+			<td>V3 = {{obj.volumeHGNO3}} мл</td>
+		</tr>
+		<tr>
+			<td>Т1 = {{obj.titr1}} мг/мл</td>
+			<td>Т2 = {{obj.titr2}} мг/мл</td>
+			<td>Т3 = {{obj.titr3}} мг/мл</td>
+		</tr>
+		<tr>
+			<td colspan="3">Расхождение между определениями:   Тmax&nbsp-&nbspTmin&nbsp=&nbsp{{obj.krit}}  </td>
+		</tr>
+		<tr>
+			<td colspan="3">{{obj.resultMeas}}   {{obj.cause}}  </td>
+		</tr>
+		<tr>
+			<td colspan="2"><b> Титр Hg(NO3)2 = {{obj.titr|default_if_none:"-"}}  мг/мл</b></td>
+			<td>годен до: {{obj.datedead|date:"d.m.Y"}}</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+
+{% endblock %}

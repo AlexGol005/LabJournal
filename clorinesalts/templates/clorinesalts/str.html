@@ -18,187 +18,204 @@
 <div class="col-md-4 mt-1" >
     <table class="table table-bordered background-color">
 	<tbody>
-        <tr>
-			<th colspan="9"><div style="text-align: center;">Атт.-ВЖ-(МИ № 02-2018)-дин. вязкость-{{ note.date|date:"Y"}}
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspСтр.&nbsp&nbsp&nbsp&nbsp </div></th>
+		<tr>
+			<td colspan="6">Атт.-ХС-ГОСТ 21534(А)-{{ note.date|date:"Y"}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Стр.&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		</tr>
 		<tr>
-			<th colspan="9"><div style="text-align: center;">Опр. плотности <b>  {{ note.equipment }}</b> и расчёт динамической вязкости по {{ note.ndocument }} </div></th>
+			<td colspan="6">Определение содержания хлористых солей в нефтепродуктах по {{ note.ndocument }}</td>
 		</tr>
 		<tr>
-			<th colspan="3"><div style="text-align: center;">Дата </div></th>
-			<th colspan="1"><div style="text-align: center;">Наименование</div></th>
-			<th colspan="1"><div style="text-align: center;">Номер партии</div></th>
-			<th colspan="2"><div style="text-align: center;">
-
-              &nbsp&nbspТ°C&nbsp&nbsp</div></th>
-			<th colspan="4"><div style="text-align: center;">Сод.&nbspнефть или октол</div></th>
+			<th>Дата</th>
+			<th>Наименование</th>
+			<th>Партия</th>
+			<th>Диапазон содержания хлористых солей, мг/л</th>
+			<th>Расчётное содержание хлористых солей, мг/л</th>
+			<th>Очерёдность отбора пробы</th>
 		</tr>
 		<tr>
-			<td colspan="3"><div style="text-align: center;">{{ note.date|date:"d.m.Y" }}</div></td>
-			<td colspan="1"><div style="text-align: center;">{{ note.name}}</div></td>
-			<td colspan="1"><div style="text-align: center;">{{ note.lot}}</div></td>
-			<td colspan="2"><div style="text-align: center;">{{ note.temperature|striptags}}</div></td>
-			<td colspan="4"><div style="text-align: center;">{{ note.constit}}</div></td>
-		</tr>
-{# конец полустандартного верха таблицы#}
-{# совсем уникальная часть таблицы#}
-		<tr>
-			<th colspan="9"><div style="text-align: center;">Измерение плотности</div></th>
-		</tr>
-
-		<tr>
-			<th colspan="2"><div style="text-align: center;">V(пикн.), мл</div></th>
-            <td colspan="2"><div style="text-align: center;">{{ note.piknometer_volume|default_if_none:" "|striptags }}</div></td>
-			<th colspan="2"><div style="text-align: center;">Измерение&nbsp1</div></th>
-			<th colspan="3"><div style="text-align: center;">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspИзмерение&nbsp2&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</div></th>
-		</tr>
-
-		<tr>
-			<th colspan="4"><div style="text-align: center;">m(пикн.), г</div></th>
-			<td colspan="2"><div style="text-align: center;">{{ note.piknometer_mass1|default_if_none:" "|striptags }}</div></td>
-            <td colspan="3"><div style="text-align: center;">{{ note.piknometer_mass2|default_if_none:" "|striptags }}</div></td>
+			<td>{{note.date|date:"d.m.Y"}}</td>
+			<td>{{ note.name}}</td>
+			<td>{{ note.lot}}</td>
+			<td>{{ note.constit }}</td>
+			<td>{{ note.projectconc}}</td>
+			<td>{{ note.que}}</td>
 		</tr>
 		<tr>
-			<th colspan="4"><div style="text-align: center;">m(СО + пикн.), г</div></th>
-			<td colspan="2"><div style="text-align: center;">{{ note.piknometer_plus_SM_mass1|default_if_none:" "|striptags }}</div></td>
-			<td colspan="3"><div style="text-align: center;">{{ note.piknometer_plus_SM_mass2|default_if_none:" "|striptags }}</div></td>
-
+			<th colspan="2">Партия раствора нитрата ртути</th>
+			<th colspan="2">Титр раствора нитрата ртути, мг/мл</th>
+			<th colspan="2">Титр раствора нитрата ртути годен до</th>
 		</tr>
 		<tr>
-			<th colspan="4"><div style="text-align: center;"> m(СО), г</div></th>
-			<td colspan="2"><div style="text-align: center;">{{ note.SM_mass1|default_if_none:" "|striptags }}</div></td>
-			<td colspan="3"><div style="text-align: center;">{{ note.SM_mass2|default_if_none:" "|striptags }}</div></td>
+			<td colspan="2">{{ note.lotHg}}</td>
+			<td colspan="2">{{ note.titerHg}}</td>
+			<td colspan="2">{{ note.titerHgdead}}</td>
 		</tr>
 		<tr>
-			<th colspan="4"><div style="text-align: center;">ρ<sub>1</sub>, г/мл</div></th>
-			<td colspan="5"><div style="text-align: center;">{{ note.density1|default_if_none:" "|striptags }}</div></td>
-		</tr>
-        <tr>
-			<th colspan="4"><div style="text-align: center;">ρ<sub>2</sub>, г/м</div></th>
-			<td colspan="5"><div style="text-align: center;">{{ note.density2|default_if_none:" "|striptags }}</div></td>
-		</tr>
-        <tr>
-			<th colspan="4"><div style="text-align: center;">плотность  измерил</div></th>
-			<td colspan="5"><div style="text-align: center;">{{ note.performerdensity|default_if_none:" "|striptags }}</div></td>
+			<th>ДФК (индикатор) годен до</th>
+			<th>Растворитель</th>
+			<th>Объём аликвоты пробы, мл</th>
+			<th>Объём растворителя</th>
+			<th> Поведение пробы при экстракции</th>
+			<th>Объём холостой пробы, мл</th>
 		</tr>
 		<tr>
-			<th colspan="9"><div style="text-align: center;">Обработка результатов</div></th>
+			<td>{{ note.dfkdead}}</td>
+			<td>{{ note.solvent}}</td>
+			<td> {{ note.aliquotvolume}}</td>
+			<td>{{ note.solventvolume}}</td>
+			<td> {{ note.behaviour}}</td>
+			<td>{{ note.backvolume}}</td>
 		</tr>
 		<tr>
-			<th colspan="3"><div style="text-align: center;">Сред. плотн., ρ, г/мл</div></th>
-			<th colspan="4"><div style="text-align: center;">Оценка приемлемости измерений &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                Δ = (|ρ<sub>1</sub> - ρ<sub>2</sub>|/ρ<sub>сред</sub>) * 100 %</div></th>
-			<th colspan="2"><div style="text-align: center;">Критерий приемл. измерений, r  </div></th>
+			<th colspan="6">Титрование экстрактов</th>
 		</tr>
 		<tr>
-			<td colspan="3"><div style="text-align: center;">{{ note.density_avg|default_if_none:" "|striptags }}</div></td>
-			<td colspan="4"><div style="text-align: center;">{{ note.accMeasurement|default_if_none:" "|striptags }}</div></td>
-			<td colspan="2"><div style="text-align: center;">{{ note.kriteriy|default_if_none:" "|striptags}}</div></td>
-		</tr>
-{# блок оценки результатов #}
-		<tr>
-			<tr>
-			<td colspan="9">
-                {% if note.resultMeas == 'неудовлетворительно' %}
-                <div class="TransactionAmount Badresult">
-                {% else %}
-                <div class="TransactionAmount Goodresult">
-                {% endif %}
-                 Результат измерений: <b>{{ note.resultMeas }} </b> {{ note.cause }}
-
-
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                </div>
-            </td>
-		    </tr>
-        <tr>
-{# конец блока оценки результатов #}
-			<th colspan="9"><div style="text-align: center;">Расчёт динамической вязкости</div></th>
+			<th colspan="3">Воронка № 1</th>
+			<th colspan="3">Воронка № 2</th>
 		</tr>
 		<tr>
-			<th colspan="4"><div style="text-align: center;">Вязкость кинематическая при температуре измерений, ν,  мм<sup>2</sup>/с&nbsp&nbsp</div></th>
-			<th colspan="5"><div style="text-align: center;">Вязкость динамическая, ν<sub>дин</sub> = ν * ρ<sub>сред</sub> , Па*с </div></th>
+			<th></th>
+			<th>V(Hg(NO3)2), мл</th>
+			<th>A</th>
+			<th></th>
+			<th>V(Hg(NO3)2), мл</th>
+			<th>A</th>
 		</tr>
 		<tr>
-			<td colspan="4">
-                 {% if note.kinematicviscosity|striptags %}
-                  {{ note.kinematicviscosity|default_if_none:" "|striptags }}
-                {% endif %}
-            </td>
-			<td colspan="5"><div style="text-align: center;">{{ note.dinamicviscosity_not_rouned|default_if_none:" "|striptags }}</div></td>
-		</tr>
-        <tr>
-			<th colspan="9"><div style="text-align: center;">Фиксация результатов</div></th>
+			<th>11</th>
+			<td></td>
+			<td></td>
+			<th>21</th>
+			<td></td>
+			<td></td>
 		</tr>
 		<tr>
-			<th colspan="1"><div style="text-align: center;">АЗ, Дин. вязк., Па * с</div></th>
-			<th colspan="3"><div style="text-align: center;">
-                Абс.&nbspпогр.&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                (ν<sub>дин</sub> <sub>сред</sub> * 0,3)/ 100</div></th>
-			<th colspan="1"><div style="text-align: center;">Пред. зн. плот., ρ<sub>пред</sub>, г/мл</div></th>
-			<th colspan="4">Разница с ρ<sub>пред  </sub>
-                &nbsp&nbsp&nbsp&nbsp&nbsp
-                Δρ<sub>пред</sub> = (|ρ<sub>изм</sub> - ρ<sub>пред</sub>|/ρ<sub>сред</sub>) * 100 %</th></th>
+			<th>12</th>
+			<td></td>
+			<td></td>
+			<th>22</th>
+			<td></td>
+			<td></td>
 		</tr>
 		<tr>
-			<td colspan="1"><div style="text-align: center;">{{ note.certifiedValue|default_if_none:" "|striptags }}</div></td>
-			<td colspan="3"><div style="text-align: center;">{{ note.abserror|default_if_none:" "|striptags }}</div></td>
-			<td colspan="1"><div style="text-align: center;">{{ note.olddensity|default_if_none:" "|striptags }}</div></td>
-            <td colspan="4"><div style="text-align: center;">{{ note.deltaolddensity|default_if_none:" "|striptags }}</div></td>
-		</tr>
-        <tr>
-        <td colspan="9">
-
-                <div class="TransactionAmount Badresult">
-                  <b>{{ note.resultWarning|default_if_none:" " }}</b>
-                    <b>{{ note.resultWarningkinematic|default_if_none:" " }}</b>
-                </div>
-            </td>
-		</tr>
-{#конец уникальной части таблицы #}
-
-{# полустандартный низ таблицы с формой фиксации АЗ и кнопкой "комментарии" #}
-        <tr>
-			<th colspan="3">Исполнитель </th>
-            <th colspan="1"><div style="text-align: center;">отпр.</div></th>
-            <th colspan="1"><div style="text-align: center;">внесено</div></th>
-            <th colspan="3">ОТК</th>
-            <th colspan="1">комметарии</th>
-
+			<th>13</th>
+			<td></td>
+			<td></td>
+			<th>23</th>
+			<td></td>
+			<td></td>
 		</tr>
 		<tr>
-			<th colspan="3">{{ note.performer }} </th>
-            <td colspan="1"><div style="text-align: center;"></div></td>
-            <td colspan="1">
-                {% if note.resultMeas == 'удовлетворительно' and not note.fixation or note.resultMeas == 'плотность измерена ранее'  and not note.fixation %}
-                <form method="post" >
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button class="btn btn-outline-warning" type="submit" name="btnform2">Подтвердить</button>
-                </form>
-                {% elif  note.resultMeas == 'удовлетворительно' and note.fixation or note.resultMeas == 'плотность измерена ранее'  and note.fixation %}
-                   <a href="/CertifiedValueJ/dinamicviscosityvalues/" target="blank"> АЗ записано в ЖАЗ сайта </a>
-                {% else %}
-                нет АЗ
-                {% endif %}
-            </td>
-            <td colspan="3"><div style="text-align: center;">
-            </div></td>
-            <th colspan="1">
-                {% if not counter %}
-                <a href="/attestationJ/{{ URL }}/attestation/{{ note.id }}/comments/"  class="btn btn-outline-warning mt-3">комментировать</a>
-                {% elif counter %}
-                <a href="/attestationJ/{{ URL }}/attestation/{{ note.id }}/comments/"  class="btn btn-outline-warning mt-3">смотреть комментарии</a></th>
-                {% endif %}
-            </tr>
-{# конец низа #}
+			<th>14</th>
+			<td></td>
+			<td></td>
+			<th>24</th>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<th>15</th>
+			<td></td>
+			<td></td>
+			<th>25</th>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<th>X1, мг/л</th>
+			<td colspan="2"></td>
+			<th>X2, мг/л</th>
+			<td colspan="2"></td>
+		</tr>
+		<tr>
+			<th colspan="3">Сходимость по ГОСТ, мг/л</th>
+			<th colspan="3">Сходимость фактическая, мг/л</th>
+		</tr>
+		<tr>
+			<td colspan="3">{{ note.ndocconvergence}}</td>
+			<td colspan="3">{{ note.factconvergence}}</td>
+		</tr>
+		<tr>
+			<td colspan="6">Результат измерений: {{ note.resultMeas}} {{ note.cause}}</td>
+		</tr>
+		<tr>
+			<td colspan="3">Исполнитель: {{ note.performer}}</td>
+			<td colspan="3">Примечания:</td>
+		</tr>
+		<tr>
+			<th colspan="6">Расчёт аттестованного значения</th>
+		</tr>
+		<tr>
+			<td>Исполнитель1: {{ note.performer}}</td>
+			<td>Х1 = {{ note.x1}} мг/л</td>
+			<td>Х2 = {{ note.x2}} мг/л</td>
+			<td>Исполнитель2: {{ note.performer2}}  (дата измерений: {{note.date2|date:"d.m.Y"}}</td>
+			<td>Х3 = {{ note.x3}} мг/л</td>
+			<td>Х4 = {{ note.x4}} мг/л</td>
+		</tr>
+		<tr>
+			<th colspan="4">Диапазон</th>
+			<th rowspan="2">Воспроизводимость R, мг/л</th>
+			<th rowspan="2">Критическая разность CD, мг/л</th>
+		</tr>
+		<tr>
+			<th colspan="2">По описанию типа</th>
+			<th colspan="2">По прайсу (или по заказу)</th>
+		</tr>
+		<tr>
+			<td colspan="2">{{ note.ndoccd}}</td>
+			<td colspan="2">{{ note.ndoccd}}</td>
+			<td>{{ note.ndocreproducibility}}</td>
+			<td>{{ note.ndoccd}}</td>
+		</tr>
+		<tr>
+			<th>Xсреднее  из измеренных (Из X1-X4)</th>
+			<th colspan="4">Расчёт вхождения результатов в диапазон: Xсреднее ± CD </th>
+			<th>Из корректных результатов : Xсреднее  из (Хmax, Xmin)</th>
+		</tr>
+		<tr>
+			<td>{{ note.ndoccd}}</td>
+			<td colspan="4">{{ note.ndoccd}}</td>
+			<td>{{ note.ndoccd}}</td>
+		</tr>
+		<tr>
+			<th>Относительная погрешность (по описанию типа), %</th>
+			<th>Абсолютная погрешность, мг/л</th>
+			<th>Предыдущее АЗ</th>
+			<th>Разница с предыдущим АЗ, %</th>
+			<th>Разница с предыдущим АЗ входит в диапазон CD</th>
+			<th>Комментарии</th>
+		</tr>
+		<tr>
+			<td>{{ note.ndoccd}}</td>
+			<td>{{ note.ndoccd}}</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="6"></td>
+		</tr>
+		<tr>
+			<th colspan="6">Фиксация результатов</th>
+		</tr>
+		<tr>
+			<th>Аттестованное значение содержания хлористых солей, мг/л</th>
+			<th>Дата присвоения АЗ, мг/л</th>
+			<th>Отправлено</th>
+			<th>Внесено</th>
+			<th>Исполнитель расчёта АЗ</th>
+			<th>комментарии</th>
+		</tr>
+		<tr>
+			<td>{{ note.ndoccd}}</td>
+			<td>{{ note|date:"d.m.Y"}}</td>
+			<td></td>
+			<td>{{ note.fixation}}</td>
+			<td>{{ note.performer3}}</td>
+			<td></td>
+		</tr>
 	</tbody>
 </table>
 </div>

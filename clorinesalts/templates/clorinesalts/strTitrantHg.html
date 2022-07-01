@@ -1,7 +1,7 @@
 {% extends 'main/base.html' %}
 
 {% block title %}
-ДФК
+HgNO3
 {% endblock %}
 
 {#кнопки слева странички#}
@@ -12,10 +12,11 @@
 {#    <a href='/attestationJ/{{ URL }}/' class="btn btn-warning mt-3">В  журнал</a>#}
 {#    <a href='/attestationJ/{{ URL }}/attestation/' class="btn btn-warning mt-3">Все записи</a>#}
 {#</div>#}
-<div style="text-align: center;"><h4><a href="{% url 'clorinesalts' %}"> 1%-ный спиртовой раствор дифенилкарбазида </a> </h4></div>
-    <br>
+
 {#уникальная таблица#}
 {#полустандартный верх таблицы#}
+<div style="text-align: center;"><h4><a href="{% url 'clorinesalts' %}"> 0,01 н. раствор азотнокислой ртути </a> </h4></div>
+    <br>
 <div class="col-md-4 mt-1" >
     <table class="table table-bordered background-color">
 	<tbody>
@@ -25,22 +26,29 @@
 			<th>Количество</th>
 		</tr>
 		<tr>
-			<td>Дифенилкарбазид</td>
+			<td>Ртуть (II) азотнокислая 1-водная</td>
 			<td>{{obj.lotreakt1}}</td>
-			<td>{{obj.mass}} г</td>
+			<td>{{obj.massHgNO3}} г</td>
 		</tr>
 		<tr>
-			<td>Этиловый ректифицированный спирт</td>
+			<td>Вода дистиллированная</td>
 			<td>{{obj.lotreakt2}}</td>
-			<td>{{obj.volume}} см3</td>
+			<td>{{obj.volumeH2O}} см3</td>
+		</tr>
+        <tr>
+			<td>Кислота азотная 0,2 М</td>
+			<td>{{obj.lotreakt3}}</td>
+			<td>{{obj.volumeHNO3}} см3</td>
 		</tr>
 		<tr>
-			<th>Дата изготовления: {{obj.date|date:"d.m.Y"}}</th>
-			<th>Годен до: {{obj.datedead|date:"d.m.Y"}}</th>
+            <th>Партия титранта: {{obj.pk}}</th>
+			<th>Изготовлен: {{obj.date|date:"d.m.Y"}} <br>
+                Годен до: Н/О</th>
 			<th>Приготовил: {{obj.performer}}</th>
 		</tr>
 	</tbody>
 </table>
 </div>
+{#конец  таблицы#}
 
 {% endblock %}
