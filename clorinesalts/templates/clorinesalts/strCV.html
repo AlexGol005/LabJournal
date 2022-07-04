@@ -1,0 +1,129 @@
+{% extends 'main/superbase.html' %}
+
+{% block title %}
+{{ NAME }}
+{% endblock %}
+
+{#кнопки слева странички#}
+{% block content %}
+
+
+{#уникальная таблица#}
+{#полустандартный верх таблицы#}
+<div class="col-md-4 mt-1" >
+    <table class="table table-bordered background-color">
+
+		<tr>
+			<th colspan="6">Расчёт аттестованного значения</th>
+		</tr>
+		<tr>
+			<td colspan="2">Исп1: &nbsp&nbsp&nbsp&nbsp{{ note.performer}}&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+			<td colspan="1" >Х1 = {{ note.x1}} мг/л <br>Х2 = {{ note.x2}} мг/л</td>
+
+        <td colspan="2">{% if note.performer2 %}
+            Исп2: &nbsp&nbsp&nbsp&nbsp{{ note.performer2}}&nbsp&nbsp&nbsp&nbsp&nbspдата: {{note.date2|date:"d.m.Y"}}
+        {% endif %}</td>
+			<td colspan="1">{% if note.x3 %}
+                Х3 = {{ note.x3}} мг/л <br>Х4 = {{ note.x4}} мг/л
+                {% endif %}
+        </td>
+		</tr>
+		<tr>
+			<th colspan="4">Диапазон</th>
+			<th rowspan="2">Воспроизводимость R, мг/л</th>
+			<th rowspan="2">Критическая разность CD, мг/л</th>
+		</tr>
+		<tr>
+			<th colspan="2">По описанию типа</th>
+			<th colspan="2">По прайсу (или по заказу)</th>
+		</tr>
+		<tr>
+			<td colspan="2">{{ note.ndoccd}}</td>
+			<td colspan="2">{{ note.ndoccd}}</td>
+			<td>{{ note.ndocreproducibility}}</td>
+			<td>{{ note.ndoccd}}</td>
+		</tr>
+		<tr>
+			<th colspan="2"> Xсред. измеренное (из X1-X4)</th>
+			<th colspan="2">Вхождение рез-в в Xсреднее ± CD </th>
+			<th colspan="2"> Из корр. рез-в : Xсред  из (Хmax, Xmin)</th>
+		</tr>
+		<tr>
+			<td colspan="2">{{ note.ndoccd}}</td>
+			<td colspan="2">{{ note.ndoccd}}</td>
+			<td colspan="2">{{ note.ndoccd}}</td>
+		</tr>
+		<tr>
+			<th colspan="1">Отн.&nbspпогр.&nbsp,&nbsp%</th>
+			<th>Абс. погр., мг/л</th>
+			<th>Пред. АЗ</th>
+			<th>Δ с пред. АЗ, %</th>
+			<th colspan="2">Δ с пред. АЗ входит в CD</th>
+
+		</tr>
+		<tr>
+			<td colspan="1">{{ note.ndoccd}}</td>
+			<td>{{ note.ndoccd}}</td>
+			<td></td>
+			<td></td>
+			<td colspan="2"></td>
+
+		</tr>
+		<tr>
+			<td colspan="6"></td>
+		</tr>
+		<tr>
+			<th colspan="6">Фиксация результатов</th>
+		</tr>
+		<tr>
+			<th>АЗ, мг/л</th>
+			<th>Дата присв. АЗ</th>
+			<th>Отправлено</th>
+			<th>Внесено</th>
+			<th>АЗ рассчитал</th>
+			<th>комментарии</th>
+		</tr>
+		<tr>
+			<td>{{ note.ndoccd}}</td>
+			<td>{{ note|date:"d.m.Y"}}</td>
+			<td></td>
+			<td>{% if note.resultMeas == 'удовлетворительно' and not note.fixation %}
+                <form method="post" >
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-outline-warning" type="submit">Подтвердить</button>
+                </form>
+                {% elif note.resultMeas == 'удовлетворительно' and  note.fixation %}
+
+<a href="/CertifiedValueJ/kinematicviscosityvalues/" target="blank"> АЗ записано в ЖАЗ сайта </a>
+                {% else %}
+                нет АЗ
+                {% endif %}</td>
+			<td>{{ note.performer3}}</td>
+			<td>{% if not counter %}
+                <a href="/attestationJ/{{ URL }}/attestation/{{ note.id }}/comments/"  class="btn btn-outline-warning mt-3">комментировать</a>
+                {% elif counter %}
+                <a href="/attestationJ/{{ URL }}/attestation/{{ note.id }}/comments/"  class="btn btn-outline-warning mt-3">смотреть комментарии</a>
+                {% endif %}</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+{#конец  таблицы#}
+
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+{#кнопка печать #}
+    <a href="javascript:(print());" class="btn btn-warning mt-1">Распечатать</a>
+{% endblock %}

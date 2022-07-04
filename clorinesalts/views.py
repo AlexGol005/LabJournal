@@ -1,4 +1,6 @@
 # все стандратно кроме поиска по полям, импорта моделей и констант
+from decimal import Decimal
+
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
 from django.shortcuts import render, redirect
@@ -126,7 +128,6 @@ class StrJournalView(View):
             if form.is_valid():
                 order = form.save(commit=False)
                 order.save()
-                messages.success(request, f'Запись внесена, подтвердите АЗ!')
                 return redirect(order)
         else:
             form = StrJournalUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
@@ -138,25 +139,25 @@ class StrJournalView(View):
 @login_required
 def RegNoteJournalView(request):
     """ Представление, которое выводит форму регистрации в журнале. """
-    """Полустандартное со уникальной вставкой"""
+    """Стандартное, но со вставкой по поводу констант и предыдущего значения"""
     if request.method == "POST":
         form = StrJournalCreationForm(request.POST)
         if form.is_valid():
             order = form.save(commit=False)
             order.performer = request.user
-            """вставка начало"""
+            a = order.lotHg[-1]
             try:
-                get_id = GetTitrHg.objects.select_related('lot'). \
-                    filter(lot__pk__exact=order.lotHg). \
+                get_id_actual = GetTitrHg.objects.select_related('lot'). \
+                    filter(lot__exact=a). \
                     values('lot').annotate(id_actual=Max('id')).values('id_actual')
-                list_ = list(get_id)
+                list_ = list(get_id_actual)
                 set = list_[0].get('id_actual')
-                gettiterHg = GetTitrHg.objects.get(id=set)
-                order.titerHg = gettiterHg.titr
+                aktualTiter = GetTitrHg.objects.get(id=set)
+                order.titerHg = Decimal(aktualTiter.titr)
+                order.titerHgdead = aktualTiter.datedead
             except:
                 pass
-            """вставка окончание"""
-
+            order.dfkdead = IndicatorDFK.objects.last().datedead
             order.save()
             return redirect(order)
     else:

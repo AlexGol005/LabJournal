@@ -1,9 +1,11 @@
 import datetime
+from decimal import Decimal
+
 from django import forms
 from django.contrib.auth.models import User
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column
+from crispy_forms.layout import Layout, Submit, Row, Column, HTML
 
 from clorinesalts.models import Clorinesalts, CommentsClorinesalts, IndicatorDFK, TitrantHg, GetTitrHg, DOCUMENTS, \
     MATERIAL, CHOICES, SOLVENTS, BEHAVIOUR
@@ -15,15 +17,19 @@ COMMENTMODEL = CommentsClorinesalts
 class StrJournalCreationForm(forms.ModelForm):
     """форма для внесения записи в журнал"""
     """поменять: fields"""
+
     ndocument = forms.ChoiceField(label='Метод испытаний', required=True,
                                   choices=DOCUMENTS,
                                   widget=forms.Select(attrs={'class': 'form-control'}))
     name = forms.ChoiceField(label='Наименование пробы', required=True,
                              choices=MATERIAL,
                              widget=forms.Select(attrs={'class': 'form-control'}))
-    namedop = forms.CharField(label='Другое: (если нет в списке)', max_length=90, required=False,
+    namedop = forms.CharField(label='Индекс СО или (если выбрали "другое") полное название СО', max_length=90, required=False,
+                              help_text='Для СС-ТН: Х, ХПВ иил ХПВС;'
+                                        ' Для ХСН: индекс ГСО, например 10; '
+                                        'Для ГК: Х; Если выбрано "Другое" то укажите полное название пробы',
                               widget=forms.TextInput(attrs={'class': 'form-control',
-                                                            'placeholder': 'Название'}))
+                                                            'placeholder': '100'}))
     lot = forms.CharField(label='Партия', max_length=100, required=True,
                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': 'Партия'}))
@@ -50,7 +56,7 @@ class StrJournalCreationForm(forms.ModelForm):
     lotHg = forms.ModelChoiceField(label='Партия Hg(NO3)2', required=True,
                                  queryset=TitrantHg.objects.filter(availablity=True),
                                  widget=forms.Select(attrs={'class': 'form-control'}))
-    backvolume = forms.DecimalField(label='Объём холостой пробы, мл', initial='0.08', max_digits=4, decimal_places=2,
+    backvolume = forms.DecimalField(label='Объём холостой пробы, мл', initial=Decimal('0.08'), max_digits=4, decimal_places=2,
                                     widget=forms.TextInput(attrs={'class': 'form-control',
                                                                   'placeholder': '0.00'}))
     V1E1 = forms.DecimalField(label='V11, мл', max_digits=4, decimal_places=2,
@@ -84,34 +90,34 @@ class StrJournalCreationForm(forms.ModelForm):
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '00.00'}))
 
-    aV1E1 = forms.DecimalField(label='А11', initial='1', max_digits=1, decimal_places=0,
+    aV1E1 = forms.DecimalField(label='А11', initial=Decimal('1'), max_digits=1, decimal_places=0,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '1'}))
-    aV1E2 = forms.DecimalField(label='А12', initial='1', max_digits=1, decimal_places=0,
+    aV1E2 = forms.DecimalField(label='А12', initial=Decimal('1'), max_digits=1, decimal_places=0,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '1'}))
-    aV1E3 = forms.DecimalField(label='А13', initial='1', max_digits=1, decimal_places=0,
+    aV1E3 = forms.DecimalField(label='А13', initial=Decimal('1'), max_digits=1, decimal_places=0,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '1'}))
-    aV2E1 = forms.DecimalField(label='А21', initial='1', max_digits=1, decimal_places=0,
+    aV2E1 = forms.DecimalField(label='А21', initial=Decimal('1'), max_digits=1, decimal_places=0,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '1'}))
-    aV2E2 = forms.DecimalField(label='А22', initial='1', max_digits=1, decimal_places=0,
+    aV2E2 = forms.DecimalField(label='А22', initial=Decimal('1'), max_digits=1, decimal_places=0,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '1'}))
-    aV2E3 = forms.DecimalField(label='А23', initial='1', max_digits=1, decimal_places=0,
+    aV2E3 = forms.DecimalField(label='А23', initial=Decimal('1'), max_digits=1, decimal_places=0,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '1'}))
-    aV1E4 = forms.DecimalField(label='А14', initial='1', max_digits=1, decimal_places=0, required=False,
+    aV1E4 = forms.DecimalField(label='А14', max_digits=1, decimal_places=0, required=False,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '1'}))
-    aV1E5 = forms.DecimalField(label='А15', initial='1', max_digits=1, decimal_places=0, required=False,
+    aV1E5 = forms.DecimalField(label='А15',  max_digits=1, decimal_places=0, required=False,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '1'}))
-    aV2E4 = forms.DecimalField(label='А24', initial='1', max_digits=1, decimal_places=0, required=False,
+    aV2E4 = forms.DecimalField(label='А24',  max_digits=1, decimal_places=0, required=False,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '1'}))
-    aV2E5 = forms.DecimalField(label='А25', initial='1', max_digits=1, decimal_places=0, required=False,
+    aV2E5 = forms.DecimalField(label='А25',  max_digits=1, decimal_places=0, required=False,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '1'}))
 
@@ -120,14 +126,20 @@ class StrJournalCreationForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
+
             Row(
                 Column('name', css_class='form-group col-md-4 mb-0'),
-                Column('namedop', css_class='form-group col-md-4 mb-0'),
                 Column('lot', css_class='form-group col-md-4 mb-0'),
-
+                Column('ndocument', css_class='form-group col-md-4 mb-0'),
 
                 css_class='form-row'
             ),
+
+            Row(
+                Column('namedop', css_class='form-group col-md-12 mb-0'),
+                css_class='form-row'
+            ),
+
             Row(
 
                 Column('constit', css_class='form-group col-md-4 mb-0'),
@@ -153,18 +165,144 @@ class StrJournalCreationForm(forms.ModelForm):
                 css_class='form-row'
             ),
             Row(
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                css_class='form-row'
+            ),
+
+            Row(
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('Воронка № 1'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('Воронка № 2'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                css_class='form-row'
+            ),
+            Row(
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                css_class='form-row'
+            ),
+
+            Row(
                 Column('V1E1', css_class='form-group col-md-3 mb-0'),
                 Column('aV1E1', css_class='form-group col-md-3 mb-0'),
                 Column('V2E1', css_class='form-group col-md-3 mb-0'),
+                Column('aV2E1', css_class='form-group col-md-3 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('V1E2', css_class='form-group col-md-3 mb-0'),
+                Column('aV1E2', css_class='form-group col-md-3 mb-0'),
+                Column('V2E2', css_class='form-group col-md-3 mb-0'),
+                Column('aV2E2', css_class='form-group col-md-3 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('V1E3', css_class='form-group col-md-3 mb-0'),
                 Column('aV1E3', css_class='form-group col-md-3 mb-0'),
+                Column('V2E3', css_class='form-group col-md-3 mb-0'),
+                Column('aV2E3', css_class='form-group col-md-3 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('V1E4', css_class='form-group col-md-3 mb-0'),
+                Column('aV1E4', css_class='form-group col-md-3 mb-0'),
+                Column('V2E4', css_class='form-group col-md-3 mb-0'),
+                Column('aV2E4', css_class='form-group col-md-3 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('V1E5', css_class='form-group col-md-3 mb-0'),
+                Column('aV1E5', css_class='form-group col-md-3 mb-0'),
+                Column('V2E5', css_class='form-group col-md-3 mb-0'),
+                Column('aV2E5', css_class='form-group col-md-3 mb-0'),
                 css_class='form-row'
             ),
 
             Submit('submit', 'Внести запись в журнал'))
 
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.helper = FormHelper()
+    #     self.helper.layout = Layout(
+    #         Row(
+    #             Column('name', css_class='form-group col-md-4 mb-0'),
+    #             Column('lot', css_class='form-group col-md-4 mb-0'),
+    #             Column('temperature', css_class='form-group col-md-4 mb-0'),
+    #             css_class='form-row'
+    #         ),
+    #         Row(
+    #             Column('ndocument', css_class='form-group col-md-4 mb-0'),
+    #             Column('termostatition', css_class='form-group col-md-4 mb-0'),
+    #             Column('temperatureCheck', css_class='form-group col-md-4 mb-0'),
+    #             css_class='form-row'
+    #         ),
+    #         Row(
+    #             Column('constit', css_class='form-group col-md-6 mb-0'),
+    #             # Column('oldCertifiedValue', css_class='form-group col-md-6 mb-0'),
+    #             css_class='form-row'
+    #         ),
+    #         Row(
+    #             Column('ViscosimeterNumber1', css_class='form-group col-md-6 mb-0'),
+    #             # Column('Konstant1', css_class='form-group col-md-6 mb-0'),
+    #             css_class='form-row'
+    #         ),
+    #         Row(
+    #             Column('plustimeminK1T1', css_class='form-group col-md-2 mb-0'),
+    #             Column('plustimesekK1T1', css_class='form-group col-md-2 mb-0'),
+    #             Column('plustimeminK1T2', css_class='form-group col-md-2 mb-0'),
+    #             Column('plustimesekK1T2', css_class='form-group col-md-2 mb-0'),
+    #
+    #         ),
+    #         Row(
+    #             Column('ViscosimeterNumber2', css_class='form-group col-md-6 mb-0'),
+    #             # Column('Konstant2', css_class='form-group col-md-6 mb-0'),
+    #             css_class='form-row'
+    #         ),
+    #         Row(
+    #             Column('plustimeminK2T1', css_class='form-group col-md-2 mb-0'),
+    #             Column('plustimesekK2T1', css_class='form-group col-md-2 mb-0'),
+    #             Column('plustimeminK2T2', css_class='form-group col-md-2 mb-0'),
+    #             Column('plustimesekK2T2', css_class='form-group col-md-2 mb-0'),
+    #
+    #         ),
+    #         Submit('submit', 'Внести запись в журнал')
+    #     )
+
+
     class Meta:
         model = MODEL
-        fields = ['ndocument',
+        fields = [ 'ndocument',
                   'name', 'lot', 'namedop',
                   'constit',
                   'projectconc', 'que',
@@ -179,6 +317,9 @@ class StrJournalCreationForm(forms.ModelForm):
                   'aV2E1', 'aV2E2', 'aV2E3',
                   'aV2E4', 'aV2E5', 'aV1E4', 'aV1E5',
                   ]
+
+
+
 
 
 class StrJournalUdateForm(forms.ModelForm):
