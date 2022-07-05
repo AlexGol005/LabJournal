@@ -185,8 +185,8 @@
 		</tr>
 		<tr>
 			<th colspan="1">{{ note.performer }} </th>
-            <td colspan="2"><div style="text-align: center;"></div></td>
-            <td colspan="3"><div style="text-align: center;">
+            <td colspan="2"></td>
+            <td colspan="3">
                 {% if note.resultMeas == 'удовлетворительно' and not note.fixation %}
                 <form method="post" >
                 {% csrf_token %}
@@ -199,7 +199,7 @@
                 {% else %}
                 нет АЗ
                 {% endif %}
-            </div></td>
+           </td>
             <td colspan="2"><div style="text-align: center;">
             </div></td>
             <th colspan="1">

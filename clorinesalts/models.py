@@ -18,12 +18,13 @@ MATERIAL = (('ХСН-ПА-1', 'ХСН-ПА-1'),
            ('ГК-ПА-2', 'ГК-ПА-2'),
            ('другое', 'другое'))
 
-DOCUMENTS = (('ГОСТ 21534 (Метод А)', 'ГОСТ 21534 (Метод А)'),)
+DOCUMENTS = (('ГОСТ 21534 (Метод А)', 'ГОСТ 21534 (Метод А)'),
+             ('другое', 'другое'))
 
-RELERROR_XSN_1 = 5  # относительная погрешность ХС ХСН-ПА-1 из описания типа, %
-RELERROR_XSN_2 = 2  # относительная погрешность ХС ХСН-ПА-2 из описания типа, %
-RELERROR_SSTN = 1  # относительная погрешность ХС СС-ТН-ПА-1 из описания типа, %
-RELERROR_GK = 3  # относительная погрешность ХС ГК-ПА-2 из описания типа, %
+# RELERROR_XSN_1 = 5  # относительная погрешность ХС ХСН-ПА-1 из описания типа, %
+# RELERROR_XSN_2 = 2  # относительная погрешность ХС ХСН-ПА-2 из описания типа, %
+# RELERROR_SSTN = 1  # относительная погрешность ХС СС-ТН-ПА-1 из описания типа, %
+# RELERROR_GK = 3  # относительная погрешность ХС ГК-ПА-2 из описания типа, %
 
 CHOICES = (('до 50 мг/л', 'до 50 мг/л'),
            ('50 - 100 мг/л', '50 - 100 мг/л'),
@@ -43,6 +44,12 @@ VOLUMENACL = (('10', '10'),)
 TITRKRIT = Decimal('0.008')
 
 M_NaCl = '58.44'
+
+TYPE = (('Аттестация', 'Аттестация'),
+           ('Переаттестация', 'Переаттестация'),
+           ('Внутрилабораторный контроль', 'Внутрилабораторный контроль'),
+           ('Другое', 'Другое'))
+
 
 
 # оригинальные модели для методов с титрованием
@@ -155,6 +162,8 @@ class IndicatorDFK(models.Model):
         verbose_name_plural = 'Индикатор ДФК'
 
 class Clorinesalts(models.Model):
+    type = models.CharField('Назначение измерений', max_length=300, choices=TYPE,
+                               default= 'Аттестация', null=True, blank=True)
     for_lot_and_nameLotCSN = models.ForeignKey(LotCSN, verbose_name='Измерение для: СО и партия (ХСН)', on_delete=models.PROTECT,
                                          blank=True, null=True)
     for_lot_and_nameLotSSTN = models.ForeignKey(LotSSTN, verbose_name='Измерение для: СО и партия(СС-ТН)',
@@ -222,11 +231,13 @@ class Clorinesalts(models.Model):
 
     x1 = models.DecimalField('X1', max_digits=7, decimal_places=3, null=True, blank=True)
     x2 = models.DecimalField('X2', max_digits=7, decimal_places=3, null=True, blank=True)
-    date2 = models.DateField('Дата второго измерения', null=True, blank=True,)
     factconvergence = models.CharField('Расхождение между результатами Х1-Х2, мг/л', max_length=90, null=True, blank=True)
     resultMeas = models.CharField('Результат измерений уд/неуд', max_length=100, default='неудовлетворительно',
                                   null=True, blank=True)
     cause = models.CharField('Причина', max_length=100, default='', null=True, blank=True)
+
+    ndocreproducibility = models.CharField('Воспроизводимость, мг/л', max_length=90, null=True, blank=True)
+    ndoccd = models.CharField('Критическая разность, мг/л', max_length=90, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         # связь с конкретной партией и  относительной погрешностью СО
@@ -236,24 +247,18 @@ class Clorinesalts(models.Model):
             b = a[0]
             LotSSTN.objects.get_or_create(lot=self.lot, nameSM=b)
             self.for_lot_and_nameLotSSTN = LotSSTN.objects.get(lot=self.lot, nameSM=b)
-            self.relerror = RELERROR_SSTN
         if self.name == 'ХСН-ПА-1' or self.name == 'ХСН-ПА-2':
             pk_CSN = CSN.objects.get(name=self.name)
             a = CSNrange.objects.get_or_create(rangeindex=self.namedop, nameSM=pk_CSN)
             b = a[0]
             LotCSN.objects.get_or_create(lot=self.lot, nameSM=b)
             self.for_lot_and_nameLotCSN = LotCSN.objects.get(lot=self.lot, nameSM=b)
-            if self.name == 'ХСН-ПА-1':
-                self.relerror = RELERROR_XSN_1
-            if self.name == 'ХСН-ПА-2':
-                self.relerror = RELERROR_XSN_2
         if self.name == 'ГК-ПА-2':
             pk_GKCS = GKCS.objects.get(name=self.name)
             a = GKCSrange.objects.get_or_create(rangeindex=self.namedop, nameSM=pk_GKCS)
             b = a[0]
             LotGKCS.objects.get_or_create(lot=self.lot, nameSM=b)
             self.for_lot_and_nameLotGKCS = LotGKCS.objects.get(lot=self.lot, nameSM=b)
-
         # расчёты первичные
         clearvolume11 = self.V1E1 - self.backvolume
         clearvolume12 = self.V1E2 - self.backvolume
@@ -290,6 +295,7 @@ class Clorinesalts(models.Model):
         if not self.titerHg or self.titerHgdead < date.today():
             self.resultMeas = 'Не установлен или просрочен титр раствора нитрата ртути'
 
+
         # определяем сходимость, воспроизводимость и CD, соответствующие диапазону, сначала вычисляем среднее:
         if self.x1:
             self.x_avg = get_avg(self.x1, self.x2, 4)
@@ -317,7 +323,6 @@ class Clorinesalts(models.Model):
                 self.cause = '|Х1 - Х2| > r'
             if self.factconvergence <= Decimal(self.ndocconvergence):
                 self.resultMeas = 'Удовлетворительно'
-
         super(Clorinesalts, self).save(*args, **kwargs)
 
 
@@ -354,52 +359,163 @@ class CommentsClorinesalts(models.Model):
         ordering = ['-pk']
 
 class ClorinesaltsCV(models.Model):
-    for_measure = models.OneToOneField(Clorinesalts, verbose_name='расчёт АЗ к измерению', on_delete=models.PROTECT)
     date = models.DateField('Дата', auto_now_add=True, db_index=True, blank=True)
     performer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='performercv', blank=True)
-    x1 = models.DecimalField('X1', max_digits=7, decimal_places=3, null=True, blank=True)
-    x2 = models.DecimalField('X2', max_digits=7, decimal_places=3, null=True, blank=True)
-    x3 = models.DecimalField('X3', max_digits=7, decimal_places=3, null=True, blank=True)
-    x4 = models.DecimalField('X4', max_digits=7, decimal_places=3, null=True, blank=True)
-    performer2 = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='performer2cs', blank=True)
-    ndocreproducibility = models.CharField('Воспроизводимость, мг/л', max_length=90, null=True, blank=True)
-    ndoccd = models.CharField('Критическая разность, мг/л', max_length=90, null=True, blank=True)
+    clorinesalts = models.OneToOneField(Clorinesalts, verbose_name='расчёт АЗ к измерению', on_delete=models.PROTECT,
+                                        related_name='clorinesalts',  null=True, blank=True)
+    clorinesalts2 = models.ForeignKey(Clorinesalts, verbose_name='расчёт АЗ к измерению', on_delete=models.PROTECT,
+                                         related_name='clorinesalts2', null=True, blank=True)
     x_avg = models.DecimalField('Xсреднее', max_digits=7, decimal_places=3, null=True, blank=True)
-    x_avg_cd = models.BooleanField('Результаты измерений входят в диапазон Xсреднее+-CD ', blank=True, null=True)
+    x_avg_new = models.DecimalField('Xсреднее', max_digits=7, decimal_places=3, null=True, blank=True)
+
     x_cd_warning = models.CharField('Если входят не все Х', max_length=300, default='', null=True, blank=True)
+    x_cd_warning_new = models.CharField('Если по прежнему входят не все Х', max_length=300, default='', null=True, blank=True)
+
     x_dimension = models.DecimalField('(Xmax + Xmin)/2', max_digits=7, decimal_places=3, null=True, blank=True)
 
-    relerror = models.DecimalField('Относительная  погрешность', max_digits=3, decimal_places=1, null=True, blank=True)
     abserror = models.CharField('Абсолютная  погрешность', null=True, blank=True, max_length=300)
     certifiedValue = models.CharField('Аттестованное значение', null=True,
                                       blank=True, max_length=300)
 
+
     certifiedValue_type_diap = models.BooleanField('АЗ входит в описание типа', blank=True, null=True)
+    certifiedValue_price_diap = models.BooleanField('АЗ входит в описание диапазон по прайсу', blank=True, null=True)
 
     olddvalue = models.CharField('Предыдущее значение', max_length=300, null=True, default='', blank=True)
     deltaolddvalue = models.DecimalField('Оценка разницы с предыдущим значением ',
                                          max_digits=10, decimal_places=2, null=True, blank=True)
     old_delta_warning = models.CharField(max_length=300, default='', null=True, blank=True)
+
     fixation = models.BooleanField(verbose_name='Внесен ли результат в Журнал аттестованных значений?', default=False,
                                    null=True, blank=True)
 
+    # def save(self, *args, **kwargs):
+    #     super().save()
     def save(self, *args, **kwargs):
-        # рассчитываем абсолютную погрешность и аз если результат измерений удовлетворительный
-        self.abserror = mrerrow(get_abserror(self.x_avg, self.relerror))
-        self.certifiedValue = numberDigits(self.x_avg, self.abserror)
+        # находим х среднее из всех измерений
+        if self.clorinesalts:
+            x1 = self.clorinesalts.x1
+            x2 = self.clorinesalts.x2
+            self.x_avg = ((x1 + x2) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+            self.x_cd_warning = 'Все результаты входят в CD'
+            self.x_dimension = self.x_avg
+        if self.clorinesalts and self.clorinesalts2:
+            x1 = self.clorinesalts.x1
+            x2 = self.clorinesalts.x2
+            x3 = self.clorinesalts2.x1
+            x4 = self.clorinesalts2.x2
+            self.x_avg = ((x1 + x2 + x3 + x4) / Decimal(4)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+        # проверяем вхождение в CD и указываем причину
+            kr1 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg - x1).copy_abs())
+            kr2 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg - x2).copy_abs())
+            kr3 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg - x3).copy_abs())
+            kr4 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg - x4).copy_abs())
+            if kr1 >=0 and kr2 >=0 and kr3 >=0 and kr4 >= 0:
+                self.x_cd_warning = 'Все результаты входят в CD'
+                xmax = max(x1, x2, x3, x4)
+                xmin = min(x1, x2, x3, x4)
+                self.x_dimension = ((xmax + xmin) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+            if kr1 < 0 and kr2 >=0 and kr3 >=0 and kr4 >= 0:
+                self.x_cd_warning = 'x1 не входит в CD, расчёт по х2, х3, х4'
+                self.x_avg_new = ((x2 + x3 + x4) / Decimal(3)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                kr4 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x2).copy_abs())
+                kr5 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x3).copy_abs())
+                kr6 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x4).copy_abs())
+                if kr4 >= 0 and kr5 >= 0 and kr6 >= 0:
+                    self.x_cd_warning_new = 'х2, х3, х4 входит в CD'
+                    xmax = max(x2, x3, x4)
+                    xmin = min(x2, x3, x4)
+                    self.x_dimension = ((xmax + xmin) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                else:
+                    self.x_cd_warning_new = 'Измерения не входят в CD, недостаточно измерений для расчёта АЗ'
 
-        # проверяем соответствие АЗ диапазону по прайсу и по описанию типа
-        # typeSM = CSNrange.objects.get(rangeindex=self.namedop)
-        # if typeSM.pricebegin <= self.certifiedValue <= typeSM.priceend:
-        #     self.certifiedValue_type_diap = True
+            if kr1 >=0 and kr2 < 0 and kr3 >= 0 and kr4 >= 0:
+                self.x_cd_warning = 'x2 не входит в CD, расчёт по х1, х3, х4'
+                self.x_avg_new = ((x1 + x3 + x4) / Decimal(3)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                kr4 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x1).copy_abs())
+                kr5 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x3).copy_abs())
+                kr6 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x4).copy_abs())
+                if kr4 >= 0 and kr5 >= 0 and kr6 >= 0:
+                    self.x_cd_warning_new = 'х1, х3, х4 входит в CD'
+                    xmax = max(x1, x3, x4)
+                    xmin = min(x1, x3, x4)
+                    self.x_dimension = ((xmax + xmin) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                else:
+                    self.x_cd_warning_new = 'Измерения не входят в CD, недостаточно измерений для расчёта АЗ'
+
+            if kr1 >=0 and kr2 >= 0 and kr3 < 0 and kr4 >= 0:
+                self.x_cd_warning = 'x3 не входит в CD, расчёт по х1, х2, х4'
+                self.x_avg_new = ((x1 + x2 + x4) / Decimal(3)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                kr4 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x1).copy_abs())
+                kr5 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x2).copy_abs())
+                kr6 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x4).copy_abs())
+                if kr4 >= 0 and kr5 >= 0 and kr6 >= 0:
+                    self.x_cd_warning_new = 'х1, х2, х4 входит в CD'
+                    xmax = max(x1, x2, x4)
+                    xmin = min(x1, x2, x4)
+                    self.x_dimension = ((xmax + xmin) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                else:
+                    self.x_cd_warning_new = 'Измерения не входят в CD, недостаточно измерений для расчёта АЗ'
+
+            if kr1 >=0 and kr2 >=0 and kr3 >= 0 and kr4 < 0:
+                self.x_cd_warning = 'x4 не входит в CD, расчёт по х1, х2, х3'
+                self.x_avg_new_new = ((x1 + x2 + x3) / Decimal(3)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                kr4 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x1).copy_abs())
+                kr5 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x2).copy_abs())
+                kr6 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x3).copy_abs())
+                if kr4 >= 0 and kr5 >= 0 and kr6 >= 0:
+                    self.x_cd_warning_new = 'х1, х2, х3 входит в CD'
+                    xmax = max(x1, x2, x3)
+                    xmin = min(x1, x2, x3)
+                    self.x_dimension = ((xmax + xmin) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                else:
+                    self.x_cd_warning_new = 'Измерения не входят в CD, недостаточно измерений для расчёта АЗ'
+
+            if kr1 < 0 and kr2 >=0 and kr3 < 0 and kr4 >= 0:
+                self.x_cd_warning = 'x1 и х3 не входят в CD, расчёт по х2 и х4'
+                self.x_avg_new = ((x2 + x4) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                self.x_dimension = self.x_avg_new
+
+            if kr1 >=0 and kr2 < 0 and kr3 < 0 and kr4 >= 0:
+                self.x_cd_warning = 'x2 и х3 не входят в CD, расчёт по х1 и х4'
+                self.x_avg_new = ((x1 + x4) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                self.x_dimension = self.x_avg_new
+
+            if kr1 < 0 and kr2 >=0 and kr3 >= 0 and kr4 < 0:
+                self.x_cd_warning = 'x1 и х4 не входят в CD, расчёт по х2 и х3'
+                self.x_avg_new = ((x2 + x3) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                self.x_dimension = self.x_avg_new
+
+            if kr1 >=0 and kr2 < 0 and kr3 >= 0 and kr4 < 0:
+                self.x_cd_warning = 'x2 и х4 не входят в CD, расчёт по х1 и х3'
+                self.x_avg_new = ((x1 + x3) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                self.x_dimension = self.x_avg_new
+
+            if (kr1 < 0 and kr2 < 0 and kr3 < 0 and kr4 < 0) or\
+                (kr1 < 0 and kr2 < 0) or (kr3 < 0 and kr4 < 0):
+                self.x_cd_warning = 'Измерения не входят в CD, недостаточно измерений для расчёта АЗ'
+
+        if self.x_dimension:
+            if self.clorinesalts.name == 'ХСН-ПА-1' or self.clorinesalts.name == 'ХСН-ПА-2':
+                self.abserror = mrerrow(get_abserror(self.x_dimension,
+                                                     Decimal(self.clorinesalts.for_lot_and_nameLotCSN.nameSM.nameSM.relerror)))
+            if self.clorinesalts.name == 'СС-ТН-ПА-1':
+                self.abserror = mrerrow(get_abserror(self.x_dimension,
+                                                     Decimal(self.clorinesalts.for_lot_and_nameLotSSTN.nameSM.nameSM.relerrorCS)))
+            if self.clorinesalts.name == 'ГК-ПА-2':
+                self.abserror = mrerrow(get_abserror(self.x_dimension,
+                                                     Decimal(self.clorinesalts.for_lot_and_nameLotGKCS.nameSM.nameSM.relerror)))
+            self.certifiedValue = numberDigits(self.x_dimension, self.abserror)
+
+        # проверяем соответствие АЗ диапазону по прайсу и по описанию типа иразницу со старым
         super(ClorinesaltsCV, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f' {self.for_measure.name}{self.for_measure.namedop} п.{self.for_measure.lot};   {self.date}'
+        return f' {self.clorinesalts.name}({self.clorinesalts.namedop}) п.{self.clorinesalts.lot};   {self.date}'
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
-        return reverse('clorinesaltsstrcm', kwargs={'pk': self.pk})
+        return reverse('clorinesaltsstrcv', kwargs={'pk': self.pk})
 
     class Meta:
         verbose_name = 'Хлористые соли:  расчёт АЗ'

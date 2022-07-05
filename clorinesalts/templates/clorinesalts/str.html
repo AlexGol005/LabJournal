@@ -166,7 +166,7 @@
             </td>
 		</tr>
             <td colspan="3">Исполнитель: {{ note.performer}}</td>
-			<td colspan="2">Рассчитать АЗ</td>
+			<td colspan="2"><a href="/attestationJ/{{ URL }}/clorinesaltsstrcv/{{ note.id }}/"  class="btn btn-outline-warning mt-3">Рассчитать АЗ</a> </td>
 			<td colspan="1">{% if not counter %}
                 <a href="/attestationJ/{{ URL }}/attestation/{{ note.id }}/comments/"  class="btn btn-outline-warning mt-3">комментировать</a>
                 {% elif counter %}

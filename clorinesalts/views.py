@@ -13,9 +13,9 @@ from django.contrib.auth.decorators import login_required
 
 from jouViscosity.models import CvKinematicviscosityVG, CvDensityDinamicVG
 from main.models import AttestationJ
-from .models import Clorinesalts, CommentsClorinesalts, IndicatorDFK, TitrantHg, GetTitrHg
+from .models import Clorinesalts, CommentsClorinesalts, IndicatorDFK, TitrantHg, GetTitrHg, ClorinesaltsCV
 from .forms import DPKForm, TitrantHgForm, GetTitrHgForm, StrJournalUdateForm, SearchForm, SearchDateForm, \
-    CommentCreationForm, StrJournalCreationForm
+    CommentCreationForm, StrJournalCreationForm, ClorinesaltsCVUpdateForm
 
 JOURNAL = AttestationJ
 MODEL = Clorinesalts
@@ -292,4 +292,23 @@ class VolumecsView(View):
 
     def get(self, request):
         return render(request, 'clorinesalts/volume.html')
+
+class ClorinesaltsCVView(View):
+    """ выводит отдельную запись расчёта АЗ и форму для её обновления """
+
+    def get(self, request, pk):
+        note = get_object_or_404(ClorinesaltsCV, pk=pk)
+        form = ClorinesaltsCVUpdateForm()
+        return render(request, URL + '/strCV.html',
+                      {'note': note, 'form': form, 'URL': URL})
+    def post(self, request, pk, *args, **kwargs):
+        form = ClorinesaltsCVUpdateForm(request.POST, instance=ClorinesaltsCV.objects.get(id=pk))
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.save()
+            return redirect(order)
+        else:
+            form = ClorinesaltsCVUpdateForm(request.POST, instance=ClorinesaltsCV.objects.get(id=pk))
+            order = form.save(commit=False)
+            return redirect(order)
 
