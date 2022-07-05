@@ -22,4 +22,5 @@ urlpatterns = [
     path('searchresult/', views.SearchResultView.as_view(), name=URL + 'search'),
     path('datesearchresult/', views.DateSearchResultView.as_view(), name=URL + 'datesearch'),
     path('filter/<int:pk>', views.filterview, name=URL + 'filter'),
+    path('volumecs/', views.VolumecsView.as_view(), name='volumecs'),
 ]

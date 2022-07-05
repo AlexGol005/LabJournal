@@ -286,3 +286,10 @@ def filterview(request, pk):
                                                    'formdate': formdate})
 
 
+class VolumecsView(View):
+    """ Представление, которое выводит табличку с объёмами аликвоты и растворителя """
+    """ уникальное """
+
+    def get(self, request):
+        return render(request, 'clorinesalts/volume.html')
+

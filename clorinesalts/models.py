@@ -154,7 +154,7 @@ class IndicatorDFK(models.Model):
         verbose_name_plural = 'Индикатор ДФК'
 
 class Clorinesalts(models.Model):
-    for_lot_and_nameLotCSN = models.ForeignKey(LotCSN, verbose_name='Измерение для: СО и партия', on_delete=models.PROTECT,
+    for_lot_and_nameLotCSN = models.ForeignKey(LotCSN, verbose_name='Измерение для: СО и партия (ХСН)', on_delete=models.PROTECT,
                                          blank=True, null=True)
     for_lot_and_nameLotSSTN = models.ForeignKey(LotSSTN, verbose_name='Измерение для: СО и партия',
                                                on_delete=models.PROTECT,
@@ -187,7 +187,7 @@ class Clorinesalts(models.Model):
     solventvolume = models.DecimalField('Объём растворителя, мл', max_digits=3, decimal_places=0, null=True, blank=True)
 
     lotHg = models.CharField('Партия раствора нитрата ртути', max_length=90, null=True, blank=True)
-    titerHg = models.DecimalField('Титр нитрата ртути, мг/см3', max_digits=5, decimal_places=4, null=True, blank=True, default='1')
+    titerHg = models.DecimalField('Титр нитрата ртути, мг/см3', max_digits=5, decimal_places=4, null=True, blank=True)
     Hgdate = models.DateField('Дата изготовления нитрата ртути', null=True, blank=True)
     titerHgdate = models.DateField('Дата установки титра', null=True, blank=True)
     titerHgdead = models.DateField('Титр годен до', null=True, blank=True)
@@ -237,15 +237,16 @@ class Clorinesalts(models.Model):
             self.for_lot_and_nameSSTN = LotSSTN.objects.get(lot=self.lot, nameSM=b)
             self.relerror = RELERROR_SSTN
         if self.name == 'ХСН-ПА-1' or self.name == 'ХСН-ПА-2':
-            pk_CSN = CSN.objects.get(name=self.name[0:8])
+            pk_CSN = CSN.objects.get(name=self.name)
             a = CSNrange.objects.get_or_create(rangeindex=self.namedop, nameSM=pk_CSN)
             b = a[0]
             LotCSN.objects.get_or_create(lot=self.lot, nameSM=b)
-            self.for_lot_and_nameCSN = LotCSN.objects.get(lot=self.lot, nameSM=b)
+            self.for_lot_and_nameLotCSN = LotCSN.objects.get(lot=self.lot, nameSM=b)
             if self.name == 'ХСН-ПА-1':
                 self.relerror = RELERROR_XSN_1
             if self.name == 'ХСН-ПА-2':
                 self.relerror = RELERROR_XSN_2
+
         if self.name == 'ГК-ПА-2':
             # pk_CSN = CSN.objects.get(name=self.name[0:8])
             # a = SSTNrange.objects.get_or_create(rangeindex=self.name[9:-1], nameSM=pk_CSN)
@@ -261,7 +262,8 @@ class Clorinesalts(models.Model):
         clearvolume21 = self.V2E1 - self.backvolume
         clearvolume22 = self.V2E2 - self.backvolume
         clearvolume23 = self.V2E3 - self.backvolume
-        if self.titerHg:
+
+        if self.titerHg and self.titerHgdead >= date.today():
             cV1E1 = (clearvolume11 * self.titerHg * Decimal('1000') * self.aV1E1) / self.aliquotvolume
             cV1E2 = (clearvolume12 * self.titerHg * Decimal('1000') * self.aV1E2) / self.aliquotvolume
             cV1E3 = (clearvolume13 * self.titerHg * Decimal('1000') * self.aV1E3) / self.aliquotvolume
@@ -286,8 +288,8 @@ class Clorinesalts(models.Model):
                 clearvolume25 = self.V2E5 - self.backvolume
                 cV2E5 = (clearvolume25 * self.titerHg * Decimal('1000') * self.aV1E1) / self.aliquotvolume
                 self.x2 = self.x2 + cV2E5
-        if not self.titerHg:
-            self.resultMeas = 'Не установлен титр раствора нитрата ртути'
+        if not self.titerHg or self.titerHgdead < date.today():
+            self.resultMeas = 'Не установлен или просрочен титр раствора нитрата ртути'
 
         # определяем сходимость, воспроизводимость и CD, соответствующие диапазону, сначала вычисляем среднее:
         if self.x1:

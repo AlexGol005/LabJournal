@@ -3,28 +3,12 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-Внести запись
+ХС внести запись
 {% endblock %}
 
-
-{#{% block content %}#}
-{#кнопки#}
-{#нестандартная#}
-{#<a href="/attestationJ/{{ URL }}/" class="btn btn-info mt-3 mr-3">перейти в журнал</a>#}
-{#<a href="{% url 'picnometer' %}" class="btn btn-info mt-3 mr-3" target="blank">объём пикнометра</a>#}
-{##}
-{#конец кнопок#}
-{##}
-{#форма регистрации#}
-{#стандартная#}
-{#<form method="post" class="form-register">#}
-{#    {% csrf_token %}#}
-{#    {% crispy form %}#}
-{#</form>#}
-{#{% endblock %}#}
-
 {% block content %}
-
+<a href="/attestationJ/{{ URL }}/" class="btn btn-info mt-3 mr-3">перейти в журнал</a>
+<a href="{% url 'volumecs' %}" class="btn btn-info mt-3 mr-3" target="blank">объёмы пробы и растворителя по ГОСТ</a>
 <form method="post" class="form-register">
     {% csrf_token %}
     {% crispy form %}

@@ -57,8 +57,8 @@
 			<th colspan="2">Титр  нитрата ртути годен до</th>
 		</tr>
 		<tr>
-			<td colspan="2">{{ note.lotHg}}</td>
-			<td colspan="2">{{ note.titerHg}}</td>
+			<td colspan="2">{{ note.lotHg|default_if_none:" "}}</td>
+			<td colspan="2">{{ note.titerHg|default_if_none:" "}}</td>
 			<td colspan="2">{{ note.titerHgdead|date:"d.m.Y"}}</td>
 		</tr>
 		<tr>
@@ -71,11 +71,11 @@
 		</tr>
 		<tr>
 			<td>{{ note.dfkdead|date:"d.m.Y"}}</td>
-			<td>{{ note.solvent}}</td>
-			<td> {{ note.aliquotvolume}}</td>
-			<td>{{ note.solventvolume}}</td>
-			<td> {{ note.behaviour}}</td>
-			<td>{{ note.backvolume}}</td>
+			<td>{{ note.solvent|default_if_none:" "}}</td>
+			<td> {{ note.aliquotvolume|default_if_none:" "}}</td>
+			<td>{{ note.solventvolume|default_if_none:" "}}</td>
+			<td> {{ note.behaviour|default_if_none:" "}}</td>
+			<td>{{ note.backvolume|default_if_none:" "}}</td>
 		</tr>
 		<tr>
 			<th colspan="6">
@@ -146,12 +146,14 @@
 			<th colspan="3">Сходимость фактическая, мг/л</th>
 		</tr>
 		<tr>
-			<td colspan="3">{{ note.ndocconvergence}}</td>
-			<td colspan="3">{{ note.factconvergence}}</td>
+			<td colspan="3">{{ note.ndocconvergence|default_if_none:" "}}</td>
+			<td colspan="3">{{ note.factconvergence|default_if_none:" "}}</td>
 		</tr>
 		<tr>
 			<td colspan="6">
                 {% if note.resultMeas == 'Неудовлетворительно' %}
+                <div class="TransactionAmount Badresult">
+                {% elif note.resultMeas == 'Не установлен или просрочен титр раствора нитрата ртути' %}
                 <div class="TransactionAmount Badresult">
                 {% else %}
                 <div class="TransactionAmount Goodresult">
