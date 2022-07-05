@@ -12,21 +12,56 @@
 {#полустандартный верх таблицы#}
 <div class="col-md-4 mt-1" >
     <table class="table table-bordered background-color">
-
-		<tr>
-			<th colspan="6">Расчёт аттестованного значения</th>
+        <tr>
+			<td colspan="6">Атт.-ХС-ГОСТ 21534(А)-{{ note.date|date:"Y"}}&nbsp;&nbsp;  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspСтр.&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		</tr>
 		<tr>
-			<td colspan="2">Исп1: &nbsp&nbsp&nbsp&nbsp{{ note.performer}}&nbsp&nbsp&nbsp&nbsp&nbsp</td>
-			<td colspan="1" >Х1 = {{ note.x1}} мг/л <br>Х2 = {{ note.x2}} мг/л</td>
+			<th colspan="6"><h4>Расчёт аттестованного значения</h4></th>
+		</tr>
+        <tr>
+			<th colspan="6">Измерение № 1</th>
+		</tr>
+		<tr>
+			<th colspan="3" >Исполнитель </th>
+            <th colspan="1">Дата</th>
+			<th colspan="1">Х1, мг/л</th>
+			<th colspan="1">Х2, мг/л</th>
+        </tr>
+        <tr>
+			<td colspan="3">{{ note.clorinesalts_performer}}</td>
+			<td colspan="1">{{ note.clorinesalts_date}} </td>
+			<td colspan="1">{{ note.x1}} </td>
+			<td colspan="1">{{ note.x2}}</td>
+        </tr>
+        <tr>
+        <tr>
+			<th colspan="6">Измерение № 2</th>
+		</tr>
+        <td colspan="6">
+            {% if not note.fixation %}
+                <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-outline-warning" type="submit">Подтвердить</button>
+                </form>
+                {% elif note.resultMeas == 'удовлетворительно' and  note.fixation %}
 
-        <td colspan="2">{% if note.performer2 %}
-            Исп2: &nbsp&nbsp&nbsp&nbsp{{ note.performer2}}&nbsp&nbsp&nbsp&nbsp&nbspдата: {{note.date2|date:"d.m.Y"}}
-        {% endif %}</td>
-			<td colspan="1">{% if note.x3 %}
-                Х3 = {{ note.x3}} мг/л <br>Х4 = {{ note.x4}} мг/л
+<a href="/CertifiedValueJ/kinematicviscosityvalues/" target="blank"> АЗ записано в ЖАЗ сайта </a>
+                {% else %}
+                нет АЗ
                 {% endif %}
-        </td>
+           </td>
+    </tr>
+		<tr>
+			<th colspan="6">Расчёт АЗ и проверка корректности</th>
 		</tr>
 		<tr>
 			<th colspan="4">Диапазон</th>

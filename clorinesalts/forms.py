@@ -8,7 +8,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, HTML
 
 from clorinesalts.models import Clorinesalts, CommentsClorinesalts, IndicatorDFK, TitrantHg, GetTitrHg, DOCUMENTS, \
-    MATERIAL, CHOICES, SOLVENTS, BEHAVIOUR
+    MATERIAL, CHOICES, SOLVENTS, BEHAVIOUR, ClorinesaltsCV, TYPE
 
 MODEL = Clorinesalts
 COMMENTMODEL = CommentsClorinesalts
@@ -18,13 +18,16 @@ class StrJournalCreationForm(forms.ModelForm):
     """форма для внесения записи об аттестации в журнал"""
     """поменять: fields"""
 
+    type = forms.ChoiceField(label='Назначение измерений', required=True,
+                                  choices=TYPE,
+                                  widget=forms.Select(attrs={'class': 'form-control'}))
     ndocument = forms.ChoiceField(label='Метод испытаний', required=True,
                                   choices=DOCUMENTS,
                                   widget=forms.Select(attrs={'class': 'form-control'}))
     name = forms.ChoiceField(label='Наименование пробы', required=True,
                              choices=MATERIAL,
                              widget=forms.Select(attrs={'class': 'form-control'}))
-    namedop = forms.CharField(label='Индекс СО или (если выбрали "другое") полное название СО', max_length=90,
+    namedop = forms.CharField(label='Индекс СО (пример: Х или  100) или (если выбрали "другое") полное название СО', max_length=90,
                               required=False,
                               help_text='Для СС-ТН: Х, ХПВ иил ХПВС;'
                                         ' Для ХСН: индекс ГСО, например 10; '
@@ -34,13 +37,13 @@ class StrJournalCreationForm(forms.ModelForm):
     lot = forms.CharField(label='Партия', max_length=100, required=True,
                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': 'Партия'}))
-    constit = forms.ChoiceField(label='Диапазон хлористых солей, мг/л', required=True,
+    constit = forms.ChoiceField(label='Диапазон хлористых солей по ГОСТ, мг/л', required=True,
                                 choices=CHOICES,
                                 widget=forms.Select(attrs={'class': 'form-control'}))
-    projectconc = forms.CharField(label='Расчётное содержание хлористых солей, мг/л)', max_length=90, required=False,
+    projectconc = forms.CharField(label='Расчётное содержание, мг/л', max_length=90, required=False,
                                   widget=forms.TextInput(attrs={'class': 'form-control',
                                                           'placeholder': '000.00'}))
-    que = forms.IntegerField(label='Очередность отбора пробы', initial=1,
+    que = forms.IntegerField(label='Очередность отбора', initial=1,
                              widget=forms.TextInput(attrs={'class': 'form-control',
                                                                     'placeholder': '000.00'}))
     solvent = forms.ChoiceField(label='Растворитель', required=True,
@@ -130,33 +133,38 @@ class StrJournalCreationForm(forms.ModelForm):
         self.helper.layout = Layout(
 
             Row(
-                Column('name', css_class='form-group col-md-4 mb-0'),
-                Column('lot', css_class='form-group col-md-4 mb-0'),
+                Column('type', css_class='form-group col-md-6 mb-0'),
                 Column('ndocument', css_class='form-group col-md-4 mb-0'),
+                css_class='form-row'
+            ),
+
+            Row(
+                Column('name', css_class='form-group col-md-3 mb-0'),
+                Column('namedop', css_class='form-group col-md-9 mb-0'),
+
+
 
                 css_class='form-row'
             ),
 
             Row(
-                Column('namedop', css_class='form-group col-md-12 mb-0'),
+                Column('lot', css_class='form-group col-md-4 mb-0'),
+                Column('projectconc', css_class='form-group col-md-4 mb-0'),
+                Column('que', css_class='form-group col-md-4 mb-0'),
                 css_class='form-row'
             ),
 
             Row(
 
                 Column('constit', css_class='form-group col-md-4 mb-0'),
-                Column('projectconc', css_class='form-group col-md-4 mb-0'),
-                Column('que', css_class='form-group col-md-4 mb-0'),
+                Column('truevolume', css_class='form-group col-md-8 mb-0'),
+
                 css_class='form-row'
             ),
             Row(
                 Column('solvent', css_class='form-group col-md-4 mb-0'),
                 Column('behaviour', css_class='form-group col-md-4 mb-0'),
                 Column('lotHg', css_class='form-group col-md-4 mb-0'),
-                css_class='form-row'
-            ),
-            Row(
-                Column('truevolume', css_class='form-group col-md-18 mb-0'),
                 css_class='form-row'
             ),
 
@@ -255,7 +263,7 @@ class StrJournalCreationForm(forms.ModelForm):
 
     class Meta:
         model = MODEL
-        fields = ['ndocument',
+        fields = ['ndocument', 'type',
                   'name', 'lot', 'namedop',
                   'constit',
                   'projectconc', 'que',
@@ -400,6 +408,20 @@ class GetTitrHgForm(forms.ModelForm):
         model = GetTitrHg
         fields = ['lot', 'backvolume', 'volumeNaCl', 'volumeHGNO1', 'volumeHGNO2', 'volumeHGNO3']
 
-class ClorinesaltsCVForm(forms.ModelForm):
+
+class ClorinesaltsCVUpdateForm(forms.ModelForm):
     """форма для расчёта и внесения АЗ"""
+
+    clorinesalts2 = forms.ModelChoiceField(label='Выберите измерение вторым исполнителем (если требуется)', required=False,
+                                  queryset=Clorinesalts.objects.all(),
+                                  widget=forms.Select(attrs={'class': 'form-control'}))
+    fixation = forms.BooleanField(label='Внести в ЖАЗ')
+
+
+    class Meta:
+        model = ClorinesaltsCV
+        fields = ['clorinesalts2', 'fixation']
+
+
+
 

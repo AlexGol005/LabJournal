@@ -23,4 +23,5 @@ urlpatterns = [
     path('datesearchresult/', views.DateSearchResultView.as_view(), name=URL + 'datesearch'),
     path('filter/<int:pk>', views.filterview, name=URL + 'filter'),
     path('volumecs/', views.VolumecsView.as_view(), name='volumecs'),
+    path('clorinesaltsstrcv/<int:pk>/', login_required(views.ClorinesaltsCVView.as_view()), name='clorinesaltsstrcv'),
 ]
