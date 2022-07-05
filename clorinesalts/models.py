@@ -7,6 +7,7 @@ from decimal import *
 
 from jouChlorineOilProducts.models import LotCSN, CSN, CSNrange
 from jouPetroleumChlorineImpurityWater.models import LotSSTN, SSTN, SSTNrange
+from jougascondensate.models import LotGKCS
 
 from metods import get_avg, get_acc_measurement, get_abserror
 from formuls import mrerrow, numberDigits
@@ -156,12 +157,12 @@ class IndicatorDFK(models.Model):
 class Clorinesalts(models.Model):
     for_lot_and_nameLotCSN = models.ForeignKey(LotCSN, verbose_name='Измерение для: СО и партия (ХСН)', on_delete=models.PROTECT,
                                          blank=True, null=True)
-    for_lot_and_nameLotSSTN = models.ForeignKey(LotSSTN, verbose_name='Измерение для: СО и партия',
+    for_lot_and_nameLotSSTN = models.ForeignKey(LotSSTN, verbose_name='Измерение для: СО и партия(СС-ТН)',
                                                on_delete=models.PROTECT,
                                                blank=True, null=True)
-    # for_lot_and_nameLotGK = models.ForeignKey(LotGK, verbose_name='Измерение для: СО и партия',
-    #                                             on_delete=models.PROTECT,
-    #                                             blank=True, null=True)
+    for_lot_and_nameLotGK = models.ForeignKey(LotGKCS, verbose_name='Измерение для: СО и партия (ГК)',
+                                                on_delete=models.PROTECT,
+                                                blank=True, null=True)
     ndocument = models.CharField('Метод испытаний', max_length=100, choices=DOCUMENTS, default='ГОСТ 21534 (Метод А)',
                                  blank=True)
     date = models.DateField('Дата', auto_now_add=True, db_index=True, blank=True)
@@ -230,7 +231,7 @@ class Clorinesalts(models.Model):
     def save(self, *args, **kwargs):
         # связь с конкретной партией и  относительной погрешностью СО
         if self.name == 'СС-ТН-ПА-1':
-            pk_SSTN = SSTN.objects.get(name=self.name[0:10])
+            pk_SSTN = SSTN.objects.get(name=self.name)
             a = SSTNrange.objects.get_or_create(rangeindex=self.namedop, nameSM=pk_SSTN)
             b = a[0]
             LotSSTN.objects.get_or_create(lot=self.lot, nameSM=b)
@@ -246,13 +247,12 @@ class Clorinesalts(models.Model):
                 self.relerror = RELERROR_XSN_1
             if self.name == 'ХСН-ПА-2':
                 self.relerror = RELERROR_XSN_2
-
         if self.name == 'ГК-ПА-2':
-            # pk_CSN = CSN.objects.get(name=self.name[0:8])
-            # a = SSTNrange.objects.get_or_create(rangeindex=self.name[9:-1], nameSM=pk_CSN)
-            # b = a[0]
-            # LotCSN.objects.get_or_create(lot=self.lot, nameSM=b)
-            # self.for_lot_and_nameCSN = LotCSN.objects.get(lot=self.lot, nameSM=b)
+            pk_CSN = CSN.objects.get(name=self.name[0:8])
+            a = SSTNrange.objects.get_or_create(rangeindex=self.name[9:-1], nameSM=pk_CSN)
+            b = a[0]
+            LotCSN.objects.get_or_create(lot=self.lot, nameSM=b)
+            self.for_lot_and_nameCSN = LotCSN.objects.get(lot=self.lot, nameSM=b)
             self.relerror = RELERROR_GK
 
         # расчёты первичные
