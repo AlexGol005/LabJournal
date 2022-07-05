@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'dinamicviscosity',
     'clorinesalts',
     'jouPetroleumChlorineImpurityWater',
-    'jouChlorineOilProducts'
+    'jouChlorineOilProducts',
     'jougascondensate'
 ]
 

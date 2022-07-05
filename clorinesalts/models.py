@@ -7,7 +7,7 @@ from decimal import *
 
 from jouChlorineOilProducts.models import LotCSN, CSN, CSNrange
 from jouPetroleumChlorineImpurityWater.models import LotSSTN, SSTN, SSTNrange
-from jougascondensate.models import LotGKCS
+from jougascondensate.models import LotGKCS, GKCS, GKCSrange
 
 from metods import get_avg, get_acc_measurement, get_abserror
 from formuls import mrerrow, numberDigits
@@ -160,7 +160,7 @@ class Clorinesalts(models.Model):
     for_lot_and_nameLotSSTN = models.ForeignKey(LotSSTN, verbose_name='Измерение для: СО и партия(СС-ТН)',
                                                on_delete=models.PROTECT,
                                                blank=True, null=True)
-    for_lot_and_nameLotGK = models.ForeignKey(LotGKCS, verbose_name='Измерение для: СО и партия (ГК)',
+    for_lot_and_nameLotGKCS = models.ForeignKey(LotGKCS, verbose_name='Измерение для: СО и партия (ГК)',
                                                 on_delete=models.PROTECT,
                                                 blank=True, null=True)
     ndocument = models.CharField('Метод испытаний', max_length=100, choices=DOCUMENTS, default='ГОСТ 21534 (Метод А)',
@@ -235,7 +235,7 @@ class Clorinesalts(models.Model):
             a = SSTNrange.objects.get_or_create(rangeindex=self.namedop, nameSM=pk_SSTN)
             b = a[0]
             LotSSTN.objects.get_or_create(lot=self.lot, nameSM=b)
-            self.for_lot_and_nameSSTN = LotSSTN.objects.get(lot=self.lot, nameSM=b)
+            self.for_lot_and_nameLotSSTN = LotSSTN.objects.get(lot=self.lot, nameSM=b)
             self.relerror = RELERROR_SSTN
         if self.name == 'ХСН-ПА-1' or self.name == 'ХСН-ПА-2':
             pk_CSN = CSN.objects.get(name=self.name)
@@ -248,12 +248,11 @@ class Clorinesalts(models.Model):
             if self.name == 'ХСН-ПА-2':
                 self.relerror = RELERROR_XSN_2
         if self.name == 'ГК-ПА-2':
-            pk_CSN = CSN.objects.get(name=self.name[0:8])
-            a = SSTNrange.objects.get_or_create(rangeindex=self.name[9:-1], nameSM=pk_CSN)
+            pk_GKCS = GKCS.objects.get(name=self.name)
+            a = GKCSrange.objects.get_or_create(rangeindex=self.namedop, nameSM=pk_GKCS)
             b = a[0]
-            LotCSN.objects.get_or_create(lot=self.lot, nameSM=b)
-            self.for_lot_and_nameCSN = LotCSN.objects.get(lot=self.lot, nameSM=b)
-            self.relerror = RELERROR_GK
+            LotGKCS.objects.get_or_create(lot=self.lot, nameSM=b)
+            self.for_lot_and_nameLotGKCS = LotGKCS.objects.get(lot=self.lot, nameSM=b)
 
         # расчёты первичные
         clearvolume11 = self.V1E1 - self.backvolume
