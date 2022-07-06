@@ -13,7 +13,7 @@ class AttestationJ(models.Model):
     ndocument = models.CharField('Методы испытаний', max_length=100, default='')
     performer = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='ответственный за ведение журнала')
     for_url = models.CharField('Адрес журнала', max_length=100, default='')  # todo URLField
-    CM = models.TextField('Аттестуемые ГСО', blank=True, null=True)
+    # CM = models.TextField('Аттестуемые ГСО', blank=True, null=True)
     extra_info = models.TextField('Доп', blank=True, null=True)
 
 
