@@ -1,0 +1,68 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+{{ NAME }}
+{% endblock %}
+
+
+{% block content %}
+
+<div style="text-align: center;"><h4><a href="{% url 'chlorineoilvalues' %}">Содержание хлористых солей для ХСН-ПА все АЗ</a> </h4></div>
+<br>
+<br>
+{#форма для поиска по ГСО#}
+{#стандартная#}
+<form action="/CertifiedValueJ/chlorineoilresult/" method="GET">
+{% csrf_token %}
+{% crispy form %}
+</form>
+{#конец формы для поиска по ГСО#}
+
+<div class="col-md-10 mt-1" >
+
+{#Таблица  с заголовком#}
+<br>
+<div style="text-align: center;"><h5><a href="{% url 'clorinesaltsall' %}">{% autoescape off %}{{ TABLENAME }}{% endautoescape %} </a> </h5></div>
+<br>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <td>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspВЖ&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
+			<td>п.</td>
+			<td>АЗ, мг/л</td>
+         </tr>
+    </thead>
+    <tbody>
+{% for obj in objects %}
+<tr>
+    <td>{{ obj.namelot.nameSM }}(obj.namelot.rangeindex)</td>
+    <td>{{ obj.namelot.lot }}</td>
+{#поля с АЗ кинематика#}
+    <td class="
+    {% if obj.cvdead >= now and  now_date_plusmonth <= obj.cvdead %}green{% endif %}
+    {% if now_date_plusmonth > obj.cvdead and obj.cvdead > now %}orange{% endif %}
+    {% if obj.cvdead < now %}red{% endif %}">
+        {% if obj.cvdead >= now and  now_date_plusmonth <= obj.cvdead %}
+        <a href="{% url '/'  %}" style="color: green"><b>
+        {% elif now_date_plusmonth > obj.cvead and obj.cvdead > now %}
+        <a href="{%  url '/'  %}" style="color: darkorange">
+        {% elif obj.cvdead < now %}
+        <a href="{%  url '/'  %}" style="color: red">
+        {% endif %}
+        {{ obj.cv|default_if_none:" " }}</a>
+    </td>
+
+
+{#конец полей с АЗ #}
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{#конец Таблицы  с заголовком#}
+
+
+
+
+{#конец  таблицы#}
+{% endblock %}

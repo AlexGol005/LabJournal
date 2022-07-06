@@ -314,10 +314,11 @@ class CommentCVCreationForm(forms.ModelForm):
 
 
 class SearchForm(forms.Form):
-    """форма для поиска по полям журнала ГСО, партия, температура"""
+    """форма для поиска по полям журнала ГСО, партия"""
     """при копировании поменять поля на нужные"""
-    name = forms.CharField(label='Название', initial='ВЖ-2-ПА(100)')
-    lot = forms.CharField(label='Партия', initial='1', required=False)
+    name = forms.CharField(label='Название', initial='ХСН-ПА-1')
+    namedop = forms.CharField(label='Индекс', initial='100')
+    lot = forms.CharField(label='Партия', initial='10', required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -325,6 +326,7 @@ class SearchForm(forms.Form):
         self.helper.layout = Layout(
             Row(
                 Column('name', css_class='form-group col-md-4 mb-0'),
+                Column('namedop', css_class='form-group col-md-4 mb-0'),
                 Column('lot', css_class='form-group col-md-2 mb-0'),
                 Submit('submit', 'Найти', css_class='btn  btn-info col-md-2 mb-3 mt-4 ml-4'),
                 css_class='form-row'

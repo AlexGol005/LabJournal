@@ -1,0 +1,42 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}
+История измерений
+{% endblock %}
+
+
+{% block content %}
+    <div style="text-align: center;"><h5><a href="{% url 'dinamicviscosityvalues' %}">История измерений {{ name.name }}, п. {{ name.lot }}, {{ name.temperature }} °C</a></h5></div>
+<br>
+
+<table class="table table-bordered">
+<thead>
+    <tr>
+        <th>Дата<br> измерения <br> плотности<br> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>
+        <th>Плотность годна<br> до <br> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>
+        <th>Плотность, &nbsp г/мл
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        </th>
+        <th>Динамическая <br> вязкость, Па*с
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        </th>
+        <th>Разница <br> с предыдущей <br> плотностью, %</th>
+        <th>Смотреть <br> в журнале <br> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>
+    </tr>
+</thead>
+
+<tbody>
+{% for obj in objects %}
+<tr>
+    <td>{{ obj.date|date:"d-m-Y" }}</td>
+    <td>{{ obj.date_exp|date:"d-m-Y" }}</td>
+    <td> {{ obj.density_avg|default_if_none:" " }}</td>
+    <td> {{ obj.certifiedValue|default_if_none:" " }}</td>
+    <td> {{ obj.deltaolddensity|default_if_none:" " }}</td>
+    <td><a href="/attestationJ/dinamicviscosity/attestation/{{ obj.id }}/"  class="btn btn-outline-warning mt-3">смотреть</a></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}

@@ -209,6 +209,24 @@ class AllStrView(ListView):
         context['URL'] = URL
         return context
 
+class AllStrCVView(ListView):
+    """ Представление, которое выводит все записи в журнале расчёта АЗ. """
+    """стандартное"""
+    model = ClorinesaltsCV
+    template_name = URL + '/journalCV.html'
+    context_object_name = 'objects'
+    ordering = ['-date']
+    paginate_by = 8
+
+
+    def get_context_data(self, **kwargs):
+        context = super(AllStrCVView, self).get_context_data(**kwargs)
+        context['journal'] = JOURNAL.objects.filter(for_url=URL)
+        # context['formSM'] = SearchForm()
+        # context['formdate'] = SearchDateForm()
+        context['URL'] = URL
+        return context
+
 class SearchResultView(TemplateView):
     """ Представление, которое выводит результаты поиска на странице со всеми записями журнала. """
     """нестандартное"""
@@ -218,15 +236,16 @@ class SearchResultView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(SearchResultView, self).get_context_data(**kwargs)
         name = self.request.GET['name']
+        namedop = self.request.GET['namedop']
         lot = self.request.GET['lot']
         if name and lot:
-            objects = MODEL.objects.filter(name=name).filter(lot=lot).filter(fixation=True).order_by('-pk')
+            objects = MODEL.objects.filter(name=name).filter(namedop=namedop).filter(lot=lot).order_by('-pk')
             context['objects'] = objects
         if name and not lot:
-            objects = MODEL.objects.filter(name=name).filter(fixation=True).order_by('-pk')
+            objects = MODEL.objects.filter(name=name).filter(namedop=namedop).order_by('-pk')
             context['objects'] = objects
         context['journal'] = JOURNAL.objects.filter(for_url=URL)
-        context['formSM'] = SearchForm(initial={'name': name, 'lot': lot})
+        context['formSM'] = SearchForm(initial={'name': name, 'namedop': namedop,'lot': lot})
         context['formdate'] = SearchDateForm()
         context['URL'] = URL
         return context
