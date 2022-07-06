@@ -7,9 +7,9 @@ class GKCS(models.Model):
     fullname = models.CharField('Название СО полное', max_length=100, null=True, blank=True, default='')
     number = models.CharField('Номер ГСО', max_length=100, null=True, blank=True, default='')
     expiration = models.CharField('Срок годности ГСО', max_length=100, null=True, blank=True, default='')
-    typebegin = models.FloatField('Диапазон по описанию типа от', null=True, blank=True)
-    typeend = models.FloatField('Диапазон по описанию типа до', null=True, blank=True)
-    relerror = models.FloatField('Относительная погрешность', null=True, blank=True)
+    typebegin = models.CharField('Диапазон по описанию типа от', null=True, blank=True, max_length=100)
+    typeend = models.CharField('Диапазон по описанию типа до', null=True, blank=True, max_length=100)
+    relerror = models.CharField('Относительная погрешность', null=True, blank=True, max_length=100)
 
     def __str__(self):
         return f'{self.name} № ГСО {self.number}'
@@ -23,8 +23,8 @@ class GKCSrange(models.Model):
     nameSM = models.ForeignKey(GKCS, verbose_name='СО', max_length=100, on_delete=models.CASCADE, null=True, blank=True)
     rangeindex = models.CharField('Индекс ГСО', max_length=90, null=True, blank=True)
     name = models.CharField('краткое название ГСО с индексом', max_length=100, null=True, blank=True)
-    pricebegin = models.FloatField('Диапазон по прайсу от', null=True, blank=True)
-    priceend = models.FloatField('Диапазон по прайсу до', null=True, blank=True)
+    pricebegin = models.CharField('Диапазон по прайсу от', null=True, blank=True, max_length=100)
+    priceend = models.CharField('Диапазон по прайсу до', null=True, blank=True, max_length=100)
 
 
 

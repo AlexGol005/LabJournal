@@ -43,7 +43,7 @@ class StrJournalCreationForm(forms.ModelForm):
     #                                widget=forms.TextInput(attrs={'class': 'form-control',
     #                                                              'placeholder': 'Константа через точку'}
     #                                                       ))
-    ViscosimeterNumber2 = forms.ModelChoiceField(label='вискозиметр № 2', required=True,
+    ViscosimeterNumber2 = forms.ModelChoiceField(label='вискозиметр № 2', required=False,
                                                  queryset=Viscosimeters.objects.all(),
                                                  widget=forms.Select(attrs={'class': 'form-control'}))
     plustimeminK1T1 = forms.DecimalField(label='τ1, минуты',

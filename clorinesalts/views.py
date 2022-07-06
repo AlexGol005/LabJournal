@@ -13,9 +13,11 @@ from django.contrib.auth.decorators import login_required
 
 from jouViscosity.models import CvKinematicviscosityVG, CvDensityDinamicVG
 from main.models import AttestationJ
-from .models import Clorinesalts, CommentsClorinesalts, IndicatorDFK, TitrantHg, GetTitrHg, ClorinesaltsCV
+from .models import Clorinesalts, CommentsClorinesalts, IndicatorDFK, TitrantHg, GetTitrHg, ClorinesaltsCV, \
+    CommentsClorinesaltsCV
 from .forms import DPKForm, TitrantHgForm, GetTitrHgForm, StrJournalUdateForm, SearchForm, SearchDateForm, \
-    CommentCreationForm, StrJournalCreationForm, ClorinesaltsCVUpdateForm
+    CommentCreationForm, StrJournalCreationForm, ClorinesaltsCVUpdateForm, ClorinesaltsCVUpdateFixationForm, \
+    CommentCVCreationForm
 
 JOURNAL = AttestationJ
 MODEL = Clorinesalts
@@ -139,7 +141,7 @@ class StrJournalView(View):
 @login_required
 def RegNoteJournalView(request):
     """ Представление, которое выводит форму регистрации в журнале. """
-    """Стандартное, но со вставкой по поводу констант и предыдущего значения"""
+
     if request.method == "POST":
         form = StrJournalCreationForm(request.POST)
         if form.is_valid():
@@ -299,16 +301,46 @@ class ClorinesaltsCVView(View):
     def get(self, request, pk):
         note = get_object_or_404(ClorinesaltsCV, pk=pk)
         form = ClorinesaltsCVUpdateForm()
+        form2 = ClorinesaltsCVUpdateFixationForm()
+        try:
+            counter = CommentsClorinesaltsCV.objects.filter(forNote=note.id)
+        except ObjectDoesNotExist:
+            counter = None
         return render(request, URL + '/strCV.html',
-                      {'note': note, 'form': form, 'URL': URL})
+                      {'note': note, 'form': form, 'form2': form2, 'URL': URL, 'counter': counter})
     def post(self, request, pk, *args, **kwargs):
         form = ClorinesaltsCVUpdateForm(request.POST, instance=ClorinesaltsCV.objects.get(id=pk))
+        form2 = ClorinesaltsCVUpdateFixationForm(request.POST, instance=ClorinesaltsCV.objects.get(id=pk))
         if form.is_valid():
             order = form.save(commit=False)
+            order.performer = request.user
             order.save()
             return redirect(order)
-        else:
-            form = ClorinesaltsCVUpdateForm(request.POST, instance=ClorinesaltsCV.objects.get(id=pk))
+        if form2.is_valid():
+            order2 = form2.save(commit=False)
+            order2.save()
+            return redirect(f'/attestationJ/clorinesalts/clorinesaltsstrcv/{pk}/')
+
+class CommentsCVView(View):
+    """ выводит комментарии к записи в журнале и форму для добавления комментариев """
+
+    form_class = CommentCVCreationForm
+    initial = {'key': 'value'}
+    template_name = URL + '/comments.html'
+
+    def get(self, request, pk):
+        note = CommentsClorinesaltsCV.objects.filter(forNote=pk)
+        form = CommentCVCreationForm()
+        # title = ClorinesaltsCV.objects.get(pk=pk)
+        return render(request, 'main/comments.html', {'note': note, 'form': form, 'URL': URL})
+
+    def post(self, request, pk, *args, **kwargs):
+        form = CommentCVCreationForm(request.POST)
+        if form.is_valid():
             order = form.save(commit=False)
+            order.author = request.user
+            order.forNote = ClorinesaltsCV.objects.get(pk=pk)
+            order.save()
+            messages.success(request, f'Комментарий добавлен!')
             return redirect(order)
 

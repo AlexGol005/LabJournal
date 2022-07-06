@@ -6,7 +6,9 @@
 
 
 {% block content %}
+    {% if title.name %}
     <div style="text-align: center;"><h4>Комментарии к записи: <a href="/attestationJ/{{ URL }}/attestation/{{ title.id }}/"> {{title.name}} п. {{title.lot}} </a> </h4></div>
+    {% endif %}
     <br><br>
     <form method="post" class="form-register">
         {% csrf_token %}

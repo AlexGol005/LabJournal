@@ -8,7 +8,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, HTML
 
 from clorinesalts.models import Clorinesalts, CommentsClorinesalts, IndicatorDFK, TitrantHg, GetTitrHg, DOCUMENTS, \
-    MATERIAL, CHOICES, SOLVENTS, BEHAVIOUR, ClorinesaltsCV, TYPE
+    MATERIAL, CHOICES, SOLVENTS, BEHAVIOUR, ClorinesaltsCV, TYPE, CommentsClorinesaltsCV
 
 MODEL = Clorinesalts
 COMMENTMODEL = CommentsClorinesalts
@@ -301,6 +301,17 @@ class CommentCreationForm(forms.ModelForm):
         model = COMMENTMODEL
         fields = ['name']
 
+class CommentCVCreationForm(forms.ModelForm):
+    """форма для  комментариев к расчёту АЗ"""
+
+    name = forms.CharField(label='Комментировать', max_length=1000,
+                           widget=forms.Textarea(attrs={'class': 'form-control',
+                                                        'placeholder': 'введите текст комментария'}))
+
+    class Meta:
+        model = CommentsClorinesaltsCV
+        fields = ['name']
+
 
 class SearchForm(forms.Form):
     """форма для поиска по полям журнала ГСО, партия, температура"""
@@ -410,17 +421,26 @@ class GetTitrHgForm(forms.ModelForm):
 
 
 class ClorinesaltsCVUpdateForm(forms.ModelForm):
-    """форма для расчёта и внесения АЗ"""
+    """форма для расчёта АЗ"""
 
     clorinesalts2 = forms.ModelChoiceField(label='Выберите измерение вторым исполнителем (если требуется)', required=False,
                                   queryset=Clorinesalts.objects.all(),
                                   widget=forms.Select(attrs={'class': 'form-control'}))
-    fixation = forms.BooleanField(label='Внести в ЖАЗ')
+    countmeasur = forms.BooleanField(label='Есть все результаты измерений для расчёта АЗ')
+
+    class Meta:
+        model = ClorinesaltsCV
+        fields = ['clorinesalts2', 'countmeasur']
+
+class ClorinesaltsCVUpdateFixationForm(forms.ModelForm):
+    """форма для внесения АЗ"""
+
+    fixation = forms.BooleanField(label='АЗ')
 
 
     class Meta:
         model = ClorinesaltsCV
-        fields = ['clorinesalts2', 'fixation']
+        fields = ['fixation']
 
 
 
