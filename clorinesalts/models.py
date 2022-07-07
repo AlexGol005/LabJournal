@@ -248,18 +248,18 @@ class Clorinesalts(models.Model):
         #     b = a[0]
         #     LotSSTN.objects.get_or_create(lot=self.lot, nameSM=b)
         #     self.for_lot_and_nameLotSSTN = LotSSTN.objects.get(lot=self.lot, nameSM=b)
-        if self.name == 'ХСН-ПА-1' or self.name == 'ХСН-ПА-2':
-            pk_CSN = CSN.objects.get(name=self.name)
-            a = CSNrange.objects.get_or_create(rangeindex=self.namedop, nameSM=pk_CSN)
-            b = a[0]
-            LotCSN.objects.get_or_create(lot=self.lot, nameSM=b)
-            self.for_lot_and_nameLotCSN = LotCSN.objects.get(lot=self.lot, nameSM=b)
-        if self.name == 'ГК-ПА-2':
-            pk_GKCS = GKCS.objects.get(name=self.name)
-            a = GKCSrange.objects.get_or_create(rangeindex=self.namedop, nameSM=pk_GKCS)
-            b = a[0]
-            LotGKCS.objects.get_or_create(lot=self.lot, nameSM=b)
-            self.for_lot_and_nameLotGKCS = LotGKCS.objects.get(lot=self.lot, nameSM=b)
+        # if self.name == 'ХСН-ПА-1' or self.name == 'ХСН-ПА-2':
+        #     pk_CSN = CSN.objects.get(name=self.name)
+        #     a = CSNrange.objects.get_or_create(rangeindex=self.namedop, nameSM=pk_CSN)
+        #     b = a[0]
+        #     LotCSN.objects.get_or_create(lot=self.lot, nameSM=b)
+        #     self.for_lot_and_nameLotCSN = LotCSN.objects.get(lot=self.lot, nameSM=b)
+        # if self.name == 'ГК-ПА-2':
+        #     pk_GKCS = GKCS.objects.get(name=self.name)
+        #     a = GKCSrange.objects.get_or_create(rangeindex=self.namedop, nameSM=pk_GKCS)
+        #     b = a[0]
+        #     LotGKCS.objects.get_or_create(lot=self.lot, nameSM=b)
+        #     self.for_lot_and_nameLotGKCS = LotGKCS.objects.get(lot=self.lot, nameSM=b)
         # расчёты первичные
         clearvolume11 = self.V1E1 - self.backvolume
         clearvolume12 = self.V1E2 - self.backvolume
