@@ -317,8 +317,8 @@ class Clorinesalts(models.Model):
                 self.ndocreproducibility = '50'
                 self.ndoccd = '33'
             if Decimal(1000) < self.x_avg:
-                self.ndocconvergence = str(self.x_avg * Decimal('0.04'))
-                self.ndocreproducibility = str(self.x_avg * Decimal('0.04') * 2)
+                self.ndocconvergence = str(self.x_avg * Decimal('0.04').quantize(Decimal('1.00'), ROUND_HALF_UP))
+                self.ndocreproducibility = str((self.x_avg * Decimal('0.04') * 2).quantize(Decimal('1.00'), ROUND_HALF_UP))
 
 
             # сравниваем х1-х2 со сходимостью и комментируем результат измерений
