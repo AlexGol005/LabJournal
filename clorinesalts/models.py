@@ -242,12 +242,12 @@ class Clorinesalts(models.Model):
 
     def save(self, *args, **kwargs):
         # связь с конкретной партией и  относительной погрешностью СО
-        if self.name == 'СС-ТН-ПА-1':
-            pk_SSTN = SSTN.objects.get(name=self.name)
-            a = SSTNrange.objects.get_or_create(rangeindex=self.namedop, nameSM=pk_SSTN)
-            b = a[0]
-            LotSSTN.objects.get_or_create(lot=self.lot, nameSM=b)
-            self.for_lot_and_nameLotSSTN = LotSSTN.objects.get(lot=self.lot, nameSM=b)
+        # if self.name == 'СС-ТН-ПА-1':
+        #     pk_SSTN = SSTN.objects.get(name=self.name)
+        #     a = SSTNrange.objects.get_or_create(rangeindex=self.namedop, nameSM=pk_SSTN)
+        #     b = a[0]
+        #     LotSSTN.objects.get_or_create(lot=self.lot, nameSM=b)
+        #     self.for_lot_and_nameLotSSTN = LotSSTN.objects.get(lot=self.lot, nameSM=b)
         if self.name == 'ХСН-ПА-1' or self.name == 'ХСН-ПА-2':
             pk_CSN = CSN.objects.get(name=self.name)
             a = CSNrange.objects.get_or_create(rangeindex=self.namedop, nameSM=pk_CSN)
