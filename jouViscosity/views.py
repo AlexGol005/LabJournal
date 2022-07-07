@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, date
+from datetime import timedelta, date
 
 
 from django.shortcuts import render
@@ -24,13 +24,18 @@ class AllKinematicviscosityView(ListView):
     """полустандартное"""
     template_name = 'jouViscosity/kinematicviscosityvalues.html'
     context_object_name = 'objects'
+
     def get_queryset(self):
-        queryset = MODEL.objects.filter(namelot__nameVG__nameSM__name='ВЖ-2-ПА').order_by('namelot__nameVG__rangeindex', 'namelot__lot')
+        queryset = MODEL.objects.filter(namelot__nameVG__nameSM__name='ВЖ-2-ПА').\
+            order_by('namelot__nameVG__rangeindex', 'namelot__lot')
         return queryset
+
     def get_context_data(self, **kwargs):
         context = super(AllKinematicviscosityView, self).get_context_data(**kwargs)
         objects2 = MODEL2.objects.all().order_by('namelot__nameVG__rangeindex', 'namelot__lot')
-        objects3 = MODEL.objects.exclude(namelot__nameVG__nameSM__name='ВЖ-2-ПА').order_by('namelot__nameVG__nameSM__name', 'namelot__nameVG__rangeindex', 'namelot__lot')
+        objects3 = MODEL.objects.exclude(namelot__nameVG__nameSM__name='ВЖ-2-ПА').\
+            order_by('namelot__nameVG__nameSM__name', 'namelot__nameVG__rangeindex', 'namelot__lot')
+
         context['objects2'] = objects2
         context['objects3'] = objects3
         context['NAME'] = NAME
@@ -41,19 +46,21 @@ class AllKinematicviscosityView(ListView):
         context['form'] = SearchKinematicaForm()
         return context
 
+
 class SearchKinematicResultView(TemplateView):
-    """ Представление, которое выводит результаты поиска на странице со всеми записями журнала АЗ кинематической вязкости. """
+    """ Представление, которое выводит результаты поиска на странице со всеми записями журнала АЗ
+    кинематической вязкости. """
     """нестандартное"""
 
     template_name = 'jouViscosity/kinematicviscosityvalues.html'
 
     def get_context_data(self, **kwargs):
-        context = super(SearchKinematicResultView, self).get_context_data(**kwargs)
         name = self.request.GET['name']
         lot = self.request.GET['lot']
         context = super(SearchKinematicResultView, self).get_context_data(**kwargs)
         if name and lot:
-            objects = MODEL.objects.filter(namelot__nameVG__nameSM__name='ВЖ-2-ПА').filter(namelot__nameVG__name=name, namelot__lot=lot).order_by(
+            objects = MODEL.objects.filter(namelot__nameVG__nameSM__name='ВЖ-2-ПА').\
+                filter(namelot__nameVG__name=name, namelot__lot=lot).order_by(
                 'namelot__nameVG__rangeindex', 'namelot__lot')
             objects2 = MODEL2.objects.filter(namelot__nameVG__name=name, namelot__lot=lot).order_by(
                 'namelot__nameVG__rangeindex', 'namelot__lot')
@@ -65,10 +72,12 @@ class SearchKinematicResultView(TemplateView):
             context['objects3'] = objects3
         if name and not lot:
             objects = MODEL.objects.filter(namelot__nameVG__nameSM__name='ВЖ-2-ПА').\
-                filter(namelot__nameVG__name=name).order_by('namelot__nameVG__rangeindex',
-                                                                                'namelot__lot')
-            objects2 = MODEL2.objects.filter(namelot__nameVG__name=name).order_by('namelot__nameVG__rangeindex',
-                                                                                'namelot__lot')
+                filter(namelot__nameVG__name=name).\
+                order_by('namelot__nameVG__rangeindex',  'namelot__lot')
+
+            objects2 = MODEL2.objects.filter(namelot__nameVG__name=name).\
+                order_by('namelot__nameVG__rangeindex', 'namelot__lot')
+
             objects3 = MODEL.objects.exclude(namelot__nameVG__nameSM__name='ВЖ-2-ПА').\
                 filter(namelot__nameVG__name=name).order_by('namelot__nameVG__rangeindex', 'namelot__lot')
 
@@ -83,11 +92,13 @@ class SearchKinematicResultView(TemplateView):
         context['form'] = SearchKinematicaForm(initial={'name': name, 'lot': lot})
         return context
 
+
 class DetailKinematicView(View):
     """ выводит историю измерений кинематической вязкости для партии """
     def get(self, request, path, int, str, *args, **kwargs):
         try:
-            objects = ViscosityMJL.objects.filter(fixation=True).filter(name=path).filter(lot=int).filter(temperature=str)
+            objects = ViscosityMJL.objects.filter(fixation=True).filter(name=path).\
+                filter(lot=int).filter(temperature=str)
             name = ViscosityMJL.objects.filter(fixation=True, name=path, lot=int, temperature=str)[0]
             template = 'jouViscosity/detailkinematicviscosity.html'
             context = {
@@ -105,13 +116,16 @@ class DetailKinematicView(View):
 
 
 class AllDinamicviscosityView(ListView):
-    """ Представление, которое выводит все значения динамической вязкости и плотности  из Журнала аттестованных значений"""
+    """ Представление, которое выводит все значения динамической вязкости и плотности
+    из Журнала аттестованных значений"""
     """полустандартное"""
     template_name = 'jouViscosity/dinamicviscosityvalues.html'
     context_object_name = 'objects'
+
     def get_queryset(self):
         queryset = MODEL.objects.all().order_by('namelot__nameVG__rangeindex', 'namelot__lot')
         return queryset
+
     def get_context_data(self, **kwargs):
         context = super(AllDinamicviscosityView, self).get_context_data(**kwargs)
         objects2 = MODEL2.objects.all().order_by('namelot__nameVG__rangeindex', 'namelot__lot')
@@ -124,8 +138,10 @@ class AllDinamicviscosityView(ListView):
         context['form'] = SearchKinematicaForm()
         return context
 
+
 class SearchDinamicResultView(TemplateView):
-    """ Представление, которое выводит результаты поиска на странице со всеми записями журнала АЗ динамической вязкости. """
+    """ Представление, которое выводит результаты поиска на странице со всеми записями журнала АЗ динамической
+     вязкости. """
     """нестандартное"""
 
     template_name = 'jouViscosity/dinamicviscosityvalues.html'
@@ -143,10 +159,12 @@ class SearchDinamicResultView(TemplateView):
             context['objects'] = objects
             context['objects2'] = objects2
         if name and not lot:
-            objects = MODEL.objects.filter(namelot__nameVG__name=name).order_by('namelot__nameVG__rangeindex',
-                                                                                'namelot__lot')
-            objects2 = MODEL2.objects.filter(namelot__nameVG__name=name).order_by('namelot__nameVG__rangeindex',
-                                                                                'namelot__lot')
+            objects = MODEL.objects.filter(namelot__nameVG__name=name).\
+                order_by('namelot__nameVG__rangeindex', 'namelot__lot')
+
+            objects2 = MODEL2.objects.filter(namelot__nameVG__name=name).\
+                order_by('namelot__nameVG__rangeindex', 'namelot__lot')
+
             context['objects'] = objects
             context['objects2'] = objects2
         context['NAME'] = NAME
@@ -157,11 +175,13 @@ class SearchDinamicResultView(TemplateView):
         context['form'] = SearchKinematicaForm(initial={'name': name, 'lot': lot})
         return context
 
+
 class DetailDinamicView(View):
     """ выводит историю измерений плотности и динамической  вязкости для партии"""
     def get(self, request, path, int, str, *args, **kwargs):
         try:
-            objects = Dinamicviscosity.objects.filter(fixation=True).filter(name=path).filter(lot=int).filter(temperature=str)
+            objects = Dinamicviscosity.objects.filter(fixation=True).filter(name=path).filter(lot=int).\
+                filter(temperature=str)
             name = Dinamicviscosity.objects.filter(fixation=True, name=path, lot=int, temperature=str)[0]
             template = 'jouChlorineOilProducts/detaildinamicviscosity.html'
             context = {
@@ -176,5 +196,3 @@ class DetailDinamicView(View):
                 'objects': objects,
             }
             return render(request, template, context)
-
-
