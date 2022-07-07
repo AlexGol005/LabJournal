@@ -89,14 +89,14 @@ class DetailKinematicView(View):
         try:
             objects = ViscosityMJL.objects.filter(fixation=True).filter(name=path).filter(lot=int).filter(temperature=str)
             name = ViscosityMJL.objects.filter(fixation=True, name=path, lot=int, temperature=str)[0]
-            template = 'jouChlorineOilProducts/detailkinematicviscosity.html'
+            template = 'jouViscosity/detailkinematicviscosity.html'
             context = {
                 'objects': objects,
                 'name': name
             }
             return render(request, template, context)
         except IndexError:
-            template = 'jouChlorineOilProducts/olddetailkinematicviscosity.html'
+            template = 'jouViscosity/olddetailkinematicviscosity.html'
             objects = MODEL.objects.filter(namelot__nameVG__name=path, namelot__lot=int)
             context = {
                 'objects': objects,
