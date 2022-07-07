@@ -122,7 +122,7 @@ class GetTitrHg(models.Model):
             self.resultMeas = 'Удовлетворительно:'
             self.cause = f'Tmax - Tmin <= {TITRKRIT}'
             self.datedead = date.today() + timedelta(days=14)
-            self.titr = Decimal(((self.titr1 + self.titr2 + self.titr3) / Decimal('3')).quantize(Decimal('1.000'), ROUND_HALF_UP))
+            self.titr = Decimal(((self.titr1 + self.titr2 + self.titr3) / Decimal('3')).quantize(Decimal('1.0000'), ROUND_HALF_UP))
         super(GetTitrHg, self).save(*args, **kwargs)
 
     def __str__(self):
