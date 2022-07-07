@@ -312,10 +312,14 @@ class Clorinesalts(models.Model):
                 self.ndocconvergence = '6'
                 self.ndocreproducibility = '12'
                 self.ndoccd = '8'
-            if Decimal(200) <= self.x_avg:
+            if Decimal(200) <= self.x_avg <= Decimal(200):
                 self.ndocconvergence = '25'
                 self.ndocreproducibility = '50'
                 self.ndoccd = '33'
+            if Decimal(1000) < self.x_avg:
+                self.ndocconvergence = str(self.x_avg * Decimal('0.04'))
+                self.ndocreproducibility = str(self.x_avg * Decimal('0.04') * 2)
+
 
             # сравниваем х1-х2 со сходимостью и комментируем результат измерений
             self.factconvergence = (self.x1 - self.x2).copy_abs().quantize(Decimal('1.00'), ROUND_HALF_UP)
