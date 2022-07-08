@@ -296,7 +296,7 @@ red{% endif %}">
     {% if obj.cvt40dead >= now and  now_date_plusmonth <= obj.cvt40dead %}green{% endif %}
     {% if now_date_plusmonth > obj.cvt40dead and obj.cvt40dead > now %}orange{% endif %}
     {% if obj.cvt40dead < now %}red{% endif %}">
-        {% if obj.cvt40dead = now and  now_date_plusmonth <= obj.cvt40dead %}
+        {% if obj.cvt40dead == now and  now_date_plusmonth <= obj.cvt40dead %}
         <a href="{% url 'detailkinematic' obj.namelot.nameVG.name obj.namelot.lot '40' %}" style="color: green"><b>
         {% elif now_date_plusmonth > obj.cvt40dead and obj.cvt40dead > now %}
         <a href="{%  url 'detailkinematic' obj.namelot.nameVG.name obj.namelot.lot '40' %}" style="color: darkorange">
