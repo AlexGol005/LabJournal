@@ -12,6 +12,7 @@ from clorinesalts.models import Clorinesalts, CommentsClorinesalts, IndicatorDFK
 
 MODEL = Clorinesalts
 COMMENTMODEL = CommentsClorinesalts
+MATERIAL1 = MATERIAL[0:-1]
 
 
 class StrJournalCreationForm(forms.ModelForm):
@@ -76,65 +77,65 @@ class StrJournalCreationForm(forms.ModelForm):
                                     decimal_places=2,
                                     widget=forms.TextInput(attrs={'class': 'form-control',
                                                                   'placeholder': '0.00'}))
-    V1E1 = forms.DecimalField(label='V11, мл', max_digits=4, decimal_places=2,
+    V1E1 = forms.DecimalField(label='Х1, экстр.1, мл', max_digits=4, decimal_places=2,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                                    'placeholder': '00.00'}))
-    V1E2 = forms.DecimalField(label='V12, мл', max_digits=4, decimal_places=2,
+    V1E2 = forms.DecimalField(label='Х1, экстр.2, мл', max_digits=4, decimal_places=2,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '00.00'}))
-    V1E3 = forms.DecimalField(label='V13, мл', max_digits=4, decimal_places=2,
+    V1E3 = forms.DecimalField(label='Х1, экстр.3, мл', max_digits=4, decimal_places=2,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '00.00'}))
-    V2E1 = forms.DecimalField(label='V21, мл', max_digits=4, decimal_places=2,
+    V2E1 = forms.DecimalField(label='Х2, экстр.1, мл', max_digits=4, decimal_places=2,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '00.00'}))
-    V2E2 = forms.DecimalField(label='V22, мл', max_digits=4, decimal_places=2,
+    V2E2 = forms.DecimalField(label='Х2, экстр.2, мл', max_digits=4, decimal_places=2,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '00.00'}))
-    V2E3 = forms.DecimalField(label='V23, мл', max_digits=4, decimal_places=2,
+    V2E3 = forms.DecimalField(label='Х2, экстр.3, мл', max_digits=4, decimal_places=2,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '00.00'}))
-    V1E4 = forms.DecimalField(label='V14, мл', max_digits=4, decimal_places=2, required=False,
+    V1E4 = forms.DecimalField(label='Х1, экстр.4, мл', max_digits=4, decimal_places=2, required=False,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '00.00'}))
-    V1E5 = forms.DecimalField(label='V15, мл', max_digits=4, decimal_places=2, required=False,
+    V1E5 = forms.DecimalField(label='Х1, экстр.5, мл', max_digits=4, decimal_places=2, required=False,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '00.00'}))
-    V2E4 = forms.DecimalField(label='V24, мл', max_digits=4, decimal_places=2, required=False,
+    V2E4 = forms.DecimalField(label='Х2, экстр.4, мл', max_digits=4, decimal_places=2, required=False,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '00.00'}))
-    V2E5 = forms.DecimalField(label='V25, мл', max_digits=4, decimal_places=2, required=False,
+    V2E5 = forms.DecimalField(label='Х2, экстр.5, мл', max_digits=4, decimal_places=2, required=False,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '00.00'}))
 
-    aV1E1 = forms.DecimalField(label='А11', initial=Decimal('1'), max_digits=1, decimal_places=0,
+    aV1E1 = forms.DecimalField(label='А для Х1, экстр.1', initial=Decimal('1'), max_digits=1, decimal_places=0,
                                widget=forms.TextInput(attrs={'class': 'form-control',
                                                                       'placeholder': '1'}))
-    aV1E2 = forms.DecimalField(label='А12', initial=Decimal('1'), max_digits=1, decimal_places=0,
+    aV1E2 = forms.DecimalField(label='А для Х1, экстр.2', initial=Decimal('1'), max_digits=1, decimal_places=0,
                                widget=forms.TextInput(attrs={'class': 'form-control',
                                                               'placeholder': '1'}))
-    aV1E3 = forms.DecimalField(label='А13', initial=Decimal('1'), max_digits=1, decimal_places=0,
+    aV1E3 = forms.DecimalField(label='А для Х1, экстр.3', initial=Decimal('1'), max_digits=1, decimal_places=0,
                                widget=forms.TextInput(attrs={'class': 'form-control',
                                                                        'placeholder': '1'}))
-    aV2E1 = forms.DecimalField(label='А21', initial=Decimal('1'), max_digits=1, decimal_places=0,
+    aV2E1 = forms.DecimalField(label='А для Х2, экстр.1', initial=Decimal('1'), max_digits=1, decimal_places=0,
                                widget=forms.TextInput(attrs={'class': 'form-control',
                                                        'placeholder': '1'}))
-    aV2E2 = forms.DecimalField(label='А22', initial=Decimal('1'), max_digits=1, decimal_places=0,
+    aV2E2 = forms.DecimalField(label='А для Х2, экстр.2', initial=Decimal('1'), max_digits=1, decimal_places=0,
                                widget=forms.TextInput(attrs={'class': 'form-control',
                                                              'placeholder': '1'}))
-    aV2E3 = forms.DecimalField(label='А23', initial=Decimal('1'), max_digits=1, decimal_places=0,
+    aV2E3 = forms.DecimalField(label='А для Х2, экстр.3', initial=Decimal('1'), max_digits=1, decimal_places=0,
                                widget=forms.TextInput(attrs={'class': 'form-control',
                                                              'placeholder': '1'}))
-    aV1E4 = forms.DecimalField(label='А14', max_digits=1, decimal_places=0, required=False,
+    aV1E4 = forms.DecimalField(label='А для Х1, экстр.4', max_digits=1, decimal_places=0, required=False,
                                widget=forms.TextInput(attrs={'class': 'form-control',
                                                               'placeholder': '1'}))
-    aV1E5 = forms.DecimalField(label='А15',  max_digits=1, decimal_places=0, required=False,
+    aV1E5 = forms.DecimalField(label='А для Х1, экстр.5',  max_digits=1, decimal_places=0, required=False,
                                widget=forms.TextInput(attrs={'class': 'form-control',
                                                               'placeholder': '1'}))
-    aV2E4 = forms.DecimalField(label='А24',  max_digits=1, decimal_places=0, required=False,
+    aV2E4 = forms.DecimalField(label='А для Х2, экстр.4',  max_digits=1, decimal_places=0, required=False,
                                widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': '1'}))
-    aV2E5 = forms.DecimalField(label='А25',  max_digits=1, decimal_places=0, required=False,
+    aV2E5 = forms.DecimalField(label='А для Х2, экстр.5',  max_digits=1, decimal_places=0, required=False,
                                widget=forms.TextInput(attrs={'class': 'form-control',
                                                               'placeholder': '1'}))
 
@@ -204,10 +205,8 @@ class StrJournalCreationForm(forms.ModelForm):
             ),
 
             Row(
-                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
-                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
-                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
                 HTML('Воронка № 1'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
                 HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
                 HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
                 HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
@@ -330,9 +329,16 @@ class CommentCVCreationForm(forms.ModelForm):
 class SearchForm(forms.Form):
     """форма для поиска по полям журнала ГСО, партия"""
     """при копировании поменять поля на нужные"""
-    name = forms.CharField(label='Название', initial='ХСН-ПА-1')
-    namedop = forms.CharField(label='Индекс', initial='100')
+    name = forms.ChoiceField(label='Наименование', required=True,
+                             choices=MATERIAL1,
+                             widget=forms.Select(attrs={'class': 'form-control'}))
+    namedop = forms.CharField(label='Индекс', initial='100',
+                              help_text='Для СС-ТН: Х, ХПВ или ХПВС;'
+                                        ' Для ХСН: индекс ГСО, например 10;',
+                              widget=forms.TextInput(attrs={'class': 'form-control',
+                                                            'placeholder': '100'}))
     lot = forms.CharField(label='Партия', initial='10', required=False)
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

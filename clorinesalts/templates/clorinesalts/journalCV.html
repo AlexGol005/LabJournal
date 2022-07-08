@@ -14,21 +14,21 @@
 {#заголовок с ссылкой#}
 {#стандартная#}
 <div class="row">
-<div class="col-md-9 mt-2" >
-<div style="text-align: center;"><h4><a href="/attestationJ/{{ URL }}/"> {% for item in journal %}{{ item.name }}{% endfor %}</a></h4></div>
+<div class="col-md-8 mt-2" >
+<div style="text-align: center;"><h4><a href="/attestationJ/{{ URL }}/"> Журнал расчёта аттестованных значений хлористых солей</a></h4></div>
 <br>
-{#конец заголовка со ссылкой#}
+конец заголовка со ссылкой
 
-{#форма для поиска по ГСО#}
-{#стандартная#}
-{#    <form action="/attestationJ/{{ URL }}/searchresult/" method="GET">#}
-{#        {% csrf_token %}#}
-{#        {% crispy formSM %}#}
-{#    </form>#}
+форма для поиска по ГСО
+стандартная
+    <form action="/attestationJ/{{ URL }}/searchresultcv/" method="GET">
+        {% csrf_token %}
+        {% crispy formSM %}
+    </form>
 {#конец формы для поиска по ГСО#}
-
+{##}
 {#основная таблица#}
-{# уникальная #}
+{# уникальная#}
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -70,32 +70,34 @@
 
 {#фильтры#}
 {# уникальные, менять url #}
-<div class="col-md-3 mt-5" ><div style="text-align: center;"><h4> Фильтр записей  </h4></div>
-<div style="text-align: center;"><a href="/attestationJ/{{ URL }}/attestation/" class="btn  btn-warning  mt-3"  >&nbspВсе&nbsp</a></div>
-<div style="text-align: center;"> <a href="{% url 'clorinesaltsfilter' pk=2 %}" class="btn  btn-primary  mt-3" >Сегодня</a></div>
-<div style="text-align: center;"> <a href="{% url 'clorinesaltsfilter' pk=5 %}" class="btn  btn-primary  mt-3" >&nbsp&nbsp&nbspМои&nbsp&nbsp&nbsp</a></div>
+<div class="col-md-3 mt-4" ><div style="text-align: center;"><h4> Фильтр записей  </h4></div>
+<div style="text-align: center;"><a href="/attestationJ/{{ URL }}/attestationcv/" class="btn  btn-warning  mt-3"  >&nbspВсе&nbsp</a></div>
+<div style="text-align: center;"> <a href="{% url 'clorinesaltsfiltercv' pk=2 %}" class="btn  btn-primary  mt-3" >Сегодня</a></div>
+<div style="text-align: center;"> <a href="{% url 'clorinesaltsfiltercv' pk=5 %}" class="btn  btn-primary  mt-3" >&nbsp&nbsp&nbspМои&nbsp&nbsp&nbsp</a></div>
 
 {# конец фильров #}
 
 
 {#форма для поиска по датам записей и вывод ошибки формата даты#}
 {#стандартная#}
-{#<br>#}
-{#    <div >#}
-{#<div style="text-align: center;" class="TransactionAmount Badresult"> <b> {{ Date }}</b> </div>#}
-{#<div style="text-align: center;" class="TransactionAmount Badresult"> <b> {{ format }}</b> </div>#}
-{#<br>#}
-{#<div style="text-align: center;">#}
-{#    <form action="/attestationJ/{{ URL }}/datesearchresult/" method="GET">#}
-{#        {% csrf_token %}#}
-{#        {% crispy formdate %}#}
-{#    </form>#}
-{#</div>#}
+<br>
+    <div >
+<div style="text-align: center;" class="TransactionAmount Badresult"> <b> {{ Date }}</b> </div>
+<div style="text-align: center;" class="TransactionAmount Badresult"> <b> {{ format }}</b> </div>
+<br>
+<div style="text-align: center;">
+    <form action="/attestationJ/{{ URL }}/datesearchresultcv/" method="GET">
+        {% csrf_token %}
+        {% crispy formdate %}
+    </form>
+</div>
 {#конец формы для поиска по датам записей#}
+
 
 </div>
 </div>
 </div>
+
 
 {% endblock %}
 {#конец блока {% block content %}"""#}

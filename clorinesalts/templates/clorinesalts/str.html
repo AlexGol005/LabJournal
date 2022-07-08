@@ -10,7 +10,12 @@
 
 {#уникальная таблица#}
 {#полустандартный верх таблицы#}
-<div class="col-md-4 mt-1" >
+<div class="col-md-8 mt-1" >
+<div style="text-align: center;">
+<a href="/attestationJ/{{ URL }}/registration/" class="btn btn-warning mt-3 mr-2">Внести ещё </a>
+    <a href='/attestationJ/{{ URL }}/' class="btn btn-warning mt-3 mr-2">В  журнал</a>
+    <a href='/attestationJ/{{ URL }}/attestation/' class="btn btn-warning mt-3 mr-2">Все записи</a></div>
+    <br><br>
     <table class="table table-bordered background-color">
 	<tbody>
 		<tr>
@@ -158,7 +163,7 @@
                 {% else %}
                 <div class="TransactionAmount Goodresult">
                 {% endif %}
-                Результат измерений: <b>{{ note.resultMeas }} </b> {{ note.cause }}
+                Результат измерений: <b>{{ note.resultMeas|default_if_none:" " }} </b> {{ note.cause|default_if_none:" " }}
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
@@ -167,10 +172,13 @@
 		</tr>
             <td colspan="3">Исполнитель: {{ note.performer}}</td>
 			<td colspan="2">
-                {% if  note.resultMeas == 'Удовлетворительно'%}
+                 {% if  note.resultMeas == 'Удовлетворительно' and not note.clorinesalts.certifiedValue %}
                 <a href="/attestationJ/{{ URL }}/clorinesaltsstrcv/{{ note.id }}/"  class="btn btn-outline-warning mt-3">
                     Рассчитать АЗ
-
+                     </a>
+                {% elif  note.resultMeas == 'Удовлетворительно' and note.clorinesalts.certifiedValue %}
+                <a href="/attestationJ/{{ URL }}/clorinesaltsstrcv/{{ note.id }}/"  class="btn btn-outline-warning mt-3">
+                    Смотреть АЗ
                 </a>
             {% else %}
                 -

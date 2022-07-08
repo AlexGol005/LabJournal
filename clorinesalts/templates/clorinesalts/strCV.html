@@ -8,9 +8,8 @@
 {% block content %}
 <div class="row">
 <div class="col-md-2">
-    <a href="/attestationJ/{{ URL }}/registration/" class="btn btn-warning mt-3 mr-5">&nbsp&nbspвнести&nbsp&nbsp&nbsp ещё </a>
     <a href='/attestationJ/{{ URL }}/' class="btn btn-warning mt-3">В  журнал</a>
-    <a href='/attestationJ/{{ URL }}/attestation/' class="btn btn-warning mt-3">Все <br>записи</a>
+    <a href='/attestationJ/{{ URL }}/attestationcv/' class="btn btn-warning mt-3">Все <br>записи</a>
 </div>
 
 {#уникальная таблица#}
@@ -53,9 +52,11 @@
 
         <tr>
 			<th colspan="6">
+                {% if note.clorinesalts2.pk %}
                 <a href="{% url 'clorinesaltsstr'  note.clorinesalts2.pk %}" target="blank">
                 Измерение № 2
              </a>
+                {% endif %}
             </th>
 		</tr>
         <td colspan="6">

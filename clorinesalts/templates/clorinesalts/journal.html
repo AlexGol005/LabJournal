@@ -43,6 +43,22 @@
     </thead>
     <tbody>
     {% for obj in objects %}
+        {% if obj.clorinesalts.certifiedValue %}
+
+    <tr>
+        <td align="center"><b>{{ obj.date|date:"d.m.Y" }}</b></td>
+        <td align="center"><b> {{ obj.name }}<br>({{ obj.namedop }})</b></td>
+        <td align="center"> <b>{{ obj.lot }}</b></td>
+        <td align="center"><b>{{ obj.x1 }}</b> </td>
+        <td align="center"><b>{{ obj.x2 }}</b> </td>
+        <td align="center"><b>
+            {% if obj.resultMeas == 'Удовлетворительно' %}
+            {{ obj.x_avg|default_if_none:" " }}
+            {% endif %}</b>
+        </td>
+        <td align="center"><a href="/attestationJ/{{ URL }}/attestation/{{ obj.id }}/"  class="btn btn-outline-warning mt-3">см.</a></td>
+    </tr>
+            {% elif not obj.clorinesalts.certifiedValue %}
     <tr>
         <td align="center">{{ obj.date|date:"d.m.Y" }}</td>
         <td align="center"> {{ obj.name }}<br>({{ obj.namedop }})</td>
@@ -56,6 +72,7 @@
         </td>
         <td align="center"><a href="/attestationJ/{{ URL }}/attestation/{{ obj.id }}/"  class="btn btn-outline-warning mt-3">см.</a></td>
     </tr>
+        {% endif %}
     {% endfor %}
     </tbody>
 </table>

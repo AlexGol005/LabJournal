@@ -211,19 +211,23 @@ class AllStrView(ListView):
 
 class AllStrCVView(ListView):
     """ Представление, которое выводит все записи в журнале расчёта АЗ. """
-    """стандартное"""
+    """нестандартное"""
     model = ClorinesaltsCV
     template_name = URL + '/journalCV.html'
     context_object_name = 'objects'
     ordering = ['-date']
     paginate_by = 8
 
+    def get_queryset(self, *args, **kwargs):
+        qs = super(AllStrCVView, self).get_queryset(*args, **kwargs)
+        qs = qs.filter(fixation=True)
+        return qs
 
     def get_context_data(self, **kwargs):
         context = super(AllStrCVView, self).get_context_data(**kwargs)
         context['journal'] = JOURNAL.objects.filter(for_url=URL)
-        # context['formSM'] = SearchForm()
-        # context['formdate'] = SearchDateForm()
+        context['formSM'] = SearchForm()
+        context['formdate'] = SearchDateForm()
         context['URL'] = URL
         return context
 
@@ -243,6 +247,29 @@ class SearchResultView(TemplateView):
             context['objects'] = objects
         if name and not lot:
             objects = MODEL.objects.filter(name=name).filter(namedop=namedop).order_by('-pk')
+            context['objects'] = objects
+        context['journal'] = JOURNAL.objects.filter(for_url=URL)
+        context['formSM'] = SearchForm(initial={'name': name, 'namedop': namedop,'lot': lot})
+        context['formdate'] = SearchDateForm()
+        context['URL'] = URL
+        return context
+
+class SearchCVResultView(TemplateView):
+    """ Представление, которое выводит результаты поиска на странице со всеми записями журнала расчёта АЗ. """
+    """нестандартное"""
+
+    template_name = URL + '/journalCV.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchCVResultView, self).get_context_data(**kwargs)
+        name = self.request.GET['name']
+        namedop = self.request.GET['namedop']
+        lot = self.request.GET['lot']
+        if name and lot:
+            objects = ClorinesaltsCV.objects.filter(fixation=True).filter(clorinesalts__name=name).filter(clorinesalts__namedop=namedop).filter(clorinesalts__lot=lot).order_by('-pk')
+            context['objects'] = objects
+        if name and not lot:
+            objects = ClorinesaltsCV.objects.filter(fixation=True).filter(clorinesalts__name=name).filter(clorinesalts__namedop=namedop).order_by('-pk')
             context['objects'] = objects
         context['journal'] = JOURNAL.objects.filter(for_url=URL)
         context['formSM'] = SearchForm(initial={'name': name, 'namedop': namedop,'lot': lot})
@@ -278,7 +305,34 @@ class DateSearchResultView(TemplateView):
             context['Date'] = 'введите даты в формате'
             context['format'] = 'ГГГГ-ММ-ДД'
             return context
+class DateSearchCVResultView(TemplateView):
+    """ Представление, которое выводит результаты поиска на странице со всеми расчётами АЗ. """
+    """стандартное"""
 
+    template_name = URL + '/journalCV.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DateSearchCVResultView, self).get_context_data(**kwargs)
+        datestart = self.request.GET['datestart']
+        datefinish = self.request.GET['datefinish']
+        try:
+            objects = ClorinesaltsCV.objects.all().filter(fixation=True).filter(date__range=(datestart, datefinish)).order_by('-pk')
+            context['objects'] = objects
+            context['journal'] = JOURNAL.objects.filter(for_url=URL)
+            context['formSM'] = SearchForm()
+            context['formdate'] = SearchDateForm(initial={'datestart': datestart, 'datefinish': datefinish})
+            context['URL'] = URL
+            return context
+        except ValidationError:
+            objects = ClorinesaltsCV.objects.filter(id=5)
+            context['objects'] = objects
+            context['journal'] = JOURNAL.objects.filter(for_url=URL)
+            context['formSM'] = SearchForm()
+            context['formdate'] = SearchDateForm(initial={'datestart': datestart, 'datefinish': datefinish})
+            context['URL'] = URL
+            context['Date'] = 'введите даты в формате'
+            context['format'] = 'ГГГГ-ММ-ДД'
+            return context
 def filterview(request, pk):
     """ Фильтры записей об измерениях по дате, АЗ, мои записи и пр """
     """Стандартная"""
@@ -304,6 +358,21 @@ def filterview(request, pk):
         objects = objects.filter(performer=request.user).filter(fixation__exact=True).filter(
             date__gte=datetime.now()).order_by('-pk')
     return render(request, URL + "/journal.html", {'objects': objects, 'journal': journal, 'formSM': formSM, 'URL': URL,
+                                                   'formdate': formdate})
+
+def filtercvview(request, pk):
+    """ Фильтры записей об измерениях по дате, АЗ, мои записи и пр для Журнала расчёта АЗ"""
+    """Стандартная"""
+    journal = JOURNAL.objects.filter(for_url=URL)
+    objects = ClorinesaltsCV.objects.all()
+    formSM = SearchForm()
+    formdate = SearchDateForm()
+    if pk == 2:
+        now = datetime.now()
+        objects = objects.filter(date__gte=now).order_by('-pk')
+    elif pk == 5:
+        objects = objects.filter(performer=request.user).order_by('-pk')
+    return render(request, URL + "/journalCV.html", {'objects': objects, 'journal': journal, 'formSM': formSM, 'URL': URL,
                                                    'formdate': formdate})
 
 
