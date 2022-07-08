@@ -375,7 +375,7 @@ class ClorinesaltsCV(models.Model):
                                          related_name='clorinesalts2', null=True, blank=True)
     countmeasur = models.BooleanField(verbose_name='Имеются все результаты для расчёта АЗ', default=False,
                                    null=True, blank=True)
-    x_avg = models.DecimalField('Xсреднее', max_digits=7, decimal_places=3, null=True, blank=True)
+    x_avg = models.DecimalField('Xсреднее', max_digits=18, decimal_places=4, null=True, blank=True)
     x_avg_new = models.DecimalField('Xсреднее', max_digits=7, decimal_places=3, null=True, blank=True)
 
     x_cd_warning = models.CharField('Если входят не все Х', max_length=300, default='', null=True, blank=True)
