@@ -20,7 +20,7 @@ class NoteAdmin(admin.ModelAdmin):
 
 @admin.register(ClorinesaltsCV)
 class NoteAdmin(admin.ModelAdmin):
-    list_display = ('id', 'certifiedValue', 'name.clorinesalts')
+    list_display = ('id', 'certifiedValue')
 
 
 
