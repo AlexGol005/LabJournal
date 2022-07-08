@@ -7,7 +7,10 @@ from crispy_forms.layout import Layout, Submit, Row, Column
 class SearchKinematicaForm(forms.Form):
     "форма для поиска по полям ЖАЗ кинематики, партия"
     "при копировании поменять поля на нужные"
-    name = forms.CharField(label='Название', initial='ВЖ-2-ПА(100)')
+    name = forms.CharField(label='Название', initial='ВЖ-2-ПА(100)',
+                           help_text='введите название в форме: ВЖ-2-ПА(100)',
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                         'placeholder': 'ВЖ-2-ПА(100)'}))
     lot = forms.CharField(label='Партия', initial='10', required=False)
 
 

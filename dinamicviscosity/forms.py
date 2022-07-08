@@ -201,7 +201,10 @@ class CommentCreationForm(forms.ModelForm):
 class SearchForm(forms.Form):
     "форма для поиска по полям журнала ГСО, партия, температура"
     "при копировании поменять поля на нужные"
-    name = forms.CharField(label='Название', initial='ВЖ-2-ПА(100)')
+    name = forms.CharField(label='Название', initial='ВЖ-2-ПА(100)',
+                           help_text='введите название в форме: ВЖ-2-ПА(100)',
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                         'placeholder': 'ВЖ-2-ПА(100)'}))
     lot = forms.CharField(label='Партия', initial='1', required=False)
     temperature = forms.CharField(label='Температура', initial='20', required=False)
 

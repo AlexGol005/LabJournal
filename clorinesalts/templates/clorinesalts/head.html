@@ -2,21 +2,27 @@
 {% load static %}
 {% block uniccontent %}
 <br>
-    <div style="text-align: center;"><a href="{% url 'clorinesaltsallcv' %}" class="btn btn-info mr-5 mt-7">Смотреть расчёты аттестованных значений</a></div>
-    <div style="text-align: center;"><a href="{% url 'dpkreg' %}" class="btn btn-info mr-5 mt-3">Внести индикатор</a></div>
-    <div style="text-align: center;"><a href="{% url 'titranthgreg' %}" class="btn btn-info mr-5 mt-3">Внести приготовление Hg(NO3)2</a></div>
-    <div style="text-align: center;"><a href="{% url 'gettitrhgreg' %}" class="btn btn-info mr-5 mt-3">Внести установку титра Hg(NO3)2</a></div>
+<div style="text-align: center;"><h4>Титрант</h4></div>
+<div style="text-align: center;"><h6>Приготовление</h6></div>
+<div style="text-align: center;"><a href="{% url 'titranthgreg' %}" class="btn btn-info mt-3 mr-3" style="width: 260px">Внести Hg(NO<sub>3</sub>)<sub>2</sub></a>
+<a href="{% url 'titranthgreg' %}" class="btn btn-info mt-3" style="width: 260px">Смотреть партии Hg(NO<sub>3</sub>)<sub>2</sub></a>
+</div>
 <br>
-{#    <br>#}
-{#    <div style="text-align: center;"><h4> Информация </h4></div>#}
-{#     <br>#}
-{#         <div style="text-align: center;">#}
-{#        <a href="{% url 'konstv' %}" class="btn btn-info mr-5 mt-3"> Константы вискозиметров </a>#}
-{#        <a href="https://petroanalytica.sharepoint.com/sites/main/production/%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D0%B8%D0%BA%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B5%D0%BD%D0%B8%D0%B9/%D0%9C%D0%98%20%D0%92%D0%96-%D0%9F%D0%90%20%E2%84%96%20%D0%9C%D0%98-02-2018.pdf"#}
-{#           class="btn btn-info mt-3">Методика измерений</a>#}
-{#         </div>#}
-{#    <br>#}
-{#    <div style="text-align: center;"><img src="{% static 'main/img/3.jpg' %}"#}
-{#                                          alt="ВЖ"></div>#}
+<div style="text-align: center;"><h6>Установка титра</h6></div>
+
+<div style="text-align: center;"><a href="{% url 'gettitrhgreg' %}" class="btn btn-info mt-3 mr-3 "style="width: 260px">Внести титр Hg(NO<sub>3</sub>)<sub>2</sub></a>
+<a href="{% url 'gettitrhgreg' %}" class="btn btn-info mt-3" style="width: 260px">Смотреть титр Hg(NO<sub>3</sub>)<sub>2</sub></a>
+</div>
+<br>
+<div style="text-align: center;"><h4>Индикатор</h4></div>
+<div style="text-align: center;"><a href="{% url 'dpkreg' %}" class="btn btn-info  mt-3">Внести индикатор</a></div>
+<br>
+<div style="text-align: center;"><h4>Расчёт АЗ <sup>*</sup></h4></div>
+<div style="text-align: center;"><a href="{% url 'clorinesaltsallcv' %}" class="btn btn-info mt-3">Смотреть расчёты аттестованных значений</a></div>
+<br>
+<br>
+<div style="text-align: center;"><img src="{% static 'main/img/clorinesalts.jpg' %}"
+                              alt="ХС"></div>
+
 
 {% endblock %}
