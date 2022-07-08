@@ -134,7 +134,11 @@
 
 		</tr>
 		<tr>
-			<td colspan="6"></td>
+			<td colspan="6">
+                {{ note.type_warning|default_if_none:" "}}<br>
+                {{ note.price_warning|default_if_none:" "}}<br>
+                {{ note.old_delta_warning|default_if_none:" "}}
+            </td>
 		</tr>
 		<tr>
 			<th colspan="6">Фиксация результатов</th>

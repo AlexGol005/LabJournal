@@ -37,6 +37,17 @@ class StrJournalCreationForm(forms.ModelForm):
     lot = forms.CharField(label='Партия', max_length=100, required=True,
                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': 'Партия'}))
+
+    order_cv_value_begin = forms.CharField(label='требуемый диапазон по заказу от, мг/л', max_length=90, required=False,
+                                           help_text='для ХСН-ПА указывать не нужно',
+                          widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': 'от'}))
+    order_cv_value_end = forms.CharField(label='требуемый диапазон по заказу до, мг/л', max_length=90, required=False,
+                                         help_text='для ХСН-ПА указывать не нужно',
+                          widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': 'до'}))
+
+
     constit = forms.ChoiceField(label='Диапазон хлористых солей по ГОСТ, мг/л', required=True,
                                 choices=CHOICES,
                                 widget=forms.Select(attrs={'class': 'form-control'}))
@@ -141,9 +152,11 @@ class StrJournalCreationForm(forms.ModelForm):
             Row(
                 Column('name', css_class='form-group col-md-3 mb-0'),
                 Column('namedop', css_class='form-group col-md-9 mb-0'),
-
-
-
+                css_class='form-row'
+            ),
+            Row(
+                Column('order_cv_value_begin', css_class='form-group col-md-6 mb-0'),
+                Column('order_cv_value_end', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
 
@@ -277,6 +290,7 @@ class StrJournalCreationForm(forms.ModelForm):
                   'aV1E1', 'aV1E2', 'aV1E3',
                   'aV2E1', 'aV2E2', 'aV2E3',
                   'aV2E4', 'aV2E5', 'aV1E4', 'aV1E5',
+                  'order_cv_value_begin', 'order_cv_value_end'
                   ]
 
 

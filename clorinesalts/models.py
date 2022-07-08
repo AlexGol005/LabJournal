@@ -240,6 +240,9 @@ class Clorinesalts(models.Model):
     ndocreproducibility = models.CharField('Воспроизводимость, мг/л', max_length=90, null=True, blank=True)
     ndoccd = models.CharField('Критическая разность, мг/л', max_length=90, null=True, blank=True)
 
+    order_cv_value_begin = models.CharField('Диапазон по заказу от, мг/л', max_length=90, null=True, blank=True)
+    order_cv_value_end = models.CharField('Диапазон по заказу до, мг/л', max_length=90, null=True, blank=True)
+
     def save(self, *args, **kwargs):
         # связь с конкретной партией и  относительной погрешностью СО
         if self.name == 'СС-ТН-ПА-1':
@@ -382,8 +385,13 @@ class ClorinesaltsCV(models.Model):
 
     abserror = models.CharField('Абсолютная  погрешность', null=True, blank=True, max_length=300)
     relerror = models.CharField('Относительная   погрешность', null=True, blank=True, max_length=300)
+
     typebegin = models.CharField('Описание типа от', null=True, blank=True, max_length=300)
     typeend = models.CharField('Описание типа до', null=True, blank=True, max_length=300)
+
+    pricebegin = models.CharField('По прайсу или заказу от', null=True, blank=True, max_length=300)
+    priceend = models.CharField('По прайсу или заказу до', null=True, blank=True, max_length=300)
+
     certifiedValue = models.CharField('Аттестованное значение', null=True,
                                       blank=True, max_length=300)
 
@@ -394,15 +402,28 @@ class ClorinesaltsCV(models.Model):
     olddvalue = models.CharField('Предыдущее значение', max_length=300, null=True, default='', blank=True)
     deltaolddvalue = models.DecimalField('Оценка разницы с предыдущим значением ',
                                          max_digits=10, decimal_places=2, null=True, blank=True)
-    old_delta_warning = models.CharField(max_length=300, default='', null=True, blank=True)
+    old_delta_warning = models.CharField('Текст о разнице с предыдущим значением', max_length=300, default='', null=True, blank=True)
+    price_warning = models.CharField('Текст о вхождении в прайс (диапазон)', max_length=300, default='', null=True, blank=True)
+    type_warning = models.CharField('Текст о вхождении в описание типа', max_length=300, default='', null=True, blank=True)
     exp = models.IntegerField('Срок годности, месяцев',  blank=True, null=True)
+
     fixation = models.BooleanField(verbose_name='Внесен ли результат в Журнал аттестованных значений?', default=False,
                                    null=True, blank=True)
-
-    # def save(self, *args, **kwargs):
-    #     super().save()
     def save(self, *args, **kwargs):
         self.exp = EXP
+        # устанавливаем границы по заказу (прайсу)
+        if self.clorinesalts.name[0:3] == 'ХСН':
+            self.pricebegin = self.clorinesalts.for_lot_and_nameLotCSN.nameSM.pricebegin
+            self.priceend = self.clorinesalts.for_lot_and_nameLotCSN.nameSM.priceend
+        if self.clorinesalts.order_cv_value_end:
+            self.priceend = self.clorinesalts.order_cv_value_end
+        if self.clorinesalts.order_cv_value_begin:
+            self.pricebegin = self.clorinesalts.order_cv_value_begin
+        if not self.clorinesalts.order_cv_value_end and self.clorinesalts2.order_cv_value_end:
+            self.priceend = self.clorinesalts2.order_cv_value_end
+        if not self.clorinesalts.order_cv_value_begin and self.clorinesalts2.order_cv_value_begin:
+            self.pricebegin = self.clorinesalts2.order_cv_value_begin
+
         # находим х среднее из всех измерений
         if self.countmeasur:
             if self.clorinesalts and not self.clorinesalts2:
@@ -530,6 +551,20 @@ class ClorinesaltsCV(models.Model):
 
 
         # проверяем соответствие АЗ диапазону по прайсу и по описанию типа иразницу со старым
+                if self.typebegin and self.typeend:
+                    if Decimal(self.typebegin) <= self.certifiedValue <= Decimal(self.typeend):
+                        self.type_warning = 'АЗ входит в диапазон по описанию типа'
+                    if Decimal(self.typebegin) >= self.certifiedValue or self.certifiedValue >= Decimal(self.typeend):
+                        self.type_warning = 'АЗ не входит в диапазон по описанию типа!'
+                if not self.typebegin or not self.typeend:
+                    self.type_warning = 'Не указан диапазон по описанию типа!'
+                if self.pricebegin and self.priceend:
+                    if Decimal(self.pricebegin) <= self.certifiedValue <= Decimal(self.priceend):
+                        self.price_warning = 'АЗ входит в диапазон по заказу или прайсу'
+                    if Decimal(self.pricebegin) >= self.certifiedValue or self.certifiedValue >= Decimal(self.priceend):
+                        self.price_warning = 'АЗ не входит в диапазон по заказу или прайсу!'
+                if not self.pricebegin or not self.priceend:
+                    self.price_warning = 'Не указан ни диапазон по заказу, ни по прайсу'
                 # вносим АЗ в ЖАЗ
                 if self.clorinesalts.name[0:3] == 'ХСН' and self.fixation:
                     a = CVclorinesaltsCSN.objects.get_or_create(namelot=self.clorinesalts.for_lot_and_nameLotCSN)
