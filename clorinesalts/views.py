@@ -73,6 +73,36 @@ def RegTitrantHgView(request):
         form = TitrantHgForm()
     return render(request, URL + '/registrationTitrantHg.html', {'form': form, 'URL': URL})
 
+class AllTitrantHgView(ListView):
+    """ Представление, которое выводит все записи о приготовлении титранта. """
+    """стандартное"""
+    model = TitrantHg
+    template_name = URL + '/journalTitrantHg.html'
+    context_object_name = 'objects'
+    ordering = ['-date']
+    paginate_by = 8
+
+
+    def get_context_data(self, **kwargs):
+        context = super(AllTitrantHgView, self).get_context_data(**kwargs)
+        context['URL'] = URL
+        return context
+
+class AllTitrantHgTitrView(ListView):
+    """ Представление, которое выводит все записи об установке титра. """
+    """стандартное"""
+    model = GetTitrHg
+    template_name = URL + '/journalTitrantHgTitr.html'
+    context_object_name = 'objects'
+    ordering = ['-date']
+    paginate_by = 8
+
+
+    def get_context_data(self, **kwargs):
+        context = super(AllTitrantHgTitrView, self).get_context_data(**kwargs)
+        context['URL'] = URL
+        return context
+
 
 class StrGetTitrHgView(View):
     """ выводит отдельную запись установки титра """
@@ -277,6 +307,7 @@ class SearchCVResultView(TemplateView):
         context['URL'] = URL
         return context
 
+
 class DateSearchResultView(TemplateView):
     """ Представление, которое выводит результаты поиска на странице со всеми записями журнала. """
     """стандартное"""
@@ -305,6 +336,8 @@ class DateSearchResultView(TemplateView):
             context['Date'] = 'введите даты в формате'
             context['format'] = 'ГГГГ-ММ-ДД'
             return context
+
+
 class DateSearchCVResultView(TemplateView):
     """ Представление, которое выводит результаты поиска на странице со всеми расчётами АЗ. """
     """стандартное"""
@@ -333,6 +366,8 @@ class DateSearchCVResultView(TemplateView):
             context['Date'] = 'введите даты в формате'
             context['format'] = 'ГГГГ-ММ-ДД'
             return context
+
+
 def filterview(request, pk):
     """ Фильтры записей об измерениях по дате, АЗ, мои записи и пр """
     """Стандартная"""

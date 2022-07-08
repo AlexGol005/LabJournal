@@ -5,13 +5,13 @@
 <div style="text-align: center;"><h5>Титрант</h5></div>
 <div style="text-align: center;"><h6>Приготовление</h6></div>
 <div style="text-align: center;"><a href="{% url 'titranthgreg' %}" class="btn btn-info mt-3 mr-3" style="width: 260px">Внести Hg(NO<sub>3</sub>)<sub>2</sub></a>
-<a href="{% url 'titranthgreg' %}" class="btn btn-info mt-3" style="width: 260px">Смотреть партии Hg(NO<sub>3</sub>)<sub>2</sub></a>
+<a href="{% url 'allhg' %}" class="btn btn-info mt-3" style="width: 260px">Смотреть партии Hg(NO<sub>3</sub>)<sub>2</sub></a>
 </div>
 <br>
 <div style="text-align: center;"><h6>Установка титра</h6></div>
 
 <div style="text-align: center;"><a href="{% url 'gettitrhgreg' %}" class="btn btn-info mt-3 mr-3 "style="width: 260px">Внести титр Hg(NO<sub>3</sub>)<sub>2</sub></a>
-<a href="{% url 'gettitrhgreg' %}" class="btn btn-info mt-3" style="width: 260px">Смотреть титр Hg(NO<sub>3</sub>)<sub>2</sub></a>
+<a href="{% url 'allhgtitr' %}" class="btn btn-info mt-3" style="width: 260px">Смотреть титры Hg(NO<sub>3</sub>)<sub>2</sub></a>
 </div>
 <br>
 <div style="text-align: center;"><h5>Индикатор</h5></div>
@@ -26,6 +26,7 @@
 
 <br>
 <br>
+   <i> *Переход к форме для расчёта - в записи об аттестации</i>
 <br>
 <br>
 {% endblock %}

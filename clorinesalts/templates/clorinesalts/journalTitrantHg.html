@@ -1,0 +1,67 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+{#название страницы#}
+{#стандартная#}
+{% block title %}
+{% for item in journal %}{{ item.name }}{% endfor %}
+{% endblock %}
+{#конец названия страницы#}
+
+{% block content %}
+
+{#заголовок с ссылкой#}
+{#стандартная#}
+<div class="row">
+<div class="col-md-9 mt-2" >
+<div style="text-align: center;"><h4><a href="/attestationJ/{{ URL }}/"> Растворы нитрата ртути для титрования</a></h4></div>
+<br>
+{#конец заголовка со ссылкой#}
+
+
+{#основная таблица#}
+{# уникальная #}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>  Дата</th>
+            <th> п. </th>
+            <th> Приготовил </th>
+            <th>  См. </th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for obj in objects %}
+    <tr>
+        <td>{{ obj.date|date:"d.m.Y" }}</td>
+        <td>{{ obj.pk }}</td>
+        <td>{{ obj.performer }} </td>
+        <td><a href="{% url 'titranthg' obj.pk %}"  class="btn btn-outline-warning mt-3">см.</a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{#конец основной таблицы#}
+
+{#пагинация#}
+{# стандартная #}
+{% if is_paginated %}
+    {% if page_obj.has_previous %}
+       <a href="?page=1" class="btn btn-outline-primary">Начало</a>
+       <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-primary">Предыдущая</a>
+  {% endif %}
+    {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-primary">Следующая</a>
+       <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-primary">Последняя</a>
+  {% endif %}
+  {% endif %}
+{#конец пагинации#}
+</div>
+</div>
+
+
+{% endblock %}
+
+
+
