@@ -27,7 +27,8 @@
         <tr>
             <th>  Дата</th>
             <th> п. </th>
-            <th> Приготовил </th>
+            <th> Титр </th>
+            <th> Установил </th>
             <th>  См. </th>
         </tr>
     </thead>
@@ -36,6 +37,7 @@
     <tr>
         <td>{{ obj.date|date:"d.m.Y" }}</td>
         <td>{{ obj.pk }}</td>
+        <td>{{ obj.titr }}</td>
         <td>{{ obj.performer }} </td>
         <td><a href="{% url 'gettitrhg' obj.pk %}"  class="btn btn-outline-warning mt-3">см.</a></td>
     </tr>

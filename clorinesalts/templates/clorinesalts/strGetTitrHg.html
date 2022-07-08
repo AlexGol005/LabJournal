@@ -1,4 +1,4 @@
-{% extends 'main/base.html' %}
+{% extends 'main/superbase.html' %}
 
 {% block title %}
 ДФК
@@ -19,12 +19,18 @@
 <div class="col-md-4 mt-1" >
     <table class="table table-bordered background-color">
 	<tbody>
+    <tr>
+			<td colspan="6">Атт.-ХС-ГОСТ 21534(А)-{{ obj.date|date:"Y"}}&nbsp;&nbsp;  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+
+
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspСтр.&nbsp;&nbsp;&nbsp;&nbsp;</td>
+		</tr>
 		<tr>
 			<td colspan="3"><b>Установка титра  {{obj.lot}}</b> </td>
 		</tr>
 		<tr>
 			<td>Дата:&nbsp&nbsp{{obj.date|date:"d.m.Y"}}&nbsp&nbsp&nbsp&nbsp</td>
-			<td>Исп.:&nbsp{{obj.performer}}</td>
+			<td>Исп.:&nbsp{{obj.performer}}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</td>
 			<td>&nbsp&nbspVхол&nbsp=&nbsp{{obj.backvolume}}&nbspмл&nbsp&nbsp&nbsp&nbsp</td>
 		</tr>
 		<tr>
@@ -50,5 +56,5 @@
 	</tbody>
 </table>
 </div>
-
+<a href="javascript:(print());" class="btn btn-warning mt-1">Распечатать</a>
 {% endblock %}
