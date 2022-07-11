@@ -33,7 +33,7 @@ class StrJournalCreationForm(forms.ModelForm):
     temperatureCheck = forms.BooleanField(label='Температура контролируется внешним поверенным термометром',
                                           required=True)
     ViscosimeterNumber1 = forms.ModelChoiceField(label='вискозиметр № 1', required=True,
-                                  queryset=Viscosimeters.objects.all(),
+                                  queryset=Viscosimeters.objects.filter(equipmentSM__equipment__status='Э'),
                                   widget=forms.Select(attrs={'class': 'form-control'}))
     # ViscosimeterNumber1 = forms.CharField(label='Заводской номер вискозиметра № 1', max_length=10, required=True,
     #                                       widget=forms.TextInput(attrs={'class': 'form-control',
@@ -44,7 +44,7 @@ class StrJournalCreationForm(forms.ModelForm):
     #                                                              'placeholder': 'Константа через точку'}
     #                                                       ))
     ViscosimeterNumber2 = forms.ModelChoiceField(label='вискозиметр № 2', required=False,
-                                                 queryset=Viscosimeters.objects.all(),
+                                                 queryset=Viscosimeters.objects.filter(equipmentSM__equipment__status='Э'),
                                                  widget=forms.Select(attrs={'class': 'form-control'}))
     plustimeminK1T1 = forms.DecimalField(label='τ1, минуты',
                                          max_digits=3, decimal_places=0, required=True,

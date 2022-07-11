@@ -14,7 +14,7 @@ class KalibrationViscosimetersForm(forms.ModelForm):
                            widget=forms.TextInput(attrs={'class': 'form-control',
                                                          'placeholder': 'константа через точку'}))
     id_Viscosimeter = forms.ModelChoiceField(label='Номер вискозиметра',  required=True,
-                                        queryset=Viscosimeters.objects.all(),
+                                        queryset=Viscosimeters.objects.filter(equipmentSM__equipment__status='Э'),
                                         widget=forms.Select(attrs={'class': 'form-control'}))
 
 
