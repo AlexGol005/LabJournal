@@ -8,7 +8,7 @@
 
 
 {% block content %}
-    <div style="text-align: center;"><h4><a href="/ProductionJ/"> Создать заявку на новый журнал приготовления </a></h4></div>
+    <div style="text-align: center;"><h4><a href="/productionJ/"> Создать заявку на новый журнал приготовления </a></h4></div>
     <form method="post" enctype="multipart/form-data" class="form-register">
         {% csrf_token %}
         {{ form.as_p }}

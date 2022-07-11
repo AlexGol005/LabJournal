@@ -76,4 +76,7 @@ td.green {
     background-color: rgb(245, 245, 246);
 }
 
-
+td.nor {
+   padding: 0 !important;
+    text-align: center !important;
+}

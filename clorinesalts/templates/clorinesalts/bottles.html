@@ -1,0 +1,162 @@
+{% extends 'main/superbase.html' %}
+
+{% block title %}
+Этикетки на растворы
+{% endblock %}
+
+{#кнопки слева странички#}
+{% block content %}
+
+
+{#уникальная таблица#}
+{#полустандартный верх таблицы#}
+{#<div class="col-md-8 mt-1" style="text-align: center;" >#}
+<table class="table table-bordered background-color number">
+	<tbody>
+		<tr>
+			<td colspan="4" height="5" class="nor">ООО "Петроаналитика"</td>
+			<td colspan="4" height="5" class="nor" >ООО "Петроаналитика"</td>
+		</tr>
+		<tr>
+			<td colspan="4">Ртуть (II) азотнокислая</td>
+	        <td colspan="4">Ртуть (II) азотнокислая</td>
+		</tr>
+		<tr>
+			<td colspan="2">Метод испытаний</td>
+			<td colspan="2">ГОСТ 21534-76(А)</td>
+			<td>Титр 4</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="1">изг.</td>
+			<td colspan="1">2022-01-56</td>
+			<td colspan="1">до</td>
+			<td colspan="1">н/о</td>
+			<td colspan="1">Титр 5</td>
+			<td colspan="1"></td>
+			<td colspan="1">титр до</td>
+			<td colspan="1"></td>
+		</tr>
+		<tr>
+			<td colspan="2">Приготовил</td>
+			<td colspan="2">{{hg.performer}}</td>
+			<td>Титр 6</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>Титр 1</td>
+			<td></td>
+			<td>титр до</td>
+			<td></td>
+			<td>Титр 7</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="4">ООО "Петроаналитика"</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="4">Кислота азотная HNO3</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="4">0,2 моль/дм3</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="2">Метод испытаний</td>
+			<td colspan="2">ГОСТ  21534-76 (метод А)</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>Дата изготовления</td>
+			<td></td>
+			<td>Годен до</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="2"></td>
+			<td colspan="2"></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td colspan="4">ООО "Петроаналитика"</td>
+			<td colspan="4">ООО "Петроаналитика"</td>
+		</tr>
+		<tr>
+			<td colspan="4">1,5-дифенилкарбазид</td>
+			<td colspan="4">1,5-дифенилкарбазид</td>
+		</tr>
+		<tr>
+			<td colspan="4">1% спиртовой раствор</td>
+			<td colspan="4">1% спиртовой раствор</td>
+		</tr>
+		<tr>
+			<td colspan="2">Метод испытаний</td>
+			<td colspan="2">ГОСТ  21534-76 (метод А)</td>
+			<td colspan="2">Метод испытаний</td>
+			<td colspan="2">ГОСТ  21534-76 (метод А)</td>
+		</tr>
+		<tr>
+			<td>Дата изготовления</td>
+			<td>{{ind.date}}</td>
+			<td>Годен до</td>
+			<td>{{ind.datedead}}</td>
+			<td>Дата изготовления</td>
+			<td>{{ind.date}}</td>
+			<td>Годен до</td>
+			<td>{{ind.datedead}}</td>
+		</tr>
+		<tr>
+			<td colspan="2">Приготовил</td>
+			<td colspan="2">{{ind.performer}}</td>
+			<td colspan="2">Приготовил</td>
+			<td colspan="2">{{ind.performer}}</td>
+		</tr>
+	</tbody>
+</table>
+
+{#</div>#}
+{#конец  таблицы#}
+
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+{#кнопка печать #}
+    <a href="javascript:(print());" class="btn btn-warning mt-1">Распечатать</a>
+{% endblock %}

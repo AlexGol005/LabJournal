@@ -474,3 +474,9 @@ class CommentsCVView(View):
             messages.success(request, f'Комментарий добавлен!')
             return redirect(order)
 
+class BottlesView(View):
+    """ выводит этикетки для растворов """
+    """уникальное для титрования"""
+
+    def get(self, request):
+        return render(request, URL + '/bottles.html')

@@ -31,4 +31,5 @@ urlpatterns = [
     path('clorinesaltsstrcv/<int:pk>/', login_required(views.ClorinesaltsCVView.as_view()), name='clorinesaltsstrcv'),
     path('attestation/<int:pk>/commentscv/', login_required(views.CommentsCVView.as_view()), name=URL + 'commcv'),
     path('attestationcv/', login_required(views.AllStrCVView.as_view()), name=URL + 'allcv'),
+    path('clorinesaltsbottles/', views.BottlesView.as_view(), name=URL + 'bottles'),
 ]
