@@ -205,7 +205,7 @@ class StrJournalCreationForm(forms.ModelForm):
             ),
 
             Row(
-                HTML('Воронка № 1'),
+                HTML('Воронка №1'),
                 HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
                 HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
                 HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
@@ -213,8 +213,7 @@ class StrJournalCreationForm(forms.ModelForm):
                 HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
                 HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
                 HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
-                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
-                HTML('Воронка № 2'),
+                HTML('Воронка №2'),
                 HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
                 HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
                 HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
