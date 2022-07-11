@@ -17,10 +17,10 @@
 <div class="col-md-8 mt-2" >
 <div style="text-align: center;"><h4><a href="/attestationJ/{{ URL }}/"> Журнал расчёта аттестованных значений хлористых солей</a></h4></div>
 <br>
-конец заголовка со ссылкой
-
-форма для поиска по ГСО
-стандартная
+{#конец заголовка со ссылкой#}
+{##}
+{#форма для поиска по ГСО#}
+{#стандартная#}
     <form action="/attestationJ/{{ URL }}/searchresultcv/" method="GET">
         {% csrf_token %}
         {% crispy formSM %}

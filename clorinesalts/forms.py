@@ -71,7 +71,7 @@ class StrJournalCreationForm(forms.ModelForm):
     aliquotvolume = forms.DecimalField(label='Аликвота пробы, мл', max_digits=3, decimal_places=0)
     solventvolume = forms.DecimalField(label='Объём растворителя, мл', max_digits=3, decimal_places=0)
     lotHg = forms.ModelChoiceField(label='Партия Hg(NO3)2', required=True,
-                                   queryset=TitrantHg.objects.filter(availablity=True),
+                                   queryset=TitrantHg.objects.filter(availablity='В наличии'),
                                    widget=forms.Select(attrs={'class': 'form-control'}))
     backvolume = forms.DecimalField(label='Объём холостой пробы, мл', initial=Decimal('0.08'), max_digits=4,
                                     decimal_places=2,
@@ -418,7 +418,7 @@ class TitrantHgForm(forms.ModelForm):
 class GetTitrHgForm(forms.ModelForm):
     """форма для расчёта и внесения титра"""
     lot = forms.ModelChoiceField(label='Партия Hg(NO3)2', required=True,
-                                 queryset=TitrantHg.objects.filter(availablity=True),
+                                 queryset=TitrantHg.objects.filter(availablity='В наличии'),
                                  widget=forms.Select(attrs={'class': 'form-control'}))
     backvolume = forms.DecimalField(label='Объём холостой пробы, мл', initial='0.08', max_digits=4, decimal_places=2,
                               widget=forms.TextInput(attrs={'class': 'form-control',
@@ -465,5 +465,14 @@ class ClorinesaltsCVUpdateFixationForm(forms.ModelForm):
         fields = ['fixation']
 
 
+class StrTitrantHgUdateForm(forms.ModelForm):
+    """форма для  обновления записи в журнале приготовления титранта по наличию: поле модели fixation """
+    """стандартная"""
+    availablity = forms.ChoiceField(label='Наличие', required=True,
+                                choices=(('В наличии', 'В наличии'), ('Нет в наличии', 'Нет в наличии')),
+                                widget=forms.Select(attrs={'class': 'form-control'}))
 
+    class Meta:
+        model = TitrantHg
+        fields = ['availablity']
 

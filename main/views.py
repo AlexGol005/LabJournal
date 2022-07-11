@@ -1,8 +1,11 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import render, redirect
 from django.views import View
 from django.http import  HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404
+
+from .forms import AttestationJForm, ProductionJForm
 from .models import AttestationJ, ProductionJ, CertifiedValueJ
 
 
@@ -43,6 +46,49 @@ class EquipmentView(View):
     # страница оборудование
    def get(self, request):
        return render(request, 'main/equipment.html')
+
+
+@login_required
+def AttestationJRegView(request):
+    """ выводит форму внесения журнала аттестации """
+    if request.method == "POST":
+        form = AttestationJForm(request.POST, request.FILES)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.performer = request.user
+            order.save()
+            messages.success(request, f'Заявка принята. Сообщите о заявке разработчику по a.golovkina@petroanalytica.ru')
+            return redirect('/attestationJ/')
+    else:
+        form = AttestationJForm()
+
+    return render(
+        request,
+        'main/registrationAtt.html',
+        {
+            'form': form
+        })
+
+@login_required
+def ProductionJRegView(request):
+    """ выводит форму внесения журнала приготовления """
+    if request.method == "POST":
+        form = ProductionJForm(request.POST, request.FILES)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.performer = request.user
+            order.save()
+            messages.success(request, f'Заявка принята. Сообщите о заявке разработчику по a.golovkina@petroanalytica.ru')
+            return redirect('/productionJ/')
+    else:
+        form = ProductionJForm()
+
+    return render(
+        request,
+        'main/registrationProd.html',
+        {
+            'form': form
+        })
 
 
 

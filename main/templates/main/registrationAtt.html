@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Заполнить заявку
+{% endblock %}
+
+
+{% block content %}
+    <div style="text-align: center;"><h4><a href="/AttestationJ/"> Создать заявку на новый журнал аттестации </a></h4></div>
+    <form method="post" enctype="multipart/form-data" class="form-register">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-outline-warning" type="submit">Отправить заявку</button>
+    </form>
+{% endblock %}

@@ -46,6 +46,22 @@ HgNO3
                 Годен до: Н/О</th>
 			<th>Приготовил: {{obj.performer}}</th>
 		</tr>
+    <tr>
+        <td colspan="12">
+        <form method="post" >
+        {% if obj.availablity == 'В наличии' %}
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-outline-warning" type="submit">Записать </button>
+            </form>
+        {% elif obj.availablity == 'Нет в наличии' %}
+            закончился
+        {% endif %}
+
+
+
+        </td>
+    </tr>
 	</tbody>
 </table>
 </div>

@@ -17,7 +17,7 @@ from .models import Clorinesalts, CommentsClorinesalts, IndicatorDFK, TitrantHg,
     CommentsClorinesaltsCV
 from .forms import DPKForm, TitrantHgForm, GetTitrHgForm, StrJournalUdateForm, SearchForm, SearchDateForm, \
     CommentCreationForm, StrJournalCreationForm, ClorinesaltsCVUpdateForm, ClorinesaltsCVUpdateFixationForm, \
-    CommentCVCreationForm
+    CommentCVCreationForm, StrTitrantHgUdateForm
 
 JOURNAL = AttestationJ
 MODEL = Clorinesalts
@@ -56,7 +56,14 @@ class StrTitrantHgView(View):
 
     def get(self, request, pk):
         obj = get_object_or_404(TitrantHg, pk=pk)
-        return render(request, URL + '/strTitrantHg.html',  {'obj': obj})
+        form = StrTitrantHgUdateForm()
+        return render(request, URL + '/strTitrantHg.html',  {'obj': obj, 'form': form})
+    def post(self, request, pk, *args, **kwargs):
+        form = StrTitrantHgUdateForm(request.POST, instance=TitrantHg.objects.get(id=pk))
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.save()
+            return redirect(order)
 
 @login_required
 def RegTitrantHgView(request):

@@ -65,7 +65,7 @@ class TitrantHg(models.Model):
     massHgNO3 = models.DecimalField('Масса нитрата ртути', max_digits=3, decimal_places=2, null=True, blank=True)
     volumeH2O = models.DecimalField('Вместимость колбы, мл', max_digits=4, decimal_places=0, null=True, blank=True)
     volumeHNO3 = models.DecimalField('Объём раствора азотной кислоты, мл', max_digits=3, decimal_places=1, null=True, blank=True)
-    availablity = models.BooleanField('наличие', default=True, blank=True)
+    availablity = models.CharField('Наличие', max_length=90, default='В наличии', null=True, blank=True)
 
 
     def __str__(self):

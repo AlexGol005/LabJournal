@@ -9,4 +9,6 @@ urlpatterns = [
     path('attestationJ/', views.AttestationJView.as_view(), name='att'),
     path('CertifiedValueJ', views.CertifiedValueJView.as_view(), name='cv'),
     path('equipment/', views.EquipmentView.as_view(), name='eq'),
+    path('attjreg/', views.AttestationJRegView, name='attjreg'),
+    path('prodjreg/', views.ProductionJRegView, name='prodjreg'),
       ]

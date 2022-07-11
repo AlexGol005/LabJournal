@@ -120,7 +120,7 @@ def RegNoteJournalView(request):
             return redirect(order)
     else:
         form = StrJournalCreationForm()
-    return render(request, URL + '/registration.html', {'form': form, 'URL': URL})
+    return render(request, URL + '/registrationAtt.html', {'form': form, 'URL': URL})
 
 
 class CommentsView(View):
