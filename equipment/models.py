@@ -60,9 +60,6 @@ class ModificationsAndTypes(models.Model):
         verbose_name_plural = 'Модификации и типы'
 
 
-
-
-
 class Equipment(models.Model):
     exnumber = models.CharField('Внутренний номер', max_length=100, default='', blank=True, null=True, unique=True)
     lot = models.CharField('Заводской номер', max_length=100, default='')
@@ -78,7 +75,6 @@ class Equipment(models.Model):
 
     def __str__(self):
         return f'Вн. № {self.exnumber}    Зав. № {self.lot}'
-
 
     class Meta:
         verbose_name = 'Прибор'
