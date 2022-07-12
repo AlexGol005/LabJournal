@@ -14,7 +14,7 @@
 {#заголовок с ссылкой#}
 {#стандартная#}
 <div class="row">
-<div class="col-md-20 mt-2" >
+<div class="col-md-12 mt-2" >
 <div style="text-align: center;"><h4><a href="/{{ URL }}/"> Средства измерения ООО "Петроаналитика"</a></h4></div>
 <br>
 {#конец заголовка со ссылкой#}
@@ -32,29 +32,35 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>  Дата</th>
-            <th> ГСО </th>
-            <th> п. </th>
-            <th>  Т, ℃ </th>
-            <th> Кинематика </th>
-            <th> Кинематика </th>
-            <th> Кинематика </th>
-            <th> Кинематика </th>
-            <th> Кинематика </th>
-            <th>  Подробнее </th>
-            <th>  Подробнее </th>
-            <th>  Подробнее </th>
+            <th>Внут.№</th>
+            <th> Госреестр </th>
+            <th> Название </th>
+            <th> Тип/модификация</th>
+            <th> Заводской № </th>
+            <th> Год вып. </th>
+            <th> Ком.№ </th>
+            <th> Ответств-й пользователь </th>
+            <th> Статус </th>
+            <th> Поверен до </th>
+            <th> Диапазон измерений </th>
             <th>  Подробнее </th>
          </tr>
     </thead>
     <tbody>
     {% for obj in objects %}
     <tr>
-        <td>{{ obj.date|date:"d.m.Y" }}</td>
-         <td> {{ obj.name }}</td>
-         <td> {{ obj.lot }}</td>
-         <td>{{ obj.temperature }} </td>
-         <td>{{ obj.certifiedValue_text }} </td>
+        <td>{{ obj.equipment.exnumber }}</td>
+         <td> {{ obj.charakters.reestr }}</td>
+         <td> {{ obj.charakters.name }}</td>
+         <td>{{ obj.charakters.modtype.typename|default:" " }}/
+             {{ obj.charakters.modtype.modificname|default:" " }} </td>
+        <td> {{ obj.equipment.lot }}</td>
+        <td> {{ obj.equipment.yearmanuf }}</td>
+        <td> {{ obj.equipment.roomschange_set.all.last.roomnumber.roomnumber }}</td>
+        <td> {{ obj.equipment.personchange_set.all.last.person }}</td>
+        <td> {{ obj.equipment.status }}</td>
+        <td> {{ obj.equipmentSM_ver.all.last.datedead|date:"d.m.Y" }}</td>
+        <td> {{ obj.charakters.measurydiapason }}</td>
          <td><a href="/"  class="btn btn-outline-warning mt-3">см</a></td>
     </tr>
     {% endfor %}

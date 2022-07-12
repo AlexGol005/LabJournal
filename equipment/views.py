@@ -9,7 +9,7 @@ class MeasurEquipmentView(ListView):
     model = MeasurEquipment
     template_name = URL + '/measureequipment.html'
     context_object_name = 'objects'
-    # ordering = ['-date']
+    ordering = ['charakters__name']
     paginate_by = 12
 
 

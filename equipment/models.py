@@ -43,8 +43,8 @@ class Verificators(models.Model):
         return self.companyName
 
     class Meta:
-        verbose_name = 'Поверитель'
-        verbose_name_plural = 'Поверители'
+        verbose_name = 'Поверитель организация'
+        verbose_name_plural = 'Поверители организации'
 
 class VerificatorPerson(models.Model):
     verificator = models.ForeignKey(Verificators, on_delete=models.PROTECT, blank=True, null=True)
@@ -57,8 +57,8 @@ class VerificatorPerson(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = 'Поверитель'
-        verbose_name_plural = 'Поверители'
+        verbose_name = 'Поверитель сотрудник'
+        verbose_name_plural = 'Поверители сотрудники'
 
 class Rooms(models.Model):
     roomnumber = models.CharField('Номер комнаты', max_length=10, default='', unique=True)
@@ -95,9 +95,9 @@ class Equipment(models.Model):
     new = models.CharField('Новый или б/у', max_length=100, default='новый')
     invnumber = models.CharField('Инвентарный номер', max_length=100, default='', blank=True, null=True)
     kategory = models.CharField(max_length=300, choices=KATEGORY, default='Средство измерения', null=True, verbose_name='Категория')
-    imginstruction1 = models.ImageField('Паспорт', upload_to='user_images', blank=True)
-    imginstruction2 = models.ImageField('Внутренняя инструкция', upload_to='user_images', blank=True)
-    imginstruction3 = models.ImageField('Право владения', upload_to='user_images', blank=True)
+    imginstruction1 = models.ImageField('Паспорт', upload_to='user_images', blank=True, null=True)
+    imginstruction2 = models.ImageField('Внутренняя инструкция', upload_to='user_images', blank=True, null=True)
+    imginstruction3 = models.ImageField('Право владения', upload_to='user_images', blank=True, null=True)
     individuality = models.TextField('Индивидуальные особенности прибора',  blank=True, null=True)
 
 
@@ -106,21 +106,25 @@ class Equipment(models.Model):
 
     def save(self, *args, **kwargs):
         super().save()
-        image1 = Image.open(self.imginstruction1.path)
-        image2 = Image.open(self.imginstruction2.path)
-        image3 = Image.open(self.imginstruction3.path)
-        if image1.height > 500 or image1.width > 500:
-            resize = (500, 500)
-            image1.thumbnail(resize)
-        if image2.height > 500 or image2.width > 500:
-            resize = (500, 500)
-            image2.thumbnail(resize)
-        if image3.height > 500 or image3.width > 500:
-            resize = (500, 500)
-            image3.thumbnail(resize)
-            image1.save(self.imginstruction1.path)
-            image2.save(self.imginstruction2.path)
-            image3.save(self.imginstruction2.path)
+        if self.imginstruction1:
+            image1 = Image.open(self.imginstruction1.path)
+            if image1.height > 500 or image1.width > 500:
+                resize = (500, 500)
+                image1.thumbnail(resize)
+                image1.save(self.imginstruction1.path)
+        if self.imginstruction2:
+            image2 = Image.open(self.imginstruction2.path)
+            if image2.height > 500 or image1.width > 500:
+                resize = (500, 500)
+                image2.thumbnail(resize)
+                image2.save(self.imginstruction2.path)
+        if self.imginstruction3:
+            image3 = Image.open(self.imginstruction3.path)
+            if image3.height > 500 or image3.width > 500:
+                resize = (500, 500)
+                image3.thumbnail(resize)
+                image3.save(self.imginstruction3.path)
+
 
 
     class Meta:
@@ -133,7 +137,7 @@ class Personchange(models.Model):
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self):
-        return f'Перемещено {self.date}'
+        return f'{self.equipment.exnumber} Изменён ответственный {self.date}'
 
     class Meta:
         verbose_name = 'Дата изменения ответственного'
@@ -144,9 +148,8 @@ class Roomschange(models.Model):
     date = models.DateField('Дата перемещения', auto_now_add=True, db_index=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Оборудование')
 
-
     def __str__(self):
-        return f'Перемещено {self.date}'
+        return f'{self.equipment.exnumber} Перемещено {self.date} '
 
     class Meta:
         verbose_name = 'Дата перемещения прибора'
@@ -182,7 +185,7 @@ class MeasurEquipment(models.Model):
         verbose_name = 'Средство измерения'
         verbose_name_plural = 'Средства измерения'
 
-class VerificationEquipment(models.Model):
+class Verificationequipment(models.Model):
     equipmentSM = models.ForeignKey(MeasurEquipment, verbose_name='СИ',
                                     on_delete=models.PROTECT, related_name='equipmentSM_ver', blank=True, null=True)
     date = models.DateField('Дата поверки')
@@ -192,7 +195,7 @@ class VerificationEquipment(models.Model):
     certnumber = models.CharField('Номер сертификата о поверке', max_length=90, blank=True, null=True)
     certnumbershort = models.CharField('Краткий номер сертификата о поверке', max_length=90, blank=True, null=True)
     price = models.DecimalField('Стоимость данной поверки', max_digits=100, decimal_places=2, null=True, blank=True)
-    img = models.ImageField('Сертификат', upload_to='user_images', blank=True)
+    img = models.ImageField('Сертификат', upload_to='user_images', blank=True, null=True)
     statusver = models.CharField('Статус поверки', max_length=90, blank=True, null=True)
     statusmoney = models.CharField('Статус оплаты', max_length=90, blank=True, null=True)
     verificatorperson = models.ForeignKey(VerificatorPerson, on_delete=models.PROTECT,
@@ -204,11 +207,12 @@ class VerificationEquipment(models.Model):
 
     def save(self, *args, **kwargs):
         super().save()
-        image = Image.open(self.img.path)
-        if image.height > 500 or image.width > 500:
-            resize = (500, 500)
-            image.thumbnail(resize)
-            image.save(self.img.path)
+        if self.img:
+            image = Image.open(self.img.path)
+            if image.height > 500 or image.width > 500:
+                resize = (500, 500)
+                image.thumbnail(resize)
+                image.save(self.img.path)
 
     class Meta:
         verbose_name = 'Поверка прибора'
