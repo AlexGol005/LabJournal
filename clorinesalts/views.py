@@ -479,4 +479,20 @@ class BottlesView(View):
     """уникальное для титрования"""
 
     def get(self, request):
-        return render(request, URL + '/bottles.html')
+
+        indicatordead = IndicatorDFK.objects.last().datedead
+        indicatorbirth = IndicatorDFK.objects.last().date
+        indicatormother = IndicatorDFK.objects.last().performer
+        titrantbirth = TitrantHg.objects.last().date
+        titrantmother = TitrantHg.objects.last().performer
+        titrantlot = TitrantHg.objects.last().pk
+        context = {
+            'indicatordead': indicatordead,
+            'indicatorbirth': indicatorbirth,
+            'indicatormother': indicatormother,
+            'titrantbirth': titrantbirth,
+            'titrantmother': titrantmother,
+            'titrantlot': titrantlot,
+        }
+
+        return render(request, URL + '/bottles.html', context)

@@ -8,9 +8,12 @@
 {% block content %}
 <div class="row">
 <div class="col-md-2">
+    {#кнопка печать #}
+    <div class="noprint">
     <a href="/attestationJ/{{ URL }}/registration/" class="btn btn-warning mt-3 mr-5">&nbsp&nbspвнести&nbsp&nbsp&nbsp ещё </a>
     <a href='/attestationJ/{{ URL }}/' class="btn btn-warning mt-3">В  журнал</a>
     <a href='/attestationJ/{{ URL }}/attestation/' class="btn btn-warning mt-3">Все записи</a>
+        </div>
 </div>
 
 {#уникальная таблица#}
@@ -229,5 +232,8 @@
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
     &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 {#кнопка печать #}
+    {#кнопка печать #}
+    <div class="noprint">
     <a href="javascript:(print());" class="btn btn-warning mt-1">Распечатать</a>
+    </div>
 {% endblock %}

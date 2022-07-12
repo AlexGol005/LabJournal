@@ -12,9 +12,11 @@
 {#полустандартный верх таблицы#}
 <div class="col-md-8 mt-1" >
 <div style="text-align: center;">
+    <div class="noprint">
 <a href="/attestationJ/{{ URL }}/registration/" class="btn btn-warning mt-3 mr-2">Внести ещё </a>
     <a href='/attestationJ/{{ URL }}/' class="btn btn-warning mt-3 mr-2">В  журнал</a>
     <a href='/attestationJ/{{ URL }}/attestation/' class="btn btn-warning mt-3 mr-2">Все записи</a></div>
+</div>
     <br><br>
     <table class="table table-bordered background-color">
 	<tbody>
@@ -209,5 +211,7 @@
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
     &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 {#кнопка печать #}
+    <div class="noprint">
     <a href="javascript:(print());" class="btn btn-warning mt-1">Распечатать</a>
+    </div>
 {% endblock %}
