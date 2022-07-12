@@ -1,9 +1,6 @@
 from django.db import models
-from django.conf import settings
-from django.urls import reverse
-from django.utils import timezone
+from PIL import  Image
 from django.contrib.auth.models import User
-from datetime import datetime
 from decimal import *
 
 
@@ -37,6 +34,32 @@ class Manufacturer(models.Model):
         verbose_name = 'Производитель'
         verbose_name_plural = 'Производители'
 
+class Verificators(models.Model):
+    companyName = models.CharField('Поверитель', max_length=100, unique=True)
+    companyAdress = models.CharField('Адрес', max_length=200, default='', blank=True)
+    telnumber = models.CharField('Телефон', max_length=200, default='', blank=True)
+
+    def __str__(self):
+        return self.companyName
+
+    class Meta:
+        verbose_name = 'Поверитель'
+        verbose_name_plural = 'Поверители'
+
+class VerificatorPerson(models.Model):
+    verificator = models.ForeignKey(Verificators, on_delete=models.PROTECT, blank=True, null=True)
+    name = models.CharField('ИМЯ', max_length=100, blank=True, null=True, default='Неизвестно')
+    departament = models.CharField('отдел', max_length=100, blank=True, null=True)
+    dop = models.CharField('Примечание', max_length=200, blank=True, null=True)
+    telnumber = models.CharField('Телефон', max_length=200, default='', blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Поверитель'
+        verbose_name_plural = 'Поверители'
+
 class Rooms(models.Model):
     roomnumber = models.CharField('Номер комнаты', max_length=10, default='', unique=True)
     person = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
@@ -47,6 +70,7 @@ class Rooms(models.Model):
     class Meta:
         verbose_name = 'Комната'
         verbose_name_plural = 'Комнаты'
+
 
 class ModificationsAndTypes(models.Model):
     modificname = models.CharField('Модификация прибора', max_length=100, default='', blank=True, null=True)
@@ -71,10 +95,33 @@ class Equipment(models.Model):
     new = models.CharField('Новый или б/у', max_length=100, default='новый')
     invnumber = models.CharField('Инвентарный номер', max_length=100, default='', blank=True, null=True)
     kategory = models.CharField(max_length=300, choices=KATEGORY, default='Средство измерения', null=True, verbose_name='Категория')
+    imginstruction1 = models.ImageField('Паспорт', upload_to='user_images', blank=True)
+    imginstruction2 = models.ImageField('Внутренняя инструкция', upload_to='user_images', blank=True)
+    imginstruction3 = models.ImageField('Право владения', upload_to='user_images', blank=True)
+    individuality = models.TextField('Индивидуальные особенности прибора',  blank=True, null=True)
 
 
     def __str__(self):
         return f'Вн. № {self.exnumber}    Зав. № {self.lot}'
+
+    def save(self, *args, **kwargs):
+        super().save()
+        image1 = Image.open(self.imginstruction1.path)
+        image2 = Image.open(self.imginstruction2.path)
+        image3 = Image.open(self.imginstruction3.path)
+        if image1.height > 500 or image1.width > 500:
+            resize = (500, 500)
+            image1.thumbnail(resize)
+        if image2.height > 500 or image2.width > 500:
+            resize = (500, 500)
+            image2.thumbnail(resize)
+        if image3.height > 500 or image3.width > 500:
+            resize = (500, 500)
+            image3.thumbnail(resize)
+            image1.save(self.imginstruction1.path)
+            image2.save(self.imginstruction2.path)
+            image3.save(self.imginstruction2.path)
+
 
     class Meta:
         verbose_name = 'Прибор'
@@ -134,6 +181,46 @@ class MeasurEquipment(models.Model):
     class Meta:
         verbose_name = 'Средство измерения'
         verbose_name_plural = 'Средства измерения'
+
+class VerificationEquipment(models.Model):
+    equipmentSM = models.ForeignKey(MeasurEquipment, verbose_name='СИ',
+                                    on_delete=models.PROTECT, related_name='equipmentSM_ver', blank=True, null=True)
+    date = models.DateField('Дата поверки')
+    datedead = models.DateField('Дата окончания поверки')
+    dateorder = models.DateField('Дата заказа следующей поверки')
+    arshin = models.TextField('Ссылка на сведения о поверке в Аршин', blank=True, null=True)
+    certnumber = models.CharField('Номер сертификата о поверке', max_length=90, blank=True, null=True)
+    certnumbershort = models.CharField('Краткий номер сертификата о поверке', max_length=90, blank=True, null=True)
+    price = models.DecimalField('Стоимость данной поверки', max_digits=100, decimal_places=2, null=True, blank=True)
+    img = models.ImageField('Сертификат', upload_to='user_images', blank=True)
+    statusver = models.CharField('Статус поверки', max_length=90, blank=True, null=True)
+    statusmoney = models.CharField('Статус оплаты', max_length=90, blank=True, null=True)
+    verificatorperson = models.ForeignKey(VerificatorPerson, on_delete=models.PROTECT,
+                                          verbose_name='Поверитель Имя', blank=True, null=True)
+    type = models.CharField('На месте/выездная', max_length=90, blank=True, null=True)
+
+    def __str__(self):
+        return f'Поверка {self.equipmentSM.charakters.name} вн № {self.equipmentSM.equipment.exnumber}'
+
+    def save(self, *args, **kwargs):
+        super().save()
+        image = Image.open(self.img.path)
+        if image.height > 500 or image.width > 500:
+            resize = (500, 500)
+            image.thumbnail(resize)
+            image.save(self.img.path)
+
+    class Meta:
+        verbose_name = 'Поверка прибора'
+        verbose_name_plural = 'Поверки приборов'
+
+
+class NotesEquipment(models.Model):
+    note = models.TextField('Запись о неисправности, модификации или ремонте', blank=True, null=True)
+    person = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
+    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True,
+                                  verbose_name='Оборудование')
+
 
 
 

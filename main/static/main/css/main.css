@@ -74,20 +74,6 @@ td.green {
     background-color: rgb(245, 245, 246);
 }
 
-/*td.nor, th.nor {*/
-/*   padding: 0 !important;*/
-/*    text-align: center !important;*/
-/*    border-collapse: collapse !important;*/
-/*    width: 50px;*/
-/*}*/
-
-/*table, th, td {*/
-/*    border: 1px solid black;*/
-/*    background-color: rgb(245, 245, 246);*/
-/*    border-collapse: collapse;*/
-/*    text-align: center;*/
-/*    width: 50%;*/
-/*}*/
 
 .nor , nor.td, nor.th {
   border: 1px solid black;

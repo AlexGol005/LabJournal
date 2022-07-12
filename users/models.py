@@ -38,8 +38,6 @@ class Profile(models.Model):
             image.thumbnail(resize)
             image.save(self.img.path)
 
-
-
     class Meta:
         verbose_name = 'Профиль сотрудника'
         verbose_name_plural = 'Профили сотрудников'

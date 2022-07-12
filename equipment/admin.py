@@ -13,4 +13,10 @@ admin.site.register(Personchange)
 admin.site.register(MeasurEquipment)
 admin.site.register(Equipment)
 admin.site.register(ModificationsAndTypes)
+admin.site.register(NotesEquipment)
+admin.site.register(VerificationEquipment)
+admin.site.register(Roomschange)
+admin.site.register(VerificatorPerson)
+admin.site.register(Verificators)
+
 
