@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}
+{{ obj.charakters.name}}
+{% endblock %}
+
+
+{% block content %}
+
+<div style="text-align: center;"><h4>{{ obj.charakters.name}}</h4></div>
+<div style="text-align: center;"><h6>тип/модификация: {{ obj.charakters.modtype.typename|default:" " }}
+{{ obj.charakters.modtype.modificname|default:" " }}.
+Заводской номер: <b>{{ obj.equipment.lot }}</b>
+</h6></div>
+<div style="text-align: center;"><h6>
+Внутренний номер: <b> {{ obj.equipment.exnumber }}</b></h6></div>
+<div style="text-align: center;"><h6>Номер в госреестре: <b>{{ obj.charakters.reestr }}</b></h6></div>
+<div style="text-align: center;"><h6>Год выпуска <b>{{ obj.equipment.yearmanuf }}</b>.
+Производитель: <b>{{ obj.equipment.manufacturer.companyName }}</b></h6></div>
+
+
+
+<div style="text-align: center;">
+<a href="attestation/" class="btn btn-warning mt-3 mr-5" style="width: 160px">Смотреть записи</a>
+<a href="registration/" class="btn btn-warning mt-3" style="width: 160px">Внести запись</a>
+</div>
+<br>
+
+
+{% endblock %}

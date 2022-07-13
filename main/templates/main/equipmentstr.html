@@ -1,0 +1,26 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}
+{% for obj in objects %}{{ obj.charakters.name}}{% endfor %}
+{% endblock %}
+
+
+{% block content %}
+    {% for obj in objects %}
+    <div style="text-align: center;"><h4>{{ obj.charakters.name}}
+        {{ obj.charakters.modtype.typename|default:" " }}
+        {{ obj.charakters.modtype.modificname|default:" " }}
+
+    </h4></div>
+    <br>
+             <div style="text-align: center;">зав. № {{ obj.equipment.lot }}</div>
+             <div style="text-align: center;">вн. № {{ obj.equipment.yearmanuf }}</div>
+         <br>
+         <div style="text-align: center;">
+        <a href="attestation/" class="btn btn-warning mt-3 mr-5" style="width: 160px">Смотреть записи</a>
+        <a href="registration/" class="btn btn-warning mt-3" style="width: 160px">Внести запись</a>
+        </div>
+    <br>
+    {% endfor %}
+
+{% endblock %}

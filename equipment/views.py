@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
 from django.db.models import Max, Q
 from django.db.models.functions import Upper
+from django.shortcuts import get_object_or_404, render
 from django.template.defaultfilters import upper
+from django.views import View
 from django.views.generic import ListView, TemplateView
 
 from equipment.forms import SearchMEForm
@@ -122,8 +124,34 @@ class SearchResultMeasurEquipmentView(TemplateView):
                 order_by('charakters__name')
             context['objects'] = objects
 
-
-
         context['form'] = SearchMEForm(initial={'name': name, 'lot': lot, 'exnumber': exnumber, 'dateser': dateser})
         context['URL'] = URL
         return context
+
+
+class StrMeasurEquipmentView(View):
+    """ выводит отдельную запись и форму добавления в ЖАЗ """
+    """Стандартная"""
+
+    def get(self, request, pk):
+        obj = get_object_or_404(MeasurEquipment, pk=pk)
+        # form = StrJournalUdateForm()
+        # try:
+        #     counter = COMMENTMODEL.objects.filter(forNote=note.id)
+        # except ObjectDoesNotExist:
+        #     counter = None
+        return render(request, URL + '/equipmentstr.html',
+                      {'obj': obj})
+
+    # def post(self, request, pk, *args, **kwargs):
+    #     if MODEL.objects.get(id=pk).performer == request.user:
+    #         form = StrJournalUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
+    #         if form.is_valid():
+    #             order = form.save(commit=False)
+    #             order.save()
+    #             return redirect(order)
+    #     else:
+    #         form = StrJournalUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
+    #         order = form.save(commit=False)
+    #         messages.success(request, f'АЗ не подтверждено! Подтвердить АЗ может только исполнитель данного измерения!')
+    #         return redirect(order)

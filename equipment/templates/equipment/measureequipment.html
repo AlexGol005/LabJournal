@@ -63,7 +63,7 @@
         <td> {{ obj.equipmentSM_ver.all.last.datedead|date:"d.m.Y"  }}</td>
         <td> {{ obj.equipmentSM_ver.all.last.statusver|default:" " }}</td>
         <td> {{ obj.equipmentSM_ver.all.last.statusmoney|default:" " }}</td>
-         <td><a href="/"  class="btn btn-outline-warning mt-3">см</a></td>
+        <td><a href="/equipment/measureequipmentstr/{{ obj.id }}/"  class="btn btn-outline-warning mt-3">СМ</a></td>
     </tr>
     {% endfor %}
     </tbody>
