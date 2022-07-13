@@ -78,25 +78,25 @@ class SearchResultMeasurEquipmentView(TemplateView):
             context['objects'] = objects
         if dateser and not name and not lot and not exnumber:
             objects = MeasurEquipment.objects.\
-                filter(Q(equipmentSM_ver__date__lte=dateser) & Q(equipmentSM_ver__id__in=set)). \
+                filter(Q(equipmentSM_ver__datedead__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
                 order_by('charakters__name')
             context['objects'] = objects
         if dateser and name and not lot and not exnumber:
             objects = MeasurEquipment.objects.\
-                filter(Q(equipmentSM_ver__date__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
+                filter(Q(equipmentSM_ver__datedead__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
                 filter(Q(charakters__name__icontains=name) | Q(charakters__name__icontains=name1)). \
                 order_by('charakters__name')
             context['objects'] = objects
         if dateser and name and lot and not exnumber:
             objects = MeasurEquipment.objects.\
-                filter(Q(equipmentSM_ver__date__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
+                filter(Q(equipmentSM_ver__datedead__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
                 filter(Q(charakters__name__icontains=name) | Q(charakters__name__icontains=name1)). \
                 filter(equipment__lot=lot).\
                 order_by('charakters__name')
             context['objects'] = objects
         if dateser and name and lot and exnumber:
-            objects = MeasurEquipment.objects.\
-                filter(Q(equipmentSM_ver__date__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
+            objects = MeasurEquipment.objects. \
+                filter(Q(equipmentSM_ver__datedead__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
                 filter(Q(charakters__name__icontains=name) | Q(charakters__name__icontains=name1)). \
                 filter(equipment__lot=lot). \
                 filter(equipment__exnumber=exnumber). \
@@ -104,19 +104,19 @@ class SearchResultMeasurEquipmentView(TemplateView):
             context['objects'] = objects
         if dateser and not name and lot and not exnumber:
             objects = MeasurEquipment.objects.\
-                filter(Q(equipmentSM_ver__date__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
+                filter(Q(equipmentSM_ver__datedead__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
                 filter(equipment__lot=lot). \
                 order_by('charakters__name')
             context['objects'] = objects
         if dateser and not name and not lot and exnumber:
             objects = MeasurEquipment.objects.\
-                filter(Q(equipmentSM_ver__date__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
+                filter(Q(equipmentSM_ver__datedead__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
                 filter(equipment__exnumber=exnumber). \
                 order_by('charakters__name')
             context['objects'] = objects
         if dateser and name and lot and not exnumber:
             objects = MeasurEquipment.objects.\
-                filter(Q(equipmentSM_ver__date__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
+                filter(Q(equipmentSM_ver__datedead__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
                 filter(Q(charakters__name__icontains=name) | Q(charakters__name__icontains=name1)). \
                 filter(equipment__lot=lot). \
                 order_by('charakters__name')
