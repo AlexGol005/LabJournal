@@ -13,13 +13,16 @@ class SearchMEForm(forms.Form):
     "при копировании поменять поля на нужные"
     name = forms.CharField(label='Название', required=False,
                            help_text='введите название частично или полностью',
-                           widget=forms.TextInput(attrs={'class': 'form-control' }))
-    exnumber = forms.CharField(label='Внут. №', initial='В005', required=False,
-                           widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'В005'}))
-    lot = forms.CharField(label='Заводской №', initial='160716002', required=False,
-                               widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '160716002'}))
-    datedead = forms.CharField(label='Поверка истекает после', initial='2022-07-12', required=False,
-                          widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '2022-07-12'}))
+                           widget=forms.TextInput(attrs={'class': 'form-control'}))
+    exnumber = forms.CharField(label='Внут. №', required=False,
+                               help_text='вн. № полн.',
+                           widget=forms.TextInput(attrs={'class': 'form-control'}))
+    lot = forms.CharField(label='Заводской №', required=False,
+                          help_text='заводской № полностью',
+                               widget=forms.TextInput(attrs={'class': 'form-control'}))
+    dateser = forms.CharField(label='Поверка истекает после', required=False,
+                               help_text='дата в формате ГГГГ-ММ-ДД',
+                          widget=forms.TextInput(attrs={'class': 'form-control'}))
 
 
     def __init__(self, *args, **kwargs):
@@ -27,9 +30,9 @@ class SearchMEForm(forms.Form):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(
-                Column('name', css_class='form-group col-md-5 mb-0'),
+                Column('name', css_class='form-group col-md-3 mb-0'),
                 Column('exnumber', css_class='form-group col-md-1 mb-0'),
                 Column('lot', css_class='form-group col-md-2 mb-0'),
-                Column('datedead', css_class='form-group col-md-2 mb-0'),
+                Column('dateser', css_class='form-group col-md-2 mb-0'),
                 Row(Submit('submit', 'Найти', css_class='btn  btn-info col-md-9 mb-3 mt-4 ml-4'))))
 

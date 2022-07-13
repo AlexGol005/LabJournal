@@ -21,7 +21,7 @@
 
 {#форма для поиска по полям #}
 {#стандартная#}
-    <form action="/attestationJ/{{ URL }}/searchresult/" method="GET">
+    <form action="/equipment/measureequipmentallsearres/" method="GET">
         {% csrf_token %}
         {% crispy form %}
     </form>
@@ -43,7 +43,7 @@
             <th> Статус</th>
             <th> Поверен до  </th>
             <th> Статус поверки </th>
-            <th>  Статус оплаты </th>
+            <th>  Статус оплаты поверки </th>
             <th>  См </th>
          </tr>
     </thead>
@@ -61,8 +61,8 @@
         <td> {{ obj.equipment.personchange_set.all.last.person }}</td>
         <td> {{ obj.equipment.status }}</td>
         <td> {{ obj.equipmentSM_ver.all.last.datedead|date:"d.m.Y"  }}</td>
-        <td> {{ obj.equipmentSM_ver.all.last.statusver }}</td>
-        <td> {{ obj.equipmentSM_ver.all.last.statusmoney }}</td>
+        <td> {{ obj.equipmentSM_ver.all.last.statusver|default:" " }}</td>
+        <td> {{ obj.equipmentSM_ver.all.last.statusmoney|default:" " }}</td>
          <td><a href="/"  class="btn btn-outline-warning mt-3">см</a></td>
     </tr>
     {% endfor %}

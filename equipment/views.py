@@ -1,7 +1,11 @@
+from datetime import datetime, timedelta
+from django.db.models import Max, Q
+from django.db.models.functions import Upper
+from django.template.defaultfilters import upper
 from django.views.generic import ListView, TemplateView
 
 from equipment.forms import SearchMEForm
-from equipment.models import MeasurEquipment
+from equipment.models import MeasurEquipment, Verificationequipment
 
 URL = 'equipment'
 
@@ -28,22 +32,98 @@ class SearchResultMeasurEquipmentView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(SearchResultMeasurEquipmentView, self).get_context_data(**kwargs)
         name = self.request.GET['name']
+        if self.request.GET['name']:
+            name1 = self.request.GET['name'][0].upper() + self.request.GET['name'][1:]
+        exnumber = self.request.GET['exnumber']
         lot = self.request.GET['lot']
-        temperature = self.request.GET['temperature']
-        if name and lot and temperature:
-            objects = MODEL.objects.filter(name=name).filter(lot=lot).filter(temperature=temperature).filter(fixation=True).order_by('-pk')
+        dateser = self.request.GET['dateser']
+        if dateser:
+            delt = datetime.now() - timedelta(days=60 * 24 * 7)
+
+        get_id_actual = Verificationequipment.objects.select_related('equipmentSM').values('equipmentSM'). \
+            annotate(id_actual=Max('id')).values('id_actual')
+        list_ = list(get_id_actual)
+        set = []
+        for n in list_:
+            set.append(n.get('id_actual'))
+
+        if name and not lot and not exnumber and not dateser:
+            objects = MeasurEquipment.objects.\
+            filter(Q(charakters__name__icontains=name)|Q(charakters__name__icontains=name1)).order_by('charakters__name')
             context['objects'] = objects
-        if name and lot and not temperature:
-            objects = MODEL.objects.filter(name=name).filter(lot=lot).filter(fixation=True).order_by('-pk')
+        if lot and not name  and not exnumber and not dateser:
+            objects = MeasurEquipment.objects.filter(equipment__lot=lot).order_by('charakters__name')
             context['objects'] = objects
-        if name and not lot and not temperature:
-            objects = MODEL.objects.filter(name=name).filter(fixation=True).order_by('-pk')
+        if exnumber and not name and not lot and not dateser:
+            objects = MeasurEquipment.objects.filter(equipment__exnumber=exnumber).order_by('charakters__name')
             context['objects'] = objects
-        if name and temperature and not lot:
-            objects = MODEL.objects.filter(name=name).filter(temperature=temperature).filter(fixation=True).order_by('-pk')
+        if exnumber and name and lot and not dateser:
+            objects = MeasurEquipment.objects.filter(equipment__exnumber=exnumber).\
+                filter(Q(charakters__name__icontains=name)|Q(charakters__name__icontains=name1)).\
+                filter(equipment__lot=lot).order_by('charakters__name')
+            context['objects'] = objects
+        if exnumber and name and not lot and not dateser:
+            objects = MeasurEquipment.objects.filter(equipment__exnumber=exnumber).\
+                filter(Q(charakters__name__icontains=name)|Q(charakters__name__icontains=name1)).\
+                order_by('charakters__name')
+            context['objects'] = objects
+        if exnumber and not name and lot and not dateser:
+            objects = MeasurEquipment.objects.filter(equipment__exnumber=exnumber).\
+                filter(equipment__lot=lot).order_by('charakters__name')
+            context['objects'] = objects
+        if lot and name and not exnumber and not dateser:
+            objects = MeasurEquipment.objects.\
+                filter(Q(charakters__name__icontains=name)|Q(charakters__name__icontains=name1)).\
+                filter(equipment__lot=lot).order_by('charakters__name')
+            context['objects'] = objects
+        if dateser and not name and not lot and not exnumber:
+            objects = MeasurEquipment.objects.\
+                filter(Q(equipmentSM_ver__date__lte=dateser) & Q(equipmentSM_ver__id__in=set)). \
+                order_by('charakters__name')
+            context['objects'] = objects
+        if dateser and name and not lot and not exnumber:
+            objects = MeasurEquipment.objects.\
+                filter(Q(equipmentSM_ver__date__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
+                filter(Q(charakters__name__icontains=name) | Q(charakters__name__icontains=name1)). \
+                order_by('charakters__name')
+            context['objects'] = objects
+        if dateser and name and lot and not exnumber:
+            objects = MeasurEquipment.objects.\
+                filter(Q(equipmentSM_ver__date__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
+                filter(Q(charakters__name__icontains=name) | Q(charakters__name__icontains=name1)). \
+                filter(equipment__lot=lot).\
+                order_by('charakters__name')
+            context['objects'] = objects
+        if dateser and name and lot and exnumber:
+            objects = MeasurEquipment.objects.\
+                filter(Q(equipmentSM_ver__date__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
+                filter(Q(charakters__name__icontains=name) | Q(charakters__name__icontains=name1)). \
+                filter(equipment__lot=lot). \
+                filter(equipment__exnumber=exnumber). \
+                order_by('charakters__name')
+            context['objects'] = objects
+        if dateser and not name and lot and not exnumber:
+            objects = MeasurEquipment.objects.\
+                filter(Q(equipmentSM_ver__date__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
+                filter(equipment__lot=lot). \
+                order_by('charakters__name')
+            context['objects'] = objects
+        if dateser and not name and not lot and exnumber:
+            objects = MeasurEquipment.objects.\
+                filter(Q(equipmentSM_ver__date__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
+                filter(equipment__exnumber=exnumber). \
+                order_by('charakters__name')
+            context['objects'] = objects
+        if dateser and name and lot and not exnumber:
+            objects = MeasurEquipment.objects.\
+                filter(Q(equipmentSM_ver__date__gte=dateser) & Q(equipmentSM_ver__id__in=set)). \
+                filter(Q(charakters__name__icontains=name) | Q(charakters__name__icontains=name1)). \
+                filter(equipment__lot=lot). \
+                order_by('charakters__name')
             context['objects'] = objects
 
 
-        context['form'] = SearchMEForm()
+
+        context['form'] = SearchMEForm(initial={'name': name, 'lot': lot, 'exnumber': exnumber, 'dateser': dateser})
         context['URL'] = URL
         return context
