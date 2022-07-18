@@ -1,8 +1,8 @@
 import xlwt
 from django.http import HttpResponse
 from datetime import datetime, timedelta
-from django.db.models import Max, Q
-from django.db.models.functions import Upper
+from django.db.models import Max, Q, F, Value
+from django.db.models.functions import Upper, Concat
 from django.shortcuts import get_object_or_404, render
 from django.template.defaultfilters import upper
 from django.views import View
@@ -172,6 +172,7 @@ def export_me_xls(request):
 
     # ширина столбцов
     ws.col(2).width = 4500
+    ws.col(8).width = 3000
 
     # заголовки, первый ряд
     row_num = 0
@@ -197,14 +198,29 @@ def export_me_xls(request):
 
         return style
 
-
-
     columns = [
                 # '№',
-               'Внутренний  номер',
-               'Номер в госреестре',
-               'Наименование',
-               'Тип/Модификация',
+                'Внутренний  номер',
+                'Номер в госреестре',
+                'Наименование',
+                'Тип/Модификация',
+                'Заводской номер',
+                'Год выпуска',
+                'Новый или б/у',
+                'Год ввода в эксплуатацию',
+                'Страна, наименование производителя',
+                'Место установки или хранения',
+                'Ответственный за СИ',
+                'Статус',
+                'Ссылка на сведения о поверке',
+                'Ссылка на карточку',
+                'Сведения о поверке/калибровке',
+                'Краткий номер свидетельства',
+                'Дата поверки/калибровки',
+                'Дата окончания свидетельства',
+                'Дата заказа поверки/калибровки',
+                'Периодичность поверки /калибровки (месяцы)',
+                'Инвентарный номер',
                ]
 
     for col_num in range(len(columns)):
@@ -225,17 +241,27 @@ def export_me_xls(request):
         style.alignment.wrap = 1
         style.alignment.horz = 0x02
         style.alignment.vert = 0x01
-
         return style
 
-    rows = MeasurEquipment.objects.all().values_list(
-        'equipment__exnumber',
-        'charakters__reestr',
-        'charakters__name',
-        'charakters__modtype__typename',
-        'charakters__modtype__modificname',
-    )
+    set=1
 
+    rows = MeasurEquipment.objects.all().\
+        annotate(mod_type=Concat('charakters__modtype__typename', 'charakters__modtype__modificname'),
+    manuf_country=Concat('equipment__manufacturer__country', Value(', '), 'equipment__manufacturer__companyName'),\
+    room=Max('equipment__roomschange')).\
+        filter(equipment__roomschange__in=set).\
+        values_list(
+            'equipment__exnumber',
+            'charakters__reestr',
+            'charakters__name',
+            'mod_type',
+            'equipment__lot',
+            'equipment__yearmanuf',
+            'equipment__new',
+            'equipment__yearintoservice',
+            'manuf_country',
+            'equipment__roomschange__roomnumber__roomnumber',
+        )
 
     for row in rows:
         row_num += 1
