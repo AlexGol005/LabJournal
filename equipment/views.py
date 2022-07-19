@@ -162,113 +162,113 @@ class StrMeasurEquipmentView(View):
 # -------------------
 
 
-# def export_me_xls(request):
-#     '''представление для выгрузки списка всех СИ в ексель'''
-#     response = HttpResponse(content_type='application/ms-excel')
-#     response['Content-Disposition'] = 'attachment; filename="measure equipment.xls"'
-#
-#     wb = xlwt.Workbook(encoding='utf-8')
-#     ws = wb.add_sheet('График поверки СИ', cell_overwrite_ok=True)
-#
-#     # ширина столбцов
-#     ws.col(2).width = 4500
-#     ws.col(8).width = 3000
-#
-#     # заголовки, первый ряд
-#     row_num = 0
-#
-#     def set_style_top():
-#         style = xlwt.XFStyle()
-#         style.font.bold = True
-#         style.font.name = 'Calibri'
-#         style.borders.left = 1
-#         style.borders.right = 1
-#         style.borders.top = 1
-#         style.borders.bottom = 1
-#
-#         style.alignment.wrap = 1
-#         style.alignment.horz = 0x02
-#         style.alignment.vert = 0x01
-#
-#
-#         pattern = xlwt.Pattern()
-#         pattern.pattern = xlwt.Pattern.SOLID_PATTERN
-#         pattern.pattern_fore_colour = xlwt.Style.colour_map['tan']
-#         style.pattern = pattern
-#
-#         return style
-#
-#     columns = [
-#                 # '№',
-#                 'Внутренний  номер',
-#                 'Номер в госреестре',
-#                 'Наименование',
-#                 'Тип/Модификация',
-#                 'Заводской номер',
-#                 'Год выпуска',
-#                 'Новый или б/у',
-#                 'Год ввода в эксплуатацию',
-#                 'Страна, наименование производителя',
-#                 'Место установки или хранения',
-#                 'Ответственный за СИ',
-#                 'Статус',
-#                 'Ссылка на сведения о поверке',
-#                 'Ссылка на карточку',
-#                 'Сведения о поверке/калибровке',
-#                 'Краткий номер свидетельства',
-#                 'Дата поверки/калибровки',
-#                 'Дата окончания свидетельства',
-#                 'Дата заказа поверки/калибровки',
-#                 'Периодичность поверки /калибровки (месяцы)',
-#                 'Инвентарный номер',
-#                ]
-#
-#     for col_num in range(len(columns)):
-#         ws.write(row_num, col_num, columns[col_num], set_style_top())
-#         # ws.merge(0, 0, 3, 4)
-#
-#     # значения, остальные ряды
-#     def set_style_body():
-#         style = xlwt.XFStyle()
-#
-#         style.font.name = 'Calibri'
-#
-#         style.borders.left = 1
-#         style.borders.right = 1
-#         style.borders.top = 1
-#         style.borders.bottom = 1
-#
-#         style.alignment.wrap = 1
-#         style.alignment.horz = 0x02
-#         style.alignment.vert = 0x01
-#         return style
-#
-#     set=1
-#
-#     rows = MeasurEquipment.objects.all().\
-#         annotate(mod_type=Concat('charakters__modtype__typename', 'charakters__modtype__modificname'),
-#     manuf_country=Concat('equipment__manufacturer__country', Value(', '), 'equipment__manufacturer__companyName'),\
-#     room=Max('equipment__roomschange')).\
-#         filter(equipment__roomschange__in=set).\
-#         values_list(
-#             'equipment__exnumber',
-#             'charakters__reestr',
-#             'charakters__name',
-#             'mod_type',
-#             'equipment__lot',
-#             'equipment__yearmanuf',
-#             'equipment__new',
-#             'equipment__yearintoservice',
-#             'manuf_country',
-#             'equipment__roomschange__roomnumber__roomnumber',
-#         )
-#
-#     for row in rows:
-#         row_num += 1
-#         for col_num in range(len(row)):
-#             ws.write(row_num, col_num, row[col_num], set_style_body())
-#             # ws.merge(1, 1, 3, 4)
-#
-#
-#     wb.save(response)
-#     return response
+def export_me_xls(request):
+    '''представление для выгрузки списка всех СИ в ексель'''
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="measure equipment.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('График поверки СИ', cell_overwrite_ok=True)
+
+    # ширина столбцов
+    ws.col(2).width = 4500
+    ws.col(8).width = 3000
+
+    # заголовки, первый ряд
+    row_num = 0
+
+    def set_style_top():
+        style = xlwt.XFStyle()
+        style.font.bold = True
+        style.font.name = 'Calibri'
+        style.borders.left = 1
+        style.borders.right = 1
+        style.borders.top = 1
+        style.borders.bottom = 1
+
+        style.alignment.wrap = 1
+        style.alignment.horz = 0x02
+        style.alignment.vert = 0x01
+
+
+        pattern = xlwt.Pattern()
+        pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+        pattern.pattern_fore_colour = xlwt.Style.colour_map['tan']
+        style.pattern = pattern
+
+        return style
+
+    columns = [
+                # '№',
+                'Внутренний  номер',
+                'Номер в госреестре',
+                'Наименование',
+                'Тип/Модификация',
+                'Заводской номер',
+                'Год выпуска',
+                'Новый или б/у',
+                'Год ввода в эксплуатацию',
+                'Страна, наименование производителя',
+                'Место установки или хранения',
+                'Ответственный за СИ',
+                'Статус',
+                'Ссылка на сведения о поверке',
+                'Ссылка на карточку',
+                'Сведения о поверке/калибровке',
+                'Краткий номер свидетельства',
+                'Дата поверки/калибровки',
+                'Дата окончания свидетельства',
+                'Дата заказа поверки/калибровки',
+                'Периодичность поверки /калибровки (месяцы)',
+                'Инвентарный номер',
+               ]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], set_style_top())
+        # ws.merge(0, 0, 3, 4)
+
+    # значения, остальные ряды
+    def set_style_body():
+        style = xlwt.XFStyle()
+
+        style.font.name = 'Calibri'
+
+        style.borders.left = 1
+        style.borders.right = 1
+        style.borders.top = 1
+        style.borders.bottom = 1
+
+        style.alignment.wrap = 1
+        style.alignment.horz = 0x02
+        style.alignment.vert = 0x01
+        return style
+
+    set=1
+
+    rows = MeasurEquipment.objects.all().\
+        annotate(mod_type=Concat('charakters__modtype__typename', 'charakters__modtype__modificname'),
+    manuf_country=Concat('equipment__manufacturer__country', Value(', '), 'equipment__manufacturer__companyName'),\
+    room=Max('equipment__roomschange')).\
+        filter(equipment__roomschange__in=set).\
+        values_list(
+            'equipment__exnumber',
+            'charakters__reestr',
+            'charakters__name',
+            'mod_type',
+            'equipment__lot',
+            'equipment__yearmanuf',
+            'equipment__new',
+            'equipment__yearintoservice',
+            'manuf_country',
+            'equipment__roomschange__roomnumber__roomnumber',
+        )
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], set_style_body())
+            # ws.merge(1, 1, 3, 4)
+
+
+    wb.save(response)
+    return response
