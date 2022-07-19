@@ -243,13 +243,13 @@ def export_me_xls(request):
         style.alignment.vert = 0x01
         return style
 
-    set=1
+    # set=1
 
     rows = MeasurEquipment.objects.all().\
         annotate(mod_type=Concat('charakters__modtype__typename', 'charakters__modtype__modificname'),
     manuf_country=Concat('equipment__manufacturer__country', Value(', '), 'equipment__manufacturer__companyName'),\
     room=Max('equipment__roomschange')).\
-        filter(equipment__roomschange__in=set).\
+        # filter(equipment__roomschange__in=set).\
         values_list(
             'equipment__exnumber',
             'charakters__reestr',
