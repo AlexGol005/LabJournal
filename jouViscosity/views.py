@@ -183,7 +183,7 @@ class DetailDinamicView(View):
             objects = Dinamicviscosity.objects.filter(fixation=True).filter(name=path).filter(lot=int).\
                 filter(temperature=str)
             name = Dinamicviscosity.objects.filter(fixation=True, name=path, lot=int, temperature=str)[0]
-            template = 'jouChlorineOilProducts/detaildinamicviscosity.html'
+            template = 'jouViscosity/detaildinamicviscosity.html'
             context = {
                 'objects': objects,
                 'name': name
