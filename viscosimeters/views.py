@@ -97,16 +97,16 @@ class ViscosimetersHeadView(View):
 #     columns = ['Имя', 'First name', 'Last name', 'Email address', ]
 #
 #     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-
-    # Sheet body, remaining rows
-    font_style = xlwt.XFStyle()
-
-    rows = User.objects.all().values_list('username', 'first_name', 'last_name', 'email')
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws.write(row_num, col_num, row[col_num], font_style)
-
-    wb.save(response)
-    return response
+#         ws.write(row_num, col_num, columns[col_num], font_style)
+#
+#     # Sheet body, remaining rows
+#     font_style = xlwt.XFStyle()
+#
+#     rows = User.objects.all().values_list('username', 'first_name', 'last_name', 'email')
+#     for row in rows:
+#         row_num += 1
+#         for col_num in range(len(row)):
+#             ws.write(row_num, col_num, row[col_num], font_style)
+#
+#     wb.save(response)
+#     return response
