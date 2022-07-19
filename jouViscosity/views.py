@@ -190,7 +190,7 @@ class DetailDinamicView(View):
             }
             return render(request, template, context)
         except IndexError:
-            template = 'jouChlorineOilProducts/olddetaildinamicviscosity.html'
+            template = 'jouViscosity/olddetaildinamicviscosity.html'
             objects = MODEL2.objects.filter(namelot__nameVG__name=path, namelot__lot=int)
             context = {
                 'objects': objects,
