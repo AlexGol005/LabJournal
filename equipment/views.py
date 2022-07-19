@@ -1,4 +1,4 @@
-from xlwt import*
+import xlwt
 from django.http import HttpResponse
 from datetime import datetime, timedelta
 from django.db.models import Max, Q, F, Value
