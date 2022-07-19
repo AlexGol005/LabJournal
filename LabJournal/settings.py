@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'clorinesalts',
     'jouPetroleumChlorineImpurityWater',
     'jouChlorineOilProducts',
-    'jougascondensate'
+    'jougascondensate',
+    'xlwt',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
