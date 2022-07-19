@@ -170,10 +170,10 @@
             {% if now_date_plusmonth > obj.cvt20dead and obj.cvt20dead > now %}orange{% endif %}
             {% if obj.cvt20dead < now %}red{% endif %}">
                 {% if obj.cvt20dead > now and  now_date_plusmonth < obj.cvt20dead %}
-                <a href="{% url 'detaildinamic' obj.namelot.nameVG.name obj.namelot.lot '20' %}" style="color: green"><b>{% endif %}
-                {% if now_date_plusmonth > obj.cvt20dead and obj.cvt20dead > now %}
-                <a href="{%  url 'detaildinamic' obj.namelot.nameVG.name obj.namelot.lot '20' %}" style="color: darkorange">{% endif %}
-                {% if obj.cvt100dead < now %}
+                <a href="{% url 'detaildinamic' obj.namelot.nameVG.name obj.namelot.lot '20' %}" style="color: green"><b>
+                {% elif now_date_plusmonth > obj.cvt20dead and obj.cvt20dead > now %}
+                <a href="{%  url 'detaildinamic' obj.namelot.nameVG.name obj.namelot.lot '20' %}" style="color: darkorange">
+                {% elif obj.cvt20dead < now %}
                 <a href="{%  url 'detaildinamic' obj.namelot.nameVG.name  obj.namelot.lot '20' %}" style="color: red">
                 {% endif %}
                 {{ obj.cvt20|default_if_none:" " }}</a>
