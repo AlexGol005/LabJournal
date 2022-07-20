@@ -1,15 +1,17 @@
 import xlwt
+from django.contrib import messages
 from django.http import HttpResponse
 from datetime import datetime, timedelta
 from django.db.models import Max, Q, F, Value
 from django.db.models.functions import Upper, Concat
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.template.defaultfilters import upper
 from django.views import View
 from django.views.generic import ListView, TemplateView
 
-from equipment.forms import SearchMEForm
-from equipment.models import MeasurEquipment, Verificationequipment, Roomschange, Personchange
+from equipment.forms import SearchMEForm, NoteCreationForm
+from equipment.models import MeasurEquipment, Verificationequipment, Roomschange, Personchange, CommentsEquipment, \
+    Equipment
 
 URL = 'equipment'
 
@@ -157,6 +159,33 @@ class StrMeasurEquipmentView(View):
     #         order = form.save(commit=False)
     #         messages.success(request, f'АЗ не подтверждено! Подтвердить АЗ может только исполнитель данного измерения!')
     #         return redirect(order)
+
+class CommentsView(View):
+    """ выводит комментарии к записи в журнале и форму для добавления комментариев """
+    """Стандартное"""
+    form_class = NoteCreationForm
+    initial = {'key': 'value'}
+    template_name = 'equipment/comments.html'
+
+    def get(self, request, str):
+        note = CommentsEquipment.objects.filter(forNote__exnumber=str)
+        title = Equipment.objects.get(exnumber=str)
+        form = NoteCreationForm()
+        return render(request, 'main/comments.html', {'note': note, 'title': title, 'form': form, 'URL': URL})
+
+    def post(self, request, str, *args, **kwargs):
+        form = NoteCreationForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            if request.user and not order.author:
+                order.author = request.user
+            if not request.user and order.author:
+                order.author = order.author
+            order.forNote = Equipment.objects.get(exnumber=str)
+            order.save()
+            messages.success(request, f'Запись добавлена!')
+            return redirect(order)
+
 
 
 # -------------------

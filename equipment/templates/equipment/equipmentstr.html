@@ -1,4 +1,4 @@
-{% extends 'main/superbase.html' %}
+{% extends 'main/base.html' %}
 {% load static %}
 {% block title %}
 {{ obj.charakters.name}}
@@ -14,10 +14,10 @@
 {{ obj.charakters.modtype.modificname|default:" " }}.
 Заводской номер: <b>{{ obj.equipment.lot }}</b></h6>
 </div>
-    <br>
+<br>
 
 
-
+{#таблица неизменные сведения о приборе#}
 <div style="text-align: center;">
 <table class="table table-bordered">
     <thead>
@@ -28,11 +28,8 @@
             <th> Тип/модификация</th>
             <th> Заводской № </th>
             <th> Год вып. </th>
-            <th> Производитель </th>
-            <th> Год ввода в эксплуатацию в ООО "Петроаналитика" </th>
-            <th> Новый или&nbsp&nbsp б/у</th>
-            <th> Инвентарный номер  </th>
-         </tr>
+            <th> Произв-ль </th>
+        </tr>
     </thead>
     <tbody>
     <tr>
@@ -45,13 +42,55 @@
         <td> {{ obj.equipment.yearmanuf }}</td>
         <td> {{ obj.equipment.manufacturer.country }},
          {{ obj.equipment.manufacturer.companyName }}</td>
-        <td> {{ obj.equipment.yearintoservice }}</td>
-        <td> {{ obj.equipment.new }}</td>
-        <td> {{ obj.equipment.invnumber|default:" " }}</td>
     </tr>
     </tbody>
 </table>
 </div>
+
+{#особенности прибора, если имеются#}
+<br>
+{% if obj.equipment.individuality  %}
+<div style="text-align: center; margin-top: 2px"><h6>Особенности работы прибора</h6></div>
+<table class="table table-bordered">
+<td colspan="6">{{ obj.equipment.individuality }}</td>
+</table>
+</div>
+{% endif %}
+
+{#записи о приборе#}
+<div style="text-align: center; margin-top: 20px"><h6>
+Техническое обслуживание и данные о повреждениях, неисправностях, модификациях и ремонте </h6></div>
+<i>ГОСТ 17034 (ссылка на 17025, п.6.4.13): "Должны вестись записи о состоянии оборудования...должны включать...
+подробную информацию о любых повреждениях, неисправностях, модификациях или ремонте..."</i>
+
+ <a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/comments/"  class="btn btn-warning mt-2">
+     комментировать</a>
+
+
+
+    <br>
+<div style="text-align: center; margin-top: 20px">
+<table class="table table-bordered">
+    <thead>
+        <tr><th> Год ввода в эксплуатацию</th>
+            <th> Новый или&nbsp&nbsp б/у</th>
+            <th> Ответственный </th>
+            <th> Расположение </th>
+            <th> Распечатать карточку</th>
+            <th> Распечатать этикетку на прибор </th>
+
+         </tr>
+    </thead>
+    <tbody>
+    <tr><td> {{ obj.equipment.yearintoservice }}</td>
+        <td> {{ obj.equipment.new }}</td>
+        <td>{{ obj.equipment.exnumber }}</td>
+         <td> {{ obj.charakters.reestr }}</td>
+         <td> {{ obj.charakters.name }}</td>
+        <td> {{ obj.equipment.new }}</td>
+    </tr>
+    </tbody>
+</table>
 </div>
 
 <br>
@@ -63,6 +102,8 @@
             <th> Поверен до </th>
             <th> Месяц заказа поверки </th>
             <th> Ссылка на сведения о поверке</th>
+             <th>Технические документы и принадлежности</th>
+            <th> Инвентарный номер  </th>
 
          </tr>
     </thead>
@@ -76,31 +117,9 @@
     </tbody>
 </table>
 </div>
-</div>
 
 
-    <br>
-<div style="text-align: center;">
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th> Ответственный </th>
-            <th> Расположение </th>
-            <th> Распечатать карточку</th>
-            <th> Распечатать этикетку на прибор </th>
-            <th>Технические документы и принадлежности</th>
-         </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>{{ obj.equipment.exnumber }}</td>
-         <td> {{ obj.charakters.reestr }}</td>
-         <td> {{ obj.charakters.name }}</td>
-        <td> {{ obj.equipment.new }}</td>
-        <td> {{ obj.equipment.invnumber|default:" " }}</td>
-    </tr>
-    </tbody>
-</table>
-</div>
+
+
 </div>
 {% endblock %}

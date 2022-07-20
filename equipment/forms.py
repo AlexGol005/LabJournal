@@ -5,7 +5,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
 
 
-from equipment.models import MeasurEquipment
+from equipment.models import MeasurEquipment, CommentsEquipment
 
 
 class SearchMEForm(forms.Form):
@@ -36,3 +36,15 @@ class SearchMEForm(forms.Form):
                 Column('dateser', css_class='form-group col-md-2 mb-0'),
                 Row(Submit('submit', 'Найти', css_class='btn  btn-info col-md-9 mb-3 mt-4 ml-4'))))
 
+class NoteCreationForm(forms.ModelForm):
+    """форма для  записей об оборудовании"""
+    name = forms.CharField(label='Внести запись о приборе', max_length=10000,
+                           widget=forms.Textarea(attrs={'class': 'form-control',
+                                                        'placeholder': 'введите текст записи о приборе'}))
+    author = forms.CharField(label='Автор записи', required=False,  max_length=100,
+                              help_text='впишите автора если вы не авторизованы',
+                              widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = CommentsEquipment
+        fields = ['name', 'author']

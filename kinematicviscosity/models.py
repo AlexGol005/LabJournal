@@ -254,7 +254,7 @@ class CommentsKinematicviscosity(models.Model):
     name = models.TextField('Содержание', max_length=1000, default='')
     forNote = models.ForeignKey(ViscosityMJL, verbose_name='К странице аттестации', on_delete=models.CASCADE,
                                 related_name='comments')
-    author = models.ForeignKey(User, verbose_name='Наименование', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, verbose_name='Автор', on_delete=models.CASCADE)
 
     def __str__(self):
         return f' {self.author.username} , {self.forNote.name},  {self.date}'

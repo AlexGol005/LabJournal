@@ -3,8 +3,7 @@ from PIL import  Image
 from django.contrib.auth.models import User
 from decimal import *
 
-
-
+from django.urls import reverse
 
 CHOICES = (
         ('Э', 'В эксплуатации'),
@@ -230,6 +229,25 @@ class NotesEquipment(models.Model):
     person = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True,
                                   verbose_name='Оборудование')
+
+class CommentsEquipment(models.Model):
+    """стандартнрый класс для комментариев, поменять только get_absolute_url"""
+    date = models.DateField('Дата', auto_now_add=True, db_index=True)
+    name = models.TextField('Содержание', max_length=1000, default='')
+    forNote = models.ForeignKey(Equipment, verbose_name='К прибору', on_delete=models.CASCADE)
+    author = models.CharField('Автор', max_length=90, blank=True, null=True)
+
+    def __str__(self):
+        return f' {self.author} , {self.forNote.exnumber},  {self.date}'
+
+    def get_absolute_url(self):
+        """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
+        return reverse('measureequipmentcomm', kwargs={'str': self.forNote.exnumber})
+
+    class Meta:
+        verbose_name = 'Запись о приборе'
+        verbose_name_plural = 'Записи о приборах'
+        ordering = ['-pk']
 
 
 
