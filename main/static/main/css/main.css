@@ -96,4 +96,12 @@ td.green {
    }
 }
 
+th.ind {
+    max-width: 100px !important;
+    word-wrap: break-word;
+}
 
+td.ind {
+    max-width: 100px !important;
+    word-wrap: break-word;
+}

@@ -47,53 +47,54 @@
 </table>
 </div>
 
+
 {#особенности прибора, если имеются#}
 <br>
 {% if obj.equipment.individuality  %}
-<div style="text-align: center; margin-top: 2px"><h6>Особенности работы прибора</h6></div>
+<div style="text-align: center; margin-top: 2px"><h6>Особенности работы прибора</h6>
 <table class="table table-bordered">
 <td colspan="6">{{ obj.equipment.individuality }}</td>
 </table>
 </div>
 {% endif %}
-
+</div>
 {#записи о приборе#}
 <div style="text-align: center; margin-top: 20px"><h6>
 Техническое обслуживание и данные о повреждениях, неисправностях, модификациях и ремонте </h6></div>
 <i>ГОСТ 17034 (ссылка на 17025, п.6.4.13): "Должны вестись записи о состоянии оборудования...должны включать...
-подробную информацию о любых повреждениях, неисправностях, модификациях или ремонте..."</i>
-
+подробную информацию о любых повреждениях, неисправностях, модификациях или ремонте..."</i></div>
+<div style="text-align: center; margin-top: 10px">
  <a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/comments/"  class="btn btn-warning mt-2">
-     комментировать</a>
+     Внести запись и смотреть записи</a>
 
-
-
-    <br>
-<div style="text-align: center; margin-top: 20px">
-<table class="table table-bordered">
-    <thead>
-        <tr><th> Год ввода в эксплуатацию</th>
-            <th> Новый или&nbsp&nbsp б/у</th>
-            <th> Ответственный </th>
-            <th> Расположение </th>
-            <th> Распечатать карточку</th>
-            <th> Распечатать этикетку на прибор </th>
-
-         </tr>
-    </thead>
-    <tbody>
-    <tr><td> {{ obj.equipment.yearintoservice }}</td>
-        <td> {{ obj.equipment.new }}</td>
-        <td>{{ obj.equipment.exnumber }}</td>
-         <td> {{ obj.charakters.reestr }}</td>
-         <td> {{ obj.charakters.name }}</td>
-        <td> {{ obj.equipment.new }}</td>
-    </tr>
-    </tbody>
-</table>
-</div>
-
-<br>
+{#    <br>#}
+{#<div style="text-align: center; margin-top: 20px">#}
+{#<table class="table table-bordered">#}
+{#    <thead>#}
+{#        <tr><th> Год ввода в эксплуатацию</th>#}
+{#            <th> Новый или&nbsp&nbsp б/у</th>#}
+{#            <th> Ответственный </th>#}
+{#            <th> Расположение </th>#}
+{#            <th> Распечатать карточку</th>#}
+{#            <th> Распечатать этикетку на прибор </th>#}
+{##}
+{#         </tr>#}
+{#    </thead>#}
+{#    <tbody>#}
+{#    <tr><td> {{ obj.equipment.yearintoservice }}</td>#}
+{#        <td> {{ obj.equipment.new }}</td>#}
+{#        <td>{{ obj.equipment.exnumber }}</td>#}
+{#         <td> {{ obj.charakters.reestr }}</td>#}
+{#         <td> {{ obj.charakters.name }}</td>#}
+{#        <td> {{ obj.equipment.new }}</td>#}
+{#    </tr>#}
+{#    </tbody>#}
+{#</table>#}
+{#</div>#}
+{##}
+{#<br>#}
+<div style="text-align: center; margin-top: 20px"><h4>
+Поверка </h4></div>
 <div style="text-align: center;">
 <table class="table table-bordered">
     <thead>
@@ -101,16 +102,18 @@
             <th> Дата поверки </th>
             <th> Поверен до </th>
             <th> Месяц заказа поверки </th>
-            <th> Ссылка на сведения о поверке</th>
-             <th>Технические документы и принадлежности</th>
-            <th> Инвентарный номер  </th>
+            <th class="ind"> Ссылка на сведения о поверке</th>
+             <th>Статус поверки</th>
+            <th> Статус оплаты поверки</th>
 
          </tr>
     </thead>
     <tbody>
     <tr>
-        <td>{{ obj.equipment.exnumber }}</td>
-         <td> {{ obj.charakters.reestr }}</td>
+        <td>{{ obj.equipmentSM_ver.last.date|date:'d.m.y' }}</td>
+         <td> {{ obj.equipmentSM_ver.last.datedead|date:'d.m.y' }}</td>
+         <td> {{ obj.equipmentSM_ver.last.dateorder|date:'m.Y' }}</td>
+         <td class="ind"> {{ obj.equipmentSM_ver.last.arshin|default:" " }}</td>
          <td> {{ obj.charakters.name }}</td>
         <td> {{ obj.equipment.invnumber|default:" " }}</td>
     </tr>

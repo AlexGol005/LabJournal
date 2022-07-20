@@ -6,9 +6,8 @@
 
 
 {% block content %}
-    {% if title.name %}
-    <div style="text-align: center;"><h4>Запись о приборе: <a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/"> {{title.name}} п. {{title.lot}} </a> </h4></div>
-    {% endif %}
+    <div style="text-align: center;"><h4>Записи о: <a href="/equipment/measureequipment/{{ title.exnumber }}/">
+    {{ title.exnumber }}, {{title.measurequipment_set.all.last.charakters}}, зав. № {{title.lot}}  </a> </h4></div>
     <br><br>
     <form method="post" class="form-register">
         {% csrf_token %}
@@ -18,8 +17,9 @@
     <br>
         {% for obj in note %}
         <div class="alert alert-light">
-        <p>{{ obj.name }}</p>
+        <p>{{ obj.note }}</p>
         -----------------------
+    <p><b>Тип записи: {{ obj.type }}</b></p>
     <p><b>Автор записи: {{ obj.author }}</b></p>
     <span class="text-muted"> {{ obj.date|date:"j F Y" }}</span>
     </div>

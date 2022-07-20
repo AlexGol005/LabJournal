@@ -20,6 +20,13 @@ KATEGORY = (
         ('И', 'Индикатор'),
     )
 
+NOTETYPE = (
+        ('Техническое обслуживание', 'Техническое обслуживание'),
+        ('Неисправность', 'Неисправность'),
+        ('Ремонт', 'Ремонт'),
+        ('Другое', 'Другое'),
+    )
+
 class Manufacturer(models.Model):
     companyName = models.CharField('Производитель', max_length=100, unique=True)
     companyAdress = models.CharField('Адрес', max_length=200, default='', blank=True)
@@ -174,8 +181,10 @@ class MeasurEquipmentCharakters(models.Model):
         verbose_name_plural = 'Средства измерения описания типов'
 
 class MeasurEquipment(models.Model):
-    charakters = models.ForeignKey(MeasurEquipmentCharakters,  on_delete=models.PROTECT, verbose_name='Характеристики СИ', blank=True, null=True)
-    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Оборудование')
+    charakters = models.ForeignKey(MeasurEquipmentCharakters,  on_delete=models.PROTECT,
+                                   verbose_name='Характеристики СИ', blank=True, null=True)
+    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True,
+                                  verbose_name='Оборудование')
     ecard = models.CharField('Ссылка на карточку прибора', max_length=90, blank=True, null=True)
 
     def save(self, *args, **kwargs):
@@ -233,9 +242,10 @@ class NotesEquipment(models.Model):
 class CommentsEquipment(models.Model):
     """стандартнрый класс для комментариев, поменять только get_absolute_url"""
     date = models.DateField('Дата', auto_now_add=True, db_index=True)
-    name = models.TextField('Содержание', max_length=1000, default='')
+    note = models.TextField('Содержание', max_length=1000, default='')
     forNote = models.ForeignKey(Equipment, verbose_name='К прибору', on_delete=models.CASCADE)
     author = models.CharField('Автор', max_length=90, blank=True, null=True)
+    type = models.CharField('Тип записи', max_length=90, blank=True, null=True, choices=NOTETYPE)
 
     def __str__(self):
         return f' {self.author} , {self.forNote.exnumber},  {self.date}'

@@ -171,7 +171,7 @@ class CommentsView(View):
         note = CommentsEquipment.objects.filter(forNote__exnumber=str)
         title = Equipment.objects.get(exnumber=str)
         form = NoteCreationForm()
-        return render(request, 'main/comments.html', {'note': note, 'title': title, 'form': form, 'URL': URL})
+        return render(request, 'equipment/comments.html', {'note': note, 'title': title, 'form': form, 'URL': URL})
 
     def post(self, request, str, *args, **kwargs):
         form = NoteCreationForm(request.POST)
