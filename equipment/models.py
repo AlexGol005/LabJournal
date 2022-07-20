@@ -177,6 +177,12 @@ class MeasurEquipmentCharakters(models.Model):
 class MeasurEquipment(models.Model):
     charakters = models.ForeignKey(MeasurEquipmentCharakters,  on_delete=models.PROTECT, verbose_name='Характеристики СИ', blank=True, null=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Оборудование')
+    ecard = models.CharField('Ссылка на карточку прибора', max_length=90, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        self.ecard = f'https://labjournal.pythonanywhere.com/equipment/measureequipment/{self.equipment.exnumber}'
+        super(MeasurEquipment, self).save(*args, **kwargs)
+
 
     def __str__(self):
         return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot}  № реестр {self.charakters.reestr}'
@@ -192,8 +198,8 @@ class Verificationequipment(models.Model):
     datedead = models.DateField('Дата окончания поверки')
     dateorder = models.DateField('Дата заказа следующей поверки')
     arshin = models.TextField('Ссылка на сведения о поверке в Аршин', blank=True, null=True)
-    certnumber = models.CharField('Номер сертификата о поверке', max_length=90, blank=True, null=True)
-    certnumbershort = models.CharField('Краткий номер сертификата о поверке', max_length=90, blank=True, null=True)
+    certnumber = models.CharField('Номер свидетельства о поверке', max_length=90, blank=True, null=True)
+    certnumbershort = models.CharField('Краткий номер свидетельства о поверке', max_length=90, blank=True, null=True)
     price = models.DecimalField('Стоимость данной поверки', max_digits=100, decimal_places=2, null=True, blank=True)
     img = models.ImageField('Сертификат', upload_to='user_images', blank=True, null=True)
     statusver = models.CharField('Статус поверки', max_length=90, blank=True, null=True)

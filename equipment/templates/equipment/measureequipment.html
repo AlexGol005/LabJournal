@@ -19,7 +19,7 @@
 <br>
 {#конец заголовка со ссылкой#}
 {# Выгрузка полного списка в ексель #}
-<a href="{% url 'export_me_xls' %}" class="btn btn-warning mr-5 mt-3">Выгрузить в EXEL</a>
+<a href="{% url 'export_me_xls' %}" class="btn btn-warning mr-5 mt-3">Выгрузить график поверки EXEL</a>
     <br>
     <br>
     <br>
@@ -67,7 +67,7 @@
         <td> {{ obj.equipmentSM_ver.all.last.datedead|date:"d.m.Y"  }}</td>
         <td> {{ obj.equipmentSM_ver.all.last.statusver|default:" " }}</td>
         <td> {{ obj.equipmentSM_ver.all.last.statusmoney|default:" " }}</td>
-        <td><a href="/equipment/measureequipmentstr/{{ obj.id }}/"  class="btn btn-outline-warning mt-3">СМ</a></td>
+        <td><a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/"  class="btn btn-outline-warning mt-3">СМ</a></td>
     </tr>
     {% endfor %}
     </tbody>

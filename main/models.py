@@ -10,7 +10,7 @@ from PIL import Image
 
 class AttestationJ(models.Model):
     date = models.DateField('Дата создания журнала', default=timezone.now)
-    name = models.CharField('Наименование журнала', max_length=100, default='')
+    name = models.CharField('Наименование журнала', max_length=1000, default='')
     ndocument = models.CharField('Методы испытаний', max_length=100, default='')
     performer = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='ответственный за ведение журнала')
     for_url = models.CharField('Адрес журнала', max_length=100, default='')
@@ -44,7 +44,7 @@ class AttestationJ(models.Model):
 
 class ProductionJ(models.Model):
     date = models.DateField('Дата создания журнала', default=timezone.now)
-    name = models.CharField('Наименование журнала', max_length=100, default='')
+    name = models.CharField('Наименование журнала', max_length=1000, default='')
     ndocument = models.CharField('Методики приготовления', max_length=100, default='')
     performer = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='ответственный за ведение журнала')
     for_url = models.CharField('Адрес журнала', max_length=100, default='')  # todo URLField

@@ -9,7 +9,7 @@ from django.views import View
 from django.views.generic import ListView, TemplateView
 
 from equipment.forms import SearchMEForm
-from equipment.models import MeasurEquipment, Verificationequipment
+from equipment.models import MeasurEquipment, Verificationequipment, Roomschange, Personchange
 
 URL = 'equipment'
 
@@ -135,8 +135,8 @@ class StrMeasurEquipmentView(View):
     """ выводит отдельную запись и форму добавления в ЖАЗ """
     """Стандартная"""
 
-    def get(self, request, pk):
-        obj = get_object_or_404(MeasurEquipment, pk=pk)
+    def get(self, request, str):
+        obj = get_object_or_404(MeasurEquipment, equipment__exnumber=str)
         # form = StrJournalUdateForm()
         # try:
         #     counter = COMMENTMODEL.objects.filter(forNote=note.id)
@@ -213,14 +213,13 @@ def export_me_xls(request):
                 'Ответственный за СИ',
                 'Статус',
                 'Ссылка на сведения о поверке',
-                'Ссылка на карточку',
-                'Сведения о поверке/калибровке',
                 'Краткий номер свидетельства',
                 'Дата поверки/калибровки',
                 'Дата окончания свидетельства',
                 'Дата заказа поверки/калибровки',
                 'Периодичность поверки /калибровки (месяцы)',
                 'Инвентарный номер',
+                'Ссылка на карточку',
                ]
 
     for col_num in range(len(columns)):
@@ -243,13 +242,34 @@ def export_me_xls(request):
         style.alignment.vert = 0x01
         return style
 
-    set=(1,2)
+    get_id_room = Roomschange.objects.select_related('equipment').values('equipment'). \
+        annotate(id_actual=Max('id')).values('id_actual')
+    list_ = list(get_id_room)
+    setroom = []
+    for n in list_:
+        setroom.append(n.get('id_actual'))
+
+    get_id_person = Personchange.objects.select_related('equipment').values('equipment'). \
+        annotate(id_actual=Max('id')).values('id_actual')
+    list_ = list(get_id_person)
+    setperson = []
+    for n in list_:
+        setperson.append(n.get('id_actual'))
+
+    get_id_verification = Verificationequipment.objects.select_related('equipmentSM').values('equipmentSM'). \
+        annotate(id_actual=Max('id')).values('id_actual')
+    list_ = list(get_id_verification)
+    setver = []
+    for n in list_:
+        setver.append(n.get('id_actual'))
 
     rows = MeasurEquipment.objects.all().\
         annotate(mod_type=Concat('charakters__modtype__typename', 'charakters__modtype__modificname'),
-    manuf_country=Concat('equipment__manufacturer__country', Value(', '), 'equipment__manufacturer__companyName'),\
-    room=Max('equipment__roomschange')).\
-        filter(equipment__roomschange__in=set).\
+    manuf_country=Concat('equipment__manufacturer__country', Value(', '), 'equipment__manufacturer__companyName')).\
+        filter(equipment__roomschange__in=setroom).\
+        filter(equipment__personchange__in=setperson).\
+        filter(equipmentSM_ver__in=setver).\
+        exclude(equipment__status='C').\
         values_list(
             'equipment__exnumber',
             'charakters__reestr',
@@ -261,6 +281,16 @@ def export_me_xls(request):
             'equipment__yearintoservice',
             'manuf_country',
             'equipment__roomschange__roomnumber__roomnumber',
+            'equipment__personchange__person__username',
+            'equipment__status',
+            'equipmentSM_ver__arshin',
+            'equipmentSM_ver__certnumbershort',
+            'equipmentSM_ver__date',
+            'equipmentSM_ver__datedead',
+            'equipmentSM_ver__dateorder',
+            'charakters__calinterval',
+            'equipment__invnumber',
+            'ecard',
         )
 
     for row in rows:

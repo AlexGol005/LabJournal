@@ -1,4 +1,4 @@
-{% extends 'main/base.html' %}
+{% extends 'main/superbase.html' %}
 {% load static %}
 {% block title %}
 {{ obj.charakters.name}}
@@ -6,23 +6,53 @@
 
 
 {% block content %}
-
+<div class="row">
+<div class="col-md-24 mt-2" >
 <div style="text-align: center;"><h4>{{ obj.charakters.name}}</h4></div>
-<div style="text-align: center;"><h6>тип/модификация: {{ obj.charakters.modtype.typename|default:" " }}
+    <div style="text-align: center;">
+<h6> {{ obj.charakters.modtype.typename|default:" " }}
 {{ obj.charakters.modtype.modificname|default:" " }}.
-Заводской номер: <b>{{ obj.equipment.lot }}</b>
-</h6></div>
-<div style="text-align: center;"><h6>
-Внутренний номер: <b> {{ obj.equipment.exnumber }}</b></h6></div>
-<div style="text-align: center;"><h6>Номер в госреестре: <b>{{ obj.charakters.reestr }}</b></h6></div>
-<div style="text-align: center;"><h6>Год выпуска <b>{{ obj.equipment.yearmanuf }}</b>.
-Производитель: <b>{{ obj.equipment.manufacturer.companyName }}</b></h6></div>
+Заводской номер: <b>{{ obj.equipment.lot }}</b></h6>
+</div>
+    <br>
 
 
 
 <div style="text-align: center;">
-<a href="attestation/" class="btn btn-warning mt-3 mr-5" style="width: 160px">Смотреть записи</a>
-<a href="registration/" class="btn btn-warning mt-3" style="width: 160px">Внести запись</a>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Внут.№</th>
+            <th> Номер в реестре </th>
+            <th> Название </th>
+            <th> Тип/модификация</th>
+            <th> Заводской № </th>
+            <th> Год вып. </th>
+            <th> Производитель </th>
+            <th> Год ввода в эксплуатацию в ООО "Петроаналитика" </th>
+            <th> Новый или б/у</th>
+            <th> Инвентарный номер  </th>
+         </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{ obj.equipment.exnumber }}</td>
+         <td> {{ obj.charakters.reestr }}</td>
+         <td> {{ obj.charakters.name }}</td>
+        <td>{{ obj.charakters.modtype.typename|default:" " }}/
+             {{ obj.charakters.modtype.modificname|default:" " }} </td>
+        <td> {{ obj.equipment.lot }}</td>
+        <td> {{ obj.equipment.yearmanuf }}</td>
+        <td> {{ obj.equipment.manufacturer.country }},
+         {{ obj.equipment.manufacturer.companyName }}</td>
+        <td> {{ obj.equipment.yearintoservice }}</td>
+        <td> {{ obj.equipment.new }}</td>
+        <td> {{ obj.equipment.invnumber|default:" " }}</td>
+    </tr>
+    </tbody>
+</table>
+</div>
+</div>
 </div>
 <br>
 
