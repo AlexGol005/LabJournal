@@ -33,7 +33,8 @@
     <thead>
         <tr>
             <th> <div style="text-align: center;"> Дата </div></th>
-            <th> <div style="text-align: center; max-width: 20px;"  > ГСО </div></th>
+            <div style="text-align: center; max-width: 20px;"  >
+            <th>  ГСО </th></div>
             <th> <div style="text-align: center;"> п. </div></th>
             <th> <div style="text-align: center;"> X1  </div></th>
             <th> <div style="text-align: center;"> X2  </div></th>
@@ -47,8 +48,8 @@
 
     <tr>
         <td align="center"><b>{{ obj.date|date:"d.m.Y" }}</b></td>
-        <td align="center"><div style="text-align: center; max-width: 20px;" >
-            <b> {{ obj.name }}<br>({{ obj.namedop }})</b></div></td>
+       <td align="center">
+            <b> {{ obj.name }}<br>({{ obj.namedop }})</b></td>
         <td align="center"> <b>{{ obj.lot }}</b></td>
         <td align="center"><b>{{ obj.x1 }}</b> </td>
         <td align="center"><b>{{ obj.x2 }}</b> </td>
