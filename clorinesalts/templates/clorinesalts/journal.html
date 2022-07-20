@@ -14,7 +14,7 @@
 {#заголовок с ссылкой#}
 {#стандартная#}
 <div class="row">
-<div class="col-md-10 mt-2" >
+<div class="col-md-9 mt-2" >
 <div style="text-align: center;"><h4><a href="/attestationJ/{{ URL }}/"> {% for item in journal %}{{ item.name }}{% endfor %}</a></h4></div>
 <br>
 {#конец заголовка со ссылкой#}
@@ -34,7 +34,7 @@
         <tr>
             <th>  Дата </th>
 
-            <th width=30px>  ГСО </th>
+            <th >  ГСО </th>
             <th> <div style="text-align: center;"> п. </div></th>
             <th> <div style="text-align: center;"> X1  </div></th>
             <th> <div style="text-align: center;"> X2  </div></th>
@@ -97,7 +97,7 @@
 
 {#фильтры#}
 {# уникальные, менять url #}
-<div class="col-md-2 mt-5 ml-2" ><div style="text-align: center;"><h4> Фильтр записей  </h4></div>
+<div class="col-md-2 mt-5 ml-1" ><div style="text-align: center;"><h4> Фильтр записей  </h4></div>
 <div style="text-align: center;"><a href="/attestationJ/{{ URL }}/attestation/" class="btn  btn-warning  mt-3"  >&nbspВсе&nbsp</a></div>
 <div style="text-align: center;"> <a href="{% url 'clorinesaltsfilter' pk=2 %}" class="btn  btn-primary  mt-3" >Сегодня</a></div>
 <div style="text-align: center;"> <a href="{% url 'clorinesaltsfilter' pk=5 %}" class="btn  btn-primary  mt-3" >&nbsp&nbsp&nbspМои&nbsp&nbsp&nbsp</a></div>
