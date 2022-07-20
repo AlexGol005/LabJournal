@@ -30,7 +30,7 @@
             <th> Год вып. </th>
             <th> Производитель </th>
             <th> Год ввода в эксплуатацию в ООО "Петроаналитика" </th>
-            <th> Новый или б/у</th>
+            <th> Новый или&nbsp&nbsp б/у</th>
             <th> Инвентарный номер  </th>
          </tr>
     </thead>
@@ -53,8 +53,54 @@
 </table>
 </div>
 </div>
-</div>
+
 <br>
+<div style="text-align: center;">
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th> Дата поверки </th>
+            <th> Поверен до </th>
+            <th> Месяц заказа поверки </th>
+            <th> Ссылка на сведения о поверке</th>
+
+         </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{ obj.equipment.exnumber }}</td>
+         <td> {{ obj.charakters.reestr }}</td>
+         <td> {{ obj.charakters.name }}</td>
+        <td> {{ obj.equipment.invnumber|default:" " }}</td>
+    </tr>
+    </tbody>
+</table>
+</div>
+</div>
 
 
+    <br>
+<div style="text-align: center;">
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th> Ответственный </th>
+            <th> Расположение </th>
+            <th> Распечатать карточку</th>
+            <th> Распечатать этикетку на прибор </th>
+            <th>Технические документы и принадлежности</th>
+         </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{ obj.equipment.exnumber }}</td>
+         <td> {{ obj.charakters.reestr }}</td>
+         <td> {{ obj.charakters.name }}</td>
+        <td> {{ obj.equipment.new }}</td>
+        <td> {{ obj.equipment.invnumber|default:" " }}</td>
+    </tr>
+    </tbody>
+</table>
+</div>
+</div>
 {% endblock %}
