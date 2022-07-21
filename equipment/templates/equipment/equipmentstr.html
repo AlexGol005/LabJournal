@@ -92,9 +92,14 @@
          <td> {{ obj.equipmentSM_ver.last.datedead|date:'d.m.y' }}</td>
          <td> {{ obj.equipmentSM_ver.last.dateorder|date:'m.Y' }}</td>
          <td class="ind">
+             {% if obj.equipmentSM_ver.last.arshin %}
               <a href="{{ obj.equipmentSM_ver.last.arshin}}"  target="blank" >
              Аршин
-                  </a></td>
+                  </a>
+             {% else  %}
+             отсутствует
+             {% endif %}
+         </td>
          <td> {{ obj.equipmentSM_ver.last.certnumbershort}}</td>
          <td> {{ obj.equipmentSM_ver.last.statusver}}</td>
         <td> {{ obj.equipmentSM_ver.last.statusmoney}}</td>
@@ -116,23 +121,23 @@
 <table class="table table-bordered">
     <thead>
         <tr>
+            <th> № <br> комн. </th>
+            <th> Ответственный </th>
             <th> Документы и принадлежности</th>
             <th> Год <br> ввода в&nbspэксп.</th>
             <th> Новый <br>или&nbsp&nbsp б/у</th>
-            <th> Ответственный </th>
-            <th> № <br> комн. </th>
             <th> Инвентарный № <br> (НЕ = внут.№) </th>
 
          </tr>
     </thead>
     <tbody>
     <tr>
+        <td>{{ obj.equipment.roomschange_set.last.roomnumber.roomnumber }}</td>
+        <td>{{ obj.equipment.personchange_set.last.person.username }}</td>
         <td><a href="/attestationJ/{{ URL }}/attestation/{{ obj.id }}/"  class="btn btn-outline-warning mt-3">
             смотреть</a></td>
         <td> {{ obj.equipment.yearintoservice }}</td>
         <td> {{ obj.equipment.new }}</td>
-        <td>{{ obj.equipment.personchange_set.last.person.username }}</td>
-        <td>{{ obj.equipment.roomschange_set.last.roomnumber.roomnumber }}</td>
          <td> {{ obj.equipment.invnumber|default:"б/н" }}</td>
     </tr>
     </tbody>
