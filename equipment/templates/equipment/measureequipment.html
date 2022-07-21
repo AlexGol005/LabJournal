@@ -36,6 +36,7 @@
 <table class="table table-bordered">
     <thead>
         <tr>
+            <th>  См </th>
             <th>Внут.№</th>
             <th> Реестр </th>
             <th> Название </th>
@@ -48,12 +49,12 @@
             <th> Поверен до  </th>
             <th> Статус поверки </th>
             <th>  Статус оплаты поверки </th>
-            <th>  См </th>
          </tr>
     </thead>
     <tbody>
     {% for obj in objects %}
     <tr>
+        <td><a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/"  class="btn btn-outline-warning mt-3">СМ</a></td>
         <td>{{ obj.equipment.exnumber }}</td>
          <td> {{ obj.charakters.reestr }}</td>
          <td> {{ obj.charakters.name }}</td>
@@ -67,7 +68,6 @@
         <td> {{ obj.equipmentSM_ver.all.last.datedead|date:"d.m.Y"  }}</td>
         <td> {{ obj.equipmentSM_ver.all.last.statusver|default:" " }}</td>
         <td> {{ obj.equipmentSM_ver.all.last.statusmoney|default:" " }}</td>
-        <td><a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/"  class="btn btn-outline-warning mt-3">СМ</a></td>
     </tr>
     {% endfor %}
     </tbody>
