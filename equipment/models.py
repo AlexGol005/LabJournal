@@ -1,5 +1,5 @@
 from django.db import models
-from PIL import  Image
+from PIL import Image
 from django.contrib.auth.models import User
 from decimal import *
 
@@ -186,6 +186,7 @@ class MeasurEquipment(models.Model):
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True,
                                   verbose_name='Оборудование')
     ecard = models.CharField('Ссылка на карточку прибора', max_length=90, blank=True, null=True)
+    aim = models.CharField('Назначение', max_length=90, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         self.ecard = f'https://labjournal.pythonanywhere.com/equipment/measureequipment/{self.equipment.exnumber}'
@@ -233,11 +234,6 @@ class Verificationequipment(models.Model):
         verbose_name_plural = 'Поверки приборов'
 
 
-class NotesEquipment(models.Model):
-    note = models.TextField('Запись о неисправности, модификации или ремонте', blank=True, null=True)
-    person = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
-    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True,
-                                  verbose_name='Оборудование')
 
 class CommentsEquipment(models.Model):
     """стандартнрый класс для комментариев, поменять только get_absolute_url"""
@@ -246,6 +242,8 @@ class CommentsEquipment(models.Model):
     forNote = models.ForeignKey(Equipment, verbose_name='К прибору', on_delete=models.CASCADE)
     author = models.CharField('Автор', max_length=90, blank=True, null=True)
     type = models.CharField('Тип записи', max_length=90, blank=True, null=True, choices=NOTETYPE)
+    img = models.ImageField('Фото', upload_to='user_images', blank=True, null=True, default='user_images/default.png')
+
 
     def __str__(self):
         return f' {self.author} , {self.forNote.exnumber},  {self.date}'
@@ -253,6 +251,14 @@ class CommentsEquipment(models.Model):
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
         return reverse('measureequipmentcomm', kwargs={'str': self.forNote.exnumber})
+
+    def save(self, *args, **kwargs):
+        super().save()
+        image = Image.open(self.img.path)
+        if image.height > 1000 or image.width > 1000:
+            resize = (1000, 1000)
+            image.thumbnail(resize)
+            image.save(self.img.path)
 
     class Meta:
         verbose_name = 'Запись о приборе'

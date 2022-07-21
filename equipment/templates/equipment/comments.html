@@ -9,7 +9,7 @@
     <div style="text-align: center;"><h4>Записи о: <a href="/equipment/measureequipment/{{ title.exnumber }}/">
     {{ title.exnumber }}, {{title.measurequipment_set.all.last.charakters}}, зав. № {{title.lot}}  </a> </h4></div>
     <br><br>
-    <form method="post" class="form-register">
+    <form method="post" enctype="multipart/form-data" class="form-register">
         {% csrf_token %}
         {{ form.as_p }}
         <button class="btn btn-outline-warning" type="submit">Отправить</button>
@@ -18,7 +18,13 @@
         {% for obj in note %}
         <div class="alert alert-light">
         <p>{{ obj.note }}</p>
-        -----------------------
+            {% if obj.img %}
+{#         <div class="media text-muted pt-3">#}
+                <a href="{{ obj.img.url }}" target="blank">
+      <img class="bd-placeholder-img mr-2 rounded" width=10% height=10% src="{{ obj.img.url }}">
+</a>
+            {% endif %}
+            <br> -----------------------
     <p><b>Тип записи: {{ obj.type }}</b></p>
     <p><b>Автор записи: {{ obj.author }}</b></p>
     <span class="text-muted"> {{ obj.date|date:"j F Y" }}</span>

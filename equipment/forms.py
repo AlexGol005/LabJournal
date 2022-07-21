@@ -44,10 +44,12 @@ class NoteCreationForm(forms.ModelForm):
     note = forms.CharField(label='Внести запись о приборе', max_length=10000,
                            widget=forms.Textarea(attrs={'class': 'form-control',
                                                         'placeholder': 'введите текст записи о приборе'}))
+    img = forms.ImageField(label='Загрузить фото прибора или документа', required=False,
+                           widget=forms.FileInput)
     author = forms.CharField(label='Автор записи', required=False,  max_length=100,
                               help_text='впишите автора если вы не авторизованы',
                               widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = CommentsEquipment
-        fields = ['type', 'note', 'author']
+        fields = ['type', 'note', 'img', 'author']

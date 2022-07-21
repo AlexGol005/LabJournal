@@ -174,7 +174,7 @@ class CommentsView(View):
         return render(request, 'equipment/comments.html', {'note': note, 'title': title, 'form': form, 'URL': URL})
 
     def post(self, request, str, *args, **kwargs):
-        form = NoteCreationForm(request.POST)
+        form = NoteCreationForm(request.POST, request.FILES)
         if form.is_valid():
             order = form.save(commit=False)
             if request.user and not order.author:
