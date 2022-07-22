@@ -1,0 +1,66 @@
+{% extends 'main/superbase.html' %}
+
+{% block title %}
+Поверка СИ
+{% endblock %}
+
+
+{% block content %}
+<div style="text-align: center;"><h4>История поверки средства измерения:
+<br> <a href="/equipment/measureequipment/{{ title.exnumber }}/">
+{{ title.exnumber }}, {{title.measurequipment_set.all.last.charakters}}, зав. № {{title.lot}}  </a> </h4></div>
+<div style="text-align: center; margin-top: 20px; margin-bottom: 15px"><h6> Межповерочный интервал {{ calinterval }} мес. </h6></div>
+
+{#таблица для вывода поверки#}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Поверка от</th>
+            <th> Поверка до </th>
+            <th> Поверка заказ </th>
+            <th> Ссылка ФГИС</th>
+            <th> Место поверки </th>
+            <th> Статус поверки и оплаты</th>
+            <th> Поверитель </th>
+            <th> Поверитель имя, телефон </th>
+            <th> Примечание </th>
+            <th> Цена </th>
+            <th> Серт-т </th>
+         </tr>
+    </thead>
+    <tbody>
+    {% for obj in note %}
+         <td> {{ obj.date|date:"d.m.y" }}</td>
+         <td> {{ obj.datedead|date:"d.m.y" }}</td>
+         <td> {{ obj.dateorder|date:"d.m.y" }}</td>
+        <td class="ind">
+             {% if obj.arshin %}
+              <a href="{{ obj.arshin}}"  target="blank" >
+             Аршин
+                  </a>
+             {% else  %}
+             отсутствует
+             {% endif %}
+         </td>
+        <td> {{ obj.type }}</td>
+        <td> {{ obj.statusver }} {{ obj.statusmoney }}
+        </td>
+        <td> {{ obj.verificatorperson.name|default:" " }}</td>
+        <td> {{ obj.equipment.personchange_set.all.last.person }}</td>
+        <td> {{ obj.equipment.get_status_display }}</td>
+        <td> {{ obj.equipmentSM_ver.all.last.datedead|date:"d.m.Y"  }}</td>
+        <td> {{ obj.equipmentSM_ver.all.last.statusver|default:" " }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{#конец таблицы для вывода поверки#}
+<br>
+{#форма для добавления поверки#}
+    <form method="post" enctype="multipart/form-data" class="form-register">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-outline-warning" type="submit">Отправить</button>
+    </form>
+{#конец формы для добавления поверки#}
+{% endblock %}

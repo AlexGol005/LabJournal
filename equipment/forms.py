@@ -5,7 +5,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
 
 
-from equipment.models import MeasurEquipment, CommentsEquipment, NOTETYPE
+from equipment.models import MeasurEquipment, CommentsEquipment, NOTETYPE, Equipment, CHOICES
 
 
 class SearchMEForm(forms.Form):
@@ -53,3 +53,24 @@ class NoteCreationForm(forms.ModelForm):
     class Meta:
         model = CommentsEquipment
         fields = ['type', 'note', 'img', 'author']
+
+
+class EquipmentUpdateForm(forms.ModelForm):
+    """форма для обновления разрешенных полей оборудования ответственному за оборудование"""
+    status = forms.ChoiceField(label='Выберите статус прибора (если требуется изменить статус)', required=False,
+                                  choices=CHOICES,
+                                  widget=forms.Select(attrs={'class': 'form-control'}))
+    individuality = forms.CharField(label='Индивидуальные особенности прибора', max_length=10000, required=False,
+                           widget=forms.Textarea(attrs={'class': 'form-control'}))
+    notemaster = forms.CharField(label='Примечание (или временное предостережение)', max_length=10000, required=False,
+                                    widget=forms.Textarea(attrs={'class': 'form-control'}))
+    imginstruction2 = forms.ImageField(label='Внутренняя инструкция загрузить фото',  widget=forms.FileInput,
+                                       required=False,)
+    video = forms.CharField(label='Видео к прибору', max_length=10000, required=False,
+                                    widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                 'placeholder': 'добавьте ссылку на видео'}))
+
+
+    class Meta:
+        model = Equipment
+        fields = ['status', 'individuality', 'notemaster', 'imginstruction2', 'video']

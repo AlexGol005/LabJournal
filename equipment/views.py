@@ -1,5 +1,6 @@
 import xlwt
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from datetime import datetime, timedelta
 from django.db.models import Max, Q, F, Value
@@ -9,7 +10,7 @@ from django.template.defaultfilters import upper
 from django.views import View
 from django.views.generic import ListView, TemplateView
 
-from equipment.forms import SearchMEForm, NoteCreationForm
+from equipment.forms import SearchMEForm, NoteCreationForm, EquipmentUpdateForm
 from equipment.models import MeasurEquipment, Verificationequipment, Roomschange, Personchange, CommentsEquipment, \
     Equipment
 
@@ -17,12 +18,14 @@ URL = 'equipment'
 
 class MeasurEquipmentView(ListView):
     """ Выводит список средств измерений """
-    model = MeasurEquipment
     template_name = URL + '/measureequipment.html'
     context_object_name = 'objects'
     ordering = ['charakters__name']
     paginate_by = 12
 
+    def get_queryset(self):
+        queryset = MeasurEquipment.objects.exclude(equipment__status='С')
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super(MeasurEquipmentView, self).get_context_data(**kwargs)
@@ -186,6 +189,67 @@ class CommentsView(View):
             messages.success(request, f'Запись добавлена!')
             return redirect(order)
 
+
+
+def EquipmentUpdate(request, str):
+    """выводит форму для обновления разрешенных полей оборудования ответственному за оборудование"""
+    title = Equipment.objects.get(exnumber=str)
+    get_pk = title.personchange_set.latest('pk').pk
+    person = Personchange.objects.get(pk=get_pk).person
+
+    if person == request.user or request.user.is_superuser:
+        if request.method == "POST":
+            form = EquipmentUpdateForm(request.POST, request.FILES,  instance=Equipment.objects.get(exnumber=str))
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.save()
+                return redirect(order)
+    if person != request.user and not request.user.is_superuser:
+        form = EquipmentUpdateForm(request.POST, request.FILES,  instance=Equipment.objects.get(exnumber=str))
+        order = form.save(commit=False)
+        messages.success(request, f' Для внесения записей о приборе нажмите на кнопку ниже:'
+                                  f' "Внести запись о приборе и смотреть записи (для всех пользователей)"'
+                                  f'. Добавить особенности работы или поменять статус может только ответственный '
+                                  f'за прибор или поверку.')
+
+        return redirect(order)
+
+    else:
+        form = EquipmentUpdateForm(instance=Equipment.objects.get(exnumber=str))
+    data = {'form': form, 'title': title
+            }
+    return render(request, 'equipment/individuality.html', data)
+
+class VerificationequipmentView(View):
+    """ выводит историю поверок и форму для добавления поверки прибора """
+    # form_class = NoteCreationForm
+    # initial = {'key': 'value'}
+    # template_name = 'equipment/verification.html'
+
+    def get(self, request, str):
+        note = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str)
+        calinterval = note.latest('pk').equipmentSM.charakters.calinterval
+        title = Equipment.objects.get(exnumber=str)
+        form = 1
+        data = {'note': note,
+                'title': title,
+                'form': form,
+                'calinterval': calinterval
+                }
+        return render(request, 'equipment/verification.html', data)
+
+    # def post(self, request, str, *args, **kwargs):
+    #     form = NoteCreationForm(request.POST, request.FILES)
+    #     if form.is_valid():
+    #         order = form.save(commit=False)
+    #         if request.user and not order.author:
+    #             order.author = request.user
+    #         if not request.user and order.author:
+    #             order.author = order.author
+    #         order.forNote = Equipment.objects.get(exnumber=str)
+    #         order.save()
+    #         messages.success(request, f'Запись добавлена!')
+    #         return redirect(order)
 
 
 # -------------------

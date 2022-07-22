@@ -64,7 +64,7 @@
         <td> {{ obj.equipment.yearmanuf }}</td>
         <td> {{ obj.equipment.roomschange_set.all.last.roomnumber.roomnumber }}</td>
         <td> {{ obj.equipment.personchange_set.all.last.person }}</td>
-        <td> {{ obj.equipment.status }}</td>
+        <td> {{ obj.equipment.get_status_display }}</td>
         <td> {{ obj.equipmentSM_ver.all.last.datedead|date:"d.m.Y"  }}</td>
         <td> {{ obj.equipmentSM_ver.all.last.statusver|default:" " }}</td>
         <td> {{ obj.equipmentSM_ver.all.last.statusmoney|default:" " }}</td>

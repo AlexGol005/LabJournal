@@ -6,7 +6,8 @@ from decimal import *
 from django.urls import reverse
 
 CHOICES = (
-        ('Э', 'В эксплуатации'),
+        ('Э', 'Эксплуатация'),
+        ('РЕ', 'Ремонт'),
         ('С', 'Списан'),
         ('Р', 'Резерв'),
         ('Д', 'Другое'),
@@ -54,7 +55,7 @@ class Verificators(models.Model):
 
 class VerificatorPerson(models.Model):
     verificator = models.ForeignKey(Verificators, on_delete=models.PROTECT, blank=True, null=True)
-    name = models.CharField('ИМЯ', max_length=100, blank=True, null=True, default='Неизвестно')
+    name = models.CharField('ИМЯ', max_length=100, blank=True, null=True, default=' ')
     departament = models.CharField('отдел', max_length=100, blank=True, null=True)
     dop = models.CharField('Примечание', max_length=200, blank=True, null=True)
     telnumber = models.CharField('Телефон', max_length=200, default='', blank=True)
@@ -95,16 +96,22 @@ class Equipment(models.Model):
     lot = models.CharField('Заводской номер', max_length=100, default='')
     yearmanuf = models.IntegerField('Год выпуска', default='', blank=True, null=True)
     manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT, verbose_name='Производитель')
-    status = models.CharField(max_length=300, choices=CHOICES, default='В эксплуатации', null=True, verbose_name='Статус')
-    docs = models.TextField('Перечень документов и принадлежностей', max_length=1000, default='', blank=True, null=True)
+    status = models.CharField(max_length=300, choices=CHOICES, default='В эксплуатации', null=True,
+                              verbose_name='Статус')
     yearintoservice = models.IntegerField('Год ввода в эксплуатацию', default='0', blank=True, null=True)
     new = models.CharField('Новый или б/у', max_length=100, default='новый')
     invnumber = models.CharField('Инвентарный номер', max_length=100, default='', blank=True, null=True)
-    kategory = models.CharField(max_length=300, choices=KATEGORY, default='Средство измерения', null=True, verbose_name='Категория')
-    imginstruction1 = models.ImageField('Паспорт', upload_to='user_images', blank=True, null=True)
-    imginstruction2 = models.ImageField('Внутренняя инструкция', upload_to='user_images', blank=True, null=True)
-    imginstruction3 = models.ImageField('Право владения', upload_to='user_images', blank=True, null=True)
+    kategory = models.CharField(max_length=300, choices=KATEGORY, default='Средство измерения', null=True,
+                                verbose_name='Категория')
+    imginstruction1 = models.ImageField('Паспорт', upload_to='user_images', blank=True, null=True,
+                                        default='user_images/default.png')
+    imginstruction2 = models.ImageField('Внутренняя инструкция', upload_to='user_images', blank=True, null=True,
+                                        default='user_images/default.png')
+    imginstruction3 = models.ImageField('Право владения', upload_to='user_images', blank=True, null=True,
+                                        default='user_images/default.png')
     individuality = models.TextField('Индивидуальные особенности прибора',  blank=True, null=True)
+    video = models.CharField('Ссылка на видео', max_length=1000,  blank=True, null=True)
+    notemaster = models.TextField('Примечание ответственного за прибор',  blank=True, null=True)
 
 
     def __str__(self):
@@ -114,24 +121,27 @@ class Equipment(models.Model):
         super().save()
         if self.imginstruction1:
             image1 = Image.open(self.imginstruction1.path)
-            if image1.height > 500 or image1.width > 500:
-                resize = (500, 500)
+            if image1.height > 1000 or image1.width > 1000:
+                resize = (1000, 1000)
                 image1.thumbnail(resize)
                 image1.save(self.imginstruction1.path)
         if self.imginstruction2:
             image2 = Image.open(self.imginstruction2.path)
-            if image2.height > 500 or image1.width > 500:
-                resize = (500, 500)
+            if image2.height > 1000 or image2.width > 1000:
+                resize = (1000, 1000)
                 image2.thumbnail(resize)
                 image2.save(self.imginstruction2.path)
         if self.imginstruction3:
             image3 = Image.open(self.imginstruction3.path)
-            if image3.height > 500 or image3.width > 500:
-                resize = (500, 500)
+            if image3.height > 1000 or image3.width > 1000:
+                resize = (1000, 1000)
                 image3.thumbnail(resize)
                 image3.save(self.imginstruction3.path)
 
 
+    def get_absolute_url(self):
+        """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
+        return reverse('measureequipmentpk', kwargs={'str': self.exnumber})
 
     class Meta:
         verbose_name = 'Прибор'
@@ -160,6 +170,20 @@ class Roomschange(models.Model):
     class Meta:
         verbose_name = 'Дата перемещения прибора'
         verbose_name_plural = 'Даты перемещения приборов'
+
+
+class DocsCons(models.Model):
+    date = models.DateField('Дата появления', auto_now_add=True, db_index=True)
+    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Оборудование')
+    docs = models.TextField('Документ или принадлежность (1 или несколько)', max_length=1000, default='', blank=True, null=True)
+    source = models.CharField('Откуда появился', max_length=1000, default='От поставщика', blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.equipment.exnumber} Перемещено {self.date} '
+
+    class Meta:
+        verbose_name = 'Документы к прибору'
+        verbose_name_plural = 'Документы к приборам'
 
 
 
@@ -215,7 +239,8 @@ class Verificationequipment(models.Model):
     statusmoney = models.CharField('Статус оплаты', max_length=90, blank=True, null=True)
     verificatorperson = models.ForeignKey(VerificatorPerson, on_delete=models.PROTECT,
                                           verbose_name='Поверитель Имя', blank=True, null=True)
-    type = models.CharField('На месте/выездная', max_length=90, blank=True, null=True)
+    type = models.CharField('В Петроаналитике/У поверителя', max_length=90, blank=True, null=True)
+    note = models.CharField('Примечание', max_length=900, blank=True, null=True)
 
     def __str__(self):
         return f'Поверка {self.equipmentSM.charakters.name} вн № {self.equipmentSM.equipment.exnumber}'
