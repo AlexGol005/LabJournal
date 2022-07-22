@@ -239,7 +239,7 @@ class Verificationequipment(models.Model):
     statusmoney = models.CharField('Статус оплаты', max_length=90, blank=True, null=True)
     verificator = models.ForeignKey(Verificators, on_delete=models.PROTECT,
                                           verbose_name='Поверитель', blank=True, null=True,
-                                    default='ФБУ "ТЕСТ-С.-ПЕТЕРБУРГ"')
+                                    default='')
     verificatorperson = models.ForeignKey(VerificatorPerson, on_delete=models.PROTECT,
                                     verbose_name='Поверитель имя', blank=True, null=True)
 
