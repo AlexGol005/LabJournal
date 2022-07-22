@@ -218,27 +218,26 @@ class VerificationequipmentView(View):
 
 
 def VerificationReg(request, str):
-    """выводит форму для обновления разрешенных полей оборудования ответственному за оборудование"""
+    """выводит форму для внесения сведений о поверке"""
     title = Equipment.objects.get(exnumber=str)
     if request.user.is_superuser:
         if request.method == "POST":
-            form = EquipmentUpdateForm(request.POST, request.FILES,  instance=Equipment.objects.get(exnumber=str))
+            form = VerificationRegForm(request.POST, request.FILES)
             if form.is_valid():
                 order = form.save(commit=False)
                 order.save()
                 return redirect(order)
     if not request.user.is_superuser:
-        form = EquipmentUpdateForm(request.POST, request.FILES,  instance=Equipment.objects.get(exnumber=str))
+        form = VerificationRegForm(request.POST, request.FILES)
         order = form.save(commit=False)
         messages.success(request, 'Раздел доступен только инженеру по оборудованию')
         return redirect(order)
-
     else:
-        form = EquipmentUpdateForm(instance=Equipment.objects.get(exnumber=str))
+        form = VerificationRegForm()
     data = {'form': form,
             'title': title
             }
-    return render(request, 'equipment/individuality.html', data)
+    return render(request, 'equipment/verificationreg.html', data)
 
 # -------------------
 
