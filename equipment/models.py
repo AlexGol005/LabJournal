@@ -237,9 +237,9 @@ class Verificationequipment(models.Model):
     img = models.ImageField('Сертификат', upload_to='user_images', blank=True, null=True)
     statusver = models.CharField('Статус поверки', max_length=90, blank=True, null=True)
     statusmoney = models.CharField('Статус оплаты', max_length=90, blank=True, null=True)
-    verificator = models.ForeignKey(Verificators, on_delete=models.PROTECT,
-                                          verbose_name='Поверитель', blank=True, null=True,
-                                    default='')
+    # verificator = models.ForeignKey(Verificators, on_delete=models.PROTECT,
+    #                                       verbose_name='Поверитель', blank=True, null=True)
+
     verificatorperson = models.ForeignKey(VerificatorPerson, on_delete=models.PROTECT,
                                     verbose_name='Поверитель имя', blank=True, null=True)
 
