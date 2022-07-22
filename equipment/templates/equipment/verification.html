@@ -20,20 +20,22 @@
             <th> Поверка заказ </th>
             <th> Ссылка ФГИС</th>
             <th> Место поверки </th>
-            <th> Статус поверки и оплаты</th>
             <th> Поверитель </th>
-            <th> Поверитель имя, телефон </th>
+            <th> Исполнитель </th>
             <th> Примечание </th>
-            <th> Цена </th>
-            <th> Серт-т </th>
+            <th> Стоимость, <br> руб </th>
+            <th> Сертификат </th>
          </tr>
     </thead>
     <tbody>
     {% for obj in note %}
-         <td> {{ obj.date|date:"d.m.y" }}</td>
-         <td> {{ obj.datedead|date:"d.m.y" }}</td>
-         <td> {{ obj.dateorder|date:"d.m.y" }}</td>
-        <td class="ind">
+
+        {% if obj.datedead >  now %}
+            <tr>
+         <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.date|date:"d.m.y" }} </td>
+         <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.datedead|date:"d.m.y" }}</td>
+         <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.dateorder|date:"d.m.y" }}</td>
+        <td class="ind" style="background-color: rgba(168,255,18,0.37) !important">
              {% if obj.arshin %}
               <a href="{{ obj.arshin}}"  target="blank" >
              Аршин
@@ -42,25 +44,76 @@
              отсутствует
              {% endif %}
          </td>
-        <td> {{ obj.type }}</td>
-        <td> {{ obj.statusver }} {{ obj.statusmoney }}
+        <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.type }}</td>
+        <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.verificator.companyName }}</td>
+        <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.verificatorperson.name|default:" " }}
+        {% if obj.verificatorperson.telnumber %}
+        телефон {{ obj.verificatorperson.telnumber|default:" " }}
+        {% endif %}
+        {% if obj.verificatorperson.departament %}
+        отдел {{ obj.verificatorperson.departament|default:" " }}
+        {% endif %}
+        {% if obj.verificatorperson.dop %}
+        примечание {{ obj.verificatorperson.dop|default:" " }}
+        {% endif %}
         </td>
-        <td> {{ obj.verificatorperson.name|default:" " }}</td>
-        <td> {{ obj.equipment.personchange_set.all.last.person }}</td>
-        <td> {{ obj.equipment.get_status_display }}</td>
-        <td> {{ obj.equipmentSM_ver.all.last.datedead|date:"d.m.Y"  }}</td>
-        <td> {{ obj.equipmentSM_ver.all.last.statusver|default:" " }}</td>
+        <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.note|default:" " }}</td>
+        <td style="background-color: rgba(168,255,18,0.37) !important">{{ obj.price|default:" "  }}</td>
+        <td style="background-color: rgba(168,255,18,0.37) !important">
+            {% if obj.img %}
+        <a href="{{ obj.arshin}}"  target="blank" >
+             {{ obj.certnumber|default:" "}}
+                  </a>
+        {% endif %}
+        {{ obj.certnumber|default:" "}}
+        </td>
     </tr>
+
+        {% endif %}
+        {% if obj.datedead <= now %}
+            <tr>
+         <td> {{ obj.date|date:"d.m.y" }}</td>
+         <td > {{ obj.datedead|date:"d.m.y" }}</td>
+         <td > {{ obj.dateorder|date:"d.m.y" }}</td>
+        <td class="ind" >
+             {% if obj.arshin %}
+              <a href="{{ obj.arshin}}"  target="blank" >
+             Аршин
+                  </a>
+             {% else  %}
+             отсутствует
+             {% endif %}
+         </td>
+        <td > {{ obj.type }}</td>
+        <td > {{ obj.verificator.companyName }}</td>
+        <td > {{ obj.verificatorperson.name|default:" " }}
+        {% if obj.verificatorperson.telnumber %}
+        телефон {{ obj.verificatorperson.telnumber|default:" " }}
+        {% endif %}
+        {% if obj.verificatorperson.departament %}
+        отдел {{ obj.verificatorperson.departament|default:" " }}
+        {% endif %}
+        {% if obj.verificatorperson.dop %}
+        примечание {{ obj.verificatorperson.dop|default:" " }}
+        {% endif %}
+        </td>
+        <td style=> {{ obj.note|default:" " }}</td>
+        <td style=> {{ obj.price|default:" "  }}</td>
+        <td style=>
+            {% if obj.img %}
+        <a href="{{ obj.arshin}}"  target="blank" >
+             {{ obj.certnumber|default:" "}}
+                  </a>
+        {% endif %}
+        {{ obj.certnumber|default:" "}}
+        </td>
+    </tr>
+        {% endif %}
+
     {% endfor %}
     </tbody>
 </table>
 {#конец таблицы для вывода поверки#}
 <br>
-{#форма для добавления поверки#}
-    <form method="post" enctype="multipart/form-data" class="form-register">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button class="btn btn-outline-warning" type="submit">Отправить</button>
-    </form>
-{#конец формы для добавления поверки#}
+
 {% endblock %}

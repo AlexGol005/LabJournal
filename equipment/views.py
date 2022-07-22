@@ -1,4 +1,5 @@
 import xlwt
+from datetime import timedelta, date
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -137,31 +138,12 @@ class SearchResultMeasurEquipmentView(TemplateView):
 
 
 class StrMeasurEquipmentView(View):
-    """ выводит отдельную запись и форму добавления в ЖАЗ """
-    """Стандартная"""
-
+    """ выводит страницу СИ """
     def get(self, request, str):
         obj = get_object_or_404(MeasurEquipment, equipment__exnumber=str)
-        # form = StrJournalUdateForm()
-        # try:
-        #     counter = COMMENTMODEL.objects.filter(forNote=note.id)
-        # except ObjectDoesNotExist:
-        #     counter = None
         return render(request, URL + '/equipmentstr.html',
                       {'obj': obj})
 
-    # def post(self, request, pk, *args, **kwargs):
-    #     if MODEL.objects.get(id=pk).performer == request.user:
-    #         form = StrJournalUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
-    #         if form.is_valid():
-    #             order = form.save(commit=False)
-    #             order.save()
-    #             return redirect(order)
-    #     else:
-    #         form = StrJournalUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
-    #         order = form.save(commit=False)
-    #         messages.success(request, f'АЗ не подтверждено! Подтвердить АЗ может только исполнитель данного измерения!')
-    #         return redirect(order)
 
 class CommentsView(View):
     """ выводит комментарии к записи в журнале и форму для добавления комментариев """
@@ -222,35 +204,41 @@ def EquipmentUpdate(request, str):
 
 class VerificationequipmentView(View):
     """ выводит историю поверок и форму для добавления поверки прибора """
-    # form_class = NoteCreationForm
-    # initial = {'key': 'value'}
-    # template_name = 'equipment/verification.html'
-
     def get(self, request, str):
-        note = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str)
+        note = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).order_by('-pk')
         calinterval = note.latest('pk').equipmentSM.charakters.calinterval
         title = Equipment.objects.get(exnumber=str)
-        form = 1
+        now = date.today()
         data = {'note': note,
                 'title': title,
-                'form': form,
-                'calinterval': calinterval
+                'calinterval': calinterval,
+                'now': now
                 }
         return render(request, 'equipment/verification.html', data)
 
-    # def post(self, request, str, *args, **kwargs):
-    #     form = NoteCreationForm(request.POST, request.FILES)
-    #     if form.is_valid():
-    #         order = form.save(commit=False)
-    #         if request.user and not order.author:
-    #             order.author = request.user
-    #         if not request.user and order.author:
-    #             order.author = order.author
-    #         order.forNote = Equipment.objects.get(exnumber=str)
-    #         order.save()
-    #         messages.success(request, f'Запись добавлена!')
-    #         return redirect(order)
 
+def VerificationReg(request, str):
+    """выводит форму для обновления разрешенных полей оборудования ответственному за оборудование"""
+    title = Equipment.objects.get(exnumber=str)
+    if request.user.is_superuser:
+        if request.method == "POST":
+            form = EquipmentUpdateForm(request.POST, request.FILES,  instance=Equipment.objects.get(exnumber=str))
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.save()
+                return redirect(order)
+    if not request.user.is_superuser:
+        form = EquipmentUpdateForm(request.POST, request.FILES,  instance=Equipment.objects.get(exnumber=str))
+        order = form.save(commit=False)
+        messages.success(request, 'Раздел доступен только инженеру по оборудованию')
+        return redirect(order)
+
+    else:
+        form = EquipmentUpdateForm(instance=Equipment.objects.get(exnumber=str))
+    data = {'form': form,
+            'title': title
+            }
+    return render(request, 'equipment/individuality.html', data)
 
 # -------------------
 

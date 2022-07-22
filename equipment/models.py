@@ -237,8 +237,12 @@ class Verificationequipment(models.Model):
     img = models.ImageField('Сертификат', upload_to='user_images', blank=True, null=True)
     statusver = models.CharField('Статус поверки', max_length=90, blank=True, null=True)
     statusmoney = models.CharField('Статус оплаты', max_length=90, blank=True, null=True)
+    verificator = models.ForeignKey(Verificators, on_delete=models.PROTECT,
+                                          verbose_name='Поверитель', blank=True, null=True,
+                                    default='ФБУ "ТЕСТ-С.-ПЕТЕРБУРГ"')
     verificatorperson = models.ForeignKey(VerificatorPerson, on_delete=models.PROTECT,
-                                          verbose_name='Поверитель Имя', blank=True, null=True)
+                                    verbose_name='Поверитель имя', blank=True, null=True)
+
     type = models.CharField('В Петроаналитике/У поверителя', max_length=90, blank=True, null=True)
     note = models.CharField('Примечание', max_length=900, blank=True, null=True)
 
