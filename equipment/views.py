@@ -11,7 +11,7 @@ from django.template.defaultfilters import upper
 from django.views import View
 from django.views.generic import ListView, TemplateView
 
-from equipment.forms import SearchMEForm, NoteCreationForm, EquipmentUpdateForm
+from equipment.forms import SearchMEForm, NoteCreationForm, EquipmentUpdateForm, VerificationRegForm
 from equipment.models import MeasurEquipment, Verificationequipment, Roomschange, Personchange, CommentsEquipment, \
     Equipment
 
