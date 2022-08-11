@@ -1,6 +1,8 @@
 # все стандратно кроме поиска по полям, импорта моделей и констант
+import xlwt
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, TemplateView
 from datetime import datetime, timedelta
@@ -271,3 +273,87 @@ def filterview(request, pk):
 
 
 # url of this view is 'search_result'
+# --------------------------------
+def export_me_xls(request):
+    '''представление для выгрузки отдельной странички  в ексель'''
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="measure equipment.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('График поверки СИ', cell_overwrite_ok=True)
+
+    # ширина столбцов
+    # ws.col(2).width = 4500
+    # ws.col(8).width = 3000
+
+    # заголовки, первый ряд
+    row_num = 0
+
+    def set_style_top():
+        style = xlwt.XFStyle()
+        style.font.bold = True
+        style.font.name = 'Calibri'
+        style.borders.left = 1
+        style.borders.right = 1
+        style.borders.top = 1
+        style.borders.bottom = 1
+
+        style.alignment.wrap = 1
+        style.alignment.horz = 0x02
+        style.alignment.vert = 0x01
+
+
+        pattern = xlwt.Pattern()
+        pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+        pattern.pattern_fore_colour = xlwt.Style.colour_map['tan']
+        style.pattern = pattern
+
+        return style
+    a = ViscosityMJL.objects.get(pk=175).pk
+    columns = [
+                 'ff'
+               ]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], set_style_top())
+        # ws.merge(0, 0, 3, 4)
+
+    wb.save(response)
+    return response
+
+    # значения, остальные ряды
+    # def set_style_body():
+    #     style = xlwt.XFStyle()
+    #
+    #     style.font.name = 'Calibri'
+    #
+    #     style.borders.left = 1
+    #     style.borders.right = 1
+    #     style.borders.top = 1
+    #     style.borders.bottom = 1
+    #
+    #     style.alignment.wrap = 1
+    #     style.alignment.horz = 0x02
+    #     style.alignment.vert = 0x01
+    #     return style
+    #
+    # get_id_room = Roomschange.objects.select_related('equipment').values('equipment'). \
+    #     annotate(id_actual=Max('id')).values('id_actual')
+    # list_ = list(get_id_room)
+    # setroom = []
+    # for n in list_:
+    #     setroom.append(n.get('id_actual'))
+    #
+    # get_id_person = Personchange.objects.select_related('equipment').values('equipment'). \
+    #     annotate(id_actual=Max('id')).values('id_actual')
+    # list_ = list(get_id_person)
+    # setperson = []
+    # for n in list_:
+    #     setperson.append(n.get('id_actual'))
+    #
+    # get_id_verification = Verificationequipment.objects.select_related('equipmentSM').values('equipmentSM'). \
+    #     annotate(id_actual=Max('id')).values('id_actual')
+    # list_ = list(get_id_verification)
+    # setver = []
+    # for n in list_:
+    #     setver.append(n.get('id_actual'))

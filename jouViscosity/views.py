@@ -1,6 +1,7 @@
 from datetime import timedelta, date
 
-
+import xlwt
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView, TemplateView
@@ -196,3 +197,4 @@ class DetailDinamicView(View):
                 'objects': objects,
             }
             return render(request, template, context)
+

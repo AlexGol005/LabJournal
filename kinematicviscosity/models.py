@@ -237,7 +237,7 @@ class ViscosityMJL(models.Model):
         super(ViscosityMJL, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f' {self.name}  п.{self.lot};  {self.temperature} t ℃;   {self.date}'
+        return f' {self.name}  п.{self.lot};  {self.temperature} t ℃;   {self.date}; pk={self.pk}'
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
