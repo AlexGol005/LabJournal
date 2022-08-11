@@ -18,6 +18,7 @@ urlpatterns = [
     # path('CertifiedValueJ/', include('jouPetroleumChlorineImpurityWater.urls')),
     # path('CertifiedValueJ/', include('jougascondensate.urls')),
     path('attestationJ/clorinesalts/', include('clorinesalts.urls')),
+    path('productionJ/clorinesaltsprod/', include('clorinesaltsprod.urls')),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,17 @@
+{% extends 'main/Journal.html' %}
+{% load static %}
+{% block uniccontent %}
+    <div style="text-align: center;"><h6>Этикетки на растворы</h6></div>
+<div style="text-align: center;"><a href="{% url 'clorinesaltsbottles' %}" class="btn btn-info mt-3">Этикетки</a></div>
+<br>
+
+<div style="text-align: center;"><h5>Хлорид лития</h5></div>
+<div style="text-align: center;"><a href="{% url 'titranthgreg' %}" class="btn btn-info mt-3 mr-3" style="width: 260px">внести определение доли Cl<sup>-</sup></a>
+<a href="{% url 'allhg' %}" class="btn btn-info mt-3" style="width: 260px">Смотреть определения Cl<sup>-</sup></a>
+</div>
+
+
+<div style="text-align: center; margin-top: 20px"><img src="{% static 'main/img/clorinesalts.jpg' %}"
+                              alt="ХС"></div>
+
+{% endblock %}
