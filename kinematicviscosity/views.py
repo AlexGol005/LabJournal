@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from xlwt import Borders, Alignment
 
 from jouViscosity.models import CvKinematicviscosityVG
 from main.models import AttestationJ
@@ -274,86 +275,153 @@ def filterview(request, pk):
 
 # url of this view is 'search_result'
 # --------------------------------
-def export_me_xls(request):
+def export_me_xls(request, pk):
     '''представление для выгрузки отдельной странички  в ексель'''
+    note = ViscosityMJL.objects.get(pk=pk)
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="measure equipment.xls"'
+    response['Content-Disposition'] = f'attachment; filename="{note.pk}.xls"'
 
     wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('График поверки СИ', cell_overwrite_ok=True)
+    ws = wb.add_sheet(f'{note.name}, п. {note.lot},{note.temperature}', cell_overwrite_ok=True)
 
     # ширина столбцов
-    # ws.col(2).width = 4500
-    # ws.col(8).width = 3000
+    ws.col(0).width = 4100
+    ws.col(1).width = 4100
+    ws.col(2).width = 4100
+    ws.col(5).width = 4100
 
-    # заголовки, первый ряд
+
+    brd1 = Borders()
+    brd1.left = 1
+    brd1.right = 1
+    brd1.top = 1
+    brd1.bottom = 1
+
+    al1 = Alignment()
+    al1.horz = Alignment.HORZ_CENTER
+    al1.vert = Alignment.VERT_CENTER
+
+
+    style1 = xlwt.XFStyle()
+    style1.font.bold = True
+    style1.font.name = 'Calibri'
+    style1.borders = brd1
+    style1.alignment = al1
+    style1.alignment.wrap = 1
+
+    style2 = xlwt.XFStyle()
+    style2.font.name = 'Calibri'
+    style2.borders = brd1
+    style2.alignment = al1
+
+    style3 = xlwt.XFStyle()
+    style3.font.name = 'Calibri'
+    style3.borders = brd1
+    style3.alignment = al1
+    style3.num_format_str = 'D.MM.YYYY'
+
+
+
     row_num = 0
-
-    def set_style_top():
-        style = xlwt.XFStyle()
-        style.font.bold = True
-        style.font.name = 'Calibri'
-        style.borders.left = 1
-        style.borders.right = 1
-        style.borders.top = 1
-        style.borders.bottom = 1
-
-        style.alignment.wrap = 1
-        style.alignment.horz = 0x02
-        style.alignment.vert = 0x01
-
-
-        pattern = xlwt.Pattern()
-        pattern.pattern = xlwt.Pattern.SOLID_PATTERN
-        pattern.pattern_fore_colour = xlwt.Style.colour_map['tan']
-        style.pattern = pattern
-
-        return style
-    a = ViscosityMJL.objects.get(pk=175).pk
     columns = [
-                 'ff'
+                 f'Атт.-ВЖ-(МИ № 02-2018)-{note.date}'
                ]
 
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], set_style_top())
-        # ws.merge(0, 0, 3, 4)
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(0, 0, 0, 5, style1)
+
+    row_num = 1
+    columns = [
+        f'Определение кинематической вязкости, метод: { note.ndocument }'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(1, 1, 0, 5, style1)
+
+    row_num = 2
+    columns = [
+        'Дата измерения',
+        'Наименование',
+        'Номер партии',
+        'Т °C',
+        'Термост. 20 мин',
+        'Сод. нефть или октол',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+
+    row_num = 3
+    columns = [
+        note.date,
+        note.name,
+        note.lot,
+        note.temperature,
+        'V',
+        note.constit,
+    ]
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], style3)
+
+    row_num = 4
+    columns = [
+        'Проведение измерений'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(4, 4, 0, 5, style1)
+
+    row_num = 5
+    columns = [
+        '№ виск-ра',
+        str(note.ViscosimeterNumber1),
+        str(note.ViscosimeterNumber1),
+        str(note.ViscosimeterNumber2),
+    ]
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], style1)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(5, 5, 1, 2, style2)
+        ws.merge(5, 5, 3, 5, style2)
+
+    row_num = 6
+    columns = [
+        'Константа вискозиметра, мм2/с2',
+        'К1',
+        'К1',
+        'К2',
+    ]
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(6, 7, 0, 0, style1)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(6, 6, 1, 2, style2)
+        ws.merge(6, 6, 3, 5, style2)
+
+    row_num = 7
+    columns = [
+        'Константа вискозиметра, мм2/с2',
+        note.Konstant1,
+        note.Konstant1,
+        note.Konstant2,
+    ]
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(7, 7, 1, 2, style2)
+        ws.merge(7, 7, 3, 5, style2)
+
+
+
+
+
+
+
+
 
     wb.save(response)
     return response
 
-    # значения, остальные ряды
-    # def set_style_body():
-    #     style = xlwt.XFStyle()
-    #
-    #     style.font.name = 'Calibri'
-    #
-    #     style.borders.left = 1
-    #     style.borders.right = 1
-    #     style.borders.top = 1
-    #     style.borders.bottom = 1
-    #
-    #     style.alignment.wrap = 1
-    #     style.alignment.horz = 0x02
-    #     style.alignment.vert = 0x01
-    #     return style
-    #
-    # get_id_room = Roomschange.objects.select_related('equipment').values('equipment'). \
-    #     annotate(id_actual=Max('id')).values('id_actual')
-    # list_ = list(get_id_room)
-    # setroom = []
-    # for n in list_:
-    #     setroom.append(n.get('id_actual'))
-    #
-    # get_id_person = Personchange.objects.select_related('equipment').values('equipment'). \
-    #     annotate(id_actual=Max('id')).values('id_actual')
-    # list_ = list(get_id_person)
-    # setperson = []
-    # for n in list_:
-    #     setperson.append(n.get('id_actual'))
-    #
-    # get_id_verification = Verificationequipment.objects.select_related('equipmentSM').values('equipmentSM'). \
-    #     annotate(id_actual=Max('id')).values('id_actual')
-    # list_ = list(get_id_verification)
-    # setver = []
-    # for n in list_:
-    #     setver.append(n.get('id_actual'))
