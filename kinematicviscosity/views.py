@@ -284,11 +284,26 @@ def export_me_xls(request, pk):
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet(f'{note.name}, п. {note.lot},{note.temperature}', cell_overwrite_ok=True)
 
+
+    for i in range(21):
+        ws.row(i).height_mismatch = True
+        ws.row(i).height = 600
+
+    ws.row(21).height_mismatch = True
+    ws.row(21).height = 800
+
+    for i in range(22, 25):
+        ws.row(i).height_mismatch = True
+        ws.row(i).height = 600
+
+
+
     # ширина столбцов
     ws.col(0).width = 4100
     ws.col(1).width = 4100
     ws.col(2).width = 4100
     ws.col(5).width = 4100
+
 
 
     brd1 = Borders()
@@ -318,9 +333,19 @@ def export_me_xls(request, pk):
     style3.font.name = 'Calibri'
     style3.borders = brd1
     style3.alignment = al1
-    style3.num_format_str = 'D.MM.YYYY'
+    style3.num_format_str = 'DD.MM.YYYY'
 
+    style4 = xlwt.XFStyle()
+    style4.font.name = 'Calibri'
+    style4.borders = brd1
+    style4.alignment = al1
+    style4.num_format_str = '0.00'
 
+    style5 = xlwt.XFStyle()
+    style5.font.name = 'Calibri'
+    style5.borders = brd1
+    style5.alignment = al1
+    style5.num_format_str = '0.00000'
 
     row_num = 0
     columns = [
@@ -360,10 +385,12 @@ def export_me_xls(request, pk):
         'V',
         note.constit,
     ]
-    for col_num in range(1, len(columns)):
+    for col_num in range(1, 4):
         ws.write(row_num, col_num, columns[col_num], style2)
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], style3)
+    for col_num in range(3, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style4)
 
     row_num = 4
     columns = [
@@ -414,13 +441,226 @@ def export_me_xls(request, pk):
         ws.merge(7, 7, 1, 2, style2)
         ws.merge(7, 7, 3, 5, style2)
 
+    row_num = 8
+    columns = [
+        'Время истечения 1, τ1',
+        'τ11, минут',
+        'τ11, секунд',
+        'τ21, минут',
+        'τ21, минут',
+        'τ21, секунд',
+    ]
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(8, 9, 0, 0, style1)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(8, 8, 3, 4, style1)
 
+    row_num = 9
+    columns = [
+        'Время истечения 1, τ1',
+        f'{note.plustimeminK1T1}:{ note.plustimesekK1T1}',
+        note.timeK1T1_sec,
+        f'{note.plustimeminK2T1}:{ note.plustimesekK2T1}',
+        f'{note.plustimeminK2T1}:{ note.plustimesekK2T1}',
+        note.timeK2T1_sec,
+    ]
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style4)
+        ws.merge(9, 9, 3, 4, style4)
 
+    row_num = 10
+    columns = [
+        'Время истечения 2, τ2',
+        'τ21, минут',
+        'τ21, секунд',
+        'τ22, минут',
+        'τ22, минут',
+        'τ22, секунд',
+    ]
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(10, 11, 0, 0, style1)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(10, 10, 3, 4, style1)
 
+    row_num = 11
+    columns = [
+        'Время истечения 2, τ2',
+        f'{note.plustimeminK1T2}:{note.plustimesekK1T2}',
+        note.timeK1T2_sec,
+        f'{note.plustimeminK2T2}:{note.plustimesekK2T2}',
+        f'{note.plustimeminK2T2}:{note.plustimesekK2T2}',
+        note.timeK2T2_sec,
+    ]
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style4)
+        ws.merge(11, 11, 3, 4, style4)
 
+    row_num = 12
+    columns = [
+        'Время истечения среднее',
+        'τ1',
+        'τ2',
+        'τ2',
+    ]
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(12, 13, 0, 0, style1)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(12, 12, 1, 2, style2)
+        ws.merge(12, 12, 3, 5, style2)
 
+    row_num = 13
+    columns = [
+        'Время истечения среднее',
+         note.timeK1_avg,
+         note.timeK2_avg,
+         note.timeK2_avg,
+    ]
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style4)
+        ws.merge(13, 13, 1, 2, style4)
+        ws.merge(13, 13, 3, 5, style4)
 
+    row_num = 14
+    columns = [
+        'Вязкость кинематическая  νi= Кi * τi',
+        'ν1, мм2/с',
+        'ν2, мм2/с',
+        'ν2, мм2/с',
+    ]
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(14, 15, 0, 0, style1)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(14, 14, 1, 2, style2)
+        ws.merge(14, 14, 3, 5, style2)
 
+    row_num = 15
+    columns = [
+        'Вязкость кинематическая  νi= Кi * τi',
+        note.viscosity1,
+        note.viscosity2,
+        note.viscosity2,
+    ]
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style5)
+        ws.merge(15, 15, 1, 2, style5)
+        ws.merge(15, 15, 3, 5, style5)
+
+    row_num = 16
+    columns = [
+        'Обработка результатов'
+    ]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(16, 16, 0, 5, style1)
+
+    row_num = 17
+    columns = [
+        'νсред = (ν1 + ν2)/2',
+        'νсред = (ν1 + ν2)/2',
+        'Оценка приемл. изм. Δ = (|ν1 - ν2|)/νсред) * 100%',
+        'Оценка приемл. изм. Δ = (|ν1 - ν2|)/νсред) * 100%',
+        'Критерий приемлемости измерений, r',
+        'Критерий приемлемости измерений, r',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(17, 17, 0, 1, style1)
+        ws.merge(17, 17, 2, 3, style1)
+        ws.merge(17, 17, 4, 5, style1)
+
+    row_num = 18
+    columns = [
+        note.viscosityAVG,
+        note.viscosityAVG,
+        note.accMeasurement,
+        note.accMeasurement,
+        note.kriteriy,
+        note.kriteriy,
+    ]
+    for col_num in range(0, 2):
+        ws.write(row_num, col_num, columns[col_num], style5)
+        ws.merge(18, 18, 0, 1, style5)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(18, 18, 2, 3, style2)
+        ws.merge(18, 18, 4, 5, style2)
+
+    row_num = 19
+    columns = [
+        f'Результат измерений: {note.resultMeas}'
+    ]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(19, 19, 0, 5, style1)
+
+    row_num = 20
+    columns = [
+       ' Фиксация результатов'
+    ]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(20, 20, 0, 5, style1)
+
+    row_num = 21
+    columns = [
+        'АЗ, мм2/с',
+        'Абс. погр. (νсред * 0,3)/100',
+        'Пред. знач. вязкости, νпред, мм2/с ',
+        'Разница с νпред, %',
+        'Разница с νпред, %',
+        'Разница с νпред, %',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(21, 21, 3, 5, style1)
+
+    row_num = 22
+    columns = [
+        note.certifiedValue_text,
+        note.abserror,
+        note.oldCertifiedValue,
+        note.deltaOldCertifiedValue,
+        note.deltaOldCertifiedValue,
+        note.deltaOldCertifiedValue,
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(22, 22, 3, 5, style2)
+
+    row_num = 23
+    columns = [
+        'Исполнитель',
+        'отпр.',
+        'внесено',
+        'ОТК',
+        'ОТК',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(23, 23, 3, 5, style1)
+
+    row_num = 24
+    columns = [
+        str(note.performer),
+        '',
+        '',
+        '',
+        '',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(24, 24, 3, 5, style2)
 
     wb.save(response)
     return response
