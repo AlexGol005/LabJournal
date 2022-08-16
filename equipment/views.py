@@ -208,15 +208,17 @@ class VerificationequipmentView(View):
         note = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).order_by('-pk')
         calinterval = note.latest('pk').equipmentSM.charakters.calinterval
         title = Equipment.objects.get(exnumber=str)
+        dateorder = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).last().dateorder
         now = date.today()
         data = {'note': note,
                 'title': title,
                 'calinterval': calinterval,
-                'now': now
+                'now': now,
+                'dateorder': dateorder,
                 }
         return render(request, 'equipment/verification.html', data)
 
-
+@login_required
 def VerificationReg(request, str):
     """выводит форму для внесения сведений о поверке"""
     title = Equipment.objects.get(exnumber=str)
@@ -225,6 +227,7 @@ def VerificationReg(request, str):
             form = VerificationRegForm(request.POST, request.FILES)
             if form.is_valid():
                 order = form.save(commit=False)
+                order.equipmentSM = MeasurEquipment.objects.get(equipment__exnumber=str)
                 order.save()
                 return redirect(order)
     if not request.user.is_superuser:

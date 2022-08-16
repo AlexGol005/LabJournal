@@ -10,6 +10,7 @@
 <br> <a href="/equipment/measureequipment/{{ title.exnumber }}/">
 {{ title.exnumber }}, {{title.measurequipment_set.all.last.charakters}}, зав. № {{title.lot}}  </a> </h4></div>
 <div style="text-align: center; margin-top: 20px; margin-bottom: 15px"><h6> Межповерочный интервал {{ calinterval }} мес. </h6></div>
+<div style="text-align: center; margin-top: 20px; margin-bottom: 15px"><h6> Планируемая дата отправки отправки в поверку: {{ dateorder|date:"M.Y" }} </h6></div>
 
 {#таблица для вывода поверки#}
 <table class="table table-bordered">
@@ -17,7 +18,6 @@
         <tr>
             <th>Поверка от</th>
             <th> Поверка до </th>
-            <th> Поверка заказ </th>
             <th> Ссылка ФГИС</th>
             <th> Место поверки </th>
             <th> Поверитель </th>
@@ -34,7 +34,6 @@
             <tr>
          <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.date|date:"d.m.y" }} </td>
          <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.datedead|date:"d.m.y" }}</td>
-         <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.dateorder|date:"d.m.y" }}</td>
         <td class="ind" style="background-color: rgba(168,255,18,0.37) !important">
              {% if obj.arshin %}
               <a href="{{ obj.arshin}}"  target="blank" >
@@ -74,7 +73,6 @@
             <tr>
          <td> {{ obj.date|date:"d.m.y" }}</td>
          <td > {{ obj.datedead|date:"d.m.y" }}</td>
-         <td > {{ obj.dateorder|date:"d.m.y" }}</td>
         <td class="ind" >
              {% if obj.arshin %}
               <a href="{{ obj.arshin}}"  target="blank" >

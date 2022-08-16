@@ -246,8 +246,12 @@ class Verificationequipment(models.Model):
     type = models.CharField('В Петроаналитике/У поверителя', max_length=90, blank=True, null=True)
     note = models.CharField('Примечание', max_length=900, blank=True, null=True)
 
-    def __str__(self):
-        return f'Поверка {self.equipmentSM.charakters.name} вн № {self.equipmentSM.equipment.exnumber}'
+    # def __str__(self):
+    #     return f'Поверка {self.equipmentSM.charakters.name} вн № {self.equipmentSM.equipment.exnumber}'
+
+    def get_absolute_url(self):
+        """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
+        return reverse('measureequipment', kwargs={'pk': self.equipmentSM.pk})
 
     def save(self, *args, **kwargs):
         super().save()
