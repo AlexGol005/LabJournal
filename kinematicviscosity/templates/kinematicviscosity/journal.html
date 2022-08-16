@@ -36,24 +36,26 @@
             <th> <div style="text-align: center;"> ГСО </div></th>
             <th> <div style="text-align: center;"> п. </div></th>
             <th> <div style="text-align: center;"> Т, ℃  </div></th>
-            <th> <div style="text-align: center;"> Кинематика  </div></th>
-            <th> <div style="text-align: center;"> Подробнее  </div></th>
+            <th> <div style="text-align: center;"> Кинемат.  </div></th>
+            <th> <div style="text-align: center;"> СМ  </div></th>
+            <th> <div style="text-align: center;"> exel  </div></th>
          </tr>
     </thead>
     <tbody>
     {% for obj in objects %}
     <tr>
-        <td>{{ obj.date|date:"d.m.Y" }}</td>
+        <td>{{ obj.date|date:"d.m.y" }}</td>
         <td> {{ obj.name }}</td>
         <td> {{ obj.lot }}</td>
         <td>{{ obj.temperature }} </td>
         <td>{{ obj.certifiedValue_text }} </td>
-        <td><a href="/attestationJ/{{ URL }}/attestation/{{ obj.id }}/"  class="btn btn-outline-warning mt-3">смотреть</a></td>
+        <td><a href="/attestationJ/{{ URL }}/attestation/{{ obj.id }}/"  class="btn btn-outline-warning mt-3">СМ</a></td>
+        <td><a href="{% url 'export_kinematicviscosity_xls' obj.pk %}"  class="btn btn-outline-warning mt-3">exel</a></td>
     </tr>
     {% endfor %}
     </tbody>
 </table>
-{#конец основной таблицы#}
+
 
 {#пагинация#}
 {# стандартная #}

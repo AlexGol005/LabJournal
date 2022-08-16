@@ -1,4 +1,7 @@
 # все стандратно кроме поиска по полям, импорта моделей и констант
+import os
+from wsgiref.util import FileWrapper
+
 import xlwt
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
@@ -10,6 +13,7 @@ from django.shortcuts import get_object_or_404
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from sqlparse.filters import output
 from xlwt import Borders, Alignment
 
 from jouViscosity.models import CvKinematicviscosityVG
@@ -280,6 +284,7 @@ def export_me_xls(request, pk):
     note = ViscosityMJL.objects.get(pk=pk)
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}.xls"'
+
 
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet(f'{note.name}, п. {note.lot},{note.temperature}', cell_overwrite_ok=True)
@@ -661,7 +666,8 @@ def export_me_xls(request, pk):
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
         ws.merge(24, 24, 3, 5, style2)
-
+    # response = HttpResponse('C:\\Users\\АлександраГоловкина\\Петроаналитика\\Петроаналитика - Производство и склад\\Личные папки сотрудников\\Саша Головкина\\', )
     wb.save(response)
     return response
+
 
