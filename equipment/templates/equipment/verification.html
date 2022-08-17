@@ -1,4 +1,5 @@
 {% extends 'main/superbase.html' %}
+{% load crispy_forms_tags %}
 
 {% block title %}
 Поверка СИ
@@ -12,6 +13,11 @@
 <div style="text-align: center; margin-top: 20px; margin-bottom: 15px"><h6> Межповерочный интервал {{ calinterval }} мес. </h6></div>
 <div style="text-align: center; margin-top: 20px; margin-bottom: 15px"><h6> Планируемая дата отправки отправки в поверку: {{ dateorder|date:"M.Y" }} </h6></div>
 
+{#таблица для вывода комментария#}
+<table class="table table-bordered">
+<td colspan="6"><b>Комментарий ответственного за поверку:</b> {{ comment }}</td>
+</table>
+{#конец таблицы для вывода комментария#}
 {#таблица для вывода поверки#}
 <table class="table table-bordered">
     <thead>
@@ -20,11 +26,11 @@
             <th> Поверка до </th>
             <th> Ссылка ФГИС</th>
             <th> Место поверки </th>
-            <th> Поверитель </th>
-            <th> Исполнитель </th>
+            <th> Организация поверитель </th>
             <th> Результат </th>
             <th> Стоимость, <br> руб </th>
             <th> Документ </th>
+            <th> Исполнитель поверки </th>
          </tr>
     </thead>
     <tbody>
@@ -45,17 +51,6 @@
          </td>
         <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.place }}</td>
         <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.verificator.companyName }}</td>
-        <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.verificatorperson.name|default:" " }}
-        {% if obj.verificatorperson.telnumber %}
-        телефон {{ obj.verificatorperson.telnumber|default:" " }}
-        {% endif %}
-        {% if obj.verificatorperson.departament %}
-        отдел {{ obj.verificatorperson.departament|default:" " }}
-        {% endif %}
-        {% if obj.verificatorperson.dop %}
-        примечание {{ obj.verificatorperson.dop|default:" " }}
-        {% endif %}
-        </td>
         <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.statusver|default:" " }}</td>
         <td style="background-color: rgba(168,255,18,0.37) !important">{{ obj.price|default:" "  }}</td>
         <td style="background-color: rgba(168,255,18,0.37) !important">
@@ -65,6 +60,17 @@
                   </a>
         {% endif %}
         {{ obj.certnumber|default:" "}}
+        </td>
+            <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.verificatorperson.name|default:" " }}
+        {% if obj.verificatorperson.telnumber %}
+        телефон {{ obj.verificatorperson.telnumber|default:" " }}
+        {% endif %}
+        {% if obj.verificatorperson.departament %}
+        отдел {{ obj.verificatorperson.departament|default:" " }}
+        {% endif %}
+        {% if obj.verificatorperson.dop %}
+        примечание {{ obj.verificatorperson.dop|default:" " }}
+        {% endif %}
         </td>
     </tr>
 
@@ -84,6 +90,16 @@
          </td>
         <td > {{ obj.place }}</td>
         <td > {{ obj.verificator.companyName }}</td>
+        <td style=> {{ obj.statusver|default:" " }}</td>
+        <td style=> {{ obj.price|default:" "  }}</td>
+        <td style=>
+            {% if obj.img %}
+        <a href="{{ obj.arshin}}"  target="blank" >
+             {{ obj.certnumber|default:" "}}
+                  </a>
+        {% endif %}
+        {{ obj.certnumber|default:" "}}
+        </td>
         <td > {{ obj.verificatorperson.name|default:" " }}
         {% if obj.verificatorperson.telnumber %}
         телефон {{ obj.verificatorperson.telnumber|default:" " }}
@@ -95,16 +111,6 @@
         примечание {{ obj.verificatorperson.dop|default:" " }}
         {% endif %}
         </td>
-        <td style=> {{ obj.statusver|default:" " }}</td>
-        <td style=> {{ obj.price|default:" "  }}</td>
-        <td style=>
-            {% if obj.img %}
-        <a href="{{ obj.arshin}}"  target="blank" >
-             {{ obj.certnumber|default:" "}}
-                  </a>
-        {% endif %}
-        {{ obj.certnumber|default:" "}}
-        </td>
     </tr>
         {% endif %}
 
@@ -113,5 +119,13 @@
 </table>
 {#конец таблицы для вывода поверки#}
 <br>
-
+{#форма для комментария#}
+<form method="post" enctype="multipart/form-data" class="form-register">
+    <form method="post" class="form-register">
+    {% csrf_token %}
+    {% crispy form %}
+</form>
+</form>
+{#конец формы для комментария#}
+<br>
 {% endblock %}

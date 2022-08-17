@@ -8,6 +8,6 @@ urlpatterns = [
     path(r'^export/xls/$', views.export_me_xls, name='export_me_xls'),
     path('measureequipment/<str:str>/comments/', views.CommentsView.as_view(), name='measureequipmentcomm'),
     path('measureequipment/<str:str>/individuality/', views.EquipmentUpdate, name='measureequipmentind'),
-    path('measureequipment/<str:str>/verification/', views.VerificationequipmentView.as_view(), name='measureequipmentver'),
-    path('measureequipment/<str:str>/verificationreg/', views.VerificationReg, name='measureequipmentverificationreg'),
+    path('measureequipment/verification/<str:str>/', views.VerificationequipmentView.as_view(), name='measureequipmentver'),
+    path('measureequipment/verificationreg/<str:str>/', views.VerificationReg, name='measureequipmentverificationreg'),
 ]

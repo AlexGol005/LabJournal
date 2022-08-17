@@ -11,9 +11,10 @@ from django.template.defaultfilters import upper
 from django.views import View
 from django.views.generic import ListView, TemplateView
 
-from equipment.forms import SearchMEForm, NoteCreationForm, EquipmentUpdateForm, VerificationRegForm
+from equipment.forms import SearchMEForm, NoteCreationForm, EquipmentUpdateForm, VerificationRegForm, \
+    CommentsVerificationCreationForm
 from equipment.models import MeasurEquipment, Verificationequipment, Roomschange, Personchange, CommentsEquipment, \
-    Equipment
+    Equipment, CommentsVerificationequipment
 
 URL = 'equipment'
 
@@ -203,20 +204,35 @@ def EquipmentUpdate(request, str):
     return render(request, 'equipment/individuality.html', data)
 
 class VerificationequipmentView(View):
-    """ выводит историю поверок и форму для добавления поверки прибора """
+    """ выводит историю поверок и форму для добавления комментария к истории поверок """
     def get(self, request, str):
         note = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).order_by('-pk')
         calinterval = note.latest('pk').equipmentSM.charakters.calinterval
         title = Equipment.objects.get(exnumber=str)
         dateorder = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).last().dateorder
         now = date.today()
+        try:
+            comment = CommentsVerificationequipment.objects.filter(forNote__exnumber=str).last().note
+        except:
+            comment = ''
+        form = CommentsVerificationCreationForm(initial={'comment': comment})
         data = {'note': note,
                 'title': title,
                 'calinterval': calinterval,
                 'now': now,
                 'dateorder': dateorder,
+                'form': form,
+                'comment': comment,
                 }
         return render(request, 'equipment/verification.html', data)
+    def post(self, request, str, *args, **kwargs):
+        form = CommentsVerificationCreationForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.author = request.user
+            order.forNote = Equipment.objects.get(exnumber=str)
+            order.save()
+            return redirect(order)
 
 @login_required
 def VerificationReg(request, str):

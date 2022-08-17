@@ -6,7 +6,7 @@ from crispy_forms.layout import Layout, Submit, Row, Column
 
 
 from equipment.models import MeasurEquipment, CommentsEquipment, NOTETYPE, Equipment, CHOICES, Verificators, \
-    VerificatorPerson, Verificationequipment, CHOICESVERIFIC, CHOICESPLACE
+    VerificatorPerson, Verificationequipment, CHOICESVERIFIC, CHOICESPLACE, CommentsVerificationequipment
 
 
 class SearchMEForm(forms.Form):
@@ -138,3 +138,21 @@ class VerificationRegForm(forms.ModelForm):
                   'price', 'statusver',  'verificator', 'verificatorperson',
                   'place', 'note'
                   ]
+
+class CommentsVerificationCreationForm(forms.ModelForm):
+    """форма для комментария к истории поверки"""
+    note = forms.CharField(label='Обновить комментарий отвественного', max_length=10000000,
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
+
+    class Meta:
+        model = CommentsVerificationequipment
+        fields = ['note']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('note', css_class='form-group col-md-10 mb-0'),
+                Row(Submit('submit', 'Обновить', css_class='btn  btn-info col-md-10 mb-3 mt-4 ml-4'))))

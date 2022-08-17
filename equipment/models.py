@@ -263,7 +263,7 @@ class Verificationequipment(models.Model):
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
-        return reverse('measureequipment', kwargs={'str': self.equipmentSM.equipment.exnumber})
+        return reverse('measureequipmentver', kwargs={'str': self.equipmentSM.equipment.exnumber})
 
     def save(self, *args, **kwargs):
         super().save()
@@ -280,7 +280,7 @@ class Verificationequipment(models.Model):
 
 
 
-class CommentsVerificationequipment(models.Model):
+class CommentsEquipment(models.Model):
     """стандартнрый класс для комментариев, поменять только get_absolute_url"""
     date = models.DateField('Дата', auto_now_add=True, db_index=True)
     note = models.TextField('Содержание', max_length=1000, default='')
@@ -310,7 +310,7 @@ class CommentsVerificationequipment(models.Model):
         verbose_name_plural = 'Записи о приборах'
         ordering = ['-pk']
 
-class CommentsEquipment(models.Model):
+class  CommentsVerificationequipment(models.Model):
     """комментарии к поверке """
     date = models.DateField('Дата', auto_now_add=True, db_index=True)
     note = models.TextField('Содержание', max_length=1000, default='')
@@ -319,7 +319,7 @@ class CommentsEquipment(models.Model):
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
-        return reverse('measureequipmentcomm', kwargs={'str': self.forNote.exnumber})
+        return reverse('measureequipmentver', kwargs={'str': self.forNote.exnumber})
 
     class Meta:
         verbose_name = 'Комментарий к поверке'
