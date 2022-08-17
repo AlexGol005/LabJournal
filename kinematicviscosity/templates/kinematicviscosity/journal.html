@@ -50,7 +50,7 @@
         <td>{{ obj.temperature }} </td>
         <td>{{ obj.certifiedValue_text }} </td>
         <td><a href="/attestationJ/{{ URL }}/attestation/{{ obj.id }}/"  class="btn btn-outline-warning mt-3">СМ</a></td>
-        <td><a href="{% url 'export_kinematicviscosity_xls' obj.pk %}"  class="btn btn-outline-warning mt-3">exel</a></td>
+        <td><a href="{% url 'export_kinematicviscosity_xls' obj.pk %}"  class="btn btn-outline-warning mt-3">exel {{ obj.id }}</a></td>
     </tr>
     {% endfor %}
     </tbody>

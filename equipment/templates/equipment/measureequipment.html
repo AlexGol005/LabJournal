@@ -45,10 +45,8 @@
             <th> Год вып. </th>
             <th> Ком.№ </th>
             <th> Ответств-й пользователь </th>
-            <th> Статус</th>
+            <th> Статус прибора</th>
             <th> Поверен до  </th>
-            <th> Статус поверки </th>
-            <th>  Статус оплаты поверки </th>
          </tr>
     </thead>
     <tbody>
@@ -66,8 +64,6 @@
         <td> {{ obj.equipment.personchange_set.all.last.person }}</td>
         <td> {{ obj.equipment.get_status_display }}</td>
         <td> {{ obj.equipmentSM_ver.all.last.datedead|date:"d.m.Y"  }}</td>
-        <td> {{ obj.equipmentSM_ver.all.last.statusver|default:" " }}</td>
-        <td> {{ obj.equipmentSM_ver.all.last.statusmoney|default:" " }}</td>
     </tr>
     {% endfor %}
     </tbody>

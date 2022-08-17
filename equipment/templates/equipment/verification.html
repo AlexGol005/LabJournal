@@ -43,7 +43,7 @@
              отсутствует
              {% endif %}
          </td>
-        <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.type }}</td>
+        <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.place }}</td>
         <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.verificator.companyName }}</td>
         <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.verificatorperson.name|default:" " }}
         {% if obj.verificatorperson.telnumber %}
@@ -82,7 +82,7 @@
              отсутствует
              {% endif %}
          </td>
-        <td > {{ obj.type }}</td>
+        <td > {{ obj.place }}</td>
         <td > {{ obj.verificator.companyName }}</td>
         <td > {{ obj.verificatorperson.name|default:" " }}
         {% if obj.verificatorperson.telnumber %}

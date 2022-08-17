@@ -6,7 +6,7 @@ from crispy_forms.layout import Layout, Submit, Row, Column
 
 
 from equipment.models import MeasurEquipment, CommentsEquipment, NOTETYPE, Equipment, CHOICES, Verificators, \
-    VerificatorPerson, Verificationequipment
+    VerificatorPerson, Verificationequipment, CHOICESVERIFIC, CHOICESPLACE
 
 
 class SearchMEForm(forms.Form):
@@ -81,33 +81,30 @@ class VerificationRegForm(forms.ModelForm):
     """форма для  внесения сведений о поверке"""
     date = forms.CharField(label='Дата поверки',  max_length=10000,
                                     widget=forms.TextInput(attrs={'class': 'form-control'}))
-    datedead = forms.CharField(label='Дата окончания поверки', max_length=10000,
+    datedead = forms.CharField(label='Дата окончания поверки', max_length=10000, required=False,
                              widget=forms.TextInput(attrs={'class': 'form-control'}))
-    dateorder = forms.CharField(label='Дата заказа следующей поверки', max_length=10000,
+    dateorder = forms.CharField(label='Дата заказа следующей поверки', max_length=10000, required=False,
                                  widget=forms.TextInput(attrs={'class': 'form-control'}))
-    arshin = forms.CharField(label='Ссылка на сведения о поверке в Аршин', max_length=10000,
+    arshin = forms.CharField(label='Ссылка на сведения о поверке в Аршин', max_length=10000, required=False,
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
-    certnumber = forms.CharField(label='Номер свидетельства о поверке', max_length=10000,
+    certnumber = forms.CharField(label='Номер свидетельства о поверке', max_length=10000, required=False,
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
-    price = forms.DecimalField(label='Стоимость данной поверки', max_digits=10, decimal_places=2,
+    price = forms.DecimalField(label='Стоимость данной поверки', max_digits=10, decimal_places=2, required=False,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '0000.00'}))
-    statusver = forms.ChoiceField(label='Статус поверки', required=False,
-                               choices=CHOICES,
+    statusver = forms.ChoiceField(label='Результат поверки',
+                               choices=CHOICESVERIFIC,
                                widget=forms.Select(attrs={'class': 'form-control'}))
-    statusmoney = forms.ChoiceField(label='Статус оплаты', required=False,
-                                  choices=CHOICES,
-                                  widget=forms.Select(attrs={'class': 'form-control'}))
 
-    verificator = forms.ModelChoiceField(label='Организация-поверитель',
+    verificator = forms.ModelChoiceField(label='Организация-поверитель', required=False,
                                          queryset=Verificators.objects.all(),
                                              widget=forms.Select(attrs={'class': 'form-control'}))
     verificatorperson = forms.ModelChoiceField(label='Имя поверителя', required=False,
                                          queryset=VerificatorPerson.objects.all(),
                                          widget=forms.Select(attrs={'class': 'form-control'}))
 
-    type = forms.ChoiceField(label='Место поверки',
-                             choices=CHOICES,
+    place = forms.ChoiceField(label='Место поверки',
+                             choices=CHOICESPLACE,
                                widget=forms.Select(attrs={'class': 'form-control'}))
     note = forms.CharField(label='Примечание', max_length=10000, required=False,
                                     widget=forms.Textarea(attrs={'class': 'form-control'}))
@@ -116,6 +113,6 @@ class VerificationRegForm(forms.ModelForm):
     class Meta:
         model = Verificationequipment
         fields = ['date', 'datedead', 'dateorder', 'arshin', 'certnumber',
-                  'price', 'statusver', 'statusmoney', 'verificator', 'verificatorperson',
-                  'type', 'note'
+                  'price', 'statusver',  'verificator', 'verificatorperson',
+                  'place', 'note'
                   ]

@@ -28,6 +28,17 @@ NOTETYPE = (
         ('Другое', 'Другое'),
     )
 
+CHOICESVERIFIC = (
+        ('Поверен', 'Поверен'),
+        ('Признан непригодным', 'Признан непригодным'),
+        ('Спорный', 'Спорный'),
+    )
+
+CHOICESPLACE = (
+        ('У поверителя', 'У поверителя'),
+        ('В ПА', 'В ПА'),
+    )
+
 class Manufacturer(models.Model):
     companyName = models.CharField('Производитель', max_length=100, unique=True)
     companyAdress = models.CharField('Адрес', max_length=200, default='', blank=True)
@@ -235,23 +246,24 @@ class Verificationequipment(models.Model):
     certnumbershort = models.CharField('Краткий номер свидетельства о поверке', max_length=90, blank=True, null=True)
     price = models.DecimalField('Стоимость данной поверки', max_digits=100, decimal_places=2, null=True, blank=True)
     img = models.ImageField('Сертификат', upload_to='user_images', blank=True, null=True)
-    statusver = models.CharField('Статус поверки', max_length=90, blank=True, null=True)
-    statusmoney = models.CharField('Статус оплаты', max_length=90, blank=True, null=True)
+    statusver = models.CharField(max_length=300, choices=CHOICESVERIFIC, default='Поверен', null=True,
+                              verbose_name='Статус')
     verificator = models.ForeignKey(Verificators, on_delete=models.PROTECT,
                                           verbose_name='Поверитель', blank=True, null=True)
 
     verificatorperson = models.ForeignKey(VerificatorPerson, on_delete=models.PROTECT,
                                     verbose_name='Поверитель имя', blank=True, null=True)
 
-    type = models.CharField('В Петроаналитике/У поверителя', max_length=90, blank=True, null=True)
+    place = models.CharField(max_length=300, choices=CHOICESPLACE, default='У поверителя', null=True,
+                              verbose_name='Место поверки')
     note = models.CharField('Примечание', max_length=900, blank=True, null=True)
 
-    # def __str__(self):
-    #     return f'Поверка {self.equipmentSM.charakters.name} вн № {self.equipmentSM.equipment.exnumber}'
+    def __str__(self):
+        return f'Поверка {self.equipmentSM.charakters.name} вн № {self.equipmentSM.equipment.exnumber}'
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
-        return reverse('measureequipment', kwargs={'pk': self.equipmentSM.pk})
+        return reverse('measureequipment', kwargs={'str': self.equipmentSM.equipment.exnumber})
 
     def save(self, *args, **kwargs):
         super().save()
