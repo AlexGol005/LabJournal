@@ -320,9 +320,10 @@ class CommentsEquipment(models.Model):
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
         return reverse('measureequipmentcomm', kwargs={'str': self.forNote.exnumber})
+
     class Meta:
-        verbose_name = 'Запись о приборе'
-        verbose_name_plural = 'Записи о приборах'
+        verbose_name = 'Комментарий к поверке'
+        verbose_name_plural = 'Комментарии к поверкам'
 
 
 
