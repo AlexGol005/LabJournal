@@ -87,6 +87,7 @@ class VerificationRegForm(forms.ModelForm):
             '%Y-%m-%d',  # '2006-10-25'
             '%m/%d/%Y',  # '10/25/2006'
             '%m/%d/%y',
+            '%d.%m.%Y',
         ))
     datedead = forms.DateField(label='Дата окончания поверки', required=False,
                            widget=forms.DateInput(
@@ -95,6 +96,7 @@ class VerificationRegForm(forms.ModelForm):
                                '%Y-%m-%d',  # '2006-10-25'
                                '%m/%d/%Y',  # '10/25/2006'
                                '%m/%d/%y',
+                               '%d.%m.%Y',
                            ))
     dateorder = forms.DateField(label='Дата заказа следующей поверки', required=False,
                            widget=forms.DateInput(
@@ -103,6 +105,7 @@ class VerificationRegForm(forms.ModelForm):
                                '%Y-%m-%d',  # '2006-10-25'
                                '%m/%d/%Y',  # '10/25/2006'
                                '%m/%d/%y',
+                               '%d.%m.%Y',
                            ))
     arshin = forms.CharField(label='Ссылка на сведения о поверке в Аршин', max_length=10000, required=False,
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))

@@ -280,7 +280,7 @@ class Verificationequipment(models.Model):
 
 
 
-class CommentsEquipment(models.Model):
+class CommentsVerificationequipment(models.Model):
     """стандартнрый класс для комментариев, поменять только get_absolute_url"""
     date = models.DateField('Дата', auto_now_add=True, db_index=True)
     note = models.TextField('Содержание', max_length=1000, default='')
@@ -309,6 +309,20 @@ class CommentsEquipment(models.Model):
         verbose_name = 'Запись о приборе'
         verbose_name_plural = 'Записи о приборах'
         ordering = ['-pk']
+
+class CommentsEquipment(models.Model):
+    """комментарии к поверке """
+    date = models.DateField('Дата', auto_now_add=True, db_index=True)
+    note = models.TextField('Содержание', max_length=1000, default='')
+    forNote = models.ForeignKey(Equipment, verbose_name='К прибору', on_delete=models.CASCADE)
+    author = models.CharField('Автор', max_length=90, blank=True, null=True)
+
+    def get_absolute_url(self):
+        """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
+        return reverse('measureequipmentcomm', kwargs={'str': self.forNote.exnumber})
+    class Meta:
+        verbose_name = 'Запись о приборе'
+        verbose_name_plural = 'Записи о приборах'
 
 
 

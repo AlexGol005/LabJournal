@@ -228,7 +228,7 @@ def VerificationReg(request, str):
             if form.is_valid():
                 order = form.save(commit=False)
                 order.equipmentSM = MeasurEquipment.objects.get(equipment__exnumber=str)
-                order.date
+
                 order.save()
                 return redirect(order)
     if not request.user.is_superuser:
