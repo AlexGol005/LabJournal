@@ -22,9 +22,9 @@
             <th> Место поверки </th>
             <th> Поверитель </th>
             <th> Исполнитель </th>
-            <th> Примечание </th>
+            <th> Результат </th>
             <th> Стоимость, <br> руб </th>
-            <th> Сертификат </th>
+            <th> Документ </th>
          </tr>
     </thead>
     <tbody>
@@ -34,7 +34,7 @@
             <tr>
          <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.date|date:"d.m.y" }} </td>
          <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.datedead|date:"d.m.y" }}</td>
-        <td class="ind" style="background-color: rgba(168,255,18,0.37) !important">
+         <td class="ind" style="background-color: rgba(168,255,18,0.37) !important">
              {% if obj.arshin %}
               <a href="{{ obj.arshin}}"  target="blank" >
              Аршин
@@ -56,7 +56,7 @@
         примечание {{ obj.verificatorperson.dop|default:" " }}
         {% endif %}
         </td>
-        <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.note|default:" " }}</td>
+        <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.statusver|default:" " }}</td>
         <td style="background-color: rgba(168,255,18,0.37) !important">{{ obj.price|default:" "  }}</td>
         <td style="background-color: rgba(168,255,18,0.37) !important">
             {% if obj.img %}
@@ -95,7 +95,7 @@
         примечание {{ obj.verificatorperson.dop|default:" " }}
         {% endif %}
         </td>
-        <td style=> {{ obj.note|default:" " }}</td>
+        <td style=> {{ obj.statusver|default:" " }}</td>
         <td style=> {{ obj.price|default:" "  }}</td>
         <td style=>
             {% if obj.img %}

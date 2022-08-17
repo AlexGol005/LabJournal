@@ -79,12 +79,31 @@ class EquipmentUpdateForm(forms.ModelForm):
 
 class VerificationRegForm(forms.ModelForm):
     """форма для  внесения сведений о поверке"""
-    date = forms.CharField(label='Дата поверки',  max_length=10000,
-                                    widget=forms.TextInput(attrs={'class': 'form-control'}))
-    datedead = forms.CharField(label='Дата окончания поверки', max_length=10000, required=False,
-                             widget=forms.TextInput(attrs={'class': 'form-control'}))
-    dateorder = forms.CharField(label='Дата заказа следующей поверки', max_length=10000, required=False,
-                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    date = forms.DateField(label='Дата поверки',
+        widget=forms.DateInput(
+            attrs={'class': 'form-control', 'placeholder': ''}),
+        input_formats=(
+            '%Y-%m-%d',  # '2006-10-25'
+            '%m/%d/%Y',  # '10/25/2006'
+            '%m/%d/%y',
+        ))
+    datedead = forms.DateField(label='Дата окончания поверки', required=False,
+                           widget=forms.DateInput(
+                               attrs={'class': 'form-control', 'placeholder': ''}),
+                           input_formats=(
+                               '%Y-%m-%d',  # '2006-10-25'
+                               '%m/%d/%Y',  # '10/25/2006'
+                               '%m/%d/%y',
+                           ))
+    dateorder = forms.DateField(label='Дата заказа следующей поверки', required=False,
+                           widget=forms.DateInput(
+                               attrs={'class': 'form-control', 'placeholder': ''}),
+                           input_formats=(
+                               '%Y-%m-%d',  # '2006-10-25'
+                               '%m/%d/%Y',  # '10/25/2006'
+                               '%m/%d/%y',
+                           ))
     arshin = forms.CharField(label='Ссылка на сведения о поверке в Аршин', max_length=10000, required=False,
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
     certnumber = forms.CharField(label='Номер свидетельства о поверке', max_length=10000, required=False,
