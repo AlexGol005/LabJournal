@@ -14,6 +14,7 @@
 <div style="text-align: center; margin-top: 20px; margin-bottom: 15px"><h6> Планируемая дата отправки отправки в поверку: {{ dateorder|date:"M.Y" }} </h6></div>
 
 {#таблица для вывода комментария#}
+
 <table class="table table-bordered">
 <td colspan="6"><b>Комментарий ответственного за поверку:</b> {{ comment }}</td>
 </table>
@@ -128,4 +129,8 @@
 </form>
 {#конец формы для комментария#}
 <br>
+    <div style="text-align: center; margin-top: 20px; margin-bottom: 15px">
+     <a href="/equipment/measureequipment/verificationreg/{{ strreg }}/"  class="btn btn-warning mt-2 mr-2">
+ Внести запись о поверке</a>
+   </div>
 {% endblock %}

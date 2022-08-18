@@ -8,6 +8,7 @@ from django.db.models import Max, Q, F, Value
 from django.db.models.functions import Upper, Concat
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template.defaultfilters import upper
+from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView, TemplateView
 
@@ -139,7 +140,7 @@ class SearchResultMeasurEquipmentView(TemplateView):
 
 
 class StrMeasurEquipmentView(View):
-    """ выводит страницу СИ """
+    """ выводит отдельную страницу СИ """
     def get(self, request, str):
         obj = get_object_or_404(MeasurEquipment, equipment__exnumber=str)
         return render(request, URL + '/equipmentstr.html',
@@ -207,6 +208,7 @@ class VerificationequipmentView(View):
     """ выводит историю поверок и форму для добавления комментария к истории поверок """
     def get(self, request, str):
         note = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).order_by('-pk')
+        strreg = note.latest('pk').equipmentSM.equipment.exnumber
         calinterval = note.latest('pk').equipmentSM.charakters.calinterval
         title = Equipment.objects.get(exnumber=str)
         dateorder = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).last().dateorder
@@ -223,16 +225,23 @@ class VerificationequipmentView(View):
                 'dateorder': dateorder,
                 'form': form,
                 'comment': comment,
+                'strreg': strreg,
                 }
         return render(request, 'equipment/verification.html', data)
     def post(self, request, str, *args, **kwargs):
         form = CommentsVerificationCreationForm(request.POST)
-        if form.is_valid():
+        if request.user.is_superuser:
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.author = request.user
+                order.forNote = Equipment.objects.get(exnumber=str)
+                order.save()
+                return redirect(order)
+        else:
+            form = CommentsVerificationCreationForm(request.POST)
             order = form.save(commit=False)
-            order.author = request.user
-            order.forNote = Equipment.objects.get(exnumber=str)
-            order.save()
-            return redirect(order)
+            messages.success(request, f'Комментировать может только ответственный за поверку приборов')
+            return redirect(reverse('measureequipmentver', kwargs={'str': str}))
 
 @login_required
 def VerificationReg(request, str):

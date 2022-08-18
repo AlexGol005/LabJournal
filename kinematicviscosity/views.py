@@ -163,7 +163,6 @@ class AllStrView(ListView):
     ordering = ['-date']
     paginate_by = 8
 
-
     def get_context_data(self, **kwargs):
         context = super(AllStrView, self).get_context_data(**kwargs)
         context['journal'] = JOURNAL.objects.filter(for_url=URL)
@@ -280,7 +279,7 @@ def filterview(request, pk):
 # url of this view is 'search_result'
 # --------------------------------
 def export_me_xls(request, pk):
-    '''представление для выгрузки отдельной странички  в ексель'''
+    '''представление для выгрузки отдельной странички жкрнала в ексель'''
     note = ViscosityMJL.objects.get(pk=pk)
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}.xls"'
