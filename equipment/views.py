@@ -13,7 +13,7 @@ from django.views import View
 from django.views.generic import ListView, TemplateView
 
 from equipment.forms import SearchMEForm, NoteCreationForm, EquipmentUpdateForm, VerificationRegForm, \
-    CommentsVerificationCreationForm
+    CommentsVerificationCreationForm, VerificatorsCreationForm, VerificatorPersonCreationForm
 from equipment.models import MeasurEquipment, Verificationequipment, Roomschange, Personchange, CommentsEquipment, \
     Equipment, CommentsVerificationequipment
 
@@ -142,9 +142,10 @@ class SearchResultMeasurEquipmentView(TemplateView):
 class StrMeasurEquipmentView(View):
     """ выводит отдельную страницу СИ """
     def get(self, request, str):
+        note = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).order_by('-pk')
         obj = get_object_or_404(MeasurEquipment, equipment__exnumber=str)
         return render(request, URL + '/equipmentstr.html',
-                      {'obj': obj})
+                      {'obj': obj, 'note': note})
 
 
 class CommentsView(View):
@@ -174,7 +175,6 @@ class CommentsView(View):
             return redirect(order)
 
 
-
 def EquipmentUpdate(request, str):
     """выводит форму для обновления разрешенных полей оборудования ответственному за оборудование"""
     title = Equipment.objects.get(exnumber=str)
@@ -187,17 +187,14 @@ def EquipmentUpdate(request, str):
             if form.is_valid():
                 order = form.save(commit=False)
                 order.save()
-                return redirect(order)
+                return redirect(reverse('measureequipment', kwargs={'str': str}))
     if person != request.user and not request.user.is_superuser:
-        form = EquipmentUpdateForm(request.POST, request.FILES,  instance=Equipment.objects.get(exnumber=str))
-        order = form.save(commit=False)
         messages.success(request, f' Для внесения записей о приборе нажмите на кнопку ниже:'
                                   f' "Внести запись о приборе и смотреть записи (для всех пользователей)"'
                                   f'. Добавить особенности работы или поменять статус может только ответственный '
                                   f'за прибор или поверку.')
 
-        return redirect(order)
-
+        return redirect(reverse('measureequipment', kwargs={'str': str}))
     else:
         form = EquipmentUpdateForm(instance=Equipment.objects.get(exnumber=str))
     data = {'form': form, 'title': title
@@ -238,8 +235,6 @@ class VerificationequipmentView(View):
                 order.save()
                 return redirect(order)
         else:
-            form = CommentsVerificationCreationForm(request.POST)
-            order = form.save(commit=False)
             messages.success(request, f'Комментировать может только ответственный за поверку приборов')
             return redirect(reverse('measureequipmentver', kwargs={'str': str}))
 
@@ -249,24 +244,72 @@ def VerificationReg(request, str):
     title = Equipment.objects.get(exnumber=str)
     if request.user.is_superuser:
         if request.method == "POST":
-            form = VerificationRegForm(request.POST, request.FILES)
+            form = VerificationRegForm(request.POST)
+            form2 = VerificatorsCreationForm(request.POST)
+            form3 = VerificatorPersonCreationForm(request.POST)
             if form.is_valid():
                 order = form.save(commit=False)
                 order.equipmentSM = MeasurEquipment.objects.get(equipment__exnumber=str)
-
                 order.save()
                 return redirect(order)
+            if form2.is_valid():
+                order = form2.save(commit=False)
+                order.save()
+                return redirect(reverse('measureequipmentver', kwargs={'str': str}))
+            if form3.is_valid():
+                order = form3.save(commit=False)
+                order.save()
+                return redirect(reverse('measureequipmentver', kwargs={'str': str}))
     if not request.user.is_superuser:
-        form = VerificationRegForm(request.POST, request.FILES)
-        order = form.save(commit=False)
         messages.success(request, 'Раздел доступен только инженеру по оборудованию')
-        return redirect(order)
+        return redirect(reverse('measureequipmentver', kwargs={'str': str}))
     else:
         form = VerificationRegForm()
-    data = {'form': form,
-            'title': title
+        form2 = VerificatorsCreationForm()
+        form3 = VerificatorPersonCreationForm(request.POST)
+    data = {
+        'form': form,
+        'form2': form2,
+        'form3': form3,
+        'title': title
             }
     return render(request, 'equipment/verificationreg.html', data)
+
+
+@login_required
+def EquipmentReg(request):
+    """выводит форму для внесения нового ЛО"""
+    if request.user.is_superuser:
+        if request.method == "POST":
+            form = VerificationRegForm(request.POST)
+            form2 = VerificatorsCreationForm(request.POST)
+            form3 = VerificatorPersonCreationForm(request.POST)
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.equipmentSM = MeasurEquipment.objects.get(equipment__exnumber=str)
+                order.save()
+                return redirect(order)
+            if form2.is_valid():
+                order = form2.save(commit=False)
+                order.save()
+                return redirect(reverse('measureequipmentver', kwargs={'str': str}))
+            if form3.is_valid():
+                order = form3.save(commit=False)
+                order.save()
+                return redirect(reverse('measureequipmentver', kwargs={'str': str}))
+    if not request.user.is_superuser:
+        messages.success(request, 'Раздел доступен только инженеру по оборудованию')
+        return redirect(reverse('measureequipmentver', kwargs={'str': str}))
+    else:
+        form = VerificationRegForm()
+        form2 = VerificatorsCreationForm()
+        form3 = VerificatorPersonCreationForm(request.POST)
+    data = {
+        'form': form,
+        'form2': form2,
+        'form3': form3,
+            }
+    return render(request, 'equipment/equipmentreg.html', data)
 
 # -------------------
 

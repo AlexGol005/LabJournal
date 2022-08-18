@@ -97,9 +97,6 @@
             <th> Месяц заказа поверки </th>
             <th class="ind"> Ссылка ФГИС</th>
             <th class="ind">  № свидет. о поверке</th>
-             <th>Статус <br> поверки</th>
-            <th> Статус оплаты поверки</th>
-
          </tr>
     </thead>
     <tbody>
@@ -117,16 +114,16 @@
              {% endif %}
          </td>
          <td> {{ obj.equipmentSM_ver.last.certnumbershort}}</td>
-         <td> {{ obj.equipmentSM_ver.last.statusver}}</td>
-        <td> {{ obj.equipmentSM_ver.last.statusmoney}}</td>
     </tr>
     </tbody>
 </table>
 </div>
 {# поверка кнопка1#}
 <div style="text-align: center; margin-top: 10px">
+    {% if note %}
  <a href="/equipment/measureequipment/verification/{{ obj.equipment.exnumber }}/"  class="btn btn-info mt-2 mr-2">
      Смотреть историю поверок</a>
+    {% endif %}
      <a href="/equipment/measureequipment/verificationreg/{{ obj.equipment.exnumber }}/"  class="btn btn-warning mt-2 mr-2">
      Внести запись о поверке</a>
 {# поверка кнопка3#}

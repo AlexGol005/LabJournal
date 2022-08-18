@@ -56,6 +56,8 @@ class Verificators(models.Model):
     companyName = models.CharField('Поверитель', max_length=100, unique=True)
     companyAdress = models.CharField('Адрес', max_length=200, default='', blank=True)
     telnumber = models.CharField('Телефон', max_length=200, default='', blank=True)
+    email = models.CharField('email', max_length=200, default='', blank=True)
+    note = models.CharField('Примечание', max_length=10000, default='', blank=True)
 
     def __str__(self):
         return self.companyName
@@ -65,11 +67,14 @@ class Verificators(models.Model):
         verbose_name_plural = 'Поверители организации'
 
 class VerificatorPerson(models.Model):
+    company = models.ForeignKey(Verificators, on_delete=models.PROTECT, verbose_name='Компания',
+                                related_name='Verificators_company', blank=True, null=True)
     verificator = models.ForeignKey(Verificators, on_delete=models.PROTECT, blank=True, null=True)
     name = models.CharField('ИМЯ', max_length=100, blank=True, null=True, default=' ')
     departament = models.CharField('отдел', max_length=100, blank=True, null=True)
     dop = models.CharField('Примечание', max_length=200, blank=True, null=True)
     telnumber = models.CharField('Телефон', max_length=200, default='', blank=True)
+    email = models.CharField('email', max_length=200, default='', blank=True)
 
     def __str__(self):
         return self.name
@@ -150,9 +155,9 @@ class Equipment(models.Model):
                 image3.save(self.imginstruction3.path)
 
 
-    def get_absolute_url(self):
-        """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
-        return reverse('measureequipmentpk', kwargs={'str': self.exnumber})
+    # def get_absolute_url(self):
+    #     """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
+    #     return reverse('measureequipmentpk', kwargs={'str': self.exnumber})
 
     class Meta:
         verbose_name = 'Прибор'

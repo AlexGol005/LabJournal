@@ -64,13 +64,13 @@
         </td>
             <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.verificatorperson.name|default:" " }}
         {% if obj.verificatorperson.telnumber %}
-        телефон {{ obj.verificatorperson.telnumber|default:" " }}
+        , телефон {{ obj.verificatorperson.telnumber|default:" " }}
         {% endif %}
         {% if obj.verificatorperson.departament %}
-        отдел {{ obj.verificatorperson.departament|default:" " }}
+        , отдел {{ obj.verificatorperson.departament|default:" " }}
         {% endif %}
         {% if obj.verificatorperson.dop %}
-        примечание {{ obj.verificatorperson.dop|default:" " }}
+        , примечание {{ obj.verificatorperson.dop|default:" " }}
         {% endif %}
         </td>
     </tr>
@@ -119,7 +119,6 @@
     </tbody>
 </table>
 {#конец таблицы для вывода поверки#}
-<br>
 {#форма для комментария#}
 <form method="post" enctype="multipart/form-data" class="form-register">
     <form method="post" class="form-register">
@@ -129,7 +128,7 @@
 </form>
 {#конец формы для комментария#}
 <br>
-    <div style="text-align: center; margin-top: 20px; margin-bottom: 15px">
+    <div style="text-align: center; margin-top: 5px; margin-bottom: 15px">
      <a href="/equipment/measureequipment/verificationreg/{{ strreg }}/"  class="btn btn-warning mt-2 mr-2">
  Внести запись о поверке</a>
    </div>
