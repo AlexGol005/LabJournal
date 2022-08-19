@@ -1,0 +1,88 @@
+{% extends 'main/superbase.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+{#название страницы#}
+{#стандартная#}
+{% block title %}
+ЛО
+{% endblock %}
+{#конец названия страницы#}
+
+{% block content %}
+
+{#заголовок#}
+{#стандартная#}
+<div class="row">
+<div class="col-md-24 mt-2" >
+<div style="text-align: center;"><h4> Лабораторное оборудование ООО "Петроаналитика"</h4></div>
+<br>
+{#конец заголовка #}
+{# Выгрузка полного списка в ексель #}
+{#<a href="{% url 'export_me_xls' %}" class="btn btn-warning mr-5 mt-3">Выгрузить график поверки EXEL</a>#}
+{#    <br>#}
+{#    <br>#}
+{#    <br>#}
+{#форма для поиска по полям #}
+{#стандартная#}
+{#    <form action="/equipment/measureequipmentallsearres/" method="GET">#}
+{#        {% csrf_token %}#}
+{#        {% crispy form %}#}
+{#    </form>#}
+{#конец формы для поиска по#}
+
+{#основная таблица#}
+{# уникальная #}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Внут.№</th>
+            <th> Заводской № </th>
+            <th> Год вып. </th>
+            <th> Статус </th>
+            <th> Категория </th>
+         </tr>
+    </thead>
+    <tbody>
+    {% for obj in objects %}
+    <tr>
+        <td>{{ obj.exnumber }}</td>
+        <td> {{ obj.lot }}</td>
+        <td> {{ obj.yearmanuf }}</td>
+        <td> {{ obj.status }}</td>
+        <td>{{ obj.kategory }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{#конец основной таблицы#}
+
+{#пагинация#}
+{# стандартная #}
+{% if is_paginated %}
+    {% if page_obj.has_previous %}
+       <a href="?page=1" class="btn btn-outline-primary">Начало</a>
+       <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-primary">Предыдущая</a>
+  {% endif %}
+    {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-primary">Следующая</a>
+       <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-primary">Последняя</a>
+  {% endif %}
+  {% endif %}
+{#конец пагинации#}
+</div>
+
+{#фильтры#}
+{# уникальные, менять url #}
+{# конец фильров #}
+
+
+{#форма для поиска по датам записей и вывод ошибки формата даты#}
+
+{#конец формы для поиска по датам записей#}
+
+</div>
+
+
+{% endblock %}
+{#конец блока {% block content %}"""#}

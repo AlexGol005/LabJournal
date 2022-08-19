@@ -2,35 +2,16 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-Внести поверку
+Регистрация ЛО
 {% endblock %}
 
 
 {% block content %}
-    <div style="text-align: center;"><h4>Внести сведения о поверке для:
-        <br> <a href="/equipment/measureequipment/{{ title.exnumber }}/">
-    {{ title.exnumber }}, {{title.measurequipment_set.all.last.charakters}}, зав. № {{title.lot}}  </a> </h4></div>
-    <br><br>
-    <div style="text-align: center;"><h4> Внести запись о поверке </h4></div>
-    <form method="post" enctype="multipart/form-data" class="form-register">
-    <form method="post" class="form-register">
-    {% csrf_token %}
-    {% crispy form %}
-</form>
-</form>
-    <br>
-<div style="text-align: center;"><h4>Внести организацию поверителя </h4></div>
+<div style="text-align: center;"><h4> Регистрация ЛО </h4></div>
+<form method="post" enctype="multipart/form-data" class="form-register">
 <form method="post" class="form-register">
-    {% csrf_token %}
-    {{ form2.as_p }}
-    <button class="btn btn-outline-warning" type="submit">Внести</button>
+{% csrf_token %}
+{% crispy form %}
 </form>
-    <br>
-<div style="text-align: center;"><h4>Внести сотрудника поверителя </h4></div>
-<form method="post" class="form-register">
-    {% csrf_token %}
-    {{ form3.as_p }}
-    <button class="btn btn-outline-warning" type="submit">Внести</button>
 </form>
-    <br>
 {% endblock %}

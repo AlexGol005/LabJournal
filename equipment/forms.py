@@ -6,7 +6,8 @@ from crispy_forms.layout import Layout, Submit, Row, Column
 
 
 from equipment.models import MeasurEquipment, CommentsEquipment, NOTETYPE, Equipment, CHOICES, Verificators, \
-    VerificatorPerson, Verificationequipment, CHOICESVERIFIC, CHOICESPLACE, CommentsVerificationequipment
+    VerificatorPerson, Verificationequipment, CHOICESVERIFIC, CHOICESPLACE, CommentsVerificationequipment, Manufacturer, \
+    KATEGORY
 
 
 class SearchMEForm(forms.Form):
@@ -56,47 +57,83 @@ class NoteCreationForm(forms.ModelForm):
 
 class EquipmentCreateForm(forms.ModelForm):
     """форма для обновления разрешенных полей оборудования ответственному за оборудование"""
-    status = forms.ChoiceField(label='Выберите статус прибора (если требуется изменить статус)', required=False,
-                                  choices=CHOICES,
-                                  widget=forms.Select(attrs={'class': 'form-control'}))
+    exnumber = forms.CharField(label='Внутренний номер', max_length=10000, initial='А001',
+                               help_text='уникальный, шаблон А001',
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': 'А001'}))
+    lot = forms.CharField(label='Заводской номер', max_length=10000,
+                           widget=forms.TextInput(attrs={'class': 'form-control'}))
+    yearmanuf = forms.CharField(label='Год выпуска', max_length=10000, initial=datetime.date.today().year,
+                                widget=forms.TextInput(attrs={'class': 'form-control'}))
+    manufacturer = forms.ModelChoiceField(label='Производитель',
+                                         queryset=Manufacturer.objects.all(),
+                                             widget=forms.Select(attrs={'class': 'form-control'}))
+    status = forms.ChoiceField(label='Статус', initial='Эксплуатация',
+                               choices=CHOICES,
+                               widget=forms.Select(attrs={'class': 'form-control'}))
+
+    yearintoservice = forms.CharField(label='Год ввода в эксплуатацию', max_length=10000, initial=datetime.date.today().year,
+                                widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    new = forms.ChoiceField(label='Новый или б/у', initial='новый',
+                               choices=(
+                                        ('новый', 'новый'),
+                                        ('б/у', 'б/у')),
+                               widget=forms.Select(attrs={'class': 'form-control'}))
+    invnumber = forms.CharField(label='Инвентарный номер', max_length=10000, initial='б/н',
+                                widget=forms.TextInput(attrs={'class': 'form-control'}))
+    kategory = forms.ChoiceField(label='Категория', initial='Средство измерения',
+                               choices=KATEGORY,
+                               widget=forms.Select(attrs={'class': 'form-control'}))
+    imginstruction1 = forms.ImageField(label='Паспорт', widget=forms.FileInput, required=False)
+    imginstruction2 = forms.ImageField(label='Внутренняя инструкция', widget=forms.FileInput,
+                                       required=False)
+    imginstruction3 = forms.ImageField(label='Право владения', widget=forms.FileInput, required=False)
     individuality = forms.CharField(label='Индивидуальные особенности прибора', max_length=10000, required=False,
-                           widget=forms.Textarea(attrs={'class': 'form-control'}))
+                                    widget=forms.TextInput(attrs={'class': 'form-control'}))
     notemaster = forms.CharField(label='Примечание (или временное предостережение)', max_length=10000, required=False,
-                                    widget=forms.Textarea(attrs={'class': 'form-control'}))
-    imginstruction2 = forms.ImageField(label='Внутренняя инструкция загрузить фото',  widget=forms.FileInput,
-                                       required=False,)
+                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
     video = forms.CharField(label='Видео к прибору', max_length=10000, required=False,
-                                    widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                 'placeholder': 'добавьте ссылку на видео'}))
-    # exnumber = models.CharField('Внутренний номер', max_length=100, default='', blank=True, null=True, unique=True)
-    # exnumber = forms.CharField(label='Внутренний номер', max_length=10000,
-    #                            help_text='уникальный, шаблон А001',
-    #                        widget=forms.Textarea(attrs={'class': 'form-control',
-    #                                                     'placeholder': 'А001'}))
-    # lot = models.CharField('Заводской номер', max_length=100, default='')
-    # yearmanuf = models.IntegerField('Год выпуска', default='', blank=True, null=True)
-    # manufacturer = models.ForeignKey(Manufacturer, on_delete=models.PROTECT, verbose_name='Производитель')
-    # status = models.CharField(max_length=300, choices=CHOICES, default='В эксплуатации', null=True,
-    #                           verbose_name='Статус')
-    # yearintoservice = models.IntegerField('Год ввода в эксплуатацию', default='0', blank=True, null=True)
-    # new = models.CharField('Новый или б/у', max_length=100, default='новый')
-    # invnumber = models.CharField('Инвентарный номер', max_length=100, default='', blank=True, null=True)
-    # kategory = models.CharField(max_length=300, choices=KATEGORY, default='Средство измерения', null=True,
-    #                             verbose_name='Категория')
-    # imginstruction1 = models.ImageField('Паспорт', upload_to='user_images', blank=True, null=True,
-    #                                     default='user_images/default.png')
-    # imginstruction2 = models.ImageField('Внутренняя инструкция', upload_to='user_images', blank=True, null=True,
-    #                                     default='user_images/default.png')
-    # imginstruction3 = models.ImageField('Право владения', upload_to='user_images', blank=True, null=True,
-    #                                     default='user_images/default.png')
-    # individuality = models.TextField('Индивидуальные особенности прибора', blank=True, null=True)
-    # video = models.CharField('Ссылка на видео', max_length=1000, blank=True, null=True)
-    # notemaster = models.TextField('Примечание ответственного за прибор', blank=True, null=True)
+                            widget=forms.TextInput(attrs={'class': 'form-control',
+                                                          'placeholder': 'добавьте ссылку на видео'}))
 
 
     class Meta:
         model = Equipment
-        fields = ['status', 'individuality', 'notemaster', 'imginstruction2', 'video']
+        fields = [
+            'exnumber', 'lot', 'yearmanuf', 'manufacturer', 'status',
+            'yearintoservice', 'new', 'invnumber', 'kategory', 'individuality', 'notemaster',
+            'imginstruction2', 'imginstruction1',
+            'imginstruction3', 'video'
+        ]
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('kategory', css_class='form-group col-md-12 mb-0')),
+            Row(
+                Column('exnumber', css_class='form-group col-md-4 mb-0'),
+                Column('lot', css_class='form-group col-md-4 mb-0'),
+                Column('invnumber', css_class='form-group col-md-4 mb-0')),
+            Row(
+                Column('yearmanuf', css_class='form-group col-md-4 mb-0'),
+                Column('manufacturer', css_class='form-group col-md-4 mb-0'),
+                Column('new', css_class='form-group col-md-4 mb-0')),
+            Row(
+                Column('status', css_class='form-group col-md-6 mb-0'),
+                Column('yearintoservice', css_class='form-group col-md-6 mb-0')),
+            Row(
+                Column('imginstruction1', css_class='form-group col-md-12 mb-0')),
+            Row(
+                Column('imginstruction2', css_class='form-group col-md-12 mb-0')),
+            Row(
+                Column('imginstruction3', css_class='form-group col-md-12 mb-0')),
+            Row(
+                Column('individuality', css_class='form-group col-md-12 mb-0')),
+
+            Row(Submit('submit', 'Записать', css_class='btn  btn-info col-md-11 mb-3 mt-4 ml-4')))
+
 
 
 class EquipmentUpdateForm(forms.ModelForm):
@@ -108,16 +145,23 @@ class EquipmentUpdateForm(forms.ModelForm):
                            widget=forms.Textarea(attrs={'class': 'form-control'}))
     notemaster = forms.CharField(label='Примечание (или временное предостережение)', max_length=10000, required=False,
                                     widget=forms.Textarea(attrs={'class': 'form-control'}))
-    imginstruction2 = forms.ImageField(label='Внутренняя инструкция загрузить фото',  widget=forms.FileInput,
-                                       required=False,)
+    imginstruction1 = forms.ImageField(label='Паспорт', widget=forms.FileInput, required=False)
+    imginstruction2 = forms.ImageField(label='Внутренняя инструкция загрузить фото', widget=forms.FileInput,
+                                       required=False)
+    imginstruction3 = forms.ImageField(label='Право владения', widget=forms.FileInput, required=False)
     video = forms.CharField(label='Видео к прибору', max_length=10000, required=False,
                                     widget=forms.TextInput(attrs={'class': 'form-control',
                                                                  'placeholder': 'добавьте ссылку на видео'}))
+    invnumber = forms.CharField(label='Инвентарный номер', max_length=10000, initial='б/н',
+                                widget=forms.TextInput(attrs={'class': 'form-control'}))
 
 
     class Meta:
         model = Equipment
-        fields = ['status', 'individuality', 'notemaster', 'imginstruction2', 'video']
+        fields = [
+            'status', 'individuality', 'notemaster', 'imginstruction1',
+            'imginstruction2', 'imginstruction3',
+                  'video', 'invnumber']
 
 
 class VerificationRegForm(forms.ModelForm):

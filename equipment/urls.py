@@ -10,5 +10,6 @@ urlpatterns = [
     path('measureequipment/<str:str>/individuality/', views.EquipmentUpdate, name='measureequipmentind'),
     path('measureequipment/verification/<str:str>/', views.VerificationequipmentView.as_view(), name='measureequipmentver'),
     path('measureequipment/verificationreg/<str:str>/', views.VerificationReg, name='measureequipmentverificationreg'),
-    path('measureequipment/equipmentreg/', views.EquipmentReg, name='equipmentreg'),
+    path('equipmentreg/', views.EquipmentReg, name='equipmentreg'),
+    path('equipmentlist/', views.EquipmentView.as_view(), name='equipmentlist'),
 ]

@@ -13,11 +13,19 @@ from django.views import View
 from django.views.generic import ListView, TemplateView
 
 from equipment.forms import SearchMEForm, NoteCreationForm, EquipmentUpdateForm, VerificationRegForm, \
-    CommentsVerificationCreationForm, VerificatorsCreationForm, VerificatorPersonCreationForm
+    CommentsVerificationCreationForm, VerificatorsCreationForm, VerificatorPersonCreationForm, EquipmentCreateForm
 from equipment.models import MeasurEquipment, Verificationequipment, Roomschange, Personchange, CommentsEquipment, \
     Equipment, CommentsVerificationequipment
 
 URL = 'equipment'
+
+class EquipmentView(ListView):
+    """ Выводит список Всего ЛО """
+    model = Equipment
+    template_name = URL + '/equipmentlist.html'
+    context_object_name = 'objects'
+    ordering = ['exnumber']
+
 
 class MeasurEquipmentView(ListView):
     """ Выводит список средств измерений """
@@ -35,6 +43,7 @@ class MeasurEquipmentView(ListView):
         context['URL'] = URL
         context['form'] = SearchMEForm()
         return context
+
 
 class SearchResultMeasurEquipmentView(TemplateView):
     """ Представление, которое выводит результаты поиска по списку средств измерений """
@@ -281,35 +290,36 @@ def EquipmentReg(request):
     """выводит форму для внесения нового ЛО"""
     if request.user.is_superuser:
         if request.method == "POST":
-            form = VerificationRegForm(request.POST)
-            form2 = VerificatorsCreationForm(request.POST)
-            form3 = VerificatorPersonCreationForm(request.POST)
+            form = EquipmentCreateForm(request.POST)
+            # form2 = VerificatorsCreationForm(request.POST)
+            # form3 = VerificatorPersonCreationForm(request.POST)
+
             if form.is_valid():
                 order = form.save(commit=False)
-                order.equipmentSM = MeasurEquipment.objects.get(equipment__exnumber=str)
+                a = Equipment.objects.get()
+                order.exnumber = exnumber
                 order.save()
-                return redirect(order)
-            if form2.is_valid():
-                order = form2.save(commit=False)
-                order.save()
-                return redirect(reverse('measureequipmentver', kwargs={'str': str}))
-            if form3.is_valid():
-                order = form3.save(commit=False)
-                order.save()
-                return redirect(reverse('measureequipmentver', kwargs={'str': str}))
+                # return redirect(f'/equipment/measureequipment/{order.exnumber}/')
+                return redirect('equipmentlist')
+            # if form2.is_valid():
+            #     order = form2.save(commit=False)
+            #     order.save()
+            #     return redirect(reverse('measureequipmentver', kwargs={'str': str}))
+            # if form3.is_valid():
+            #     order = form3.save(commit=False)
+            #     order.save()
+            #     return redirect(reverse('measureequipmentver', kwargs={'str': str}))
     if not request.user.is_superuser:
         messages.success(request, 'Раздел доступен только инженеру по оборудованию')
-        return redirect(reverse('measureequipmentver', kwargs={'str': str}))
+        return redirect('equipmentreg')
     else:
-        form = VerificationRegForm()
-        form2 = VerificatorsCreationForm()
-        form3 = VerificatorPersonCreationForm(request.POST)
-    data = {
-        'form': form,
-        'form2': form2,
-        'form3': form3,
-            }
-    return render(request, 'equipment/equipmentreg.html', data)
+        form = EquipmentCreateForm()
+        # form2 = VerificatorsCreationForm()
+        # form3 = VerificatorPersonCreationForm(request.POST)
+        content = {
+            'form': form,
+                }
+        return render(request, 'equipment/equipmentreg.html', content)
 
 # -------------------
 
