@@ -290,14 +290,20 @@ def EquipmentReg(request):
     """выводит форму для внесения нового ЛО"""
     if request.user.is_superuser:
         if request.method == "POST":
-            form = EquipmentCreateForm(request.POST)
+            form = EquipmentCreateForm(request.POST, request.FILES)
             # form2 = VerificatorsCreationForm(request.POST)
             # form3 = VerificatorPersonCreationForm(request.POST)
 
             if form.is_valid():
                 order = form.save(commit=False)
-                a = Equipment.objects.get()
-                order.exnumber = exnumber
+                try:
+                    a = Equipment.objects.filter(exnumber__startswith=order.exnumber).last().exnumber
+                    b = int(str(a)[-3::]) + 1
+                    c = str(b).rjust(3, '0')
+                    d = str(order.exnumber) + c
+                    order.exnumber = d
+                except:
+                    order.exnumber = str(order.exnumber) + '001'
                 order.save()
                 # return redirect(f'/equipment/measureequipment/{order.exnumber}/')
                 return redirect('equipmentlist')

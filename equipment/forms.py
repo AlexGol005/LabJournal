@@ -57,10 +57,10 @@ class NoteCreationForm(forms.ModelForm):
 
 class EquipmentCreateForm(forms.ModelForm):
     """форма для обновления разрешенных полей оборудования ответственному за оборудование"""
-    exnumber = forms.CharField(label='Внутренний номер', max_length=10000, initial='А001',
-                               help_text='уникальный, шаблон А001',
+    exnumber = forms.CharField(label='Внутренний номер', max_length=10000, initial='А',
+                               help_text='уникальный, напишите буквенную часть номера (кириллица)',
                            widget=forms.TextInput(attrs={'class': 'form-control',
-                                                        'placeholder': 'А001'}))
+                                                        'placeholder': 'А'}))
     lot = forms.CharField(label='Заводской номер', max_length=10000,
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
     yearmanuf = forms.CharField(label='Год выпуска', max_length=10000, initial=datetime.date.today().year,
@@ -80,7 +80,7 @@ class EquipmentCreateForm(forms.ModelForm):
                                         ('новый', 'новый'),
                                         ('б/у', 'б/у')),
                                widget=forms.Select(attrs={'class': 'form-control'}))
-    invnumber = forms.CharField(label='Инвентарный номер', max_length=10000, initial='б/н',
+    invnumber = forms.CharField(label='Инвентарный номер', max_length=10000, initial='б/н',  required=False,
                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
     kategory = forms.ChoiceField(label='Категория', initial='Средство измерения',
                                choices=KATEGORY,
