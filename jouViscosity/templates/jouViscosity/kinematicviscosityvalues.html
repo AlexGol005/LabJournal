@@ -249,102 +249,102 @@
 {#поля с АЗ динамика #}
 <tr>
 <td class="
-{% if obj.cvt20dead > now and obj.kinematicviscosityfordinamicdead20 > now and now_date_plusmonth < obj.cvt20dead and now_date_plusmonth < obj.kinematicviscosityfordinamicdead20 %}
+{% if obj.cvt20dead >= now and obj.kinematicviscosityfordinamicdead20 >= now and now_date_plusmonth <= obj.cvt20dead and now_date_plusmonth <= obj.kinematicviscosityfordinamicdead20 %}
 green{% endif %}
-{% if now_date_plusmonth > obj.cvt20dead and now_date_plusmonth > obj.kinematicviscosityfordinamicdead20 and obj.cvt20dead > now and obj.kinematicviscosityfordinamicdead20 > now %}
+{% if now_date_plusmonth >= obj.cvt20dead and now_date_plusmonth >= obj.kinematicviscosityfordinamicdead20 and obj.cvt20dead >= now and obj.kinematicviscosityfordinamicdead20 > now %}
 orange{% endif %}
-{% if obj.cvt20dead < now or  obj.kinematicviscosityfordinamicdead20 < now %}
+{% if obj.cvt20dead <= now or  obj.kinematicviscosityfordinamicdead20 <= now %}
 red{% endif %}">
-{% if obj.cvt20dead > now and obj.kinematicviscosityfordinamicdead20 > now and now_date_plusmonth < obj.cvt20dead and now_date_plusmonth < obj.kinematicviscosityfordinamicdead20 %}
+{% if obj.cvt20dead >= now and obj.kinematicviscosityfordinamicdead20 >= now and now_date_plusmonth <= obj.cvt20dead and now_date_plusmonth <= obj.kinematicviscosityfordinamicdead20 %}
 <a href="{% url 'detaildinamic' obj.namelot.nameVG.name obj.namelot.lot '20' %}" style="color: green"><b>
-{% elif now_date_plusmonth > obj.cvt20dead or now_date_plusmonth > obj.kinematicviscosityfordinamicdead20 %}
+{% elif now_date_plusmonth >= obj.cvt20dead or now_date_plusmonth >= obj.kinematicviscosityfordinamicdead20 %}
 <a href="{%  url 'detaildinamic' obj.namelot.nameVG.name obj.namelot.lot '20' %}" style="color: darkorange">
-{% elif obj.cvt20dead < now or  obj.kinematicviscosityfordinamicdead20 < now %}
+{% elif obj.cvt20dead <= now or  obj.kinematicviscosityfordinamicdead20 <= now %}
 <a href="{%  url 'detaildinamic' obj.namelot.nameVG.name  obj.namelot.lot '20' %}" style="color: red">
 {% endif %}
 {{ obj.cvtdinamic20|default_if_none:" " }}</a>
 </td>
 
 <td class="
-{% if obj.cvt25dead > now and obj.kinematicviscosityfordinamicdead25 > now and now_date_plusmonth < obj.cvt25dead and now_date_plusmonth < obj.kinematicviscosityfordinamicdead25 %}
+{% if obj.cvt25dead >= now and obj.kinematicviscosityfordinamicdead25 >= now and now_date_plusmonth <= obj.cvt25dead and now_date_plusmonth <= obj.kinematicviscosityfordinamicdead25 %}
 green{% endif %}
-{% if now_date_plusmonth > obj.cvt25dead and now_date_plusmonth > obj.kinematicviscosityfordinamicdead25 and obj.cvt25dead > now and obj.kinematicviscosityfordinamicdead25 > now %}
+{% if now_date_plusmonth >= obj.cvt25dead and now_date_plusmonth >= obj.kinematicviscosityfordinamicdead25 and obj.cvt25dead >= now and obj.kinematicviscosityfordinamicdead25 >= now %}
 orange{% endif %}
-{% if obj.cvt25dead < now or  obj.kinematicviscosityfordinamicdead25 < now %}
+{% if obj.cvt25dead <= now or  obj.kinematicviscosityfordinamicdead25 <= now %}
 red{% endif %}">
-{% if obj.cvt25dead > now and obj.kinematicviscosityfordinamicdead25 > now and now_date_plusmonth < obj.cvt25dead and now_date_plusmonth < obj.kinematicviscosityfordinamicdead25 %}
+{% if obj.cvt25dead >= now and obj.kinematicviscosityfordinamicdead25 >= now and now_date_plusmonth <= obj.cvt25dead and now_date_plusmonth <= obj.kinematicviscosityfordinamicdead25 %}
 <a href="{% url 'detaildinamic' obj.namelot.nameVG.name obj.namelot.lot '25' %}" style="color: green"><b>
-{% elif now_date_plusmonth > obj.cvt25dead or now_date_plusmonth > obj.kinematicviscosityfordinamicdead25 %}
+{% elif now_date_plusmonth >= obj.cvt25dead or now_date_plusmonth >= obj.kinematicviscosityfordinamicdead25 %}
 <a href="{%  url 'detaildinamic' obj.namelot.nameVG.name obj.namelot.lot '25' %}" style="color: darkorange">
-{% elif obj.cvt25dead < now or  obj.kinematicviscosityfordinamicdead25 < now %}
+{% elif obj.cvt25dead <= now or  obj.kinematicviscosityfordinamicdead25 <= now %}
 <a href="{%  url 'detaildinamic' obj.namelot.nameVG.name  obj.namelot.lot '25' %}" style="color: red">
 {% endif %}
 {{ obj.cvtdinamic25|default_if_none:" " }}</a>
 </td>
 
 <td class="
-{% if obj.cvt40dead > now and obj.kinematicviscosityfordinamicdead40 > now and now_date_plusmonth < obj.cvt40dead and now_date_plusmonth < obj.kinematicviscosityfordinamicdead40 %}
+{% if obj.cvt40dead >= now and obj.kinematicviscosityfordinamicdead40 >= now and now_date_plusmonth <= obj.cvt40dead and now_date_plusmonth <= obj.kinematicviscosityfordinamicdead40 %}
 green{% endif %}
-{% if now_date_plusmonth > obj.cvt40dead and now_date_plusmonth > obj.kinematicviscosityfordinamicdead40 and obj.cvt40dead > now and obj.kinematicviscosityfordinamicdead40 > now %}
+{% if now_date_plusmonth >= obj.cvt40dead and now_date_plusmonth >= obj.kinematicviscosityfordinamicdead40 and obj.cvt40dead >= now and obj.kinematicviscosityfordinamicdead40 >= now %}
 orange{% endif %}
-{% if obj.cvt40dead < now or  obj.kinematicviscosityfordinamicdead40 < now %}
+{% if obj.cvt40dead <= now or  obj.kinematicviscosityfordinamicdead40 <= now %}
 red{% endif %}">
-{% if obj.cvt40dead > now and obj.kinematicviscosityfordinamicdead40 > now and now_date_plusmonth < obj.cvt40dead and now_date_plusmonth < obj.kinematicviscosityfordinamicdead40 %}
+{% if obj.cvt40dead >= now and obj.kinematicviscosityfordinamicdead40 >= now and now_date_plusmonth < obj.cvt40dead and now_date_plusmonth <= obj.kinematicviscosityfordinamicdead40 %}
 <a href="{% url 'detaildinamic' obj.namelot.nameVG.name obj.namelot.lot '40' %}" style="color: green"><b>
-{% elif now_date_plusmonth > obj.cvt40dead or now_date_plusmonth > obj.kinematicviscosityfordinamicdead40 %}
+{% elif now_date_plusmonth >= obj.cvt40dead or now_date_plusmonth >= obj.kinematicviscosityfordinamicdead40 %}
 <a href="{%  url 'detaildinamic' obj.namelot.nameVG.name obj.namelot.lot '40' %}" style="color: darkorange">
-{% elif obj.cvt40dead < now or  obj.kinematicviscosityfordinamicdead40 < now %}
+{% elif obj.cvt40dead <= now or  obj.kinematicviscosityfordinamicdead40 <= now %}
 <a href="{%  url 'detaildinamic' obj.namelot.nameVG.name  obj.namelot.lot '40' %}" style="color: red">
 {% endif %}
 {{ obj.cvtdinamic40|default_if_none:" " }}</a>
 </td>
 
 <td class="
-{% if obj.cvt50dead > now and obj.kinematicviscosityfordinamicdead50 > now and now_date_plusmonth < obj.cvt50dead and now_date_plusmonth < obj.kinematicviscosityfordinamicdead50 %}
+{% if obj.cvt50dead >= now and obj.kinematicviscosityfordinamicdead50 >= now and now_date_plusmonth <= obj.cvt50dead and now_date_plusmonth <= obj.kinematicviscosityfordinamicdead50 %}
 green{% endif %}
-{% if now_date_plusmonth > obj.cvt50dead and now_date_plusmonth > obj.kinematicviscosityfordinamicdead50 and obj.cvt50dead > now and obj.kinematicviscosityfordinamicdead50 > now %}
+{% if now_date_plusmonth > obj.cvt50dead and now_date_plusmonth >= obj.kinematicviscosityfordinamicdead50 and obj.cvt50dead >= now and obj.kinematicviscosityfordinamicdead50 >= now %}
 orange{% endif %}
-{% if obj.cvt50dead < now or  obj.kinematicviscosityfordinamicdead50 < now %}
+{% if obj.cvt50dead <= now or  obj.kinematicviscosityfordinamicdead50 <= now %}
 red{% endif %}">
-{% if obj.cvt50dead > now and obj.kinematicviscosityfordinamicdead50 > now and now_date_plusmonth < obj.cvt50dead and now_date_plusmonth < obj.kinematicviscosityfordinamicdead50 %}
+{% if obj.cvt50dead >= now and obj.kinematicviscosityfordinamicdead50 >= now and now_date_plusmonth <= obj.cvt50dead and now_date_plusmonth <= obj.kinematicviscosityfordinamicdead50 %}
 <a href="{% url 'detaildinamic' obj.namelot.nameVG.name obj.namelot.lot '50' %}" style="color: green"><b>
-{% elif now_date_plusmonth > obj.cvt50dead or now_date_plusmonth > obj.kinematicviscosityfordinamicdead50 %}
+{% elif now_date_plusmonth >= obj.cvt50dead or now_date_plusmonth >= obj.kinematicviscosityfordinamicdead50 %}
 <a href="{%  url 'detaildinamic' obj.namelot.nameVG.name obj.namelot.lot '50' %}" style="color: darkorange">
-{% elif obj.cvt50dead < now or  obj.kinematicviscosityfordinamicdead50 < now %}
+{% elif obj.cvt50dead <= now or  obj.kinematicviscosityfordinamicdead50 <= now %}
 <a href="{%  url 'detaildinamic' obj.namelot.nameVG.name  obj.namelot.lot '50' %}" style="color: red">
 {% endif %}
 {{ obj.cvtdinamic50|default_if_none:" " }}</a>
 </td>
 
 <td class="
-{% if obj.cvt80dead > now and obj.kinematicviscosityfordinamicdead80 > now and now_date_plusmonth < obj.cvt80dead and now_date_plusmonth < obj.kinematicviscosityfordinamicdead80 %}
+{% if obj.cvt80dead >= now and obj.kinematicviscosityfordinamicdead80 >= now and now_date_plusmonth < obj.cvt80dead and now_date_plusmonth <= obj.kinematicviscosityfordinamicdead80 %}
 green{% endif %}
-{% if now_date_plusmonth > obj.cvt80dead and now_date_plusmonth > obj.kinematicviscosityfordinamicdead80 and obj.cvt80dead > now and obj.kinematicviscosityfordinamicdead80 > now %}
+{% if now_date_plusmonth >= obj.cvt80dead and now_date_plusmonth >= obj.kinematicviscosityfordinamicdead80 and obj.cvt80dead >= now and obj.kinematicviscosityfordinamicdead80 >= now %}
 orange{% endif %}
-{% if obj.cvt80dead < now or  obj.kinematicviscosityfordinamicdead80 < now %}
+{% if obj.cvt80dead <= now or  obj.kinematicviscosityfordinamicdead80 <= now %}
 red{% endif %}">
-{% if obj.cvt80dead > now and obj.kinematicviscosityfordinamicdead80 > now and now_date_plusmonth < obj.cvt80dead and now_date_plusmonth < obj.kinematicviscosityfordinamicdead80 %}
+{% if obj.cvt80dead >= now and obj.kinematicviscosityfordinamicdead80 >= now and now_date_plusmonth <= obj.cvt80dead and now_date_plusmonth <= obj.kinematicviscosityfordinamicdead80 %}
 <a href="{% url 'detaildinamic' obj.namelot.nameVG.name obj.namelot.lot '80' %}" style="color: green"><b>
-{% elif now_date_plusmonth > obj.cvt80dead or now_date_plusmonth > obj.kinematicviscosityfordinamicdead80 %}
+{% elif now_date_plusmonth >= obj.cvt80dead or now_date_plusmonth >= obj.kinematicviscosityfordinamicdead80 %}
 <a href="{%  url 'detaildinamic' obj.namelot.nameVG.name obj.namelot.lot '80' %}" style="color: darkorange">
-{% elif obj.cvt80dead < now or  obj.kinematicviscosityfordinamicdead80 < now %}
+{% elif obj.cvt80dead <= now or  obj.kinematicviscosityfordinamicdead80 <= now %}
 <a href="{%  url 'detaildinamic' obj.namelot.nameVG.name  obj.namelot.lot '80' %}" style="color: red">
 {% endif %}
 {{ obj.cvtdinamic80|default_if_none:" " }}</a>
 </td>
 
 <td class="
-{% if obj.cvt100dead > now and obj.kinematicviscosityfordinamicdead100 > now and now_date_plusmonth < obj.cvt100dead and now_date_plusmonth < obj.kinematicviscosityfordinamicdead100 %}
+{% if obj.cvt100dead >= now and obj.kinematicviscosityfordinamicdead100 >= now and now_date_plusmonth <= obj.cvt100dead and now_date_plusmonth <= obj.kinematicviscosityfordinamicdead100 %}
 green{% endif %}
-{% if now_date_plusmonth > obj.cvt100dead and now_date_plusmonth > obj.kinematicviscosityfordinamicdead100 and obj.cvt20dead > now and obj.kinematicviscosityfordinamicdead100 > now %}
+{% if now_date_plusmonth >= obj.cvt100dead and now_date_plusmonth >= obj.kinematicviscosityfordinamicdead100 and obj.cvt20dead >= now and obj.kinematicviscosityfordinamicdead100 >= now %}
 orange{% endif %}
-{% if obj.cvt100dead < now or  obj.kinematicviscosityfordinamicdead100 < now %}
+{% if obj.cvt100dead <= now or  obj.kinematicviscosityfordinamicdead100 <= now %}
 red{% endif %}">
-{% if obj.cvt100dead > now and obj.kinematicviscosityfordinamicdead100 > now and now_date_plusmonth < obj.cvt100dead and now_date_plusmonth < obj.kinematicviscosityfordinamicdead100 %}
+{% if obj.cvt100dead >= now and obj.kinematicviscosityfordinamicdead100 >= now and now_date_plusmonth <= obj.cvt100dead and now_date_plusmonth <= obj.kinematicviscosityfordinamicdead100 %}
 <a href="{% url 'detaildinamic' obj.namelot.nameVG.name obj.namelot.lot '100' %}" style="color: green"><b>
-{% elif now_date_plusmonth > obj.cvt100dead or now_date_plusmonth > obj.kinematicviscosityfordinamicdead100 %}
+{% elif now_date_plusmonth >= obj.cvt100dead or now_date_plusmonth >= obj.kinematicviscosityfordinamicdead100 %}
 <a href="{%  url 'detaildinamic' obj.namelot.nameVG.name obj.namelot.lot '100' %}" style="color: darkorange">
-{% elif obj.cvt100dead < now or  obj.kinematicviscosityfordinamicdead100 < now %}
+{% elif obj.cvt100dead <= now or  obj.kinematicviscosityfordinamicdead100 <= now %}
 <a href="{%  url 'detaildinamic' obj.namelot.nameVG.name  obj.namelot.lot '100' %}" style="color: red">
 {% endif %}
 {{ obj.cvtdinamic100|default_if_none:" " }}</a>
