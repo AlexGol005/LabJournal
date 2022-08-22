@@ -173,7 +173,7 @@
                 <a href="{% url 'detaildinamic' obj.namelot.nameVG.name obj.namelot.lot '20' %}" style="color: green"><b>
                 {% elif now_date_plusmonth >= obj.cvt20dead and obj.cvt20dead >= now %}
                 <a href="{%  url 'detaildinamic' obj.namelot.nameVG.name obj.namelot.lot '20' %}" style="color: darkorange">
-                {% elif obj.cvt20dead =< now %}
+                {% elif obj.cvt20dead <= now %}
                 <a href="{%  url 'detaildinamic' obj.namelot.nameVG.name  obj.namelot.lot '20' %}" style="color: red">
                 {% endif %}
                 {{ obj.cvt20|default_if_none:" " }}</a>
