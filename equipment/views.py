@@ -13,9 +13,10 @@ from django.views import View
 from django.views.generic import ListView, TemplateView
 
 from equipment.forms import SearchMEForm, NoteCreationForm, EquipmentUpdateForm, VerificationRegForm, \
-    CommentsVerificationCreationForm, VerificatorsCreationForm, VerificatorPersonCreationForm, EquipmentCreateForm
+    CommentsVerificationCreationForm, VerificatorsCreationForm, VerificatorPersonCreationForm, EquipmentCreateForm, \
+    ManufacturerCreateForm, MeasurEquipmentCharaktersCreateForm, MeasurEquipmentCreateForm, DocsConsCreateForm
 from equipment.models import MeasurEquipment, Verificationequipment, Roomschange, Personchange, CommentsEquipment, \
-    Equipment, CommentsVerificationequipment
+    Equipment, CommentsVerificationequipment, Manufacturer, MeasurEquipmentCharakters
 
 URL = 'equipment'
 
@@ -25,6 +26,23 @@ class EquipmentView(ListView):
     template_name = URL + '/equipmentlist.html'
     context_object_name = 'objects'
     ordering = ['exnumber']
+    paginate_by = 12
+
+class ManufacturerView(ListView):
+    """ Выводит список всех производителей """
+    model = Manufacturer
+    template_name = URL + '/manufacturerlist.html'
+    context_object_name = 'objects'
+    ordering = ['companyName']
+    paginate_by = 12
+
+class MeasurEquipmentCharaktersView(ListView):
+    """ Выводит список госреестров """
+    model = MeasurEquipmentCharakters
+    template_name = URL + '/measurequipmentcharacterslist.html'
+    context_object_name = 'objects'
+    ordering = ['reestr']
+    paginate_by = 12
 
 
 class MeasurEquipmentView(ListView):
@@ -187,8 +205,11 @@ class CommentsView(View):
 def EquipmentUpdate(request, str):
     """выводит форму для обновления разрешенных полей оборудования ответственному за оборудование"""
     title = Equipment.objects.get(exnumber=str)
-    get_pk = title.personchange_set.latest('pk').pk
-    person = Personchange.objects.get(pk=get_pk).person
+    try:
+        get_pk = title.personchange_set.latest('pk').pk
+        person = Personchange.objects.get(pk=get_pk).person
+    except:
+        person = 1
 
     if person == request.user or request.user.is_superuser:
         if request.method == "POST":
@@ -214,10 +235,19 @@ class VerificationequipmentView(View):
     """ выводит историю поверок и форму для добавления комментария к истории поверок """
     def get(self, request, str):
         note = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).order_by('-pk')
-        strreg = note.latest('pk').equipmentSM.equipment.exnumber
-        calinterval = note.latest('pk').equipmentSM.charakters.calinterval
+        try:
+            strreg = note.latest('pk').equipmentSM.equipment.exnumber
+        except:
+            strreg = Equipment.objects.get(exnumber=str).exnumber
+        try:
+            calinterval = note.latest('pk').equipmentSM.charakters.calinterval
+        except:
+            calinterval = '-'
         title = Equipment.objects.get(exnumber=str)
-        dateorder = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).last().dateorder
+        try:
+            dateorder = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).last().dateorder
+        except:
+            dateorder = 'не поверен'
         now = date.today()
         try:
             comment = CommentsVerificationequipment.objects.filter(forNote__exnumber=str).last().note
@@ -287,13 +317,10 @@ def VerificationReg(request, str):
 
 @login_required
 def EquipmentReg(request):
-    """выводит форму для внесения нового ЛО"""
+    """выводит форму для внесения нового ЛО и производителя, и госреестра, и СИ"""
     if request.user.is_superuser:
         if request.method == "POST":
             form = EquipmentCreateForm(request.POST, request.FILES)
-            # form2 = VerificatorsCreationForm(request.POST)
-            # form3 = VerificatorPersonCreationForm(request.POST)
-
             if form.is_valid():
                 order = form.save(commit=False)
                 try:
@@ -305,27 +332,131 @@ def EquipmentReg(request):
                 except:
                     order.exnumber = str(order.exnumber) + '001'
                 order.save()
-                # return redirect(f'/equipment/measureequipment/{order.exnumber}/')
-                return redirect('equipmentlist')
-            # if form2.is_valid():
-            #     order = form2.save(commit=False)
-            #     order.save()
-            #     return redirect(reverse('measureequipmentver', kwargs={'str': str}))
-            # if form3.is_valid():
-            #     order = form3.save(commit=False)
-            #     order.save()
-            #     return redirect(reverse('measureequipmentver', kwargs={'str': str}))
+                if order.kategory == 'СИ':
+                    return redirect(f'/equipment/measureequipmentreg/{order.exnumber}/')
+                else:
+                    return redirect('equipmentlist')
     if not request.user.is_superuser:
         messages.success(request, 'Раздел доступен только инженеру по оборудованию')
         return redirect('equipmentreg')
     else:
         form = EquipmentCreateForm()
-        # form2 = VerificatorsCreationForm()
+        form2 = ManufacturerCreateForm(request.POST)
         # form3 = VerificatorPersonCreationForm(request.POST)
         content = {
             'form': form,
                 }
         return render(request, 'equipment/equipmentreg.html', content)
+
+@login_required
+def ManufacturerRegView(request):
+    """ выводит форму внесения производителей. """
+    if request.method == "POST":
+        form = ManufacturerCreateForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.save()
+            return redirect('manufacturerlist')
+    else:
+        form = ManufacturerCreateForm()
+
+    return render(
+        request,
+        'equipment/manufacturerreg.html',
+        {
+            'form': form
+        })
+
+
+
+@login_required
+def MeasurEquipmentCharaktersRegView(request):
+    """ выводит форму внесения госреестра. """
+    if request.method == "POST":
+        form = MeasurEquipmentCharaktersCreateForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.save()
+            return redirect('measurequipmentcharacterslist')
+    else:
+        form = MeasurEquipmentCharaktersCreateForm()
+
+    return render(
+        request,
+        'equipment/measurequepmentcharacterreg.html',
+        {
+            'form': form
+        })
+
+
+
+class MeasureequipmentregView(View):
+    """ выводит форму регистрации СИ на основе ЛО и Госреестра """
+    def get(self, request, str):
+        title = Equipment.objects.get(exnumber=str)
+        form = MeasurEquipmentCreateForm()
+        data = {
+                'title': title,
+                'form': form,
+                }
+        return render(request, 'equipment/measureequipmentreg.html', data)
+    def post(self, request, str, *args, **kwargs):
+        form = MeasurEquipmentCreateForm(request.POST)
+        if request.user.is_superuser:
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.equipment = Equipment.objects.get(exnumber=str)
+                order.save()
+                return redirect(f'/equipment/measureequipment/{str}')
+        else:
+            messages.success(request, f'Регистрировать может только ответственный за поверку приборов')
+            return redirect(reverse('measureequipmentreg', kwargs={'str': str}))
+
+class DocsConsView(View):
+    """ выводит список принадлежностей прибора и форму для добавления принадлежности """
+    def get(self, request, str):
+        note = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).order_by('-pk')
+        try:
+            strreg = note.latest('pk').equipmentSM.equipment.exnumber
+        except:
+            strreg = Equipment.objects.get(exnumber=str).exnumber
+        try:
+            calinterval = note.latest('pk').equipmentSM.charakters.calinterval
+        except:
+            calinterval = '-'
+        title = Equipment.objects.get(exnumber=str)
+        try:
+            dateorder = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).last().dateorder
+        except:
+            dateorder = 'не поверен'
+        now = date.today()
+        try:
+            comment = CommentsVerificationequipment.objects.filter(forNote__exnumber=str).last().note
+        except:
+            comment = ''
+        form = CommentsVerificationCreationForm(initial={'comment': comment})
+        data = {'note': note,
+                'title': title,
+                'calinterval': calinterval,
+                'now': now,
+                'dateorder': dateorder,
+                'form': form,
+                'comment': comment,
+                'strreg': strreg,
+                }
+        return render(request, 'equipment/verification.html', data)
+    def post(self, request, str, *args, **kwargs):
+        form = DocsConsCreateForm(request.POST)
+        if request.user.is_superuser:
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.author = request.user
+                order.forNote = Equipment.objects.get(exnumber=str)
+                order.save()
+                return redirect(order)
+        else:
+            messages.success(request, f'Комментировать может только ответственный за поверку приборов')
+            return redirect(reverse('measureequipmentver', kwargs={'str': str}))
 
 # -------------------
 

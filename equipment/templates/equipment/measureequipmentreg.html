@@ -1,0 +1,23 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Зарегистрировать СИ
+{% endblock %}
+
+
+{% block content %}
+<div style="text-align: center; margin-top: 20px"><h4> Зарегистрировать СИ</h4></div>
+<div style="text-align: center; margin-top: 20px"><h4> {{title}}</h4></div>
+<form method="post" class="form-register">
+{% csrf_token %}
+{{ form.as_p }}
+<button class="btn btn-outline-warning" type="submit">Записать</button>
+</form>
+{#<div style="text-align: center; margin-top: 20px"><h4> Внести производителя </h4></div>#}
+{#<form method="post" class="form-register">#}
+{#{% csrf_token %}#}
+{#{{ form2.as_p }}#}
+{#<button class="btn btn-outline-warning" type="submit">Записать</button>#}
+{#</form>#}
+{% endblock %}

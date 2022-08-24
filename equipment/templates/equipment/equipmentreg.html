@@ -8,10 +8,22 @@
 
 {% block content %}
 <div style="text-align: center;"><h4> Регистрация ЛО </h4></div>
+<div style="text-align: center; margin-top: 20px">
+<a href="{% url 'manufacturerreg' %}"  target="blank" class="btn btn-info ml-2">
+Добавить производителя</a>
+<a href="{% url 'measurequipmentcharactersreg' %}"  target="blank" class="btn btn-info ml-2">
+Добавить Госрестр</a>
+</div>
 <form method="post" enctype="multipart/form-data" class="form-register">
 <form method="post" class="form-register">
 {% csrf_token %}
 {% crispy form %}
 </form>
 </form>
+{#<div style="text-align: center; margin-top: 20px"><h4> Внести производителя </h4></div>#}
+{#<form method="post" class="form-register">#}
+{#{% csrf_token %}#}
+{#{{ form2.as_p }}#}
+{#<button class="btn btn-outline-warning" type="submit">Записать</button>#}
+{#</form>#}
 {% endblock %}

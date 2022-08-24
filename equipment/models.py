@@ -44,6 +44,7 @@ class Manufacturer(models.Model):
     companyAdress = models.CharField('Адрес', max_length=200, default='', blank=True)
     country = models.CharField('Страна', max_length=200, default='Россия', blank=True)
     telnumber = models.CharField('Телефон', max_length=200, default='', blank=True)
+    telnumberhelp = models.CharField('Телефон техподдержки для вопросов по оборудованию', max_length=200, default='', blank=True)
 
     def __str__(self):
         return self.companyName
@@ -93,18 +94,6 @@ class Rooms(models.Model):
     class Meta:
         verbose_name = 'Комната'
         verbose_name_plural = 'Комнаты'
-
-
-class ModificationsAndTypes(models.Model):
-    modificname = models.CharField('Модификация прибора', max_length=100, default='', blank=True, null=True)
-    typename = models.CharField('Тип прибора', max_length=100, default='', blank=True, null=True)
-    def __str__(self):
-        return f'Модификация {self.modificname} Тип {self.typename} '
-
-
-    class Meta:
-        verbose_name = 'Модификация и тип'
-        verbose_name_plural = 'Модификации и типы'
 
 
 class Equipment(models.Model):
@@ -202,36 +191,31 @@ class DocsCons(models.Model):
         verbose_name_plural = 'Документы к приборам'
 
 
-
 class MeasurEquipmentCharakters(models.Model):
     name = models.CharField('Название прибора', max_length=100, default='')
-    modtype = models.ForeignKey(ModificationsAndTypes, on_delete=models.PROTECT, verbose_name='Тип и модификация', default='', blank=True, null=True)
-    reestr = models.CharField('Номер в Госреестре', max_length=1000, default='', blank=True, null=True, unique=True)
+    reestr = models.CharField('Номер в Госреестре', max_length=1000, default='', blank=True, null=True)
     calinterval = models.IntegerField('МежМетрологический интервал, месяцев', default=12, blank=True, null=True)
+    modificname = models.CharField('Модификация прибора', max_length=100, default='', blank=True, null=True)
+    typename = models.CharField('Тип прибора', max_length=100, default='', blank=True, null=True)
     measurydiapason = models.CharField('Диапазон измерений', max_length=1000, default='', blank=True, null=True)
     accuracity = models.CharField('Класс точности /(разряд/), погрешность и /(или/) неопределённость /(класс, разряд/)',
                               max_length=1000, default='', blank=True, null=True)
 
 
     def __str__(self):
-        return f'госреестр: {self.reestr},  {self.name}  {self.modtype}'
+        return f'госреестр: {self.reestr},  {self.name}  {self.modificname}'
 
     class Meta:
         verbose_name = 'Средство измерения описание типа'
         verbose_name_plural = 'Средства измерения описания типов'
+        unique_together = ('reestr', 'modificname', 'typename')
 
 class MeasurEquipment(models.Model):
     charakters = models.ForeignKey(MeasurEquipmentCharakters,  on_delete=models.PROTECT,
                                    verbose_name='Характеристики СИ', blank=True, null=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True,
                                   verbose_name='Оборудование')
-    ecard = models.CharField('Ссылка на карточку прибора', max_length=90, blank=True, null=True)
     aim = models.CharField('Назначение', max_length=90, blank=True, null=True)
-
-    def save(self, *args, **kwargs):
-        self.ecard = f'https://labjournal.pythonanywhere.com/equipment/measureequipment/{self.equipment.exnumber}'
-        super(MeasurEquipment, self).save(*args, **kwargs)
-
 
     def __str__(self):
         return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot}  № реестр {self.charakters.reestr}'

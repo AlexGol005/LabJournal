@@ -4,10 +4,11 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
 
+from django.contrib.auth.models import User
 
 from equipment.models import MeasurEquipment, CommentsEquipment, NOTETYPE, Equipment, CHOICES, Verificators, \
     VerificatorPerson, Verificationequipment, CHOICESVERIFIC, CHOICESPLACE, CommentsVerificationequipment, Manufacturer, \
-    KATEGORY
+    KATEGORY, MeasurEquipmentCharakters, Personchange, Roomschange, Rooms, DocsCons
 
 
 class SearchMEForm(forms.Form):
@@ -58,7 +59,7 @@ class NoteCreationForm(forms.ModelForm):
 class EquipmentCreateForm(forms.ModelForm):
     """форма для обновления разрешенных полей оборудования ответственному за оборудование"""
     exnumber = forms.CharField(label='Внутренний номер', max_length=10000, initial='А',
-                               help_text='уникальный, напишите буквенную часть номера (кириллица)',
+                               help_text='уникальный, напишите буквенную часть номера (заглавная кириллица)',
                            widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': 'А'}))
     lot = forms.CharField(label='Заводской номер', max_length=10000,
@@ -163,6 +164,27 @@ class EquipmentUpdateForm(forms.ModelForm):
             'imginstruction2', 'imginstruction3',
                   'video', 'invnumber']
 
+class ManufacturerCreateForm(forms.ModelForm):
+    """форма для обновления разрешенных полей оборудования ответственному за оборудование"""
+    companyName = forms.CharField(label='Название компании', max_length=10000,
+                           widget=forms.TextInput(attrs={'class': 'form-control'}))
+    country = forms.CharField(label='Страна', max_length=10000, initial = 'Россия',
+                           widget=forms.TextInput(attrs={'class': 'form-control'}))
+    companyAdress = forms.CharField(label='Адрес', max_length=10000,
+                                    required=False,
+                                    widget=forms.TextInput(attrs={'class': 'form-control'}))
+    telnumber = forms.CharField(label='Телефон общий', max_length=10000, required=False,
+                           widget=forms.TextInput(attrs={'class': 'form-control'}))
+    telnumberhelp = forms.CharField(label='Телефон техподдержки для вопросов по приборам', required=False,
+                                    max_length=10000,
+                           widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = Manufacturer
+        fields = [
+            'companyName', 'country', 'companyAdress', 'telnumber',
+            'telnumberhelp'
+                  ]
 
 class VerificationRegForm(forms.ModelForm):
     """форма для  внесения сведений о поверке"""
@@ -298,8 +320,6 @@ class VerificatorsCreationForm(forms.ModelForm):
                   ]
 
 
-
-
 class VerificatorPersonCreationForm(forms.ModelForm):
     """форма для внесения сотрудника поверителя"""
     company = forms.ModelChoiceField(label='Организация', required=False,
@@ -330,4 +350,106 @@ class VerificatorPersonCreationForm(forms.ModelForm):
             'telnumber', 'email',
             'dop'
                   ]
+
+class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
+    """форма для внесения госреестра"""
+    reestr = forms.CharField(label='Номер в Госреестре', required=False,
+                             widget=forms.TextInput(attrs={'class': 'form-control',
+                                                           'placeholder': ''}))
+    name = forms.CharField(label='Название прибора', max_length=10000000, required=False,
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
+    modificname = forms.CharField(label='Модификация', max_length=10000000, required=False, initial='нет модификации',
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
+    typename = forms.CharField(label='Тип', max_length=10000000, required=False, initial='нет типа',
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
+    calinterval = forms.CharField(label='Межповерочный интервал, месяцев', max_length=10000000, required=False,
+                                  initial='12',
+                                  widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                'placeholder': ''}))
+    measurydiapason = forms.CharField(label='Диапазон измерений', max_length=10000000, required=False,
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
+    accuracity = forms.CharField(label='Класс точности /(разряд/), погрешность и /(или/) '
+                                       'неопределённость /(класс, разряд/)', max_length=10000000, required=False,
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
+
+
+    class Meta:
+        model = MeasurEquipmentCharakters
+        fields = [
+            'reestr',
+            'name', 'modificname',
+            'typename', 'calinterval',
+            'measurydiapason', 'accuracity',
+                  ]
+
+class MeasurEquipmentCreateForm(forms.ModelForm):
+    """форма для внесения госреестра"""
+    charakters = forms.ModelChoiceField(label='Госреестр', required=False,
+                                                         queryset=MeasurEquipmentCharakters.objects.all(),
+                                                         widget=forms.Select(attrs={'class': 'form-control'}))
+    aim = forms.CharField(label='Назначение ЛО', max_length=10000000, required=False, initial='нет',
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
+
+
+    class Meta:
+        model = MeasurEquipment
+        fields = [
+            'charakters',
+             'aim',
+                  ]
+
+class PersonchangeForm(forms.ModelForm):
+    """форма для смены ответственного за ЛО"""
+    person = forms.ModelChoiceField(label='Ответственный за ЛО',
+                                                         queryset=User.objects.all(),
+                                                         widget=forms.Select(attrs={'class': 'form-control'}))
+
+
+    class Meta:
+        model = Personchange
+        fields = [
+            'person'
+                  ]
+
+class RoomschangeForm(forms.ModelForm):
+    """форма для смены Размещения ЛО"""
+    roomnumber = forms.ModelChoiceField(label='Номер комнаты',
+                                                         queryset=Rooms.objects.all(),
+                                                         widget=forms.Select(attrs={'class': 'form-control'}))
+    class Meta:
+        model = Roomschange
+        fields = [
+            'roomnumber'
+                  ]
+
+class RoomsCreateForm(forms.ModelForm):
+    """форма для смены Размещения ЛО"""
+    roomnumber = forms.CharField(label='Номер комнаты', widget=forms.TextInput(attrs={'class': 'form-control'}))
+    person = forms.ModelChoiceField(label='Ответственный за комнату', required=False,
+                                    queryset=User.objects.all(),
+                                    widget=forms.Select(attrs={'class': 'form-control'}))
+    class Meta:
+        model = Rooms
+        fields = [
+            'roomnumber', 'person'
+                  ]
+
+class DocsConsCreateForm(forms.ModelForm):
+    """форма для смены Размещения ЛО"""
+    docs = forms.CharField(label='Наименование документа/принадлежности',
+                           widget=forms.TextInput(attrs={'class': 'form-control'}))
+    source = forms.CharField(label='Источник', initial='От поставщика',
+                           widget=forms.TextInput(attrs={'class': 'form-control'}))
+    class Meta:
+        model = DocsCons
+        fields = [
+            'docs', 'source'
+                  ]
+
 

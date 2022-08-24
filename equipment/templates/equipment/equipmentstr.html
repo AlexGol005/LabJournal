@@ -10,8 +10,8 @@
 <div class="col-md-12 mt-2" >
 <div style="text-align: center;"><h4>{{ obj.charakters.name}}</h4></div>
     <div style="text-align: center;">
-<h6> {{ obj.charakters.modtype.typename|default:" " }}
-{{ obj.charakters.modtype.modificname|default:" " }}.
+<h6> {{ obj.charakters.typename|default:" " }}
+{{ obj.charakters.modificname|default:" " }}.
 Заводской номер: <b>{{ obj.equipment.lot }}</b></h6>
 </div>
 <br>
@@ -36,8 +36,8 @@
         <td>{{ obj.equipment.exnumber }}</td>
          <td> {{ obj.charakters.reestr }}</td>
          <td> {{ obj.charakters.name }}</td>
-        <td>{{ obj.charakters.modtype.typename|default:" " }}/
-             {{ obj.charakters.modtype.modificname|default:" " }} </td>
+        <td>{{ obj.charakters.typename|default:" " }}/
+             {{ obj.charakters.modificname|default:" " }} </td>
         <td> {{ obj.equipment.lot }}</td>
         <td> {{ obj.equipment.yearmanuf }}</td>
         <td> {{ obj.equipment.manufacturer.country }},
@@ -162,7 +162,16 @@
     </tbody>
 </table>
 </div>
-
+{# расположение кнопки#}
+<div style="text-align: center; margin-top: 10px">
+    {% if note %}
+ <a href="/equipment/measureequipment/verification/{{ obj.equipment.exnumber }}/"  class="btn btn-warning mt-2 mr-2">
+     Поменять ответственного</a>
+    {% endif %}
+     <a href="/equipment/measureequipment/verificationreg/{{ obj.equipment.exnumber }}/"  class="btn btn-warning mt-2 mr-2">
+     Поменять помещение</a>
+ <a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/comments/"  class="btn btn-warning mt-2 ">
+     Смотреть список и Добавить документы и принадлежности</a></div>
 {#инструкция#}
 <div style="text-align: center; margin-top: 20px"><h4>
 Характеристики и инструкции</h4></div>
@@ -186,7 +195,7 @@
         <td><a href="/attestationJ/{{ URL }}/attestation/{{ obj.id }}/"  class="btn btn-outline-warning mt-3">
             см</a></td>
         <td> {{ obj.charakters.measurydiapason }}</td>
-        <td> {{ obj.equipment.accuracity }}</td>
+        <td> {{ obj.charakters.accuracity }}</td>
         <td>{{ obj.aim }}</td>
         <td> пока пусто</td>
     </tr>
