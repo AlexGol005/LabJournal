@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+
+{% block content %}
+<div style="text-align: center;"><h4>
+<a href="/equipment/measureequipment/{{ dop.exnumber }}/">
+{{ title }}</a></h4></div>
+
+    <div style="text-align: center;"><h4>{{ dop }}</h4></div>
+    <br><br>
+    <form method="post" enctype="multipart/form-data" class="form-register">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-outline-warning" type="submit">Записать</button>
+    </form>
+    <br>
+
+{% endblock %}

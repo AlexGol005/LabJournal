@@ -55,13 +55,13 @@ class Manufacturer(models.Model):
 
 class Verificators(models.Model):
     companyName = models.CharField('Поверитель', max_length=100, unique=True)
-    companyAdress = models.CharField('Адрес', max_length=200, default='', blank=True)
-    telnumber = models.CharField('Телефон', max_length=200, default='', blank=True)
-    email = models.CharField('email', max_length=200, default='', blank=True)
-    note = models.CharField('Примечание', max_length=10000, default='', blank=True)
+    companyAdress = models.CharField('Адрес', max_length=200, default='-', blank=True)
+    telnumber = models.CharField('Телефон', max_length=200, default='-', blank=True)
+    email = models.CharField('email', max_length=200, default='-', blank=True)
+    note = models.CharField('Примечание', max_length=10000, default='-', blank=True)
 
     def __str__(self):
-        return self.companyName
+        return f'{self.companyName}, {self.companyAdress}, {self.email}, {self.telnumber}'
 
     class Meta:
         verbose_name = 'Поверитель организация'
@@ -182,13 +182,14 @@ class DocsCons(models.Model):
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Оборудование')
     docs = models.TextField('Документ или принадлежность (1 или несколько)', max_length=1000, default='', blank=True, null=True)
     source = models.CharField('Откуда появился', max_length=1000, default='От поставщика', blank=True, null=True)
+    note = models.CharField('Примечание', max_length=1000, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.equipment.exnumber} Перемещено {self.date} '
+        return f'{self.equipment.exnumber} '
 
     class Meta:
-        verbose_name = 'Документы к прибору'
-        verbose_name_plural = 'Документы к приборам'
+        verbose_name = 'Комплект к прибору'
+        verbose_name_plural = 'Комплекты к приборам'
 
 
 class MeasurEquipmentCharakters(models.Model):
@@ -299,7 +300,8 @@ class CommentsEquipment(models.Model):
         verbose_name_plural = 'Записи о приборах'
         ordering = ['-pk']
 
-class  CommentsVerificationequipment(models.Model):
+
+class CommentsVerificationequipment(models.Model):
     """комментарии к поверке """
     date = models.DateField('Дата', auto_now_add=True, db_index=True)
     note = models.TextField('Содержание', max_length=1000, default='')
@@ -307,12 +309,25 @@ class  CommentsVerificationequipment(models.Model):
     author = models.CharField('Автор', max_length=90, blank=True, null=True)
 
     def get_absolute_url(self):
-        """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
         return reverse('measureequipmentver', kwargs={'str': self.forNote.exnumber})
 
     class Meta:
         verbose_name = 'Комментарий к поверке'
         verbose_name_plural = 'Комментарии к поверкам'
+
+class MeteorologicalParameters(models.Model):
+    """метеорологические параметры в помещении """
+    date = models.DateField('Дата')
+    roomnumber = models.ForeignKey(Rooms, on_delete=models.PROTECT)
+    pressure = models.CharField('Давление, кПа', max_length=90, blank=True, null=True)
+    temperature = models.CharField('Температура, °С', max_length=90, blank=True, null=True)
+    humidity = models.CharField('Влажность, %', max_length=90, blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Условия в помещении'
+        verbose_name_plural = 'Условия в помещениях'
+
+
 
 
 

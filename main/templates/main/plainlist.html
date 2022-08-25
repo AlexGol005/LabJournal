@@ -1,0 +1,16 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}
+ЛО и ЛЖ
+{% endblock %}
+
+
+{% block content %}
+
+<div style="text-align: center;">
+{% for obj in objects %}
+<li>{{ obj }}</li>
+{% endfor %}
+</div>
+
+{% endblock %}

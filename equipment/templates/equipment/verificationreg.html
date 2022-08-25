@@ -7,30 +7,24 @@
 
 
 {% block content %}
-    <div style="text-align: center;"><h4>Внести сведения о поверке для:
-        <br> <a href="/equipment/measureequipment/{{ title.exnumber }}/">
-    {{ title.exnumber }}, {{title.measurequipment_set.all.last.charakters}}, зав. № {{title.lot}}  </a> </h4></div>
-    <br><br>
-    <div style="text-align: center;"><h4> Внести запись о поверке </h4></div>
-    <form method="post" enctype="multipart/form-data" class="form-register">
-    <form method="post" class="form-register">
-    {% csrf_token %}
-    {% crispy form %}
-</form>
-</form>
-    <br>
-<div style="text-align: center;"><h4>Внести организацию поверителя </h4></div>
+<div style="text-align: center;"><h4>Внести сведения о поверке для:
+<br> <a href="/equipment/measureequipment/{{ title.exnumber }}/">
+{{ title.exnumber }}, {{title.measurequipment_set.all.last.charakters}}, зав. № {{title.lot}}  </a> </h4></div>
+
+<div style="text-align: center; margin-top: 20px">
+<a href="{% url 'verificatorsreg' %}" class="btn btn-warning mr-5 mt-3" style="width: 210px" target="blank">
+Добавить организацию поверителя</a>
+<a href="{% url 'verificatorspersonsreg' %}" class="btn btn-warning  mt-3" style="width: 210px" target="blank">
+Добавить сотрудника поверителя</a>
+</div>
+
+<br><br>
+<div style="text-align: center;"><h4> Внести запись о поверке </h4></div>
+<form method="post" enctype="multipart/form-data" class="form-register">
 <form method="post" class="form-register">
-    {% csrf_token %}
-    {{ form2.as_p }}
-    <button class="btn btn-outline-warning" type="submit">Внести</button>
+{% csrf_token %}
+{% crispy form %}
 </form>
-    <br>
-<div style="text-align: center;"><h4>Внести сотрудника поверителя </h4></div>
-<form method="post" class="form-register">
-    {% csrf_token %}
-    {{ form3.as_p }}
-    <button class="btn btn-outline-warning" type="submit">Внести</button>
 </form>
-    <br>
+<br>
 {% endblock %}

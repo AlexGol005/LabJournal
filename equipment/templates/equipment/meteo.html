@@ -1,0 +1,23 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}
+    Метео параметры
+{% endblock %}
+
+
+{% block content %}
+
+
+<div style="text-align: center; margin-top: 20px">
+<a href="{% url 'roomreg' %}" class="btn btn-warning mr-5 mt-3" style="width: 210px">Добавить помещение</a>
+<a href="{% url 'meteoreg' %}" class="btn btn-warning  mt-3" style="width: 210px">Добавить условия окружающей среды</a>
+</div>
+
+
+
+<br><br>
+<div style="text-align: center;">
+<img src="{% static 'main/img/20.jpg' %}"
+alt="Изображение на странице метео"></div>
+
+{% endblock %}

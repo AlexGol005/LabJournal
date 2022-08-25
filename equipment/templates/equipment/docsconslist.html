@@ -1,0 +1,49 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Документы и принадлежности
+{% endblock %}
+
+
+{% block content %}
+<div style="text-align: center;">
+<a href="/equipment/measureequipment/{{ title.exnumber }}/">
+<h4>Документы и принадлежности: {{ title }}</h4></a></div>
+
+{#таблица #}
+<br>
+<table class="table table-bordered">
+<thead>
+<tr>
+<th>Название</th>
+<th> Происхождение </th>
+<th> Дата появления</th>
+<th>Примечание</th>
+</tr>
+</thead>
+<tbody>
+{% for obj in objects %}
+<tr>
+<td> {{ obj.docs }}</td>
+<td > {{ obj.source }}</td>
+<td > {{ obj.date|date:"d.m.Y" }}</td>
+<td > {{ obj.note }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{# конец таблицы #}
+
+{#форма для внесения документа#}
+  <br><br>
+<div style="text-align: center;">
+<h5>Добавить</h5></div>
+<form method="post" enctype="multipart/form-data" class="form-register">
+{% csrf_token %}
+{{ form.as_p }}
+<button class="btn btn-outline-warning" type="submit">Записать</button>
+</form>
+{#конец формы#}
+<br>
+{% endblock %}

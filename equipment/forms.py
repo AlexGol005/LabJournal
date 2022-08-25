@@ -5,10 +5,11 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
 
 from django.contrib.auth.models import User
+from django.forms import ModelForm
 
 from equipment.models import MeasurEquipment, CommentsEquipment, NOTETYPE, Equipment, CHOICES, Verificators, \
     VerificatorPerson, Verificationequipment, CHOICESVERIFIC, CHOICESPLACE, CommentsVerificationequipment, Manufacturer, \
-    KATEGORY, MeasurEquipmentCharakters, Personchange, Roomschange, Rooms, DocsCons
+    KATEGORY, MeasurEquipmentCharakters, Personchange, Roomschange, Rooms, DocsCons, MeteorologicalParameters
 
 
 class SearchMEForm(forms.Form):
@@ -198,7 +199,7 @@ class VerificationRegForm(forms.ModelForm):
             '%m/%d/%y',
             '%d.%m.%Y',
         ))
-    datedead = forms.DateField(label='Дата окончания поверки', required=False,
+    datedead = forms.DateField(label='Дата окончания поверки',
                            widget=forms.DateInput(
                                attrs={'class': 'form-control', 'placeholder': ''}),
                            input_formats=(
@@ -207,7 +208,7 @@ class VerificationRegForm(forms.ModelForm):
                                '%m/%d/%y',
                                '%d.%m.%Y',
                            ))
-    dateorder = forms.DateField(label='Дата заказа поверки', required=False,
+    dateorder = forms.DateField(label='Дата заказа поверки',
                            widget=forms.DateInput(
                                attrs={'class': 'form-control', 'placeholder': ''}),
                            input_formats=(
@@ -239,13 +240,14 @@ class VerificationRegForm(forms.ModelForm):
                                widget=forms.Select(attrs={'class': 'form-control'}))
     note = forms.CharField(label='Примечание', max_length=10000, required=False,
                                     widget=forms.TextInput(attrs={'class': 'form-control'}))
+    img = forms.ImageField(label='Сертификат', widget=forms.FileInput, required=False)
 
 
     class Meta:
         model = Verificationequipment
         fields = ['date', 'datedead', 'dateorder', 'arshin', 'certnumber',
                   'price', 'statusver',  'verificator', 'verificatorperson',
-                  'place', 'note'
+                  'place', 'note',
                   ]
 
     def __init__(self, *args, **kwargs):
@@ -270,7 +272,8 @@ class VerificationRegForm(forms.ModelForm):
                 Column('place', css_class='form-group col-md-4 mb-0'),
             ),
             Row(
-                Column('note', css_class='form-group col-md-12 mb-1')),
+                Column('note', css_class='form-group col-md-12 mb-1'),
+                Column('img', css_class='form-group col-md-12 mb-1')),
             Submit('submit', 'Внести'))
 
 
@@ -429,7 +432,7 @@ class RoomschangeForm(forms.ModelForm):
                   ]
 
 class RoomsCreateForm(forms.ModelForm):
-    """форма для смены Размещения ЛО"""
+    """форма для внесения комнаты"""
     roomnumber = forms.CharField(label='Номер комнаты', widget=forms.TextInput(attrs={'class': 'form-control'}))
     person = forms.ModelChoiceField(label='Ответственный за комнату', required=False,
                                     queryset=User.objects.all(),
@@ -441,15 +444,46 @@ class RoomsCreateForm(forms.ModelForm):
                   ]
 
 class DocsConsCreateForm(forms.ModelForm):
-    """форма для смены Размещения ЛО"""
+    """форма для внесения документа или принадлежности"""
     docs = forms.CharField(label='Наименование документа/принадлежности',
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
     source = forms.CharField(label='Источник', initial='От поставщика',
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
+    note = forms.CharField(label='Примечание', required=False,
+                             widget=forms.TextInput(attrs={'class': 'form-control'}))
     class Meta:
         model = DocsCons
         fields = [
-            'docs', 'source'
+            'docs', 'source',
+            'note'
                   ]
 
 
+class MeteorologicalParametersRegForm(ModelForm):
+    """форма для внесения условий окружающей среды в помещении"""
+    date = forms.DateField(label='Дата',
+                           widget=forms.DateInput(
+                               attrs={'class': 'form-control', 'placeholder': ''}),
+                           input_formats=(
+                               '%Y-%m-%d',
+                               '%m/%d/%Y',
+                               '%m/%d/%y',
+                               '%d.%m.%Y',
+                           ))
+    roomnumber = forms.ModelChoiceField(label='Помещение',
+                                    queryset=Rooms.objects.all(),
+                                    widget=forms.Select(attrs={'class': 'form-control'}))
+    pressure = forms.CharField(label='Давление, кПа', required=False, initial='102.0',
+                               widget=forms.TextInput(attrs={'class': 'form-control'}))
+    temperature = forms.CharField(label='Температура, °С',  required=False, initial='20.0',
+                                  widget=forms.TextInput(attrs={'class': 'form-control'}))
+    humidity = forms.CharField(label='Влажность, %', required=False, initial='50',
+                               widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = MeteorologicalParameters
+        fields = [
+            'date',
+            'roomnumber', 'pressure',
+            'temperature', 'humidity'
+                  ]

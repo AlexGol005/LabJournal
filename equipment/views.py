@@ -2,23 +2,133 @@ import xlwt
 from datetime import timedelta, date
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse
 from datetime import datetime, timedelta
-from django.db.models import Max, Q, F, Value
+from django.db.models import Max, Q, Value
 from django.db.models.functions import Upper, Concat
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template.defaultfilters import upper
 from django.urls import reverse
 from django.views import View
-from django.views.generic import ListView, TemplateView
+from django.views.generic import ListView, TemplateView, FormView, CreateView
 
 from equipment.forms import SearchMEForm, NoteCreationForm, EquipmentUpdateForm, VerificationRegForm, \
     CommentsVerificationCreationForm, VerificatorsCreationForm, VerificatorPersonCreationForm, EquipmentCreateForm, \
-    ManufacturerCreateForm, MeasurEquipmentCharaktersCreateForm, MeasurEquipmentCreateForm, DocsConsCreateForm
+    ManufacturerCreateForm, MeasurEquipmentCharaktersCreateForm, MeasurEquipmentCreateForm, DocsConsCreateForm, \
+    PersonchangeForm, RoomschangeForm, RoomsCreateForm, MeteorologicalParametersRegForm
 from equipment.models import MeasurEquipment, Verificationequipment, Roomschange, Personchange, CommentsEquipment, \
-    Equipment, CommentsVerificationequipment, Manufacturer, MeasurEquipmentCharakters
+    Equipment, CommentsVerificationequipment, Manufacturer, MeasurEquipmentCharakters, DocsCons, Verificators, \
+    VerificatorPerson
 
 URL = 'equipment'
+
+
+class MeteorologicalParametersView(TemplateView):
+    """ Представление, которое выводит формы для метеопараметров """
+    template_name = URL + '/meteo.html'
+
+class RoomsCreateView(SuccessMessageMixin, CreateView):
+    """ выводит форму добавления поверителя """
+    template_name = URL + '/reg.html'
+    form_class = RoomsCreateForm
+    success_url = '/equipment/meteo/'
+    success_message = "Помещение успешно добавлено"
+
+    def get_context_data(self, **kwargs):
+        context = super(RoomsCreateView, self).get_context_data(**kwargs)
+        context['title'] = 'Добавить помещение'
+        return context
+
+
+class VerificatorsCreationView(SuccessMessageMixin, CreateView):
+    """ выводит форму добавления компании поверителя """
+    template_name = URL + '/reg.html'
+    form_class = VerificatorsCreationForm
+    success_url = '/equipment/verificators/'
+    success_message = "Организация поверитель успешно добавлена"
+
+    def get_context_data(self, **kwargs):
+        context = super(VerificatorsCreationView, self).get_context_data(**kwargs)
+        context['title'] = 'Внести организацию поверителя'
+        return context
+
+
+class VerificatorPersonCreationView(SuccessMessageMixin, CreateView):
+    """ выводит форму добавления сотрудника поверителя """
+    template_name = URL + '/reg.html'
+    form_class = VerificatorPersonCreationForm
+    success_url = '/equipment/verificatorpersons/'
+    success_message = "Сотрудник поверитель успешно добавлен"
+
+    def get_context_data(self, **kwargs):
+        context = super(VerificatorPersonCreationView, self).get_context_data(**kwargs)
+        context['title'] = 'Внести сотрудника поверителя'
+        return context
+
+class ManufacturerRegView(SuccessMessageMixin, CreateView):
+    """ выводит форму добавления производителя """
+    template_name = URL + '/reg.html'
+    form_class = ManufacturerCreateForm
+    success_url = '/equipment/manufacturerlist/'
+    success_message = "Производитель успешно добавлен"
+
+    def get_context_data(self, **kwargs):
+        context = super(ManufacturerRegView, self).get_context_data(**kwargs)
+        context['title'] = 'Добавить производителя ЛО'
+        return context
+
+
+class MeteorologicalParametersCreateView(SuccessMessageMixin, CreateView):
+    """ выводит форму добавления производителя """
+    template_name = URL + '/reg.html'
+    form_class = ManufacturerCreateForm
+    success_url = '/equipment/manufacturerlist/'
+    success_message = "Условия окружающей среды успешно добавлены"
+
+    def get_context_data(self, **kwargs):
+        context = super(MeteorologicalParametersCreateView, self).get_context_data(**kwargs)
+        context['title'] = 'Добавить условия окружающей среды'
+        return context
+
+
+class MeasurEquipmentCharaktersRegView(SuccessMessageMixin, CreateView):
+    """ выводит форму внесения госреестра. """
+    template_name = URL + '/reg.html'
+    form_class = MeasurEquipmentCharaktersCreateForm
+    success_url = '/equipment/measurequipmentcharacterslist/'
+    success_message = "Госреестр успешно добавлен"
+
+    def get_context_data(self, **kwargs):
+        context = super(MeasurEquipmentCharaktersRegView, self).get_context_data(**kwargs)
+        context['title'] = 'Добавить Госреестр'
+        return context
+
+
+class MeasureequipmentregView(View):
+    """ выводит форму регистрации СИ на основе ЛО и Госреестра """
+    def get(self, request, str):
+        form = MeasurEquipmentCreateForm()
+        title = 'Зарегистрировать СИ'
+        dop = Equipment.objects.get(exnumber=str)
+        data = {
+                'title': title,
+                'dop': dop,
+                'form': form,
+                }
+        return render(request, 'equipment/reg.html', data)
+    def post(self, request, str, *args, **kwargs):
+        form = MeasurEquipmentCreateForm(request.POST)
+        if request.user.is_superuser:
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.equipment = Equipment.objects.get(exnumber=str)
+                order.save()
+                return redirect(f'/equipment/measureequipment/{str}')
+        else:
+            messages.success(request, f'Регистрировать может только ответственный за поверку приборов')
+            return redirect(reverse('measureequipmentreg', kwargs={'str': str}))
+
 
 class EquipmentView(ListView):
     """ Выводит список Всего ЛО """
@@ -28,6 +138,19 @@ class EquipmentView(ListView):
     ordering = ['exnumber']
     paginate_by = 12
 
+class VerificatorsView(ListView):
+    """ Выводит список всех организаций поверителей """
+    model = Verificators
+    template_name = 'main/plainlist.html'
+    context_object_name = 'objects'
+
+class VerificatorsPersonsView(ListView):
+    """ Выводит список всех организаций поверителей """
+    model = VerificatorPerson
+    template_name = 'main/plainlist.html'
+    context_object_name = 'objects'
+
+
 class ManufacturerView(ListView):
     """ Выводит список всех производителей """
     model = Manufacturer
@@ -35,6 +158,7 @@ class ManufacturerView(ListView):
     context_object_name = 'objects'
     ordering = ['companyName']
     paginate_by = 12
+
 
 class MeasurEquipmentCharaktersView(ListView):
     """ Выводит список госреестров """
@@ -283,33 +407,19 @@ def VerificationReg(request, str):
     title = Equipment.objects.get(exnumber=str)
     if request.user.is_superuser:
         if request.method == "POST":
-            form = VerificationRegForm(request.POST)
-            form2 = VerificatorsCreationForm(request.POST)
-            form3 = VerificatorPersonCreationForm(request.POST)
+            form = VerificationRegForm(request.POST, request.FILES)
             if form.is_valid():
                 order = form.save(commit=False)
                 order.equipmentSM = MeasurEquipment.objects.get(equipment__exnumber=str)
                 order.save()
                 return redirect(order)
-            if form2.is_valid():
-                order = form2.save(commit=False)
-                order.save()
-                return redirect(reverse('measureequipmentver', kwargs={'str': str}))
-            if form3.is_valid():
-                order = form3.save(commit=False)
-                order.save()
-                return redirect(reverse('measureequipmentver', kwargs={'str': str}))
     if not request.user.is_superuser:
         messages.success(request, 'Раздел доступен только инженеру по оборудованию')
         return redirect(reverse('measureequipmentver', kwargs={'str': str}))
     else:
         form = VerificationRegForm()
-        form2 = VerificatorsCreationForm()
-        form3 = VerificatorPersonCreationForm(request.POST)
     data = {
         'form': form,
-        'form2': form2,
-        'form3': form3,
         'title': title
             }
     return render(request, 'equipment/verificationreg.html', data)
@@ -348,60 +458,58 @@ def EquipmentReg(request):
                 }
         return render(request, 'equipment/equipmentreg.html', content)
 
-@login_required
-def ManufacturerRegView(request):
-    """ выводит форму внесения производителей. """
-    if request.method == "POST":
-        form = ManufacturerCreateForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.save()
-            return redirect('manufacturerlist')
-    else:
-        form = ManufacturerCreateForm()
 
-    return render(
-        request,
-        'equipment/manufacturerreg.html',
-        {
-            'form': form
-        })
-
-
-
-@login_required
-def MeasurEquipmentCharaktersRegView(request):
-    """ выводит форму внесения госреестра. """
-    if request.method == "POST":
-        form = MeasurEquipmentCharaktersCreateForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.save()
-            return redirect('measurequipmentcharacterslist')
-    else:
-        form = MeasurEquipmentCharaktersCreateForm()
-
-    return render(
-        request,
-        'equipment/measurequepmentcharacterreg.html',
-        {
-            'form': form
-        })
-
-
-
-class MeasureequipmentregView(View):
-    """ выводит форму регистрации СИ на основе ЛО и Госреестра """
+class DocsConsView(View):
+    """ выводит список принадлежностей прибора и форму для добавления принадлежности """
     def get(self, request, str):
+        template_name = 'equipment/docsconslist.html'
+        form = DocsConsCreateForm()
         title = Equipment.objects.get(exnumber=str)
-        form = MeasurEquipmentCreateForm()
-        data = {
+        objects = DocsCons.objects.filter(equipment__exnumber=str).order_by('pk')
+        context = {
                 'title': title,
                 'form': form,
+                'objects': objects,
                 }
-        return render(request, 'equipment/measureequipmentreg.html', data)
+        return render(request, template_name, context)
+
     def post(self, request, str, *args, **kwargs):
-        form = MeasurEquipmentCreateForm(request.POST)
+        form = DocsConsCreateForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.equipment = Equipment.objects.get(exnumber=str)
+            order.save()
+            template_name = 'equipment/docsconslist.html'
+            form = DocsConsCreateForm()
+            title = Equipment.objects.get(exnumber=str)
+            objects = DocsCons.objects.filter(equipment__exnumber=str).order_by('pk')
+            context = {
+                'title': title,
+                'form': form,
+                'objects': objects,
+            }
+            return render(request, template_name, context)
+
+
+
+
+
+class PersonchangeFormView(View):
+    """вывод формы смены ответсвенного за прибор, URL=personchangereg/<str:str>/"""
+    def get(self, request, str):
+        title = 'Смена ответственного за прибор'
+        dop = Equipment.objects.get(exnumber=str)
+        form = PersonchangeForm()
+        context = {
+            'title': title,
+            'dop': dop,
+            'form': form,
+        }
+        template_name = 'equipment/reg.html'
+        return render(request, template_name, context)
+
+    def post(self, request, str, *args, **kwargs):
+        form = PersonchangeForm(request.POST)
         if request.user.is_superuser:
             if form.is_valid():
                 order = form.save(commit=False)
@@ -409,54 +517,35 @@ class MeasureequipmentregView(View):
                 order.save()
                 return redirect(f'/equipment/measureequipment/{str}')
         else:
-            messages.success(request, f'Регистрировать может только ответственный за поверку приборов')
-            return redirect(reverse('measureequipmentreg', kwargs={'str': str}))
+            messages.success(request, f'Раздел для ответственного за поверку приборов')
+            return redirect(f'/equipment/measureequipment/{str}')
 
-class DocsConsView(View):
-    """ выводит список принадлежностей прибора и форму для добавления принадлежности """
+class RoomschangeFormView(View):
+    """вывод формы смены помещения, URL=roomschangereg/<str:str>/"""
     def get(self, request, str):
-        note = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).order_by('-pk')
-        try:
-            strreg = note.latest('pk').equipmentSM.equipment.exnumber
-        except:
-            strreg = Equipment.objects.get(exnumber=str).exnumber
-        try:
-            calinterval = note.latest('pk').equipmentSM.charakters.calinterval
-        except:
-            calinterval = '-'
-        title = Equipment.objects.get(exnumber=str)
-        try:
-            dateorder = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).last().dateorder
-        except:
-            dateorder = 'не поверен'
-        now = date.today()
-        try:
-            comment = CommentsVerificationequipment.objects.filter(forNote__exnumber=str).last().note
-        except:
-            comment = ''
-        form = CommentsVerificationCreationForm(initial={'comment': comment})
-        data = {'note': note,
-                'title': title,
-                'calinterval': calinterval,
-                'now': now,
-                'dateorder': dateorder,
-                'form': form,
-                'comment': comment,
-                'strreg': strreg,
-                }
-        return render(request, 'equipment/verification.html', data)
+        title = 'Смена размещения прибора'
+        dop = Equipment.objects.get(exnumber=str)
+        form = RoomschangeForm()
+        context = {
+            'title': title,
+            'dop': dop,
+            'form': form,
+        }
+        template_name = 'equipment/reg.html'
+        return render(request, template_name, context)
+
     def post(self, request, str, *args, **kwargs):
-        form = DocsConsCreateForm(request.POST)
+        form = RoomschangeForm(request.POST)
         if request.user.is_superuser:
             if form.is_valid():
                 order = form.save(commit=False)
-                order.author = request.user
-                order.forNote = Equipment.objects.get(exnumber=str)
+                order.equipment = Equipment.objects.get(exnumber=str)
                 order.save()
-                return redirect(order)
+                return redirect(f'/equipment/measureequipment/{str}')
         else:
-            messages.success(request, f'Комментировать может только ответственный за поверку приборов')
-            return redirect(reverse('measureequipmentver', kwargs={'str': str}))
+            messages.success(request, f'Раздел для ответственного за поверку приборов')
+            return redirect(f'/equipment/measureequipment/{str}')
+
 
 # -------------------
 
