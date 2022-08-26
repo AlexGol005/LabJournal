@@ -128,7 +128,7 @@ class Equipment(models.Model):
 
 
     def __str__(self):
-        return f'Вн. № {self.exnumber}    Зав. № {self.lot}   pk {self.pk}'
+        return f'Вн. № {self.exnumber}    Зав. № {self.lot} '
 
     def save(self, *args, **kwargs):
         super().save()
@@ -209,6 +209,7 @@ class MeasurEquipmentCharakters(models.Model):
     measurydiapason = models.CharField('Диапазон измерений', max_length=1000, default='', blank=True, null=True)
     accuracity = models.CharField('Класс точности /(разряд/), погрешность и /(или/) неопределённость /(класс, разряд/)',
                               max_length=1000, default='', blank=True, null=True)
+    aim = models.CharField('Назначение', max_length=90, blank=True, null=True)
 
 
     def __str__(self):
@@ -225,6 +226,10 @@ class TestingEquipmentCharakters(models.Model):
     modificname = models.CharField('Модификация прибора', max_length=100, default='', blank=True, null=True)
     typename = models.CharField('Тип прибора', max_length=100, default='', blank=True, null=True)
     measurydiapason = models.CharField('Основные технические характеристики', max_length=1000,  blank=True, null=True)
+    aim = models.CharField('Наименование видов испытаний и/или определяемых характеристик (параметров) продукции',
+                           max_length=500, blank=True, null=True)
+    aim2 = models.CharField('Наименование испытуемых групп объектов',
+                            max_length=500, blank=True, null=True)
 
     def __str__(self):
         return f'{self.name}  {self.modificname}'
@@ -239,7 +244,6 @@ class MeasurEquipment(models.Model):
                                    verbose_name='Характеристики СИ', blank=True, null=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True,
                                   verbose_name='Оборудование')
-    aim = models.CharField('Назначение', max_length=90, blank=True, null=True)
     ecard = models.CharField('Назначение', max_length=90, blank=True, null=True)
 
     def __str__(self):
@@ -254,10 +258,7 @@ class TestingEquipment(models.Model):
                                    verbose_name='Характеристики ИО', blank=True, null=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True,
                                   verbose_name='Оборудование')
-    aim = models.CharField('Наименование видов испытаний и/или определяемых характеристик (параметров) продукции',
-                           max_length=500, blank=True, null=True)
-    aim2 = models.CharField('Наименование испытуемых групп объектов',
-                           max_length=500, blank=True, null=True)
+
 
     def __str__(self):
         return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot} '

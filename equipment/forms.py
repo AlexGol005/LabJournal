@@ -379,6 +379,9 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
                                        'неопределённость /(класс, разряд/)', max_length=10000000, required=False,
                            widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': ''}))
+    aim = forms.CharField(label='Назначение ЛО', max_length=10000000, required=False, initial='нет',
+                          widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
 
 
     class Meta:
@@ -388,6 +391,7 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
             'name', 'modificname',
             'typename', 'calinterval',
             'measurydiapason', 'accuracity',
+            'aim'
                   ]
 
 class MeasurEquipmentCreateForm(forms.ModelForm):
@@ -395,16 +399,12 @@ class MeasurEquipmentCreateForm(forms.ModelForm):
     charakters = forms.ModelChoiceField(label='Госреестр', required=False,
                                                          queryset=MeasurEquipmentCharakters.objects.all().order_by('name'),
                                                          widget=forms.Select(attrs={'class': 'form-control'}))
-    aim = forms.CharField(label='Назначение ЛО', max_length=10000000, required=False, initial='нет',
-                           widget=forms.TextInput(attrs={'class': 'form-control',
-                                                        'placeholder': ''}))
 
 
     class Meta:
         model = MeasurEquipment
         fields = [
             'charakters',
-             'aim',
                   ]
 
 class PersonchangeForm(forms.ModelForm):
