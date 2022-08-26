@@ -173,7 +173,7 @@ class MeasurEquipmentView(ListView):
     """ Выводит список средств измерений """
     template_name = URL + '/measureequipment.html'
     context_object_name = 'objects'
-    ordering = ['charakters__name']
+    ordering = ['charakters_name']
     paginate_by = 12
 
     def get_queryset(self):

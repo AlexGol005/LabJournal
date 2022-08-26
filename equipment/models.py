@@ -247,8 +247,8 @@ class MeasurEquipment(models.Model):
     ecard = models.CharField('Назначение', max_length=90, blank=True, null=True)
     aim = models.CharField('Назначение', max_length=90, blank=True, null=True)
 
-    # def __str__(self):
-    #     return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot}  № реестр {self.charakters.reestr}'
+    def __str__(self):
+        return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot}  № реестр {self.charakters.reestr}'
 
     class Meta:
         verbose_name = 'Средство измерения'
