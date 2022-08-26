@@ -1,7 +1,9 @@
 # все стандратно кроме поиска по полям, импорта моделей и констант
 import os
 from wsgiref.util import FileWrapper
-
+from PIL import Image
+import xlwt
+from io import BytesIO
 import xlwt
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
@@ -16,6 +18,7 @@ from django.contrib.auth.decorators import login_required
 from sqlparse.filters import output
 from xlwt import Borders, Alignment
 
+from equipment.models import Verificationequipment, Equipment, CompanyCard
 from jouViscosity.models import CvKinematicviscosityVG
 from main.models import AttestationJ
 from viscosimeters.models import Kalibration
@@ -668,5 +671,184 @@ def export_me_xls(request, pk):
     # response = HttpResponse('C:\\Users\\АлександраГоловкина\\Петроаналитика\\Петроаналитика - Производство и склад\\Личные папки сотрудников\\Саша Головкина\\', )
     wb.save(response)
     return response
+
+
+
+
+def export_protocol_xls(request, pk):
+    '''представление для выгрузки протокола испытаний в ексель'''
+    company = CompanyCard.objects.get(pk=1)
+    note = ViscosityMJL.objects.get(pk=pk)
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = f'attachment; filename="{note.pk}_protocol.xls"'
+    wb = xlwt.Workbook()
+    ws = wb.add_sheet('protocol', cell_overwrite_ok=True)
+    Image.open(company.imglogoadress.path).convert("RGB").save('logo.bmp')
+    ws.insert_bitmap('logo.bmp', 1, 3)
+
+    ws.col(0).width = 700
+    ws.col(1).width = 5000
+    ws.col(2).width = 5000
+    ws.col(3).width = 5000
+    ws.col(4).width = 5000
+    ws.col(5).width = 5000
+    ws.col(6).width = 5000
+    ws.col(7).width = 5000
+    ws.col(8).width = 5000
+
+
+    al1 = Alignment()
+    al1.horz = Alignment.HORZ_CENTER
+    al1.vert = Alignment.VERT_CENTER
+
+    style1 = xlwt.XFStyle()
+    # style1.font.bold = True
+    style1.font.name = 'Times New Roman'
+    style1.alignment = al1
+    style1.alignment.wrap = 1
+
+
+    row_num = 5
+    columns = [
+        company.sertificat9001,
+        company.sertificat9001,
+        company.sertificat9001,
+        company.affirmationproduction,
+    ]
+    for col_num in range(3):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(5, 5, 0, 3, style1)
+    for col_num in range(6, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(5, 5, 6, 8, style1)
+    ws.row(5).height_mismatch = True
+    ws.row(5).height = 800
+
+
+    wb.save(response)
+    return response
+    # note = ViscosityMJL.objects.get(pk=pk)
+    # response = HttpResponse(content_type='application/ms-excel')
+    # response['Content-Disposition'] = f'attachment; filename="1.xls"'
+    #
+    #
+    # wb = xlwt.Workbook(encoding='utf-8')
+    # ws = wb.add_sheet(f'{note.name}, п. {note.lot},{note.temperature}', cell_overwrite_ok=True)
+    #
+    #
+    # for i in range(21):
+    #     ws.row(i).height_mismatch = True
+    #     ws.row(i).height = 600
+    #
+    # ws.row(21).height_mismatch = True
+    # ws.row(21).height = 800
+    #
+    # for i in range(22, 25):
+    #     ws.row(i).height_mismatch = True
+    #     ws.row(i).height = 600
+    #
+    #
+    #
+    # # ширина столбцов
+    # ws.col(0).width = 4100
+    # ws.col(1).width = 4100
+    # ws.col(2).width = 4100
+    # ws.col(5).width = 4100
+    #
+    #
+    #
+    # brd1 = Borders()
+    # brd1.left = 1
+    # brd1.right = 1
+    # brd1.top = 1
+    # brd1.bottom = 1
+    #
+    # al1 = Alignment()
+    # al1.horz = Alignment.HORZ_CENTER
+    # al1.vert = Alignment.VERT_CENTER
+    #
+    #
+    # style1 = xlwt.XFStyle()
+    # style1.font.bold = True
+    # style1.font.name = 'Calibri'
+    # style1.borders = brd1
+    # style1.alignment = al1
+    # style1.alignment.wrap = 1
+    #
+    # style2 = xlwt.XFStyle()
+    # style2.font.name = 'Calibri'
+    # style2.borders = brd1
+    # style2.alignment = al1
+    #
+    # style3 = xlwt.XFStyle()
+    # style3.font.name = 'Calibri'
+    # style3.borders = brd1
+    # style3.alignment = al1
+    # style3.num_format_str = 'DD.MM.YYYY'
+    #
+    # style4 = xlwt.XFStyle()
+    # style4.font.name = 'Calibri'
+    # style4.borders = brd1
+    # style4.alignment = al1
+    # style4.num_format_str = '0.00'
+    #
+    # style5 = xlwt.XFStyle()
+    # style5.font.name = 'Calibri'
+    # style5.borders = brd1
+    # style5.alignment = al1
+    # style5.num_format_str = '0.00000'
+    #
+    # with open("Logo", "r"):
+    #     ws.insert_bitmap("Logo", 2, 2)
+
+
+
+
+    # row_num = 0
+    # columns = [
+    #              f'Атт.-ВЖ-(МИ № 02-2018)-{note.date}'
+    #            ]
+    #
+    # for col_num in range(len(columns)):
+    #     ws.write(row_num, col_num, columns[col_num], style1)
+    #     ws.merge(0, 0, 0, 5, style1)
+    #
+    # row_num = 1
+    # columns = [
+    #     f'Определение кинематической вязкости, метод: { note.ndocument }'
+    # ]
+    # for col_num in range(len(columns)):
+    #     ws.write(row_num, col_num, columns[col_num], style1)
+    #     ws.merge(1, 1, 0, 5, style1)
+    #
+    # row_num = 2
+    # columns = [
+    #     'Дата измерения',
+    #     'Наименование',
+    #     'Номер партии',
+    #     'Т °C',
+    #     'Термост. 20 мин',
+    #     'Сод. нефть или октол',
+    # ]
+    # for col_num in range(len(columns)):
+    #     ws.write(row_num, col_num, columns[col_num], style1)
+    #
+    # row_num = 3
+    # columns = [
+    #     note.date,
+    #     note.name,
+    #     note.lot,
+    #     note.temperature,
+    #     'V',
+    #     note.constit,
+    # ]
+    # for col_num in range(1, 4):
+    #     ws.write(row_num, col_num, columns[col_num], style2)
+    # for col_num in range(1):
+    #     ws.write(row_num, col_num, columns[col_num], style3)
+    # for col_num in range(3, len(columns)):
+    #     ws.write(row_num, col_num, columns[col_num], style4)
+    # wb.save(response)
+    # return response
 
 

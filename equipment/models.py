@@ -34,6 +34,12 @@ CHOICESVERIFIC = (
         ('Спорный', 'Спорный'),
     )
 
+CHOICESATT = (
+        ('Аттестован', 'Аттестован'),
+        ('Признан непригодным', 'Признан непригодным'),
+        ('Спорный', 'Спорный'),
+    )
+
 CHOICESPLACE = (
         ('У поверителя', 'У поверителя'),
         ('В ПА', 'В ПА'),
@@ -117,10 +123,12 @@ class Equipment(models.Model):
     individuality = models.TextField('Индивидуальные особенности прибора',  blank=True, null=True)
     video = models.CharField('Ссылка на видео', max_length=1000,  blank=True, null=True)
     notemaster = models.TextField('Примечание ответственного за прибор',  blank=True, null=True)
+    price = models.DecimalField('Стоимость', max_digits=100, decimal_places=2, null=True, blank=True)
+
 
 
     def __str__(self):
-        return f'Вн. № {self.exnumber}    Зав. № {self.lot}'
+        return f'Вн. № {self.exnumber}    Зав. № {self.lot}   pk {self.pk}'
 
     def save(self, *args, **kwargs):
         super().save()
@@ -178,7 +186,7 @@ class Roomschange(models.Model):
 
 
 class DocsCons(models.Model):
-    date = models.DateField('Дата появления', auto_now_add=True, db_index=True)
+    date = models.DateField('Дата появления', db_index=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Оборудование')
     docs = models.TextField('Документ или принадлежность (1 или несколько)', max_length=1000, default='', blank=True, null=True)
     source = models.CharField('Откуда появился', max_length=1000, default='От поставщика', blank=True, null=True)
@@ -209,7 +217,22 @@ class MeasurEquipmentCharakters(models.Model):
     class Meta:
         verbose_name = 'Средство измерения описание типа'
         verbose_name_plural = 'Средства измерения описания типов'
-        unique_together = ('reestr', 'modificname', 'typename')
+        unique_together = ('reestr', 'modificname', 'typename', 'name')
+
+class TestingEquipmentCharakters(models.Model):
+    name = models.CharField('Название прибора', max_length=100, default='')
+    calinterval = models.IntegerField('МежМетрологический интервал, месяцев', default=12, blank=True, null=True)
+    modificname = models.CharField('Модификация прибора', max_length=100, default='', blank=True, null=True)
+    typename = models.CharField('Тип прибора', max_length=100, default='', blank=True, null=True)
+    measurydiapason = models.CharField('Основные технические характеристики', max_length=1000,  blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.name}  {self.modificname}'
+
+    class Meta:
+        verbose_name = 'Испытательное оборудование, характеристики'
+        verbose_name_plural = 'СИспытательное оборудование, характеристики'
+        unique_together = ('name', 'modificname', 'typename')
 
 class MeasurEquipment(models.Model):
     charakters = models.ForeignKey(MeasurEquipmentCharakters,  on_delete=models.PROTECT,
@@ -224,6 +247,23 @@ class MeasurEquipment(models.Model):
     class Meta:
         verbose_name = 'Средство измерения'
         verbose_name_plural = 'Средства измерения'
+
+class TestingEquipment(models.Model):
+    charakters = models.ForeignKey(TestingEquipmentCharakters,  on_delete=models.PROTECT,
+                                   verbose_name='Характеристики ИО', blank=True, null=True)
+    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True,
+                                  verbose_name='Оборудование')
+    aim = models.CharField('Наименование видов испытаний и/или определяемых характеристик (параметров) продукции',
+                           max_length=500, blank=True, null=True)
+    aim2 = models.CharField('Наименование испытуемых групп объектов',
+                           max_length=500, blank=True, null=True)
+
+    def __str__(self):
+        return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot} '
+
+    class Meta:
+        verbose_name = 'Испытательное оборудование'
+        verbose_name_plural = 'Испытательное оборудование'
 
 class Verificationequipment(models.Model):
     equipmentSM = models.ForeignKey(MeasurEquipment, verbose_name='СИ',
@@ -268,6 +308,48 @@ class Verificationequipment(models.Model):
         verbose_name = 'Поверка прибора'
         verbose_name_plural = 'Поверки приборов'
 
+
+class Attestationequipment(models.Model):
+    equipmentSM = models.ForeignKey(TestingEquipment, verbose_name='ИО',
+                                    on_delete=models.PROTECT, related_name='equipmentSM_att', blank=True, null=True)
+    date = models.DateField('Дата аттестации')
+    datedead = models.DateField('Дата окончания аттестации')
+    dateorder = models.DateField('Дата заказа следующей аттестации')
+    certnumber = models.CharField('Номер аттестата', max_length=90, blank=True, null=True)
+    certnumbershort = models.CharField('Краткий номер свидетельства о аттестата', max_length=90, blank=True, null=True)
+    price = models.DecimalField('Стоимость данной аттестации', max_digits=100, decimal_places=2, null=True, blank=True)
+    img = models.ImageField('Аттестат', upload_to='user_images', blank=True, null=True)
+    statusver = models.CharField(max_length=300, choices=CHOICESATT, default='Аттестован', null=True,
+                              verbose_name='Статус')
+    verificator = models.ForeignKey(Verificators, on_delete=models.PROTECT,
+                                          verbose_name='Поверитель', blank=True, null=True)
+
+    verificatorperson = models.ForeignKey(VerificatorPerson, on_delete=models.PROTECT,
+                                    verbose_name='Поверитель имя', blank=True, null=True)
+
+    place = models.CharField(max_length=300, choices=CHOICESPLACE, default='У поверителя', null=True,
+                              verbose_name='Место аттестации')
+    note = models.CharField('Примечание', max_length=900, blank=True, null=True)
+
+    def __str__(self):
+        return f'Поверка {self.equipmentSM.charakters.name} вн № {self.equipmentSM.equipment.exnumber}'
+
+    def get_absolute_url(self):
+        """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
+        return reverse('testingequipmentatt', kwargs={'str': self.equipmentSM.equipment.exnumber})
+
+    def save(self, *args, **kwargs):
+        super().save()
+        if self.img:
+            image = Image.open(self.img.path)
+            if image.height > 500 or image.width > 500:
+                resize = (500, 500)
+                image.thumbnail(resize)
+                image.save(self.img.path)
+
+    class Meta:
+        verbose_name = 'Аттестация прибора'
+        verbose_name_plural = 'Аттестации приборов'
 
 
 class CommentsEquipment(models.Model):
@@ -326,6 +408,36 @@ class MeteorologicalParameters(models.Model):
     class Meta:
         verbose_name = 'Условия в помещении'
         verbose_name_plural = 'Условия в помещениях'
+
+
+class CompanyCard(models.Model):
+    """Карточка Петроаналитики """
+    name = models.CharField('Название', max_length=90, blank=True, null=True)
+    sertificat9001 = models.CharField('Сертификат 9001', max_length=500, blank=True, null=True)
+    affirmationproduction = models.CharField('Утверждаю начальник производства', max_length=90, blank=True, null=True)
+    affirmationcompanyboss = models.CharField('Утверждаю генеральный директор', max_length=90, blank=True, null=True)
+    adress = models.CharField('Юридический адрес', max_length=500, blank=True, null=True)
+    prohibitet = models.TextField('Запрет на тираж протокола',  blank=True, null=True)
+    imglogoadress = models.ImageField('Картинка логотип с адресом', upload_to='user_images', blank=True, null=True,
+                                        default='user_images/default.png')
+
+
+    def __str__(self):
+        return self.name
+
+    # def save(self, *args, **kwargs):
+    #     super().save()
+    #     if self.imglogoadress:
+    #         image1 = Image.open(self.imglogoadress.path)
+    #         if image1.height > 100 or image1.width > 100:
+    #             resize = (200, 200)
+    #             image1.thumbnail(resize)
+    #             image1.save(self.imglogoadress.path)
+
+    class Meta:
+        verbose_name = 'Карточка'
+        verbose_name_plural = 'Карточка'
+
 
 
 

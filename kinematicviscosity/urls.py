@@ -17,6 +17,7 @@ urlpatterns = [
     path('datesearchresult/', views.DateSearchResultView.as_view(), name=URL + 'datesearch'),
     path('filter/<int:pk>', views.filterview, name=URL + 'filter'),
     path(r'^export/xls/$/<int:pk>', views.export_me_xls, name='export_kinematicviscosity_xls'),
+    path(r'^export1/xls/$/<int:pk>', views.export_protocol_xls, name='export_kinematicviscosity_protocol_xls'),
 
 ]
 # path('/search_location/result/', views.SearchResultView.as_view(), name=URL + 'search'),

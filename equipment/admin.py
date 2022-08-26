@@ -15,5 +15,9 @@ admin.site.register(Roomschange)
 admin.site.register(VerificatorPerson)
 admin.site.register(Verificators)
 admin.site.register(DocsCons)
+admin.site.register(CompanyCard)
+admin.site.register(TestingEquipmentCharakters)
+admin.site.register(TestingEquipment)
+admin.site.register(Attestationequipment)
 
 

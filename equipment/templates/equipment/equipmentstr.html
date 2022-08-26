@@ -16,6 +16,11 @@
 </div>
 <br>
 
+{#карточка#}
+<div style="text-align: center; margin-top: 10px; margin-bottom: 50px">
+ <a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/comments/"  class="btn btn-warning mt-2 ">
+     Распечатать карточку на прибор</a></div>
+
 
 {#таблица неизменные сведения о приборе#}
 <div style="text-align: center;">
@@ -138,13 +143,10 @@
         <tr>
             <th> № <br> комн. </th>
             <th> Ответственный </th>
-            <th> Доку- менты и принад- лежности</th>
+            <th> Документы и принадлежности</th>
             <th> Год <br> ввода в&nbspэксп.</th>
             <th> Новый <br>или&nbsp&nbsp б/у</th>
             <th> Статус</th>
-            <th> Инвентар- ный № <br> (НЕ = внут.№) </th>
-
-
          </tr>
     </thead>
     <tbody>
@@ -156,8 +158,6 @@
         <td> {{ obj.equipment.yearintoservice }}</td>
         <td> {{ obj.equipment.new }}</td>
         <td> {{ obj.equipment.get_status_display }}</td>
-         <td> {{ obj.equipment.invnumber|default:"б/н" }}</td>
-
     </tr>
     </tbody>
 </table>
@@ -173,9 +173,7 @@
 {#инструкция#}
 <div style="text-align: center; margin-top: 20px"><h4>
 Характеристики и инструкции</h4></div>
-    <div class="alert alert-light">
-<a href="{{ obj.imginstruction1.url }}" target="blank">
-      <img class="bd-placeholder-img mr-2 rounded" width=10% height=10% src="{{ obj.imginstruction1.url }}"></a> </div>
+
 <div style="text-align: center;">
 <table class="table table-bordered">
     <thead>
@@ -191,10 +189,15 @@
     </thead>
     <tbody>
     <tr>
-        <td><a href="{{ obj.imginstruction1.url }}" target="blank">
-      <img class="bd-placeholder-img mr-2 rounded" width=10% height=10% src="{{ obj.imginstruction1.url }}"></a></td>
-        <td><a href="/attestationJ/{{ URL }}/attestation/{{ obj.id }}/"  class="btn btn-outline-warning mt-3">
-            см</a></td>
+
+        <td>{% if obj.equipment.imginstruction1 %}
+        <a href="{{ obj.equipment.imginstruction1.url }}" target="blank">
+        <img class="bd-placeholder-img mr-2 rounded" width=50px height=70px src="{{ obj.equipment.imginstruction1.url }}">
+        </a>{% endif %}</td>
+        <td>{% if obj.equipment.imginstruction2 %}
+        <a href="{{ obj.equipment.imginstruction2.url }}" target="blank">
+        <img class="bd-placeholder-img mr-2 rounded" width=50px height=70px src="{{ obj.equipment.imginstruction2.url }}">
+        </a>{% endif %}</td>
         <td> {{ obj.charakters.measurydiapason }}</td>
         <td> {{ obj.charakters.accuracity }}</td>
         <td>{{ obj.aim }}</td>
@@ -203,9 +206,32 @@
     </tbody>
 </table>
 </div>
-{#карточка#}
-<div style="text-align: center; margin-top: 10px; margin-bottom: 50px">
- <a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/comments/"  class="btn btn-warning mt-2 ">
-     Распечатать карточку на прибор</a></div>
+{# бухгалтерия  #}
+<div style="text-align: center; margin-top: 40px"><h4>
+Бухгалтерские сведения</h4></div>
+
+<div style="text-align: center;">
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th> Документ на право владения</th>
+            <th> Стоимость, руб</th>
+            <th> Инвентарный № <br> (НЕ = внут.№) </th>
+         </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{% if obj.equipment.imginstruction3 %}
+        <a href="{{ obj.equipment.imginstruction1.url }}" target="blank">
+        <img class="bd-placeholder-img mr-2 rounded" width=50px height=70px src="{{ obj.equipment.imginstruction3.url }}">
+        </a>{% endif %}</td>
+        <td>{{ obj.equipment.price|default:" " }}</td>
+        <td> {{ obj.equipment.invnumber|default:"б/н" }}</td>
+    </tr>
+    </tbody>
+</table>
+</div>
+    <br>
+    <br>
 </div>
 {% endblock %}

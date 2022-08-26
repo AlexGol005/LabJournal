@@ -13,7 +13,7 @@ from equipment.models import MeasurEquipment, CommentsEquipment, NOTETYPE, Equip
 
 
 class SearchMEForm(forms.Form):
-    "форма для поиска по полям списка СИ"
+    "форма для поиска по полям списка СИ и ИО"
     name = forms.CharField(label='Название', required=False,
                            help_text='введите название частично или полностью',
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -58,7 +58,7 @@ class NoteCreationForm(forms.ModelForm):
         fields = ['type', 'note', 'img', 'author']
 
 class EquipmentCreateForm(forms.ModelForm):
-    """форма для обновления разрешенных полей оборудования ответственному за оборудование"""
+    """форма для внесения ЛО"""
     exnumber = forms.CharField(label='Внутренний номер', max_length=10000, initial='А',
                                help_text='уникальный, напишите буквенную часть номера (заглавная кириллица)',
                            widget=forms.TextInput(attrs={'class': 'form-control',
@@ -154,7 +154,7 @@ class EquipmentUpdateForm(forms.ModelForm):
     video = forms.CharField(label='Видео к прибору', max_length=10000, required=False,
                                     widget=forms.TextInput(attrs={'class': 'form-control',
                                                                  'placeholder': 'добавьте ссылку на видео'}))
-    invnumber = forms.CharField(label='Инвентарный номер', max_length=10000, initial='б/н',
+    invnumber = forms.CharField(label='Инвентарный номер', max_length=10000, initial='б/н', required=False,
                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
 
 
@@ -391,9 +391,9 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
                   ]
 
 class MeasurEquipmentCreateForm(forms.ModelForm):
-    """форма для внесения госреестра"""
+    """форма для внесения СИ"""
     charakters = forms.ModelChoiceField(label='Госреестр', required=False,
-                                                         queryset=MeasurEquipmentCharakters.objects.all(),
+                                                         queryset=MeasurEquipmentCharakters.objects.all().order_by('name'),
                                                          widget=forms.Select(attrs={'class': 'form-control'}))
     aim = forms.CharField(label='Назначение ЛО', max_length=10000000, required=False, initial='нет',
                            widget=forms.TextInput(attrs={'class': 'form-control',
@@ -445,6 +445,15 @@ class RoomsCreateForm(forms.ModelForm):
 
 class DocsConsCreateForm(forms.ModelForm):
     """форма для внесения документа или принадлежности"""
+    date = forms.DateField(label='Дата',  initial=datetime.date.today().year,
+                           widget=forms.DateInput(
+                               attrs={'class': 'form-control', 'placeholder': ''}),
+                           input_formats=(
+                               '%Y-%m-%d',
+                               '%m/%d/%Y',
+                               '%m/%d/%y',
+                               '%d.%m.%Y',
+                           ))
     docs = forms.CharField(label='Наименование документа/принадлежности',
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
     source = forms.CharField(label='Источник', initial='От поставщика',
@@ -454,6 +463,7 @@ class DocsConsCreateForm(forms.ModelForm):
     class Meta:
         model = DocsCons
         fields = [
+            'date',
             'docs', 'source',
             'note'
                   ]

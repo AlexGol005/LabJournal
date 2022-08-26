@@ -3,7 +3,9 @@ from . import views
 
 urlpatterns = [
     path('measureequipmentall/', views.MeasurEquipmentView.as_view(), name='measureequipmentall'),
+    path('testingequipmentall/', views.TestingEquipmentView.as_view(), name='testingequipmentall'),
     path('measureequipmentallsearres/', views.SearchResultMeasurEquipmentView.as_view(), name='measureequipmentallsearres'),
+    path('testingequipmentallsearres/', views.SearchResultTestingEquipmentView.as_view(), name='testingequipmentallsearres'),
     path('measureequipment/<str:str>/', views.StrMeasurEquipmentView.as_view(), name='measureequipment'),
     path(r'^export/xls/$', views.export_me_xls, name='export_me_xls'),
     path('measureequipment/<str:str>/comments/', views.CommentsView.as_view(), name='measureequipmentcomm'),
