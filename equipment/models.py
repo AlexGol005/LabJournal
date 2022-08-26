@@ -254,6 +254,7 @@ class MeasurEquipment(models.Model):
         verbose_name = 'Средство измерения'
         verbose_name_plural = 'Средства измерения'
         unique_together = ('charakters', 'equipment')
+        ordering = ['charakters_name']
 
 class TestingEquipment(models.Model):
     charakters = models.ForeignKey(TestingEquipmentCharakters,  on_delete=models.PROTECT,
