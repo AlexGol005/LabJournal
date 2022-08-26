@@ -253,6 +253,7 @@ class MeasurEquipment(models.Model):
     class Meta:
         verbose_name = 'Средство измерения'
         verbose_name_plural = 'Средства измерения'
+        unique_together = ('charakters', 'equipment')
 
 class TestingEquipment(models.Model):
     charakters = models.ForeignKey(TestingEquipmentCharakters,  on_delete=models.PROTECT,
