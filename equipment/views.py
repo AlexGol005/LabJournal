@@ -80,7 +80,7 @@ class ManufacturerRegView(SuccessMessageMixin, CreateView):
 
 
 class MeteorologicalParametersCreateView(SuccessMessageMixin, CreateView):
-    """ выводит форму добавления производителя """
+    """ выводит форму добавления метеопараметров """
     template_name = URL + '/reg.html'
     form_class = MeteorologicalParametersRegForm
     success_url = '/equipment/manufacturerlist/'
@@ -123,7 +123,10 @@ class MeasureequipmentregView(View):
             if form.is_valid():
                 order = form.save(commit=False)
                 order.equipment = Equipment.objects.get(exnumber=str)
-                order.save()
+                try:
+                    order.save()
+                except:
+                    messages.success(request, f'Такой прибор уже есть')
                 return redirect(f'/equipment/measureequipment/{str}')
         else:
             messages.success(request, f'Регистрировать может только ответственный за поверку приборов')
