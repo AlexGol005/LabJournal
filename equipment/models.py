@@ -245,6 +245,7 @@ class MeasurEquipment(models.Model):
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True,
                                   verbose_name='Оборудование')
     ecard = models.CharField('Назначение', max_length=90, blank=True, null=True)
+    aim = models.CharField('Назначение', max_length=90, blank=True, null=True)
 
     def __str__(self):
         return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot}  № реестр {self.charakters.reestr}'
