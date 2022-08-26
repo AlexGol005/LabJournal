@@ -114,8 +114,8 @@ class Equipment(models.Model):
     invnumber = models.CharField('Инвентарный номер', max_length=100, default='', blank=True, null=True)
     kategory = models.CharField(max_length=300, choices=KATEGORY, default='Средство измерения', null=True,
                                 verbose_name='Категория')
-    imginstruction1 = models.ImageField('Паспорт', upload_to='user_images', blank=True, null=True,
-                                        default='user_images/default.png')
+    imginstruction1 = models.ImageField('Паспорт', upload_to='user_images', blank=True, null=True)
+                                        # default='user_images/default.png')
     imginstruction2 = models.ImageField('Внутренняя инструкция', upload_to='user_images', blank=True, null=True,
                                         default='user_images/default.png')
     imginstruction3 = models.ImageField('Право владения', upload_to='user_images', blank=True, null=True,
