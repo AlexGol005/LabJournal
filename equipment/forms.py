@@ -23,7 +23,7 @@ class SearchMEForm(forms.Form):
     lot = forms.CharField(label='Заводской №', required=False,
                           help_text='заводской № полностью',
                                widget=forms.TextInput(attrs={'class': 'form-control'}))
-    dateser = forms.CharField(label='Поверка/аттестация истекает после', required=False,
+    dateser = forms.CharField(label='Поверка/атт-я истекает после', required=False,
                                help_text='дата в формате ГГГГ-ММ-ДД',
                           widget=forms.TextInput(attrs={'class': 'form-control'}))
 
