@@ -405,8 +405,10 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
         model = MeasurEquipmentCharakters
         fields = [
             'reestr',
-            'name', 'modificname',
-            'typename', 'calinterval',
+            'name',
+            'typename',
+            'modificname',
+             'calinterval',
             'measurydiapason', 'accuracity',
             'aim'
                   ]
