@@ -42,7 +42,7 @@
          <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.date|date:"d.m.y"|default:" " }}{{ obj.year|default:" "}} </td>
          <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.datedead|date:"d.m.y"|default:" " }}</td>
          <td class="ind" style="background-color: rgba(168,255,18,0.37) !important">
-             {% if obj.arshin %}
+             {% if obj.arshinif|length > 14 %}
               <a href="{{ obj.arshin}}"  target="blank" >
              Аршин
                   </a>
