@@ -271,7 +271,8 @@ class VerificationRegForm(forms.ModelForm):
         model = Verificationequipment
         fields = ['date', 'datedead', 'dateorder', 'arshin', 'certnumber',
                   'price', 'statusver',  'verificator', 'verificatorperson',
-                  'place', 'note', 'year'
+                  'place', 'note', 'year',
+                  'dateordernew'
                   ]
 
     def __init__(self, *args, **kwargs):
@@ -298,8 +299,9 @@ class VerificationRegForm(forms.ModelForm):
             Row(
                 Column('note', css_class='form-group col-md-12 mb-1')),
             Row(
-                Column('img', css_class='form-group col-md-6 mb-1'),
-                Column('year', css_class='form-group col-md-6 mb-1')),
+                Column('img', css_class='form-group col-md-4 mb-1'),
+                Column('dateordernew', css_class='form-group col-md-4 mb-1'),
+                Column('year', css_class='form-group col-md-4 mb-1')),
             Submit('submit', 'Внести'))
 
 
