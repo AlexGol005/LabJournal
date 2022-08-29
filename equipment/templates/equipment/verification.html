@@ -41,11 +41,11 @@
           <td> {{ obj.datedead|date:"d.m.y"|default:" " }}</td>
          <td class="ind" >
              {% if obj.arshinif %}
-              <a href="{{ obj.arshin}}"  target="blank" >
+              <a href="{{ obj.arshin }}"  target="blank" >
              Аршин
                   </a>
-             {% elif obj.arshinif == 'отсутствует'  %}
-             отсутствует
+             {% elif obj.arshinif == 'отсутствуют'  %}
+             отсутствуют
              {% endif %}
          </td>
         <td> {{ obj.place }}</td>
