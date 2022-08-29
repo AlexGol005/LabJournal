@@ -362,7 +362,7 @@ class Attestationequipment(models.Model):
 
 class CommentsEquipment(models.Model):
     """стандартнрый класс для комментариев, поменять только get_absolute_url"""
-    date = models.DateField('Дата', auto_now_add=True, db_index=True)
+    date = models.DateField('Дата',  db_index=True)
     note = models.TextField('Содержание', max_length=1000, default='')
     forNote = models.ForeignKey(Equipment, verbose_name='К прибору', on_delete=models.CASCADE)
     author = models.CharField('Автор', max_length=90, blank=True, null=True)

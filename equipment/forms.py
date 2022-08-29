@@ -41,6 +41,15 @@ class SearchMEForm(forms.Form):
 
 class NoteCreationForm(forms.ModelForm):
     """форма для  записей об оборудовании"""
+    date = forms.DateField(label='Дата', required=False, initial=datetime.date.today(),
+                           widget=forms.DateInput(
+                               attrs={'class': 'form-control', 'placeholder': ''}),
+                           input_formats=(
+                               '%Y-%m-%d',
+                               '%m/%d/%Y',
+                               '%m/%d/%y',
+                               '%d.%m.%Y',
+                           ))
     type = forms.ChoiceField(label='Выберите тип события', required=True,
                                   choices=NOTETYPE,
                                   widget=forms.Select(attrs={'class': 'form-control'}))
@@ -55,7 +64,7 @@ class NoteCreationForm(forms.ModelForm):
 
     class Meta:
         model = CommentsEquipment
-        fields = ['type', 'note', 'img', 'author']
+        fields = ['date', 'type', 'note', 'img', 'author']
 
 class EquipmentCreateForm(forms.ModelForm):
     """форма для внесения ЛО"""
