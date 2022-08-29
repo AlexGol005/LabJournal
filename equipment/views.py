@@ -380,33 +380,48 @@ def EquipmentReg(request):
 class DocsConsView(View):
     """ выводит список принадлежностей прибора и форму для добавления принадлежности """
     def get(self, request, str):
-        template_name = 'equipment/docsconslist.html'
-        form = DocsConsCreateForm()
+        note = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).order_by('-pk')
+        try:
+            strreg = note.latest('pk').equipmentSM.equipment.exnumber
+        except:
+            strreg = Equipment.objects.get(exnumber=str).exnumber
+        try:
+            calinterval = note.latest('pk').equipmentSM.charakters.calinterval
+        except:
+            calinterval = '-'
         title = Equipment.objects.get(exnumber=str)
-        objects = DocsCons.objects.filter(equipment__exnumber=str).order_by('pk')
-        context = {
+        try:
+            dateorder = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).last().dateorder
+        except:
+            dateorder = 'не поверен'
+        now = date.today()
+        try:
+            comment = CommentsVerificationequipment.objects.filter(forNote__exnumber=str).last().note
+        except:
+            comment = ''
+        form = CommentsVerificationCreationForm(initial={'comment': comment})
+        data = {'note': note,
                 'title': title,
+                'calinterval': calinterval,
+                'now': now,
+                'dateorder': dateorder,
                 'form': form,
-                'objects': objects,
+                'comment': comment,
+                'strreg': strreg,
                 }
-        return render(request, template_name, context)
-
+        return render(request, 'equipment/verification.html', data)
     def post(self, request, str, *args, **kwargs):
         form = DocsConsCreateForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.equipment = Equipment.objects.get(exnumber=str)
-            order.save()
-            template_name = 'equipment/docsconslist.html'
-            form = DocsConsCreateForm()
-            title = Equipment.objects.get(exnumber=str)
-            objects = DocsCons.objects.filter(equipment__exnumber=str).order_by('pk')
-            context = {
-                'title': title,
-                'form': form,
-                'objects': objects,
-            }
-            return render(request, template_name, context)
+        if request.user.is_superuser:
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.author = request.user
+                order.forNote = Equipment.objects.get(exnumber=str)
+                order.save()
+                return redirect(order)
+        else:
+            messages.success(request, f'Комментировать может только ответственный за поверку приборов')
+            return redirect(reverse('measureequipmentver', kwargs={'str': str}))
 
 
 
