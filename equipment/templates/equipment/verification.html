@@ -37,9 +37,9 @@
     <tbody>
     {% for obj in note %}
             <tr>
-         <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.date|date:"d.m.y"|default:" " }}{{ obj.year|default:" "}} </td>
-         <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.datedead|date:"d.m.y"|default:" " }}</td>
-         <td class="ind" style="background-color: rgba(168,255,18,0.37) !important">
+         <td> {{ obj.date|date:"d.m.y"|default:" " }}{{ obj.year|default:" "}} </td>
+          <td> {{ obj.datedead|date:"d.m.y"|default:" " }}</td>
+         <td class="ind" >
              {% if obj.arshinif|length > 14 %}
               <a href="{{ obj.arshin}}"  target="blank" >
              Аршин
@@ -48,11 +48,11 @@
              отсутствует
              {% endif %}
          </td>
-        <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.place }}</td>
-        <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.verificator.companyName }}</td>
-        <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.statusver|default:" " }}</td>
-        <td style="background-color: rgba(168,255,18,0.37) !important">{{ obj.price|default:" "  }}</td>
-        <td style="background-color: rgba(168,255,18,0.37) !important">
+        <td> {{ obj.place }}</td>
+         <td> {{ obj.verificator.companyName }}</td>
+        <td> {{ obj.statusver|default:" " }}</td>
+         <td>{{ obj.price|default:" "  }}</td>
+         <td>
             {% if obj.img %}
         <a href="{{ obj.arshin}}"  target="blank" >
              {{ obj.certnumber|default:" "}}
@@ -60,7 +60,7 @@
             {% endif %}
         {{ obj.certnumber|default:" "}}
         </td>
-            <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.verificatorperson.name|default:" " }}
+             <td> {{ obj.verificatorperson.name|default:" " }}
         {% if obj.verificatorperson.telnumber %}
         , телефон {{ obj.verificatorperson.telnumber|default:" " }}
         {% endif %}
