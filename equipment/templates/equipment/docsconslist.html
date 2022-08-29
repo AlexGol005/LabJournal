@@ -28,7 +28,7 @@
 <td> {{ obj.docs }}</td>
 <td > {{ obj.source }}</td>
 <td > {{ obj.date|date:"d.m.Y" }}</td>
-<td > {{ obj.note }}</td>
+<td > {{ obj.note|default:" " }}</td>
 </tr>
 {% endfor %}
 </tbody>

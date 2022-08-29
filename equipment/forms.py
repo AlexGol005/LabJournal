@@ -454,7 +454,7 @@ class DocsConsCreateForm(forms.ModelForm):
                                '%m/%d/%y',
                                '%d.%m.%Y',
                            ))
-    docs = forms.CharField(label='Наименование документа/принадлежности',
+    docs = forms.CharField(label='Наименование документа/принадлежности', initial='Паспорт',
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
     source = forms.CharField(label='Источник', initial='От поставщика',
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
