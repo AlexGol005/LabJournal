@@ -275,7 +275,7 @@ class Verificationequipment(models.Model):
                                     on_delete=models.PROTECT, related_name='equipmentSM_ver', blank=True, null=True)
     date = models.DateField('Дата поверки')
     datedead = models.DateField('Дата окончания поверки')
-    dateorder = models.DateField('Дата заказа следующей поверки')
+    dateorder = models.DateField('Дата заказа следующей поверки', blank=True, null=True)
     arshin = models.TextField('Ссылка на сведения о поверке в Аршин', blank=True, null=True)
     certnumber = models.CharField('Номер свидетельства о поверке', max_length=90, blank=True, null=True)
     certnumbershort = models.CharField('Краткий номер свидетельства о поверке', max_length=90, blank=True, null=True)
