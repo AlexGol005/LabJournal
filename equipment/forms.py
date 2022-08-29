@@ -190,6 +190,7 @@ class ManufacturerCreateForm(forms.ModelForm):
 class VerificationRegForm(forms.ModelForm):
     """форма для  внесения сведений о поверке"""
 
+
     date = forms.DateField(label='Дата поверки',
         widget=forms.DateInput(
             attrs={'class': 'form-control', 'placeholder': ''}),
@@ -217,7 +218,8 @@ class VerificationRegForm(forms.ModelForm):
                                '%m/%d/%y',
                                '%d.%m.%Y',
                            ))
-    arshin = forms.CharField(label='Ссылка на сведения о поверке в Аршин', max_length=10000, required=False,
+    arshin = forms.CharField(label='Ссылка на сведения о поверке в Аршин', max_length=10000, initial='отсутствуют',
+                             required=False,
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
     certnumber = forms.CharField(label='№ свидетельства о поверке', max_length=10000, required=False,
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -241,13 +243,16 @@ class VerificationRegForm(forms.ModelForm):
     note = forms.CharField(label='Примечание', max_length=10000, required=False,
                                     widget=forms.TextInput(attrs={'class': 'form-control'}))
     img = forms.ImageField(label='Сертификат', widget=forms.FileInput, required=False)
+    year = forms.CharField(label='Год поверки', max_length=10000, initial='2018', required=False,
+                             help_text='Укажите год если не указываете точные даты поверки',
+                             widget=forms.TextInput(attrs={'class': 'form-control'}))
 
 
     class Meta:
         model = Verificationequipment
         fields = ['date', 'datedead', 'dateorder', 'arshin', 'certnumber',
                   'price', 'statusver',  'verificator', 'verificatorperson',
-                  'place', 'note',
+                  'place', 'note', 'year'
                   ]
 
     def __init__(self, *args, **kwargs):
@@ -272,8 +277,10 @@ class VerificationRegForm(forms.ModelForm):
                 Column('place', css_class='form-group col-md-4 mb-0'),
             ),
             Row(
-                Column('note', css_class='form-group col-md-12 mb-1'),
-                Column('img', css_class='form-group col-md-12 mb-1')),
+                Column('note', css_class='form-group col-md-12 mb-1')),
+            Row(
+                Column('img', css_class='form-group col-md-6 mb-1'),
+                Column('year', css_class='form-group col-md-6 mb-1')),
             Submit('submit', 'Внести'))
 
 

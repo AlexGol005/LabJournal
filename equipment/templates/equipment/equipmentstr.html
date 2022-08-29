@@ -106,9 +106,9 @@
     </thead>
     <tbody>
     <tr>
-        <td>{{ obj.equipmentSM_ver.last.date|date:'d.m.y' }}</td>
-         <td> {{ obj.equipmentSM_ver.last.datedead|date:'d.m.y' }}</td>
-         <td> {{ obj.equipmentSM_ver.last.dateorder|date:'m.Y' }}</td>
+        <td>{{ obj.equipmentSM_ver.last.date|date:'d.m.y'|default:" " }}</td>
+         <td> {{ obj.equipmentSM_ver.last.datedead|date:'d.m.y'|default:" " }}</td>
+         <td> {{ obj.equipmentSM_ver.last.dateorder|date:'m.Y'|default:" " }}</td>
          <td class="ind">
              {% if obj.equipmentSM_ver.last.arshin %}
               <a href="{{ obj.equipmentSM_ver.last.arshin}}"  target="blank" >

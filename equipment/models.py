@@ -293,6 +293,7 @@ class Verificationequipment(models.Model):
     place = models.CharField(max_length=300, choices=CHOICESPLACE, default='У поверителя', null=True,
                               verbose_name='Место поверки')
     note = models.CharField('Примечание', max_length=900, blank=True, null=True)
+    year = models.CharField('Год поверки (если нет точных дат)', max_length=900, blank=True, null=True)
 
     def __str__(self):
         return f'Поверка {self.equipmentSM.charakters.name} вн № {self.equipmentSM.equipment.exnumber}'
