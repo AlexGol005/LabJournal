@@ -408,7 +408,7 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
                            widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': ''}))
     aim = forms.CharField(label='Назначение ЛО', max_length=10000000, required=False,
-                          initial='Измерение массы стандартных образцов и реактивов',
+                          initial='Определение вязкости нефти и нефтепродуктов',
                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': ''}))
 
