@@ -175,7 +175,7 @@ class EquipmentUpdateForm(forms.ModelForm):
                   'video', 'invnumber']
 
 class ManufacturerCreateForm(forms.ModelForm):
-    """форма для обновления разрешенных полей оборудования ответственному за оборудование"""
+    """форма для внесения производителя"""
     companyName = forms.CharField(label='Название компании', max_length=10000,
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
     country = forms.CharField(label='Страна', max_length=10000, initial = 'Россия',
@@ -395,7 +395,8 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
                                        'неопределённость /(класс, разряд/)', max_length=10000000, required=False,
                            widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': ''}))
-    aim = forms.CharField(label='Назначение ЛО', max_length=10000000, required=False, initial='нет',
+    aim = forms.CharField(label='Назначение ЛО', max_length=10000000, required=False,
+                          initial='Измерение массы стандартных образцов и реактивов',
                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': ''}))
 
