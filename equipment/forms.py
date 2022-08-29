@@ -191,7 +191,7 @@ class VerificationRegForm(forms.ModelForm):
     """форма для  внесения сведений о поверке"""
 
 
-    date = forms.DateField(label='Дата поверки',
+    date = forms.DateField(label='Дата поверки', required=False,
         widget=forms.DateInput(
             attrs={'class': 'form-control', 'placeholder': ''}),
         input_formats=(
@@ -200,7 +200,7 @@ class VerificationRegForm(forms.ModelForm):
             '%m/%d/%y',
             '%d.%m.%Y',
         ))
-    datedead = forms.DateField(label='Дата окончания поверки',
+    datedead = forms.DateField(label='Дата окончания поверки', required=False,
                            widget=forms.DateInput(
                                attrs={'class': 'form-control', 'placeholder': ''}),
                            input_formats=(
