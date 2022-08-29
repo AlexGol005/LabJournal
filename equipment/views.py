@@ -397,17 +397,17 @@ class DocsConsView(View):
             order = form.save(commit=False)
             order.equipment = Equipment.objects.get(exnumber=str)
             order.save()
-            # template_name = 'equipment/docsconslist.html'
-            # form = DocsConsCreateForm()
-            # title = Equipment.objects.get(exnumber=str)
-            # objects = DocsCons.objects.filter(equipment__exnumber=str).order_by('pk')
-            # context = {
-            #     'title': title,
-            #     'form': form,
-            #     'objects': objects,
-            # }
-            # return render(request, template_name, context)
-            return redirect('/')
+            template_name = 'equipment/docsconslist.html'
+            form = DocsConsCreateForm()
+            title = Equipment.objects.get(exnumber=str)
+            objects = DocsCons.objects.filter(equipment__exnumber=str).order_by('pk')
+            context = {
+                'title': title,
+                'form': form,
+                'objects': objects,
+            }
+            return render(request, template_name, context)
+
 
 
 
