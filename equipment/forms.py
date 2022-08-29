@@ -218,7 +218,7 @@ class VerificationRegForm(forms.ModelForm):
                                '%m/%d/%y',
                                '%d.%m.%Y',
                            ))
-    arshin = forms.CharField(label='Ссылка на сведения о поверке в Аршин', max_length=10000, initial='отсутствуют',
+    arshin = forms.CharField(label='Ссылка на сведения о поверке в Аршин', max_length=10000,
                              required=False,
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
     certnumber = forms.CharField(label='№ свидетельства о поверке', max_length=10000, required=False,
