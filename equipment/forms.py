@@ -445,7 +445,7 @@ class RoomsCreateForm(forms.ModelForm):
 
 class DocsConsCreateForm(forms.ModelForm):
     """форма для внесения документа или принадлежности"""
-    date = forms.DateField(label='Дата',  initial=datetime.date.today().year,
+    date = forms.CharField(label='Дата',  initial=datetime.date.today().year,
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
     docs = forms.CharField(label='Наименование документа/принадлежности', initial='Паспорт',
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
