@@ -274,8 +274,8 @@ class TestingEquipment(models.Model):
 class Verificationequipment(models.Model):
     equipmentSM = models.ForeignKey(MeasurEquipment, verbose_name='СИ',
                                     on_delete=models.PROTECT, related_name='equipmentSM_ver', blank=True, null=True)
-    date = models.DateField('Дата поверки')
-    datedead = models.DateField('Дата окончания поверки')
+    date = models.DateField('Дата поверки', blank=True, null=True)
+    datedead = models.DateField('Дата окончания поверки', blank=True, null=True)
     dateorder = models.DateField('Дата заказа следующей поверки', blank=True, null=True)
     arshin = models.TextField('Ссылка на сведения о поверке в Аршин', blank=True, null=True)
     certnumber = models.CharField('Номер свидетельства о поверке', max_length=90, blank=True, null=True)
