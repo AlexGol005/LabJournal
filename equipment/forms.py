@@ -378,10 +378,10 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
     name = forms.CharField(label='Название прибора', max_length=10000000, required=False,
                            widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': ''}))
-    modificname = forms.CharField(label='Модификация', max_length=10000000, required=False, initial='нет модификации',
-                           widget=forms.TextInput(attrs={'class': 'form-control',
-                                                        'placeholder': ''}))
     typename = forms.CharField(label='Тип', max_length=10000000, required=False, initial='нет типа',
+                               widget=forms.TextInput(attrs={'class': 'form-control',
+                                                             'placeholder': ''}))
+    modificname = forms.CharField(label='Модификация', max_length=10000000, required=False, initial='нет модификации',
                            widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': ''}))
     calinterval = forms.CharField(label='Межповерочный интервал, месяцев', max_length=10000000, required=False,
