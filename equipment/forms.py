@@ -243,7 +243,7 @@ class VerificationRegForm(forms.ModelForm):
     note = forms.CharField(label='Примечание', max_length=10000, required=False,
                                     widget=forms.TextInput(attrs={'class': 'form-control'}))
     img = forms.ImageField(label='Сертификат', widget=forms.FileInput, required=False)
-    year = forms.CharField(label='Год поверки', max_length=10000, initial='2018', required=False,
+    year = forms.CharField(label='Год поверки', max_length=10000, required=False,
                              help_text='Укажите год если не указываете точные даты поверки',
                              widget=forms.TextInput(attrs={'class': 'form-control'}))
 
