@@ -255,6 +255,16 @@ class VerificationRegForm(forms.ModelForm):
     year = forms.CharField(label='Год поверки', max_length=10000, required=False,
                              help_text='Укажите год если не указываете точные даты поверки',
                              widget=forms.TextInput(attrs={'class': 'form-control'}))
+    dateordernew = forms.DateField(label='Дата заказа замены', required=False,
+                                   help_text='Укажите, если поверка не выгодна',
+                                widget=forms.DateInput(
+                                    attrs={'class': 'form-control', 'placeholder': ''}),
+                                input_formats=(
+                                    '%Y-%m-%d',
+                                    '%m/%d/%Y',
+                                    '%m/%d/%y',
+                                    '%d.%m.%Y',
+                                ))
 
 
     class Meta:

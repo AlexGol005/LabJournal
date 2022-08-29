@@ -213,6 +213,7 @@ class MeasurEquipmentCharakters(models.Model):
                            max_length=90, blank=True, null=True)
 
 
+
     def __str__(self):
         return f'госреестр: {self.reestr},  {self.name}  {self.modificname}'
 
@@ -294,6 +295,8 @@ class Verificationequipment(models.Model):
                               verbose_name='Место поверки')
     note = models.CharField('Примечание', max_length=900, blank=True, null=True)
     year = models.CharField('Год поверки (если нет точных дат)', max_length=900, blank=True, null=True)
+    dateordernew = models.DateField('Дата заказа нового оборудования (если поверять не выгодно)',
+                                    blank=True, null=True)
 
     def __str__(self):
         return f'Поверка {self.equipmentSM.charakters.name} вн № ' \
