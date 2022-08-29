@@ -36,8 +36,6 @@
     </thead>
     <tbody>
     {% for obj in note %}
-
-        {% if obj.datedead >  now %}
             <tr>
          <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.date|date:"d.m.y"|default:" " }}{{ obj.year|default:" "}} </td>
          <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.datedead|date:"d.m.y"|default:" " }}</td>
@@ -59,7 +57,6 @@
         <a href="{{ obj.arshin}}"  target="blank" >
              {{ obj.certnumber|default:" "}}
                   </a>
-        {% endif %}
         {{ obj.certnumber|default:" "}}
         </td>
             <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.verificatorperson.name|default:" " }}
@@ -74,47 +71,6 @@
         {% endif %}
         </td>
     </tr>
-
-        {% endif %}
-        {% if obj.datedead <= now or not obj.datedead%}
-            <tr>
-         <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.date|date:"d.m.y"|default:" " }}{{ obj.year|default:" "}} </td>
-         <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.datedead|date:"d.m.y"|default:" " }}</td>
-        <td class="ind" >
-             {% if obj.arshinif|length > 14 %}
-              <a href="{{obj.arshin}}"  target="blank" >
-             Аршин
-                  </a>
-             {% else  %}
-             отсутствует
-             {% endif %}
-         </td>
-        <td > {{ obj.place }}</td>
-        <td > {{ obj.verificator.companyName }}</td>
-        <td style=> {{ obj.statusver|default:" " }}</td>
-        <td style=> {{ obj.price|default:" "  }}</td>
-        <td style=>
-            {% if obj.img %}
-        <a href="{{ obj.arshin}}"  target="blank" >
-             {{ obj.certnumber|default:" "}}
-                  </a>
-        {% endif %}
-        {{ obj.certnumber|default:" "}}
-        </td>
-        <td > {{ obj.verificatorperson.name|default:" " }}
-        {% if obj.verificatorperson.telnumber %}
-        телефон {{ obj.verificatorperson.telnumber|default:" " }}
-        {% endif %}
-        {% if obj.verificatorperson.departament %}
-        отдел {{ obj.verificatorperson.departament|default:" " }}
-        {% endif %}
-        {% if obj.verificatorperson.dop %}
-        примечание {{ obj.verificatorperson.dop|default:" " }}
-        {% endif %}
-        </td>
-    </tr>
-        {% endif %}
-
     {% endfor %}
     </tbody>
 </table>
