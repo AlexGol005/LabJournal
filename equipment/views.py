@@ -218,8 +218,7 @@ class StrMeasurEquipmentView(View):
 
 
 class CommentsView(View):
-    """ выводит комментарии к записи в журнале и форму для добавления комментариев """
-    """Стандартное"""
+    """ выводит комментарии к оборудованию и форму для добавления комментариев """
     form_class = NoteCreationForm
     initial = {'key': 'value'}
     template_name = 'equipment/comments.html'
@@ -382,7 +381,8 @@ class DocsConsView(View):
     def get(self, request, str):
         template_name = 'equipment/docsconslist.html'
         form = DocsConsCreateForm()
-        title = Equipment.objects.get(exnumber=str)
+        # title = Equipment.objects.get(exnumber=str)
+        title = 1
         objects = DocsCons.objects.filter(equipment__exnumber=str).order_by('pk')
         context = {
                 'title': title,
@@ -399,8 +399,28 @@ class DocsConsView(View):
             order.save()
             return redirect(f'/equipment/docsreg/{str}')
 
-
-
+    # form_class = NoteCreationForm
+    # initial = {'key': 'value'}
+    # template_name = 'equipment/comments.html'
+    #
+    # def get(self, request, str):
+    #     note = CommentsEquipment.objects.filter(forNote__exnumber=str)
+    #     title = Equipment.objects.get(exnumber=str)
+    #     form = NoteCreationForm()
+    #     return render(request, 'equipment/comments.html', {'note': note, 'title': title, 'form': form, 'URL': URL})
+    #
+    # def post(self, request, str, *args, **kwargs):
+    #     form = NoteCreationForm(request.POST, request.FILES)
+    #     if form.is_valid():
+    #         order = form.save(commit=False)
+    #         if request.user and not order.author:
+    #             order.author = request.user
+    #         if not request.user and order.author:
+    #             order.author = order.author
+    #         order.forNote = Equipment.objects.get(exnumber=str)
+    #         order.save()
+    #         messages.success(request, f'Запись добавлена!')
+    #         return redirect(order)
 
 
 
