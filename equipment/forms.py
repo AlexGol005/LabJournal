@@ -208,7 +208,7 @@ class VerificationRegForm(forms.ModelForm):
                                '%m/%d/%y',
                                '%d.%m.%Y',
                            ))
-    dateorder = forms.DateField(label='Дата заказа поверки',
+    dateorder = forms.DateField(label='Дата заказа поверки', required=False,
                            widget=forms.DateInput(
                                attrs={'class': 'form-control', 'placeholder': ''}),
                            input_formats=(
