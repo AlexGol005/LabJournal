@@ -420,9 +420,9 @@ class ClorinesaltsCV(models.Model):
         if self.clorinesalts.order_cv_value_begin:
             self.pricebegin = self.clorinesalts.order_cv_value_begin
         if not self.clorinesalts.order_cv_value_end and self.clorinesalts2.order_cv_value_end:
-            self.priceend = self.clorinesalts2.order_cv_value_end
-        if not self.clorinesalts.order_cv_value_begin and self.clorinesalts2.order_cv_value_begin:
-            self.pricebegin = self.clorinesalts2.order_cv_value_begin
+            self.priceend = self.clorinesalts.order_cv_value_end
+        if not self.clorinesalts.order_cv_value_begin and self.clorinesalts.order_cv_value_begin:
+            self.pricebegin = self.clorinesalts.order_cv_value_begin
 
         # находим х среднее из всех измерений
         if self.countmeasur:
