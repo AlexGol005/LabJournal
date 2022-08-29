@@ -257,6 +257,9 @@ class Clorinesalts(models.Model):
             b = a[0]
             LotCSN.objects.get_or_create(lot=self.lot, nameSM=b)
             self.for_lot_and_nameLotCSN = LotCSN.objects.get(lot=self.lot, nameSM=b)
+            # начало и конец диапазона
+            self.order_cv_value_begin = self.for_lot_and_nameLotCSN.nameSM.nameSM.typebegin
+            self.order_cv_value_end = self.for_lot_and_nameLotCSN.nameSM.nameSM.typeend
         if self.name == 'ГК-ПА-2':
             pk_GKCS = GKCS.objects.get(name=self.name)
             a = GKCSrange.objects.get_or_create(rangeindex=self.namedop, nameSM=pk_GKCS)
