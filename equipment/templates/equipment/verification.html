@@ -76,7 +76,7 @@
     </tr>
 
         {% endif %}
-        {% if obj.datedead <= now %}
+        {% if obj.datedead <= now or not obj.datedead%}
             <tr>
          <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.date|date:"d.m.y"|default:" " }}{{ obj.year|default:" "}} </td>
          <td style="background-color: rgba(168,255,18,0.37) !important"> {{ obj.datedead|date:"d.m.y"|default:" " }}</td>

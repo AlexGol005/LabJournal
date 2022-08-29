@@ -296,7 +296,8 @@ class Verificationequipment(models.Model):
     year = models.CharField('Год поверки (если нет точных дат)', max_length=900, blank=True, null=True)
 
     def __str__(self):
-        return f'Поверка {self.equipmentSM.charakters.name} вн № {self.equipmentSM.equipment.exnumber}'
+        return f'Поверка {self.equipmentSM.charakters.name} вн № ' \
+               f'{self.equipmentSM.equipment.exnumber}  {self.date}  {self.year}'
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
