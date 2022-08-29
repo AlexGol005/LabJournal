@@ -39,13 +39,14 @@
             <tr>
          <td> {{ obj.date|date:"d.m.y"|default:" " }}{{ obj.year|default:" "}} </td>
           <td> {{ obj.datedead|date:"d.m.y"|default:" " }}</td>
-         <td class="ind" >
-             {% if obj.arshinif %}
+         <td>
+         {% if obj.arshinif == 'отсутствуют'  %}
+             отсутствуют
+             {% elif obj.arshin %}
               <a href="{{ obj.arshin }}"  target="blank" >
              Аршин
                   </a>
-             {% elif obj.arshinif == 'отсутствуют'  %}
-             отсутствуют
+
              {% endif %}
          </td>
         <td> {{ obj.place }}</td>
