@@ -495,7 +495,7 @@ class DocsConsCreateForm(forms.ModelForm):
 
 class MeteorologicalParametersRegForm(ModelForm):
     """форма для внесения условий окружающей среды в помещении"""
-    date = forms.DateField(label='Дата', initial=datetime.date.today(),
+    date = forms.DateField(label='Дата',
                            widget=forms.DateInput(
                                attrs={'class': 'form-control', 'placeholder': ''}),
                            input_formats=(
