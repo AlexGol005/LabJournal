@@ -19,6 +19,7 @@ urlpatterns = [
     path(r'^export/xls/$/<int:pk>', views.export_me_xls, name='export_kinematicviscosity_xls'),
     path(r'^export1/xls/$/<int:pk>', views.export_protocol_xls, name='export_kinematicviscosity_protocol_xls'),
     path('protocolhead/<slug:pk>', views.ProtocolHeadView.as_view(), name=URL + 'protocolhead'),
+    path('protocolbutton/<slug:pk>', views.ProtocolbuttonView.as_view(), name=URL + 'protocolbutton'),
 
 ]
 # path('/search_location/result/', views.SearchResultView.as_view(), name=URL + 'search'),

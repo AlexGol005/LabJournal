@@ -420,6 +420,9 @@ class MeteorologicalParameters(models.Model):
     equipment2 = models.ForeignKey(MeasurEquipment, verbose_name='Барометр', null=True,
                                    on_delete=models.PROTECT, blank=True, related_name='equipment2meteo')
 
+    def __str__(self):
+        return f' {self.date} , {self.roomnumber.roomnumber}'
+
     class Meta:
         verbose_name = 'Условия в помещении'
         verbose_name_plural = 'Условия в помещениях'

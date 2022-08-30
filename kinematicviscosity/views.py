@@ -55,7 +55,10 @@ class StrJournalView(View):
         except ObjectDoesNotExist:
             counter = None
         return render(request, URL + '/str.html',
-                      {'note': note, 'form': form, 'URL': URL, 'NAME': NAME, 'counter': counter})
+                      {'note': note, 'form': form, 'URL': URL,
+                       'NAME': NAME,
+                       'counter': counter,
+                       })
 
     def post(self, request, pk, *args, **kwargs):
         if MODEL.objects.get(id=pk).performer == request.user:
@@ -177,9 +180,33 @@ class ProtocolHeadView(View):
             order.save()
             try:
                 MeteorologicalParameters.objects.get(Q(date__exact=order.date) & Q(roomnumber__exact=order.room))
-                return redirect(f'/attestationJ/kinematicviscosity/protocolhead/{pk}')
+                return redirect(f'/attestationJ/kinematicviscosity/protocolbutton/{pk}')
             except:
-                return redirect('/equipment/meteo/')
+                return redirect('/equipment/meteoreg/')
+
+class ProtocolbuttonView(View):
+    """ Выводит кнопку для формирования протокола """
+    def get(self, request, pk):
+        template_name = 'kinematicviscosity/buttonprotocol.html'
+        titlehead = 'Протокол анализа'
+        note = get_object_or_404(MODEL, pk=pk)
+        if note.room:
+            try:
+                MeteorologicalParameters.objects.get(Q(date__exact=note.date) & Q(roomnumber__exact=note.room))
+                title = 'Есть все данные для формирования протокола'
+
+
+            except:
+                title = 'Сначала укажите метеопараметры'
+        else:
+                title = 'Укажите СИ и/или метеопараметры'
+        context = {
+            'title': title,
+            'titlehead': titlehead,
+            'note': note,
+                   }
+        return render(request, template_name, context)
+
 
 
 class AllStrView(ListView):
@@ -227,25 +254,6 @@ class SearchResultView(TemplateView):
         context['formdate'] = SearchDateForm()
         context['URL'] = URL
         return context
-
-# class ButtonView(TemplateView):
-#     """ Представление выводит страницу с кнопками """
-#     template_name = 'main/headbase.html'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(ButtonView, self).get_context_data(**kwargs)
-#         buttons = '<div style="text-align: center;"> <a href="{% url "prod" %}" class="btn btn-warning mr-5 mt-3" ' \
-#                   'style="width: 210px">Журналы приготовления</a>       ' \
-#                   ' <a href="{% url "att" %}" class="btn btn-warning  mt-3" style="width: 210px">' \
-#                   'Журналы аттестации</a>  </div>'
-#         titlehead = 'Протокол анализа'
-#         title = 'Заполните данные для протокола анализа'
-#         context['buttons'] = buttons
-#         context['titlehead'] = titlehead
-#         context['title'] = title
-#         return context
-
-
 
 
 class DateSearchResultView(TemplateView):
@@ -731,43 +739,79 @@ def export_protocol_xls(request, pk):
     Image.open(company.imglogoadress.path).convert("RGB").save('logo.bmp')
     ws.insert_bitmap('logo.bmp', 1, 3)
 
-    ws.col(0).width = 700
-    ws.col(1).width = 5000
-    ws.col(2).width = 5000
-    ws.col(3).width = 5000
-    ws.col(4).width = 5000
-    ws.col(5).width = 5000
-    ws.col(6).width = 5000
-    ws.col(7).width = 5000
-    ws.col(8).width = 5000
+    ws.col(0).width = 400
+    ws.col(1).width = 6000
+    ws.col(2).width = 3500
+    ws.col(3).width = 3500
+    ws.col(4).width = 2700
+    ws.col(5).width = 2700
+    ws.col(6).width = 2700
+    ws.col(7).width = 3900
+    ws.col(8).width = 3900
 
 
     al1 = Alignment()
     al1.horz = Alignment.HORZ_CENTER
     al1.vert = Alignment.VERT_CENTER
 
+    al2 = Alignment()
+    al2.horz = Alignment.HORZ_RIGHT
+    al2.vert = Alignment.VERT_CENTER
+
     style1 = xlwt.XFStyle()
-    # style1.font.bold = True
+    style1.font.height = 20 * 8
     style1.font.name = 'Times New Roman'
     style1.alignment = al1
     style1.alignment.wrap = 1
 
+    style2 = xlwt.XFStyle()
+    style2.font.height = 20 * 8
+    style2.font.name = 'Times New Roman'
+    style2.alignment = al2
+    style2.alignment.wrap = 1
 
-    row_num = 5
+    style3 = xlwt.XFStyle()
+    style3.font.height = 20 * 8
+    style3.font.name = 'Times New Roman'
+    style3.alignment = al2
+    style3.alignment.wrap = 1
+    style3.num_format_str = 'DD.MM.YYYY г.'
+
+
+    row_num = 4
     columns = [
-        company.sertificat9001,
-        company.sertificat9001,
-        company.sertificat9001,
-        company.affirmationproduction,
+        'Сертифицирован на соотвествие требованиям национального стандарта \nГОСТ Р ИСО 9001-2015 \nорганом по сертификации СМК ООО "ACEPT Бюро" \n от 23.06.2022г., сертификат действителен до 24.12.2025 г.',
+        'Сертифицирован на соотвествие требованиям национального стандарта \nГОСТ Р ИСО 9001-2015 \nорганом по сертификации СМК ООО "ACEPT Бюро" \n от 23.06.2022г., сертификат действителен до 24.12.2025 г.',
+        'Сертифицирован на соотвествие требованиям национального стандарта \nГОСТ Р ИСО 9001-2015 \nорганом по сертификации СМК ООО "ACEPT Бюро" \n от 23.06.2022г., сертификат действителен до 24.12.2025 г.',
+        'Сертифицирован на соотвествие требованиям национального стандарта \nГОСТ Р ИСО 9001-2015 \nорганом по сертификации СМК ООО "ACEPT Бюро" \n от 23.06.2022г., сертификат действителен до 24.12.2025 г.',
+        '',
+        '',
+        'УТВЕРЖДАЮ \nНачальник производства \nООО "Петроаналитика"\n___________ /Н.Ю. Пилявская',
+        'УТВЕРЖДАЮ \nНачальник производства \nООО "Петроаналитика"\n___________ /Н.Ю. Пилявская',
     ]
     for col_num in range(3):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(5, 5, 0, 3, style1)
+        ws.merge(4, 4, 0, 3, style1)
     for col_num in range(6, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(5, 5, 6, 8, style1)
-    ws.row(5).height_mismatch = True
-    ws.row(5).height = 800
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(4, 4, 6, 7, style2)
+    ws.row(4).height_mismatch = True
+    ws.row(4).height = 900
+
+    row_num = 5
+    columns = [
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        note.date,
+        ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+
 
 
     wb.save(response)

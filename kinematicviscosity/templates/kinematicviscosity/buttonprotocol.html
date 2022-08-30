@@ -1,0 +1,27 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}
+    {{ titlehead }}
+{% endblock %}
+
+
+{% block content %}
+<div style="text-align: center;"><h3>{{ title }}</h3></div>
+<br><br>
+    {% if title == 'Есть все данные для формирования протокола' %}
+    <div style="text-align: center;">'
+                          <a href="{% url 'export_kinematicviscosity_protocol_xls' note.pk %}"
+                           class="btn btn-warning mr-5 mt-3"
+                          style="width: 210px">Скачать протокол анализа</a></div>
+    {% elif title == 'Сначала укажите метеопараметры' %}
+    <div style="text-align: center;">'
+                          <a href="{% url 'meteoreg'  %}"
+                           class="btn btn-warning mr-5 mt-3"
+                          style="width: 210px">Указать</a></div>
+    {% elif title == 'укажите СИ и/или метеопараметры' %}
+    <div style="text-align: center;">'
+                          <a href="{% url 'export_kinematicviscosity_protocol_xls' note.pk %}"
+                           class="btn btn-warning mr-5 mt-3"
+                          style="width: 210px">Скачать протокол анализа</a></div>
+    {% endif %}
+{% endblock %}

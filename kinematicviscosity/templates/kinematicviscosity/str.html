@@ -236,8 +236,13 @@
     <div class="noprint">
     <a href="javascript:(print());" class="btn btn-warning mt-1">Распечатать</a>
     <a href="{% url 'export_kinematicviscosity_xls' note.pk %}"  class="btn btn-warning ml-5 mt-1">Сохранить в EXEL</a>
+        {% if note.room %}
+    <a href="{% url 'kinematicviscosityprotocolbutton' note.pk %}"  class="btn btn-warning ml-5 mt-1">
+        Сформировать протокол испытаний</a>
+        {% else %}
     <a href="{% url 'kinematicviscosityprotocolhead' note.pk %}"  class="btn btn-warning ml-5 mt-1">
         Сформировать протокол испытаний</a>
+        {% endif %}
     <br>
     <br>
     </div>
