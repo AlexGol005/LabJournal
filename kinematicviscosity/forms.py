@@ -1,9 +1,11 @@
 import datetime
 from django import forms
+from django.db.models import  Q
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
 
+from equipment.models import Rooms, MeasurEquipment
 from viscosimeters.models import Viscosimeters
 from .models import CHOICES, CommentsKinematicviscosity, ndocumentoptional, ViscosityMJL
 
@@ -163,6 +165,41 @@ class StrJournalUdateForm(forms.ModelForm):
     class Meta:
         model = MODEL
         fields = ['fixation']
+
+class StrJournalProtocolUdateForm(forms.ModelForm):
+    """форма для  обновления записи в журнале: поля модели метеоусловия для протокола"""
+    """стандартная"""
+    room = forms.ModelChoiceField(label='Помещение', required=False,
+                                        queryset=Rooms.objects.all(),
+                                        widget=forms.Select(attrs={'class': 'form-control'}))
+    equipment1 = forms.ModelChoiceField(label='Секундомер', required=False,
+                                        queryset=MeasurEquipment.objects.\
+                                        filter(Q(charakters__name__contains='Секундомер')|\
+                                               Q(charakters__name__contains='секундомер')),
+                                        widget=forms.Select(attrs={'class': 'form-control'}))
+    equipment2 = forms.ModelChoiceField(label='Вискозиметр1', required=False,
+                                        queryset=MeasurEquipment.objects. \
+                                        filter(Q(charakters__name__contains='Вискозиметр') | \
+                                               Q(charakters__name__contains='вискозиметр')),
+                                        widget=forms.Select(attrs={'class': 'form-control'}))
+    equipment3 = forms.ModelChoiceField(label='Вискозиметр2', required=False,
+                                        queryset=MeasurEquipment.objects. \
+                                        filter(Q(charakters__name__contains='Вискозиметр') | \
+                                               Q(charakters__name__contains='вискозиметр')),
+                                        widget=forms.Select(attrs={'class': 'form-control'}))
+    equipment4 = forms.ModelChoiceField(label='Термометр', required=False,
+                                        queryset=MeasurEquipment.objects. \
+                                        filter(Q(charakters__name__contains='Термометр') | \
+                                               Q(charakters__name__contains='термометр')),
+                                        widget=forms.Select(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = MODEL
+        fields = [
+            'room', 'equipment1',
+            'equipment2', 'equipment3',
+            'equipment4',
+        ]
 
 
 class CommentCreationForm(forms.ModelForm):

@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from decimal import *
 
-from equipment.models import MeasurEquipment
+from equipment.models import MeasurEquipment, Rooms
 from viscosimeters.models import Viscosimeters, Kalibration
 from jouViscosity.models import LotVG, VGrange, VG, CvKinematicviscosityVG
 from formuls import mrerrow, numberDigits
@@ -99,7 +99,7 @@ class ViscosityMJL(models.Model):
     resultWarning = models.CharField(max_length=300, default='', null=True,  blank=True)
 
     #  поля для записи - помещения, оборудования - для подготовки протокола анализа
-    room = models.ForeignKey(Viscosimeters, verbose_name='Номер комнаты', null=True,
+    room = models.ForeignKey(Rooms, verbose_name='Номер комнаты', null=True,
                                             on_delete=models.PROTECT,  blank=True)
     equipment1 = models.ForeignKey(MeasurEquipment, verbose_name='Секундомер', null=True,
                              on_delete=models.PROTECT, blank=True, related_name='equipment1kinematic')

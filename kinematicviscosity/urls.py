@@ -14,11 +14,11 @@ urlpatterns = [
     path('attestation/<int:pk>/comments/', login_required(views.CommentsView.as_view()), name=URL + 'comm'),
     path('attestation/', login_required(views.AllStrView.as_view()), name=URL + 'all'),
     path('searchresult/', views.SearchResultView.as_view(), name=URL + 'search'),
-    path('protocolhead/', views.ProtocolHeadView.as_view(), name=URL + 'protocolhead'),
     path('datesearchresult/', views.DateSearchResultView.as_view(), name=URL + 'datesearch'),
     path('filter/<int:pk>', views.filterview, name=URL + 'filter'),
     path(r'^export/xls/$/<int:pk>', views.export_me_xls, name='export_kinematicviscosity_xls'),
     path(r'^export1/xls/$/<int:pk>', views.export_protocol_xls, name='export_kinematicviscosity_protocol_xls'),
+    path('protocolhead/<slug:pk>', views.ProtocolHeadView.as_view(), name=URL + 'protocolhead'),
 
 ]
 # path('/search_location/result/', views.SearchResultView.as_view(), name=URL + 'search'),

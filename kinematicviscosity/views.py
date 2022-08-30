@@ -5,11 +5,12 @@ from PIL import Image
 import xlwt
 from io import BytesIO
 import xlwt
+from django.db.models import Max, Q, Value
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, TemplateView
+from django.views.generic import ListView, TemplateView, CreateView
 from datetime import datetime, timedelta
 from django.shortcuts import get_object_or_404
 from django.views import View
@@ -18,12 +19,13 @@ from django.contrib.auth.decorators import login_required
 from sqlparse.filters import output
 from xlwt import Borders, Alignment
 
-from equipment.models import Verificationequipment, Equipment, CompanyCard
+from equipment.models import Verificationequipment, Equipment, CompanyCard, MeteorologicalParameters
 from jouViscosity.models import CvKinematicviscosityVG
 from main.models import AttestationJ
 from viscosimeters.models import Kalibration
 from .models import ViscosityMJL, CommentsKinematicviscosity
-from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm, SearchForm, SearchDateForm
+from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm, SearchForm, SearchDateForm, \
+    StrJournalProtocolUdateForm
 
 JOURNAL = AttestationJ
 MODEL = ViscosityMJL
@@ -156,6 +158,29 @@ class CommentsView(View):
             messages.success(request, f'Комментарий добавлен!')
             return redirect(order)
 
+class ProtocolHeadView(View):
+    """ выводит форму внесения для внесения допинформации для формирования протокола и кнопку для протокола """
+    def get(self, request, pk):
+        title = "Добавить данные для протокола"
+        template_name = 'main/reg.html'
+        form = StrJournalProtocolUdateForm()
+        context = {'title': title,
+                   'form': form
+                   }
+        return render(request, template_name, context)
+
+    def post(self, request, pk, *args, **kwargs):
+        form = StrJournalProtocolUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
+        if form.is_valid():
+            order = form.save(commit=False)
+            messages.success(request, f'Записано')
+            order.save()
+            try:
+                MeteorologicalParameters.objects.get(Q(date__exact=order.date) & Q(roomnumber__exact=order.room))
+                return redirect(f'/attestationJ/kinematicviscosity/protocolhead/{pk}')
+            except:
+                return redirect('/equipment/meteo/')
+
 
 class AllStrView(ListView):
     """ Представление, которое выводит все записи в журнале. """
@@ -203,22 +228,25 @@ class SearchResultView(TemplateView):
         context['URL'] = URL
         return context
 
-class ProtocolHeadView(TemplateView):
-    """ Представление выводит страницу для заполнения данных для протокола """
-    template_name = 'main/headbase.html'
+# class ButtonView(TemplateView):
+#     """ Представление выводит страницу с кнопками """
+#     template_name = 'main/headbase.html'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(ButtonView, self).get_context_data(**kwargs)
+#         buttons = '<div style="text-align: center;"> <a href="{% url "prod" %}" class="btn btn-warning mr-5 mt-3" ' \
+#                   'style="width: 210px">Журналы приготовления</a>       ' \
+#                   ' <a href="{% url "att" %}" class="btn btn-warning  mt-3" style="width: 210px">' \
+#                   'Журналы аттестации</a>  </div>'
+#         titlehead = 'Протокол анализа'
+#         title = 'Заполните данные для протокола анализа'
+#         context['buttons'] = buttons
+#         context['titlehead'] = titlehead
+#         context['title'] = title
+#         return context
 
-    def get_context_data(self, **kwargs):
-        context = super(ProtocolHeadView, self).get_context_data(**kwargs)
-        buttons = '<div style="text-align: center;"> <a href="{% url "prod" %}" class="btn btn-warning mr-5 mt-3" ' \
-                  'style="width: 210px">Журналы приготовления</a>       ' \
-                  ' <a href="{% url "att" %}" class="btn btn-warning  mt-3" style="width: 210px">' \
-                  'Журналы аттестации</a>  </div>'
-        titlehead = 'Протокол анализа'
-        title = 'Заполните данные для протокола анализа'
-        context['buttons'] = buttons
-        context['titlehead'] = titlehead
-        context['title'] = title
-        return context
+
+
 
 class DateSearchResultView(TemplateView):
     """ Представление, которое выводит результаты поиска по датам на странице со всеми записями журнала. """
