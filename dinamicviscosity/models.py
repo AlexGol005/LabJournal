@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from decimal import *
 
+from equipment.models import MeasurEquipment
 from jouViscosity.models import VG, VGrange, LotVG, CvDensityDinamicVG
 from metods import get_avg, get_acc_measurement
 from formuls import mrerrow, numberDigits
@@ -85,6 +86,15 @@ class Dinamicviscosity(models.Model):
     kinematicviscositydead = models.DateField('кинематика годна до:', blank=True, null=True)
     havedensity = models.BooleanField(verbose_name='Есть значение плотности, измеренное ранее', default=False, blank=True)
     densitydead = models.DateField('Плотность, измеренная ранее, годна до:', null=True, blank=True)
+    room = models.ForeignKey(Viscosimeters, verbose_name='Номер комнаты', null=True,
+                             on_delete=models.PROTECT, blank=True)
+    #  поля для записи - помещения, оборудования - для подготовки протокола анализа
+    equipment1 = models.ForeignKey(MeasurEquipment, verbose_name='Весы', null=True,
+                                   on_delete=models.PROTECT, blank=True, related_name='equipment1dinamic')
+    equipment2 = models.ForeignKey(MeasurEquipment, verbose_name='Термометр', null=True,
+                                   on_delete=models.PROTECT, blank=True, related_name='equipment2dinamic')
+    equipment3 = models.ForeignKey(MeasurEquipment, verbose_name='Пикнометр', null=True,
+                                   on_delete=models.PROTECT, blank=True, related_name='equipment3dinamic')
 
 
     def save(self, *args, **kwargs):

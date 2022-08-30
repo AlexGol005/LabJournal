@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from decimal import *
 
+from equipment.models import MeasurEquipment
 from viscosimeters.models import Viscosimeters, Kalibration
 from jouViscosity.models import LotVG, VGrange, VG, CvKinematicviscosityVG
 from formuls import mrerrow, numberDigits
@@ -96,6 +97,18 @@ class ViscosityMJL(models.Model):
     deltaOldCertifiedValue = models.DecimalField('Оценка разницы с предыдущим значением',
                                                  max_digits=10, decimal_places=2, null=True, blank=True)
     resultWarning = models.CharField(max_length=300, default='', null=True,  blank=True)
+
+    #  поля для записи - помещения, оборудования - для подготовки протокола анализа
+    room = models.ForeignKey(Viscosimeters, verbose_name='Номер комнаты', null=True,
+                                            on_delete=models.PROTECT,  blank=True)
+    equipment1 = models.ForeignKey(MeasurEquipment, verbose_name='Секундомер', null=True,
+                             on_delete=models.PROTECT, blank=True, related_name='equipment1kinematic')
+    equipment2 = models.ForeignKey(MeasurEquipment, verbose_name='Вискозиметр1', null=True,
+                                   on_delete=models.PROTECT, blank=True, related_name='equipment2kinematic')
+    equipment3 = models.ForeignKey(MeasurEquipment, verbose_name='Вискозиметр2', null=True,
+                                   on_delete=models.PROTECT, blank=True, related_name='equipment3kinematic')
+    equipment4 = models.ForeignKey(MeasurEquipment, verbose_name='Термометр', null=True,
+                                   on_delete=models.PROTECT, blank=True, related_name='equipment4kinematic')
 
 
     def save(self, *args, **kwargs):

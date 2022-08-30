@@ -495,7 +495,7 @@ class DocsConsCreateForm(forms.ModelForm):
 
 class MeteorologicalParametersRegForm(ModelForm):
     """форма для внесения условий окружающей среды в помещении"""
-    date = forms.DateField(label='Дата',
+    date = forms.DateField(label='Дата', initial=datetime.date.today(),
                            widget=forms.DateInput(
                                attrs={'class': 'form-control', 'placeholder': ''}),
                            input_formats=(
@@ -513,11 +513,18 @@ class MeteorologicalParametersRegForm(ModelForm):
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
     humidity = forms.CharField(label='Влажность, %', required=False, initial='50',
                                widget=forms.TextInput(attrs={'class': 'form-control'}))
+    equipment1 = forms.ModelChoiceField(label='Гигрометр',
+                                        queryset=MeasurEquipment.objects.filter(charakters__name__contains='Гигрометр'),
+                                        widget=forms.Select(attrs={'class': 'form-control'}))
+    equipment2 = forms.ModelChoiceField(label='Барометр',
+                                        queryset=MeasurEquipment.objects.filter(charakters__name__contains='Барометр'),
+                                        widget=forms.Select(attrs={'class': 'form-control'}))
 
     class Meta:
         model = MeteorologicalParameters
         fields = [
             'date',
             'roomnumber', 'pressure',
-            'temperature', 'humidity'
+            'temperature', 'humidity',
+            'equipment1', 'equipment2',
                   ]

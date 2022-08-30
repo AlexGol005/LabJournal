@@ -415,6 +415,10 @@ class MeteorologicalParameters(models.Model):
     pressure = models.CharField('Давление, кПа', max_length=90, blank=True, null=True)
     temperature = models.CharField('Температура, °С', max_length=90, blank=True, null=True)
     humidity = models.CharField('Влажность, %', max_length=90, blank=True, null=True)
+    equipment1 = models.ForeignKey(MeasurEquipment, verbose_name='Гигрометр', null=True,
+                                   on_delete=models.PROTECT, blank=True, related_name='equipment1meteo')
+    equipment2 = models.ForeignKey(MeasurEquipment, verbose_name='Барометр', null=True,
+                                   on_delete=models.PROTECT, blank=True, related_name='equipment2meteo')
 
     class Meta:
         verbose_name = 'Условия в помещении'
