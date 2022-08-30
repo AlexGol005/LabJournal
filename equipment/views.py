@@ -29,7 +29,7 @@ class MeteorologicalParametersView(TemplateView):
     template_name = URL + '/meteo.html'
 
 class RoomsCreateView(SuccessMessageMixin, CreateView):
-    """ выводит форму добавления поверителя """
+    """ выводит форму добавления помещения """
     template_name = URL + '/reg.html'
     form_class = RoomsCreateForm
     success_url = '/equipment/meteo/'
@@ -83,7 +83,7 @@ class MeteorologicalParametersCreateView(SuccessMessageMixin, CreateView):
     """ выводит форму добавления метеопараметров """
     template_name = URL + '/reg.html'
     form_class = MeteorologicalParametersRegForm
-    success_url = '/equipment/manufacturerlist/'
+    success_url = '/equipment/meteo/'
     success_message = "Условия окружающей среды успешно добавлены"
 
     def get_context_data(self, **kwargs):

@@ -1,0 +1,16 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}
+    {{ titlehead }}
+{% endblock %}
+
+
+{% block content %}
+<div style="text-align: center;"><h3>{{ title }}</h3></div>
+<br><br>
+
+  {{buttons|safe}}
+
+
+
+{% endblock %}

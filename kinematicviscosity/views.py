@@ -203,6 +203,23 @@ class SearchResultView(TemplateView):
         context['URL'] = URL
         return context
 
+class ProtocolHeadView(TemplateView):
+    """ Представление выводит страницу для заполнения данных для протокола """
+    template_name = 'main/headbase.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProtocolHeadView, self).get_context_data(**kwargs)
+        buttons = '<div style="text-align: center;"> <a href="{% url "prod" %}" class="btn btn-warning mr-5 mt-3" ' \
+                  'style="width: 210px">Журналы приготовления</a>       ' \
+                  ' <a href="{% url "att" %}" class="btn btn-warning  mt-3" style="width: 210px">' \
+                  'Журналы аттестации</a>  </div>'
+        titlehead = 'Протокол анализа'
+        title = 'Заполните данные для протокола анализа'
+        context['buttons'] = buttons
+        context['titlehead'] = titlehead
+        context['title'] = title
+        return context
+
 class DateSearchResultView(TemplateView):
     """ Представление, которое выводит результаты поиска по датам на странице со всеми записями журнала. """
     """стандартное"""
