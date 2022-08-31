@@ -5,7 +5,7 @@ from PIL import Image
 import xlwt
 from io import BytesIO
 import xlwt
-from django.db.models import Max, Q, Value
+from django.db.models import Max, Q, Value, OuterRef, Subquery
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
 from django.http import HttpResponse
@@ -20,7 +20,7 @@ from django.db.models.functions import Upper, Concat
 from sqlparse.filters import output
 from xlwt import Borders, Alignment
 
-from equipment.models import Verificationequipment, Equipment, CompanyCard, MeteorologicalParameters
+from equipment.models import Verificationequipment, Equipment, CompanyCard, MeteorologicalParameters, MeasurEquipment
 from jouViscosity.models import CvKinematicviscosityVG
 from main.models import AttestationJ
 from viscosimeters.models import Kalibration
@@ -734,14 +734,71 @@ def export_protocol_xls(request, pk):
     company = CompanyCard.objects.get(pk=1)
     note = ViscosityMJL.objects.\
         annotate(name_rm=Concat(Value('СО '), 'name', Value(' п. '), 'lot')).\
-        annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')).\
+        annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')). \
+        annotate(equipment_set=Concat('equipment1__charakters__name',
+                                        Value(' тип '), 'equipment1__charakters__typename',
+                                        Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
+                                        Value(' от '), 'equipment1__newdate',
+                                        # Value(', '),
+                                        Value(' действительно до '), 'equipment1__newdatedead',
+                                        Value('; \n'),
+                                        'equipment2__charakters__name',
+                                        Value(' тип '), 'equipment2__charakters__typename',
+                                        Value(', свидетельство о поверке № '), 'equipment2__newcertnumber',
+                                        Value(' от '), 'equipment2__newdate',
+                                        # Value(', '),
+                                        Value(' действительно до '), 'equipment2__newdatedead',
+                                        )). \
+        annotate(equipment_set2=Concat('equipment3__charakters__name',
+                                       Value(' тип '), 'equipment3__charakters__typename',
+                                       Value(', свидетельство о поверке № '), 'equipment3__newcertnumber',
+                                       Value(' от '), 'equipment3__newdate',
+                                       # Value(', '),
+                                       Value(' действительно до '), 'equipment3__newdatedead',
+                                       Value('; \n'),
+                                       'equipment4__charakters__name',
+                                       Value(' тип '), 'equipment4__charakters__typename',
+                                       Value(', свидетельство о поверке № '), 'equipment4__newcertnumber',
+                                       Value(' от '), 'equipment4__newdate',
+                                       # Value(', '),
+                                       Value(' действительно до '), 'equipment4__newdatedead',
+                                       )). \
         get(pk=pk)
+
+    newest = Verificationequipment.objects.filter(equipmentSM=OuterRef('pk')).order_by('-pk')
+    # a = MeasurEquipment.objects.annotate(newest_certnumber=Subquery(newest.values('certnumber')[:1]))
+    meteo = MeteorologicalParameters.objects. \
+        annotate(equipment_meteo=Concat('equipment1__charakters__name',
+                                        Value(' тип '), 'equipment1__charakters__typename',
+                                        Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
+                                        Value(' от '), 'equipment1__newdate',
+                                        # Value(', '),
+                                        Value(' действительно до '), 'equipment1__newdatedead',
+                                        Value('; \n'),
+                                        'equipment2__charakters__name',
+                                        Value(' тип '), 'equipment2__charakters__typename',
+                                        Value(', свидетельство о поверке № '), 'equipment2__newcertnumber',
+                                        Value(' от '), 'equipment2__newdate',
+                                        # Value(', '),
+                                        Value(' действительно до '), 'equipment2__newdatedead',
+                                        )).\
+        get(date__exact=note.date, roomnumber__roomnumber__exact=note.room)
+
+
+
+
+
+    # OuterRef('equipment1__equipmentSM_ver__certnumber'),)
+
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}_protocol.xls"'
     wb = xlwt.Workbook()
     ws = wb.add_sheet('protocol', cell_overwrite_ok=True)
     Image.open(company.imglogoadress.path).convert("RGB").save('logo.bmp')
     ws.insert_bitmap('logo.bmp', 1, 3)
+    sheet = wb.get_sheet(0)
+    sheet.header_str = b'1/1'
+    sheet.footer_str = b' '
 
     ws.col(0).width = 400
     ws.col(1).width = 6000
@@ -765,6 +822,18 @@ def export_protocol_xls(request, pk):
     al3 = Alignment()
     al3.horz = Alignment.HORZ_LEFT
     al3.vert = Alignment.VERT_CENTER
+
+    b1 = Borders()
+    b1.left = 1
+    b1.right = 1
+    b1.bottom = 1
+    b1.top = 1
+
+    b2 = Borders()
+    b2.left = 6
+    b2.right = 6
+    b2.bottom = 6
+    b2.top = 6
 
     style1 = xlwt.XFStyle()
     style1.font.height = 20 * 8
@@ -812,8 +881,30 @@ def export_protocol_xls(request, pk):
     style7.font.name = 'Times New Roman'
     style7.alignment = al3
     style7.alignment.wrap = 1
+    style7.num_format_str = 'DD.MM.YYYY г.'
 
+    style8 = xlwt.XFStyle()
+    style8.font.height = 20 * 8
+    style8.font.name = 'Times New Roman'
+    style8.alignment = al1
+    style8.alignment.wrap = 1
+    style8.borders = b1
+    style5.num_format_str = '0.0000'
 
+    style9 = xlwt.XFStyle()
+    style9.font.height = 20 * 8
+    style9.font.name = 'Times New Roman'
+    style9.alignment = al1
+    style9.alignment.wrap = 1
+    style9.borders = b1
+    style9.font.bold = True
+
+    style10 = xlwt.XFStyle()
+    style10.font.height = 20 * 8
+    style10.font.name = 'Times New Roman'
+    style10.alignment = al1
+    style10.alignment.wrap = 1
+    style10.borders = b2
 
     row_num = 4
     columns = [
@@ -967,7 +1058,421 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(12, 12, 2, 7, style7)
     ws.row(12).height_mismatch = True
-    ws.row(12).height = 1000
+    ws.row(12).height = 900
+
+    row_num = 13
+    columns = [
+        '5 Дата отбора проб:',
+        '5 Дата отбора проб: ',
+        note.date,
+        note.date,
+        note.date,
+        note.date,
+        note.date,
+        note.date,
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(13, 13, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(13, 13, 2, 7, style7)
+
+    row_num = 14
+    columns = [
+        '6 Дата и место проведения испытаний:',
+        '6 Дата и место проведения испытаний: ',
+        note.date,
+        company.adress,
+        company.adress,
+        company.adress,
+        'п.',
+        note.room.roomnumber,
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(14, 14, 0, 1, style6)
+    for col_num in range(2, 3):
+        ws.write(row_num, col_num, columns[col_num], style7)
+    for col_num in range(3, 6):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(14, 14, 3, 5, style7)
+    for col_num in range(6, 7):
+        ws.write(row_num, col_num, columns[col_num], style2)
+    for col_num in range(7, 8):
+        ws.write(row_num, col_num, columns[col_num], style7)
+    ws.row(14).height_mismatch = True
+    ws.row(14).height = 500
+
+    row_num = 15
+    columns = [
+        '7 Условия проведения измерений:',
+        '7 Условия проведения измерений:',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(15, 15, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(15, 15, 2, 7, style7)
+
+    row_num = 16
+    columns = [
+        '',
+        '7.1 Условия проведения \n измерений соответствуют требованиям рабочей \n эксплуатации средств измерений:',
+        meteo.equipment_meteo,
+        meteo.equipment_meteo,
+        meteo.equipment_meteo,
+        meteo.equipment_meteo,
+        meteo.equipment_meteo,
+        meteo.equipment_meteo,
+    ]
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], style7)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(16, 16, 2, 7, style7)
+    ws.row(16).height_mismatch = True
+    ws.row(16).height = 800
+
+    row_num = 17
+    columns = [
+        '',
+        '7.2 Условия окружающей среды:',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+    ]
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], style7)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(17, 17, 2, 7, style7)
+
+
+    row_num = 18
+    columns = [
+        '',
+        'давление, кПа',
+        meteo.pressure,
+        meteo.pressure,
+        meteo.pressure,
+        meteo.pressure,
+        meteo.pressure,
+        meteo.pressure,
+    ]
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], style7)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(18, 18, 2, 7, style7)
+
+    row_num = 19
+    columns = [
+        '',
+        'температура, °С',
+        meteo.temperature,
+        meteo.temperature,
+        meteo.temperature,
+        meteo.temperature,
+        meteo.temperature,
+        meteo.temperature,
+    ]
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], style7)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(19, 19, 2, 7, style7)
+
+    row_num = 20
+    columns = [
+        '',
+        'влажность, %',
+        meteo.humidity,
+        meteo.humidity,
+        meteo.humidity,
+        meteo.humidity,
+        meteo.humidity,
+        meteo.humidity,
+    ]
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], style7)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(20, 20, 2, 7, style7)
+
+    row_num = 21
+    columns = [
+        '8 Измеряемый параметр: ',
+        '8 Измеряемый параметр: ',
+        'кинематическая вязкость',
+        'кинематическая вязкость',
+        'кинематическая вязкость',
+        'кинематическая вязкость',
+        'кинематическая вязкость',
+        'кинематическая вязкость',
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(21, 21, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(21, 21, 2, 7, style7)
+
+    row_num = 22
+    columns = [
+        '9 Метод измерений/методика \n измерений:  ',
+        '9 Метод измерений/методика \n измерений:  ',
+        'МИ-02-2018. Измерение кинематической и динамической вязкости жидкостей. Разработана ООО "Петроаналитика"',
+        'МИ-02-2018. Измерение кинематической и динамической вязкости жидкостей. Разработана ООО "Петроаналитика"',
+        'МИ-02-2018. Измерение кинематической и динамической вязкости жидкостей. Разработана ООО "Петроаналитика"',
+        'МИ-02-2018. Измерение кинематической и динамической вязкости жидкостей. Разработана ООО "Петроаналитика"',
+        'МИ-02-2018. Измерение кинематической и динамической вязкости жидкостей. Разработана ООО "Петроаналитика"',
+        'МИ-02-2018. Измерение кинематической и динамической вязкости жидкостей. Разработана ООО "Петроаналитика"',
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(22, 22, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(22, 22, 2, 7, style7)
+    ws.row(22).height_mismatch = True
+    ws.row(22).height = 500
+
+    row_num = 23
+    columns = [
+        '10 Средства измерений:  ',
+        '10 Средства измерений:  ',
+        note.equipment_set,
+        note.equipment_set,
+        note.equipment_set,
+        note.equipment_set,
+        note.equipment_set,
+        note.equipment_set,
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(23, 23, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(23, 23, 2, 7, style7)
+    ws.row(23).height_mismatch = True
+    ws.row(23).height = 800
+
+    row_num = 24
+    columns = [
+        '  ',
+        '  ',
+        note.equipment_set2,
+        note.equipment_set2,
+        note.equipment_set2,
+        note.equipment_set2,
+        note.equipment_set2,
+        note.equipment_set2,
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(24, 24, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(24, 24, 2, 7, style7)
+    ws.row(24).height_mismatch = True
+    ws.row(24).height = 800
+
+    row_num = 25
+    columns = [
+        '11 Обработка результатов испытаний:  ',
+        '11 Обработка результатов испытаний:  ',
+        'В соответствии с МИ-02-2018  ',
+        'В соответствии с МИ-02-2018  ',
+        'В соответствии с МИ-02-2018  ',
+        'В соответствии с МИ-02-2018  ',
+        'В соответствии с МИ-02-2018  ',
+        'В соответствии с МИ-02-2018  ',
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(25, 25, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(25, 25, 2, 7, style7)
+    ws.row(25).height_mismatch = True
+    ws.row(25).height = 500
+
+    row_num = 26
+    columns = [
+        '12 Результаты испытаний:  ',
+        '12 Результаты испытаний:  ',
+        'приведены в таблице 1  ',
+        'В соответствии с МИ-02-2018  ',
+        'В соответствии с МИ-02-2018  ',
+        'В соответствии с МИ-02-2018  ',
+        'В соответствии с МИ-02-2018  ',
+        'В соответствии с МИ-02-2018  ',
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(26, 26, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(26, 26, 2, 7, style7)
+
+    row_num = 27
+    columns = [
+        'Таблица 1. Результаты испытаний  ',
+        'Таблица 1. Результаты испытаний  ',
+        ' ',
+        ' ',
+        ' ',
+        ' ',
+        ' ',
+        ' ',
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(27, 27, 0, 1, style7)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(27, 27, 2, 7, style7)
+
+    row_num = 28
+    columns = [
+        f'Анализ ГСО № {note.for_lot_and_name.nameVG.nameSM.number}'
+        f'  {note.for_lot_and_name.nameVG.name}  п. {note.lot}'
+        f' по {note.ndocument}',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style8)
+        ws.merge(28, 28, 0, 7, style8)
+
+    row_num = 29
+    columns = [
+        'Измеряемый параметр',
+        'Измеряемый параметр',
+        'Т °C',
+        'Измеренное значение Х1, мм2/с ',
+        'Измеренное значение Х2, мм2/с ',
+        'Измеренное значение Хср, мм2/с ',
+        'Результат контрольной процедуры измерения, rk, % ',
+        'Норматив контроля, r, % ',
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style9)
+        ws.merge(29, 29, 0, 1, style9)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style9)
+    ws.row(29).height_mismatch = True
+    ws.row(29).height = 1050
+
+    row_num = 30
+    columns = [
+        'Кинематическая вязкость',
+        'Кинематическая вязкость',
+        note.temperature,
+        note.viscosity1,
+        note.viscosity2,
+        note.certifiedValue_text,
+        note.accMeasurement,
+        note.kriteriy,
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style8)
+        ws.merge(30, 30, 0, 1, style8)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style8)
+
+    row_num = 31
+    columns = [
+        'Дополнительные сведения: ',
+        'Дополнительные сведения: ',
+        ' ',
+        ' ',
+        ' ',
+        ' ',
+        ' ',
+        ' ',
+        ' ',
+        ' ',
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(31, 31, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(31, 31, 2, 7, style7)
+
+    row_num = 32
+    columns = [
+        'Выводы: ',
+        'Выводы: ',
+        'Контроль повторяемости результатов измерений кинематической вязкости удовлетворителен, '
+        'так как расхождение между результатами измерений кинематической вязкости '
+        'в условиях повторяемости не превышает норматив контроля  ',
+
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(32, 32, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(32, 32, 2, 7, style7)
+    ws.row(32).height_mismatch = True
+    ws.row(32).height = 1000
+
+    row_num = 33
+    columns = [
+        company.prohibitet
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style10)
+        ws.merge(33, 33, 0, 7, style10)
+    ws.row(33).height_mismatch = True
+    ws.row(33).height = 1000
+
+    row_num = 35
+    columns = [
+        'Исполнитель: ',
+        'Исполнитель: ',
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(35, 35, 0, 1, style6)
+
+    row_num = 36
+    columns = [
+        note.performer.profile.userposition,
+        note.performer.profile.userposition,
+        note.performer.profile.userposition,
+        '(подпись)',
+        note.performer.username,
+        note.performer.username,
+        note.performer.username,
+    ]
+    for col_num in range(3):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(36, 36, 0, 2, style2)
+    for col_num in range(3, 4):
+        ws.write(row_num, col_num, columns[col_num], style1)
+    for col_num in range(4, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(36, 36, 4, 7, style7)
+    ws.row(36).height_mismatch = True
+    ws.row(36).height = 600
+
+
+
+
+
+
 
 
 

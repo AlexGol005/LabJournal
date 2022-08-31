@@ -580,7 +580,8 @@ class SearchResultTestingEquipmentView(TemplateView):
 
         if name and not lot and not exnumber and not dateser:
             objects = TestingEquipment.objects.\
-            filter(Q(charakters__name__icontains=name)|Q(charakters__name__icontains=name1)).order_by('charakters__name')
+            filter(Q(charakters__name__icontains=name)|Q(charakters__name__icontains=name1)).\
+                order_by('charakters__name')
             context['objects'] = objects
         if lot and not name  and not exnumber and not dateser:
             objects = TestingEquipment.objects.filter(equipment__lot=lot).order_by('charakters__name')

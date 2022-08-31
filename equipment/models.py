@@ -248,6 +248,9 @@ class MeasurEquipment(models.Model):
                                   verbose_name='Оборудование')
     ecard = models.CharField('Назначение', max_length=90, blank=True, null=True)
     aim = models.CharField('Назначение', max_length=90, blank=True, null=True)
+    newcertnumber = models.CharField('Номер последнего свидетельства о поверке', max_length=90, blank=True, null=True)
+    newdate = models.CharField('Дата последней поверки', blank=True, null=True, max_length=90)
+    newdatedead = models.CharField('Дата окончания последней поверки', blank=True, null=True, max_length=90)
 
     def __str__(self):
         return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot}  № реестр {self.charakters.reestr}'
@@ -298,22 +301,43 @@ class Verificationequipment(models.Model):
     dateordernew = models.DateField('Дата заказа нового оборудования (если поверять не выгодно)',
                                     blank=True, null=True)
 
+
     def __str__(self):
-        return f'Поверка {self.equipmentSM.charakters.name} вн № ' \
-               f'{self.equipmentSM.equipment.exnumber}  {self.date}  {self.year}'
+        return f'Поверка  вн № ' \
+               f'  {self.date}  {self.year}'
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
         return reverse('measureequipmentver', kwargs={'str': self.equipmentSM.equipment.exnumber})
 
+    def get_dateformat(self, dateneed):
+        dateformat = str(dateneed)
+        day = dateformat[8:]
+        month = dateformat[5:7]
+        year = dateformat[:4]
+        rdate = f'{day}.{month}.{year}'
+        return rdate
+
+
     def save(self, *args, **kwargs):
         super().save()
+        # для картинок
         if self.img:
             image = Image.open(self.img.path)
             if image.height > 500 or image.width > 500:
                 resize = (500, 500)
                 image.thumbnail(resize)
                 image.save(self.img.path)
+        # добавляем последнюю поверку к оборудованию
+        note = MeasurEquipment.objects.get(pk=self.equipmentSM.pk)
+        note.newcertnumber = self.certnumber
+        newdate = self.get_dateformat(self.date)
+        note.newdate = newdate
+        newdatedead = self.get_dateformat(self.datedead)
+        note.newdatedead = newdatedead
+        note.save()
+
+
 
     class Meta:
         verbose_name = 'Поверка прибора'
