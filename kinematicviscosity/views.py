@@ -16,6 +16,7 @@ from django.shortcuts import get_object_or_404
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models.functions import Upper, Concat
 from sqlparse.filters import output
 from xlwt import Borders, Alignment
 
@@ -731,7 +732,10 @@ def export_me_xls(request, pk):
 def export_protocol_xls(request, pk):
     '''представление для выгрузки протокола испытаний в ексель'''
     company = CompanyCard.objects.get(pk=1)
-    note = ViscosityMJL.objects.get(pk=pk)
+    note = ViscosityMJL.objects.\
+        annotate(name_rm=Concat(Value('СО '), 'name', Value(' п. '), 'lot')).\
+        annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')).\
+        get(pk=pk)
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}_protocol.xls"'
     wb = xlwt.Workbook()
@@ -758,6 +762,10 @@ def export_protocol_xls(request, pk):
     al2.horz = Alignment.HORZ_RIGHT
     al2.vert = Alignment.VERT_CENTER
 
+    al3 = Alignment()
+    al3.horz = Alignment.HORZ_LEFT
+    al3.vert = Alignment.VERT_CENTER
+
     style1 = xlwt.XFStyle()
     style1.font.height = 20 * 8
     style1.font.name = 'Times New Roman'
@@ -776,6 +784,35 @@ def export_protocol_xls(request, pk):
     style3.alignment = al2
     style3.alignment.wrap = 1
     style3.num_format_str = 'DD.MM.YYYY г.'
+
+    style4 = xlwt.XFStyle()
+    style4.font.height = 20 * 8
+    style4.font.name = 'Times New Roman'
+    style4.alignment = al2
+    style4.alignment.wrap = 1
+    style4.font.bold = True
+
+    style5 = xlwt.XFStyle()
+    style5.font.height = 20 * 8
+    style5.font.name = 'Times New Roman'
+    style5.alignment = al2
+    style5.alignment.wrap = 1
+    style5.num_format_str = 'DD.MM.YYYY г.'
+    style5.font.bold = True
+
+    style6 = xlwt.XFStyle()
+    style6.font.height = 20 * 8
+    style6.font.name = 'Times New Roman'
+    style6.alignment = al3
+    style6.alignment.wrap = 1
+    style6.font.bold = True
+
+    style7 = xlwt.XFStyle()
+    style7.font.height = 20 * 8
+    style7.font.name = 'Times New Roman'
+    style7.alignment = al3
+    style7.alignment.wrap = 1
+
 
 
     row_num = 4
@@ -811,6 +848,128 @@ def export_protocol_xls(request, pk):
         ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style3)
+
+    row_num = 6
+    columns = [
+        'ПРОТОКОЛ ИСПЫТАНИЙ №',
+        'ПРОТОКОЛ ИСПЫТАНИЙ №',
+        'ПРОТОКОЛ ИСПЫТАНИЙ №',
+        'ПРОТОКОЛ ИСПЫТАНИЙ №',
+        '',
+        '',
+        '',
+        '',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style4)
+        ws.merge(6, 6, 0, 3, style4)
+
+    row_num = 7
+    columns = [
+        f'от {note.date}',
+        f'от {note.date}',
+        f'от {note.date}',
+        f'от {note.date}',
+        '',
+        '',
+        '',
+        '',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style5)
+        ws.merge(7, 7, 0, 3, style5)
+
+    row_num = 8
+    columns = [
+        '',
+        '',
+        'по',
+        note.ndocument,
+        '',
+        '',
+        '',
+        '',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style4)
+
+    row_num = 9
+    columns = [
+        '1 Наименование объекта/образца испытаний:',
+        '1 Наименование объекта/образца испытаний:',
+        note.name_rm,
+        note.name_rm,
+        note.name_rm,
+        note.name_rm,
+        note.name_rm,
+        note.name_rm,
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(9, 9, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(9, 9, 2, 7, style7)
+    ws.row(9).height_mismatch = True
+    ws.row(9).height = 500
+
+    row_num = 10
+    columns = [
+        '2 Изготовитель материала СО: ',
+        '2 Изготовитель материала СО: ',
+        'ООО "Петроаналитика" ',
+        'ООО "Петроаналитика" ',
+        'ООО "Петроаналитика" ',
+        'ООО "Петроаналитика" ',
+        'ООО "Петроаналитика" ',
+        'ООО "Петроаналитика" ',
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(10, 10, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(10, 10, 2, 7, style7)
+
+    row_num = 11
+    columns = [
+        '3 Испытатель: ',
+        '3 Испытатель: ',
+        note.performer_rm,
+        note.performer_rm,
+        note.performer_rm,
+        note.performer_rm,
+        note.performer_rm,
+        note.performer_rm,
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(11, 11, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(11, 11, 2, 7, style7)
+
+    row_num = 12
+    columns = [
+        '4 Идентификационные данные объектов/образцов:',
+        '4 Идентификационные данные объектов/образцов: ',
+        note.for_lot_and_name.nameVG.nameSM.object,
+        note.for_lot_and_name.nameVG.nameSM.object,
+        note.for_lot_and_name.nameVG.nameSM.object,
+        note.for_lot_and_name.nameVG.nameSM.object,
+        note.for_lot_and_name.nameVG.nameSM.object,
+        note.for_lot_and_name.nameVG.nameSM.object,
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(12, 12, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(12, 12, 2, 7, style7)
+    ws.row(12).height_mismatch = True
+    ws.row(12).height = 1000
+
+
 
 
 

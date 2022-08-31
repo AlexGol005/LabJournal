@@ -16,7 +16,7 @@ CHOICES = (
 class VG(models.Model):
     name = models.CharField('Название СО краткое', max_length=100, null=True, blank=True, default='', unique=True)
     fullname = models.CharField('Название СО полное', max_length=100, null=True, blank=True, default='')
-    object = models.CharField('Идентификационные данные объектов/образцов', max_length=100, null=True, blank=True,
+    object = models.CharField('Идентификационные данные объектов/образцов', max_length=5000, null=True, blank=True,
                               default='')
     number = models.CharField('Номер ГСО', max_length=100, null=True, blank=True, default='')
     expiration = models.CharField('Срок годности ГСО', max_length=100, null=True, blank=True, default='')
