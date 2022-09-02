@@ -795,7 +795,7 @@ def export_protocol_xls(request, pk):
     wb = xlwt.Workbook()
     ws = wb.add_sheet('protocol', cell_overwrite_ok=True)
     Image.open(company.imglogoadress.path).convert("RGB").save('logo.bmp')
-    ws.insert_bitmap('logo.bmp', 1, 3)
+    ws.insert_bitmap('logo.bmp', 0, 2)
     sheet = wb.get_sheet(0)
     sheet.header_str = b'1/1'
     sheet.footer_str = b' '
