@@ -1418,7 +1418,7 @@ def export_protocol_xls(request, pk):
     for col_num in range(3, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style8)
 
-    row_num = 31
+    row_num = 32
     columns = [
         'Дополнительные сведения: ',
         'Дополнительные сведения: ',
@@ -1426,38 +1426,38 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(31, 31, 0, 1, style6)
+        ws.merge(32, 32, 0, 1, style6)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(31, 31, 2, 7, style7)
+        ws.merge(32, 32, 2, 7, style7)
 
-    row_num = 32
+    row_num = 33
     columns = [
         'Выводы: ',
         'Выводы: ',
-        'Контроль повторяемости результатов измерений кинематической вязкости удовлетворителен, '
-        'так как расхождение между результатами измерений кинематической вязкости '
+        'Контроль повторяемости результатов измерений кинематической и динамической вязкости удовлетворителен, '
+        'так как расхождение между результатами измерений '
         'в условиях повторяемости не превышает норматив контроля  ',
 
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(32, 32, 0, 1, style6)
+        ws.merge(33, 33, 0, 1, style6)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(32, 32, 2, 7, style7)
-    ws.row(32).height_mismatch = True
-    ws.row(32).height = 1000
+        ws.merge(33, 33, 2, 7, style7)
+    ws.row(33).height_mismatch = True
+    ws.row(33).height = 1000
 
-    row_num = 33
+    row_num = 34
     columns = [
         company.prohibitet
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style10)
-        ws.merge(33, 33, 0, 7, style10)
-    ws.row(33).height_mismatch = True
-    ws.row(33).height = 1000
+        ws.merge(34, 34, 0, 7, style10)
+    ws.row(34).height_mismatch = True
+    ws.row(34).height = 1000
 
     row_num = 35
     columns = [
