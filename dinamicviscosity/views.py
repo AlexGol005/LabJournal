@@ -759,8 +759,6 @@ def export_protocol_xls(request, pk):
                                        Value(' от '), 'equipment3__newdate',
                                        # Value(', '),
                                        Value(' действительно до '), 'equipment5__newdatedead',
-                                       Value('; \n'),
-                                       Value(' Пикнометр ' )
                                        )). \
         get(pk=pk)
 
@@ -1467,7 +1465,7 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(34, 34, 2, 7, style7)
     ws.row(34).height_mismatch = True
-    ws.row(34).height = 1000
+    ws.row(34).height = 500
 
     row_num = 35
     columns = [
