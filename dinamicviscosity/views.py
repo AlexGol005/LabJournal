@@ -22,7 +22,7 @@ from kinematicviscosity.models import ViscosityMJL
 from main.models import AttestationJ
 from .models import Dinamicviscosity, CommentsDinamicviscosity
 from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm, SearchForm, SearchDateForm, \
-    StrKinematicaForm
+    StrKinematicaForm, StrJournalProtocolUdateForm1
 
 JOURNAL = AttestationJ
 MODEL = Dinamicviscosity
@@ -303,14 +303,14 @@ class ProtocolHeadView(View):
     def get(self, request, pk):
         title = "Добавить данные для протокола"
         template_name = 'main/reg.html'
-        form = StrJournalProtocolUdateForm()
+        form = StrJournalProtocolUdateForm1()
         context = {'title': title,
                    'form': form
                    }
         return render(request, template_name, context)
 
     def post(self, request, pk, *args, **kwargs):
-        form = StrJournalProtocolUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
+        form = StrJournalProtocolUdateForm1(request.POST, instance=MODEL.objects.get(id=pk))
         if form.is_valid():
             order = form.save(commit=False)
             messages.success(request, f'Записано')

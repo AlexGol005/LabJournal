@@ -222,7 +222,7 @@ class SearchForm(forms.Form):
                 css_class='form-row'
             ))
 
-class StrJournalProtocolUdateForm(forms.ModelForm):
+class StrJournalProtocolUdateForm1(forms.ModelForm):
     """форма для  обновления записи в журнале: поля модели метеоусловия для протокола"""
     """стандартная"""
     room = forms.ModelChoiceField(label='Помещение', required=False,
