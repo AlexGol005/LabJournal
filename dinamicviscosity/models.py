@@ -57,8 +57,6 @@ class Dinamicviscosity(models.Model):
     SM_mass2 = models.DecimalField('Масса СО -  2, г', max_digits=7, decimal_places=4, null=True, blank=True)
     density1 = models.DecimalField('плотность 1, г/мл', max_digits=7, decimal_places=5, null=True, blank=True)
     density2 = models.DecimalField('плотность 2, г/мл', max_digits=7, decimal_places=5, null=True, blank=True)
-    dinamicviscosity1 = models.DecimalField('Динамика Х1', max_digits=7, decimal_places=5, null=True, blank=True)
-    dinamicviscosity2 = models.DecimalField('Динамика Х2', max_digits=7, decimal_places=5, null=True, blank=True)
     density_avg = models.DecimalField('средняя плотность, г/мл', max_digits=7, decimal_places=4, null=True, blank=True)
     delta = models.CharField('Не превышает Δ', max_length=100, null=True, blank=True)
     kriteriy = models.DecimalField('Критерий приемлемости измерений', max_digits=2, decimal_places=1, null=True,
@@ -178,9 +176,6 @@ class Dinamicviscosity(models.Model):
                 self.resultWarning = 'плотность отличается от предыдущей на > 0,7 %. Рекомендовано измерить повторно'
         if not self.havedensity:
             self.date_exp = date.today() + timedelta(days=30 * self.exp)
-        # так как всегда одно и то же
-        self.dinamicviscosity1 = self.dinamicviscosity_not_rouned
-        self.dinamicviscosity2 = self.dinamicviscosity_not_rouned
         # связь с конкретной партией
         if self.name[0:2] == 'ВЖ':
             pk_VG = VG.objects.get(name=self.name[0:7])
