@@ -1422,7 +1422,7 @@ def export_protocol_xls(request, pk):
     columns = [
         'Дополнительные сведения: ',
         'Дополнительные сведения: ',
-        f'Плотность при °C {note.temperature} = {note.density_avg} г/мл',
+        f'Плотность при  {note.temperature} °C = {note.density_avg} г/мл',
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
