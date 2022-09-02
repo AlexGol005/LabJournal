@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from decimal import *
 
-from equipment.models import MeasurEquipment
+from equipment.models import MeasurEquipment, Rooms
 from jouViscosity.models import VG, VGrange, LotVG, CvDensityDinamicVG
 from metods import get_avg, get_acc_measurement
 from formuls import mrerrow, numberDigits
@@ -57,6 +57,8 @@ class Dinamicviscosity(models.Model):
     SM_mass2 = models.DecimalField('Масса СО -  2, г', max_digits=7, decimal_places=4, null=True, blank=True)
     density1 = models.DecimalField('плотность 1, г/мл', max_digits=7, decimal_places=5, null=True, blank=True)
     density2 = models.DecimalField('плотность 2, г/мл', max_digits=7, decimal_places=5, null=True, blank=True)
+    dinamicviscosity1 = models.DecimalField('Динамика Х1', max_digits=7, decimal_places=5, null=True, blank=True)
+    dinamicviscosity2 = models.DecimalField('Динамика Х2', max_digits=7, decimal_places=5, null=True, blank=True)
     density_avg = models.DecimalField('средняя плотность, г/мл', max_digits=7, decimal_places=4, null=True, blank=True)
     delta = models.CharField('Не превышает Δ', max_length=100, null=True, blank=True)
     kriteriy = models.DecimalField('Критерий приемлемости измерений', max_digits=2, decimal_places=1, null=True,
@@ -86,15 +88,19 @@ class Dinamicviscosity(models.Model):
     kinematicviscositydead = models.DateField('кинематика годна до:', blank=True, null=True)
     havedensity = models.BooleanField(verbose_name='Есть значение плотности, измеренное ранее', default=False, blank=True)
     densitydead = models.DateField('Плотность, измеренная ранее, годна до:', null=True, blank=True)
-    room = models.ForeignKey(Viscosimeters, verbose_name='Номер комнаты', null=True,
-                             on_delete=models.PROTECT, blank=True)
     #  поля для записи - помещения, оборудования - для подготовки протокола анализа
-    equipment1 = models.ForeignKey(MeasurEquipment, verbose_name='Весы', null=True,
+    room = models.ForeignKey(Rooms, verbose_name='Номер комнаты', null=True,
+                             on_delete=models.PROTECT, blank=True)
+    equipment1 = models.ForeignKey(MeasurEquipment, verbose_name='Секундомер', null=True,
                                    on_delete=models.PROTECT, blank=True, related_name='equipment1dinamic')
-    equipment2 = models.ForeignKey(MeasurEquipment, verbose_name='Термометр', null=True,
+    equipment2 = models.ForeignKey(MeasurEquipment, verbose_name='Вискозиметр1', null=True,
                                    on_delete=models.PROTECT, blank=True, related_name='equipment2dinamic')
-    equipment3 = models.ForeignKey(MeasurEquipment, verbose_name='Пикнометр', null=True,
+    equipment3 = models.ForeignKey(MeasurEquipment, verbose_name='Вискозиметр2', null=True,
                                    on_delete=models.PROTECT, blank=True, related_name='equipment3dinamic')
+    equipment4 = models.ForeignKey(MeasurEquipment, verbose_name='Термометр', null=True,
+                                   on_delete=models.PROTECT, blank=True, related_name='equipment4dinamic')
+    equipment5 = models.ForeignKey(MeasurEquipment, verbose_name='Весы', null=True,
+                                   on_delete=models.PROTECT, blank=True, related_name='equipment5dinamic')
 
 
     def save(self, *args, **kwargs):
@@ -172,6 +178,9 @@ class Dinamicviscosity(models.Model):
                 self.resultWarning = 'плотность отличается от предыдущей на > 0,7 %. Рекомендовано измерить повторно'
         if not self.havedensity:
             self.date_exp = date.today() + timedelta(days=30 * self.exp)
+        # так как всегда одно и то же
+        self.dinamicviscosity1 = self.dinamicviscosity_not_rouned
+        self.dinamicviscosity2 = self.dinamicviscosity_not_rouned
         # связь с конкретной партией
         if self.name[0:2] == 'ВЖ':
             pk_VG = VG.objects.get(name=self.name[0:7])

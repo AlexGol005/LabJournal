@@ -17,5 +17,8 @@ urlpatterns = [
     path('datesearchresult/', views.DateSearchResultView.as_view(), name=URL + 'datesearch'),
     path('filter/<int:pk>', views.filterview, name=URL + 'filter'),
     path('picnometer/', views.PicnometerView.as_view(), name='picnometer'),
-
+    path(r'^export/xls/$/<int:pk>', views.export_me_xls, name='export_dinamicviscosity_xls'),
+    path(r'^export1/xls/$/<int:pk>', views.export_protocol_xls, name='export_dinamicviscosity_protocol_xls'),
+    path('protocolhead/<slug:pk>', views.ProtocolHeadView.as_view(), name=URL + 'protocolhead'),
+    path('protocolbutton/<slug:pk>', views.ProtocolbuttonView.as_view(), name=URL + 'protocolbutton'),
 ]

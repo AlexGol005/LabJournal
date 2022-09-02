@@ -906,6 +906,14 @@ def export_protocol_xls(request, pk):
     style10.alignment.wrap = 1
     style10.borders = b2
 
+    style11 = xlwt.XFStyle()
+    style11.font.height = 20 * 8
+    style11.font.name = 'Times New Roman'
+    style11.alignment = al1
+    style11.alignment.wrap = 1
+    style11.borders = b1
+    style11.num_format_str = '0.00'
+
     row_num = 4
     columns = [
         'Сертифицирован на соотвествие требованиям национального стандарта \nГОСТ Р ИСО 9001-2015 \nорганом по сертификации СМК ООО "ACEPT Бюро" \n от 23.06.2022г., сертификат действителен до 24.12.2025 г.',
@@ -1387,7 +1395,9 @@ def export_protocol_xls(request, pk):
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style8)
         ws.merge(30, 30, 0, 1, style8)
-    for col_num in range(1, len(columns)):
+    for col_num in range(2, 3):
+        ws.write(row_num, col_num, columns[col_num], style11)
+    for col_num in range(3, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style8)
 
     row_num = 31
@@ -1468,140 +1478,8 @@ def export_protocol_xls(request, pk):
     ws.row(36).height_mismatch = True
     ws.row(36).height = 600
 
-
-
-
-
-
-
-
-
-
-
     wb.save(response)
     return response
-    # note = ViscosityMJL.objects.get(pk=pk)
-    # response = HttpResponse(content_type='application/ms-excel')
-    # response['Content-Disposition'] = f'attachment; filename="1.xls"'
-    #
-    #
-    # wb = xlwt.Workbook(encoding='utf-8')
-    # ws = wb.add_sheet(f'{note.name}, п. {note.lot},{note.temperature}', cell_overwrite_ok=True)
-    #
-    #
-    # for i in range(21):
-    #     ws.row(i).height_mismatch = True
-    #     ws.row(i).height = 600
-    #
-    # ws.row(21).height_mismatch = True
-    # ws.row(21).height = 800
-    #
-    # for i in range(22, 25):
-    #     ws.row(i).height_mismatch = True
-    #     ws.row(i).height = 600
-    #
-    #
-    #
-    # # ширина столбцов
-    # ws.col(0).width = 4100
-    # ws.col(1).width = 4100
-    # ws.col(2).width = 4100
-    # ws.col(5).width = 4100
-    #
-    #
-    #
-    # brd1 = Borders()
-    # brd1.left = 1
-    # brd1.right = 1
-    # brd1.top = 1
-    # brd1.bottom = 1
-    #
-    # al1 = Alignment()
-    # al1.horz = Alignment.HORZ_CENTER
-    # al1.vert = Alignment.VERT_CENTER
-    #
-    #
-    # style1 = xlwt.XFStyle()
-    # style1.font.bold = True
-    # style1.font.name = 'Calibri'
-    # style1.borders = brd1
-    # style1.alignment = al1
-    # style1.alignment.wrap = 1
-    #
-    # style2 = xlwt.XFStyle()
-    # style2.font.name = 'Calibri'
-    # style2.borders = brd1
-    # style2.alignment = al1
-    #
-    # style3 = xlwt.XFStyle()
-    # style3.font.name = 'Calibri'
-    # style3.borders = brd1
-    # style3.alignment = al1
-    # style3.num_format_str = 'DD.MM.YYYY'
-    #
-    # style4 = xlwt.XFStyle()
-    # style4.font.name = 'Calibri'
-    # style4.borders = brd1
-    # style4.alignment = al1
-    # style4.num_format_str = '0.00'
-    #
-    # style5 = xlwt.XFStyle()
-    # style5.font.name = 'Calibri'
-    # style5.borders = brd1
-    # style5.alignment = al1
-    # style5.num_format_str = '0.00000'
-    #
-    # with open("Logo", "r"):
-    #     ws.insert_bitmap("Logo", 2, 2)
 
-
-
-
-    # row_num = 0
-    # columns = [
-    #              f'Атт.-ВЖ-(МИ № 02-2018)-{note.date}'
-    #            ]
-    #
-    # for col_num in range(len(columns)):
-    #     ws.write(row_num, col_num, columns[col_num], style1)
-    #     ws.merge(0, 0, 0, 5, style1)
-    #
-    # row_num = 1
-    # columns = [
-    #     f'Определение кинематической вязкости, метод: { note.ndocument }'
-    # ]
-    # for col_num in range(len(columns)):
-    #     ws.write(row_num, col_num, columns[col_num], style1)
-    #     ws.merge(1, 1, 0, 5, style1)
-    #
-    # row_num = 2
-    # columns = [
-    #     'Дата измерения',
-    #     'Наименование',
-    #     'Номер партии',
-    #     'Т °C',
-    #     'Термост. 20 мин',
-    #     'Сод. нефть или октол',
-    # ]
-    # for col_num in range(len(columns)):
-    #     ws.write(row_num, col_num, columns[col_num], style1)
-    #
-    # row_num = 3
-    # columns = [
-    #     note.date,
-    #     note.name,
-    #     note.lot,
-    #     note.temperature,
-    #     'V',
-    #     note.constit,
-    # ]
-    # for col_num in range(1, 4):
-    #     ws.write(row_num, col_num, columns[col_num], style2)
-    # for col_num in range(1):
-    #     ws.write(row_num, col_num, columns[col_num], style3)
-    # for col_num in range(3, len(columns)):
-    #     ws.write(row_num, col_num, columns[col_num], style4)
-    # wb.save(response)
-    # return response
 
 

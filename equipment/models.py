@@ -450,6 +450,7 @@ class MeteorologicalParameters(models.Model):
     class Meta:
         verbose_name = 'Условия в помещении'
         verbose_name_plural = 'Условия в помещениях'
+        # unique_together = ['date', 'roomnumber']
 
 
 class CompanyCard(models.Model):
