@@ -26,7 +26,7 @@ from main.models import AttestationJ
 from viscosimeters.models import Kalibration
 from .models import ViscosityMJL, CommentsKinematicviscosity
 from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm, SearchForm, SearchDateForm, \
-    StrJournalProtocolUdateForm
+    StrJournalProtocolUdateForm, StrJournalProtocolRoomUdateForm
 
 JOURNAL = AttestationJ
 MODEL = ViscosityMJL
@@ -312,6 +312,27 @@ def filterview(request, pk):
             date__gte=datetime.now()).order_by('-pk')
     return render(request, URL + "/journal.html", {'objects': objects, 'journal': journal, 'formSM': formSM, 'URL': URL,
                                                    'formdate': formdate})
+
+
+class RoomsUpdateView(View):
+    """ выводит форму добавления помещения к измерению """
+    def get(self, request, pk):
+        title = "Добавить номер помещения где проводились измерения"
+        template_name = 'main/reg.html'
+        form = StrJournalProtocolRoomUdateForm()
+        context = {'title': title,
+                   'form': form
+                   }
+        return render(request, template_name, context)
+
+    def post(self, request, pk, *args, **kwargs):
+        form = StrJournalProtocolRoomUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
+        if form.is_valid():
+            order = form.save(commit=False)
+            messages.success(request, f'Помещение успешно добавлено')
+            order.save()
+            return redirect(f'/attestationJ/{URL}/protocolbutton/{pk}')
+
 
 # class StrKinematicviscosityDetailView(DetailView):
 #     """ Представление, которое позволяет вывести отдельную запись (запасная версия). """
@@ -943,7 +964,7 @@ def export_protocol_xls(request, pk):
         '',
         '',
         '',
-        note.date,
+        '"___" _______ "20___"',
         ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style3)
@@ -1240,12 +1261,12 @@ def export_protocol_xls(request, pk):
     columns = [
         '9 Метод измерений/методика \n измерений:  ',
         '9 Метод измерений/методика \n измерений:  ',
-        'МИ-02-2018. Измерение кинематической и динамической вязкости жидкостей. Разработана ООО "Петроаналитика"',
-        'МИ-02-2018. Измерение кинематической и динамической вязкости жидкостей. Разработана ООО "Петроаналитика"',
-        'МИ-02-2018. Измерение кинематической и динамической вязкости жидкостей. Разработана ООО "Петроаналитика"',
-        'МИ-02-2018. Измерение кинематической и динамической вязкости жидкостей. Разработана ООО "Петроаналитика"',
-        'МИ-02-2018. Измерение кинематической и динамической вязкости жидкостей. Разработана ООО "Петроаналитика"',
-        'МИ-02-2018. Измерение кинематической и динамической вязкости жидкостей. Разработана ООО "Петроаналитика"',
+        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика',
+        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика',
+        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика',
+        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика',
+        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика',
+        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика',
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1436,7 +1457,7 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(32, 32, 2, 7, style7)
     ws.row(32).height_mismatch = True
-    ws.row(32).height = 1000
+    ws.row(32).height = 500
 
     row_num = 33
     columns = [

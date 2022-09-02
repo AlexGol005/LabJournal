@@ -167,11 +167,8 @@ class StrJournalUdateForm(forms.ModelForm):
         fields = ['fixation']
 
 class StrJournalProtocolUdateForm(forms.ModelForm):
-    """форма для  обновления записи в журнале: поля модели метеоусловия для протокола"""
+    """форма для  обновления записи в журнале: поля модели оборудование для протокола"""
     """стандартная"""
-    room = forms.ModelChoiceField(label='Помещение', required=False,
-                                        queryset=Rooms.objects.all(),
-                                        widget=forms.Select(attrs={'class': 'form-control'}))
     equipment1 = forms.ModelChoiceField(label='Секундомер', required=False,
                                         queryset=MeasurEquipment.objects.\
                                         filter(Q(charakters__name__contains='Секундомер')|\
@@ -196,9 +193,22 @@ class StrJournalProtocolUdateForm(forms.ModelForm):
     class Meta:
         model = MODEL
         fields = [
-            'room', 'equipment1',
+             'equipment1',
             'equipment2', 'equipment3',
             'equipment4',
+        ]
+
+class StrJournalProtocolRoomUdateForm(forms.ModelForm):
+    """форма для  обновления записи в журнале: поля модели оборудование для протокола"""
+    """стандартная"""
+    room = forms.ModelChoiceField(label='Помещение', required=False,
+                                        queryset=Rooms.objects.all(),
+                                        widget=forms.Select(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = MODEL
+        fields = [
+            'room'
         ]
 
 

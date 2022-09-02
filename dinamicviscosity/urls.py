@@ -21,4 +21,5 @@ urlpatterns = [
     path(r'^export1/xls/$/<int:pk>', views.export_protocol_xls, name='export_dinamicviscosity_protocol_xls'),
     path('protocolhead/<slug:pk>', views.ProtocolHeadView.as_view(), name=URL + 'protocolhead'),
     path('protocolbutton/<slug:pk>', views.ProtocolbuttonView.as_view(), name=URL + 'protocolbutton'),
+    path('protocolroom/<slug:pk>', views.RoomsUpdateView.as_view(), name=URL + 'protocolroom'),
 ]

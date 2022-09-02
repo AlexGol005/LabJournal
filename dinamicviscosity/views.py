@@ -1,13 +1,14 @@
 # все стандратно кроме поиска по полям, импорта моделей и констант
 from PIL import Image
 import xlwt
+from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Max, Q, Value, OuterRef, Subquery
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
 from django.db.models.functions import Concat
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, TemplateView
+from django.views.generic import ListView, TemplateView, CreateView
 from datetime import datetime, timedelta, date
 from django.shortcuts import get_object_or_404
 from django.views import View
@@ -17,12 +18,12 @@ from xlwt import Alignment, Borders
 
 from equipment.models import CompanyCard, Verificationequipment, MeteorologicalParameters
 from jouViscosity.models import CvKinematicviscosityVG, CvDensityDinamicVG
-from kinematicviscosity.forms import StrJournalProtocolUdateForm
+from kinematicviscosity.forms import StrJournalProtocolUdateForm, StrJournalProtocolRoomUdateForm
 from kinematicviscosity.models import ViscosityMJL
 from main.models import AttestationJ
 from .models import Dinamicviscosity, CommentsDinamicviscosity
 from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm, SearchForm, SearchDateForm, \
-    StrKinematicaForm, StrJournalProtocolUdateForm1
+    StrKinematicaForm, StrJournalProtocolUdateForm1, StrJournalProtocolRoomUdateForm1
 
 JOURNAL = AttestationJ
 MODEL = Dinamicviscosity
@@ -327,22 +328,42 @@ class ProtocolbuttonView(View):
         template_name = 'dinamicviscosity/buttonprotocol.html'
         titlehead = 'Протокол анализа'
         note = get_object_or_404(MODEL, pk=pk)
-        if note.room:
-            try:
-                MeteorologicalParameters.objects.get(Q(date__exact=note.date) & Q(roomnumber__exact=note.room))
-                title = 'Есть все данные для формирования протокола'
-
-
-            except:
-                title = 'Сначала укажите метеопараметры'
+        try:
+            meteo = MeteorologicalParameters.objects.get(Q(date__exact=note.date) & Q(roomnumber__exact=note.room))
+        except:
+            meteo = 1
+        if note.room and note.equipment1 and note.equipment2 and note.equipment3 and note.equipment4 and note.equipment5:
+            title = 'Есть все данные для формирования протокола'
         else:
-                title = 'Укажите СИ и/или метеопараметры'
+            title = 'Добавьте данные для формирования протокола'
+
         context = {
             'title': title,
             'titlehead': titlehead,
             'note': note,
+            'meteo': meteo,
                    }
         return render(request, template_name, context)
+
+
+class RoomsUpdateView(View):
+    """ выводит форму добавления помещения к измерению """
+    def get(self, request, pk):
+        title = "Добавить номер помещения где проводились измерения"
+        template_name = 'main/reg.html'
+        form = StrJournalProtocolRoomUdateForm1()
+        context = {'title': title,
+                   'form': form
+                   }
+        return render(request, template_name, context)
+
+    def post(self, request, pk, *args, **kwargs):
+        form = StrJournalProtocolRoomUdateForm1(request.POST, instance=MODEL.objects.get(id=pk))
+        if form.is_valid():
+            order = form.save(commit=False)
+            messages.success(request, f'Помещение успешно добавлено')
+            order.save()
+            return redirect(f'/attestationJ/{URL}/protocolbutton/{pk}')
 
 # ---------------------------------------------
 def export_me_xls(request, pk):
@@ -779,7 +800,7 @@ def export_protocol_xls(request, pk):
                                         )).\
         get(date__exact=note.date, roomnumber__roomnumber__exact=note.room)
 
-    kinematic = ViscosityMJL.objects.get(name=note.name, lot=note.lot, temperature=note.temperature)
+    kinematic = ViscosityMJL.objects.filter(name=note.name, lot=note.lot, temperature=note.temperature).last()
 
 
 
@@ -940,7 +961,7 @@ def export_protocol_xls(request, pk):
         '',
         '',
         '',
-    '"__" ______ "20___"',
+    '"___" _______ "20___"',
         ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style3)
@@ -1311,7 +1332,7 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(25, 25, 2, 7, style7)
     ws.row(25).height_mismatch = True
-    ws.row(25).height = 800
+    ws.row(25).height = 500
 
     row_num = 26
     columns = [
@@ -1396,19 +1417,32 @@ def export_protocol_xls(request, pk):
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style9)
     ws.row(30).height_mismatch = True
-    ws.row(30).height = 900
+    ws.row(30).height = 1000
 
     row_num = 31
-    columns = [
-        'Кинематическая вязкость',
-        'Кинематическая вязкость',
-        note.temperature,
-        kinematic.viscosity1,
-        kinematic.viscosity2,
-        kinematic.certifiedValue_text,
-        kinematic.accMeasurement,
-        note.kriteriy,
-    ]
+    if kinematic:
+        columns = [
+            'Кинематическая вязкость',
+            'Кинематическая вязкость',
+            note.temperature,
+            kinematic.viscosity1,
+            kinematic.viscosity2,
+            kinematic.certifiedValue_text,
+            kinematic.accMeasurement,
+            note.kriteriy,
+        ]
+    else:
+        columns = [
+            'Кинематическая вязкость',
+            'Кинематическая вязкость',
+            note.temperature,
+            '',
+            '',
+            '',
+            '',
+            note.kriteriy,
+        ]
+
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style8)
         ws.merge(31, 31, 0, 1, style8)

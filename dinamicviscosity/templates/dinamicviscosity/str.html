@@ -226,11 +226,12 @@
     <div class="noprint">
     <a href="javascript:(print());" class="btn btn-warning mt-1">Распечатать</a>
     <a href="{% url 'export_dinamicviscosity_xls' note.pk %}"  class="btn btn-warning ml-5 mt-1">Сохранить в EXEL</a>
+
         {% if note.room %}
     <a href="{% url 'dinamicviscosityprotocolbutton' note.pk %}"  class="btn btn-warning ml-5 mt-1">
         Сформировать протокол испытаний</a>
         {% else %}
-    <a href="{% url 'dinamicviscosityprotocolhead' note.pk %}"  class="btn btn-warning ml-5 mt-1">
+    <a href="{% url 'dinamicviscosityprotocolroom' note.pk %}"  class="btn btn-warning ml-5 mt-1">
         Сформировать протокол испытаний</a>
         {% endif %}
     <br>
