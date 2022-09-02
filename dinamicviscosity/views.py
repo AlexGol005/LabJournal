@@ -921,8 +921,8 @@ def export_protocol_xls(request, pk):
         'Сертифицирован на соотвествие требованиям национального стандарта \nГОСТ Р ИСО 9001-2015 \nорганом по сертификации СМК ООО "ACEPT Бюро" \n от 23.06.2022г., сертификат действителен до 24.12.2025 г.',
         '',
         '',
-        'УТВЕРЖДАЮ \nНачальник производства \nООО "Петроаналитика"\n___________ /Н.Ю. Пилявская \n "__" ______  "20___" ',
-        'УТВЕРЖДАЮ \nНачальник производства \nООО "Петроаналитика"\n___________ /Н.Ю. Пилявская \n "__" ______  "20__"_ ',
+        'УТВЕРЖДАЮ \nНачальник производства \nООО "Петроаналитика"\n___________ /Н.Ю. Пилявская',
+        'УТВЕРЖДАЮ \nНачальник производства \nООО "Петроаналитика"\n___________ /Н.Ю. Пилявская',
     ]
     for col_num in range(3):
         ws.write(row_num, col_num, columns[col_num], style1)
@@ -942,7 +942,7 @@ def export_protocol_xls(request, pk):
         '',
         '',
         '',
-        note.date,
+    '"__" ______ "20___"',
         ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style3)
@@ -1422,7 +1422,7 @@ def export_protocol_xls(request, pk):
     columns = [
         'Дополнительные сведения: ',
         'Дополнительные сведения: ',
-        f'Плотность при {note.temperature} = {note.density_avg} г/мл',
+        f'Плотность при °C {note.temperature} = {note.density_avg} г/мл',
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
