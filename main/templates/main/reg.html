@@ -7,7 +7,9 @@
 
 {% block content %}
 <div style="text-align: center;"><h4>
+    {% if dop.exnumber %}
 <a href="/equipment/measureequipment/{{ dop.exnumber }}/">
+    {% endif %}
 {{ title }}</a></h4></div>
 
     <div style="text-align: center;"><h4>{{ dop }}</h4></div>
