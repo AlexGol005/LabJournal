@@ -347,7 +347,7 @@ class ProtocolbuttonView(View):
 # ---------------------------------------------
 def export_me_xls(request, pk):
     '''представление для выгрузки отдельной странички жкрнала в ексель'''
-    note = ViscosityMJL.objects.get(pk=pk)
+    note = MODEL.objects.get(pk=pk)
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}.xls"'
 
@@ -360,8 +360,8 @@ def export_me_xls(request, pk):
         ws.row(i).height_mismatch = True
         ws.row(i).height = 600
 
-    ws.row(21).height_mismatch = True
-    ws.row(21).height = 800
+    ws.row(22).height_mismatch = True
+    ws.row(22).height = 800
 
     for i in range(22, 25):
         ws.row(i).height_mismatch = True
@@ -370,10 +370,11 @@ def export_me_xls(request, pk):
 
 
     # ширина столбцов
-    ws.col(0).width = 4100
-    ws.col(1).width = 4100
-    ws.col(2).width = 4100
-    ws.col(5).width = 4100
+    ws.col(0).width = 4000
+    ws.col(1).width = 4000
+    ws.col(2).width = 4000
+    ws.col(3).width = 4000
+    ws.col(4).width = 6500
 
 
 
@@ -425,15 +426,16 @@ def export_me_xls(request, pk):
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(0, 0, 0, 5, style1)
+        ws.merge(0, 0, 0, 4, style1)
+
 
     row_num = 1
     columns = [
-        f'Определение кинематической вязкости, метод: { note.ndocument }'
+        f'Опр. плотности  { note.equipment } и расчёт динамической вязкости по { note.ndocument }'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(1, 1, 0, 5, style1)
+        ws.merge(1, 1, 0, 4, style1)
 
     row_num = 2
     columns = [
@@ -441,11 +443,11 @@ def export_me_xls(request, pk):
         'Наименование',
         'Номер партии',
         'Т °C',
-        'Термост. 20 мин',
         'Сод. нефть или октол',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
+
 
     row_num = 3
     columns = [
@@ -453,7 +455,6 @@ def export_me_xls(request, pk):
         note.name,
         note.lot,
         note.temperature,
-        'V',
         note.constit,
     ]
     for col_num in range(1, 4):
@@ -465,251 +466,230 @@ def export_me_xls(request, pk):
 
     row_num = 4
     columns = [
-        'Проведение измерений'
+        'Измерение плотности'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(4, 4, 0, 5, style1)
+        ws.merge(4, 4, 0, 4, style1)
 
     row_num = 5
     columns = [
-        '№ виск-ра',
-        str(note.ViscosimeterNumber1),
-        str(note.ViscosimeterNumber1),
-        str(note.ViscosimeterNumber2),
+        'V(пикн.), мл',
+        note.piknometer_volume,
+        'Измерение 1',
+        'Измерение 2',
+        'Измерение 2',
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], style1)
-    for col_num in range(1, len(columns)):
+    for col_num in range(1, 2):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(5, 5, 1, 2, style2)
-        ws.merge(5, 5, 3, 5, style2)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(5, 5, 3, 4, style2)
+
 
     row_num = 6
     columns = [
-        'Константа вискозиметра, мм2/с2',
-        'К1',
-        'К1',
-        'К2',
+        'm(пикн.), г',
+        'm(пикн.), г',
+        note.piknometer_mass1,
+        note.piknometer_mass2,
+        note.piknometer_mass2,
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(6, 7, 0, 0, style1)
-    for col_num in range(1, len(columns)):
+        ws.merge(6, 6, 0, 1, style1)
+    for col_num in range(2, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(6, 6, 1, 2, style2)
-        ws.merge(6, 6, 3, 5, style2)
+        ws.merge(6, 6, 3, 4, style2)
 
     row_num = 7
     columns = [
-        'Константа вискозиметра, мм2/с2',
-        note.Konstant1,
-        note.Konstant1,
-        note.Konstant2,
+        'm(СО + пикн.), г',
+        'm(СО + пикн.), г',
+        note.piknometer_plus_SM_mass1,
+        note.piknometer_plus_SM_mass2,
+        note.piknometer_plus_SM_mass2,
     ]
-    for col_num in range(1, len(columns)):
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(7, 7, 0, 1, style1)
+    for col_num in range(2, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(7, 7, 1, 2, style2)
-        ws.merge(7, 7, 3, 5, style2)
+        ws.merge(7, 7, 3, 4, style2)
 
     row_num = 8
     columns = [
-        'Время истечения 1, τ1',
-        'τ11, минут',
-        'τ11, секунд',
-        'τ21, минут',
-        'τ21, минут',
-        'τ21, секунд',
+        'm(СО), г',
+        'm(СО), г',
+        note.SM_mass1,
+        note.SM_mass2,
+        note.SM_mass2,
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(8, 9, 0, 0, style1)
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(8, 8, 3, 4, style1)
+        ws.merge(8, 8, 0, 1, style1)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(8, 8, 3, 4, style2)
 
     row_num = 9
     columns = [
-        'Время истечения 1, τ1',
-        f'{note.plustimeminK1T1}:{ note.plustimesekK1T1}',
-        note.timeK1T1_sec,
-        f'{note.plustimeminK2T1}:{ note.plustimesekK2T1}',
-        f'{note.plustimeminK2T1}:{ note.plustimesekK2T1}',
-        note.timeK2T1_sec,
+        'ρ1, г/мл',
+        'ρ1, г/мл',
+        note.density1,
+        note.density1,
+        note.density1,
+
     ]
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style4)
-        ws.merge(9, 9, 3, 4, style4)
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(9, 9, 0, 1, style1)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(9, 9, 2, 4, style2)
 
     row_num = 10
     columns = [
-        'Время истечения 2, τ2',
-        'τ21, минут',
-        'τ21, секунд',
-        'τ22, минут',
-        'τ22, минут',
-        'τ22, секунд',
+        'ρ2, г/мл',
+        'ρ2, г/мл',
+        note.density2,
+        note.density2,
+        note.density2,
+
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(10, 11, 0, 0, style1)
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(10, 10, 3, 4, style1)
+        ws.merge(10, 10, 0, 1, style1)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(10, 10, 2, 4, style2)
 
     row_num = 11
     columns = [
-        'Время истечения 2, τ2',
-        f'{note.plustimeminK1T2}:{note.plustimesekK1T2}',
-        note.timeK1T2_sec,
-        f'{note.plustimeminK2T2}:{note.plustimesekK2T2}',
-        f'{note.plustimeminK2T2}:{note.plustimesekK2T2}',
-        note.timeK2T2_sec,
+        'плотность измерил',
+        'плотность измерил',
+        note.performerdensity,
+        note.performerdensity,
+        note.performerdensity,
     ]
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style4)
-        ws.merge(11, 11, 3, 4, style4)
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(11, 11, 0, 1, style1)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(11, 11, 2, 4, style2)
 
     row_num = 12
     columns = [
-        'Время истечения среднее',
-        'τ1',
-        'τ2',
-        'τ2',
+        'Обработка результатов'
     ]
-    for col_num in range(1):
+    for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(12, 13, 0, 0, style1)
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(12, 12, 1, 2, style2)
-        ws.merge(12, 12, 3, 5, style2)
+        ws.merge(12, 12, 0, 4, style1)
 
     row_num = 13
     columns = [
-        'Время истечения среднее',
-         note.timeK1_avg,
-         note.timeK2_avg,
-         note.timeK2_avg,
+        'Сред. плотн., ρ, г/мл',
+        'Оценка приемлемости измерений   \n Δ = (|ρ1 - ρ2|/ρсред) * 100 %л',
+        'Оценка приемлемости измерений   \n Δ = (|ρ1 - ρ2|/ρсред) * 100 %л',
+        'Оценка приемлемости измерений   \n Δ = (|ρ1 - ρ2|/ρсред) * 100 %л',
+         'Критерий приемл. измерений, r',
     ]
     for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style4)
-        ws.merge(13, 13, 1, 2, style4)
-        ws.merge(13, 13, 3, 5, style4)
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(13, 13, 1, 3, style4)
 
     row_num = 14
     columns = [
-        'Вязкость кинематическая  νi= Кi * τi',
-        'ν1, мм2/с',
-        'ν2, мм2/с',
-        'ν2, мм2/с',
+         note.density_avg,
+         note.accMeasurement,
+         note.accMeasurement,
+         note.accMeasurement,
+         note.kriteriy,
     ]
-    for col_num in range(1):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(14, 15, 0, 0, style1)
     for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(14, 14, 1, 2, style2)
-        ws.merge(14, 14, 3, 5, style2)
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(14, 14, 1, 3, style4)
 
     row_num = 15
     columns = [
-        'Вязкость кинематическая  νi= Кi * τi',
-        note.viscosity1,
-        note.viscosity2,
-        note.viscosity2,
+        f'Результат измерений: {note.resultMeas}'
     ]
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style5)
-        ws.merge(15, 15, 1, 2, style5)
-        ws.merge(15, 15, 3, 5, style5)
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(15, 15, 0, 4, style1)
 
     row_num = 16
     columns = [
-        'Обработка результатов'
+        'Расчёт динамической вязкости'
     ]
-
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(16, 16, 0, 5, style1)
+        ws.merge(16, 16, 0, 4, style1)
 
     row_num = 17
     columns = [
-        'νсред = (ν1 + ν2)/2',
-        'νсред = (ν1 + ν2)/2',
-        'Оценка приемл. изм. Δ = (|ν1 - ν2|)/νсред) * 100%',
-        'Оценка приемл. изм. Δ = (|ν1 - ν2|)/νсред) * 100%',
-        'Критерий приемлемости измерений, r',
-        'Критерий приемлемости измерений, r',
+        'Вязкость кинематическая при температуре измерений, ν, мм2/с',
+        'Вязкость кинематическая при температуре измерений, ν, мм2/с',
+        'Вязкость динамическая, νдин = ν * ρсред , Па*с',
+        'Вязкость динамическая, νдин = ν * ρсред , Па*с',
+        'Вязкость динамическая, νдин = ν * ρсред , Па*с',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(17, 17, 0, 1, style1)
-        ws.merge(17, 17, 2, 3, style1)
-        ws.merge(17, 17, 4, 5, style1)
+        ws.merge(17, 17, 2, 4, style1)
 
     row_num = 18
     columns = [
-        note.viscosityAVG,
-        note.viscosityAVG,
-        note.accMeasurement,
-        note.accMeasurement,
-        note.kriteriy,
-        note.kriteriy,
+       note.kinematicviscosity,
+       note.kinematicviscosity,
+       note.dinamicviscosity_not_rouned,
+       note.dinamicviscosity_not_rouned,
+       note.dinamicviscosity_not_rouned,
     ]
-    for col_num in range(0, 2):
-        ws.write(row_num, col_num, columns[col_num], style5)
-        ws.merge(18, 18, 0, 1, style5)
-    for col_num in range(2, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(18, 18, 2, 3, style2)
-        ws.merge(18, 18, 4, 5, style2)
-
-    row_num = 19
-    columns = [
-        f'Результат измерений: {note.resultMeas}'
-    ]
-
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(19, 19, 0, 5, style1)
+        ws.merge(18, 18, 0, 1, style2)
+        ws.merge(18, 18, 2, 4, style2)
 
-    row_num = 20
+
+    row_num = 19
     columns = [
        ' Фиксация результатов'
     ]
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(20, 20, 0, 5, style1)
+        ws.merge(19, 19, 0, 4, style1)
 
-    row_num = 21
+    row_num = 20
     columns = [
-        'АЗ, мм2/с',
-        'Абс. погр. (νсред * 0,3)/100',
-        'Пред. знач. вязкости, νпред, мм2/с ',
-        'Разница с νпред, %',
-        'Разница с νпред, %',
-        'Разница с νпред, %',
+        'АЗ, Дин. вязк., Па * с',
+        'Абс. погр.  (νдин сред * 0,3)/ 1000',
+        'Пред. зн. плот., ρпред, г/мл ',
+        'Разница с ρпред  Δρпред = (|ρизм - ρпред|/ρсред) * 100 %',
+        'Разница с ρпред  Δρпред = (|ρизм - ρпред|/ρсред) * 100 %',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(21, 21, 3, 5, style1)
+        ws.merge(20, 20, 3, 4, style1)
 
-    row_num = 22
+    row_num = 21
     columns = [
-        note.certifiedValue_text,
+        note.certifiedValue,
         note.abserror,
-        note.oldCertifiedValue,
-        note.deltaOldCertifiedValue,
-        note.deltaOldCertifiedValue,
-        note.deltaOldCertifiedValue,
+        note.olddensity,
+        note.deltaolddensity,
+        note.deltaolddensity,
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(22, 22, 3, 5, style2)
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(21, 21, 3, 4, style1)
 
-    row_num = 23
+    row_num = 22
     columns = [
         'Исполнитель',
         'отпр.',
@@ -719,9 +699,9 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(23, 23, 3, 5, style1)
+        ws.merge(22, 22, 3, 4, style1)
 
-    row_num = 24
+    row_num = 23
     columns = [
         str(note.performer),
         '',
@@ -731,8 +711,8 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(24, 24, 3, 5, style2)
-    # response = HttpResponse('C:\\Users\\АлександраГоловкина\\Петроаналитика\\Петроаналитика - Производство и склад\\Личные папки сотрудников\\Саша Головкина\\', )
+        ws.merge(23, 23, 3, 4, style2)
+
     wb.save(response)
     return response
 
@@ -800,6 +780,8 @@ def export_protocol_xls(request, pk):
                                         Value(' действительно до '), 'equipment2__newdatedead',
                                         )).\
         get(date__exact=note.date, roomnumber__roomnumber__exact=note.room)
+
+    kinematic = ViscosityMJL.objects.get(name=note.name, lot=note.lot, temperature=note.temperature)
 
 
 
@@ -939,8 +921,8 @@ def export_protocol_xls(request, pk):
         'Сертифицирован на соотвествие требованиям национального стандарта \nГОСТ Р ИСО 9001-2015 \nорганом по сертификации СМК ООО "ACEPT Бюро" \n от 23.06.2022г., сертификат действителен до 24.12.2025 г.',
         '',
         '',
-        'УТВЕРЖДАЮ \nНачальник производства \nООО "Петроаналитика"\n___________ /Н.Ю. Пилявская',
-        'УТВЕРЖДАЮ \nНачальник производства \nООО "Петроаналитика"\n___________ /Н.Ю. Пилявская',
+        'УТВЕРЖДАЮ \nНачальник производства \nООО "Петроаналитика"\n___________ /Н.Ю. Пилявская \n "__" ______  "20___" ',
+        'УТВЕРЖДАЮ \nНачальник производства \nООО "Петроаналитика"\n___________ /Н.Ю. Пилявская \n "__" ______  "20__"_ ',
     ]
     for col_num in range(3):
         ws.write(row_num, col_num, columns[col_num], style1)
@@ -949,7 +931,7 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style2)
         ws.merge(4, 4, 6, 7, style2)
     ws.row(4).height_mismatch = True
-    ws.row(4).height = 900
+    ws.row(4).height = 1000
 
     row_num = 5
     columns = [
@@ -1257,12 +1239,12 @@ def export_protocol_xls(request, pk):
     columns = [
         '9 Метод измерений/методика \n измерений:  ',
         '9 Метод измерений/методика \n измерений:  ',
-        'МИ-02-2018. Измерение кинематической и динамической вязкости жидкостей. Разработана ООО "Петроаналитика"',
-        'МИ-02-2018. Измерение кинематической и динамической вязкости жидкостей. Разработана ООО "Петроаналитика"',
-        'МИ-02-2018. Измерение кинематической и динамической вязкости жидкостей. Разработана ООО "Петроаналитика"',
-        'МИ-02-2018. Измерение кинематической и динамической вязкости жидкостей. Разработана ООО "Петроаналитика"',
-        'МИ-02-2018. Измерение кинематической и динамической вязкости жидкостей. Разработана ООО "Петроаналитика"',
-        'МИ-02-2018. Измерение кинематической и динамической вязкости жидкостей. Разработана ООО "Петроаналитика"',
+        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика"',
+        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика"',
+        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика"',
+        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика"',
+        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика"',
+        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика"',
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1400,13 +1382,13 @@ def export_protocol_xls(request, pk):
 
     row_num = 30
     columns = [
-        'Динамическая вязкость',
-        'Динамическая вязкость',
+        'Кинематическая вязкость',
+        'Кинематическая вязкость',
         note.temperature,
-        note.dinamicviscosity_not_rouned,
-        note.dinamicviscosity_not_rouned,
-        note.certifiedValue,
-        '0,0',
+        kinematic.viscosity1,
+        kinematic.viscosity2,
+        kinematic.certifiedValue_text,
+        kinematic.accMeasurement,
         note.kriteriy,
     ]
     for col_num in range(2):
@@ -1419,16 +1401,28 @@ def export_protocol_xls(request, pk):
 
     row_num = 31
     columns = [
+        'Динамическая вязкость (расчёт)*',
+        'Динамическая вязкость (расчёт)*',
+        note.temperature,
+        note.dinamicviscosity_not_rouned,
+        note.dinamicviscosity_not_rouned,
+        note.certifiedValue,
+        '0,0',
+        note.kriteriy,
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style8)
+        ws.merge(31, 31, 0, 1, style8)
+    for col_num in range(2, 3):
+        ws.write(row_num, col_num, columns[col_num], style11)
+    for col_num in range(3, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style8)
+
+    row_num = 31
+    columns = [
         'Дополнительные сведения: ',
         'Дополнительные сведения: ',
-        ' ',
-        ' ',
-        ' ',
-        ' ',
-        ' ',
-        ' ',
-        ' ',
-        ' ',
+        f'Плотность при {note.temperature} = {note.density_avg} г/мл',
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
