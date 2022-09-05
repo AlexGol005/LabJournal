@@ -727,20 +727,21 @@ def export_me_xls(request):
         # ws.merge(0, 0, 3, 4)
 
     # значения, остальные ряды
-    def set_style_body():
-        style = xlwt.XFStyle()
 
-        style.font.name = 'Calibri'
 
-        style.borders.left = 1
-        style.borders.right = 1
-        style.borders.top = 1
-        style.borders.bottom = 1
+    style = xlwt.XFStyle()
 
-        style.alignment.wrap = 1
-        style.alignment.horz = 0x02
-        style.alignment.vert = 0x01
-        return style
+    style.font.name = 'Calibri'
+
+    style.borders.left = 1
+    style.borders.right = 1
+    style.borders.top = 1
+    style.borders.bottom = 1
+
+    style.alignment.wrap = 1
+    style.alignment.horz = 0x02
+    style.alignment.vert = 0x01
+
 
     get_id_room = Roomschange.objects.select_related('equipment').values('equipment'). \
         annotate(id_actual=Max('id')).values('id_actual')
@@ -796,9 +797,7 @@ def export_me_xls(request):
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
-            ws.write(row_num, col_num, row[col_num], set_style_body())
-            # ws.merge(1, 1, 3, 4)
-
+            ws.write(row_num, col_num, row[col_num], style)
 
     wb.save(response)
     return response
