@@ -301,7 +301,7 @@ class ProtocolbuttonView(View):
             meteo = MeteorologicalParameters.objects.get(Q(date__exact=note.date) & Q(roomnumber__exact=note.room))
         except:
             meteo = 1
-        if note.room and note.equipment1 and note.equipment2 and note.equipment3 and note.equipment4 and note.equipment5:
+        if note.room and note.equipment1 and note.equipment2 and note.equipment3 and note.equipment4:
             title = 'Есть все данные для формирования протокола'
         else:
             title = 'Добавьте данные для формирования протокола'
