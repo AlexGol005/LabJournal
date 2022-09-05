@@ -287,14 +287,14 @@ class ProtocolHeadView(View):
             order.save()
             try:
                 MeteorologicalParameters.objects.get(Q(date__exact=order.date) & Q(roomnumber__exact=order.room))
-                return redirect(f'/attestationJ/dinamicviscosity/protocolbutton/{pk}')
+                return redirect(f'/attestationJ/kinematicviscosity/protocolbutton/{pk}')
             except:
                 return redirect('/equipment/meteoreg/')
 
 class ProtocolbuttonView(View):
     """ Выводит кнопку для формирования протокола """
     def get(self, request, pk):
-        template_name = 'dinamicviscosity/buttonprotocol.html'
+        template_name = 'kinematicviscosity/buttonprotocol.html'
         titlehead = 'Протокол анализа'
         note = get_object_or_404(MODEL, pk=pk)
         try:
