@@ -162,52 +162,6 @@ class CommentsView(View):
             messages.success(request, f'Комментарий добавлен!')
             return redirect(order)
 
-class ProtocolHeadView(View):
-    """ выводит форму внесения для внесения допинформации для формирования протокола и кнопку для протокола """
-    def get(self, request, pk):
-        title = "Добавить данные для протокола"
-        template_name = 'main/reg.html'
-        form = StrJournalProtocolUdateForm()
-        context = {'title': title,
-                   'form': form
-                   }
-        return render(request, template_name, context)
-
-    def post(self, request, pk, *args, **kwargs):
-        form = StrJournalProtocolUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
-        if form.is_valid():
-            order = form.save(commit=False)
-            messages.success(request, f'Записано')
-            order.save()
-            try:
-                MeteorologicalParameters.objects.get(Q(date__exact=order.date) & Q(roomnumber__exact=order.room))
-                return redirect(f'/attestationJ/kinematicviscosity/protocolbutton/{pk}')
-            except:
-                return redirect('/equipment/meteoreg/')
-
-class ProtocolbuttonView(View):
-    """ Выводит кнопку для формирования протокола """
-    def get(self, request, pk):
-        template_name = 'kinematicviscosity/buttonprotocol.html'
-        titlehead = 'Протокол анализа'
-        note = get_object_or_404(MODEL, pk=pk)
-        if note.room:
-            try:
-                MeteorologicalParameters.objects.get(Q(date__exact=note.date) & Q(roomnumber__exact=note.room))
-                title = 'Есть все данные для формирования протокола'
-
-
-            except:
-                title = 'Сначала укажите метеопараметры'
-        else:
-                title = 'Укажите СИ и/или метеопараметры'
-        context = {
-            'title': title,
-            'titlehead': titlehead,
-            'note': note,
-                   }
-        return render(request, template_name, context)
-
 
 
 class AllStrView(ListView):
@@ -312,6 +266,53 @@ def filterview(request, pk):
             date__gte=datetime.now()).order_by('-pk')
     return render(request, URL + "/journal.html", {'objects': objects, 'journal': journal, 'formSM': formSM, 'URL': URL,
                                                    'formdate': formdate})
+
+
+class ProtocolHeadView(View):
+    """ выводит форму внесения для внесения допинформации для формирования протокола и кнопку для протокола """
+    def get(self, request, pk):
+        title = "Добавить данные для протокола"
+        template_name = 'main/reg.html'
+        form = StrJournalProtocolUdateForm1()
+        context = {'title': title,
+                   'form': form
+                   }
+        return render(request, template_name, context)
+
+    def post(self, request, pk, *args, **kwargs):
+        form = StrJournalProtocolUdateForm1(request.POST, instance=MODEL.objects.get(id=pk))
+        if form.is_valid():
+            order = form.save(commit=False)
+            messages.success(request, f'Записано')
+            order.save()
+            try:
+                MeteorologicalParameters.objects.get(Q(date__exact=order.date) & Q(roomnumber__exact=order.room))
+                return redirect(f'/attestationJ/dinamicviscosity/protocolbutton/{pk}')
+            except:
+                return redirect('/equipment/meteoreg/')
+
+class ProtocolbuttonView(View):
+    """ Выводит кнопку для формирования протокола """
+    def get(self, request, pk):
+        template_name = 'dinamicviscosity/buttonprotocol.html'
+        titlehead = 'Протокол анализа'
+        note = get_object_or_404(MODEL, pk=pk)
+        try:
+            meteo = MeteorologicalParameters.objects.get(Q(date__exact=note.date) & Q(roomnumber__exact=note.room))
+        except:
+            meteo = 1
+        if note.room and note.equipment1 and note.equipment2 and note.equipment3 and note.equipment4 and note.equipment5:
+            title = 'Есть все данные для формирования протокола'
+        else:
+            title = 'Добавьте данные для формирования протокола'
+
+        context = {
+            'title': title,
+            'titlehead': titlehead,
+            'note': note,
+            'meteo': meteo,
+                   }
+        return render(request, template_name, context)
 
 
 class RoomsUpdateView(View):
