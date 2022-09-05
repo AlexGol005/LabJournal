@@ -1,4 +1,6 @@
 import xlwt
+import pytils.translit
+from PIL import Image
 from datetime import timedelta, date
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -12,6 +14,7 @@ from django.template.defaultfilters import upper
 from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView, TemplateView, FormView, CreateView
+from xlwt import Alignment, Borders
 
 from equipment.forms import SearchMEForm, NoteCreationForm, EquipmentUpdateForm, VerificationRegForm, \
     CommentsVerificationCreationForm, VerificatorsCreationForm, VerificatorPersonCreationForm, EquipmentCreateForm, \
@@ -19,7 +22,7 @@ from equipment.forms import SearchMEForm, NoteCreationForm, EquipmentUpdateForm,
     PersonchangeForm, RoomschangeForm, RoomsCreateForm, MeteorologicalParametersRegForm
 from equipment.models import MeasurEquipment, Verificationequipment, Roomschange, Personchange, CommentsEquipment, \
     Equipment, CommentsVerificationequipment, Manufacturer, MeasurEquipmentCharakters, DocsCons, Verificators, \
-    VerificatorPerson, TestingEquipment
+    VerificatorPerson, TestingEquipment, CompanyCard
 
 URL = 'equipment'
 
@@ -213,8 +216,12 @@ class StrMeasurEquipmentView(View):
     def get(self, request, str):
         note = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).order_by('-pk')
         obj = get_object_or_404(MeasurEquipment, equipment__exnumber=str)
-        return render(request, URL + '/equipmentstr.html',
-                      {'obj': obj, 'note': note})
+        context =  {
+            'obj': obj,
+            'note': note,
+        }
+        return render(request, URL + '/equipmentstr.html', context)
+
 
 
 class CommentsView(View):
@@ -731,6 +738,8 @@ def export_me_xls(request):
 
     style = xlwt.XFStyle()
 
+
+
     style.font.name = 'Calibri'
 
     style.borders.left = 1
@@ -798,6 +807,206 @@ def export_me_xls(request):
         row_num += 1
         for col_num in range(len(row)):
             ws.write(row_num, col_num, row[col_num], style)
+
+    wb.save(response)
+    return response
+
+
+def export_mecard_xls(request, pk):
+    '''представление для выгрузки карточки на прибор (СИ) в ексель'''
+    note = MeasurEquipment.objects.get(pk=pk)
+    company = CompanyCard.objects.get(pk=1)
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = f'attachment; filename="{note.pk}.xls"'
+
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Основная информация', cell_overwrite_ok=True)
+    Image.open(company.imglogoadress.path).convert("RGB").save('logo.bmp')
+    ws.insert_bitmap('logo.bmp', 0, 0)
+    ws.left_margin = 0
+    sheet = wb.get_sheet(0)
+    sheet.header_str = b' '
+    sheet.footer_str = b' '
+
+
+    # for i in range(26):
+    #     ws.row(i).height_mismatch = True
+    #     ws.row(i).height = 600
+
+    ws.col(0).width = 2700
+    ws.col(1).width = 2500
+    ws.col(2).width = 8000
+    ws.col(3).width = 3700
+    ws.col(4).width = 2500
+    ws.col(5).width = 2000
+    ws.col(6).width = 4000
+    ws.col(7).width = 4000
+    ws.col(8).width = 2000
+    ws.col(9).width = 2000
+
+    pattern = xlwt.Pattern()
+    pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+    pattern.pattern_fore_colour = 26
+
+
+    al1 = Alignment()
+    al1.horz = Alignment.HORZ_CENTER
+    al1.vert = Alignment.VERT_CENTER
+
+    b1 = Borders()
+    b1.left = 1
+    b1.right = 1
+    b1.bottom = 1
+    b1.top = 1
+
+    style1 = xlwt.XFStyle()
+    style1.font.height = 9 * 20
+    style1.font.name = 'Calibri'
+    style1.alignment = al1
+    style1.alignment.wrap = 1
+    style1.borders = b1
+
+    style2 = xlwt.XFStyle()
+    style2.font.height = 9 * 20
+    style2.font.name = 'Calibri'
+    style2.alignment = al1
+    style2.alignment.wrap = 1
+    style2.borders = b1
+    style2.pattern = pattern
+
+    style3 = xlwt.XFStyle()
+    style3.font.height = 15 * 20
+    style3.font.bold = True
+    style3.font.name = 'Calibri'
+    style3.alignment = al1
+    style3.alignment.wrap = 1
+
+    row_num = 1
+    columns = [
+        'Регистрационная карточка на СИ и ИО'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(1, 1, 0, 9)
+    ws.row(1).height_mismatch = True
+    ws.row(1).height = 500
+
+    row_num = 2
+    columns = [
+        'Идентификационная и уникальная информация'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(2, 2, 0, 9)
+    ws.row(2).height_mismatch = True
+    ws.row(2).height = 500
+
+    row_num = 4
+    columns = [
+        'Внутренний номер',
+        'Номер в госреестре',
+        'Наименование',
+        'Тип/модификация',
+        'Заводской номер',
+        'Год выпуска',
+        'Производитель',
+        'Год ввода в эксплуатацию в ООО "Петроаналитика" ',
+        'Новый или б/у',
+        'Инвентарный номер',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+    ws.row(4).height_mismatch = True
+    ws.row(4).height = 1100
+
+    row_num = 5
+    columns = [
+        note.equipment.exnumber,
+        note.charakters.reestr,
+        note.charakters.name,
+        f'{note.charakters.typename}/{note.charakters.modificname}',
+        note.equipment.lot,
+        note.equipment.yearmanuf,
+        f'{note.equipment.manufacturer.country}, {note.equipment.manufacturer.companyName}',
+        note.equipment.yearintoservice,
+        note.equipment.new,
+        note.equipment.invnumber,
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+    ws.row(5).height_mismatch = True
+    ws.row(5).height = 1100
+
+    row_num = 6
+    columns = [
+        'Идентификационная и уникальная информация'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(6, 6, 0, 9)
+    ws.row(6).height_mismatch = True
+    ws.row(6).height = 500
+
+    row_num = 7
+    columns = [
+        'Документы, комплектные принадлежности, программное обеспечение',
+        'Документы, комплектные принадлежности, программное обеспечение',
+        'Документы, комплектные принадлежности, программное обеспечение',
+        'Документы, комплектные принадлежности, программное обеспечение',
+        'Ответственный за прибор',
+        'Ответственный за прибор',
+        'Расположение прибора',
+        'Расположение прибора',
+        'Расположение прибора',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(7, 7, 0, 4, style2)
+        ws.merge(7, 7, 5, 6, style2)
+        ws.merge(7, 7, 7, 9, style2)
+
+    row_num = 8
+    columns = [
+        'год появления',
+        'наименование документа/комплектной принадлежности/ПО',
+        'наименование документа/комплектной принадлежности/ПО',
+        'откуда поступил документ/ принадлежность/ПО',
+        'откуда поступил документ/ принадлежность/ПО',
+        'на дату',
+        'ответственный, ФИО',
+        'на дату',
+        'на дату',
+        'номер комнаты',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(8, 8, 1, 2, style2)
+        ws.merge(8, 8, 3, 4, style2)
+        ws.merge(8, 8, 7, 8, style2)
+    ws.row(8).height_mismatch = True
+    ws.row(8).height = 500
+
+    rows_1 = DocsCons.objects.filter(equipment=note.equipment). \
+        values_list(
+        'date',
+        'docs',
+        'docs',
+        'source',
+        'source',
+    )
+
+    for row in rows_1:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], style1)
+            ws.merge(row_num, row_num, 1, 2, style2)
+            ws.merge(row_num, row_num, 3, 4, style2)
+        ws.row(row_num).height_mismatch = False
+
+
+
+
 
     wb.save(response)
     return response

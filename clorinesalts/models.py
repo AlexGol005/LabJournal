@@ -45,8 +45,8 @@ TITRKRIT = Decimal('0.008')
 
 M_NaCl = '58.44'
 
-TYPE = (('Аттестация', 'Аттестация'),
-           ('Переаттестация', 'Переаттестация'),
+TYPE = (('расчёт АЗ', 'расчёт АЗ'),
+           ('Мониторинг стабильности', 'Мониторинг стабильности'),
            ('Внутрилабораторный контроль', 'Внутрилабораторный контроль'),
            ('Другое', 'Другое'))
 
@@ -163,7 +163,7 @@ class IndicatorDFK(models.Model):
 
 class Clorinesalts(models.Model):
     type = models.CharField('Назначение измерений', max_length=300, choices=TYPE,
-                               default= 'Аттестация', null=True, blank=True)
+                               default= 'Расчёт АЗ', null=True, blank=True)
     for_lot_and_nameLotCSN = models.ForeignKey(LotCSN, verbose_name='Измерение для: СО и партия (ХСН)', on_delete=models.PROTECT,
                                          blank=True, null=True)
     for_lot_and_nameLotSSTN = models.ForeignKey(LotSSTN, verbose_name='Измерение для: СО и партия(СС-ТН)',
@@ -345,8 +345,8 @@ class Clorinesalts(models.Model):
         return reverse('clorinesaltsstr', kwargs={'pk': self.pk})
 
     class Meta:
-        verbose_name = 'Хлористые соли:  аттестация'
-        verbose_name_plural = 'Хлористые соли:  аттестация'
+        verbose_name = 'Хлористые соли:  Расчёт АЗ'
+        verbose_name_plural = 'Хлористые соли:  Расчёт АЗ'
 
 
 class CommentsClorinesalts(models.Model):

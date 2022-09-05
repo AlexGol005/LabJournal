@@ -367,7 +367,7 @@ class RoomsUpdateView(View):
 
 # ---------------------------------------------
 def export_me_xls(request, pk):
-    '''представление для выгрузки отдельной странички жкрнала в ексель'''
+    '''представление для выгрузки отдельной странички журнала в ексель'''
     note = MODEL.objects.get(pk=pk)
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}.xls"'

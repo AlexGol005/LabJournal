@@ -188,7 +188,7 @@ class Roomschange(models.Model):
 class DocsCons(models.Model):
     date = models.CharField('Дата появления',  max_length=1000, default='', blank=True, null=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Оборудование')
-    docs = models.TextField('Документ или принадлежность (1 или несколько)', max_length=1000, default='', blank=True, null=True)
+    docs = models.CharField('Документ или принадлежность (1 или несколько)', max_length=100, default='', blank=True, null=True)
     source = models.CharField('Откуда появился', max_length=1000, default='От поставщика', blank=True, null=True)
     note = models.CharField('Примечание', max_length=1000, blank=True, null=True)
 
