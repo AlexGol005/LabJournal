@@ -1003,6 +1003,8 @@ def export_mecard_xls(request, pk):
             ws.merge(row_num, row_num, 1, 2, style2)
             ws.merge(row_num, row_num, 3, 4, style2)
         ws.row(row_num).height_mismatch = False
+        ws.row(8).height_mismatch = True
+        ws.row(8).height = 500
 
 
 

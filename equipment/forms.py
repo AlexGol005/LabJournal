@@ -478,7 +478,7 @@ class DocsConsCreateForm(forms.ModelForm):
     """форма для внесения документа или принадлежности"""
     date = forms.CharField(label='Дата',  initial=datetime.date.today().year,
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
-    docs = forms.CharField(label='Наименование документа/принадлежности', initial='Паспорт',
+    docs = forms.CharField(label='Наименование документа/принадлежности', initial='Паспорт', max_length=100,
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
     source = forms.CharField(label='Источник', initial='От поставщика',
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -520,6 +520,7 @@ class MeteorologicalParametersRegForm(ModelForm):
                                         queryset=MeasurEquipment.objects.filter(charakters__name__contains='Барометр'),
                                         widget=forms.Select(attrs={'class': 'form-control'}))
 
+    class Meta:
     class Meta:
         model = MeteorologicalParameters
         fields = [
