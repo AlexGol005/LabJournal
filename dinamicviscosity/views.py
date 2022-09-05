@@ -357,13 +357,13 @@ class RoomsUpdateView(View):
                    }
         return render(request, template_name, context)
 
-    def post(self, request, pk, *args, **kwargs):
-        form = StrJournalProtocolRoomUdateForm1(request.POST, instance=MODEL.objects.get(id=pk))
-        if form.is_valid():
-            order = form.save(commit=False)
-            messages.success(request, f'Помещение успешно добавлено')
-            order.save()
-            return redirect(f'/attestationJ/{URL}/protocolbutton/{pk}')
+    # def post(self, request, pk, *args, **kwargs):
+    #     form = StrJournalProtocolRoomUdateForm1(request.POST, instance=MODEL.objects.get(id=pk))
+    #     if form.is_valid():
+    #         order = form.save(commit=False)
+    #         messages.success(request, f'Помещение успешно добавлено')
+    #         order.save()
+    #         return redirect(f'/attestationJ/{URL}/protocolbutton/{pk}')
 
 # ---------------------------------------------
 def export_me_xls(request, pk):
