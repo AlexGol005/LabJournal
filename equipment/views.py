@@ -987,6 +987,7 @@ def export_mecard_xls(request, pk):
     ws.row(8).height_mismatch = True
     ws.row(8).height = 500
 
+    row_num = 8
     rows_1 = DocsCons.objects.filter(equipment=note.equipment). \
         values_list(
         'date',
@@ -996,15 +997,21 @@ def export_mecard_xls(request, pk):
         'source',
     )
 
+
     for row in rows_1:
         row_num += 1
-        for col_num in range(len(row)):
+        for col_num in range(4):
             ws.write(row_num, col_num, row[col_num], style1)
             ws.merge(row_num, row_num, 1, 2, style2)
             ws.merge(row_num, row_num, 3, 4, style2)
         ws.row(row_num).height_mismatch = False
-        ws.row(8).height_mismatch = True
-        ws.row(8).height = 500
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
+
+
+
+
+
 
 
 
