@@ -793,7 +793,7 @@ def export_me_xls(request):
             'ecard',
         )
 
-    for row in range(len(rows)):
+    for row in rows:
         row_num += 1
         for col_num in range(len(row)):
             ws.write(row_num, col_num, row[col_num], set_style_body())
