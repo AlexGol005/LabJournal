@@ -36,19 +36,19 @@
 </table><div style="text-align: center;">
     <a href="{% url 'dinamicviscosityprotocolhead'  note.pk %}" class="btn btn-warning mr-5 mt-3" style="width: 600px" target="blank">
 Изменить использованные для измерения СИ  <br>
-за дату {{ note.date|date:"d.m.Y" }}</a></div>
+</a></div>
 {% else  %}
 <div style="text-align: center;">
 <a href="{% url 'dinamicviscosityprotocolhead' note.pk %}" class="btn btn-warning mr-5 mt-3" style="width: 300px" target="blank">
 Добавить использованные для измерения СИ  <br>
-за дату {{ note.date|date:"d.m.Y" }}</a></div>
+</a></div>
 {% endif %}
 <br><br>
 
 {% if title == 'Есть все данные для формирования протокола' %}
 <div style="text-align: center;">
 <a href="{% url 'export_dinamicviscosity_protocol_xls' note.pk %}"
-class="btn btn-warning mr-5 mt-3"
+class="btn btn-info mr-5 mt-3"
 style="width: 210px">Скачать протокол анализа</a></div>
 {% endif %}
 {% endblock %}

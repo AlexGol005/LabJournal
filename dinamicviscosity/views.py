@@ -377,7 +377,7 @@ def export_me_xls(request, pk):
     ws = wb.add_sheet(f'{note.name}, п. {note.lot},{note.temperature}', cell_overwrite_ok=True)
 
 
-    for i in range(21):
+    for i in range(26):
         ws.row(i).height_mismatch = True
         ws.row(i).height = 600
 
@@ -394,7 +394,7 @@ def export_me_xls(request, pk):
     ws.col(0).width = 4000
     ws.col(1).width = 4000
     ws.col(2).width = 4000
-    ws.col(3).width = 4000
+    ws.col(3).width = 2700
     ws.col(4).width = 6500
 
 
@@ -439,6 +439,12 @@ def export_me_xls(request, pk):
     style5.borders = brd1
     style5.alignment = al1
     style5.num_format_str = '0.00000'
+
+    style6 = xlwt.XFStyle()
+    style6.font.name = 'Calibri'
+    style6.borders = brd1
+    style6.alignment = al1
+    style6.num_format_str = '0.0000'
 
     row_num = 0
     columns = [
@@ -505,9 +511,10 @@ def export_me_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style1)
     for col_num in range(1, 2):
         ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(5, 5, 2, 3, style2)
     for col_num in range(2, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(5, 5, 3, 4, style2)
+
 
 
     row_num = 6
@@ -523,7 +530,7 @@ def export_me_xls(request, pk):
         ws.merge(6, 6, 0, 1, style1)
     for col_num in range(2, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(6, 6, 3, 4, style2)
+        ws.merge(6, 6, 2, 3, style2)
 
     row_num = 7
     columns = [
@@ -538,7 +545,7 @@ def export_me_xls(request, pk):
         ws.merge(7, 7, 0, 1, style1)
     for col_num in range(2, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(7, 7, 3, 4, style2)
+        ws.merge(7, 7, 2, 3, style2)
 
     row_num = 8
     columns = [
@@ -553,7 +560,7 @@ def export_me_xls(request, pk):
         ws.merge(8, 8, 0, 1, style1)
     for col_num in range(2, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(8, 8, 3, 4, style2)
+        ws.merge(8, 8, 2, 3, style2)
 
     row_num = 9
     columns = [
@@ -568,8 +575,8 @@ def export_me_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(9, 9, 0, 1, style1)
     for col_num in range(2, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(9, 9, 2, 4, style2)
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(9, 9, 2, 4, style6)
 
     row_num = 10
     columns = [
@@ -584,23 +591,40 @@ def export_me_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(10, 10, 0, 1, style1)
     for col_num in range(2, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(10, 10, 2, 4, style2)
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(10, 10, 2, 4, style6)
 
-    row_num = 11
-    columns = [
-        'плотность измерил',
-        'плотность измерил',
-        note.performerdensity,
-        note.performerdensity,
-        note.performerdensity,
-    ]
-    for col_num in range(1):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(11, 11, 0, 1, style1)
-    for col_num in range(2, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(11, 11, 2, 4, style2)
+    try:
+        row_num = 11
+        columns = [
+            'плотность измерил',
+            'плотность измерил',
+            note.performerdensity.username,
+            note.performerdensity.username,
+            note.performerdensity.username,
+        ]
+        for col_num in range(1):
+            ws.write(row_num, col_num, columns[col_num], style1)
+            ws.merge(11, 11, 0, 1, style1)
+        for col_num in range(2, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style2)
+            ws.merge(11, 11, 2, 4, style2)
+    except:
+        row_num = 11
+        columns = [
+            'плотность измерил',
+            'плотность измерил',
+            ' ',
+            ' ',
+            ' ',
+        ]
+        for col_num in range(1):
+            ws.write(row_num, col_num, columns[col_num], style1)
+            ws.merge(11, 11, 0, 1, style1)
+        for col_num in range(2, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style2)
+            ws.merge(11, 11, 2, 4, style2)
+
 
     row_num = 12
     columns = [
@@ -618,9 +642,10 @@ def export_me_xls(request, pk):
         'Оценка приемлемости измерений   \n Δ = (|ρ1 - ρ2|/ρсред) * 100 %л',
          'Критерий приемл. измерений, r',
     ]
-    for col_num in range(1, len(columns)):
+
+    for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(13, 13, 1, 3, style4)
+        ws.merge(13, 13, 1, 3, style1)
 
     row_num = 14
     columns = [
@@ -630,8 +655,10 @@ def export_me_xls(request, pk):
          note.accMeasurement,
          note.kriteriy,
     ]
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], style6)
     for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.write(row_num, col_num, columns[col_num], style2)
         ws.merge(14, 14, 1, 3, style4)
 
     row_num = 15
@@ -672,7 +699,7 @@ def export_me_xls(request, pk):
        note.dinamicviscosity_not_rouned,
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.write(row_num, col_num, columns[col_num], style2)
         ws.merge(18, 18, 0, 1, style2)
         ws.merge(18, 18, 2, 4, style2)
 
@@ -707,8 +734,10 @@ def export_me_xls(request, pk):
         note.deltaolddensity,
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(21, 21, 3, 4, style1)
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(21, 21, 3, 4, style2)
+    # except:
+    #     pass
 
     row_num = 22
     columns = [
