@@ -839,9 +839,9 @@ def export_mecard_xls(request, pk):
     ws.col(2).width = 8000
     ws.col(3).width = 3700
     ws.col(4).width = 2500
-    ws.col(5).width = 2000
+    ws.col(5).width = 4300
     ws.col(6).width = 4000
-    ws.col(7).width = 4000
+    ws.col(7).width = 4300
     ws.col(8).width = 2000
     ws.col(9).width = 2000
 
@@ -881,6 +881,14 @@ def export_mecard_xls(request, pk):
     style3.font.name = 'Calibri'
     style3.alignment = al1
     style3.alignment.wrap = 1
+
+    style4 = xlwt.XFStyle()
+    style4.font.height = 9 * 20
+    style4.font.name = 'Calibri'
+    style4.alignment = al1
+    style4.alignment.wrap = 1
+    style4.borders = b1
+    style4.num_format_str = 'DD.MM.YYYY'
 
     row_num = 1
     columns = [
@@ -973,21 +981,20 @@ def export_mecard_xls(request, pk):
         'наименование документа/комплектной принадлежности/ПО',
         'откуда поступил документ/ принадлежность/ПО',
         'откуда поступил документ/ принадлежность/ПО',
-        'на дату',
+        'дата',
         'ответственный, ФИО',
-        'на дату',
-        'на дату',
+        'дата',
+        'номер комнаты',
         'номер комнаты',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
         ws.merge(8, 8, 1, 2, style2)
         ws.merge(8, 8, 3, 4, style2)
-        ws.merge(8, 8, 7, 8, style2)
+        ws.merge(8, 8, 8, 9, style2)
     ws.row(8).height_mismatch = True
     ws.row(8).height = 500
 
-    row_num = 8
     rows_1 = DocsCons.objects.filter(equipment=note.equipment). \
         values_list(
         'date',
@@ -996,17 +1003,61 @@ def export_mecard_xls(request, pk):
         'source',
         'source',
     )
+    rows_2 = Personchange.objects.filter(equipment=note.equipment). \
+        values_list(
+        'date',
+        'person__username',
+    )
+
+    rows_3 = Roomschange.objects.filter(equipment=note.equipment). \
+        values_list(
+        'date',
+        'roomnumber__roomnumber',
+    )
 
 
     for row in rows_1:
         row_num += 1
-        for col_num in range(4):
+        for col_num in range(5):
             ws.write(row_num, col_num, row[col_num], style1)
             ws.merge(row_num, row_num, 1, 2, style2)
             ws.merge(row_num, row_num, 3, 4, style2)
-        ws.row(row_num).height_mismatch = False
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 500
+    a = row_num
+
+    row_num = 8
+    for row in rows_2:
+        row_num += 1
+        for col_num in range(5, 7):
+            ws.write(row_num, col_num, row[col_num - 5], style4)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
+    b = row_num
+
+
+    row_num = 8
+    for row in rows_3:
+        row_num += 1
+        for col_num in range(7, 9):
+            ws.write(row_num, col_num, row[col_num - 7], style4)
+            ws.merge(row_num, row_num, 8, 9, style4)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
+    c = row_num
+
+    d = max(a, b, c)
+
+
+    row_num = d + 2
+    columns = [
+        'Данные верификации о соответствии оборудования  установленным требованиям подтверждаются сведениями о поверке'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(row_num, row_num, 0, 9, style2)
+
+
 
 
 
