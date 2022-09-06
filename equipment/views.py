@@ -822,7 +822,7 @@ def export_mecard_xls(request, pk):
 
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('Основная информация', cell_overwrite_ok=True)
-    Image.open(company.imglogoadress.path).convert("RGB").save('logo.bmp')
+    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
     ws.insert_bitmap('logo.bmp', 0, 0)
     ws.left_margin = 0
     sheet = wb.get_sheet(0)
@@ -948,7 +948,7 @@ def export_mecard_xls(request, pk):
 
     row_num = 6
     columns = [
-        'Идентификационная и уникальная информация'
+        'Расположение и комплектность'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style3)
@@ -1049,13 +1049,117 @@ def export_mecard_xls(request, pk):
     d = max(a, b, c)
 
 
-    row_num = d + 2
+    row_num = 27
     columns = [
         'Данные верификации о соответствии оборудования  установленным требованиям подтверждаются сведениями о поверке'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
         ws.merge(row_num, row_num, 0, 9, style2)
+
+    ws1 = wb.add_sheet('Данные о ремонте и поверке', cell_overwrite_ok=True)
+    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
+    ws1.insert_bitmap('logo.bmp', 0, 0)
+    ws1.left_margin = 0
+    ws1.header_str = b' '
+    ws1.footer_str = b' '
+
+    ws1.col(0).width = 1500
+    ws1.col(1).width = 7000
+    ws1.col(2).width = 1000
+    ws1.col(3).width = 2000
+    ws1.col(4).width = 2000
+    ws1.col(5).width = 4000
+    ws1.col(6).width = 14000
+    ws1.col(7).width = 4000
+
+    row_num = 4
+    columns = [
+        'Особенности работы прибора',
+        'Особенности работы прибора',
+        note.equipment.individuality,
+        note.equipment.individuality,
+        note.equipment.individuality,
+        note.equipment.individuality,
+        note.equipment.individuality,
+    ]
+    for col_num in range(2):
+        ws1.write(row_num, col_num, columns[col_num], style2)
+        ws1.merge(row_num, row_num, 0, 1, style2)
+    for col_num in range(2, len(columns)):
+        ws1.write(row_num, col_num, columns[col_num], style1)
+        ws1.merge(row_num, row_num, 2, 7, style1)
+    ws1.row(row_num).height_mismatch = True
+    ws1.row(row_num).height = 2000
+
+
+    row_num = 6
+    columns = [
+        'Поверка',
+        'Поверка',
+        '',
+        'Техническое обслуживание и данные о повреждениях, неисправностях, модификациях и ремонте',
+        'Техническое обслуживание и данные о повреждениях, неисправностях, модификациях и ремонте',
+        'Техническое обслуживание и данные о повреждениях, неисправностях, модификациях и ремонте',
+        'Техническое обслуживание и данные о повреждениях, неисправностях, модификациях и ремонте',
+        'Техническое обслуживание и данные о повреждениях, неисправностях, модификациях и ремонте',
+    ]
+    for col_num in range(2):
+        ws1.write(row_num, col_num, columns[col_num], style2)
+        ws1.merge(row_num, row_num, 0, 1, style2)
+    for col_num in range(3, len(columns)):
+        ws1.write(row_num, col_num, columns[col_num], style2)
+        ws1.merge(row_num, row_num, 3, 7, style2)
+
+    row_num = 7
+    columns = [
+        'Год',
+        'Сведения о результатах поверки',
+        '',
+        'Дата',
+        'Описание',
+        'Описание',
+        'Описание',
+        'ФИО исполнителя',
+    ]
+    for col_num in range(2):
+        ws1.write(row_num, col_num, columns[col_num], style2)
+    for col_num in range(3, len(columns)):
+        ws1.write(row_num, col_num, columns[col_num], style2)
+        ws1.merge(row_num, row_num, 4, 6, style2)
+
+    rows_1 = Verificationequipment.objects.filter(equipmentSM__equipment=note.equipment). \
+        values_list(
+        'date',
+        'date',
+    )
+    rows_2 = CommentsEquipment.objects.filter(forNote=note.equipment). \
+        values_list(
+        'date',
+        'note',
+        'note',
+        'note',
+        'author',
+    )
+
+    for row in rows_1:
+        row_num += 1
+        for col_num in range(2):
+            ws1.write(row_num, col_num, row[col_num], style4)
+        ws1.row(row_num).height_mismatch = True
+        ws1.row(row_num).height = 500
+
+    row_num = 7
+    for row in rows_2:
+        row_num += 1
+        for col_num in range(3, 7):
+            ws1.write(row_num, col_num, row[col_num - 3], style4)
+            ws1.merge(row_num, row_num, 4, 6, style1)
+        ws1.row(row_num).height_mismatch = True
+        ws1.row(row_num).height = 500
+
+
+
 
 
 

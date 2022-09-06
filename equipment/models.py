@@ -463,6 +463,8 @@ class CompanyCard(models.Model):
     prohibitet = models.TextField('Запрет на тираж протокола',  blank=True, null=True)
     imglogoadress = models.ImageField('Картинка логотип с адресом', upload_to='user_images', blank=True, null=True,
                                         default='user_images/default.png')
+    imglogoadress_mini = models.ImageField('Картинка логотип с адресом малая', upload_to='user_images', blank=True, null=True,
+                                      default='user_images/default.png')
 
 
     def __str__(self):
