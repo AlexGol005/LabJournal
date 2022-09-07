@@ -375,7 +375,7 @@ class CommentsClorinesalts(models.Model):
 class ClorinesaltsCV(models.Model):
     date = models.DateField('Дата', auto_now=True, db_index=True, blank=True)
     performer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='performercv', blank=True)
-    clorinesalts = models.OneToOneField(Clorinesalts, verbose_name='расчёт АЗ к измерению', on_delete=models.PROTECT,
+    clorinesalts = models.ForeignKey(Clorinesalts, verbose_name='расчёт АЗ к измерению', on_delete=models.PROTECT,
                                         related_name='clorinesalts',  null=True, blank=True)
     clorinesalts2 = models.ForeignKey(Clorinesalts, verbose_name='расчёт АЗ к измерению', on_delete=models.PROTECT,
                                          related_name='clorinesalts2', null=True, blank=True)
