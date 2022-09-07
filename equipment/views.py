@@ -885,27 +885,39 @@ def export_mecard_xls(request, pk):
     style4.borders = b1
     style4.num_format_str = 'DD.MM.YYYY'
 
-    row_num = 1
+    style5 = xlwt.XFStyle()
+    style5.font.height = 20 * 20
+    style5.font.bold = True
+    style5.font.name = 'Calibri'
+    style5.alignment = al1
+    style5.alignment.wrap = 1
+
+    for row_num in range(4):
+        for col_num in range(8):
+            ws.row(row_num).height_mismatch = True
+            ws.row(row_num).height = 370
+
+    row_num = 4
     columns = [
         'Регистрационная карточка на СИ и ИО'
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style3)
-        ws.merge(1, 1, 0, 9)
-    ws.row(1).height_mismatch = True
-    ws.row(1).height = 500
+        ws.write(row_num, col_num, columns[col_num], style5)
+        ws.merge(row_num, row_num, 0, 9)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
 
-    row_num = 2
+    row_num = 5
     columns = [
         'Идентификационная и уникальная информация'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style3)
-        ws.merge(2, 2, 0, 9)
-    ws.row(2).height_mismatch = True
-    ws.row(2).height = 500
+        ws.merge(row_num, row_num, 0, 9)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
 
-    row_num = 4
+    row_num = 7
     columns = [
         'Внутренний номер',
         'Номер в госреестре',
@@ -920,10 +932,10 @@ def export_mecard_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-    ws.row(4).height_mismatch = True
-    ws.row(4).height = 1100
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1100
 
-    row_num = 5
+    row_num = 8
     columns = [
         note.equipment.exnumber,
         note.charakters.reestr,
@@ -938,20 +950,20 @@ def export_mecard_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-    ws.row(5).height_mismatch = True
-    ws.row(5).height = 1100
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1100
 
-    row_num = 6
+    row_num = 9
     columns = [
         'Расположение и комплектность'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style3)
-        ws.merge(6, 6, 0, 9)
-    ws.row(6).height_mismatch = True
-    ws.row(6).height = 500
+        ws.merge(row_num, row_num, 0, 9)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
 
-    row_num = 7
+    row_num = 10
     columns = [
         'Документы, комплектные принадлежности, программное обеспечение',
         'Документы, комплектные принадлежности, программное обеспечение',
@@ -965,11 +977,11 @@ def export_mecard_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(7, 7, 0, 4, style2)
-        ws.merge(7, 7, 5, 6, style2)
-        ws.merge(7, 7, 7, 9, style2)
+        ws.merge(row_num, row_num, 0, 4, style2)
+        ws.merge(row_num, row_num, 5, 6, style2)
+        ws.merge(row_num, row_num, 7, 9, style2)
 
-    row_num = 8
+    row_num = 11
     columns = [
         'год появления',
         'наименование документа/комплектной принадлежности/ПО',
@@ -984,11 +996,11 @@ def export_mecard_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(8, 8, 1, 2, style2)
-        ws.merge(8, 8, 3, 4, style2)
-        ws.merge(8, 8, 8, 9, style2)
-    ws.row(8).height_mismatch = True
-    ws.row(8).height = 500
+        ws.merge(row_num, row_num, 1, 2, style2)
+        ws.merge(row_num, row_num, 3, 4, style2)
+        ws.merge(row_num, row_num, 8, 9, style2)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
 
     rows_1 = DocsCons.objects.filter(equipment=note.equipment). \
         values_list(
@@ -1021,7 +1033,7 @@ def export_mecard_xls(request, pk):
         ws.row(row_num).height = 500
     a = row_num
 
-    row_num = 8
+    row_num = 11
     for row in rows_2:
         row_num += 1
         for col_num in range(5, 7):
@@ -1031,7 +1043,7 @@ def export_mecard_xls(request, pk):
     b = row_num
 
 
-    row_num = 8
+    row_num = 12
     for row in rows_3:
         row_num += 1
         for col_num in range(7, 9):
@@ -1044,7 +1056,7 @@ def export_mecard_xls(request, pk):
     d = max(a, b, c)
 
 
-    row_num = 27
+    row_num = 24
     columns = [
         'Данные верификации о соответствии оборудования  установленным требованиям подтверждаются сведениями о поверке'
     ]
