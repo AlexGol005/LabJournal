@@ -7,8 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse
 from datetime import datetime, timedelta
-from django.db.models import Max, Q, Value
-from django.db.models.functions import Upper, Concat
+from django.db.models import Max, Q, Value, CharField
+from django.db.models.functions import Upper, Concat, Extract, ExtractYear
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template.defaultfilters import upper
 from django.urls import reverse
@@ -1128,11 +1128,21 @@ def export_mecard_xls(request, pk):
         ws1.write(row_num, col_num, columns[col_num], style2)
         ws1.merge(row_num, row_num, 4, 6, style2)
 
+
     rows_1 = Verificationequipment.objects.filter(equipmentSM__equipment=note.equipment). \
+        annotate(ver=Concat(
+        Value('Свидетельство о поверке\n № '),
+        'certnumber', str('date'),
+        Value('\n от '),
+         Value('\n до '),
+        Value('\n выдано '),
+        'verificator__companyName'),
+    ).\
         values_list(
-        'date',
-        'date',
+        'date__year',
+        'ver',
     )
+
     rows_2 = CommentsEquipment.objects.filter(forNote=note.equipment). \
         values_list(
         'date',
@@ -1144,19 +1154,21 @@ def export_mecard_xls(request, pk):
 
     for row in rows_1:
         row_num += 1
-        for col_num in range(2):
+        for col_num in range(0, 1):
+            ws1.write(row_num, col_num, row[col_num], style1)
+        for col_num in range(1, 2):
             ws1.write(row_num, col_num, row[col_num], style4)
         ws1.row(row_num).height_mismatch = True
-        ws1.row(row_num).height = 500
+        ws1.row(row_num).height = 1500
 
     row_num = 7
     for row in rows_2:
         row_num += 1
-        for col_num in range(3, 7):
+        for col_num in range(3, 8):
             ws1.write(row_num, col_num, row[col_num - 3], style4)
             ws1.merge(row_num, row_num, 4, 6, style1)
         ws1.row(row_num).height_mismatch = True
-        ws1.row(row_num).height = 500
+        ws1.row(row_num).height = 1500
 
 
 

@@ -45,7 +45,7 @@
     <td>{{ obj.namelot.lot }}</td>
 {#поля с АЗ кинематика#}
     <td class="
-    {% if obj.cvt20dead >= now and  now_date_plusmonth <= obj.cvt20dead %}green{% endif %}
+    {% if obj.cvt20dead > now and  now_date_plusmonth <= obj.cvt20dead %}green{% endif %}
     {% if now_date_plusmonth > obj.cvt20dead and obj.cvt20dead > now %}orange{% endif %}
     {% if obj.cvt20dead < now %}red{% endif %}">
         {% if obj.cvt20dead >= now and  now_date_plusmonth <= obj.cvt20dead %}
