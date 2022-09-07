@@ -418,184 +418,185 @@ class ClorinesaltsCV(models.Model):
     def save(self, *args, **kwargs):
         self.exp = EXP
         # устанавливаем границы по заказу (прайсу)
-        if self.clorinesalts.name[0:3] == 'ХСН':
-            self.pricebegin = self.clorinesalts.for_lot_and_nameLotCSN.nameSM.pricebegin
-            self.priceend = self.clorinesalts.for_lot_and_nameLotCSN.nameSM.priceend
-        if self.clorinesalts.order_cv_value_end:
-            self.priceend = self.clorinesalts.order_cv_value_end
-        if self.clorinesalts.order_cv_value_begin:
-            self.pricebegin = self.clorinesalts.order_cv_value_begin
-        if not self.clorinesalts.order_cv_value_end and self.clorinesalts2.order_cv_value_end:
-            self.priceend = self.clorinesalts.order_cv_value_end
-        if not self.clorinesalts.order_cv_value_begin and self.clorinesalts.order_cv_value_begin:
-            self.pricebegin = self.clorinesalts.order_cv_value_begin
+        if self.clorinesalts.order_cv_value_end and  self.clorinesalts.order_cv_value_begin:
+            if self.clorinesalts.name[0:3] == 'ХСН':
+                self.pricebegin = self.clorinesalts.for_lot_and_nameLotCSN.nameSM.pricebegin
+                self.priceend = self.clorinesalts.for_lot_and_nameLotCSN.nameSM.priceend
+            if self.clorinesalts.order_cv_value_end:
+                self.priceend = self.clorinesalts.order_cv_value_end
+            if self.clorinesalts.order_cv_value_begin:
+                self.pricebegin = self.clorinesalts.order_cv_value_begin
+            if not self.clorinesalts.order_cv_value_end and self.clorinesalts2.order_cv_value_end:
+                self.priceend = self.clorinesalts.order_cv_value_end
+            if not self.clorinesalts.order_cv_value_begin and self.clorinesalts.order_cv_value_begin:
+                self.pricebegin = self.clorinesalts.order_cv_value_begin
 
-        # находим х среднее из всех измерений
-        if self.countmeasur:
-            if self.clorinesalts and not self.clorinesalts2:
-                x1 = self.clorinesalts.x1
-                x2 = self.clorinesalts.x2
-                self.x_avg = ((x1 + x2) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
-                self.x_cd_warning = 'Все результаты входят в CD'
-                self.x_dimension = self.x_avg
-            if self.clorinesalts and self.clorinesalts2:
-                x1 = self.clorinesalts.x1
-                x2 = self.clorinesalts.x2
-                x3 = self.clorinesalts2.x1
-                x4 = self.clorinesalts2.x2
-                self.x_avg = ((x1 + x2 + x3 + x4) / Decimal(4)).quantize(Decimal('1.000'), ROUND_HALF_UP)
-            # проверяем вхождение в CD и указываем причину
-                kr1 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg - x1).copy_abs())
-                kr2 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg - x2).copy_abs())
-                kr3 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg - x3).copy_abs())
-                kr4 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg - x4).copy_abs())
-                if kr1 >=0 and kr2 >=0 and kr3 >=0 and kr4 >= 0:
+            # находим х среднее из всех измерений
+            if self.countmeasur:
+                if self.clorinesalts and not self.clorinesalts2:
+                    x1 = self.clorinesalts.x1
+                    x2 = self.clorinesalts.x2
+                    self.x_avg = ((x1 + x2) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
                     self.x_cd_warning = 'Все результаты входят в CD'
-                    xmax = max(x1, x2, x3, x4)
-                    xmin = min(x1, x2, x3, x4)
-                    self.x_dimension = ((xmax + xmin) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
-                if kr1 < 0 and kr2 >=0 and kr3 >=0 and kr4 >= 0:
-                    self.x_cd_warning = 'x1 выброс по CD, расчёт по х2, х3, х4'
-                    self.x_avg_new = ((x2 + x3 + x4) / Decimal(3)).quantize(Decimal('1.000'), ROUND_HALF_UP)
-                    kr4 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x2).copy_abs())
-                    kr5 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x3).copy_abs())
-                    kr6 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x4).copy_abs())
-                    if kr4 >= 0 and kr5 >= 0 and kr6 >= 0:
-                        self.x_cd_warning_new = 'х2, х3, х4 входит в CD'
-                        xmax = max(x2, x3, x4)
-                        xmin = min(x2, x3, x4)
+                    self.x_dimension = self.x_avg
+                if self.clorinesalts and self.clorinesalts2:
+                    x1 = self.clorinesalts.x1
+                    x2 = self.clorinesalts.x2
+                    x3 = self.clorinesalts2.x1
+                    x4 = self.clorinesalts2.x2
+                    self.x_avg = ((x1 + x2 + x3 + x4) / Decimal(4)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                # проверяем вхождение в CD и указываем причину
+                    kr1 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg - x1).copy_abs())
+                    kr2 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg - x2).copy_abs())
+                    kr3 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg - x3).copy_abs())
+                    kr4 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg - x4).copy_abs())
+                    if kr1 >=0 and kr2 >=0 and kr3 >=0 and kr4 >= 0:
+                        self.x_cd_warning = 'Все результаты входят в CD'
+                        xmax = max(x1, x2, x3, x4)
+                        xmin = min(x1, x2, x3, x4)
                         self.x_dimension = ((xmax + xmin) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
-                    else:
-                        self.x_cd_warning_new = 'Измерения не входят в CD, недостаточно измерений для расчёта АЗ'
+                    if kr1 < 0 and kr2 >=0 and kr3 >=0 and kr4 >= 0:
+                        self.x_cd_warning = 'x1 выброс по CD, расчёт по х2, х3, х4'
+                        self.x_avg_new = ((x2 + x3 + x4) / Decimal(3)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                        kr4 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x2).copy_abs())
+                        kr5 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x3).copy_abs())
+                        kr6 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x4).copy_abs())
+                        if kr4 >= 0 and kr5 >= 0 and kr6 >= 0:
+                            self.x_cd_warning_new = 'х2, х3, х4 входит в CD'
+                            xmax = max(x2, x3, x4)
+                            xmin = min(x2, x3, x4)
+                            self.x_dimension = ((xmax + xmin) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                        else:
+                            self.x_cd_warning_new = 'Измерения не входят в CD, недостаточно измерений для расчёта АЗ'
 
-                if kr1 >=0 and kr2 < 0 and kr3 >= 0 and kr4 >= 0:
-                    self.x_cd_warning = 'x2 выброс по CD, расчёт по х1, х3, х4'
-                    self.x_avg_new = ((x1 + x3 + x4) / Decimal(3)).quantize(Decimal('1.000'), ROUND_HALF_UP)
-                    kr4 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x1).copy_abs())
-                    kr5 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x3).copy_abs())
-                    kr6 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x4).copy_abs())
-                    if kr4 >= 0 and kr5 >= 0 and kr6 >= 0:
-                        self.x_cd_warning_new = 'х1, х3, х4 входит в CD'
-                        xmax = max(x1, x3, x4)
-                        xmin = min(x1, x3, x4)
-                        self.x_dimension = ((xmax + xmin) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
-                    else:
-                        self.x_cd_warning_new = 'Измерения не входят в CD, недостаточно измерений для расчёта АЗ'
+                    if kr1 >=0 and kr2 < 0 and kr3 >= 0 and kr4 >= 0:
+                        self.x_cd_warning = 'x2 выброс по CD, расчёт по х1, х3, х4'
+                        self.x_avg_new = ((x1 + x3 + x4) / Decimal(3)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                        kr4 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x1).copy_abs())
+                        kr5 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x3).copy_abs())
+                        kr6 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x4).copy_abs())
+                        if kr4 >= 0 and kr5 >= 0 and kr6 >= 0:
+                            self.x_cd_warning_new = 'х1, х3, х4 входит в CD'
+                            xmax = max(x1, x3, x4)
+                            xmin = min(x1, x3, x4)
+                            self.x_dimension = ((xmax + xmin) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                        else:
+                            self.x_cd_warning_new = 'Измерения не входят в CD, недостаточно измерений для расчёта АЗ'
 
-                if kr1 >=0 and kr2 >= 0 and kr3 < 0 and kr4 >= 0:
-                    self.x_cd_warning = 'x3 выброс по CD, расчёт по х1, х2, х4'
-                    self.x_avg_new = ((x1 + x2 + x4) / Decimal(3)).quantize(Decimal('1.000'), ROUND_HALF_UP)
-                    kr4 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x1).copy_abs())
-                    kr5 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x2).copy_abs())
-                    kr6 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x4).copy_abs())
-                    if kr4 >= 0 and kr5 >= 0 and kr6 >= 0:
-                        self.x_cd_warning_new = 'х1, х2, х4 входит в CD'
-                        xmax = max(x1, x2, x4)
-                        xmin = min(x1, x2, x4)
-                        self.x_dimension = ((xmax + xmin) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
-                    else:
-                        self.x_cd_warning_new = 'Измерения не входят в CD, недостаточно измерений для расчёта АЗ'
+                    if kr1 >=0 and kr2 >= 0 and kr3 < 0 and kr4 >= 0:
+                        self.x_cd_warning = 'x3 выброс по CD, расчёт по х1, х2, х4'
+                        self.x_avg_new = ((x1 + x2 + x4) / Decimal(3)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                        kr4 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x1).copy_abs())
+                        kr5 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x2).copy_abs())
+                        kr6 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x4).copy_abs())
+                        if kr4 >= 0 and kr5 >= 0 and kr6 >= 0:
+                            self.x_cd_warning_new = 'х1, х2, х4 входит в CD'
+                            xmax = max(x1, x2, x4)
+                            xmin = min(x1, x2, x4)
+                            self.x_dimension = ((xmax + xmin) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                        else:
+                            self.x_cd_warning_new = 'Измерения не входят в CD, недостаточно измерений для расчёта АЗ'
 
-                if kr1 >=0 and kr2 >=0 and kr3 >= 0 and kr4 < 0:
-                    self.x_cd_warning = 'x4 выброс по CD, расчёт по х1, х2, х3'
-                    self.x_avg_new_new = ((x1 + x2 + x3) / Decimal(3)).quantize(Decimal('1.000'), ROUND_HALF_UP)
-                    kr4 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x1).copy_abs())
-                    kr5 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x2).copy_abs())
-                    kr6 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x3).copy_abs())
-                    if kr4 >= 0 and kr5 >= 0 and kr6 >= 0:
-                        self.x_cd_warning_new = 'х1, х2, х3 входит в CD'
-                        xmax = max(x1, x2, x3)
-                        xmin = min(x1, x2, x3)
-                        self.x_dimension = ((xmax + xmin) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
-                    else:
-                        self.x_cd_warning_new = 'Измерения не входят в CD, недостаточно измерений для расчёта АЗ'
+                    if kr1 >=0 and kr2 >=0 and kr3 >= 0 and kr4 < 0:
+                        self.x_cd_warning = 'x4 выброс по CD, расчёт по х1, х2, х3'
+                        self.x_avg_new_new = ((x1 + x2 + x3) / Decimal(3)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                        kr4 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x1).copy_abs())
+                        kr5 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x2).copy_abs())
+                        kr6 = Decimal(self.clorinesalts.ndoccd) - ((self.x_avg_new - x3).copy_abs())
+                        if kr4 >= 0 and kr5 >= 0 and kr6 >= 0:
+                            self.x_cd_warning_new = 'х1, х2, х3 входит в CD'
+                            xmax = max(x1, x2, x3)
+                            xmin = min(x1, x2, x3)
+                            self.x_dimension = ((xmax + xmin) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                        else:
+                            self.x_cd_warning_new = 'Измерения не входят в CD, недостаточно измерений для расчёта АЗ'
 
-                if kr1 < 0 and kr2 >=0 and kr3 < 0 and kr4 >= 0:
-                    self.x_cd_warning_new = 'x1 и х3 выброс по CD, расчёт по х2 и х4'
-                    self.x_avg_new = ((x2 + x4) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
-                    self.x_dimension = self.x_avg_new
+                    if kr1 < 0 and kr2 >=0 and kr3 < 0 and kr4 >= 0:
+                        self.x_cd_warning_new = 'x1 и х3 выброс по CD, расчёт по х2 и х4'
+                        self.x_avg_new = ((x2 + x4) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                        self.x_dimension = self.x_avg_new
 
-                if kr1 >=0 and kr2 < 0 and kr3 < 0 and kr4 >= 0:
-                    self.x_cd_warning_new = 'x2 и х3 выброс по CD, расчёт по х1 и х4'
-                    self.x_avg_new = ((x1 + x4) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
-                    self.x_dimension = self.x_avg_new
+                    if kr1 >=0 and kr2 < 0 and kr3 < 0 and kr4 >= 0:
+                        self.x_cd_warning_new = 'x2 и х3 выброс по CD, расчёт по х1 и х4'
+                        self.x_avg_new = ((x1 + x4) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                        self.x_dimension = self.x_avg_new
 
-                if kr1 < 0 and kr2 >=0 and kr3 >= 0 and kr4 < 0:
-                    self.x_cd_warning_new = 'x1 и х4 выброс по CD, расчёт по х2 и х3'
-                    self.x_avg_new = ((x2 + x3) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
-                    self.x_dimension = self.x_avg_new
+                    if kr1 < 0 and kr2 >=0 and kr3 >= 0 and kr4 < 0:
+                        self.x_cd_warning_new = 'x1 и х4 выброс по CD, расчёт по х2 и х3'
+                        self.x_avg_new = ((x2 + x3) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                        self.x_dimension = self.x_avg_new
 
-                if kr1 >=0 and kr2 < 0 and kr3 >= 0 and kr4 < 0:
-                    self.x_cd_warning_new = 'x2 и х4 выброс по CD, расчёт по х1 и х3'
-                    self.x_avg_new = ((x1 + x3) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
-                    self.x_dimension = self.x_avg_new
+                    if kr1 >=0 and kr2 < 0 and kr3 >= 0 and kr4 < 0:
+                        self.x_cd_warning_new = 'x2 и х4 выброс по CD, расчёт по х1 и х3'
+                        self.x_avg_new = ((x1 + x3) / Decimal(2)).quantize(Decimal('1.000'), ROUND_HALF_UP)
+                        self.x_dimension = self.x_avg_new
 
-                if (kr1 < 0 and kr2 < 0 and kr3 < 0 and kr4 < 0) or\
-                    (kr1 < 0 and kr2 < 0) or (kr3 < 0 and kr4 < 0):
-                    self.x_cd_warning = 'Измерения не входят в CD, недостаточно измерений для расчёта АЗ'
+                    if (kr1 < 0 and kr2 < 0 and kr3 < 0 and kr4 < 0) or\
+                        (kr1 < 0 and kr2 < 0) or (kr3 < 0 and kr4 < 0):
+                        self.x_cd_warning = 'Измерения не входят в CD, недостаточно измерений для расчёта АЗ'
 
-            if self.x_dimension:
-                if self.clorinesalts.name == 'ХСН-ПА-1' or self.clorinesalts.name == 'ХСН-ПА-2':
-                    self.abserror = mrerrow(get_abserror(self.x_dimension,
-                                                         Decimal(self.clorinesalts.for_lot_and_nameLotCSN.nameSM.nameSM.relerror)))
-                    self.relerror = self.clorinesalts.for_lot_and_nameLotCSN.nameSM.nameSM.relerror
-                    self.typebegin = self.clorinesalts.for_lot_and_nameLotCSN.nameSM.nameSM.typebegin
-                    self.typeend = self.clorinesalts.for_lot_and_nameLotCSN.nameSM.nameSM.typeend
-                if self.clorinesalts.name == 'СС-ТН-ПА-1':
-                    self.abserror = mrerrow(get_abserror(self.x_dimension,
-                                                         Decimal(self.clorinesalts.for_lot_and_nameLotSSTN.nameSM.nameSM.relerrorCS)))
-                    self.relerror = self.clorinesalts.for_lot_and_nameLotSSTN.nameSM.nameSM.relerrorCS
-                    self.typebegin = self.clorinesalts.for_lot_and_nameLotSSTN.nameSM.nameSM.typebeginCS
-                    self.typeend = self.clorinesalts.for_lot_and_nameLotSSTN.nameSM.nameSM.typeendCS
-                if self.clorinesalts.name == 'ГК-ПА-2':
-                    self.abserror = mrerrow(get_abserror(self.x_dimension,
-                                                         Decimal(self.clorinesalts.for_lot_and_nameLotGKCS.nameSM.nameSM.relerror)))
-                    self.relerror = self.clorinesalts.for_lot_and_nameLotGKCS.nameSM.nameSM.relerror
-                    self.typebegin = self.clorinesalts.for_lot_and_nameLotGKCS.nameSM.nameSM.typebegin
-                    self.typeend = self.clorinesalts.for_lot_and_nameLotGKCS.nameSM.nameSM.typeend
-                self.certifiedValue = numberDigits(self.x_dimension, self.abserror)
+                if self.x_dimension:
+                    if self.clorinesalts.name == 'ХСН-ПА-1' or self.clorinesalts.name == 'ХСН-ПА-2':
+                        self.abserror = mrerrow(get_abserror(self.x_dimension,
+                                                             Decimal(self.clorinesalts.for_lot_and_nameLotCSN.nameSM.nameSM.relerror)))
+                        self.relerror = self.clorinesalts.for_lot_and_nameLotCSN.nameSM.nameSM.relerror
+                        self.typebegin = self.clorinesalts.for_lot_and_nameLotCSN.nameSM.nameSM.typebegin
+                        self.typeend = self.clorinesalts.for_lot_and_nameLotCSN.nameSM.nameSM.typeend
+                    if self.clorinesalts.name == 'СС-ТН-ПА-1':
+                        self.abserror = mrerrow(get_abserror(self.x_dimension,
+                                                             Decimal(self.clorinesalts.for_lot_and_nameLotSSTN.nameSM.nameSM.relerrorCS)))
+                        self.relerror = self.clorinesalts.for_lot_and_nameLotSSTN.nameSM.nameSM.relerrorCS
+                        self.typebegin = self.clorinesalts.for_lot_and_nameLotSSTN.nameSM.nameSM.typebeginCS
+                        self.typeend = self.clorinesalts.for_lot_and_nameLotSSTN.nameSM.nameSM.typeendCS
+                    if self.clorinesalts.name == 'ГК-ПА-2':
+                        self.abserror = mrerrow(get_abserror(self.x_dimension,
+                                                             Decimal(self.clorinesalts.for_lot_and_nameLotGKCS.nameSM.nameSM.relerror)))
+                        self.relerror = self.clorinesalts.for_lot_and_nameLotGKCS.nameSM.nameSM.relerror
+                        self.typebegin = self.clorinesalts.for_lot_and_nameLotGKCS.nameSM.nameSM.typebegin
+                        self.typeend = self.clorinesalts.for_lot_and_nameLotGKCS.nameSM.nameSM.typeend
+                    self.certifiedValue = numberDigits(self.x_dimension, self.abserror)
 
 
-        # проверяем соответствие АЗ диапазону по прайсу и по описанию типа иразницу со старым
-                if self.typebegin and self.typeend:
-                    if Decimal(self.typebegin) <= self.certifiedValue <= Decimal(self.typeend):
-                        self.type_warning = 'АЗ входит в диапазон по описанию типа'
-                    if Decimal(self.typebegin) >= self.certifiedValue or self.certifiedValue >= Decimal(self.typeend):
-                        self.type_warning = 'АЗ не входит в диапазон по описанию типа!'
-                if not self.typebegin or not self.typeend:
-                    self.type_warning = 'Не указан диапазон по описанию типа!'
-                if self.pricebegin and self.priceend:
-                    if Decimal(self.pricebegin) <= self.certifiedValue <= Decimal(self.priceend):
-                        self.price_warning = 'АЗ входит в диапазон по заказу или прайсу'
-                    if Decimal(self.pricebegin) >= self.certifiedValue or self.certifiedValue >= Decimal(self.priceend):
-                        self.price_warning = 'АЗ не входит в диапазон по заказу или прайсу!'
-                if not self.pricebegin or not self.priceend:
-                    self.price_warning = 'Не указан ни диапазон по заказу, ни по прайсу'
-                # вносим АЗ в ЖАЗ
-                if self.clorinesalts.name[0:3] == 'ХСН' and self.fixation:
-                    a = CVclorinesaltsCSN.objects.get_or_create(namelot=self.clorinesalts.for_lot_and_nameLotCSN)
-                    note = a[0]
-                    note.cv = self.certifiedValue
-                    note.cvdate = self.date
-                    note.cvexp = self.exp
-                    note.cvdead = self.date + timedelta(days=30 * EXP)
-                    note.save()
-                if self.clorinesalts.name[0:2] == 'CC' and self.fixation:
-                    a = CVforSSTN.objects.get_or_create(namelot=self.clorinesalts.for_lot_and_nameLotSSTN)
-                    note = a[0]
-                    note.cvCS = self.certifiedValue
-                    note.cvdateCS = self.date
-                    note.cvexpCS = self.exp
-                    note.cvdeadCS = self.date + timedelta(days=30 * EXP)
-                    note.save()
-                if self.clorinesalts.name[0:2] == 'ГК' and self.fixation:
-                    a = CVclorinesaltsGKCS.objects.get_or_create(namelot=self.clorinesalts.for_lot_and_nameLotGKCS)
-                    note = a[0]
-                    note.cv = self.certifiedValue
-                    note.cvdate = self.date
-                    note.cvexp = self.exp
-                    note.cvdead = self.date + timedelta(days=30 * EXP)
-                    note.save()
+            # проверяем соответствие АЗ диапазону по прайсу и по описанию типа иразницу со старым
+                    if self.typebegin and self.typeend:
+                        if Decimal(self.typebegin) <= self.certifiedValue <= Decimal(self.typeend):
+                            self.type_warning = 'АЗ входит в диапазон по описанию типа'
+                        if Decimal(self.typebegin) >= self.certifiedValue or self.certifiedValue >= Decimal(self.typeend):
+                            self.type_warning = 'АЗ не входит в диапазон по описанию типа!'
+                    if not self.typebegin or not self.typeend:
+                        self.type_warning = 'Не указан диапазон по описанию типа!'
+                    if self.pricebegin and self.priceend:
+                        if Decimal(self.pricebegin) <= self.certifiedValue <= Decimal(self.priceend):
+                            self.price_warning = 'АЗ входит в диапазон по заказу или прайсу'
+                        if Decimal(self.pricebegin) >= self.certifiedValue or self.certifiedValue >= Decimal(self.priceend):
+                            self.price_warning = 'АЗ не входит в диапазон по заказу или прайсу!'
+                    if not self.pricebegin or not self.priceend:
+                        self.price_warning = 'Не указан ни диапазон по заказу, ни по прайсу'
+                    # вносим АЗ в ЖАЗ
+                    if self.clorinesalts.name[0:3] == 'ХСН' and self.fixation:
+                        a = CVclorinesaltsCSN.objects.get_or_create(namelot=self.clorinesalts.for_lot_and_nameLotCSN)
+                        note = a[0]
+                        note.cv = self.certifiedValue
+                        note.cvdate = self.date
+                        note.cvexp = self.exp
+                        note.cvdead = self.date + timedelta(days=30 * EXP)
+                        note.save()
+                    if self.clorinesalts.name[0:2] == 'CC' and self.fixation:
+                        a = CVforSSTN.objects.get_or_create(namelot=self.clorinesalts.for_lot_and_nameLotSSTN)
+                        note = a[0]
+                        note.cvCS = self.certifiedValue
+                        note.cvdateCS = self.date
+                        note.cvexpCS = self.exp
+                        note.cvdeadCS = self.date + timedelta(days=30 * EXP)
+                        note.save()
+                    if self.clorinesalts.name[0:2] == 'ГК' and self.fixation:
+                        a = CVclorinesaltsGKCS.objects.get_or_create(namelot=self.clorinesalts.for_lot_and_nameLotGKCS)
+                        note = a[0]
+                        note.cv = self.certifiedValue
+                        note.cvdate = self.date
+                        note.cvexp = self.exp
+                        note.cvdead = self.date + timedelta(days=30 * EXP)
+                        note.save()
 
 
         super(ClorinesaltsCV, self).save(*args, **kwargs)
