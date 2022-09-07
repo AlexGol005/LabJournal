@@ -816,23 +816,18 @@ def export_mecard_xls(request, pk):
     '''представление для выгрузки карточки на прибор (СИ) в ексель'''
     note = MeasurEquipment.objects.get(pk=pk)
     company = CompanyCard.objects.get(pk=1)
+    cardname = pytils.translit.translify(note.equipment.exnumber)
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = f'attachment; filename="{note.pk}.xls"'
-
+    response['Content-Disposition'] = f'attachment; filename="{cardname}.xls"'
 
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('Основная информация', cell_overwrite_ok=True)
     Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
     ws.insert_bitmap('logo.bmp', 0, 0)
     ws.left_margin = 0
-    sheet = wb.get_sheet(0)
-    sheet.header_str = b' '
-    sheet.footer_str = b' '
-
-
-    # for i in range(26):
-    #     ws.row(i).height_mismatch = True
-    #     ws.row(i).height = 600
+    ws.header_str = b'&F c. &P  '
+    ws.footer_str = b' '
+    ws.start_page_number = 1
 
     ws.col(0).width = 2700
     ws.col(1).width = 2500
@@ -1061,8 +1056,10 @@ def export_mecard_xls(request, pk):
     Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
     ws1.insert_bitmap('logo.bmp', 0, 0)
     ws1.left_margin = 0
-    ws1.header_str = b' '
+
+    ws1.header_str = b'&F c. &P  '
     ws1.footer_str = b' '
+    ws1.start_page_number = 2
 
     ws1.col(0).width = 1500
     ws1.col(1).width = 7000

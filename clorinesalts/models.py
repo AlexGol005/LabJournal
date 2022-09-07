@@ -348,8 +348,8 @@ class Clorinesalts(models.Model):
         return reverse('clorinesaltsstr', kwargs={'pk': self.pk})
 
     class Meta:
-        verbose_name = 'Хлористые соли:  Расчёт АЗ'
-        verbose_name_plural = 'Хлористые соли:  Расчёт АЗ'
+        verbose_name = 'Хлористые соли:  Журнал проведения испытаний'
+        verbose_name_plural = 'Хлористые соли:  Журнал проведения испытаний'
 
 
 class CommentsClorinesalts(models.Model):
