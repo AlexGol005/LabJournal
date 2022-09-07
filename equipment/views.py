@@ -1067,7 +1067,7 @@ def export_mecard_xls(request, pk):
     ws1.col(0).width = 1500
     ws1.col(1).width = 7000
     ws1.col(2).width = 1000
-    ws1.col(3).width = 2000
+    ws1.col(3).width = 2400
     ws1.col(4).width = 2000
     ws1.col(5).width = 4000
     ws1.col(6).width = 14000
@@ -1131,15 +1131,19 @@ def export_mecard_xls(request, pk):
 
     rows_1 = Verificationequipment.objects.filter(equipmentSM__equipment=note.equipment). \
         annotate(ver=Concat(
-        Value('Свидетельство о поверке\n № '),
-        'certnumber', str('date'),
-        Value('\n от '),
-         Value('\n до '),
+        Value('Свидетельство о поверке: \n  '),
+        'certnumber',
+        Value('\n от '), str('date'),
+         Value('\n до '), str('datedead'),
         Value('\n выдано '),
-        'verificator__companyName'),
-    ).\
+        'verificator__companyName', output_field=CharField(),),
+    ). \
+        annotate(ver_year=Concat(
+        'date__year', 'year',
+         output_field=CharField(), ),
+    ). \
         values_list(
-        'date__year',
+        'ver_year',
         'ver',
     )
 
@@ -1155,7 +1159,7 @@ def export_mecard_xls(request, pk):
     for row in rows_1:
         row_num += 1
         for col_num in range(0, 1):
-            ws1.write(row_num, col_num, row[col_num], style1)
+            ws1.write(row_num, col_num, row[col_num], style4)
         for col_num in range(1, 2):
             ws1.write(row_num, col_num, row[col_num], style4)
         ws1.row(row_num).height_mismatch = True
