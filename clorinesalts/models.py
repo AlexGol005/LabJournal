@@ -266,7 +266,7 @@ class Clorinesalts(models.Model):
             b = a[0]
             LotGKCS.objects.get_or_create(lot=self.lot, nameSM=b)
             self.for_lot_and_nameLotGKCS = LotGKCS.objects.get(lot=self.lot, nameSM=b)
-        if self.name == 'Другое':
+        else:
             self.order_cv_value_begin = Decimal(0)
             self.order_cv_value_end = Decimal(0)
         # расчёты первичные
