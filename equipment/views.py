@@ -822,12 +822,6 @@ def export_mecard_xls(request, pk):
 
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('Основная информация', cell_overwrite_ok=True)
-    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
-    ws.insert_bitmap('logo.bmp', 0, 0)
-    ws.left_margin = 0
-    ws.header_str = b'&F c. &P  '
-    ws.footer_str = b' '
-    ws.start_page_number = 1
 
     ws.col(0).width = 2700
     ws.col(1).width = 2500
@@ -839,6 +833,15 @@ def export_mecard_xls(request, pk):
     ws.col(7).width = 4300
     ws.col(8).width = 2000
     ws.col(9).width = 2000
+
+    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
+    ws.insert_bitmap('logo.bmp', 0, 0)
+    ws.left_margin = 0
+    ws.header_str = b'&F c. &P  '
+    ws.footer_str = b' '
+    ws.start_page_number = 1
+
+
 
     pattern = xlwt.Pattern()
     pattern.pattern = xlwt.Pattern.SOLID_PATTERN
@@ -892,10 +895,10 @@ def export_mecard_xls(request, pk):
     style5.alignment = al1
     style5.alignment.wrap = 1
 
-    for row_num in range(4):
-        for col_num in range(8):
-            ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 370
+    # for row_num in range(4):
+    #     for col_num in range(8):
+    #         ws.row(row_num).height_mismatch = True
+    #         ws.row(row_num).height = 500
 
     row_num = 4
     columns = [
@@ -1065,13 +1068,6 @@ def export_mecard_xls(request, pk):
         ws.merge(row_num, row_num, 0, 9, style2)
 
     ws1 = wb.add_sheet('Данные о ремонте и поверке', cell_overwrite_ok=True)
-    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
-    ws1.insert_bitmap('logo.bmp', 0, 0)
-    ws1.left_margin = 0
-
-    ws1.header_str = b'&F c. &P  '
-    ws1.footer_str = b' '
-    ws1.start_page_number = 2
 
     ws1.col(0).width = 1500
     ws1.col(1).width = 7000
@@ -1081,6 +1077,14 @@ def export_mecard_xls(request, pk):
     ws1.col(5).width = 4000
     ws1.col(6).width = 14000
     ws1.col(7).width = 4000
+
+    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
+    ws1.insert_bitmap('logo.bmp', 0, 0)
+    ws1.left_margin = 0
+
+    ws1.header_str = b'&F c. &P  '
+    ws1.footer_str = b' '
+    ws1.start_page_number = 2
 
     row_num = 4
     columns = [
