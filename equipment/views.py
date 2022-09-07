@@ -1043,7 +1043,7 @@ def export_mecard_xls(request, pk):
     b = row_num
 
 
-    row_num = 12
+    row_num = 11
     for row in rows_3:
         row_num += 1
         for col_num in range(7, 9):
