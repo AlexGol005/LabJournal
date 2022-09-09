@@ -415,7 +415,7 @@ class CommentsEquipment(models.Model):
     class Meta:
         verbose_name = 'Запись о приборе'
         verbose_name_plural = 'Записи о приборах'
-        ordering = ['-pk']
+
 
 
 class CommentsVerificationequipment(models.Model):

@@ -231,7 +231,7 @@ class CommentsView(View):
     template_name = 'equipment/comments.html'
 
     def get(self, request, str):
-        note = CommentsEquipment.objects.filter(forNote__exnumber=str)
+        note = CommentsEquipment.objects.filter(forNote__exnumber=str).order_by('-pk')
         title = Equipment.objects.get(exnumber=str)
         form = NoteCreationForm()
         return render(request, 'equipment/comments.html', {'note': note, 'title': title, 'form': form, 'URL': URL})
@@ -816,7 +816,9 @@ def export_mecard_xls(request, pk):
     '''представление для выгрузки карточки на прибор (СИ) в ексель'''
     note = MeasurEquipment.objects.get(pk=pk)
     company = CompanyCard.objects.get(pk=1)
-    cardname = pytils.translit.translify(note.equipment.exnumber)
+    cardname = pytils.translit.translify(note.equipment.exnumber) + ' ' +\
+                pytils.translit.translify(note.charakters.name) +\
+                ' ' + pytils.translit.translify(note.equipment.lot)
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{cardname}.xls"'
 
