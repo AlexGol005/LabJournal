@@ -19,7 +19,7 @@ from xlwt import Alignment, Borders
 from equipment.forms import SearchMEForm, NoteCreationForm, EquipmentUpdateForm, VerificationRegForm, \
     CommentsVerificationCreationForm, VerificatorsCreationForm, VerificatorPersonCreationForm, EquipmentCreateForm, \
     ManufacturerCreateForm, MeasurEquipmentCharaktersCreateForm, MeasurEquipmentCreateForm, DocsConsCreateForm, \
-    PersonchangeForm, RoomschangeForm, RoomsCreateForm, MeteorologicalParametersRegForm
+    PersonchangeForm, RoomschangeForm, RoomsCreateForm, MeteorologicalParametersRegForm, Searchreestrform
 from equipment.models import MeasurEquipment, Verificationequipment, Roomschange, Personchange, CommentsEquipment, \
     Equipment, CommentsVerificationequipment, Manufacturer, MeasurEquipmentCharakters, DocsCons, Verificators, \
     VerificatorPerson, TestingEquipment, CompanyCard
@@ -173,6 +173,38 @@ class MeasurEquipmentCharaktersView(ListView):
     context_object_name = 'objects'
     ordering = ['reestr']
     paginate_by = 12
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(MeasurEquipmentCharaktersView, self).get_context_data(**kwargs)
+        context['form'] = Searchreestrform()
+        return context
+
+class ReestrsearresView(TemplateView):
+    """ Представление, которое выводит результаты поиска по списку госреестров """
+
+    template_name = URL + '/measurequipmentcharacterslist.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ReestrsearresView, self).get_context_data(**kwargs)
+        name = self.request.GET['name']
+        reestr = self.request.GET['reestr']
+        if self.request.GET['name']:
+            name1 = self.request.GET['name'][0].upper() + self.request.GET['name'][1:]
+        reestr = self.request.GET['reestr']
+        if name and not reestr:
+            objects = MeasurEquipmentCharakters.objects.\
+            filter(Q(name__icontains=name)|Q(name__icontains=name1)).order_by('name')
+            context['objects'] = objects
+        if reestr and not name:
+            objects = MeasurEquipmentCharakters.objects.filter(reestr__icontains=reestr)
+            context['objects'] = objects
+        if reestr and  name:
+            objects = MeasurEquipmentCharakters.objects.filter(reestr__icontains=reestr).\
+                filter(Q(name__icontains=name)|Q(name__icontains=name1)).order_by('name')
+            context['objects'] = objects
+        context['form'] = Searchreestrform(initial={'name': name, 'reestr': reestr})
+        context['URL'] = URL
+        return context
 
 
 class MeasurEquipmentView(ListView):

@@ -30,4 +30,5 @@ urlpatterns = [
     path('verificatorpersons/', views.VerificatorsPersonsView.as_view(), name='verificatorpersons'),
     path('verificatorspersonsreg/', views.VerificatorPersonCreationView.as_view(), name='verificatorspersonsreg'),
     path(r'^export1/xls/$/<int:pk>', views.export_mecard_xls, name='export_mecard_xls'),
+    path('reestrsearres/', views.ReestrsearresView.as_view(), name='reestrsearres'),
 ]

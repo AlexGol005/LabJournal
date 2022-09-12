@@ -529,3 +529,22 @@ class MeteorologicalParametersRegForm(ModelForm):
             'temperature', 'humidity',
             'equipment1', 'equipment2',
                   ]
+
+class Searchreestrform(forms.Form):
+    "форма для поиска по полям списка госреестров"
+    name = forms.CharField(label='Название', required=False,
+                           help_text='введите название частично или полностью',
+                           widget=forms.TextInput(attrs={'class': 'form-control'}))
+    reestr = forms.CharField(label='Номер в реестре', required=False,
+                           help_text='введите номер частично или полностью',
+                           widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('name', css_class='form-group col-md-3 mb-0'),
+                Column('reestr', css_class='form-group col-md-3 mb-0'),
+                Row(Submit('submit', 'Найти', css_class='btn  btn-info col-md-9 mb-3 mt-4 ml-4'))))

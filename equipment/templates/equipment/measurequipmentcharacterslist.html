@@ -17,6 +17,13 @@
 <div style="text-align: center;"><h4> Госреестр СИ</h4></div>
 <br>
 {#конец заголовка #}
+{#форма для поиска по полям #}
+{#стандартная#}
+    <form action="/equipment/reestrsearres/" method="GET">
+        {% csrf_token %}
+        {% crispy form %}
+    </form>
+{#конец формы для поиска по#}
 
 {#основная таблица#}
 {# уникальная #}
