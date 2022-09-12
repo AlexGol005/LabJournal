@@ -206,6 +206,11 @@ class ReestrsearresView(TemplateView):
         context['URL'] = URL
         return context
 
+class ChromatoView(TemplateView):
+    """ Представление, которое выводит список принадлежностей для хроматографа """
+
+    template_name = URL + '/chromato.html'
+
 
 class MeasurEquipmentView(ListView):
     """ Выводит список средств измерений """

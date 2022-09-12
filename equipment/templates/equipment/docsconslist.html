@@ -34,7 +34,9 @@
 </tbody>
 </table>
 {# конец таблицы #}
-
+{% if  title.exnumber == 'Х001' %}
+<a href="{% url 'chromato' %}"  class="btn btn-warning mt-2">
+{% endif %}
 {#форма для внесения документа#}
   <br><br>
 <div style="text-align: center;">
