@@ -44,8 +44,8 @@ class ViscosityMJL(models.Model):
     exp = models.IntegerField('Срок годности, месяцев',  blank=True, null=True)
     date_exp = models.DateField('Годен до', blank=True, null=True)
     # вычисляемые поля для всех моделей
-    kriteriy = models.DecimalField('Критерий приемлемости измерений', max_digits=2, decimal_places=1, null=True)
-    accMeasurement = models.DecimalField('Оценка приемлемости измерений', max_digits=5, decimal_places=1, null=True)
+    kriteriy = models.DecimalField('Критерий приемлемости измерений', max_digits=2, decimal_places=2, null=True)
+    accMeasurement = models.DecimalField('Оценка приемлемости измерений', max_digits=5, decimal_places=2, null=True)
     resultMeas = models.CharField('Результат измерений уд/неуд', max_length=100, default='неудовлетворительно',
                                   null=True)
     cause = models.CharField('Причина', max_length=100, default='', null=True, blank=True)
@@ -153,12 +153,12 @@ class ViscosityMJL(models.Model):
             self.viscosityAVG = get_avg(self.viscosity1, self.viscosity2, 5)
         self.accMeasurement = get_acc_measurement(Decimal(self.viscosity1), Decimal(self.viscosity2))
         if self.constit == 'да':
-            self.kriteriy = Decimal(0.3)
+            self.kriteriy = Decimal(0.30)
         if self.constit == 'нет':
-            self.kriteriy = Decimal(0.2)
+            self.kriteriy = Decimal(0.20)
         if self.constit == 'другое':
-            self.kriteriy = Decimal(0.3)
-        if self.accMeasurement < self.kriteriy:
+            self.kriteriy = Decimal(0.30)
+        if self.accMeasurement <= self.kriteriy:
             self.resultMeas = 'удовлетворительно'
             self.cause = ''
         if self.accMeasurement > self.kriteriy:
