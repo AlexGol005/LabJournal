@@ -32,4 +32,7 @@ urlpatterns = [
     path('attestation/<int:pk>/commentscv/', login_required(views.CommentsCVView.as_view()), name=URL + 'commcv'),
     path('attestationcv/', login_required(views.AllStrCVView.as_view()), name=URL + 'allcv'),
     path('clorinesaltsbottles/', views.BottlesView.as_view(), name=URL + 'bottles'),
+    path(r'^export/xls/$/<int:pk>', views.export_TitrantHg_xls, name='export_TitrantHg_xls'),
+    path(r'^export1/xls/$/<int:pk>', views.export_GetTitrHg_xls, name='export_GetTitrHg_xls'),
+    path(r'^export2/xls/$/<int:pk>', views.export_Clorinesalts_xls, name='export_Clorinesalts_xls'),
 ]

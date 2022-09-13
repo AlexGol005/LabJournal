@@ -156,7 +156,9 @@ class EquipmentUpdateForm(forms.ModelForm):
                            widget=forms.Textarea(attrs={'class': 'form-control'}))
     notemaster = forms.CharField(label='Примечание (или временное предостережение)', max_length=10000, required=False,
                                     widget=forms.Textarea(attrs={'class': 'form-control'}))
-    imginstruction1 = forms.ImageField(label='Паспорт', widget=forms.FileInput, required=False)
+    imginstruction1 = forms.ImageField(label='Паспорт',
+                                       widget=forms.FileInput(attrs={'multiple': 'multiple'})
+                                       , required=False)
     imginstruction2 = forms.ImageField(label='Внутренняя инструкция загрузить фото', widget=forms.FileInput,
                                        required=False)
     imginstruction3 = forms.ImageField(label='Право владения', widget=forms.FileInput, required=False)

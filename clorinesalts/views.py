@@ -1,8 +1,10 @@
 # все стандратно кроме поиска по полям, импорта моделей и констант
 from decimal import Decimal
-
+from PIL import Image
+import xlwt
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, TemplateView
 from datetime import date, datetime, timedelta
@@ -10,6 +12,7 @@ from django.shortcuts import get_object_or_404
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from xlwt import Borders, Alignment
 
 from jouViscosity.models import CvKinematicviscosityVG, CvDensityDinamicVG
 from main.models import AttestationJ
@@ -24,6 +27,7 @@ MODEL = Clorinesalts
 COMMENTMODEL = CommentsClorinesalts
 URL = 'clorinesalts'
 NAME = 'хлористые соли'
+COLONTITUL = 'ИСП_ГОСТ 21534 (метод А)'
 
 
 class StrDPKView(View):
@@ -496,3 +500,526 @@ class BottlesView(View):
         }
 
         return render(request, URL + '/bottles.html', context)
+
+# стили для exel
+brd1 = Borders()
+brd1.left = 1
+brd1.right = 1
+brd1.top = 1
+brd1.bottom = 1
+
+al1 = Alignment()
+al1.horz = Alignment.HORZ_CENTER
+al1.vert = Alignment.VERT_CENTER
+
+style1 = xlwt.XFStyle()
+style1.font.bold = True
+style1.font.name = 'Calibri'
+style1.borders = brd1
+style1.alignment = al1
+style1.alignment.wrap = 1
+
+style2 = xlwt.XFStyle()
+style2.font.name = 'Calibri'
+style2.borders = brd1
+style2.alignment = al1
+
+style3 = xlwt.XFStyle()
+style3.font.name = 'Calibri'
+style3.alignment = al1
+
+style4 = xlwt.XFStyle()
+style4.font.bold = True
+style4.font.name = 'Calibri'
+style4.alignment = al1
+
+
+def export_TitrantHg_xls(request, pk):
+    '''представление для выгрузки отдельной странички журнала в ексель - приготовление титранта'''
+    note = TitrantHg.objects.get(pk=pk)
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = f'attachment; filename="titrant {note.pk}.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('1', cell_overwrite_ok=True)
+    ws.header_str = b' '
+    ws.footer_str = b' '
+
+    # ширина столбцов
+    ws.col(0).width = 6000
+    ws.col(1).width = 6000
+    ws.col(2).width = 6000
+
+    # высота столбцов
+    for i in range(12):
+        ws.row(i).height_mismatch = True
+        ws.row(i).height = 600
+
+    row_num = 0
+    columns = [
+        f'{COLONTITUL}_{note.date.year}',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 3, style3)
+
+    row_num = 2
+    columns = [
+        'Приготовление 0,01 н. раствора азотнокислой ртути',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style4)
+        ws.merge(row_num, row_num, 0, 3, style4)
+
+
+    row_num = 4
+    columns = [
+        'Реактив',
+        'Производство и партия',
+        'Количество',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+
+    row_num = 5
+    columns = [
+        'Ртуть (II) азотнокислая 1-водная',
+        note.lotreakt1,
+        f'{note.massHgNO3} г',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+
+    row_num = 6
+    columns = [
+        'Вода дистиллированная',
+        note.lotreakt2,
+        f'{note.volumeH2O} мл',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+
+    row_num = 7
+    columns = [
+        'Кислота азотная 0,2 М',
+        note.lotreakt3,
+        f'{note.volumeHNO3} мл',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+
+    row_num = 8
+    columns = [
+        f'Партия титранта: {note.pk}',
+        f'Изготовлен: {note.date} Годен до: Н/О',
+        f'Приготовил: {note.performer.username}',
+
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+
+    wb.save(response)
+    return response
+
+
+def export_GetTitrHg_xls(request, pk):
+    '''представление для выгрузки отдельной странички журнала в ексель - установка титра'''
+    note = GetTitrHg.objects.get(pk=pk)
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = f'attachment; filename="titr {note.lot.pk}-{note.pk}.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('1', cell_overwrite_ok=True)
+    ws.header_str = b' '
+    ws.footer_str = b' '
+
+    # ширина столбцов
+    ws.col(0).width = 6000
+    ws.col(1).width = 6000
+    ws.col(2).width = 6000
+
+    # высота столбцов
+    for i in range(12):
+        ws.row(i).height_mismatch = True
+        ws.row(i).height = 600
+
+    row_num = 0
+    columns = [
+        f'{COLONTITUL}_{note.date.year}',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 2, style3)
+
+    row_num = 2
+    columns = [
+        f'Установка титра Hg(NO3)2 р-р, п. {note.lot.pk}',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style4)
+        ws.merge(row_num, row_num, 0, 2, style4)
+
+    row_num = 4
+    columns = [
+       f" {note.date}",
+        f'Исп. {note.performer.username}',
+        f'Vхол = {note.backvolume} мл',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+
+    row_num = 5
+    columns = [
+        f'V1 = {note.volumeHGNO1} мл',
+        f'V2 = {note.volumeHGNO2} мл',
+        f'V3 = {note.volumeHGNO3} мл',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+
+    row_num = 6
+    columns = [
+        f'Т1 = {note.titr1} мг/мл',
+        f'Т2 = {note.titr2} мг/мл',
+        f'Т3 = {note.titr3} мг/мл',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+
+    row_num = 7
+    columns = [
+        f'Расхождение между определениями: Тmax - Tmin = {note.krit}',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(row_num, row_num, 0, 2, style2)
+
+    row_num = 8
+    columns = [
+        f'Удовлетворительно: Tmax - Tmin <=  {note.ndockrit}',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(row_num, row_num, 0, 2, style2)
+
+    row_num = 9
+    columns = [
+        f'Титр Hg(NO3)2 = {note.titr} мг/мл  ',
+        f'Титр Hg(NO3)2 = {note.titr} мг/мл  ',
+        f'годен до: {note.datedead} ',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 1, style1)
+
+    wb.save(response)
+    return response
+
+def export_Clorinesalts_xls(request, pk):
+    '''представление для выгрузки отдельной странички журнала в ексель - приготовление титранта'''
+    note = Clorinesalts.objects.get(pk=pk)
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = f'attachment; filename="{note.pk}.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('1', cell_overwrite_ok=True)
+    ws.header_str = b' '
+    ws.footer_str = b' '
+
+    # ширина столбцов
+    ws.col(0).width = 4000
+    ws.col(1).width = 4000
+    ws.col(2).width = 4000
+    ws.col(3).width = 4000
+    ws.col(4).width = 4000
+    ws.col(5).width = 4000
+
+    # высота столбцов
+    for i in range(25):
+        ws.row(i).height_mismatch = True
+        ws.row(i).height = 600
+
+
+    row_num = 0
+    columns = [
+        f'{COLONTITUL}_{note.date.year}',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(row_num, row_num, 0, 5, style2)
+
+    row_num = 1
+    columns = [
+        f'Определение содержания хлористых солей в нефтепродуктах по {note.ndocument}',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 5, style1)
+
+    row_num = 2
+    columns = [
+        'Дата',
+        'Наименование',
+        'Партия',
+        'Диапазон содержания хлористых солей по методу, мг/л',
+        'Расчётное содержание хлористых солей, мг/л',
+        'Очерёдность отбора пробы',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1500
+
+    row_num = 3
+    columns = [
+        f'{note.date}',
+        f'{ note.name}({ note.namedop})',
+        f'{note.lot}',
+        f'{note.constit}',
+        f'{note.projectconc}',
+        f'{note.que}',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+
+    row_num = 4
+    columns = [
+        'Партия раствора нитрата ртути',
+        'Партия раствора нитрата ртути',
+        'Титр  нитрата ртути, мг/мл',
+        'Титр  нитрата ртути, мг/мл',
+        'Титр  нитрата ртути годен до',
+        'Титр  нитрата ртути годен до',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 1,  style1)
+        ws.merge(row_num, row_num, 2, 3,  style1)
+        ws.merge(row_num, row_num, 4, 5,  style1)
+
+    row_num = 5
+    columns = [
+        f'{note.lotHg}',
+        f'{note.lotHg}',
+        f'{ note.titerHg}',
+        f'{ note.titerHg}',
+        f'{note.titerHgdead}',
+        f'{note.titerHgdead}',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(row_num, row_num, 0, 1, style2)
+        ws.merge(row_num, row_num, 2, 3, style2)
+        ws.merge(row_num, row_num, 4, 5, style2)
+
+    row_num = 6
+    columns = [
+        'ДФК индикатор р-р годен до',
+        'Растворитель',
+        'Объём аликвоты пробы, мл',
+        'Объём растворителя',
+        'Поведение пробы при экстракции',
+        'Объём на титрование холостой пробы, мл',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1200
+
+    row_num = 7
+    columns = [
+        f'{note.dfkdead}',
+        f'{ note.solvent}',
+        f'{note.aliquotvolume}',
+        f'{note.solventvolume}',
+        f'{note.behaviour}',
+        f'{note.backvolume}',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+
+    row_num = 8
+    columns = [
+        f'Титрование экстрактов',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 5, style1)
+
+    row_num = 9
+    columns = [
+        f'Воронка № 1',
+        f'Воронка № 1',
+        f'Воронка № 1',
+        f'Воронка № 2',
+        f'Воронка № 2',
+        f'Воронка № 2',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 3, 5, style1)
+
+    row_num = 10
+    columns = [
+        ' ',
+        'V(Hg(NO3)2), мл	',
+        'А',
+        ' ',
+        'V(Hg(NO3)2), мл	',
+        'А',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+
+    row_num = 11
+    columns = [
+        '11 ',
+        f'{note.V1E1}',
+        f'{note.aV1E1}',
+        '21',
+        f'{note.V2E1}',
+        f'{note.aV2E1}',
+    ]
+    for col_num in (0, 3):
+        ws.write(row_num, col_num, columns[col_num], style1)
+    for col_num in (1, 2, 4, 5):
+        ws.write(row_num, col_num, columns[col_num], style2)
+
+    row_num = 12
+    columns = [
+        '12',
+        f'{note.V1E2}',
+        f'{note.aV1E2}',
+        '22',
+        f'{note.V2E2}',
+        f'{note.aV2E2}',
+    ]
+    for col_num in (0, 3):
+        ws.write(row_num, col_num, columns[col_num], style1)
+    for col_num in (1, 2, 4, 5):
+        ws.write(row_num, col_num, columns[col_num], style2)
+
+    row_num = 13
+    columns = [
+        '13',
+        f'{note.V1E3}',
+        f'{note.aV1E3}',
+        '13',
+        f'{note.V2E3}',
+        f'{note.aV2E3}',
+    ]
+    for col_num in (0, 3):
+        ws.write(row_num, col_num, columns[col_num], style1)
+    for col_num in (1, 2, 4, 5):
+        ws.write(row_num, col_num, columns[col_num], style2)
+
+    row_num = 14
+    columns = [
+        '14',
+        note.V1E4,
+        note.aV1E4,
+        '24',
+        note.V2E4,
+        note.aV2E4,
+    ]
+    for col_num in (0, 3):
+        ws.write(row_num, col_num, columns[col_num], style1)
+    for col_num in (1, 2, 4, 5):
+        ws.write(row_num, col_num, columns[col_num], style2)
+
+    row_num = 15
+    columns = [
+        '15',
+        note.V1E5,
+       note.aV1E5,
+        '25',
+        note.V2E5,
+        note.aV2E5,
+    ]
+    for col_num in (0, 3):
+        ws.write(row_num, col_num, columns[col_num], style1)
+    for col_num in (1, 2, 4, 5):
+        ws.write(row_num, col_num, columns[col_num], style2)
+
+    row_num = 16
+    columns = [
+        'X1, мг/л',
+        note.x1,
+        note.x1,
+        'X2, мг/л',
+        note.x2,
+        note.x2,
+    ]
+    for col_num in (0, 3):
+        ws.write(row_num, col_num, columns[col_num], style1)
+    for col_num in (1, 2, 4, 5):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(row_num, row_num, 1, 2, style2)
+        ws.merge(row_num, row_num, 4, 5, style2)
+
+    row_num = 17
+    columns = [
+        'Сходимость по ГОСТ, мг/л',
+        'Сходимость по ГОСТ, мг/л',
+        'Сходимость по ГОСТ, мг/л',
+        'Сходимость фактическая, мг/л',
+        'Сходимость фактическая, мг/л',
+        'Сходимость фактическая, мг/л',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 3, 5, style1)
+
+    row_num = 18
+    columns = [
+        note.ndocconvergence,
+        note.ndocconvergence,
+        note.ndocconvergence,
+        note.factconvergence,
+        note.factconvergence,
+        note.factconvergence,
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(row_num, row_num, 0, 2, style2)
+        ws.merge(row_num, row_num, 3, 5, style2)
+
+    row_num = 19
+    columns = [
+        f'Результат измерений: {note.resultMeas}'
+
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 5, style1)
+
+    row_num = 20
+    columns = [
+        'Исполнитель',
+        'Исполнитель',
+        'Исполнитель',
+        'ОТК',
+        'ОТК',
+        'ОТК',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 3, 5, style1)
+
+    row_num = 21
+    columns = [
+        note.performer.username,
+        note.performer.username,
+        note.performer.username,
+        ' ',
+        ' ',
+        ' ',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(row_num, row_num, 0, 2, style2)
+        ws.merge(row_num, row_num, 3, 5, style2)
+
+
+    wb.save(response)
+    return response
