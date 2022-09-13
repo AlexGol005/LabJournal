@@ -778,6 +778,8 @@ def export_Clorinesalts_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1500
 
     row_num = 4
     columns = [
