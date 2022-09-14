@@ -132,7 +132,7 @@
      <a href="/equipment/measureequipment/verificationreg/{{ obj.equipment.exnumber }}/"  class="btn btn-warning mt-2 mr-2">
      Внести запись о поверке</a>
 {# поверка кнопка3#}
- <a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/comments/"  class="btn btn-warning mt-2 ">
+ <a href="{% url 'export_verificlabel_xls'  obj.pk %}"  class="btn btn-warning mt-2 ">
      Распечатать этикетку</a></div>
 {#расположение и комплектность#}
 <div style="text-align: center; margin-top: 20px"><h4>

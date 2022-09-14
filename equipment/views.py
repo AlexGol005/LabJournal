@@ -394,14 +394,14 @@ def EquipmentReg(request):
             form = EquipmentCreateForm(request.POST, request.FILES)
             if form.is_valid():
                 order = form.save(commit=False)
-                # try:
-                #     a = Equipment.objects.filter(exnumber__startswith=order.exnumber).last().exnumber
-                #     b = int(str(a)[-3::]) + 1
-                #     c = str(b).rjust(3, '0')
-                #     d = str(order.exnumber) + c
-                #     order.exnumber = d
-                # except:
-                #     order.exnumber = str(order.exnumber) + '001'
+                try:
+                    a = Equipment.objects.filter(exnumber__startswith=order.exnumber).last().exnumber
+                    b = int(str(a)[-3::]) + 1
+                    c = str(b).rjust(3, '0')
+                    d = str(order.exnumber) + c
+                    order.exnumber = d
+                except:
+                    order.exnumber = str(order.exnumber) + '001'
                 order.save()
                 if order.kategory == 'СИ':
                     return redirect(f'/equipment/measureequipmentreg/{order.exnumber}/')
@@ -1226,19 +1226,208 @@ def export_mecard_xls(request, pk):
         ws1.row(row_num).height_mismatch = True
         ws1.row(row_num).height = 1500
 
+    wb.save(response)
+    return response
+
+# стили для exel (для этикеток)
+brd1 = Borders()
+brd1.left = 1
+brd1.right = 1
+brd1.top = 1
+brd1.bottom = 1
+
+al1 = Alignment()
+al1.horz = Alignment.HORZ_CENTER
+al1.vert = Alignment.VERT_CENTER
+
+style1 = xlwt.XFStyle()
+style1.font.bold = True
+style1.font.name = 'Calibri'
+style1.borders = brd1
+style1.alignment = al1
+style1.alignment.wrap = 1
+
+style2 = xlwt.XFStyle()
+style2.font.name = 'Calibri'
+style2.borders = brd1
+style2.alignment = al1
+
+style3 = xlwt.XFStyle()
+style3.font.name = 'Calibri'
+style3.alignment = al1
+
+style4 = xlwt.XFStyle()
+style4.font.bold = True
+style4.font.name = 'Calibri'
+style4.alignment = al1
+
+def export_verificlabel_xls(request, pk):
+    '''представление для выгрузки этикетки для поверки'''
+    note = [MeasurEquipment.objects.get(pk=pk),
+            MeasurEquipment.objects.get(pk=10),
+            MeasurEquipment.objects.get(pk=10),
+            MeasurEquipment.objects.get(pk=10),
+            MeasurEquipment.objects.get(pk=10),
+            MeasurEquipment.objects.get(pk=10),
+            MeasurEquipment.objects.get(pk=10),
+            MeasurEquipment.objects.get(pk=10),
+            MeasurEquipment.objects.get(pk=10),
+            MeasurEquipment.objects.get(pk=10),
+            MeasurEquipment.objects.get(pk=10),
+            MeasurEquipment.objects.get(pk=10),
+            MeasurEquipment.objects.get(pk=10),
+            MeasurEquipment.objects.get(pk=10),
+            ]
+
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = f'attachment; filename="verification_labels.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('1', cell_overwrite_ok=True)
+    ws.header_str = b' '
+    ws.footer_str = b' '
+
+    # ширина столбцов
+    ws.col(0).width = 300
+    ws.col(1).width = 3400
+    ws.col(2).width = 3600
+    ws.col(3).width = 2000
+    ws.col(4).width = 2000
+    ws.col(5).width = 800
+    ws.col(6).width = 3400
+    ws.col(7).width = 3600
+    ws.col(8).width = 2000
+    ws.col(9).width = 2000
+    ws.col(10).width = 300
 
 
+    # высота столбцов
+    for i in range(25):
+        ws.row(i).height_mismatch = True
+        ws.row(i).height = 300
 
+    i = 0
+    while i <= 13:
 
+        currentnote1 = note[i]
+        currentnote2 = note[i + 1]
 
+        row_num = 0 + i
+        columns = [
+            '',
+            f'{currentnote1.charakters.name} {currentnote1.charakters.typename}/{currentnote1.charakters.modificname}',
+            f'{currentnote1.charakters.name} {currentnote1.charakters.typename}/{currentnote1.charakters.modificname}',
+            f'{currentnote1.charakters.name} {currentnote1.charakters.typename}/{currentnote1.charakters.modificname}',
+            f'{currentnote1.charakters.name} {currentnote1.charakters.typename}/{currentnote1.charakters.modificname}',
+            '',
+            f'{currentnote2.charakters.name} {currentnote2.charakters.typename}/{currentnote2.charakters.modificname}',
+            f'{currentnote2.charakters.name} {currentnote2.charakters.typename}/{currentnote2.charakters.modificname}',
+            f'{currentnote2.charakters.name} {currentnote2.charakters.typename}/{currentnote2.charakters.modificname}',
+            f'{currentnote2.charakters.name} {currentnote2.charakters.typename}/{currentnote2.charakters.modificname}',
+            '',
+        ]
 
+        for col_num in (1, 2, 3, 4, 6, 7, 8, 9):
+            ws.write(row_num, col_num, columns[col_num], style2)
+            ws.merge(row_num, row_num, 1, 4, style2)
+            ws.merge(row_num, row_num, 6, 9, style2)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 750
 
+        row_num = 1 + i
+        columns = [
+            '',
+            f'Заводской №:',
+            f'{currentnote1.equipment.lot}',
+            f'Внут. №',
+            f'{currentnote1.equipment.exnumber}',
+            '',
+            f'Заводской №:',
+            f'{currentnote2.equipment.lot}',
+            f'Внут. №',
+            f'{currentnote2.equipment.exnumber}',
+            '',
+        ]
 
+        for col_num in (1, 3, 6, 8):
+            ws.write(row_num, col_num, columns[col_num], style1)
+        for col_num in (2, 4, 7, 9):
+            ws.write(row_num, col_num, columns[col_num], style2)
 
+        row_num = 2 + i
+        columns = [
+            '',
+            f'Св-во поверки:',
+            f'{currentnote1.newcertnumber}',
+            f'{currentnote1.newcertnumber}',
+            f'{currentnote1.newcertnumber}',
+            '',
+            f'Св-во поверки:',
+            f'{currentnote2.newcertnumber}',
+            f'{currentnote2.newcertnumber}',
+            f'{currentnote2.newcertnumber}',
+            '',
+        ]
 
+        for col_num in (1, 6):
+            ws.write(row_num, col_num, columns[col_num], style1)
+        for col_num in range(2, 5):
+            ws.write(row_num, col_num, columns[col_num], style2)
+        for col_num in range(7, 10):
+            ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(row_num, row_num, 2, 4, style2)
+        ws.merge(row_num, row_num, 7, 9, style2)
 
+        row_num = 3 + i
+        columns = [
+            '',
+            f'поверен от {currentnote1.newdate} до {currentnote1.newdatedead}',
+            f'поверен от {currentnote1.newdate} до {currentnote1.newdatedead}',
+            f'поверен от {currentnote1.newdate} до {currentnote1.newdatedead}',
+            f'поверен от {currentnote1.newdate} до {currentnote1.newdatedead}',
+            ' ',
+            f'поверен от {currentnote2.newdate} до {currentnote2.newdatedead}',
+            f'поверен от {currentnote2.newdate} до {currentnote2.newdatedead}',
+            f'поверен от {currentnote2.newdate} до {currentnote2.newdatedead}',
+            f'поверен от {currentnote2.newdate} до {currentnote2.newdatedead}',
+            ' ',
+            ]
+        for col_num in range(1, 5):
+            ws.write(row_num, col_num, columns[col_num], style2)
+        for col_num in range(6, 10):
+            ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(row_num, row_num, 1, 4, style1)
+        ws.merge(row_num, row_num, 6, 9, style1)
 
+        row_num = 4 + i
+        columns = [
+            '',
+            f'Ответственный за поверку {"              "} А.Б.Головкина',
+            f'Ответственный за поверку {"              "} А.Б.Головкина',
+            f'Ответственный за поверку {"              "} А.Б.Головкина',
+            f'Ответственный за поверку {"              "} А.Б.Головкина',
+            ' ',
+            f'Ответственный за поверку {"              "} А.Б.Головкина',
+            f'Ответственный за поверку {"              "} А.Б.Головкина',
+            f'Ответственный за поверку {"              "} А.Б.Головкина',
+            f'Ответственный за поверку {"              "} А.Б.Головкина',
+            ' ',
+        ]
+        for col_num in range(1, 5):
+            ws.write(row_num, col_num, columns[col_num], style2)
+        for col_num in range(6, 10):
+            ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(row_num, row_num, 1, 4, style1)
+        ws.merge(row_num, row_num, 6, 9, style1)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 400
+
+        row_num = 5 + i
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
+
+        i += 1
 
 
     wb.save(response)
     return response
+
