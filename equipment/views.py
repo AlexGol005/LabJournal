@@ -31,6 +31,10 @@ class MeteorologicalParametersView(TemplateView):
     """ Представление, которое выводит формы для метеопараметров """
     template_name = URL + '/meteo.html'
 
+class MetrologicalEnsuringView(TemplateView):
+    """выводит заглавную страницу для вывода данных по поверке и аттестации, списков в ексель и пр """
+    template_name = URL + '/metro.html'
+
 class RoomsCreateView(SuccessMessageMixin, CreateView):
     """ выводит форму добавления помещения """
     template_name = URL + '/reg.html'
@@ -394,14 +398,14 @@ def EquipmentReg(request):
             form = EquipmentCreateForm(request.POST, request.FILES)
             if form.is_valid():
                 order = form.save(commit=False)
-                try:
-                    a = Equipment.objects.filter(exnumber__startswith=order.exnumber).last().exnumber
-                    b = int(str(a)[-3::]) + 1
-                    c = str(b).rjust(3, '0')
-                    d = str(order.exnumber) + c
-                    order.exnumber = d
-                except:
-                    order.exnumber = str(order.exnumber) + '001'
+                # try:
+                #     a = Equipment.objects.filter(exnumber__startswith=order.exnumber).last().exnumber
+                #     b = int(str(a)[-3::]) + 1
+                #     c = str(b).rjust(3, '0')
+                #     d = str(order.exnumber) + c
+                #     order.exnumber = d
+                # except:
+                #     order.exnumber = str(order.exnumber) + '001'
                 order.save()
                 if order.kategory == 'СИ':
                     return redirect(f'/equipment/measureequipmentreg/{order.exnumber}/')
@@ -1238,7 +1242,7 @@ brd1.bottom = 1
 
 al1 = Alignment()
 al1.horz = Alignment.HORZ_CENTER
-al1.vert = Alignment.VERT_CENTER
+al1.vert = Alignment.VERT_BOTTOM
 
 style1 = xlwt.XFStyle()
 style1.font.bold = True
@@ -1262,21 +1266,8 @@ style4.font.name = 'Calibri'
 style4.alignment = al1
 
 def export_verificlabel_xls(request, pk):
-    '''представление для выгрузки этикетки для поверки'''
+    '''представление для выгрузки этикеток для указания поверки'''
     note = [MeasurEquipment.objects.get(pk=pk),
-            MeasurEquipment.objects.get(pk=10),
-            MeasurEquipment.objects.get(pk=10),
-            MeasurEquipment.objects.get(pk=10),
-            MeasurEquipment.objects.get(pk=10),
-            MeasurEquipment.objects.get(pk=10),
-            MeasurEquipment.objects.get(pk=10),
-            MeasurEquipment.objects.get(pk=10),
-            MeasurEquipment.objects.get(pk=10),
-            MeasurEquipment.objects.get(pk=10),
-            MeasurEquipment.objects.get(pk=10),
-            MeasurEquipment.objects.get(pk=10),
-            MeasurEquipment.objects.get(pk=10),
-            MeasurEquipment.objects.get(pk=10),
             ]
 
     response = HttpResponse(content_type='application/ms-excel')
@@ -1300,18 +1291,15 @@ def export_verificlabel_xls(request, pk):
     ws.col(10).width = 300
 
 
-    # высота столбцов
-    for i in range(25):
-        ws.row(i).height_mismatch = True
-        ws.row(i).height = 300
-
     i = 0
-    while i <= 13:
-
+    j = 0
+    if len(note) % 2 != 0:
+        note.append(note[0])
+    while i <= len(note) - 2:
         currentnote1 = note[i]
         currentnote2 = note[i + 1]
 
-        row_num = 0 + i
+        row_num = 0 + j
         columns = [
             '',
             f'{currentnote1.charakters.name} {currentnote1.charakters.typename}/{currentnote1.charakters.modificname}',
@@ -1333,7 +1321,7 @@ def export_verificlabel_xls(request, pk):
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 750
 
-        row_num = 1 + i
+        row_num = 1 + j
         columns = [
             '',
             f'Заводской №:',
@@ -1352,8 +1340,10 @@ def export_verificlabel_xls(request, pk):
             ws.write(row_num, col_num, columns[col_num], style1)
         for col_num in (2, 4, 7, 9):
             ws.write(row_num, col_num, columns[col_num], style2)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 270
 
-        row_num = 2 + i
+        row_num = 2 + j
         columns = [
             '',
             f'Св-во поверки:',
@@ -1377,7 +1367,7 @@ def export_verificlabel_xls(request, pk):
         ws.merge(row_num, row_num, 2, 4, style2)
         ws.merge(row_num, row_num, 7, 9, style2)
 
-        row_num = 3 + i
+        row_num = 3 + j
         columns = [
             '',
             f'поверен от {currentnote1.newdate} до {currentnote1.newdatedead}',
@@ -1398,7 +1388,7 @@ def export_verificlabel_xls(request, pk):
         ws.merge(row_num, row_num, 1, 4, style1)
         ws.merge(row_num, row_num, 6, 9, style1)
 
-        row_num = 4 + i
+        row_num = 4 + j
         columns = [
             '',
             f'Ответственный за поверку {"              "} А.Б.Головкина',
@@ -1421,11 +1411,12 @@ def export_verificlabel_xls(request, pk):
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 400
 
-        row_num = 5 + i
+        row_num = 5 + j
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 500
+        ws.row(row_num).height = 370
 
-        i += 1
+        i += 2
+        j += 6
 
 
     wb.save(response)

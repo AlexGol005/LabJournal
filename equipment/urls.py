@@ -33,4 +33,5 @@ urlpatterns = [
     path(r'^export2/xls/$/<int:pk>', views.export_verificlabel_xls, name='export_verificlabel_xls'),
     path('chromato/', views.ChromatoView.as_view(), name='chromato'),
     path('reestrsearres/', views.ReestrsearresView.as_view(), name='reestrsearres'),
+    path('metro/', views.MetrologicalEnsuringView.as_view(), name='metro'),
 ]

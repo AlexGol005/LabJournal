@@ -1,0 +1,23 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}
+Метрологическое обеспечение
+{% endblock %}
+
+
+{% block content %}
+
+
+<div style="text-align: center; margin-top: 20px">
+<a href="{% url 'roomreg' %}" class="btn btn-warning mr-5 mt-3" style="width: 210px">Распечать этикетки на СИ</a>
+{#<a href="{% url 'meteoreg' %}" class="btn btn-warning  mt-3" style="width: 210px">Распечать этикетки на ИО</a>#}
+</div>
+
+
+
+<br><br>
+{#<div style="text-align: center;">#}
+{#<img src="{% static 'main/img/20.jpg' %}"#}
+{#alt="Изображение на странице метео"></div>#}
+
+{% endblock %}
