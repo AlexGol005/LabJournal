@@ -1,23 +1,22 @@
 {% extends 'main/base.html' %}
 {% load static %}
 {% block title %}
-{% for i in note %}{{ i.name}}{% endfor %}
+{{ note.name }}
 {% endblock %}
 
 
 {% block content %}
-    {% for i in note %}
-    <div style="text-align: center;"><h4>{{ i.name}}</h4></div>
+    <div style="text-align: center;"><h4>{{ note.name }}</h4></div>
     <br>
-             <div style="text-align: center;"><b>Методы испытаний:</b>   {{ i.ndocument }}</div>
-             <div style="text-align: center;"><b>СО:</b>   {{ i.CM }}</div>
-             <div style="text-align: center;">   {{ i.extra_info|default:" " }}</div>
+             <div style="text-align: center;"><b>Методы испытаний:</b>   {{ note.ndocument }}</div>
+             <div style="text-align: center;"><b>СО:</b>   {{ note.CM }}</div>
+             <div style="text-align: center;">   {{ note.extra_info|default:" " }}</div>
          <br>
          <div style="text-align: center;">
         <a href="attestation/" class="btn btn-warning mt-3 mr-5" style="width: 160px">Смотреть записи</a>
         <a href="registration/" class="btn btn-warning mt-3" style="width: 160px">Внести запись</a>
         </div>
     <br>
-    {% endfor %}
+
 
 {% endblock %}

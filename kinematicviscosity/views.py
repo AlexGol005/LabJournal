@@ -17,22 +17,13 @@ from django.views import View
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models.functions import Upper, Concat
-from sqlparse.filters import output
 from xlwt import Borders, Alignment
 
 from equipment.models import Verificationequipment, Equipment, CompanyCard, MeteorologicalParameters, MeasurEquipment
-from jouViscosity.models import CvKinematicviscosityVG
-from main.models import AttestationJ
-from viscosimeters.models import Kalibration
-from .models import ViscosityMJL, CommentsKinematicviscosity
 from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm, SearchForm, SearchDateForm, \
     StrJournalProtocolUdateForm, StrJournalProtocolRoomUdateForm
 
-JOURNAL = AttestationJ
-MODEL = ViscosityMJL
-COMMENTMODEL = CommentsKinematicviscosity
-URL = 'kinematicviscosity'
-NAME = 'кинематика'
+from .j_constants import *
 
 
 class HeadView(View):
@@ -40,7 +31,7 @@ class HeadView(View):
     """ Стандартное """
 
     def get(self, request):
-        note = JOURNAL.objects.all().filter(for_url=URL)
+        note = JOURNAL.objects.get(for_url=URL)
         return render(request, URL + '/head.html', {'note': note, 'URL': URL})
 
 

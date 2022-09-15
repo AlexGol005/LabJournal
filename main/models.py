@@ -18,7 +18,7 @@ class AttestationJ(models.Model):
     extra_info = models.TextField('Доп', blank=True, null=True)
     str_html = models.TextField('HTML код для страницы журнала', blank=True, null=True)
     formuls = models.TextField('Формулы для расчётов', blank=True, null=True)
-    img = models.ImageField('Картинка для журнала', default='user_images/default.png', upload_to='user_images')
+    img = models.ImageField('Картинка для журнала', default='user_images/123_m3k8cTS.jpg', upload_to='user_images')
 
 
     def __str__(self):
@@ -52,7 +52,7 @@ class ProductionJ(models.Model):
     extra_info = models.TextField('Доп', blank=True, null=True)
     str_html = models.TextField('HTML код для страницы журнала', blank=True, null=True)
     formuls = models.TextField('Формулы для расчётов', blank=True, null=True)
-    img = models.ImageField('Картинка для журнала', default='user_images/default.png', upload_to='user_images')
+    img = models.ImageField('Картинка для журнала', default='user_images/123_m3k8cTS.jpg', upload_to='user_images')
 
 
     def __str__(self):

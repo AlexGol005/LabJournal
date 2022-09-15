@@ -38,7 +38,7 @@ class HeadView(View):
     """ Стандартное """
 
     def get(self, request):
-        note = JOURNAL.objects.all().filter(for_url=URL)
+        note = JOURNAL.objects.get(for_url=URL)
         return render(request, URL + '/head.html', {'note': note, 'URL': URL})
 
 
