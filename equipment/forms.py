@@ -617,3 +617,24 @@ class LabelEquipmentform(forms.Form):
                 Column('n13', css_class='form-group col-md-2 mb-0'),
                 Column('n14', css_class='form-group col-md-2 mb-0')),
             Row(Submit('submit', 'сформировать', css_class='btn  btn-info col-md-6 mb-3 mt-4 ml-4')))
+
+
+class DateForm(forms.Form):
+    """форма для указания даты"""
+    date = forms.DateField(label='Дата',
+                           widget=forms.DateInput(
+                               attrs={'class': 'form-control', 'placeholder': ''}),
+                           input_formats=(
+                               '%Y-%m-%d',
+                               '%m/%d/%Y',
+                               '%m/%d/%y',
+                               '%d.%m.%Y',
+                           ))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('date', css_class='form-group col-md-4 mb-0'),
+                Submit('submit', 'сформировать', css_class='btn  btn-info col-md-6 mb-3 mt-4 ml-4')))

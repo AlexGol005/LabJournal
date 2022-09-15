@@ -20,12 +20,32 @@ from equipment.forms import SearchMEForm, NoteCreationForm, EquipmentUpdateForm,
     CommentsVerificationCreationForm, VerificatorsCreationForm, VerificatorPersonCreationForm, EquipmentCreateForm, \
     ManufacturerCreateForm, MeasurEquipmentCharaktersCreateForm, MeasurEquipmentCreateForm, DocsConsCreateForm, \
     PersonchangeForm, RoomschangeForm, RoomsCreateForm, MeteorologicalParametersRegForm, Searchreestrform, \
-    LabelEquipmentform
+    LabelEquipmentform, DateForm
 from equipment.models import MeasurEquipment, Verificationequipment, Roomschange, Personchange, CommentsEquipment, \
     Equipment, CommentsVerificationequipment, Manufacturer, MeasurEquipmentCharakters, DocsCons, Verificators, \
     VerificatorPerson, TestingEquipment, CompanyCard
 
 URL = 'equipment'
+
+class SearchMustVerView(ListView):
+    """ выводит список СИ у которых месяц заказа поверки совпадает с указанным либо раньше него"""
+
+    template_name = URL + '/measureequipment.html'
+    context_object_name = 'objects'
+    ordering = ['charakters_name']
+    paginate_by = 12
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchMustVerView, self).get_context_data(**kwargs)
+        context['URL'] = URL
+        context['form'] = SearchMEForm()
+        return context
+
+    def get_queryset(self):
+        queryset = MeasurEquipment.objects.exclude(equipment__status='С')
+        return queryset
+
+
 
 
 class MeteorologicalParametersView(TemplateView):
@@ -35,6 +55,11 @@ class MeteorologicalParametersView(TemplateView):
 class MetrologicalEnsuringView(TemplateView):
     """выводит заглавную страницу для вывода данных по поверке и аттестации, списков в ексель и пр """
     template_name = URL + '/metro.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(MetrologicalEnsuringView, self).get_context_data(**kwargs)
+        context['form'] = DateForm()
+        return context
 
 class VerificationLabelsView(TemplateView):
     """выводит страницу с формой для ввода внутренних номеров для распечатки этикеток о метрологическом обслуживании приборов """

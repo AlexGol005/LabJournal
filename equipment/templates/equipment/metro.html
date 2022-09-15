@@ -1,4 +1,5 @@
 {% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 {% block title %}
 Метрологическое обеспечение
@@ -6,11 +7,19 @@
 
 
 {% block content %}
-
+{#mr-5 mt-3#}
 
 <div style="text-align: center; margin-top: 20px">
-<a href="{% url 'verificationlabels' %}" class="btn btn-warning mr-5 mt-3" style="width: 210px">Распечать этикетки на СИ</a>
+<a href="{% url 'verificationlabels' %}" class="btn btn-warning" style="width: 210px">Распечать этикетки на СИ</a>
 {#<a href="{% url 'meteoreg' %}" class="btn btn-warning  mt-3" style="width: 210px">Распечать этикетки на ИО</a>#}
+</div>
+<br>
+<div style="text-align: center; margin-top: 20px">
+<h5>Сформировать список СИ у которых месяц заказа поверки совпадает с указанным либо раньше него</h5>
+ <form action="{% url 'mustver' %}" target="blank" method="GET">
+        {% csrf_token %}
+        {% crispy form %}
+    </form>
 </div>
 
 
