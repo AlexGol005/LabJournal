@@ -24,15 +24,21 @@ from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationF
     StrJournalProtocolUdateForm, StrJournalProtocolRoomUdateForm
 
 from .j_constants import *
+from utils import *
 
 
-class HeadView(View):
+
+
+class HeadView(HeadView):
     """ Представление, которое выводит заглавную страницу журнала """
     """ Стандартное """
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.URL = URL
+        self.JOURNAL = JOURNAL
 
-    def get(self, request):
-        note = JOURNAL.objects.get(for_url=URL)
-        return render(request, URL + '/head.html', {'note': note, 'URL': URL})
+
+
 
 
 class StrJournalView(View):
@@ -130,28 +136,17 @@ def RegNoteJournalView(request):
     return render(request, URL + '/registration.html', {'form': form, 'URL': URL})
 
 
-class CommentsView(View):
+class CommentsView(CommentsView):
     """ выводит комментарии к записи в журнале и форму для добавления комментариев """
     """Стандартное"""
-    form_class = CommentCreationForm
-    initial = {'key': 'value'}
-    template_name = URL + '/comments.html'
 
-    def get(self, request, pk):
-        note = COMMENTMODEL.objects.filter(forNote=pk)
-        title = MODEL.objects.get(pk=pk)
-        form = CommentCreationForm()
-        return render(request, 'main/comments.html', {'note': note, 'title': title, 'form': form, 'URL': URL})
-
-    def post(self, request, pk, *args, **kwargs):
-        form = CommentCreationForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.author = request.user
-            order.forNote = MODEL.objects.get(pk=pk)
-            order.save()
-            messages.success(request, f'Комментарий добавлен!')
-            return redirect(order)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.form = CommentCreationForm
+        self.template_name = URL + '/comments.html'
+        self.MODEL = MODEL
+        self.COMMENTMODEL = COMMENTMODEL
+        self.URL = URL
 
 
 
