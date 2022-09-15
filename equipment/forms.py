@@ -156,11 +156,17 @@ class EquipmentUpdateForm(forms.ModelForm):
                            widget=forms.Textarea(attrs={'class': 'form-control'}))
     notemaster = forms.CharField(label='Примечание (или временное предостережение)', max_length=10000, required=False,
                                     widget=forms.Textarea(attrs={'class': 'form-control'}))
-    imginstruction1 = forms.ImageField(label='Паспорт',
-                                       widget=forms.FileInput(attrs={'multiple': 'multiple'})
-                                       , required=False)
-    imginstruction2 = forms.ImageField(label='Внутренняя инструкция загрузить фото', widget=forms.FileInput,
-                                       required=False)
+    # imginstruction1 = forms.ImageField(label='Паспорт',
+    #                                    widget=forms.FileInput(attrs={'multiple': 'multiple'})
+    #                                    , required=False)
+    # imginstruction2 = forms.ImageField(label='Внутренняя инструкция загрузить фото', widget=forms.FileInput,
+    #                                    required=False)
+    pasport = forms.CharField(label='Паспорт', max_length=10000, required=False,
+                            widget=forms.TextInput(attrs={'class': 'form-control',
+                                                          'placeholder': 'добавьте ссылку на паспорт'}))
+    instruction = forms.CharField(label='Основная инструкция по эксплуатации', max_length=10000, required=False,
+                            widget=forms.TextInput(attrs={'class': 'form-control',
+                                                          'placeholder': 'добавьте ссылку на инструкцию'}))
     imginstruction3 = forms.ImageField(label='Право владения', widget=forms.FileInput, required=False)
     video = forms.CharField(label='Видео к прибору', max_length=10000, required=False,
                                     widget=forms.TextInput(attrs={'class': 'form-control',
@@ -172,9 +178,14 @@ class EquipmentUpdateForm(forms.ModelForm):
     class Meta:
         model = Equipment
         fields = [
-            'status', 'individuality', 'notemaster', 'imginstruction1',
-            'imginstruction2', 'imginstruction3',
-                  'video', 'invnumber']
+            'status', 'individuality', 'notemaster',
+            # 'imginstruction1',
+            # 'imginstruction2',
+            'pasport', 'instruction',
+            'imginstruction3',
+
+                  'video', 'invnumber',
+        ]
 
 class ManufacturerCreateForm(forms.ModelForm):
     """форма для внесения производителя"""
@@ -550,3 +561,59 @@ class Searchreestrform(forms.Form):
                 Column('name', css_class='form-group col-md-3 mb-0'),
                 Column('reestr', css_class='form-group col-md-3 mb-0'),
                 Row(Submit('submit', 'Найти', css_class='btn  btn-info col-md-9 mb-3 mt-4 ml-4'))))
+
+class LabelEquipmentform(forms.Form):
+    "форма для внесения номеров оборудования для распечатки этикеток о поверке/аттестации"
+    n1 = forms.CharField(label='№1', required=False,
+                         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'А001'}))
+    n2 = forms.CharField(label='№2', required=False,
+                         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'В010'}))
+    n3 = forms.CharField(label='№3', required=False,
+                         widget=forms.TextInput(attrs={'class': 'form-control'}))
+    n4 = forms.CharField(label='№4', required=False,
+                         widget=forms.TextInput(attrs={'class': 'form-control'}))
+    n5 = forms.CharField(label='№5', required=False,
+                         widget=forms.TextInput(attrs={'class': 'form-control'}))
+    n6 = forms.CharField(label='№6', required=False,
+                         widget=forms.TextInput(attrs={'class': 'form-control'}))
+    n7 = forms.CharField(label='№7', required=False,
+                         widget=forms.TextInput(attrs={'class': 'form-control'}))
+    n8 = forms.CharField(label='№8', required=False,
+                         widget=forms.TextInput(attrs={'class': 'form-control'}))
+    n9 = forms.CharField(label='№9', required=False,
+                         widget=forms.TextInput(attrs={'class': 'form-control'}))
+    n10 = forms.CharField(label='№10', required=False,
+                         widget=forms.TextInput(attrs={'class': 'form-control'}))
+    n11 = forms.CharField(label='№11', required=False,
+                         widget=forms.TextInput(attrs={'class': 'form-control'}))
+    n12 = forms.CharField(label='№12', required=False,
+                         widget=forms.TextInput(attrs={'class': 'form-control'}))
+    n13 = forms.CharField(label='№13', required=False,
+                         widget=forms.TextInput(attrs={'class': 'form-control'}))
+    n14 = forms.CharField(label='№14', required=False,
+                         widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('n1', css_class='form-group col-md-2 mb-0'),
+                Column('n2', css_class='form-group col-md-2 mb-0'),
+                Column('n3', css_class='form-group col-md-2 mb-0'),
+                Column('n4', css_class='form-group col-md-2 mb-0')),
+            Row(
+                Column('n5', css_class='form-group col-md-2 mb-0'),
+                Column('n6', css_class='form-group col-md-2 mb-0'),
+                Column('n7', css_class='form-group col-md-2 mb-0'),
+                Column('n8', css_class='form-group col-md-2 mb-0')),
+            Row(
+                Column('n9', css_class='form-group col-md-2 mb-0'),
+                Column('n10', css_class='form-group col-md-2 mb-0'),
+                Column('n11', css_class='form-group col-md-2 mb-0'),
+                Column('n12', css_class='form-group col-md-2 mb-0')),
+            Row(
+                Column('n13', css_class='form-group col-md-2 mb-0'),
+                Column('n14', css_class='form-group col-md-2 mb-0')),
+            Row(Submit('submit', 'сформировать', css_class='btn  btn-info col-md-6 mb-3 mt-4 ml-4')))

@@ -132,7 +132,7 @@
      <a href="/equipment/measureequipment/verificationreg/{{ obj.equipment.exnumber }}/"  class="btn btn-warning mt-2 mr-2">
      Внести запись о поверке</a>
 {# поверка кнопка3#}
- <a href="{% url 'export_verificlabel_xls'  obj.pk %}"  class="btn btn-warning mt-2 ">
+ <a href="{% url 'verificationlabels' %}"  target="blank" class="btn btn-warning mt-2 ">
      Распечатать этикетку</a></div>
 {#расположение и комплектность#}
 <div style="text-align: center; margin-top: 20px"><h4>
@@ -178,7 +178,7 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th> Паспорт</th>
+            <th> Паспорт (ссылка)</th>
             <th> Основная инструкция <br> по <br>    эксплуатации прибора <br>в ООО "Петро- аналитика"</th>
             <th> Диапазон измерений</th>
             <th> Класс точности (разряд), погрешность и (или) неопреде- лённость (класс, разряд)</th>
@@ -190,14 +190,32 @@
     <tbody>
     <tr>
 
-        <td>{% if obj.equipment.imginstruction1 %}
-        <a href="{{ obj.equipment.imginstruction1.url }}" target="blank">
-        <img class="bd-placeholder-img mr-2 rounded" width=50px height=70px src="{{ obj.equipment.imginstruction1.url }}">
-        </a>{% endif %}</td>
-        <td>{% if obj.equipment.imginstruction2 %}
-        <a href="{{ obj.equipment.imginstruction2.url }}" target="blank">
-        <img class="bd-placeholder-img mr-2 rounded" width=50px height=70px src="{{ obj.equipment.imginstruction2.url }}">
-        </a>{% endif %}</td>
+{#        <td>{% if obj.equipment.imginstruction1 %}#}
+{#        <a href="{{ obj.equipment.imginstruction1.url }}" target="blank">#}
+{#        <img class="bd-placeholder-img mr-2 rounded" width=50px height=70px src="{{ obj.equipment.imginstruction1.url }}">#}
+{#        </a>{% endif %}</td>#}
+{#        <td>{% if obj.equipment.imginstruction2 %}#}
+{#        <a href="{{ obj.equipment.imginstruction2.url }}" target="blank">#}
+{#        <img class="bd-placeholder-img mr-2 rounded" width=50px height=70px src="{{ obj.equipment.imginstruction2.url }}">#}
+{#        </a>{% endif %}</td>#}
+        <td class="ind">
+             {% if obj.equipment.pasport %}
+              <a href="{{ obj.equipment.pasport}}"  target="blank" >
+             ссылка на паспорт
+                  </a>
+             {% else  %}
+             нет паспорта
+             {% endif %}
+         </td>
+         <td class="ind">
+             {% if obj.equipment.instruction %}
+              <a href="{{ obj.equipment.instruction}}"  target="blank" >
+             ссылка на паспорт
+                  </a>
+             {% else  %}
+             нет инструкции
+             {% endif %}
+         </td>
         <td> {{ obj.charakters.measurydiapason }}</td>
         <td> {{ obj.charakters.accuracity }}</td>
         <td>{{ obj.charakters.aim }}</td>

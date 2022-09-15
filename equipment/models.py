@@ -124,6 +124,8 @@ class Equipment(models.Model):
     video = models.CharField('Ссылка на видео', max_length=1000,  blank=True, null=True)
     notemaster = models.TextField('Примечание ответственного за прибор',  blank=True, null=True)
     price = models.DecimalField('Стоимость', max_digits=100, decimal_places=2, null=True, blank=True)
+    pasport = models.CharField('Ссылка на паспорт', max_length=1000,  blank=True, null=True)
+    instruction = models.CharField('Основная инструкция по эксплуатации', max_length=1000,  blank=True, null=True)
 
 
 

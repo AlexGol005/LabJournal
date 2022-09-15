@@ -30,8 +30,9 @@ urlpatterns = [
     path('verificatorpersons/', views.VerificatorsPersonsView.as_view(), name='verificatorpersons'),
     path('verificatorspersonsreg/', views.VerificatorPersonCreationView.as_view(), name='verificatorspersonsreg'),
     path(r'^export1/xls/$/<int:pk>', views.export_mecard_xls, name='export_mecard_xls'),
-    path(r'^export2/xls/$/<int:pk>', views.export_verificlabel_xls, name='export_verificlabel_xls'),
+    path(r'^export2/xls/$/', views.export_verificlabel_xls, name='export_verificlabel_xls'),
     path('chromato/', views.ChromatoView.as_view(), name='chromato'),
     path('reestrsearres/', views.ReestrsearresView.as_view(), name='reestrsearres'),
     path('metro/', views.MetrologicalEnsuringView.as_view(), name='metro'),
+    path('verificationlabels/', views.VerificationLabelsView.as_view(), name='verificationlabels'),
 ]

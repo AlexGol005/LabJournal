@@ -19,7 +19,8 @@ from xlwt import Alignment, Borders
 from equipment.forms import SearchMEForm, NoteCreationForm, EquipmentUpdateForm, VerificationRegForm, \
     CommentsVerificationCreationForm, VerificatorsCreationForm, VerificatorPersonCreationForm, EquipmentCreateForm, \
     ManufacturerCreateForm, MeasurEquipmentCharaktersCreateForm, MeasurEquipmentCreateForm, DocsConsCreateForm, \
-    PersonchangeForm, RoomschangeForm, RoomsCreateForm, MeteorologicalParametersRegForm, Searchreestrform
+    PersonchangeForm, RoomschangeForm, RoomsCreateForm, MeteorologicalParametersRegForm, Searchreestrform, \
+    LabelEquipmentform
 from equipment.models import MeasurEquipment, Verificationequipment, Roomschange, Personchange, CommentsEquipment, \
     Equipment, CommentsVerificationequipment, Manufacturer, MeasurEquipmentCharakters, DocsCons, Verificators, \
     VerificatorPerson, TestingEquipment, CompanyCard
@@ -34,6 +35,15 @@ class MeteorologicalParametersView(TemplateView):
 class MetrologicalEnsuringView(TemplateView):
     """выводит заглавную страницу для вывода данных по поверке и аттестации, списков в ексель и пр """
     template_name = URL + '/metro.html'
+
+class VerificationLabelsView(TemplateView):
+    """выводит страницу с формой для ввода внутренних номеров для распечатки этикеток о метрологическом обслуживании приборов """
+    template_name = URL + '/labels.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(VerificationLabelsView, self).get_context_data(**kwargs)
+        context['form'] = LabelEquipmentform()
+        return context
 
 class RoomsCreateView(SuccessMessageMixin, CreateView):
     """ выводит форму добавления помещения """
@@ -1265,11 +1275,22 @@ style4.font.bold = True
 style4.font.name = 'Calibri'
 style4.alignment = al1
 
-def export_verificlabel_xls(request, pk):
+def export_verificlabel_xls(request):
     '''представление для выгрузки этикеток для указания поверки'''
-    note = [MeasurEquipment.objects.get(pk=pk),
-            ]
+    note = []
 
+    for n in (request.GET['n1'], request.GET['n2'],
+              request.GET['n3'], request.GET['n4'],
+              request.GET['n5'], request.GET['n6'],
+              request.GET['n7'], request.GET['n8'],
+              request.GET['n9'], request.GET['n10'],
+              request.GET['n11'], request.GET['n12'],
+              request.GET['n13'], request.GET['n14']):
+        try:
+            MeasurEquipment.objects.get(equipment__exnumber=n)
+            note.append(MeasurEquipment.objects.get(equipment__exnumber=n))
+        except:
+            pass
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="verification_labels.xls"'
     wb = xlwt.Workbook(encoding='utf-8')

@@ -358,7 +358,7 @@ class RoomsUpdateView(View):
 # url of this view is 'search_result'
 # --------------------------------
 def export_me_xls(request, pk):
-    '''представление для выгрузки отдельной странички жкрнала в ексель'''
+    '''представление для выгрузки отдельной странички журнала в ексель'''
     note = ViscosityMJL.objects.get(pk=pk)
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}.xls"'
