@@ -5,7 +5,7 @@ from PIL import  Image
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    img = models.ImageField('Фото сотрудника', default='user_images/123_m3k8cTS.jpg', upload_to='user_images')
+    img = models.ImageField('Фото сотрудника', default='user_images/default.png', upload_to='user_images')
     userlastname = models.CharField('Фамилия', max_length=50, default=None, null=True)
                                    # required=True,
                                    # widget=models.TextInput(attrs={'class': 'form-control',

@@ -6,11 +6,13 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
 
 from equipment.models import Rooms, MeasurEquipment
+from .j_constants import *
 from viscosimeters.models import Viscosimeters
-from .models import CHOICES, CommentsKinematicviscosity, ndocumentoptional, ViscosityMJL
+from .models import *
 
 MODEL = ViscosityMJL
-COMMENTMODEL = CommentsKinematicviscosity
+COMMENTMODEL = Comments
+
 
 
 class StrJournalCreationForm(forms.ModelForm):
@@ -37,14 +39,6 @@ class StrJournalCreationForm(forms.ModelForm):
     ViscosimeterNumber1 = forms.ModelChoiceField(label='вискозиметр № 1', required=True,
                                   queryset=Viscosimeters.objects.filter(equipmentSM__equipment__status='Э'),
                                   widget=forms.Select(attrs={'class': 'form-control'}))
-    # ViscosimeterNumber1 = forms.CharField(label='Заводской номер вискозиметра № 1', max_length=10, required=True,
-    #                                       widget=forms.TextInput(attrs={'class': 'form-control',
-    #                                                                     'placeholder': '№ первого вискозиметра'}
-    #                                                              ))
-    # Konstant1 = forms.DecimalField(label='Константа вискозиметра № 1', max_digits=20, decimal_places=6, required=False,
-    #                                widget=forms.TextInput(attrs={'class': 'form-control',
-    #                                                              'placeholder': 'Константа через точку'}
-    #                                                       ))
     ViscosimeterNumber2 = forms.ModelChoiceField(label='вискозиметр № 2', required=False,
                                                  queryset=Viscosimeters.objects.filter(equipmentSM__equipment__status='Э'),
                                                  widget=forms.Select(attrs={'class': 'form-control'}))
@@ -215,13 +209,11 @@ class StrJournalProtocolRoomUdateForm(forms.ModelForm):
 class CommentCreationForm(forms.ModelForm):
     """форма для  комментариев"""
     """стандартная"""
-    name = forms.CharField(label='Комментировать', max_length=1000,
-                           widget=forms.Textarea(attrs={'class': 'form-control',
-                                                        'placeholder': 'введите текст комментария'}))
-
     class Meta:
         model = COMMENTMODEL
         fields = ['name']
+        widgets = {'name': forms.Textarea(attrs={'class': 'form-control',  'placeholder': 'введите текст комментария'})}
+
 
 
 class SearchForm(forms.Form):

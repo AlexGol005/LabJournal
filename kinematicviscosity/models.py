@@ -11,19 +11,8 @@ from viscosimeters.models import Viscosimeters, Kalibration
 from jouViscosity.models import LotVG, VGrange, VG, CvKinematicviscosityVG
 from formuls import mrerrow, numberDigits
 from metods import get_sec, get_avg, get_acc_measurement
+from .j_constants import *
 
-RELERROR = 0.3  # относительная погрешность
-
-ndocumentoptional = (
-    ('МИ-02-2018', 'МИ-02-2018'),
-    ('оценка', 'оценка вязкости'),
-    ('ГОСТ 33', 'ГОСТ 33'))  # нормативные документы
-
-CHOICES = (
-    ('да', 'Проба содержит октол/нефть'),
-    ('нет', 'В пробе нет октола/нефти'),
-    ('другое', 'другое'),
-)
 
 
 class ViscosityMJL(models.Model):
@@ -261,7 +250,7 @@ class ViscosityMJL(models.Model):
         verbose_name_plural = 'Кинематика: расчёт АЗ'
 
 
-class CommentsKinematicviscosity(models.Model):
+class Comments(models.Model):
     """стандартнрый класс для комментариев, поменять только get_absolute_url"""
     date = models.DateField('Дата', auto_now_add=True, db_index=True)
     name = models.TextField('Содержание', max_length=1000, default='')

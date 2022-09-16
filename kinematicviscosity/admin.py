@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ViscosityMJL, CommentsKinematicviscosity
+from .models import *
 
 
 # admin.site.register(ViscosityMJL)
@@ -27,7 +27,7 @@ class NoteAdmin(admin.ModelAdmin):
     # list_filter = ['diameter', 'type', 'viscosity1000']
 
 
-@admin.register(CommentsKinematicviscosity)  # связываем админку с моделью
+@admin.register(Comments)  # связываем админку с моделью
 class NoteAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if not obj.pk:

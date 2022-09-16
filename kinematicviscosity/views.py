@@ -5,12 +5,13 @@ from PIL import Image
 import xlwt
 from io import BytesIO
 import xlwt
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Max, Q, Value, OuterRef, Subquery
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Max
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, TemplateView, CreateView
+from django.views.generic import ListView, TemplateView, CreateView, DetailView, UpdateView
 from datetime import datetime, timedelta
 from django.shortcuts import get_object_or_404
 from django.views import View
@@ -20,152 +21,120 @@ from django.db.models.functions import Upper, Concat
 from xlwt import Borders, Alignment
 
 from equipment.models import Verificationequipment, Equipment, CompanyCard, MeteorologicalParameters, MeasurEquipment
-from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm, SearchForm, SearchDateForm, \
-    StrJournalProtocolUdateForm, StrJournalProtocolRoomUdateForm
+from .forms import *
+from .models import *
 
 from .j_constants import *
 from utils import *
 
+MODEL = ViscosityMJL
+COMMENTMODEL = Comments
+
+class Constants:
+    URL = URL
+    JOURNAL = JOURNAL
+    MODEL = MODEL
+    COMMENTMODEL = COMMENTMODEL
+    NAME = NAME
 
 
+# блок стандартных 'View' унаследованных от стандартных классов из модуля utils
 
-class HeadView(HeadView):
+class HeadView(Constants, HeadView):
     """ Представление, которое выводит заглавную страницу журнала """
     """ Стандартное """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.URL = URL
-        self.JOURNAL = JOURNAL
+        self.template_name = URL + '/head.html'
 
 
-
-
-
-class StrJournalView(View):
+class StrJournalView(Constants, StrJournalView):
     """ выводит отдельную запись и форму добавления в ЖАЗ """
-    """Стандартная"""
-
-    def get(self, request, pk):
-        note = get_object_or_404(MODEL, pk=pk)
-        form = StrJournalUdateForm()
-        try:
-            counter = COMMENTMODEL.objects.filter(forNote=note.id)
-        except ObjectDoesNotExist:
-            counter = None
-        return render(request, URL + '/str.html',
-                      {'note': note, 'form': form, 'URL': URL,
-                       'NAME': NAME,
-                       'counter': counter,
-                       })
-
-    def post(self, request, pk, *args, **kwargs):
-        if MODEL.objects.get(id=pk).performer == request.user:
-            form = StrJournalUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
-            if form.is_valid():
-                order = form.save(commit=False)
-                order.save()
-                return redirect(order)
-        else:
-            form = StrJournalUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
-            order = form.save(commit=False)
-            messages.success(request, f'АЗ не подтверждено! Подтвердить АЗ может только исполнитель данного измерения!')
-            return redirect(order)
-
-
-
-@login_required
-def RegNoteJournalView(request):
-    """ Представление, которое выводит форму регистрации в журнале. """
-    """Стандартное, но со вставкой по поводу констант и предыдущего значения"""
-    if request.method == "POST":
-        form = StrJournalCreationForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.performer = request.user
-            """вставка начало"""
-            get_id_actualconstant1 = Kalibration.objects.select_related('id_Viscosimeter'). \
-                filter(id_Viscosimeter__exact=order.ViscosimeterNumber1). \
-                values('id_Viscosimeter').annotate(id_actualkonstant=Max('id')).values('id_actualkonstant')
-            list_ = list(get_id_actualconstant1)
-            set = list_[0].get('id_actualkonstant')
-            aktualKalibration1 = Kalibration.objects.get(id=set)
-            get_id_actualconstant2 = Kalibration.objects.select_related('id_Viscosimeter'). \
-                filter(id_Viscosimeter__exact=order.ViscosimeterNumber2). \
-                values('id_Viscosimeter').annotate(id_actualkonstant=Max('id')).values('id_actualkonstant')
-            list_ = list(get_id_actualconstant2)
-            set = list_[0].get('id_actualkonstant')
-            aktualKalibration2 = Kalibration.objects.get(id=set)
-            order.Konstant1 = aktualKalibration1.konstant
-            order.Konstant2 = aktualKalibration2.konstant
-            try:
-                oldvalue = CvKinematicviscosityVG.objects.get(namelot__nameVG__name=order.name, namelot__lot=order.lot)
-                if order.temperature == 20:
-                    order.oldCertifiedValue = oldvalue.cvt20
-
-                if order.temperature == 25:
-                    order.oldCertifiedValue = oldvalue.cvt25
-
-                if order.temperature == 40:
-                    order.oldCertifiedValue = oldvalue.cvt40
-
-                if order.temperature == 50:
-                    order.oldCertifiedValue = oldvalue.cvt50
-
-                if order.temperature == 60:
-                    order.oldCertifiedValue = oldvalue.cvt60
-
-                if order.temperature == 80:
-                    order.oldCertifiedValue = oldvalue.cvt80
-
-                if order.temperature == 100:
-                    order.oldCertifiedValue = oldvalue.cvt100
-
-                if order.temperature == 150:
-                    order.oldCertifiedValue = oldvalue.cvt150
-
-                if order.temperature == -20:
-                    order.oldCertifiedValue = oldvalue.cvtminus20
-            except ObjectDoesNotExist:
-                pass
-            """вставка окончание"""
-            order.save()
-            messages.success(request, f'Запись внесена, подтвердите АЗ!')
-            return redirect(order)
-    else:
-        form = StrJournalCreationForm()
-    return render(request, URL + '/registration.html', {'form': form, 'URL': URL})
-
-
-class CommentsView(CommentsView):
-    """ выводит комментарии к записи в журнале и форму для добавления комментариев """
-    """Стандартное"""
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.form = CommentCreationForm
-        self.template_name = URL + '/comments.html'
-        self.MODEL = MODEL
-        self.COMMENTMODEL = COMMENTMODEL
-        self.URL = URL
+        self.form_class = StrJournalUdateForm
+        self.template_name = URL + '/str.html'
+
+class CommentsView(Constants, CommentsView):
+    """ выводит комментарии к записи в журнале и форму для добавления комментариев """
+    """Стандартное"""
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.form_class = CommentCreationForm
 
 
+class RegView(RegView):
+    """ Представление, которое выводит форму регистрации в журнале. """
+    """ метод форм валид перегружен для заполнения полей """
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.template_name = URL + '/registration.html'
+        self.form_class = StrJournalCreationForm
+        self.success_message = "Запись внесена, подтвердите АЗ!"
 
-class AllStrView(ListView):
+    def form_valid(self, form):
+        order = form.save(commit=False)
+        """вставка начало"""
+        get_id_actualconstant1 = Kalibration.objects.select_related('id_Viscosimeter'). \
+            filter(id_Viscosimeter__exact=order.ViscosimeterNumber1). \
+            values('id_Viscosimeter').annotate(id_actualkonstant=Max('id')).values('id_actualkonstant')
+        list_ = list(get_id_actualconstant1)
+        set = list_[0].get('id_actualkonstant')
+        aktualKalibration1 = Kalibration.objects.get(id=set)
+        get_id_actualconstant2 = Kalibration.objects.select_related('id_Viscosimeter'). \
+            filter(id_Viscosimeter__exact=order.ViscosimeterNumber2). \
+            values('id_Viscosimeter').annotate(id_actualkonstant=Max('id')).values('id_actualkonstant')
+        list_ = list(get_id_actualconstant2)
+        set = list_[0].get('id_actualkonstant')
+        aktualKalibration2 = Kalibration.objects.get(id=set)
+        order.Konstant1 = aktualKalibration1.konstant
+        order.Konstant2 = aktualKalibration2.konstant
+        try:
+            oldvalue = CvKinematicviscosityVG.objects.get(namelot__nameVG__name=order.name, namelot__lot=order.lot)
+            if order.temperature == 20:
+                order.oldCertifiedValue = oldvalue.cvt20
+
+            if order.temperature == 25:
+                order.oldCertifiedValue = oldvalue.cvt25
+
+            if order.temperature == 40:
+                order.oldCertifiedValue = oldvalue.cvt40
+
+            if order.temperature == 50:
+                order.oldCertifiedValue = oldvalue.cvt50
+
+            if order.temperature == 60:
+                order.oldCertifiedValue = oldvalue.cvt60
+
+            if order.temperature == 80:
+                order.oldCertifiedValue = oldvalue.cvt80
+
+            if order.temperature == 100:
+                order.oldCertifiedValue = oldvalue.cvt100
+
+            if order.temperature == 150:
+                order.oldCertifiedValue = oldvalue.cvt150
+
+            if order.temperature == -20:
+                order.oldCertifiedValue = oldvalue.cvtminus20
+        except ObjectDoesNotExist:
+            pass
+        """вставка окончание"""
+        order.save()
+        return super().form_valid(form)
+
+
+class AllStrView(Constants, AllStrView):
     """ Представление, которое выводит все записи в журнале. """
     """стандартное"""
-    model = MODEL
-    template_name = URL + '/journal.html'
-    context_object_name = 'objects'
-    ordering = ['-date']
-    paginate_by = 8
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.SearchForm = SearchForm
+        self.SearchDateForm = SearchDateForm
+        self.template_name = URL + '/journal.html'
+        self.model = MODEL
 
-    def get_context_data(self, **kwargs):
-        context = super(AllStrView, self).get_context_data(**kwargs)
-        context['journal'] = JOURNAL.objects.filter(for_url=URL)
-        context['formSM'] = SearchForm()
-        context['formdate'] = SearchDateForm()
-        context['URL'] = URL
-        return context
+
 
 class SearchResultView(TemplateView):
     """ Представление, которое выводит результаты поиска на странице со всеми записями журнала. """
@@ -179,7 +148,8 @@ class SearchResultView(TemplateView):
         lot = self.request.GET['lot']
         temperature = self.request.GET['temperature']
         if name and lot and temperature:
-            objects = MODEL.objects.filter(name=name).filter(lot=lot).filter(temperature=temperature).filter(fixation=True).order_by('-pk')
+            objects = MODEL.objects.filter(name=name).filter(lot=lot).filter(temperature=temperature).\
+                filter(fixation=True).order_by('-pk')
             context['objects'] = objects
         if name and lot and not temperature:
             objects = MODEL.objects.filter(name=name).filter(lot=lot).filter(fixation=True).order_by('-pk')
@@ -188,7 +158,8 @@ class SearchResultView(TemplateView):
             objects = MODEL.objects.filter(name=name).filter(fixation=True).order_by('-pk')
             context['objects'] = objects
         if name and temperature and not lot:
-            objects = MODEL.objects.filter(name=name).filter(temperature=temperature).filter(fixation=True).order_by('-pk')
+            objects = MODEL.objects.filter(name=name).filter(temperature=temperature).\
+                filter(fixation=True).order_by('-pk')
             context['objects'] = objects
         context['journal'] = JOURNAL.objects.filter(for_url=URL)
         context['formSM'] = SearchForm(initial={'name': name, 'lot': lot, 'temperature': temperature})
