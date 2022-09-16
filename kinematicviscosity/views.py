@@ -12,7 +12,7 @@ from django.db.models import Max
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, TemplateView, CreateView, DetailView, UpdateView
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from django.shortcuts import get_object_or_404
 from django.views import View
 from django.contrib import messages
