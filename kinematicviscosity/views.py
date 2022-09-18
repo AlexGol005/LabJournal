@@ -225,28 +225,56 @@ def filterview(request, pk):
                                                    'formdate': formdate})
 
 
-class ProtocolHeadView(View):
+class ProtocolHeadView(Constants, UpdateView):
     """ выводит форму внесения для внесения допинформации для формирования протокола и кнопку для протокола """
-    def get(self, request, pk):
-        title = "Добавить данные для протокола"
-        template_name = 'main/reg.html'
-        form = StrJournalProtocolUdateForm()
-        context = {'title': title,
-                   'form': form
-                   }
-        return render(request, template_name, context)
+    template_name = 'main/reg.html'
+    form_class = StrJournalProtocolUdateForm
+    success_message = "Записано!"
 
-    def post(self, request, pk, *args, **kwargs):
-        form = StrJournalProtocolUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
-        if form.is_valid():
-            order = form.save(commit=False)
-            messages.success(request, f'Записано')
+    def get_object(self, queryset=None):
+        return get_object_or_404(self.MODEL, pk=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super(ProtocolHeadView, self).get_context_data(**kwargs)
+        context['title'] = "Добавить данные для протокола"
+
+    def form_valid(self, form):
+        order = form.save(commit=False)
+        order.save()
+        if self.MODEL.objects.get(id=self.kwargs['pk']).performer == self.request.user:
             order.save()
             try:
                 MeteorologicalParameters.objects.get(Q(date__exact=order.date) & Q(roomnumber__exact=order.room))
-                return redirect(f'/attestationJ/kinematicviscosity/protocolbutton/{pk}')
+                return redirect(f"/attestationJ/{URL}/protocolbutton/{self.kwargs['pk']}")
             except:
                 return redirect('/equipment/meteoreg/')
+
+
+
+
+
+# class ProtocolHeadView(View):
+#     """ выводит форму внесения для внесения допинформации для формирования протокола и кнопку для протокола """
+#     def get(self, request, pk):
+#         title = "Добавить данные для протокола"
+#         template_name = 'main/reg.html'
+#         form = StrJournalProtocolUdateForm()
+#         context = {'title': title,
+#                    'form': form
+#                    }
+#         return render(request, template_name, context)
+#
+#     def post(self, request, pk, *args, **kwargs):
+#         form = StrJournalProtocolUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
+#         if form.is_valid():
+#             order = form.save(commit=False)
+#             messages.success(request, f'Записано')
+#             order.save()
+#             try:
+#                 MeteorologicalParameters.objects.get(Q(date__exact=order.date) & Q(roomnumber__exact=order.room))
+#                 return redirect(f'/attestationJ/kinematicviscosity/protocolbutton/{pk}')
+#             except:
+#                 return redirect('/equipment/meteoreg/')
 
 class ProtocolbuttonView(View):
     """ Выводит кнопку для формирования протокола """
