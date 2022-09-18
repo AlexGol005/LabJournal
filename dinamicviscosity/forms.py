@@ -108,7 +108,6 @@ class StrJournalCreationForm(forms.ModelForm):
                 css_class='form-row'
             ),
             Row(
-                # Column('kinematicviscosity', css_class='form-group col-md-6 mb-0'),
                 Column('ndocument', css_class='form-group col-md-6 mb-0'),
 
                 css_class='form-row'
@@ -174,18 +173,6 @@ class StrJournalUdateForm(forms.ModelForm):
         model = MODEL
         fields = ['fixation']
 
-
-class StrKinematicaForm(forms.ModelForm):
-    """форма для  добавления кинематики в разработке"""
-    """уникальная"""
-
-    kinematicviscosity = forms.FloatField(label='Кинемат. вязк. при T измерений', required=False,
-                                          widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                        'placeholder': 'АЗ через точку'}
-                                                                 ))
-    class Meta:
-        model = MODEL
-        fields = ['kinematicviscosity']
 
 
 class CommentCreationForm(forms.ModelForm):

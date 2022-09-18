@@ -16,5 +16,6 @@ CHOICES = (
 )
 
 JOURNAL = AttestationJ
+journal = 'attestationJ'
 URL = 'kinematicviscosity'
 NAME = 'кинематика'

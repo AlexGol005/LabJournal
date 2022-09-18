@@ -4,8 +4,12 @@ from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.views.generic import CreateView, TemplateView, UpdateView, ListView
+from django.db.models import Q
 
 # набор представлений одинаковых для всех журналов испытаний и приготовления
+# основные
+from equipment.models import MeteorologicalParameters
+
 
 class Constants:
     URL = None
@@ -15,6 +19,7 @@ class Constants:
     COMMENTMODEL = None
     form_class = None
     NAME = None
+    journal = None
 
 
 class HeadView(Constants, TemplateView):
@@ -106,3 +111,63 @@ class AllStrView(Constants, ListView):
         context['URL'] = self.URL
         return context
 
+
+# для формирования протокола
+class RoomsUpdateView(Constants, SuccessMessageMixin, UpdateView):
+    """ выводит форму добавления помещения к измерению """
+    def get_object(self, queryset=None):
+        return get_object_or_404(self.MODEL, pk=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super(RoomsUpdateView, self).get_context_data(**kwargs)
+        context['title'] = "Добавить номер помещения где проводились измерения"
+        return context
+
+    def form_valid(self, form):
+        order = form.save(commit=False)
+        order.save()
+        return redirect(f"/{self.journal}/{self.URL}/protocolbutton/{self.kwargs['pk']}")
+
+
+class ProtocolbuttonView(Constants, TemplateView):
+    """ Выводит кнопку для формирования протокола """
+    def get_object(self): \
+        return get_object_or_404(self.MODEL, pk=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super(ProtocolbuttonView, self).get_context_data(**kwargs)
+        context['titlehead'] = "Протокол анализа"
+        note = get_object_or_404(self.MODEL, pk=self.kwargs['pk'])
+        context['note'] = note
+        try:
+            context['meteo'] = MeteorologicalParameters.objects.\
+                get(Q(date__exact=note.date) & Q(roomnumber__exact=note.room))
+        except:
+            context['meteo'] = 1
+        if note.room and note.equipment1:
+            context['title'] = 'Есть все данные для формирования протокола'
+        else:
+            context['title'] = 'Добавьте данные для формирования протокола'
+        return context
+
+
+class ProtocolHeadView(Constants, UpdateView):
+    """ выводит форму внесения для внесения допинформации для формирования протокола и кнопку для протокола """
+    success_message = "Записано!"
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(self.MODEL, pk=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super(ProtocolHeadView, self).get_context_data(**kwargs)
+        context['title'] = "Добавить данные для протокола"
+        return context
+
+    def form_valid(self, form):
+        order = form.save(commit=False)
+        try:
+            MeteorologicalParameters.objects.get(Q(date__exact=order.date) & Q(roomnumber__exact=order.room))
+            order.save()
+            return redirect(f"/attestationJ/{self.URL}/protocolbutton/{self.kwargs['pk']}")
+        except:
+            return redirect('/equipment/meteoreg/')

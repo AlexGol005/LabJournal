@@ -1,31 +1,21 @@
 # все стандратно кроме поиска по полям, импорта моделей и констант
-import os
-from wsgiref.util import FileWrapper
 from PIL import Image
 import xlwt
-from io import BytesIO
-import xlwt
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Max, Q, Value, OuterRef, Subquery
+from django.db.models import Value, OuterRef
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.db.models import Max
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.views.generic import ListView, TemplateView, CreateView, DetailView, UpdateView
+from django.shortcuts import render
 from datetime import datetime, timedelta, date
-from django.shortcuts import get_object_or_404
-from django.views import View
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.db.models.functions import Upper, Concat
+from django.db.models.functions import Concat
 from xlwt import Borders, Alignment
 
-from equipment.models import Verificationequipment, Equipment, CompanyCard, MeteorologicalParameters, MeasurEquipment
+from equipment.models import Verificationequipment, CompanyCard
 from .forms import *
 from .models import *
 
 from .j_constants import *
 from utils import *
+
 
 MODEL = ViscosityMJL
 COMMENTMODEL = Comments
@@ -36,9 +26,11 @@ class Constants:
     MODEL = MODEL
     COMMENTMODEL = COMMENTMODEL
     NAME = NAME
+    journal = journal
 
 
 # блок стандартных 'View' унаследованных от стандартных классов из модуля utils
+# основные
 
 class HeadView(Constants, HeadView):
     """ Представление, которое выводит заглавную страницу журнала """
@@ -62,6 +54,16 @@ class CommentsView(Constants, CommentsView):
         super().__init__(**kwargs)
         self.form_class = CommentCreationForm
 
+
+class AllStrView(Constants, AllStrView):
+    """ Представление, которое выводит все записи в журнале. """
+    """стандартное"""
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.SearchForm = SearchForm
+        self.SearchDateForm = SearchDateForm
+        self.template_name = URL + '/journal.html'
+        self.model = MODEL
 
 class RegView(RegView):
     """ Представление, которое выводит форму регистрации в журнале. """
@@ -124,17 +126,25 @@ class RegView(RegView):
         return super().form_valid(form)
 
 
-class AllStrView(Constants, AllStrView):
-    """ Представление, которое выводит все записи в журнале. """
-    """стандартное"""
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.SearchForm = SearchForm
-        self.SearchDateForm = SearchDateForm
-        self.template_name = URL + '/journal.html'
-        self.model = MODEL
+# блок View для формирования протокола
+class RoomsUpdateView(Constants, RoomsUpdateView):
+    """ выводит форму добавления помещения к измерению """
+    form_class = StrJournalProtocolRoomUdateForm
+    template_name = 'main/reg.html'
+    success_message = "Помещение успешно добавлено"
 
 
+class ProtocolbuttonView(Constants, ProtocolbuttonView):
+    """ Выводит кнопку для формирования протокола """
+    template_name = URL + '/buttonprotocol.html'
+
+class ProtocolHeadView(Constants, ProtocolHeadView):
+    """ выводит форму внесения для внесения допинформации для формирования протокола и кнопку для протокола """
+    template_name = 'main/reg.html'
+    form_class = StrJournalProtocolUdateForm
+
+
+# блок  'View' для различных поисков (не унаследованные)
 
 class SearchResultView(TemplateView):
     """ Представление, которое выводит результаты поиска на странице со всеми записями журнала. """
@@ -225,130 +235,13 @@ def filterview(request, pk):
                                                    'formdate': formdate})
 
 
-class ProtocolHeadView(Constants, UpdateView):
-    """ выводит форму внесения для внесения допинформации для формирования протокола и кнопку для протокола """
-    template_name = 'main/reg.html'
-    form_class = StrJournalProtocolUdateForm
-    success_message = "Записано!"
+# блок выгрузок данных в формате ексель (не унаследованные)
 
-    def get_object(self, queryset=None):
-        return get_object_or_404(self.MODEL, pk=self.kwargs['pk'])
-
-    def get_context_data(self, **kwargs):
-        context = super(ProtocolHeadView, self).get_context_data(**kwargs)
-        context['title'] = "Добавить данные для протокола"
-
-    def form_valid(self, form):
-        order = form.save(commit=False)
-        order.save()
-        if self.MODEL.objects.get(id=self.kwargs['pk']).performer == self.request.user:
-            order.save()
-            try:
-                MeteorologicalParameters.objects.get(Q(date__exact=order.date) & Q(roomnumber__exact=order.room))
-                return redirect(f"/attestationJ/{URL}/protocolbutton/{self.kwargs['pk']}")
-            except:
-                return redirect('/equipment/meteoreg/')
-
-
-
-
-
-# class ProtocolHeadView(View):
-#     """ выводит форму внесения для внесения допинформации для формирования протокола и кнопку для протокола """
-#     def get(self, request, pk):
-#         title = "Добавить данные для протокола"
-#         template_name = 'main/reg.html'
-#         form = StrJournalProtocolUdateForm()
-#         context = {'title': title,
-#                    'form': form
-#                    }
-#         return render(request, template_name, context)
-#
-#     def post(self, request, pk, *args, **kwargs):
-#         form = StrJournalProtocolUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
-#         if form.is_valid():
-#             order = form.save(commit=False)
-#             messages.success(request, f'Записано')
-#             order.save()
-#             try:
-#                 MeteorologicalParameters.objects.get(Q(date__exact=order.date) & Q(roomnumber__exact=order.room))
-#                 return redirect(f'/attestationJ/kinematicviscosity/protocolbutton/{pk}')
-#             except:
-#                 return redirect('/equipment/meteoreg/')
-
-class ProtocolbuttonView(View):
-    """ Выводит кнопку для формирования протокола """
-    def get(self, request, pk):
-        template_name = 'kinematicviscosity/buttonprotocol.html'
-        titlehead = 'Протокол анализа'
-        note = get_object_or_404(MODEL, pk=pk)
-        try:
-            meteo = MeteorologicalParameters.objects.get(Q(date__exact=note.date) & Q(roomnumber__exact=note.room))
-        except:
-            meteo = 1
-        if note.room and note.equipment1 and note.equipment2 and note.equipment3 and note.equipment4:
-            title = 'Есть все данные для формирования протокола'
-        else:
-            title = 'Добавьте данные для формирования протокола'
-
-        context = {
-            'title': title,
-            'titlehead': titlehead,
-            'note': note,
-            'meteo': meteo,
-                   }
-        return render(request, template_name, context)
-
-
-class RoomsUpdateView(View):
-    """ выводит форму добавления помещения к измерению """
-    def get(self, request, pk):
-        title = "Добавить номер помещения где проводились измерения"
-        template_name = 'main/reg.html'
-        form = StrJournalProtocolRoomUdateForm()
-        context = {'title': title,
-                   'form': form
-                   }
-        return render(request, template_name, context)
-
-    def post(self, request, pk, *args, **kwargs):
-        form = StrJournalProtocolRoomUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
-        if form.is_valid():
-            order = form.save(commit=False)
-            messages.success(request, f'Помещение успешно добавлено')
-            order.save()
-            return redirect(f'/attestationJ/{URL}/protocolbutton/{pk}')
-
-
-# class StrKinematicviscosityDetailView(DetailView):
-#     """ Представление, которое позволяет вывести отдельную запись (запасная версия). """
-#     model = MODEL
-#     pk_url_kwarg = "pk"
-#     context_object_name = "note"
-#
-#     template_name = 'kinematicviscosity/str.html'
-# docs.djangoproject.com/en/4.0/topics/class-based-views/generic-display/
-# class CreateWork(CreateView):
-#     model = MODEL
-#     fields = ['name',  'lot']
-#     template_name = 'kinematicviscosity/test.html'
-#     success_url = '/'
-#
-#
-#     def form_valid(self, form):
-#         form.instance.user = self.request.user
-#         return super(CreateWork, self).form_valid(form)
-
-
-# url of this view is 'search_result'
-# --------------------------------
 def export_me_xls(request, pk):
     '''представление для выгрузки отдельной странички журнала в ексель'''
-    note = ViscosityMJL.objects.get(pk=pk)
+    note = MODEL.objects.get(pk=pk)
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}.xls"'
-
-
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet(f'{note.name}, п. {note.lot},{note.temperature}', cell_overwrite_ok=True)
 
