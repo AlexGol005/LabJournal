@@ -9,6 +9,7 @@ from datetime import datetime, timedelta, date
 from django.db.models.functions import Concat
 from xlwt import Borders, Alignment
 
+# этот блок нужен для всех журналов
 from equipment.models import Verificationequipment, CompanyCard
 from .forms import *
 from .models import *
@@ -27,7 +28,7 @@ class Constants:
     COMMENTMODEL = COMMENTMODEL
     NAME = NAME
     journal = journal
-
+# конец блока для всех журналов
 
 # блок стандартных 'View' унаследованных от стандартных классов из модуля utils
 # основные

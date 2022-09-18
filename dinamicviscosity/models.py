@@ -11,22 +11,7 @@ from metods import get_avg, get_acc_measurement
 from formuls import mrerrow, numberDigits
 
 from viscosimeters.models import Viscosimeters, Kalibration
-
-
-CHOICES = (
-    ('да', 'Проба содержит октол/нефть'),
-    ('нет', 'В пробе нет октола/нефти'),
-    ('другое', 'другое'),
-)
-
-DENSITYE = (
-    ('денсиметром', 'денсиметром'),
-    ('пикнометром', 'пикнометром'),
-)
-
-DOCUMENTS = (('МИ-02-2018', 'МИ-02-2018'),)
-
-RELERROR = 0.3  # относительная погрешность СО из описания типа
+from .j_constants import *
 
 
 class Dinamicviscosity(models.Model):

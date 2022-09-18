@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Dinamicviscosity, CommentsDinamicviscosity
-
+from .models import*
 
 # admin.site.register(ViscosityMJL)
 

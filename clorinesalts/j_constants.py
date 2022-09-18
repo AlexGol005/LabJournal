@@ -1,3 +1,4 @@
+from kinematicviscosity.models import *
 from main.models import AttestationJ
 
 

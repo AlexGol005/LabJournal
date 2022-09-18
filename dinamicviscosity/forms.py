@@ -7,8 +7,8 @@ from crispy_forms.layout import Layout, Submit, Row, Column
 from django.db.models import Q
 
 from equipment.models import Rooms, MeasurEquipment
-from .models import Dinamicviscosity, CHOICES, CommentsDinamicviscosity, DOCUMENTS, DENSITYE
-
+from .models import*
+from .j_constants import *
 
 MODEL = Dinamicviscosity
 COMMENTMODEL = CommentsDinamicviscosity
@@ -164,14 +164,7 @@ class StrJournalCreationForm(forms.ModelForm):
                   ]
 
 
-class StrJournalUdateForm(forms.ModelForm):
-    """форма для  обновления записи в журнале: поле модели fixation для отправки записи в ЖАЗ"""
-    """стандартная"""
-    fixation = forms.BooleanField(label='АЗ', required=False)
 
-    class Meta:
-        model = MODEL
-        fields = ['fixation']
 
 
 
@@ -209,8 +202,8 @@ class SearchForm(forms.Form):
                 css_class='form-row'
             ))
 
-class StrJournalProtocolUdateForm1(forms.ModelForm):
-    """форма для  обновления записи в журнале: поля модели метеоусловия для протокола"""
+class StrJournalProtocolUdateForm(forms.ModelForm):
+    """форма для  обновления записи в журнале: поля модели оборудование для протокола"""
     """стандартная"""
     equipment1 = forms.ModelChoiceField(label='Секундомер', required=False,
                                         queryset=MeasurEquipment.objects.\
@@ -247,7 +240,16 @@ class StrJournalProtocolUdateForm1(forms.ModelForm):
             'equipment4', 'equipment5',
         ]
 
-class StrJournalProtocolRoomUdateForm1(forms.ModelForm):
+class StrJournalUdateForm(forms.ModelForm):
+    """форма для  обновления записи в журнале: поле модели fixation для отправки записи в ЖАЗ"""
+    """стандартная"""
+    fixation = forms.BooleanField(label='АЗ', required=False)
+
+    class Meta:
+        model = MODEL
+        fields = ['fixation']
+
+class StrJournalProtocolRoomUdateForm(forms.ModelForm):
     """форма для  обновления записи в журнале: поля модели метеоусловия для протокола"""
     """стандартная"""
     room = forms.ModelChoiceField(label='Помещение', required=False,

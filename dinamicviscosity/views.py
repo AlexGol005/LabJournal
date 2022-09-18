@@ -1,212 +1,186 @@
 # все стандратно кроме поиска по полям, импорта моделей и констант
 from PIL import Image
 import xlwt
-from django.contrib.messages.views import SuccessMessageMixin
-from django.db.models import Max, Q, Value, OuterRef, Subquery
+from django.db.models import Value
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.db.models import Max
 from django.db.models.functions import Concat
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, TemplateView, CreateView
 from datetime import datetime, timedelta, date
-from django.shortcuts import get_object_or_404
-from django.views import View
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from xlwt import Alignment, Borders
 
-from equipment.models import CompanyCard, Verificationequipment, MeteorologicalParameters
-from jouViscosity.models import CvKinematicviscosityVG, CvDensityDinamicVG
-from kinematicviscosity.forms import StrJournalProtocolUdateForm, StrJournalProtocolRoomUdateForm
+from jouViscosity.models import CvKinematicviscosityVG
 from kinematicviscosity.models import ViscosityMJL
-from main.models import AttestationJ
-from .models import Dinamicviscosity, CommentsDinamicviscosity
-from .forms import StrJournalCreationForm, StrJournalUdateForm, CommentCreationForm, SearchForm, SearchDateForm, \
-    StrKinematicaForm, StrJournalProtocolUdateForm1, StrJournalProtocolRoomUdateForm1
 
-JOURNAL = AttestationJ
+# этот блок нужен для всех журналов
+from equipment.models import CompanyCard
+from .forms import *
+from .models import *
+
+from .j_constants import *
+from utils import *
+
 MODEL = Dinamicviscosity
 COMMENTMODEL = CommentsDinamicviscosity
-URL = 'dinamicviscosity'
-NAME = 'динамика'
+
+class Constants:
+    URL = URL
+    JOURNAL = JOURNAL
+    MODEL = MODEL
+    COMMENTMODEL = COMMENTMODEL
+    NAME = NAME
+    journal = journal
+# конец блока для всех журналов
 
 
+class PicnometerView(TemplateView):
+    """ Представление, которое выводит табличку с объёмами пикнометра """
+    """ уникальное """
+    template_name = 'dinamicviscosity/picnometer.html'
 
-
-class HeadView(View):
+# блок стандартных 'View' унаследованных от стандартных классов из модуля utils
+# основные
+class HeadView(Constants, HeadView):
     """ Представление, которое выводит заглавную страницу журнала """
     """ Стандартное """
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.template_name = URL + '/head.html'
 
-    def get(self, request):
-        note = JOURNAL.objects.get(for_url=URL)
-        return render(request, URL + '/head.html', {'note': note, 'URL': URL})
 
-
-class StrJournalView(View):
+class StrJournalView(Constants, StrJournalView):
     """ выводит отдельную запись и форму добавления в ЖАЗ """
-    """Стандартная"""
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.form_class = StrJournalUdateForm
+        self.template_name = URL + '/str.html'
 
-    def get(self, request, pk):
-        note = get_object_or_404(MODEL, pk=pk)
-        form = StrJournalUdateForm()
-        try:
-            counter = COMMENTMODEL.objects.filter(forNote=note.id)
-        except ObjectDoesNotExist:
-            counter = None
-        return render(request, URL + '/str.html',
-                      {'note': note, 'form': form, 'URL': URL, 'NAME': NAME, 'counter': counter,
-                       # 'formkinematica': formkinematica
-                       })
-
-    def post(self, request, pk, *args, **kwargs):
-        form = StrJournalUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
-        if MODEL.objects.get(id=pk).performer == request.user:
-            if form.is_valid():
-                order = form.save(commit=False)
-                order.save()
-                messages.success(request, f'Запись внесена, подтвердите АЗ!')
-                return redirect(order)
-        else:
-            form = StrJournalUdateForm(request.POST, instance=MODEL.objects.get(id=pk))
-            order = form.save(commit=False)
-            messages.success(request, f'АЗ не подтверждено! Подтвердить АЗ может только исполнитель данного измерения!')
-            return redirect(order)
-
-
-@login_required
-def RegNoteJournalView(request):
-    """ Представление, которое выводит форму регистрации в журнале. """
-    """Полустандартное со уникальной вставкой"""
-    if request.method == "POST":
-        form = StrJournalCreationForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.performer = request.user
-            """вставка начало"""
-            try:
-                olddencity = CvDensityDinamicVG.objects.get(namelot__nameVG__name=order.name, namelot__lot=order.lot)
-                if order.temperature == 20:
-                    order.olddensity = olddencity.cvt20
-
-                if order.temperature == 25:
-                    order.olddensity = olddencity.cvt25
-
-                if order.temperature == 40:
-                    order.olddensity = olddencity.cvt40
-
-                if order.temperature == 50:
-                    order.olddensity = olddencity.cvt50
-
-                if order.temperature == 60:
-                    order.olddensity = olddencity.cvt60
-
-                if order.temperature == 80:
-                    order.olddensity = olddencity.cvt80
-
-                if order.temperature == 100:
-                    order.olddensity = olddencity.cvt100
-
-                if order.temperature == 150:
-                    order.olddensity = olddencity.cvt150
-
-                if order.temperature == -20:
-                    order.olddensity = olddencity.cvtminus20
-            except ObjectDoesNotExist:
-                pass
-
-            try:
-                kinematicviscosity = CvKinematicviscosityVG.objects.get(namelot__nameVG__name=order.name,
-                                                                        namelot__lot=order.lot)
-                if order.temperature == 20:
-                    if kinematicviscosity.cvt20dead >= date.today():
-                        order.kinematicviscosity = kinematicviscosity.cvt20
-                        order.kinematicviscositydead = kinematicviscosity.cvt20dead
-                if order.temperature == 25:
-                    if kinematicviscosity.cvt25dead >= date.today():
-                        order.kinematicviscosity = kinematicviscosity.cvt25
-                        order.kinematicviscositydead = kinematicviscosity.cvt25dead
-                if order.temperature == 40:
-                    if kinematicviscosity.cvt40dead >= date.today():
-                        order.kinematicviscosity = kinematicviscosity.cvt40
-                        order.kinematicviscositydead = kinematicviscosity.cvt40dead
-                if order.temperature == 50:
-                    if kinematicviscosity.cvt50dead >= date.today():
-                        order.kinematicviscosity = kinematicviscosity.cvt50
-                        order.kinematicviscositydead = kinematicviscosity.cvt50dead
-                if order.temperature == 60:
-                    if kinematicviscosity.cvt60dead >= date.today():
-                        order.kinematicviscosity = kinematicviscosity.cvt60
-                        order.kinematicviscositydead = kinematicviscosity.cvt60dead
-                if order.temperature == 80:
-                    if kinematicviscosity.cvt80dead >= date.today():
-                        order.kinematicviscosity = kinematicviscosity.cvt80
-                        order.kinematicviscositydead = kinematicviscosity.cvt80dead
-                if order.temperature == 100:
-                    if kinematicviscosity.cvt20dead >= date.today():
-                        order.kinematicviscosity = kinematicviscosity.cvt100
-                        order.kinematicviscositydead = kinematicviscosity.cvt100dead
-                if order.temperature == 150:
-                    if kinematicviscosity.cvt150dead >= date.today():
-                        order.kinematicviscosity = kinematicviscosity.cvt150
-                        order.kinematicviscositydead = kinematicviscosity.cvt150dead
-                if order.temperature == -20:
-                    if kinematicviscosity.cvtminus20dead >= date.today():
-                        order.kinematicviscosity = kinematicviscosity.cvtminus20
-                        order.kinematicviscositydead = kinematicviscosity.cvtminus20dead
-            except:
-                pass
-            """вставка окончание"""
-
-            order.save()
-            return redirect(order)
-    else:
-        form = StrJournalCreationForm()
-    return render(request, URL + '/registration.html', {'form': form, 'URL': URL})
-
-
-class CommentsView(View):
+class CommentsView(Constants, CommentsView):
     """ выводит комментарии к записи в журнале и форму для добавления комментариев """
     """Стандартное"""
-    form_class = CommentCreationForm
-    initial = {'key': 'value'}
-    template_name = URL + '/comments.html'
-
-    def get(self, request, pk):
-        note = COMMENTMODEL.objects.filter(forNote=pk)
-        title = MODEL.objects.get(pk=pk)
-        form = CommentCreationForm()
-        return render(request, 'main/comments.html', {'note': note, 'title': title, 'form': form, 'URL': URL})
-
-    def post(self, request, pk, *args, **kwargs):
-        form = CommentCreationForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.author = request.user
-            order.forNote = MODEL.objects.get(pk=pk)
-            order.save()
-            messages.success(request, f'Комментарий добавлен!')
-            return redirect(order)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.form_class = CommentCreationForm
 
 
-class AllStrView(ListView):
+class AllStrView(Constants, AllStrView):
     """ Представление, которое выводит все записи в журнале. """
     """стандартное"""
-    model = MODEL
-    template_name = URL + '/journal.html'
-    context_object_name = 'objects'
-    ordering = ['-date']
-    paginate_by = 8
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.SearchForm = SearchForm
+        self.SearchDateForm = SearchDateForm
+        self.template_name = URL + '/journal.html'
+        self.model = MODEL
+
+class RegView(RegView):
+    """ Представление, которое выводит форму регистрации в журнале. """
+    """ метод форм валид перегружен для заполнения полей """
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.template_name = URL + '/registration.html'
+        self.form_class = StrJournalCreationForm
+        self.success_message = "Запись внесена, подтвердите АЗ!"
+
+    def form_valid(self, form):
+        order = form.save(commit=False)
+        """вставка начало"""
+        try:
+            olddencity = CvDensityDinamicVG.objects.get(namelot__nameVG__name=order.name, namelot__lot=order.lot)
+            if order.temperature == 20:
+                order.olddensity = olddencity.cvt20
+
+            if order.temperature == 25:
+                order.olddensity = olddencity.cvt25
+
+            if order.temperature == 40:
+                order.olddensity = olddencity.cvt40
+
+            if order.temperature == 50:
+                order.olddensity = olddencity.cvt50
+
+            if order.temperature == 60:
+                order.olddensity = olddencity.cvt60
+
+            if order.temperature == 80:
+                order.olddensity = olddencity.cvt80
+
+            if order.temperature == 100:
+                order.olddensity = olddencity.cvt100
+
+            if order.temperature == 150:
+                order.olddensity = olddencity.cvt150
+
+            if order.temperature == -20:
+                order.olddensity = olddencity.cvtminus20
+        except ObjectDoesNotExist:
+            pass
+
+        try:
+            kinematicviscosity = CvKinematicviscosityVG.objects.get(namelot__nameVG__name=order.name,
+                                                                    namelot__lot=order.lot)
+            if order.temperature == 20:
+                if kinematicviscosity.cvt20dead >= date.today():
+                    order.kinematicviscosity = kinematicviscosity.cvt20
+                    order.kinematicviscositydead = kinematicviscosity.cvt20dead
+            if order.temperature == 25:
+                if kinematicviscosity.cvt25dead >= date.today():
+                    order.kinematicviscosity = kinematicviscosity.cvt25
+                    order.kinematicviscositydead = kinematicviscosity.cvt25dead
+            if order.temperature == 40:
+                if kinematicviscosity.cvt40dead >= date.today():
+                    order.kinematicviscosity = kinematicviscosity.cvt40
+                    order.kinematicviscositydead = kinematicviscosity.cvt40dead
+            if order.temperature == 50:
+                if kinematicviscosity.cvt50dead >= date.today():
+                    order.kinematicviscosity = kinematicviscosity.cvt50
+                    order.kinematicviscositydead = kinematicviscosity.cvt50dead
+            if order.temperature == 60:
+                if kinematicviscosity.cvt60dead >= date.today():
+                    order.kinematicviscosity = kinematicviscosity.cvt60
+                    order.kinematicviscositydead = kinematicviscosity.cvt60dead
+            if order.temperature == 80:
+                if kinematicviscosity.cvt80dead >= date.today():
+                    order.kinematicviscosity = kinematicviscosity.cvt80
+                    order.kinematicviscositydead = kinematicviscosity.cvt80dead
+            if order.temperature == 100:
+                if kinematicviscosity.cvt20dead >= date.today():
+                    order.kinematicviscosity = kinematicviscosity.cvt100
+                    order.kinematicviscositydead = kinematicviscosity.cvt100dead
+            if order.temperature == 150:
+                if kinematicviscosity.cvt150dead >= date.today():
+                    order.kinematicviscosity = kinematicviscosity.cvt150
+                    order.kinematicviscositydead = kinematicviscosity.cvt150dead
+            if order.temperature == -20:
+                if kinematicviscosity.cvtminus20dead >= date.today():
+                    order.kinematicviscosity = kinematicviscosity.cvtminus20
+                    order.kinematicviscositydead = kinematicviscosity.cvtminus20dead
+        except:
+            pass
+            """вставка окончание"""
+        order.save()
+        return super().form_valid(form)
 
 
-    def get_context_data(self, **kwargs):
-        context = super(AllStrView, self).get_context_data(**kwargs)
-        context['journal'] = JOURNAL.objects.filter(for_url=URL)
-        context['formSM'] = SearchForm()
-        context['formdate'] = SearchDateForm()
-        context['URL'] = URL
-        return context
+# блок View для формирования протокола
+class RoomsUpdateView(Constants, RoomsUpdateView):
+    """ выводит форму добавления помещения к измерению """
+    form_class = StrJournalProtocolRoomUdateForm
+    template_name = 'main/reg.html'
+    success_message = "Помещение успешно добавлено"
 
+
+class ProtocolbuttonView(Constants, ProtocolbuttonView):
+    """ Выводит кнопку для формирования протокола """
+    template_name = URL + '/buttonprotocol.html'
+
+class ProtocolHeadView(Constants, ProtocolHeadView):
+    """ выводит форму внесения для внесения допинформации для формирования протокола и кнопку для протокола """
+    template_name = 'main/reg.html'
+    form_class = StrJournalProtocolUdateForm
+
+
+# блок  'View' для различных поисков (не унаследованные)
 class SearchResultView(TemplateView):
     """ Представление, которое выводит результаты поиска на странице со всеми записями журнала. """
     """нестандартное"""
@@ -293,78 +267,10 @@ def filterview(request, pk):
                                                    'formdate': formdate})
 
 
-class PicnometerView(View):
-    """ Представление, которое выводит табличку с объёмами пикнометра """
-    """ уникальное """
-
-    def get(self, request):
-        return render(request, 'dinamicviscosity/picnometer.html')
-
-class ProtocolHeadView(View):
-    """ выводит форму внесения для внесения допинформации для формирования протокола и кнопку для протокола """
-    def get(self, request, pk):
-        title = "Добавить данные для протокола"
-        template_name = 'main/reg.html'
-        form = StrJournalProtocolUdateForm1()
-        context = {'title': title,
-                   'form': form
-                   }
-        return render(request, template_name, context)
-
-    def post(self, request, pk, *args, **kwargs):
-        form = StrJournalProtocolUdateForm1(request.POST, instance=MODEL.objects.get(id=pk))
-        if form.is_valid():
-            order = form.save(commit=False)
-            messages.success(request, f'Записано')
-            order.save()
-            try:
-                MeteorologicalParameters.objects.get(Q(date__exact=order.date) & Q(roomnumber__exact=order.room))
-                return redirect(f'/attestationJ/dinamicviscosity/protocolbutton/{pk}')
-            except:
-                return redirect('/equipment/meteoreg/')
-
-class ProtocolbuttonView(View):
-    """ Выводит кнопку для формирования протокола """
-    def get(self, request, pk):
-        template_name = 'dinamicviscosity/buttonprotocol.html'
-        titlehead = 'Протокол анализа'
-        note = get_object_or_404(MODEL, pk=pk)
-        try:
-            meteo = MeteorologicalParameters.objects.get(Q(date__exact=note.date) & Q(roomnumber__exact=note.room))
-        except:
-            meteo = 1
-        if note.room and note.equipment1 and note.equipment2 and note.equipment3 and note.equipment4 and note.equipment5:
-            title = 'Есть все данные для формирования протокола'
-        else:
-            title = 'Добавьте данные для формирования протокола'
-
-        context = {
-            'title': title,
-            'titlehead': titlehead,
-            'note': note,
-            'meteo': meteo,
-                   }
-        return render(request, template_name, context)
 
 
-class RoomsUpdateView(View):
-    """ выводит форму добавления помещения к измерению """
-    def get(self, request, pk):
-        title = "Добавить номер помещения где проводились измерения"
-        template_name = 'main/reg.html'
-        form = StrJournalProtocolRoomUdateForm1()
-        context = {'title': title,
-                   'form': form
-                   }
-        return render(request, template_name, context)
 
-    def post(self, request, pk, *args, **kwargs):
-        form = StrJournalProtocolRoomUdateForm1(request.POST, instance=MODEL.objects.get(id=pk))
-        if form.is_valid():
-            order = form.save(commit=False)
-            messages.success(request, f'Помещение успешно добавлено')
-            order.save()
-            return redirect(f'/attestationJ/{URL}/protocolbutton/{pk}')
+
 
 # ---------------------------------------------
 def export_me_xls(request, pk):
