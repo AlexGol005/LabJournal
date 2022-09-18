@@ -5,7 +5,6 @@ from django.db.models import Value, OuterRef
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.http import HttpResponse
 from django.shortcuts import render
-from datetime import datetime, timedelta, date
 from django.db.models.functions import Concat
 from xlwt import Borders, Alignment
 
@@ -216,10 +215,10 @@ def filterview(request, pk):
     formSM = SearchForm()
     formdate = SearchDateForm()
     if pk == 1:
-        now = datetime.now() - timedelta(minutes=60 * 24 * 7)
+        now = datetime.datetime.now() - timedelta(minutes=60 * 24 * 7)
         objects = objects.filter(date__gte=now).order_by('-pk')
     elif pk == 2:
-        now = datetime.now()
+        now = datetime.datetime.now()
         objects = objects.filter(date__gte=now).order_by('-pk')
     elif pk == 3:
         objects = objects.order_by('-pk')
@@ -231,7 +230,7 @@ def filterview(request, pk):
         objects = objects.filter(performer=request.user).filter(fixation__exact=True).order_by('-pk')
     elif pk == 7:
         objects = objects.filter(performer=request.user).filter(fixation__exact=True).filter(
-            date__gte=datetime.now()).order_by('-pk')
+            date__gte=datetime.datetime.now()).order_by('-pk')
     return render(request, URL + "/journal.html", {'objects': objects, 'journal': journal, 'formSM': formSM, 'URL': URL,
                                                    'formdate': formdate})
 
