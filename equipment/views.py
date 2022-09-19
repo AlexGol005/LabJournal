@@ -1,6 +1,5 @@
 import xlwt
 import pytils.translit
-from PIL import Image
 from datetime import timedelta, date
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -10,20 +9,13 @@ from datetime import datetime, timedelta
 from django.db.models import Max, Q, Value, CharField
 from django.db.models.functions import Upper, Concat, Extract, ExtractYear
 from django.shortcuts import get_object_or_404, render, redirect
-from django.template.defaultfilters import upper
-from django.urls import reverse
+from django.template.context_processors import request
 from django.views import View
 from django.views.generic import ListView, TemplateView, FormView, CreateView
 from xlwt import Alignment, Borders
 
-from equipment.forms import SearchMEForm, NoteCreationForm, EquipmentUpdateForm, VerificationRegForm, \
-    CommentsVerificationCreationForm, VerificatorsCreationForm, VerificatorPersonCreationForm, EquipmentCreateForm, \
-    ManufacturerCreateForm, MeasurEquipmentCharaktersCreateForm, MeasurEquipmentCreateForm, DocsConsCreateForm, \
-    PersonchangeForm, RoomschangeForm, RoomsCreateForm, MeteorologicalParametersRegForm, Searchreestrform, \
-    LabelEquipmentform, DateForm
-from equipment.models import MeasurEquipment, Verificationequipment, Roomschange, Personchange, CommentsEquipment, \
-    Equipment, CommentsVerificationequipment, Manufacturer, MeasurEquipmentCharakters, DocsCons, Verificators, \
-    VerificatorPerson, TestingEquipment, CompanyCard
+from equipment.forms import*
+from equipment.models import*
 
 URL = 'equipment'
 
@@ -44,8 +36,6 @@ class SearchMustVerView(ListView):
     def get_queryset(self):
         queryset = MeasurEquipment.objects.exclude(equipment__status='С')
         return queryset
-
-
 
 
 class MeteorologicalParametersView(TemplateView):
@@ -108,6 +98,7 @@ class VerificatorPersonCreationView(SuccessMessageMixin, CreateView):
         context['title'] = 'Внести сотрудника поверителя'
         return context
 
+
 class ManufacturerRegView(SuccessMessageMixin, CreateView):
     """ выводит форму добавления производителя """
     template_name = URL + '/reg.html'
@@ -140,6 +131,7 @@ class MeasurEquipmentCharaktersRegView(SuccessMessageMixin, CreateView):
     form_class = MeasurEquipmentCharaktersCreateForm
     success_url = '/equipment/measurequipmentcharacterslist/'
     success_message = "Госреестр успешно добавлен"
+
 
     def get_context_data(self, **kwargs):
         context = super(MeasurEquipmentCharaktersRegView, self).get_context_data(**kwargs)
@@ -189,6 +181,7 @@ class VerificatorsView(ListView):
     template_name = 'main/plainlist.html'
     context_object_name = 'objects'
 
+
 class VerificatorsPersonsView(ListView):
     """ Выводит список всех организаций поверителей """
     model = VerificatorPerson
@@ -217,6 +210,7 @@ class MeasurEquipmentCharaktersView(ListView):
         context = super(MeasurEquipmentCharaktersView, self).get_context_data(**kwargs)
         context['form'] = Searchreestrform()
         return context
+
 
 class ReestrsearresView(TemplateView):
     """ Представление, которое выводит результаты поиска по списку госреестров """
@@ -247,7 +241,6 @@ class ReestrsearresView(TemplateView):
 
 class ChromatoView(TemplateView):
     """ Представление, которое выводит список принадлежностей для хроматографа """
-
     template_name = URL + '/chromato.html'
 
 
@@ -297,7 +290,6 @@ class StrMeasurEquipmentView(View):
             'note': note,
         }
         return render(request, URL + '/equipmentstr.html', context)
-
 
 
 class CommentsView(View):

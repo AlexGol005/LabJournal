@@ -18,9 +18,7 @@ from jouViscosity.models import CvKinematicviscosityVG, CvDensityDinamicVG
 from main.models import AttestationJ
 from .models import Clorinesalts, CommentsClorinesalts, IndicatorDFK, TitrantHg, GetTitrHg, ClorinesaltsCV, \
     CommentsClorinesaltsCV
-from .forms import DPKForm, TitrantHgForm, GetTitrHgForm, StrJournalUdateForm, SearchForm, SearchDateForm, \
-    CommentCreationForm, StrJournalCreationForm, ClorinesaltsCVUpdateForm, ClorinesaltsCVUpdateFixationForm, \
-    CommentCVCreationForm, StrTitrantHgUdateForm
+from .forms import*
 
 JOURNAL = AttestationJ
 MODEL = Clorinesalts
@@ -28,8 +26,7 @@ COMMENTMODEL = CommentsClorinesalts
 URL = 'clorinesalts'
 NAME = 'хлористые соли'
 COLONTITUL = 'ИСП_ГОСТ 21534 (метод А)'
-
-
+from utils_forms import*
 class StrDPKView(View):
     """ выводит отдельную запись об изготовлении индикатора """
     """уникальное для титрования"""

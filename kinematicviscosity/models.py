@@ -147,6 +147,8 @@ class ViscosityMJL(models.Model):
             self.kriteriy = Decimal(0.20)
         if self.constit == 'другое':
             self.kriteriy = Decimal(0.30)
+        if self.constit == 'по ГОСТ 33':
+            self.kriteriy = Decimal(0.35)
         if self.accMeasurement <= self.kriteriy:
             self.resultMeas = 'удовлетворительно'
             self.cause = ''

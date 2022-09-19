@@ -7,9 +7,7 @@ from crispy_forms.layout import Layout, Submit, Row, Column
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 
-from equipment.models import MeasurEquipment, CommentsEquipment, NOTETYPE, Equipment, CHOICES, Verificators, \
-    VerificatorPerson, Verificationequipment, CHOICESVERIFIC, CHOICESPLACE, CommentsVerificationequipment, Manufacturer, \
-    KATEGORY, MeasurEquipmentCharakters, Personchange, Roomschange, Rooms, DocsCons, MeteorologicalParameters
+from equipment.models import*
 
 
 class SearchMEForm(forms.Form):

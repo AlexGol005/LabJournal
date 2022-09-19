@@ -1,24 +1,25 @@
 # все стандратно кроме поиска по полям, импорта моделей и констант
 from PIL import Image
 import xlwt
-from django.db.models import Value, OuterRef
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db.models import Value
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.db.models.functions import Concat
 from xlwt import Borders, Alignment
 
 # этот блок нужен для всех журналов
-from equipment.models import Verificationequipment, CompanyCard
+from equipment.models import CompanyCard
 from .forms import *
+from utils_forms import*
 from .models import *
 
 from .j_constants import *
 from utils import *
 
-
 MODEL = ViscosityMJL
 COMMENTMODEL = Comments
+
 
 class Constants:
     URL = URL
@@ -27,52 +28,19 @@ class Constants:
     COMMENTMODEL = COMMENTMODEL
     NAME = NAME
     journal = journal
+    SearchForm = SearchForm
+    SearchDateForm = SearchDateForm
 # конец блока для всех журналов
 
-# блок стандартных 'View' унаследованных от стандартных классов из модуля utils
-# основные
+# блок стандартных 'View' но с индивидуальностями,  возможно унаследованных от стандартных классов из модуля utils
 
-class HeadView(Constants, HeadView):
-    """ Представление, которое выводит заглавную страницу журнала """
-    """ Стандартное """
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.template_name = URL + '/head.html'
-
-
-class StrJournalView(Constants, StrJournalView):
-    """ выводит отдельную запись и форму добавления в ЖАЗ """
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.form_class = StrJournalUdateForm
-        self.template_name = URL + '/str.html'
-
-class CommentsView(Constants, CommentsView):
-    """ выводит комментарии к записи в журнале и форму для добавления комментариев """
-    """Стандартное"""
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.form_class = CommentCreationForm
-
-
-class AllStrView(Constants, AllStrView):
-    """ Представление, которое выводит все записи в журнале. """
-    """стандартное"""
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.SearchForm = SearchForm
-        self.SearchDateForm = SearchDateForm
-        self.template_name = URL + '/journal.html'
-        self.model = MODEL
 
 class RegView(RegView):
     """ Представление, которое выводит форму регистрации в журнале. """
     """ метод форм валид перегружен для заполнения полей """
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.template_name = URL + '/registration.html'
-        self.form_class = StrJournalCreationForm
-        self.success_message = "Запись внесена, подтвердите АЗ!"
+    template_name = URL + '/registration.html'
+    form_class = StrJournalCreationForm
+    success_message = "Запись внесена, подтвердите АЗ!"
 
     def form_valid(self, form):
         order = form.save(commit=False)
@@ -80,17 +48,17 @@ class RegView(RegView):
         get_id_actualconstant1 = Kalibration.objects.select_related('id_Viscosimeter'). \
             filter(id_Viscosimeter__exact=order.ViscosimeterNumber1). \
             values('id_Viscosimeter').annotate(id_actualkonstant=Max('id')).values('id_actualkonstant')
-        list_ = list(get_id_actualconstant1)
-        set = list_[0].get('id_actualkonstant')
-        aktualKalibration1 = Kalibration.objects.get(id=set)
+        list1_ = list(get_id_actualconstant1)
+        set1 = list1_[0].get('id_actualkonstant')
+        aktualkalibration1 = Kalibration.objects.get(id=set1)
         get_id_actualconstant2 = Kalibration.objects.select_related('id_Viscosimeter'). \
             filter(id_Viscosimeter__exact=order.ViscosimeterNumber2). \
             values('id_Viscosimeter').annotate(id_actualkonstant=Max('id')).values('id_actualkonstant')
-        list_ = list(get_id_actualconstant2)
-        set = list_[0].get('id_actualkonstant')
-        aktualKalibration2 = Kalibration.objects.get(id=set)
-        order.Konstant1 = aktualKalibration1.konstant
-        order.Konstant2 = aktualKalibration2.konstant
+        list2_ = list(get_id_actualconstant2)
+        set2 = list2_[0].get('id_actualkonstant')
+        aktualkalibration2 = Kalibration.objects.get(id=set2)
+        order.Konstant1 = aktualkalibration1.konstant
+        order.Konstant2 = aktualkalibration2.konstant
         try:
             oldvalue = CvKinematicviscosityVG.objects.get(namelot__nameVG__name=order.name, namelot__lot=order.lot)
             if order.temperature == 20:
@@ -124,6 +92,35 @@ class RegView(RegView):
         """вставка окончание"""
         order.save()
         return super().form_valid(form)
+# конец блока стандартных 'View' но с индивидуальностями
+
+# блок стандартных 'View' унаследованных от стандартных классов из модуля utils
+# основные
+
+
+class HeadView(Constants, HeadView):
+    """ Представление, которое выводит заглавную страницу журнала """
+    """ Стандартное """
+    template_name = URL + '/head.html'
+
+
+class StrJournalView(Constants, StrJournalView):
+    """ выводит отдельную запись и форму добавления в ЖАЗ """
+    form_class = StrJournalUdateForm
+    template_name = URL + '/str.html'
+
+
+class CommentsView(Constants, CommentsView):
+    """ выводит комментарии к записи в журнале и форму для добавления комментариев """
+    """Стандартное"""
+    form_class = CommentCreationForm
+
+
+class AllStrView(Constants, AllStrView):
+    """ Представление, которое выводит все записи в журнале. """
+    """стандартное"""
+    template_name = URL + '/journal.html'
+    model = MODEL
 
 
 # блок View для формирования протокола
@@ -138,18 +135,24 @@ class ProtocolbuttonView(Constants, ProtocolbuttonView):
     """ Выводит кнопку для формирования протокола """
     template_name = URL + '/buttonprotocol.html'
 
+
 class ProtocolHeadView(Constants, ProtocolHeadView):
     """ выводит форму внесения для внесения допинформации для формирования протокола и кнопку для протокола """
     template_name = 'main/reg.html'
     form_class = StrJournalProtocolUdateForm
 
 
-# блок  'View' для различных поисков (не унаследованные)
+# блок  'View' для различных поисков - унаследованные
+class DateSearchResultView(Constants, DateSearchResultView):
+    """ Представление, которое выводит результаты поиска по датам на странице со всеми записями журнала. """
+    """стандартное"""
+    template_name = URL + '/journal.html'
 
-class SearchResultView(TemplateView):
+
+# блок  'View' для различных поисков - НЕунаследованные
+class SearchResultView(Constants, TemplateView):
     """ Представление, которое выводит результаты поиска на странице со всеми записями журнала. """
     """нестандартное"""
-
     template_name = URL + '/journal.html'
 
     def get_context_data(self, **kwargs):
@@ -177,35 +180,6 @@ class SearchResultView(TemplateView):
         context['URL'] = URL
         return context
 
-
-class DateSearchResultView(TemplateView):
-    """ Представление, которое выводит результаты поиска по датам на странице со всеми записями журнала. """
-    """стандартное"""
-
-    template_name = URL + '/journal.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(DateSearchResultView, self).get_context_data(**kwargs)
-        datestart = self.request.GET['datestart']
-        datefinish = self.request.GET['datefinish']
-        try:
-            objects = MODEL.objects.all().filter(date__range=(datestart, datefinish)).order_by('-pk')
-            context['objects'] = objects
-            context['journal'] = JOURNAL.objects.filter(for_url=URL)
-            context['formSM'] = SearchForm()
-            context['formdate'] = SearchDateForm(initial={'datestart': datestart, 'datefinish': datefinish})
-            context['URL'] = URL
-            return context
-        except ValidationError:
-            objects = MODEL.objects.filter(id=1)
-            context['objects'] = objects
-            context['journal'] = JOURNAL.objects.filter(for_url=URL)
-            context['formSM'] = SearchForm()
-            context['formdate'] = SearchDateForm(initial={'datestart': datestart, 'datefinish': datefinish})
-            context['URL'] = URL
-            context['Date'] = 'введите даты в формате'
-            context['format'] = 'ГГГГ-ММ-ДД'
-            return context
 
 def filterview(request, pk):
     """ Фильтры записей об измерениях по дате, АЗ, мои записи и пр """
@@ -236,28 +210,49 @@ def filterview(request, pk):
 
 
 # блок выгрузок данных в формате ексель (не унаследованные)
+# вспомогательная общая информация
+b1 = Borders()
+b1.left = 1
+b1.right = 1
+b1.top = 1
+b1.bottom = 1
+
+b2 = Borders()
+b2.left = 6
+b2.right = 6
+b2.bottom = 6
+b2.top = 6
+
+al1 = Alignment()
+al1.horz = Alignment.HORZ_CENTER
+al1.vert = Alignment.VERT_CENTER
+
+al2 = Alignment()
+al2.horz = Alignment.HORZ_RIGHT
+al2.vert = Alignment.VERT_CENTER
+
+al3 = Alignment()
+al3.horz = Alignment.HORZ_LEFT
+al3.vert = Alignment.VERT_CENTER
+
 
 def export_me_xls(request, pk):
-    '''представление для выгрузки отдельной странички журнала в ексель'''
+    """представление для выгрузки отдельной странички журнала в ексель"""
     note = MODEL.objects.get(pk=pk)
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}.xls"'
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet(f'{note.name}, п. {note.lot},{note.temperature}', cell_overwrite_ok=True)
 
-
-    for i in range(21):
+    # высота строк
+    for i in range(0, 21):
         ws.row(i).height_mismatch = True
         ws.row(i).height = 600
-
     ws.row(21).height_mismatch = True
     ws.row(21).height = 800
-
     for i in range(22, 25):
         ws.row(i).height_mismatch = True
         ws.row(i).height = 600
-
-
 
     # ширина столбцов
     ws.col(0).width = 4100
@@ -265,46 +260,34 @@ def export_me_xls(request, pk):
     ws.col(2).width = 4100
     ws.col(5).width = 4100
 
-
-
-    brd1 = Borders()
-    brd1.left = 1
-    brd1.right = 1
-    brd1.top = 1
-    brd1.bottom = 1
-
-    al1 = Alignment()
-    al1.horz = Alignment.HORZ_CENTER
-    al1.vert = Alignment.VERT_CENTER
-
-
+    # стили
     style1 = xlwt.XFStyle()
     style1.font.bold = True
     style1.font.name = 'Calibri'
-    style1.borders = brd1
+    style1.borders = b1
     style1.alignment = al1
     style1.alignment.wrap = 1
 
     style2 = xlwt.XFStyle()
     style2.font.name = 'Calibri'
-    style2.borders = brd1
+    style2.borders = b1
     style2.alignment = al1
 
     style3 = xlwt.XFStyle()
     style3.font.name = 'Calibri'
-    style3.borders = brd1
+    style3.borders = b1
     style3.alignment = al1
     style3.num_format_str = 'DD.MM.YYYY'
 
     style4 = xlwt.XFStyle()
     style4.font.name = 'Calibri'
-    style4.borders = brd1
+    style4.borders = b1
     style4.alignment = al1
     style4.num_format_str = '0.00'
 
     style5 = xlwt.XFStyle()
     style5.font.name = 'Calibri'
-    style5.borders = brd1
+    style5.borders = b1
     style5.alignment = al1
     style5.num_format_str = '0.00000'
 
@@ -312,10 +295,9 @@ def export_me_xls(request, pk):
     columns = [
                  f'Атт.-ВЖ-(МИ № 02-2018)-{note.date}'
                ]
-
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(0, 0, 0, 5, style1)
+        ws.merge(row_num, row_num, 0, 5, style1)
 
     row_num = 1
     columns = [
@@ -323,7 +305,7 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(1, 1, 0, 5, style1)
+        ws.merge(row_num, row_num, 0, 5, style1)
 
     row_num = 2
     columns = [
@@ -359,7 +341,7 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(4, 4, 0, 5, style1)
+        ws.merge(row_num, row_num, 0, 5, style1)
 
     row_num = 5
     columns = [
@@ -372,8 +354,8 @@ def export_me_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style1)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(5, 5, 1, 2, style2)
-        ws.merge(5, 5, 3, 5, style2)
+        ws.merge(row_num, row_num, 1, 2, style2)
+        ws.merge(row_num, row_num, 3, 5, style2)
 
     row_num = 6
     columns = [
@@ -387,8 +369,8 @@ def export_me_xls(request, pk):
         ws.merge(6, 7, 0, 0, style1)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(6, 6, 1, 2, style2)
-        ws.merge(6, 6, 3, 5, style2)
+        ws.merge(row_num, row_num, 1, 2, style2)
+        ws.merge(row_num, row_num, 3, 5, style2)
 
     row_num = 7
     columns = [
@@ -399,8 +381,8 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(7, 7, 1, 2, style2)
-        ws.merge(7, 7, 3, 5, style2)
+        ws.merge(row_num, row_num, 1, 2, style2)
+        ws.merge(row_num, row_num, 3, 5, style2)
 
     row_num = 8
     columns = [
@@ -413,10 +395,10 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(8, 9, 0, 0, style1)
+        ws.merge(row_num, 9, 0, 0, style1)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(8, 8, 3, 4, style1)
+        ws.merge(row_num, row_num, 3, 4, style1)
 
     row_num = 9
     columns = [
@@ -429,7 +411,7 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style4)
-        ws.merge(9, 9, 3, 4, style4)
+        ws.merge(row_num, row_num, 3, 4, style4)
 
     row_num = 10
     columns = [
@@ -442,10 +424,10 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(10, 11, 0, 0, style1)
+        ws.merge(row_num, 11, 0, 0, style1)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(10, 10, 3, 4, style1)
+        ws.merge(row_num, row_num, 3, 4, style1)
 
     row_num = 11
     columns = [
@@ -458,7 +440,7 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style4)
-        ws.merge(11, 11, 3, 4, style4)
+        ws.merge(row_num, row_num, 3, 4, style4)
 
     row_num = 12
     columns = [
@@ -472,20 +454,21 @@ def export_me_xls(request, pk):
         ws.merge(12, 13, 0, 0, style1)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(12, 12, 1, 2, style2)
-        ws.merge(12, 12, 3, 5, style2)
+        ws.merge(row_num, row_num, 1, 2, style2)
+        ws.merge(row_num, row_num, 3, 5, style2)
 
     row_num = 13
     columns = [
         'Время истечения среднее',
          note.timeK1_avg,
          note.timeK2_avg,
-         note.timeK2_avg,
+         note.timeK2_avg
     ]
+
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style4)
-        ws.merge(13, 13, 1, 2, style4)
-        ws.merge(13, 13, 3, 5, style4)
+        ws.merge(row_num, row_num, 1, 2, style4)
+        ws.merge(row_num, row_num, 3, 5, style4)
 
     row_num = 14
     columns = [
@@ -496,11 +479,11 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(14, 15, 0, 0, style1)
+        ws.merge(row_num, 15, 0, 0, style1)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(14, 14, 1, 2, style2)
-        ws.merge(14, 14, 3, 5, style2)
+        ws.merge(row_num, row_num, 1, 2, style2)
+        ws.merge(row_num, row_num, 3, 5, style2)
 
     row_num = 15
     columns = [
@@ -511,8 +494,8 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style5)
-        ws.merge(15, 15, 1, 2, style5)
-        ws.merge(15, 15, 3, 5, style5)
+        ws.merge(row_num, row_num, 1, 2, style5)
+        ws.merge(row_num, row_num, 3, 5, style5)
 
     row_num = 16
     columns = [
@@ -521,7 +504,7 @@ def export_me_xls(request, pk):
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(16, 16, 0, 5, style1)
+        ws.merge(row_num, row_num, 0, 5, style1)
 
     row_num = 17
     columns = [
@@ -534,9 +517,9 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(17, 17, 0, 1, style1)
-        ws.merge(17, 17, 2, 3, style1)
-        ws.merge(17, 17, 4, 5, style1)
+        ws.merge(row_num, row_num, 0, 1, style1)
+        ws.merge(row_num, row_num, 2, 3, style1)
+        ws.merge(row_num, row_num, 4, 5, style1)
 
     row_num = 18
     columns = [
@@ -549,11 +532,11 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(0, 2):
         ws.write(row_num, col_num, columns[col_num], style5)
-        ws.merge(18, 18, 0, 1, style5)
+        ws.merge(row_num, row_num, 0, 1, style5)
     for col_num in range(2, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(18, 18, 2, 3, style2)
-        ws.merge(18, 18, 4, 5, style2)
+        ws.merge(row_num, row_num, 2, 3, style2)
+        ws.merge(row_num, row_num, 4, 5, style2)
 
     row_num = 19
     columns = [
@@ -562,16 +545,15 @@ def export_me_xls(request, pk):
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(19, 19, 0, 5, style1)
+        ws.merge(row_num, row_num, 0, 5, style1)
 
     row_num = 20
     columns = [
        ' Фиксация результатов'
     ]
-
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(20, 20, 0, 5, style1)
+        ws.merge(row_num, row_num, 0, 5, style1)
 
     row_num = 21
     columns = [
@@ -584,7 +566,7 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(21, 21, 3, 5, style1)
+        ws.merge(row_num, row_num, 3, 5, style1)
 
     row_num = 22
     columns = [
@@ -597,7 +579,7 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(22, 22, 3, 5, style2)
+        ws.merge(row_num, row_num, 3, 5, style2)
 
     row_num = 23
     columns = [
@@ -609,7 +591,7 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(23, 23, 3, 5, style1)
+        ws.merge(row_num, row_num, 3, 5, style1)
 
     row_num = 24
     columns = [
@@ -621,16 +603,13 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(24, 24, 3, 5, style2)
-    # response = HttpResponse('C:\\Users\\АлександраГоловкина\\Петроаналитика\\Петроаналитика - Производство и склад\\Личные папки сотрудников\\Саша Головкина\\', )
+        ws.merge(row_num, row_num, 3, 5, style2)
     wb.save(response)
     return response
 
 
-
-
 def export_protocol_xls(request, pk):
-    '''представление для выгрузки протокола испытаний в ексель'''
+    """представление для выгрузки протокола испытаний в ексель"""
     company = CompanyCard.objects.get(pk=1)
     note = ViscosityMJL.objects.\
         annotate(name_rm=Concat(Value('СО '), 'name', Value(' п. '), 'lot')).\
@@ -665,8 +644,6 @@ def export_protocol_xls(request, pk):
                                        )). \
         get(pk=pk)
 
-    newest = Verificationequipment.objects.filter(equipmentSM=OuterRef('pk')).order_by('-pk')
-    # a = MeasurEquipment.objects.annotate(newest_certnumber=Subquery(newest.values('certnumber')[:1]))
     meteo = MeteorologicalParameters.objects. \
         annotate(equipment_meteo=Concat('equipment1__charakters__name',
                                         Value(' тип '), 'equipment1__charakters__typename',
@@ -684,21 +661,10 @@ def export_protocol_xls(request, pk):
                                         )).\
         get(date__exact=note.date, roomnumber__roomnumber__exact=note.room)
 
-
-
-
-
-    # OuterRef('equipment1__equipmentSM_ver__certnumber'),)
-
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}_protocol.xls"'
     wb = xlwt.Workbook()
     ws = wb.add_sheet('protocol', cell_overwrite_ok=True)
-    Image.open(company.imglogoadress.path).convert("RGB").save('logo.bmp')
-    ws.insert_bitmap('logo.bmp', 0, 2)
-    sheet = wb.get_sheet(0)
-    sheet.header_str = b'1/1'
-    sheet.footer_str = b' '
 
     ws.col(0).width = 400
     ws.col(1).width = 6000
@@ -710,30 +676,11 @@ def export_protocol_xls(request, pk):
     ws.col(7).width = 3900
     ws.col(8).width = 3900
 
-
-    al1 = Alignment()
-    al1.horz = Alignment.HORZ_CENTER
-    al1.vert = Alignment.VERT_CENTER
-
-    al2 = Alignment()
-    al2.horz = Alignment.HORZ_RIGHT
-    al2.vert = Alignment.VERT_CENTER
-
-    al3 = Alignment()
-    al3.horz = Alignment.HORZ_LEFT
-    al3.vert = Alignment.VERT_CENTER
-
-    b1 = Borders()
-    b1.left = 1
-    b1.right = 1
-    b1.bottom = 1
-    b1.top = 1
-
-    b2 = Borders()
-    b2.left = 6
-    b2.right = 6
-    b2.bottom = 6
-    b2.top = 6
+    Image.open(company.imglogoadress.path).convert("RGB").save('logo.bmp')
+    ws.insert_bitmap('logo.bmp', 0, 2)
+    sheet = wb.get_sheet(0)
+    sheet.header_str = b'1/1'
+    sheet.footer_str = b' '
 
     style1 = xlwt.XFStyle()
     style1.font.height = 20 * 8
@@ -816,14 +763,13 @@ def export_protocol_xls(request, pk):
 
     row_num = 4
     columns = [
-        'Сертифицирован на соотвествие требованиям национального стандарта \nГОСТ Р ИСО 9001-2015 \nорганом по сертификации СМК ООО "ACEPT Бюро" \n от 23.06.2022г., сертификат действителен до 24.12.2025 г.',
-        'Сертифицирован на соотвествие требованиям национального стандарта \nГОСТ Р ИСО 9001-2015 \nорганом по сертификации СМК ООО "ACEPT Бюро" \n от 23.06.2022г., сертификат действителен до 24.12.2025 г.',
-        'Сертифицирован на соотвествие требованиям национального стандарта \nГОСТ Р ИСО 9001-2015 \nорганом по сертификации СМК ООО "ACEPT Бюро" \n от 23.06.2022г., сертификат действителен до 24.12.2025 г.',
-        'Сертифицирован на соотвествие требованиям национального стандарта \nГОСТ Р ИСО 9001-2015 \nорганом по сертификации СМК ООО "ACEPT Бюро" \n от 23.06.2022г., сертификат действителен до 24.12.2025 г.',
+        sertificat9001,
+        sertificat9001,
+        sertificat9001,
+        sertificat9001,
         '',
-        '',
-        'УТВЕРЖДАЮ \nНачальник производства \nООО "Петроаналитика"\n___________ /Н.Ю. Пилявская',
-        'УТВЕРЖДАЮ \nНачальник производства \nООО "Петроаналитика"\n___________ /Н.Ю. Пилявская',
+        affirmationprod,
+        affirmationprod,
     ]
     for col_num in range(3):
         ws.write(row_num, col_num, columns[col_num], style1)
@@ -850,10 +796,10 @@ def export_protocol_xls(request, pk):
 
     row_num = 6
     columns = [
-        'ПРОТОКОЛ ИСПЫТАНИЙ №',
-        'ПРОТОКОЛ ИСПЫТАНИЙ №',
-        'ПРОТОКОЛ ИСПЫТАНИЙ №',
-        'ПРОТОКОЛ ИСПЫТАНИЙ №',
+        nameprot,
+        nameprot,
+        nameprot,
+        nameprot,
         '',
         '',
         '',
@@ -861,7 +807,7 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style4)
-        ws.merge(6, 6, 0, 3, style4)
+        ws.merge(row_num, row_num, 0, 3, style4)
 
     row_num = 7
     columns = [
@@ -1066,7 +1012,6 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(17, 17, 2, 7, style7)
 
-
     row_num = 18
     columns = [
         '',
@@ -1122,12 +1067,12 @@ def export_protocol_xls(request, pk):
     columns = [
         '8 Измеряемый параметр: ',
         '8 Измеряемый параметр: ',
-        'кинематическая вязкость',
-        'кинематическая вязкость',
-        'кинематическая вязкость',
-        'кинематическая вязкость',
-        'кинематическая вязкость',
-        'кинематическая вязкость',
+         parameter,
+         parameter,
+         parameter,
+         parameter,
+         parameter,
+         parameter,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1140,12 +1085,12 @@ def export_protocol_xls(request, pk):
     columns = [
         '9 Метод измерений/методика \n измерений:  ',
         '9 Метод измерений/методика \n измерений:  ',
-        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика',
-        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика',
-        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика',
-        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика',
-        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика',
-        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика',
+        metodic,
+        metodic,
+        metodic,
+        metodic,
+        metodic,
+        metodic,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1173,8 +1118,8 @@ def export_protocol_xls(request, pk):
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(23, 23, 2, 7, style7)
-    ws.row(23).height_mismatch = True
-    ws.row(23).height = 800
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 800
 
     row_num = 24
     columns = [
@@ -1189,12 +1134,12 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(24, 24, 0, 1, style6)
+        ws.merge(row_num, row_num, 0, 1, style6)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(24, 24, 2, 7, style7)
-    ws.row(24).height_mismatch = True
-    ws.row(24).height = 800
+        ws.merge(row_num, row_num, 2, 7, style7)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 800
 
     row_num = 25
     columns = [
@@ -1209,10 +1154,10 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(25, 25, 0, 1, style6)
+        ws.merge(row_num, row_num, 0, 1, style6)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(25, 25, 2, 7, style7)
+        ws.merge(row_num, row_num, 2, 7, style7)
 
     row_num = 26
     columns = [
@@ -1230,7 +1175,7 @@ def export_protocol_xls(request, pk):
         ws.merge(26, 26, 0, 1, style6)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(26, 26, 2, 7, style7)
+        ws.merge(row_num, row_num, 2, 7, style7)
 
     row_num = 27
     columns = [
@@ -1245,10 +1190,10 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(27, 27, 0, 1, style7)
+        ws.merge(row_num, row_num, 0, 1, style7)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(27, 27, 2, 7, style7)
+        ws.merge(row_num, row_num, 2, 7, style7)
 
     row_num = 28
     columns = [
@@ -1273,11 +1218,11 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style9)
-        ws.merge(29, 29, 0, 1, style9)
+        ws.merge(row_num, row_num, 0, 1, style9)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style9)
-    ws.row(29).height_mismatch = True
-    ws.row(29).height = 1050
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1050
 
     row_num = 30
     columns = [
@@ -1332,9 +1277,9 @@ def export_protocol_xls(request, pk):
         ws.merge(32, 32, 0, 1, style6)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(32, 32, 2, 7, style7)
-    ws.row(32).height_mismatch = True
-    ws.row(32).height = 600
+        ws.merge(row_num, row_num, 2, 7, style7)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 600
 
     row_num = 33
     columns = [
@@ -1342,9 +1287,9 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style10)
-        ws.merge(33, 33, 0, 7, style10)
-    ws.row(33).height_mismatch = True
-    ws.row(33).height = 1000
+        ws.merge(row_num, 33, 0, 7, style10)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1000
 
     row_num = 35
     columns = [
@@ -1353,7 +1298,7 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(35, 35, 0, 1, style6)
+        ws.merge(row_num, row_num, 0, 1, style6)
 
     row_num = 36
     columns = [
@@ -1367,17 +1312,14 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(3):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(36, 36, 0, 2, style2)
+        ws.merge(row_num, row_num, 0, 2, style2)
     for col_num in range(3, 4):
         ws.write(row_num, col_num, columns[col_num], style1)
     for col_num in range(4, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(36, 36, 4, 7, style7)
-    ws.row(36).height_mismatch = True
-    ws.row(36).height = 600
+        ws.merge(row_num, row_num, 4, 7, style7)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 600
 
     wb.save(response)
     return response
-
-
-

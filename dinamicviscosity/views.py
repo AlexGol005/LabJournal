@@ -2,7 +2,7 @@
 from PIL import Image
 import xlwt
 from django.db.models import Value
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.functions import Concat
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -14,6 +14,7 @@ from kinematicviscosity.models import ViscosityMJL
 # этот блок нужен для всех журналов
 from equipment.models import CompanyCard
 from .forms import *
+from utils_forms import*
 from .models import *
 
 from .j_constants import *
@@ -31,46 +32,12 @@ class Constants:
     journal = journal
 # конец блока для всех журналов
 
-
+# блок стандартных 'View' но с индивидуальностями,  возможно унаследованных от стандартных классов из модуля utils
 class PicnometerView(TemplateView):
     """ Представление, которое выводит табличку с объёмами пикнометра """
     """ уникальное """
     template_name = 'dinamicviscosity/picnometer.html'
 
-# блок стандартных 'View' унаследованных от стандартных классов из модуля utils
-# основные
-class HeadView(Constants, HeadView):
-    """ Представление, которое выводит заглавную страницу журнала """
-    """ Стандартное """
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.template_name = URL + '/head.html'
-
-
-class StrJournalView(Constants, StrJournalView):
-    """ выводит отдельную запись и форму добавления в ЖАЗ """
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.form_class = StrJournalUdateForm
-        self.template_name = URL + '/str.html'
-
-class CommentsView(Constants, CommentsView):
-    """ выводит комментарии к записи в журнале и форму для добавления комментариев """
-    """Стандартное"""
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.form_class = CommentCreationForm
-
-
-class AllStrView(Constants, AllStrView):
-    """ Представление, которое выводит все записи в журнале. """
-    """стандартное"""
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.SearchForm = SearchForm
-        self.SearchDateForm = SearchDateForm
-        self.template_name = URL + '/journal.html'
-        self.model = MODEL
 
 class RegView(RegView):
     """ Представление, которое выводит форму регистрации в журнале. """
@@ -159,6 +126,36 @@ class RegView(RegView):
             """вставка окончание"""
         order.save()
         return super().form_valid(form)
+# конец блока стандартных 'View' но с индивидуальностями
+
+
+# блок стандартных 'View' унаследованных от стандартных классов из модуля utils
+# основные
+
+
+class HeadView(Constants, HeadView):
+    """ Представление, которое выводит заглавную страницу журнала """
+    """ Стандартное """
+    template_name = URL + '/head.html'
+
+
+class StrJournalView(Constants, StrJournalView):
+    """ выводит отдельную запись и форму добавления в ЖАЗ """
+    form_class = StrJournalUdateForm
+    template_name = URL + '/str.html'
+
+
+class CommentsView(Constants, CommentsView):
+    """ выводит комментарии к записи в журнале и форму для добавления комментариев """
+    """Стандартное"""
+    form_class = CommentCreationForm
+
+
+class AllStrView(Constants, AllStrView):
+    """ Представление, которое выводит все записи в журнале. """
+    """стандартное"""
+    template_name = URL + '/journal.html'
+    model = MODEL
 
 
 # блок View для формирования протокола
@@ -173,17 +170,24 @@ class ProtocolbuttonView(Constants, ProtocolbuttonView):
     """ Выводит кнопку для формирования протокола """
     template_name = URL + '/buttonprotocol.html'
 
+
 class ProtocolHeadView(Constants, ProtocolHeadView):
     """ выводит форму внесения для внесения допинформации для формирования протокола и кнопку для протокола """
     template_name = 'main/reg.html'
     form_class = StrJournalProtocolUdateForm
 
 
+# блок  'View' для различных поисков - унаследованные
+class DateSearchResultView(Constants, DateSearchResultView):
+    """ Представление, которое выводит результаты поиска по датам на странице со всеми записями журнала. """
+    """стандартное"""
+    template_name = URL + '/journal.html'
+
+
 # блок  'View' для различных поисков (не унаследованные)
 class SearchResultView(TemplateView):
     """ Представление, которое выводит результаты поиска на странице со всеми записями журнала. """
     """нестандартное"""
-
     template_name = URL + '/journal.html'
 
     def get_context_data(self, **kwargs):
@@ -209,34 +213,6 @@ class SearchResultView(TemplateView):
         context['URL'] = URL
         return context
 
-class DateSearchResultView(TemplateView):
-    """ Представление, которое выводит результаты поиска на странице со всеми записями журнала. """
-    """стандартное"""
-
-    template_name = URL + '/journal.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(DateSearchResultView, self).get_context_data(**kwargs)
-        datestart = self.request.GET['datestart']
-        datefinish = self.request.GET['datefinish']
-        try:
-            objects = MODEL.objects.all().filter(date__range=(datestart, datefinish)).order_by('-pk')
-            context['objects'] = objects
-            context['journal'] = JOURNAL.objects.filter(for_url=URL)
-            context['formSM'] = SearchForm()
-            context['formdate'] = SearchDateForm(initial={'datestart': datestart, 'datefinish': datefinish})
-            context['URL'] = URL
-            return context
-        except ValidationError:
-            objects = MODEL.objects.filter(id=1)
-            context['objects'] = objects
-            context['journal'] = JOURNAL.objects.filter(for_url=URL)
-            context['formSM'] = SearchForm()
-            context['formdate'] = SearchDateForm(initial={'datestart': datestart, 'datefinish': datefinish})
-            context['URL'] = URL
-            context['Date'] = 'введите даты в формате'
-            context['format'] = 'ГГГГ-ММ-ДД'
-            return context
 
 def filterview(request, pk):
     """ Фильтры записей об измерениях по дате, АЗ, мои записи и пр """
@@ -267,10 +243,6 @@ def filterview(request, pk):
 
 
 
-
-
-
-
 # ---------------------------------------------
 def export_me_xls(request, pk):
     '''представление для выгрузки отдельной странички журнала в ексель'''
@@ -295,14 +267,12 @@ def export_me_xls(request, pk):
         ws.row(i).height = 600
 
 
-
     # ширина столбцов
     ws.col(0).width = 4000
     ws.col(1).width = 4000
     ws.col(2).width = 4000
     ws.col(3).width = 2700
     ws.col(4).width = 6500
-
 
 
     brd1 = Borders()

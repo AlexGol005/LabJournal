@@ -1,17 +1,39 @@
 from decimal import Decimal
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render
 from django.db import connection
 from django.views import View
-from django.http import  HttpResponse, HttpRequest
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView
 
 from django.db.models import Max
-from viscosimeters.models import Viscosimeters, Kalibration
+from viscosimeters.models import*
 from .forms import KalibrationViscosimetersForm
+
+
+# class KalibrationViscosimetersRegView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+#     """ выводит форму внесения для внесения допинформации для формирования протокола и кнопку для протокола """
+#     template_name = 'equipment/reg.html'
+#     success_url = '/kalibrationviscosimetersreg/'
+#     form_class = KalibrationViscosimetersForm
+#
+#     def form_valid(self, form):
+#         order = form.save(commit=False)
+#         order.performer = User.objects.get(username=self.request.user)
+#         order.save()
+#         return super().form_valid(form)
+
+    # name = form.cleaned_data.get('id_Viscosimeter')
+    # konstant = form.cleaned_data.get('konstant')
+    # success_message = f'Константа {konstant} вискозиметра {name} внесена!'
+
+
+
 
 @login_required
 def KalibrationViscosimetersRegView(request):
@@ -22,9 +44,7 @@ def KalibrationViscosimetersRegView(request):
             order = form.save(commit=False)
             order.performer = request.user
             order.save()
-            name = form.cleaned_data.get('id_Viscosimeter')
-            konstant = form.cleaned_data.get('konstant')
-            messages.success(request, f'Константа {konstant} вискозиметра {name} внесена!')
+
             return redirect('/kalibrationviscosimetersreg/')
     else:
         form = KalibrationViscosimetersForm()
@@ -54,59 +74,11 @@ class ViscosimetersView(View):
         return render(request, 'viscosimeters/viscosimetersKonstants.html', data)
 
 
-class ViscosimeterTypeView(View):
 
-    def get(self, request):
-        ViscosimeterTypeObjects = Viscosimeters.objects.annotate(actualkonst=Max('kalibration__id'))
-
-        return render(request, 'viscosimeters/viscosimeterType.html', {'ViscosimeterTypeObjects': ViscosimeterTypeObjects})
-
-# class ViscosimetersKonstantsView(View):
-#     '''должна выводить список вискозиметров с актуальными константами'''
-#     def get(self, request):
-#         ViscosimetersObjects = Viscosimeters.objects.order_by('viscosimeterType_id')
-#         return render(request, 'viscosimeters/viscosimetersKonstants.html', {'ViscosimetersObjects': ViscosimetersObjects})
-
-
-class ViscosimetersHeadView(View):
+class ViscosimetersHeadView(TemplateView):
     """ выводит заглавную старницу вискозиметров """
-    def get(self, request):
-        return render(request, 'viscosimeters/head.html')
+    template_name = 'viscosimeters/head.html'
 
 
 
-# # -------------------
-# import xlwt
-#
-# from django.http import HttpResponse
-# from django.contrib.auth.models import User
-#
-# def export_users_xls(request):
-#     response = HttpResponse(content_type='application/ms-excel')
-#     response['Content-Disposition'] = 'attachment; filename="users.xls"'
-#
-#     wb = xlwt.Workbook(encoding='utf-8')
-#     ws = wb.add_sheet('Users')
-#
-#     # Sheet header, first row
-#     row_num = 3
-#
-#     font_style = xlwt.XFStyle()
-#     font_style.font.bold = True
-#
-#     columns = ['Имя', 'First name', 'Last name', 'Email address', ]
-#
-#     for col_num in range(len(columns)):
-#         ws.write(row_num, col_num, columns[col_num], font_style)
-#
-#     # Sheet body, remaining rows
-#     font_style = xlwt.XFStyle()
-#
-#     rows = User.objects.all().values_list('username', 'first_name', 'last_name', 'email')
-#     for row in rows:
-#         row_num += 1
-#         for col_num in range(len(row)):
-#             ws.write(row_num, col_num, row[col_num], font_style)
-#
-#     wb.save(response)
-#     return response
+

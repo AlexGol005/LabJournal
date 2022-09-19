@@ -1,19 +1,19 @@
-import datetime
 from django import forms
 from django.db.models import  Q
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
-
-from equipment.models import Rooms, MeasurEquipment
-from .j_constants import *
-from viscosimeters.models import Viscosimeters
 from .models import *
+
+input_formats = (
+    '%Y-%m-%d',
+    '%m/%d/%Y',
+    '%m/%d/%y',
+    '%d.%m.%Y',
+)
 
 MODEL = ViscosityMJL
 COMMENTMODEL = Comments
-
-
 
 class StrJournalCreationForm(forms.ModelForm):
     """форма для внесения записи в журнал"""
@@ -107,12 +107,10 @@ class StrJournalCreationForm(forms.ModelForm):
             ),
             Row(
                 Column('constit', css_class='form-group col-md-6 mb-0'),
-                # Column('oldCertifiedValue', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
             Row(
                 Column('ViscosimeterNumber1', css_class='form-group col-md-6 mb-0'),
-                # Column('Konstant1', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -124,7 +122,6 @@ class StrJournalCreationForm(forms.ModelForm):
             ),
             Row(
                 Column('ViscosimeterNumber2', css_class='form-group col-md-6 mb-0'),
-                # Column('Konstant2', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -147,7 +144,6 @@ class StrJournalCreationForm(forms.ModelForm):
                   'ViscosimeterNumber2',
                   'plustimeminK2T1', 'plustimesekK2T1',
                   'plustimeminK2T2', 'plustimesekK2T2', 'ndocument',
-                  # 'Konstant1', 'Konstant2', 'oldCertifiedValue',
                   ]
 
 
@@ -215,7 +211,6 @@ class CommentCreationForm(forms.ModelForm):
         widgets = {'name': forms.Textarea(attrs={'class': 'form-control',  'placeholder': 'введите текст комментария'})}
 
 
-
 class SearchForm(forms.Form):
     "форма для поиска по полям журнала ГСО, партия, температура"
     "при копировании поменять поля на нужные"
@@ -239,20 +234,5 @@ class SearchForm(forms.Form):
             ))
 
 
-class SearchDateForm(forms.Form):
-    "форма для поиска записей по датам"
-    "стандартная"
-    datestart = forms.DateField(label='От', initial=datetime.date.today,
-                                    widget=forms.DateInput(attrs={'placeholder': datetime.date.today}))
-    datefinish = forms.DateField(label='До', initial=datetime.date.today,
-                                     widget=forms.DateInput(attrs={'placeholder': datetime.date.today}))
 
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.layout = Layout(
-                Row(Column('datestart', css_class='form-group col-md-9 mb-1 ml-4')),
-                Row(Column('datefinish', css_class='form-group col-md-9 mb-1 ml-4')),
-                Row(Submit('submit', 'Найти', css_class='btn  btn-info col-md-9 mb-3 mt-4 ml-4')))
 

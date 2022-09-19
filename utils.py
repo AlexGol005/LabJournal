@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.exceptions import ValidationError
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -20,6 +21,9 @@ class Constants:
     form_class = None
     NAME = None
     journal = None
+    SearchForm = None
+    SearchDateForm = None
+    paginate_by = 8
 
 
 class HeadView(Constants, TemplateView):
@@ -96,12 +100,9 @@ class AllStrView(Constants, ListView):
     """ Представление, которое выводит все записи в журнале. """
     """стандартное"""
     MODEL = None
-    SearchForm = None
-    SearchDateForm = None
     model = MODEL
     context_object_name = 'objects'
     ordering = ['-date']
-    paginate_by = 8
 
     def get_context_data(self, **kwargs):
         context = super(AllStrView, self).get_context_data(**kwargs)
@@ -171,3 +172,28 @@ class ProtocolHeadView(Constants, UpdateView):
             return redirect(f"/attestationJ/{self.URL}/protocolbutton/{self.kwargs['pk']}")
         except:
             return redirect('/equipment/meteoreg/')
+
+# для поисков
+class DateSearchResultView(Constants, TemplateView):
+    """ Представление, которое выводит результаты поиска по датам на странице со всеми записями журнала. """
+    """стандартное"""
+    def get_context_data(self, **kwargs):
+        context = super(DateSearchResultView, self).get_context_data(**kwargs)
+        datestart = self.request.GET['datestart']
+        datefinish = self.request.GET['datefinish']
+        context['journal'] = self.JOURNAL.objects.filter(for_url=self.URL)
+        context['formSM'] = self.SearchForm
+        context['formdate'] = self.SearchDateForm(initial={'datestart': datestart, 'datefinish': datefinish})
+        context['URL'] = self.URL
+        try:
+            objects = self.MODEL.objects.all().filter(date__range=(datestart, datefinish)).order_by('-pk')
+            context['objects'] = objects
+            return context
+        except ValidationError:
+            objects = self.MODEL.objects.filter(id=1)
+            context['objects'] = objects
+            context['Date'] = 'введите даты в формате'
+            context['format'] = 'ГГГГ-ММ-ДД'
+            return context
+
+
