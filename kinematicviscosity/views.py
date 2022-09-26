@@ -243,6 +243,8 @@ def export_me_xls(request, pk):
     response['Content-Disposition'] = f'attachment; filename="{note.pk}.xls"'
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet(f'{note.name}, п. {note.lot},{note.temperature}', cell_overwrite_ok=True)
+    ws.header_str = b''
+    ws.footer_str = b''
 
     # высота строк
     for i in range(0, 21):
@@ -293,7 +295,8 @@ def export_me_xls(request, pk):
 
     style6 = xlwt.XFStyle()
     style6.font.name = 'Times New Roman'
-    style6.alignment = al1
+    style6.alignment = al2
+
 
 
     row_num = 0
@@ -302,7 +305,7 @@ def export_me_xls(request, pk):
                ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(row_num, row_num, 0, 6, style1)
+        ws.merge(row_num, row_num, 0, 5, style6)
 
     row_num = 2
     columns = [
@@ -315,6 +318,8 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 750
 
     row_num = 3
     columns = [
@@ -589,6 +594,7 @@ def export_me_xls(request, pk):
         'Исполнитель',
         'ОТК',
         'ОТК',
+        'ОТК',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
@@ -599,14 +605,29 @@ def export_me_xls(request, pk):
     columns = [
         str(note.performer),
         str(note.performer),
+        str(note.performer),
+        '',
         '',
         '',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(row_num, row_num, 0, 2, style2)
         ws.merge(row_num, row_num, 3, 5, style2)
+
+
+    row_num = 25
+    columns = [
+        'Страница №',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(row_num, row_num, 0, 5, style6)
+
     wb.save(response)
     return response
+
+
 
 
 def export_protocol_xls(request, pk):
