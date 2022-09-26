@@ -301,24 +301,16 @@ def export_me_xls(request, pk):
                  AttestationJ.objects.get(id=1).name
                ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(row_num, row_num, 0, 5, style1)
-
-    row_num = 1
-    columns = [
-        f'Определение кинематической вязкости, метод: { note.ndocument }'
-    ]
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(row_num, row_num, 0, 5, style1)
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(row_num, row_num, 0, 6, style1)
 
     row_num = 2
     columns = [
         'Дата измерения',
-        'Наименование',
-        'Номер партии',
+        'Индекс СО',
+        'Номер внутренней партии',
         'Т °C',
-        'Термост. 20 мин',
+        'Термост-но. 20 мин',
         'Сод. нефть или октол',
     ]
     for col_num in range(len(columns)):
@@ -554,7 +546,7 @@ def export_me_xls(request, pk):
 
     row_num = 20
     columns = [
-       ' Фиксация результатов'
+       ' Результат испытаний'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
@@ -572,6 +564,10 @@ def export_me_xls(request, pk):
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(row_num, row_num, 3, 5, style1)
+
+    note.certifiedValue_text = str(note.certifiedValue_text).replace('.', ',')
+    note.abserror = str(note.abserror).replace('.', ',')
+    note.oldCertifiedValue = str(note.oldCertifiedValue).replace('.', ',')
 
     row_num = 22
     columns = [
