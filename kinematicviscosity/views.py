@@ -295,7 +295,11 @@ def export_me_xls(request, pk):
 
     style6 = xlwt.XFStyle()
     style6.font.name = 'Times New Roman'
-    style6.alignment = al2
+    style6.alignment = al1
+
+    style7 = xlwt.XFStyle()
+    style7.font.name = 'Times New Roman'
+    style7.alignment = al2
 
 
 
@@ -616,13 +620,13 @@ def export_me_xls(request, pk):
         ws.merge(row_num, row_num, 3, 5, style2)
 
 
-    row_num = 25
+    row_num = 27
     columns = [
-        'Страница №',
+        'Страница №           ',
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(row_num, row_num, 0, 5, style6)
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(row_num, row_num, 0, 5, style7)
 
     wb.save(response)
     return response
