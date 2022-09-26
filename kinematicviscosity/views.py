@@ -263,32 +263,42 @@ def export_me_xls(request, pk):
     # стили
     style1 = xlwt.XFStyle()
     style1.font.bold = True
+    style1.font.name = 'Times New Roman'
     style1.borders = b1
     style1.alignment = al1
     style1.alignment.wrap = 1
 
     style2 = xlwt.XFStyle()
+    style2.font.name = 'Times New Roman'
     style2.borders = b1
     style2.alignment = al1
 
     style3 = xlwt.XFStyle()
+    style3.font.name = 'Times New Roman'
     style3.borders = b1
     style3.alignment = al1
     style3.num_format_str = 'DD.MM.YYYY'
 
     style4 = xlwt.XFStyle()
+    style4.font.name = 'Times New Roman'
     style4.borders = b1
     style4.alignment = al1
     style4.num_format_str = '0.00'
 
     style5 = xlwt.XFStyle()
+    style5.font.name = 'Times New Roman'
     style5.borders = b1
     style5.alignment = al1
     style5.num_format_str = '0.00000'
 
+    style6 = xlwt.XFStyle()
+    style6.font.name = 'Times New Roman'
+    style6.alignment = al1
+
+
     row_num = 0
     columns = [
-                 f'Атт.-ВЖ-(МИ № 02-2018)-{note.date}'
+                 AttestationJ.objects.get(id=1).name
                ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
