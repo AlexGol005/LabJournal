@@ -613,9 +613,9 @@ def export_me_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(20, 20, 3, 4, style1)
 
-    note.certifiedValue = str(note.certifiedValue_text).replace('.', ',')
+    note.certifiedValue = str(note.certifiedValue).replace('.', ',')
     note.abserror = str(note.abserror).replace('.', ',')
-    note.olddensity = str(note.oldCertifiedValue).replace('.', ',')
+    note.olddensity = str(note.olddensity).replace('.', ',')
 
     row_num = 21
     columns = [
