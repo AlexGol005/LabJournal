@@ -49,7 +49,7 @@
         </a>
         {% else %}
         <a href="{% url 'profile' %}" >
-        <button class="btn btn-outline-warning mt-2">профиль</button>
+        <button class="btn btn-outline-warning mt-2">{{ request.user.username }}</button>
         </a>
         <a href="{% url 'exit' %}" class="ml-2">
             <button class="btn btn-outline-info mt-2">выйти</button>

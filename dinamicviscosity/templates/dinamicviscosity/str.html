@@ -114,8 +114,6 @@
                 <div class="TransactionAmount Goodresult">
                 {% endif %}
                  Результат измерений: <b>{{ note.resultMeas }} </b> {{ note.cause }}
-
-
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
@@ -159,9 +157,8 @@
 		</tr>
         <tr>
         <td colspan="9">
-
                 <div class="TransactionAmount Badresult">
-                  <b>{{ note.resultWarning|default_if_none:" " }}</b>
+                    <b>{{ note.resultWarning|default_if_none:" " }}</b>
                     <b>{{ note.resultWarningkinematic|default_if_none:" " }}</b>
                 </div>
             </td>
@@ -188,7 +185,7 @@
                 <button class="btn btn-outline-warning" type="submit" name="btnform2">Подтвердить</button>
                 </form>
                 {% elif  note.resultMeas == 'удовлетворительно' and note.fixation or note.resultMeas == 'плотность измерена ранее'  and note.fixation %}
-                   <a href="/CertifiedValueJ/dinamicviscosityvalues/" target="blank"> АЗ записано в ЖАЗ сайта </a>
+                   <a href="/CertifiedValueJ/kinematicviscosityvalues/" target="blank"> АЗ записано в ЖАЗ сайта </a>
                 {% else %}
                 нет АЗ
                 {% endif %}
@@ -197,9 +194,11 @@
             </div></td>
             <th colspan="1">
                 {% if not counter %}
-                <a href="/attestationJ/{{ URL }}/attestation/{{ note.id }}/comments/"  class="btn btn-outline-warning mt-3">комментировать</a>
+                <a href="/attestationJ/{{ URL }}/attestation/{{ note.id }}/comments/"  class="btn btn-outline-warning mt-3">
+                    комментировать</a>
                 {% elif counter %}
-                <a href="/attestationJ/{{ URL }}/attestation/{{ note.id }}/comments/"  class="btn btn-outline-warning mt-3">смотреть комментарии</a></th>
+                <a href="/attestationJ/{{ URL }}/attestation/{{ note.id }}/comments/"  class="btn btn-outline-warning mt-3">
+                    смотреть комментарии</a></th>
                 {% endif %}
             </tr>
 {# конец низа #}
@@ -221,12 +220,10 @@
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
     &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-{#кнопка печать #}
    {#кнопка печать #}
     <div class="noprint">
     <a href="javascript:(print());" class="btn btn-warning mt-1">Распечатать</a>
     <a href="{% url 'export_dinamicviscosity_xls' note.pk %}"  class="btn btn-warning ml-5 mt-1">Сохранить в EXEL</a>
-
         {% if note.room %}
     <a href="{% url 'dinamicviscosityprotocolbutton' note.pk %}"  class="btn btn-warning ml-5 mt-1">
         Сформировать протокол испытаний</a>

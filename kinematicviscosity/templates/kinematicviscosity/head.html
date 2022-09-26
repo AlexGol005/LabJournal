@@ -1,18 +1,16 @@
 {% extends 'main/Journal.html' %}
 {% load static %}
 {% block uniccontent %}
-    <br>
-    <div style="text-align: center;"><h4> Информация </h4></div>
-     <br>
-         <div style="text-align: center;">
-        <a href="{% url 'konstv' %}" class="btn btn-info mr-5 mt-3" style="width: 220px"> Константы вискозиметров </a>
-        <a href="https://petroanalytica.sharepoint.com/sites/main/production/%D0%9C%D0%B5%D1%82%D0%BE%D0%B4%D0%B8%D0%BA%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B5%D0%BD%D0%B8%D0%B9/%D0%9C%D0%98%20%D0%92%D0%96-%D0%9F%D0%90%20%E2%84%96%20%D0%9C%D0%98-02-2018.pdf"
-           class="btn btn-info mt-3" style="width: 220px">Методика измерений</a>
-         </div>
-    <br>
-    <div style="text-align: center;"><a href="/CertifiedValueJ/kinematicviscosityvalues/" class="btn btn-info mr-5 mt-3" style="width: 600px"> Полный список АЗ</a></div>
-    <br>
-    <div style="text-align: center;"><img src="{% static 'main/img/3.jpg' %}"
-                                          alt="ВЖ"></div>
-
+<br>
+<div style="text-align: center;"><h4> Информация </h4></div>
+<br>
+<div style="text-align: center;">
+<a href="{% url 'konstv' %}" class="btn btn-info mr-5 mt-3" style="width: 220px"> Константы вискозиметров </a>
+</div>
+<br>
+<div style="text-align: center;"><a href="/CertifiedValueJ/kinematicviscosityvalues/" class="btn btn-info mr-5 mt-3" style="width: 600px">
+Полный список АЗ</a></div>
+<br>
+<div style="text-align: center;"><img src="{% static 'main/img/3.jpg' %}"
+                              alt="ВЖ"></div>
 {% endblock %}
