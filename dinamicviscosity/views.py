@@ -463,8 +463,8 @@ def export_me_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(9, 9, 0, 1, style1)
     for col_num in range(2, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(9, 9, 2, 4, style6)
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(9, 9, 2, 4, style2)
 
     row_num = 10
     columns = [
@@ -479,8 +479,8 @@ def export_me_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(10, 10, 0, 1, style1)
     for col_num in range(2, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(10, 10, 2, 4, style1)
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(10, 10, 2, 4, style2)
 
     try:
         row_num = 11
