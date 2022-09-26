@@ -244,15 +244,41 @@ def filterview(request, pk):
 
 
 # ---------------------------------------------
+# блок выгрузок данных в формате ексель (не унаследованные)
+# вспомогательная общая информация
+b1 = Borders()
+b1.left = 1
+b1.right = 1
+b1.top = 1
+b1.bottom = 1
+
+b2 = Borders()
+b2.left = 6
+b2.right = 6
+b2.bottom = 6
+b2.top = 6
+
+al1 = Alignment()
+al1.horz = Alignment.HORZ_CENTER
+al1.vert = Alignment.VERT_CENTER
+
+al2 = Alignment()
+al2.horz = Alignment.HORZ_RIGHT
+al2.vert = Alignment.VERT_CENTER
+
+al3 = Alignment()
+al3.horz = Alignment.HORZ_LEFT
+al3.vert = Alignment.VERT_CENTER
+
 def export_me_xls(request, pk):
     '''представление для выгрузки отдельной странички журнала в ексель'''
     note = MODEL.objects.get(pk=pk)
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = f'attachment; filename="{note.pk}.xls"'
-
-
+    response['Content-Disposition'] = f'attachment; filename="{note.pk}_{note.date}_{note.name}_{note.lot}.xls"'
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet(f'{note.name}, п. {note.lot},{note.temperature}', cell_overwrite_ok=True)
+    ws.header_str = b''
+    ws.footer_str = b''
 
 
     for i in range(26):
@@ -274,82 +300,66 @@ def export_me_xls(request, pk):
     ws.col(3).width = 2700
     ws.col(4).width = 6500
 
-
-    brd1 = Borders()
-    brd1.left = 1
-    brd1.right = 1
-    brd1.top = 1
-    brd1.bottom = 1
-
-    al1 = Alignment()
-    al1.horz = Alignment.HORZ_CENTER
-    al1.vert = Alignment.VERT_CENTER
-
-
+    # стили
     style1 = xlwt.XFStyle()
     style1.font.bold = True
-    style1.font.name = 'Calibri'
-    style1.borders = brd1
+    style1.font.name = 'Times New Roman'
+    style1.borders = b1
     style1.alignment = al1
     style1.alignment.wrap = 1
 
     style2 = xlwt.XFStyle()
-    style2.font.name = 'Calibri'
-    style2.borders = brd1
+    style2.font.name = 'Times New Roman'
+    style2.borders = b1
     style2.alignment = al1
 
     style3 = xlwt.XFStyle()
-    style3.font.name = 'Calibri'
-    style3.borders = brd1
+    style3.font.name = 'Times New Roman'
+    style3.borders = b1
     style3.alignment = al1
     style3.num_format_str = 'DD.MM.YYYY'
 
     style4 = xlwt.XFStyle()
-    style4.font.name = 'Calibri'
-    style4.borders = brd1
+    style4.font.name = 'Times New Roman'
+    style4.borders = b1
     style4.alignment = al1
     style4.num_format_str = '0.00'
 
     style5 = xlwt.XFStyle()
-    style5.font.name = 'Calibri'
-    style5.borders = brd1
+    style5.font.name = 'Times New Roman'
+    style5.borders = b1
     style5.alignment = al1
     style5.num_format_str = '0.00000'
 
     style6 = xlwt.XFStyle()
-    style6.font.name = 'Calibri'
-    style6.borders = brd1
+    style6.font.name = 'Times New Roman'
     style6.alignment = al1
-    style6.num_format_str = '0.0000'
+
+    style7 = xlwt.XFStyle()
+    style7.font.name = 'Times New Roman'
+    style7.alignment = al2
+
 
     row_num = 0
     columns = [
-                 f'Атт.-ВЖ-(МИ № 02-2018)-{note.date}'
-               ]
-
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(0, 0, 0, 4, style1)
-
-
-    row_num = 1
-    columns = [
-        f'Опр. плотности  { note.equipment } и расчёт динамической вязкости по { note.ndocument }'
+        AttestationJ.objects.get(id=2).name
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(1, 1, 0, 4, style1)
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(1, 1, 0, 4, style6)
 
     row_num = 2
     columns = [
         'Дата измерения',
         'Наименование',
-        'Номер партии',
+        'Номер внутренней партии',
         'Т °C',
         'Сод. нефть или октол',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 750
 
 
     row_num = 3
@@ -582,7 +592,7 @@ def export_me_xls(request, pk):
 
     row_num = 19
     columns = [
-       ' Фиксация результатов'
+       ' Результат испытаний'
     ]
 
     for col_num in range(len(columns)):
@@ -618,30 +628,39 @@ def export_me_xls(request, pk):
     row_num = 22
     columns = [
         'Исполнитель',
-        'отпр.',
-        'внесено',
+        'Исполнитель',
+        'Исполнитель',
         'ОТК',
         'ОТК',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(22, 22, 3, 4, style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 3, 4, style1)
 
     row_num = 23
     columns = [
         str(note.performer),
-        '',
-        '',
+        str(note.performer),
+        str(note.performer),
         '',
         '',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(23, 23, 3, 4, style2)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 3, 4, style1)
+
+    row_num = 26
+    columns = [
+        'Страница №           ',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(row_num, row_num, 0, 4, style7)
 
     wb.save(response)
     return response
-
 
 
 

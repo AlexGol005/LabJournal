@@ -240,7 +240,7 @@ def export_me_xls(request, pk):
     """представление для выгрузки отдельной странички журнала в ексель"""
     note = MODEL.objects.get(pk=pk)
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = f'attachment; filename="{note.pk}.xls"'
+    response['Content-Disposition'] = f'attachment; filename="{note.pk}_{note.date}_{note.name}_{note.lot}.xls"'
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet(f'{note.name}, п. {note.lot},{note.temperature}', cell_overwrite_ok=True)
     ws.header_str = b''
@@ -343,7 +343,7 @@ def export_me_xls(request, pk):
 
     row_num = 4
     columns = [
-        'Проведение измерений'
+        'Проведение испытаний'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
