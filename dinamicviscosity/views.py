@@ -30,6 +30,8 @@ class Constants:
     COMMENTMODEL = COMMENTMODEL
     NAME = NAME
     journal = journal
+    SearchForm = SearchForm
+    SearchDateForm = SearchDateForm
 # конец блока для всех журналов
 
 # блок стандартных 'View' но с индивидуальностями,  возможно унаследованных от стандартных классов из модуля utils
