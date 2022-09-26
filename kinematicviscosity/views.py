@@ -323,7 +323,7 @@ def export_me_xls(request, pk):
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 750
+        ws.row(row_num).height = 800
 
     row_num = 3
     columns = [
