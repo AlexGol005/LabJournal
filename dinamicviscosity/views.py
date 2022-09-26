@@ -348,12 +348,12 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(1, 1, 0, 4, style6)
+        ws.merge(row_num, row_num, 0, 4, style6)
 
     row_num = 2
     columns = [
         'Дата измерения',
-        'Наименование',
+        'Индекс СО',
         'Номер внутренней партии',
         'Т °C',
         'Сод. нефть или октол',
@@ -389,7 +389,7 @@ def export_me_xls(request, pk):
 
     row_num = 5
     columns = [
-        'V(пикн.), мл',
+        'V(пикн.), см3',
         note.piknometer_volume,
         'Измерение 1',
         'Измерение 2',
@@ -452,8 +452,8 @@ def export_me_xls(request, pk):
 
     row_num = 9
     columns = [
-        'ρ1, г/мл',
-        'ρ1, г/мл',
+        'ρ1, г/см3',
+        'ρ1, г/см3',
         note.density1,
         note.density1,
         note.density1,
@@ -468,8 +468,8 @@ def export_me_xls(request, pk):
 
     row_num = 10
     columns = [
-        'ρ2, г/мл',
-        'ρ2, г/мл',
+        'ρ2, г/см3',
+        'ρ2, г/см3',
         note.density2,
         note.density2,
         note.density2,
@@ -524,10 +524,10 @@ def export_me_xls(request, pk):
 
     row_num = 13
     columns = [
-        'Сред. плотн., ρ, г/мл',
-        'Оценка приемлемости измерений   \n Δ = (|ρ1 - ρ2|/ρсред) * 100 %л',
-        'Оценка приемлемости измерений   \n Δ = (|ρ1 - ρ2|/ρсред) * 100 %л',
-        'Оценка приемлемости измерений   \n Δ = (|ρ1 - ρ2|/ρсред) * 100 %л',
+        'Сред. плотн., ρ, г/см3',
+        'Оценка приемлемости измерений   \n Δ = (|ρ1 - ρ2|/ρсред) * 100 %',
+        'Оценка приемлемости измерений   \n Δ = (|ρ1 - ρ2|/ρсред) * 100 %',
+        'Оценка приемлемости измерений   \n Δ = (|ρ1 - ρ2|/ρсред) * 100 %',
          'Критерий приемл. измерений, r',
     ]
 
@@ -605,13 +605,17 @@ def export_me_xls(request, pk):
     columns = [
         'АЗ, Дин. вязк., Па * с',
         'Абс. погр.  (νдин сред * 0,3)/ 1000',
-        'Пред. зн. плот., ρпред, г/мл ',
+        'Пред. зн. плот., ρпред, г/см3 ',
         'Разница с ρпред  Δρпред = (|ρизм - ρпред|/ρсред) * 100 %',
         'Разница с ρпред  Δρпред = (|ρизм - ρпред|/ρсред) * 100 %',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(20, 20, 3, 4, style1)
+
+    note.certifiedValue = str(note.certifiedValue_text).replace('.', ',')
+    note.abserror = str(note.abserror).replace('.', ',')
+    note.olddensity = str(note.oldCertifiedValue).replace('.', ',')
 
     row_num = 21
     columns = [
