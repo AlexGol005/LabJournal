@@ -578,6 +578,8 @@ def export_me_xls(request, pk):
         ws.merge(17, 17, 0, 1, style1)
         ws.merge(17, 17, 2, 4, style1)
 
+    note.kinematicviscosity = str(note.kinematicviscosity).replace('.', ',')
+
     row_num = 18
     columns = [
        note.kinematicviscosity,
