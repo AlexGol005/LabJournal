@@ -435,14 +435,26 @@ def export_me_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(row_num, row_num, 3, 4, style1)
 
+    am21 = f'{note.plustimeminK1T2}:{note.plustimesekK1T2}'
+    as21 = note.timeK1T2_sec
+    am22 = f'{note.plustimeminK2T2}:{note.plustimesekK2T2}'
+    as22 = note.timeK1T2_sec
+
+    if not note.plustimeminK1T2 and not note.plustimesekK1T2:
+        am21 = '-'
+        as21 = '-'
+    if not note.plustimeminK2T2 and not note.plustimesekK2T2:
+        am22 = '-'
+        as22 = '-'
+
     row_num = 11
     columns = [
         'Время истечения 2, τ2',
-        f'{note.plustimeminK1T2}:{note.plustimesekK1T2}',
-        note.timeK1T2_sec,
-        f'{note.plustimeminK2T2}:{note.plustimesekK2T2}',
-        f'{note.plustimeminK2T2}:{note.plustimesekK2T2}',
-        note.timeK2T2_sec,
+        am21,
+        as21,
+        am22,
+        am22,
+        as22,
     ]
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style4)
@@ -578,6 +590,10 @@ def export_me_xls(request, pk):
     note.abserror = str(note.abserror).replace('.', ',')
     note.oldCertifiedValue = str(note.oldCertifiedValue).replace('.', ',')
 
+    if not note.deltaOldCertifiedValue:
+        note.deltaOldCertifiedValue = '-'
+    if not note.oldCertifiedValue:
+        note.oldCertifiedValue = '-'
     row_num = 22
     columns = [
         note.certifiedValue_text,
