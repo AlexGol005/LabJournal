@@ -1,0 +1,243 @@
+{% extends 'main/superbase.html' %}
+{% load static %}
+{% block title %}
+{{ obj.charakters.name}}
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+<div class="col-md-12 mt-2" >
+<div style="text-align: center;"><a href="/equipment/testingequipmentall/"><h4>{{ obj.charakters.name}}</h4></a></div>
+    <div style="text-align: center;">
+<h6>тип: {{ obj.charakters.typename|default:" " }}
+модификация: {{ obj.charakters.modificname|default:" " }}.
+Заводской номер: <b>{{ obj.equipment.lot }}</b></h6>
+</div>
+<br>
+
+{#карточка#}
+<div style="text-align: center; margin-top: 10px; margin-bottom: 50px">
+ <a href="{% url 'export_mecard_xls' obj.pk %}"  class="btn btn-warning mt-2 ">
+     Распечатать карточку на прибор</a></div>
+
+
+{#таблица неизменные сведения о приборе#}
+<div style="text-align: center;">
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Внут.№</th>
+            <th> Название </th>
+            <th> Тип/модификация</th>
+            <th> Заводской № </th>
+            <th> Год вып. </th>
+            <th> Произв-ль </th>
+        </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{ obj.equipment.exnumber }}</td>
+         <td> {{ obj.charakters.name }}</td>
+        <td>{{ obj.charakters.typename|default:" " }}/
+             {{ obj.charakters.modificname|default:" " }} </td>
+        <td> {{ obj.equipment.lot }}</td>
+        <td> {{ obj.equipment.yearmanuf }}</td>
+        <td> {{ obj.equipment.manufacturer.country }},
+         {{ obj.equipment.manufacturer.companyName }}</td>
+    </tr>
+    </tbody>
+</table>
+</div>
+{#примечание#}
+<br>
+{% if obj.equipment.notemaster  %}
+<div style="text-align: center; margin-top: 2px; color: red" ><h6>Внимание!</h6>
+<table class="table table-bordered">
+<td colspan="6">
+<div class="TransactionAmount Badresult">
+{{ obj.equipment.notemaster }}
+</div>
+</td>
+</table>
+</div>
+{% endif %}
+
+{#особенности прибора, если имеются#}
+<br>
+{% if obj.equipment.individuality  %}
+<div style="text-align: center; margin-top: 2px"><h6>Особенности работы прибора</h6>
+<table class="table table-bordered">
+<td colspan="6">{{ obj.equipment.individuality }}</td>
+</table>
+</div>
+{% endif %}
+
+<div style="text-align: center; margin-top: 20px">
+ <a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/individuality/"  class="btn btn-warning mt-2">
+     Добавить особенности работы прибора, инструкцию и пр. (для ответственного за прибор)</a></div>
+</div>
+
+{#записи о приборе#}
+<div style="text-align: center; margin-top: 20px"><h4>
+Техническое обслуживание и данные о повреждениях, неисправностях, модификациях и ремонте </h4></div>
+<i>ГОСТ Р ИСО 17034-2021 (ссылка на ГОСТ ISO/IEC 17025-2019, п.6.4.13): "Должны вестись записи о состоянии оборудования...должны включать...
+подробную информацию о любых повреждениях, неисправностях, модификациях или ремонте..."</i></div>
+<div style="text-align: center; margin-top: 10px">
+<div style="text-align: center; margin-top: 10px">
+ <a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/comments/"  class="btn btn-warning mt-2">
+     Внести запись о приборе и смотреть записи (для всех пользователей)</a></div>
+
+{#    поверка#}
+<div style="text-align: center; margin-top: 20px"><h4>
+Аттестация </h4></div>
+<div style="text-align: center;">
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th> Дата аттестации </th>
+            <th> Аттестован до </th>
+            <th> Месяц заказа аттестации </th>
+            <th class="ind">  № аттестата</th>
+         </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{ obj.equipmentSM_ver.last.date|date:'d.m.y'|default:" " }}</td>
+         <td> {{ obj.equipmentSM_ver.last.datedead|date:'d.m.y'|default:" " }}</td>
+         <td> {{ obj.equipmentSM_ver.last.dateorder|date:'m.Y'|default:" " }}</td>
+         <td> {{ obj.equipmentSM_ver.last.certnumber}}</td>
+    </tr>
+    </tbody>
+</table>
+</div>
+{# поверка кнопка1#}
+<div style="text-align: center; margin-top: 10px">
+    {% if note %}
+ <a href="/equipment/measureequipment/verification/{{ obj.equipment.exnumber }}/"  class="btn btn-info mt-2 mr-2">
+     Смотреть историю аттестаций</a>
+    {% endif %}
+     <a href="/equipment/measureequipment/verificationreg/{{ obj.equipment.exnumber }}/"  class="btn btn-warning mt-2 mr-2">
+     Внести запись об аттестации</a>
+{# поверка кнопка3#}
+ <a href="{% url 'verificationlabels' %}"  target="blank" class="btn btn-warning mt-2 ">
+     Распечатать этикетку</a></div>
+{#расположение и комплектность#}
+<div style="text-align: center; margin-top: 20px"><h4>
+Расположение и комплекность </h4></div>
+<div style="text-align: center;">
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th> № <br> комн. </th>
+            <th> Ответственный </th>
+            <th> Документы и принадлежности</th>
+            <th> Год <br> ввода в&nbspэксп.</th>
+            <th> Новый <br>или&nbsp&nbsp б/у</th>
+            <th> Статус</th>
+         </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{ obj.equipment.roomschange_set.last.roomnumber.roomnumber }}</td>
+        <td>{{ obj.equipment.personchange_set.last.person.username }}</td>
+        <td><a href="/equipment/docsreg/{{ obj.equipment.exnumber }}/" target="blank" class="btn btn-outline-warning mt-3">
+            см</a></td>
+        <td> {{ obj.equipment.yearintoservice }}</td>
+        <td> {{ obj.equipment.new }}</td>
+        <td> {{ obj.equipment.get_status_display }}</td>
+    </tr>
+    </tbody>
+</table>
+</div>
+{# расположение кнопки#}
+<div style="text-align: center; margin-top: 10px">
+ <a href="/equipment/personchangereg/{{ obj.equipment.exnumber }}/" target="blank" class="btn btn-warning mt-2 mr-2">
+     Поменять ответственного</a>
+     <a href="/equipment/roomschangereg/{{ obj.equipment.exnumber }}/" target="blank" class="btn btn-warning mt-2 mr-2">
+     Поменять помещение</a>
+ <a href="/equipment/docsreg/{{ obj.equipment.exnumber }}/"  class="btn btn-warning mt-2 ">
+     Смотреть список и Добавить документы и принадлежности</a></div>
+{#инструкция#}
+<div style="text-align: center; margin-top: 20px"><h4>
+Характеристики и инструкции</h4></div>
+
+<div style="text-align: center;">
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th> Паспорт (ссылка)</th>
+            <th> Основная инструкция <br> по <br>    эксплуатации прибора <br>в ООО "Петро- аналитика"</th>
+            <th> Диапазон измерений</th>
+            <th> Класс точности (разряд), погрешность и (или) неопреде- лённость (класс, разряд)</th>
+            <th> Наиме- нование опреде- ляемых <br>(изме- ряемых) характе- ристик (параметров) продукции </th>
+            <th> Видео- инструк- ция </th>
+
+         </tr>
+    </thead>
+    <tbody>
+    <tr>
+
+{#        <td>{% if obj.equipment.imginstruction1 %}#}
+{#        <a href="{{ obj.equipment.imginstruction1.url }}" target="blank">#}
+{#        <img class="bd-placeholder-img mr-2 rounded" width=50px height=70px src="{{ obj.equipment.imginstruction1.url }}">#}
+{#        </a>{% endif %}</td>#}
+{#        <td>{% if obj.equipment.imginstruction2 %}#}
+{#        <a href="{{ obj.equipment.imginstruction2.url }}" target="blank">#}
+{#        <img class="bd-placeholder-img mr-2 rounded" width=50px height=70px src="{{ obj.equipment.imginstruction2.url }}">#}
+{#        </a>{% endif %}</td>#}
+        <td class="ind">
+             {% if obj.equipment.pasport %}
+              <a href="{{ obj.equipment.pasport}}"  target="blank" >
+             ссылка на паспорт
+                  </a>
+             {% else  %}
+             нет паспорта
+             {% endif %}
+         </td>
+         <td class="ind">
+             {% if obj.equipment.instruction %}
+              <a href="{{ obj.equipment.instruction}}"  target="blank" >
+             ссылка на инструкцию
+                  </a>
+             {% else  %}
+             нет инструкции
+             {% endif %}
+         </td>
+        <td> {{ obj.charakters.measurydiapason }}</td>
+        <td> {{ obj.charakters.accuracity }}</td>
+        <td>{{ obj.charakters.aim }}</td>
+        <td> пока пусто</td>
+    </tr>
+    </tbody>
+</table>
+</div>
+{# бухгалтерия  #}
+<div style="text-align: center; margin-top: 40px"><h4>
+Бухгалтерские сведения</h4></div>
+
+<div style="text-align: center;">
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th> Документ на право владения</th>
+            <th> Стоимость, руб</th>
+            <th> Инвентарный № <br> (НЕ = внут.№) </th>
+         </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{% if obj.equipment.imginstruction3 %}
+        <a href="{{ obj.equipment.imginstruction1.url }}" target="blank">
+        <img class="bd-placeholder-img mr-2 rounded" width=50px height=70px src="{{ obj.equipment.imginstruction3.url }}">
+        </a>{% endif %}</td>
+        <td>{{ obj.equipment.price|default:" " }}</td>
+        <td> {{ obj.equipment.invnumber|default:"б/н" }}</td>
+    </tr>
+    </tbody>
+</table>
+</div>
+    <br>
+    <br>
+</div>
+{% endblock %}

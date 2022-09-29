@@ -234,6 +234,7 @@ class TestingEquipmentCharakters(models.Model):
                            max_length=500, blank=True, null=True)
     aim2 = models.CharField('Наименование испытуемых групп объектов',
                             max_length=500, blank=True, null=True)
+    ndoc = models.CharField('Методики испытаний', max_length=500, blank=True, null=True)
 
     def __str__(self):
         return f'{self.name}  {self.modificname}'

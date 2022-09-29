@@ -436,15 +436,72 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
             'aim'
                   ]
 
+class TestingEquipmentCharaktersCreateForm(forms.ModelForm):
+    """форма для внесения характеристик ИО"""
+    name = forms.CharField(label='Название прибора', max_length=10000000, required=False,
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
+    typename = forms.CharField(label='Тип', max_length=10000000, required=False, initial='нет типа',
+                               widget=forms.TextInput(attrs={'class': 'form-control',
+                                                             'placeholder': ''}))
+    modificname = forms.CharField(label='Модификация', max_length=10000000, required=False, initial='нет модификации',
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
+    calinterval = forms.CharField(label='МежМетрологический интервал, месяцев', max_length=10000000, required=False,
+                                  initial='24',
+                                  widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                'placeholder': ''}))
+    measurydiapason = forms.CharField(label='Основные технические характеристики', max_length=10000000, required=False,
+                                  widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                'placeholder': ''}))
+    aim = forms.CharField(label='Наименование видов испытаний и/или определяемых характеристик (параметров) продукции',
+                          max_length=10000000, required=False,
+                          initial='Определение содержания механических примесей в нефтепродуктах',
+                          widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
+    aim2 = forms.CharField(label='Наименование испытуемых групп объектов', max_length=10000000, required=False,
+                          initial='Нефть и нефтепродукты',
+                          widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
+    ndoc = forms.CharField(label='Методики испытаний', max_length=10000000, required=False,
+                          initial='ГОСТ 33, МИ-02-2018, ...',
+                          widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
+
+
+    class Meta:
+        model = TestingEquipmentCharakters
+        fields = [
+            'name',
+            'typename',
+            'modificname',
+             'calinterval',
+            'measurydiapason',
+            'aim',
+            'aim2',
+            'ndoc',
+                  ]
+
 class MeasurEquipmentCreateForm(forms.ModelForm):
     """форма для внесения СИ"""
     charakters = forms.ModelChoiceField(label='Госреестр', required=False,
                                                          queryset=MeasurEquipmentCharakters.objects.all().order_by('name'),
                                                          widget=forms.Select(attrs={'class': 'form-control'}))
 
-
     class Meta:
         model = MeasurEquipment
+        fields = [
+            'charakters',
+                  ]
+
+class TestingEquipmentCreateForm(forms.ModelForm):
+    """форма для внесения ИО"""
+    charakters = forms.ModelChoiceField(label='Характеристики испытательного оборудования', required=False,
+                                                         queryset=TestingEquipmentCharakters.objects.all().order_by('name'),
+                                                         widget=forms.Select(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = TestingEquipment
         fields = [
             'charakters',
                   ]
@@ -454,7 +511,6 @@ class PersonchangeForm(forms.ModelForm):
     person = forms.ModelChoiceField(label='Ответственный за ЛО',
                                                          queryset=User.objects.all(),
                                                          widget=forms.Select(attrs={'class': 'form-control'}))
-
 
     class Meta:
         model = Personchange
@@ -558,6 +614,25 @@ class Searchreestrform(forms.Form):
             Row(
                 Column('name', css_class='form-group col-md-3 mb-0'),
                 Column('reestr', css_class='form-group col-md-3 mb-0'),
+                Row(Submit('submit', 'Найти', css_class='btn  btn-info col-md-9 mb-3 mt-4 ml-4'))))
+
+class Searchtestingform(forms.Form):
+    "форма для поиска по полям списка госреестров"
+    name = forms.CharField(label='Название', required=False,
+                           help_text='введите название частично или полностью',
+                           widget=forms.TextInput(attrs={'class': 'form-control'}))
+    ndoc = forms.CharField(label='Методики испытаний', required=False,
+                           help_text='введите методику испытаний',
+                           widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('name', css_class='form-group col-md-3 mb-0'),
+                Column('ndoc', css_class='form-group col-md-3 mb-0'),
                 Row(Submit('submit', 'Найти', css_class='btn  btn-info col-md-9 mb-3 mt-4 ml-4'))))
 
 class LabelEquipmentform(forms.Form):

@@ -3,6 +3,7 @@ import pytils.translit
 from datetime import timedelta, date
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse
 from datetime import datetime, timedelta
@@ -11,7 +12,7 @@ from django.db.models.functions import Upper, Concat, Extract, ExtractYear
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template.context_processors import request
 from django.views import View
-from django.views.generic import ListView, TemplateView, FormView, CreateView
+from django.views.generic import ListView, TemplateView, FormView, CreateView, UpdateView
 from xlwt import Alignment, Borders
 
 from equipment.forms import*
@@ -132,39 +133,104 @@ class MeasurEquipmentCharaktersRegView(SuccessMessageMixin, CreateView):
     success_url = '/equipment/measurequipmentcharacterslist/'
     success_message = "Госреестр успешно добавлен"
 
-
     def get_context_data(self, **kwargs):
         context = super(MeasurEquipmentCharaktersRegView, self).get_context_data(**kwargs)
-        context['title'] = 'Добавить Госреестр'
+        context['title'] = 'Добавить госреестр'
         return context
 
+class TestingEquipmentCharaktersRegView(SuccessMessageMixin, CreateView):
+    """ выводит форму внесения характеристик ИО. """
+    template_name = URL + '/reg.html'
+    form_class = TestingEquipmentCharaktersCreateForm
+    success_url = '/equipment/testingequipmentcharacterslist/'
+    success_message = "Характеристики ИО успешно добавлены"
 
-class MeasureequipmentregView(View):
+    def get_context_data(self, **kwargs):
+        context = super(TestingEquipmentCharaktersRegView, self).get_context_data(**kwargs)
+        context['title'] = 'Добавить характеристики ИО'
+        return context
+
+class MeasureequipmentregView(LoginRequiredMixin, CreateView):
     """ выводит форму регистрации СИ на основе ЛО и Госреестра """
-    def get(self, request, str):
-        form = MeasurEquipmentCreateForm()
-        title = 'Зарегистрировать СИ'
-        dop = Equipment.objects.get(exnumber=str)
-        data = {
-                'title': title,
-                'dop': dop,
-                'form': form,
-                }
-        return render(request, 'equipment/reg.html', data)
-    def post(self, request, str, *args, **kwargs):
-        form = MeasurEquipmentCreateForm(request.POST)
-        if request.user.is_superuser:
+    form_class = MeasurEquipmentCreateForm
+    template_name = 'equipment/reg.html'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Equipment, exnumber=self.kwargs['str'])
+
+    def get_context_data(self, **kwargs):
+        context = super(MeasureequipmentregView, self).get_context_data(**kwargs)
+        context['title'] = 'Зарегистрировать СИ'
+        context['dop'] = Equipment.objects.get(exnumber=self.kwargs['str'])
+        return context
+
+    def form_valid(self, form):
+        user = User.objects.get(username=self.request.user)
+        if user.is_superuser:
             if form.is_valid():
                 order = form.save(commit=False)
-                order.equipment = Equipment.objects.get(exnumber=str)
-                try:
-                    order.save()
-                except:
-                    messages.success(request, f'Такой прибор уже есть')
-                return redirect(f'/equipment/measureequipment/{str}')
+                order.equipment = Equipment.objects.get(exnumber=self.kwargs['str'])
+                order.save()
+                return redirect(f'/equipment/measureequipment/{self.kwargs["str"]}')
         else:
             messages.success(request, f'Регистрировать может только ответственный за поверку приборов')
-            return redirect(reverse('measureequipmentreg', kwargs={'str': str}))
+            return redirect(reverse('measureequipmentreg', kwargs={'str': self.kwargs['str']}))
+
+
+class TestingequipmentregView(LoginRequiredMixin, CreateView):
+    """ выводит форму регистрации ИО на основе ЛО и характеристик ИО """
+    form_class = TestingEquipmentCreateForm
+    template_name = 'equipment/reg.html'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Equipment, exnumber=self.kwargs['str'])
+
+    def get_context_data(self, **kwargs):
+        context = super(TestingequipmentregView, self).get_context_data(**kwargs)
+        context['title'] = 'Зарегистрировать ИО'
+        context['dop'] = Equipment.objects.get(exnumber=self.kwargs['str'])
+        return context
+
+    def form_valid(self, form):
+        user = User.objects.get(username=self.request.user)
+        if user.is_superuser:
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.equipment = Equipment.objects.get(exnumber=self.kwargs['str'])
+                order.save()
+                return redirect(f'/equipment/testequipment/{self.kwargs["str"]}')
+        else:
+            messages.success(request, f'Регистрировать может только ответственный за метрологическое обеспечение приборов')
+            return redirect(reverse('testequipmentreg', kwargs={'str': self.kwargs['str']}))
+
+
+
+# class MeasureequipmentregView(View):
+#     """ выводит форму регистрации СИ на основе ЛО и Госреестра """
+#     def get(self, request, str):
+#         form = MeasurEquipmentCreateForm()
+#         title = 'Зарегистрировать СИ'
+#         dop = Equipment.objects.get(exnumber=str)
+#         data = {
+#                 'title': title,
+#                 'dop': dop,
+#                 'form': form,
+#                 }
+#         return render(request, 'equipment/reg.html', data)
+#     def post(self, request, str, *args, **kwargs):
+#         form = MeasurEquipmentCreateForm(request.POST)
+#         if request.user.is_superuser:
+#             if form.is_valid():
+#                 order = form.save(commit=False)
+#                 order.equipment = Equipment.objects.get(exnumber=str)
+#                 try:
+#                     order.save()
+#                 except:
+#                     messages.success(request, f'Такой прибор уже есть')
+#                 return redirect(f'/equipment/measureequipment/{str}')
+#         else:
+#             messages.success(request, f'Регистрировать может только ответственный за поверку приборов')
+#             return redirect(reverse('measureequipmentreg', kwargs={'str': str}))
 
 
 class EquipmentView(ListView):
@@ -183,7 +249,7 @@ class VerificatorsView(ListView):
 
 
 class VerificatorsPersonsView(ListView):
-    """ Выводит список всех организаций поверителей """
+    """ Выводит список всех сотрудников поверителей """
     model = VerificatorPerson
     template_name = 'main/plainlist.html'
     context_object_name = 'objects'
@@ -211,31 +277,35 @@ class MeasurEquipmentCharaktersView(ListView):
         context['form'] = Searchreestrform()
         return context
 
+class TestingEquipmentCharaktersView(ListView):
+    """ Выводит список характеристик ИО """
+    model = TestingEquipmentCharakters
+    template_name = URL + '/testingequipmentcharacterslist.html'
+    context_object_name = 'objects'
+    ordering = ['name']
+    paginate_by = 12
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(TestingEquipmentCharaktersView, self).get_context_data(**kwargs)
+        context['form'] = Searchtestingform()
+        return context
 
 class ReestrsearresView(TemplateView):
-    """ Представление, которое выводит результаты поиска по списку госреестров """
+    """ Представление, которое выводит результаты поиска по списку характеристик ИО """
 
     template_name = URL + '/measurequipmentcharacterslist.html'
 
     def get_context_data(self, **kwargs):
         context = super(ReestrsearresView, self).get_context_data(**kwargs)
         name = self.request.GET['name']
-        reestr = self.request.GET['reestr']
         if self.request.GET['name']:
             name1 = self.request.GET['name'][0].upper() + self.request.GET['name'][1:]
-        reestr = self.request.GET['reestr']
-        if name and not reestr:
+        if name:
             objects = MeasurEquipmentCharakters.objects.\
             filter(Q(name__icontains=name)|Q(name__icontains=name1)).order_by('name')
             context['objects'] = objects
-        if reestr and not name:
-            objects = MeasurEquipmentCharakters.objects.filter(reestr__icontains=reestr)
             context['objects'] = objects
-        if reestr and  name:
-            objects = MeasurEquipmentCharakters.objects.filter(reestr__icontains=reestr).\
-                filter(Q(name__icontains=name)|Q(name__icontains=name1)).order_by('name')
-            context['objects'] = objects
-        context['form'] = Searchreestrform(initial={'name': name, 'reestr': reestr})
+        context['form'] = Searchreestrform(initial={'name': name})
         context['URL'] = URL
         return context
 
@@ -290,6 +360,18 @@ class StrMeasurEquipmentView(View):
             'note': note,
         }
         return render(request, URL + '/equipmentstr.html', context)
+
+
+class StrTestEquipmentView(View):
+    """ выводит отдельную страницу ИО """
+    def get(self, request, str):
+        note = Attestationequipment.objects.filter(equipmentSM__equipment__exnumber=str).order_by('-pk')
+        obj = get_object_or_404(TestingEquipment, equipment__exnumber=str)
+        context = {
+            'obj': obj,
+            'note': note,
+        }
+        return render(request, URL + '/testingequipmentstr.html', context)
 
 
 class CommentsView(View):
@@ -419,7 +501,7 @@ def VerificationReg(request, str):
 
 @login_required
 def EquipmentReg(request):
-    """выводит форму для внесения нового ЛО и производителя, и госреестра, и СИ"""
+    """выводит форму для регистрации  ЛО"""
     if request.user.is_superuser:
         if request.method == "POST":
             form = EquipmentCreateForm(request.POST, request.FILES)
@@ -436,6 +518,8 @@ def EquipmentReg(request):
                 order.save()
                 if order.kategory == 'СИ':
                     return redirect(f'/equipment/measureequipmentreg/{order.exnumber}/')
+                if order.kategory == 'ИО':
+                    return redirect(f'/equipment/testequipmentreg/{order.exnumber}/')
                 else:
                     return redirect('equipmentlist')
     if not request.user.is_superuser:
@@ -646,7 +730,7 @@ class SearchResultTestingEquipmentView(TemplateView):
         if dateser:
             delt = datetime.now() - timedelta(days=60 * 24 * 7)
 
-        get_id_actual = TestingEquipment.objects.select_related('equipmentSM').values('equipmentSM'). \
+        get_id_actual = TestingEquipment.objects.select_related('equipmentSM_att').values('equipmentSM_att'). \
             annotate(id_actual=Max('id')).values('id_actual')
         list_ = list(get_id_actual)
         set = []
