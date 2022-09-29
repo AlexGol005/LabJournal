@@ -136,7 +136,7 @@ class MeasurEquipmentCharaktersRegView(SuccessMessageMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(MeasurEquipmentCharaktersRegView, self).get_context_data(**kwargs)
         context['title'] = 'Добавить госреестр'
-        context['dopin'] = 'equipment/measureequipmentcharacterslist'
+        context['dopin'] = 'equipment/measurequipmentcharacterslist'
         return context
 
 class TestingEquipmentCharaktersRegView(SuccessMessageMixin, CreateView):
@@ -149,7 +149,7 @@ class TestingEquipmentCharaktersRegView(SuccessMessageMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(TestingEquipmentCharaktersRegView, self).get_context_data(**kwargs)
         context['title'] = 'Добавить характеристики ИО'
-        context['dopin'] = '/equipment/testingequipmentcharacterslist/'
+        context['dopin'] = 'equipment/testingequipmentcharacterslist'
         return context
 
 class MeasureequipmentregView(LoginRequiredMixin, CreateView):
