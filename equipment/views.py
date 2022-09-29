@@ -136,7 +136,7 @@ class MeasurEquipmentCharaktersRegView(SuccessMessageMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(MeasurEquipmentCharaktersRegView, self).get_context_data(**kwargs)
         context['title'] = 'Добавить госреестр'
-        context['dopin'] = '/equipment/measureequipmentcharacterslist/'
+        context['dopin'] = 'equipment/measureequipmentcharacterslist'
         return context
 
 class TestingEquipmentCharaktersRegView(SuccessMessageMixin, CreateView):
