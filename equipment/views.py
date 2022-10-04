@@ -62,7 +62,7 @@ class SearchMustVerView(ListView):
 
     def get_queryset(self):
         serdate = self.request.GET['date']
-        queryset_get = Verificationequipment.objects.\
+        queryset_get = Verificationequipment.objects.filter(haveorder=False).\
             select_related('equipmentSM').values('equipmentSM'). \
             annotate(id_actual=Max('id')).values('id_actual')
         b = list(queryset_get)
