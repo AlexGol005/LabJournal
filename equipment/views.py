@@ -1,3 +1,5 @@
+import http
+
 import xlwt
 import pytils.translit
 from datetime import timedelta, date
@@ -5,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from datetime import datetime, timedelta
 from django.db.models import Max, Q, Value, CharField
 from django.db.models.functions import Upper, Concat, Extract, ExtractYear
@@ -51,7 +53,6 @@ class SearchMustVerView(ListView):
     template_name = URL + '/measureequipment.html'
     context_object_name = 'objects'
     ordering = ['charakters_name']
-    paginate_by = 12
 
     def get_context_data(self, **kwargs):
         context = super(SearchMustVerView, self).get_context_data(**kwargs)
@@ -76,7 +77,7 @@ class SearchMustVerView(ListView):
         for i in b:
             a = i.get('equipmentSM__id')
             set1.append(a)
-        queryset = MeasurEquipment.objects.filter(id__in=set1)
+        queryset = MeasurEquipment.objects.filter(id__in=set1).filter(equipment__status='Э')
         return queryset
 
 
@@ -359,7 +360,7 @@ class ChromatoView(TemplateView):
 
 
 class MeasurEquipmentView(ListView):
-    """ Выводит список средств измерений """
+    """Выводит список средств измерений"""
     template_name = URL + '/measureequipment.html'
     context_object_name = 'objects'
     ordering = ['charakters_name']
@@ -392,6 +393,42 @@ class TestingEquipmentView(ListView):
         context['URL'] = URL
         context['form'] = SearchMEForm()
         return context
+
+class HaveorderView(UpdateView):
+    """ выводит форму добавления инфо о заказе поверки """
+    template_name = 'equipment/reg.html'
+    form_class = OrderMEUdateForm
+
+    def get_object(self, queryset=None):
+        queryset_get = Verificationequipment.objects. \
+            select_related('equipmentSM').values('equipmentSM'). \
+            annotate(id_actual=Max('id')).values('id_actual')
+        b = list(queryset_get)
+        set = []
+        for i in b:
+            a = i.get('id_actual')
+            set.append(a)
+        q = Verificationequipment.objects.filter(id__in=set). \
+            get(equipmentSM_id=self.kwargs['pk'])
+        return q
+
+
+
+
+    def get_context_data(self, **kwargs):
+        context = super(HaveorderView, self).get_context_data(**kwargs)
+        context['title'] = "Заказана поверка или новое СИ"
+        return context
+
+    def form_valid(self, form):
+        user = User.objects.get(username=self.request.user)
+        if user.is_superuser:
+            order = form.save(commit=False)
+            order.save()
+            return redirect(f"/equipment/measureequipmentall/")
+        else:
+            return redirect(f"/equipment/measureequipmentall/")
+
 
 
 class StrMeasurEquipmentView(View):

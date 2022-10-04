@@ -730,3 +730,19 @@ class ContactsVerForm(ModelForm):
             'verificators',
             'department', 'note',
                   ]
+
+class OrderMEUdateForm(forms.ModelForm):
+    """форма для обозначения того, что заказана поверка, или ЛО на замену"""
+    haveorder = forms.BooleanField(label='', required=False)
+
+    class Meta:
+        model = Verificationequipment
+        fields = ['haveorder']
+
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.helper = FormHelper()
+    #     self.helper.layout = Layout(
+    #         Row(
+    #             Column('', css_class='form-group col-md-1 mb-0'),
+    #             Submit('submit', 'ок', css_class='btn  btn-info col-md-3 mb-1 mt-1 ml-1')))

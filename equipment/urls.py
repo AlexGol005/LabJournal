@@ -41,4 +41,5 @@ urlpatterns = [
     path('metro/', views.MetrologicalEnsuringView.as_view(), name='metro'),
     path('verificationlabels/', views.VerificationLabelsView.as_view(), name='verificationlabels'),
     path('contactsverreg/<str:str>/', views.ContactsVerregView.as_view(), name='contactsverreg'),
+    path('haveorder/<int:pk>/', views.HaveorderView.as_view(), name='haveorder'),
 ]

@@ -6,11 +6,11 @@ from decimal import *
 from django.urls import reverse
 
 CHOICES = (
-        ('Э', 'Эксплуатация'),
-        ('РЕ', 'Ремонт'),
-        ('С', 'Списан'),
-        ('Р', 'Резерв'),
-        ('Д', 'Другое'),
+        ('Э', 'Экс.'),
+        ('РЕ', 'Рем.'),
+        ('С', 'Сп.'),
+        ('Р', 'Рез.'),
+        ('Д', 'Др.'),
     )
 
 KATEGORY = (
@@ -304,6 +304,8 @@ class Verificationequipment(models.Model):
     year = models.CharField('Год поверки (если нет точных дат)', max_length=900, blank=True, null=True)
     dateordernew = models.DateField('Дата заказа нового оборудования (если поверять не выгодно)',
                                     blank=True, null=True)
+    haveorder = models.BooleanField(verbose_name='Заказана следующая поверка (или новое СИ)', default=False,
+                                    blank=True)
 
 
     def __str__(self):
