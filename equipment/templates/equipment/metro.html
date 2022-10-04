@@ -15,7 +15,7 @@
 </div>
 <br>
 <div style="text-align: center; margin-top: 20px">
-<h5>Сформировать список СИ у которых месяц заказа поверки совпадает с указанным либо раньше него</h5>
+<h5>Сформировать список СИ у которых дата заказа поверки раньше или равна указанной</h5>
  <form action="{% url 'mustver' %}" target="blank" method="GET">
         {% csrf_token %}
         {% crispy form %}

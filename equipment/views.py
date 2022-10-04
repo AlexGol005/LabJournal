@@ -60,13 +60,21 @@ class SearchMustVerView(ListView):
         return context
 
     def get_queryset(self):
-        queryset = MeasurEquipment.objects.exclude(equipment__status='С')
+        serdate = self.request.GET['date']
+        queryset_get = Verificationequipment.objects.filter(dateorder__lte=serdate).values('equipmentSM__id')
+        b = list(queryset_get)
+        set = []
+        for i in b:
+            a = i.get('equipmentSM__id')
+            set.append(a)
+        queryset = MeasurEquipment.objects.filter(id__in=set)
         return queryset
 
 
 class MeteorologicalParametersView(TemplateView):
     """ Представление, которое выводит формы для метеопараметров """
     template_name = URL + '/meteo.html'
+
 
 class MetrologicalEnsuringView(TemplateView):
     """выводит заглавную страницу для вывода данных по поверке и аттестации, списков в ексель и пр """
