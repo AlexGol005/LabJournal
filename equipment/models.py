@@ -177,7 +177,8 @@ class Personchange(models.Model):
 class Roomschange(models.Model):
     roomnumber = models.ForeignKey(Rooms, on_delete=models.PROTECT)
     date = models.DateField('Дата перемещения', auto_now_add=True, db_index=True)
-    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Оборудование')
+    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True,
+                                  verbose_name='Оборудование')
 
     def __str__(self):
         return f'{self.equipment.exnumber} Перемещено {self.date} '
@@ -189,8 +190,10 @@ class Roomschange(models.Model):
 
 class DocsCons(models.Model):
     date = models.CharField('Дата появления',  max_length=1000, default='', blank=True, null=True)
-    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True, verbose_name='Оборудование')
-    docs = models.CharField('Документ или принадлежность (1 или несколько)', max_length=100, default='', blank=True, null=True)
+    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True,
+                                  verbose_name='Оборудование')
+    docs = models.CharField('Документ или принадлежность (1 или несколько)', max_length=100, default='', blank=True,
+                            null=True)
     source = models.CharField('Откуда появился', max_length=1000, default='От поставщика', blank=True, null=True)
     note = models.CharField('Примечание', max_length=1000, blank=True, null=True)
 
@@ -213,8 +216,6 @@ class MeasurEquipmentCharakters(models.Model):
                               max_length=1000, default='', blank=True, null=True)
     aim = models.CharField('Наименование определяемых (измеряемых) характеристик (параметров) продукции',
                            max_length=90, blank=True, null=True)
-
-
 
     def __str__(self):
         return f'госреестр: {self.reestr},  {self.name}  {self.modificname}'
@@ -466,8 +467,9 @@ class CompanyCard(models.Model):
     prohibitet = models.TextField('Запрет на тираж протокола',  blank=True, null=True)
     imglogoadress = models.ImageField('Картинка логотип с адресом', upload_to='user_images', blank=True, null=True,
                                         default='user_images/default.png')
-    imglogoadress_mini = models.ImageField('Картинка логотип с адресом малая', upload_to='user_images', blank=True, null=True,
-                                      default='user_images/default.png')
+    imglogoadress_mini = models.ImageField('Картинка логотип с адресом малая', upload_to='user_images',
+                                           blank=True, null=True,  default='user_images/default.png')
+
 
 
     def __str__(self):
@@ -487,7 +489,19 @@ class CompanyCard(models.Model):
         verbose_name_plural = 'Карточка'
 
 
+class ContactsVer(models.Model):
+    """контакты поверителей"""
+    equipment = models.ForeignKey(Equipment, verbose_name='Прибор', on_delete=models.CASCADE)
+    verificators = models.ForeignKey(Verificators, verbose_name='Организация', on_delete=models.CASCADE)
+    department = models.TextField('Отдел', max_length=1000, default='', blank=True, null=True)
+    note = models.TextField('Содержание', max_length=1000, default='', blank=True, null=True)
 
+    def get_absolute_url(self):
+        return reverse('contactsver')
+
+    class Meta:
+        verbose_name = 'Контакты поверителей'
+        verbose_name_plural = 'Контакты поверителей'
 
 
 

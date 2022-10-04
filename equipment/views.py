@@ -20,6 +20,31 @@ from equipment.models import*
 
 URL = 'equipment'
 
+class ContactsVerregView(LoginRequiredMixin, CreateView):
+    """ выводит форму регистрации контактов поверителей"""
+    form_class = ContactsVerForm
+    template_name = 'equipment/reg.html'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Equipment, exnumber=self.kwargs['str'])
+
+    def get_context_data(self, **kwargs):
+        context = super(ContactsVerregView, self).get_context_data(**kwargs)
+        context['title'] = 'Добавить контакт поверителя'
+        context['dop'] = Equipment.objects.get(exnumber=self.kwargs['str'])
+        return context
+
+    def form_valid(self, form):
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.equipment = Equipment.objects.get(exnumber=self.kwargs['str'])
+            order.save()
+            if order.equipment.kategory == 'СИ':
+                return redirect(f'/equipment/measureequipment/verification/{self.kwargs["str"]}')
+            if order.equipment.kategory == 'ИО':
+                return super().form_valid(form)
+
+
 class SearchMustVerView(ListView):
     """ выводит список СИ у которых месяц заказа поверки совпадает с указанным либо раньше него"""
 
@@ -435,6 +460,7 @@ class VerificationequipmentView(View):
     """ выводит историю поверок и форму для добавления комментария к истории поверок """
     def get(self, request, str):
         note = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).order_by('-pk')
+        note2 = ContactsVer.objects.filter(equipment__exnumber=str).order_by('-pk')
         try:
             strreg = note.latest('pk').equipmentSM.equipment.exnumber
         except:
@@ -455,6 +481,7 @@ class VerificationequipmentView(View):
             comment = ''
         form = CommentsVerificationCreationForm(initial={'comment': comment})
         data = {'note': note,
+                'note2': note2,
                 'title': title,
                 'calinterval': calinterval,
                 'now': now,

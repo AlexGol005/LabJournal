@@ -86,5 +86,27 @@
     <div style="text-align: center; margin-top: 5px; margin-bottom: 15px">
      <a href="/equipment/measureequipment/verificationreg/{{ strreg }}/"  class="btn btn-warning mt-2 mr-2">
  Внести запись о поверке</a>
+     <a href="/equipment/contactsverreg/{{ strreg }}/"  class="btn btn-warning mt-2 mr-2">
+ Внести контакты поверителя</a>
    </div>
+<div style="text-align: center; margin-top: 5px; margin-bottom: 15px">
+<h6>Контакты поверителей</h6></div>
+    <table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Организация</th>
+            <th> Отдел </th>
+            <th> Контактные данные</th>
+         </tr>
+    </thead>
+    <tbody>
+    {% for obj2 in note2 %}
+<tr>
+<td> {{ obj2.verificators }}</td>
+<td> {{ obj2.department }}</td>
+<td> {{ obj2.note }}</td>
+</tr>
+    {% endfor %}
+    </tbody>
+    </table>
 {% endblock %}

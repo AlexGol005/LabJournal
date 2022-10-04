@@ -711,3 +711,22 @@ class DateForm(forms.Form):
             Row(
                 Column('date', css_class='form-group col-md-4 mb-0'),
                 Submit('submit', 'сформировать', css_class='btn  btn-info col-md-6 mb-3 mt-4 ml-4')))
+
+
+class ContactsVerForm(ModelForm):
+    """форма для добавления контактов поверителей"""
+    verificators = forms.ModelChoiceField(label='Организация',
+                                        queryset=Verificators.objects.all(),
+                                        widget=forms.Select(attrs={'class': 'form-control'}))
+    department = forms.CharField(label='Отдел', required=False,
+                          widget=forms.TextInput(attrs={'class': 'form-control'}))
+    note = forms.CharField(label='ФИО и телефон', required=False,
+                                 widget=forms.Textarea(attrs={'class': 'form-control'}))
+
+
+    class Meta:
+        model = ContactsVer
+        fields = [
+            'verificators',
+            'department', 'note',
+                  ]
