@@ -1064,6 +1064,7 @@ def export_mustver_xls(request):
         filter(equipment__personchange__in=setperson). \
         filter(equipment__roomschange__in=setroom). \
         filter(equipment__status='Э'). \
+        filter(equipmentSM_ver__in=setver). \
         values_list(
         'equipment__exnumber',
         'charakters__reestr',
