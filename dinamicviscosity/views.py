@@ -340,6 +340,7 @@ def export_me_xls(request, pk):
     style7 = xlwt.XFStyle()
     style7.font.name = 'Times New Roman'
     style7.alignment = al2
+    style7.alignment = al1
 
     style8 = xlwt.XFStyle()
     style8.font.name = 'Times New Roman'
@@ -399,6 +400,8 @@ def export_me_xls(request, pk):
         note.piknometer_mass2 = '-'
         note.piknometer_plus_SM_mass1 = '-'
         note.piknometer_plus_SM_mass2 = '-'
+        note.SM_mass1 = '-'
+        note.SM_mass2 = '-'
 
     row_num = 5
     columns = [
@@ -415,8 +418,6 @@ def export_me_xls(request, pk):
         ws.merge(5, 5, 2, 3, style2)
     for col_num in range(2, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-
-
 
     row_num = 6
     columns = [
@@ -445,8 +446,8 @@ def export_me_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(7, 7, 0, 1, style1)
     for col_num in range(2, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(7, 7, 2, 3, style2)
+        ws.write(row_num, col_num, columns[col_num], style8)
+        ws.merge(7, 7, 2, 3, style8)
 
     row_num = 8
     columns = [
@@ -460,8 +461,8 @@ def export_me_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(8, 8, 0, 1, style1)
     for col_num in range(2, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(8, 8, 2, 3, style2)
+        ws.write(row_num, col_num, columns[col_num], style8)
+        ws.merge(8, 8, 2, 3, style8)
 
     row_num = 9
     columns = [
