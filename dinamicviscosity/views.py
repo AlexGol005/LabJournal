@@ -341,10 +341,16 @@ def export_me_xls(request, pk):
     style7.font.name = 'Times New Roman'
     style7.alignment = al2
 
+    style8 = xlwt.XFStyle()
+    style8.font.name = 'Times New Roman'
+    style8.borders = b1
+    style8.alignment = al1
+    style8.num_format_str = '0.0000'
+
 
     row_num = 0
     columns = [
-        AttestationJ.objects.get(id=2).name
+        f'{AttestationJ.objects.get(id=1).name}_{note.date.year}'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -355,7 +361,7 @@ def export_me_xls(request, pk):
         'Дата измерения',
         'Индекс СО',
         'Номер внутренней партии',
-        'Т °C',
+        'Т, °C',
         'Сод. нефть или октол',
     ]
     for col_num in range(len(columns)):
@@ -381,11 +387,18 @@ def export_me_xls(request, pk):
 
     row_num = 4
     columns = [
-        'Измерение плотности'
+        f'Измерение плотности {note.equipment}'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(4, 4, 0, 4, style1)
+
+    if note.equipment == 'денсиметром':
+        note.piknometer_volume = '-'
+        note.piknometer_mass1 = '-'
+        note.piknometer_mass2 = '-'
+        note.piknometer_plus_SM_mass1 = '-'
+        note.piknometer_plus_SM_mass2 = '-'
 
     row_num = 5
     columns = [
@@ -417,7 +430,7 @@ def export_me_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(6, 6, 0, 1, style1)
     for col_num in range(2, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.write(row_num, col_num, columns[col_num], style8)
         ws.merge(6, 6, 2, 3, style2)
 
     row_num = 7
@@ -524,10 +537,10 @@ def export_me_xls(request, pk):
 
     row_num = 13
     columns = [
-        'Сред. плотн., ρ, г/см3',
-        'Оценка приемлемости измерений   \n Δ = (|ρ1 - ρ2|/ρсред) * 100 %',
-        'Оценка приемлемости измерений   \n Δ = (|ρ1 - ρ2|/ρсред) * 100 %',
-        'Оценка приемлемости измерений   \n Δ = (|ρ1 - ρ2|/ρсред) * 100 %',
+        'ρ сред., г/см3',
+        'Оценка приемлемости измерений   \n Δ = (|ρ1 - ρ2|/ρ сред.) * 100 %',
+        'Оценка приемлемости измерений   \n Δ = (|ρ1 - ρ2|/ρ сред.) * 100 %',
+        'Оценка приемлемости измерений   \n Δ = (|ρ1 - ρ2|/ρ сред.) * 100 %',
          'Критерий приемл. измерений, r',
     ]
 
@@ -544,7 +557,7 @@ def export_me_xls(request, pk):
          note.kriteriy,
     ]
     for col_num in range(1):
-        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.write(row_num, col_num, columns[col_num], style7)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
         ws.merge(14, 14, 1, 3, style2)
@@ -606,18 +619,26 @@ def export_me_xls(request, pk):
     row_num = 20
     columns = [
         'АЗ, Дин. вязк., Па * с',
-        'Абс. погр.  (νдин сред * 0,3)/ 1000',
+        'Абс. погр.  (νдин сред. * 0,3)/ 1000',
         'Пред. зн. плот., ρпред, г/см3 ',
-        'Разница с ρпред  Δρпред = (|ρизм - ρпред|/ρсред) * 100 %',
-        'Разница с ρпред  Δρпред = (|ρизм - ρпред|/ρсред) * 100 %',
+        'Разница с ρпред, %',
+        'Разница с ρпред <= 0,7%',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(20, 20, 3, 4, style1)
 
     note.certifiedValue = str(note.certifiedValue).replace('.', ',')
     note.abserror = str(note.abserror).replace('.', ',')
     note.olddensity = str(note.olddensity).replace('.', ',')
+
+    if not note.olddensity:
+        note.deltaolddensity = '-'
+        note.olddensity = '-'
+        note.resultWarning = '-'
+    if note.resultWarning and not note.olddensity:
+        note.resultWarning = 'нет'
+    if note.resultWarning == '' and note.olddensity:
+        note.resultWarning = 'да'
 
     row_num = 21
     columns = [
@@ -625,13 +646,11 @@ def export_me_xls(request, pk):
         note.abserror,
         note.olddensity,
         note.deltaolddensity,
-        note.deltaolddensity,
+        note.resultWarning,
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(21, 21, 3, 4, style2)
-    # except:
-    #     pass
+
 
     row_num = 22
     columns = [

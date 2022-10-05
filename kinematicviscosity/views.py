@@ -305,7 +305,7 @@ def export_me_xls(request, pk):
 
     row_num = 0
     columns = [
-                 AttestationJ.objects.get(id=1).name
+                 f'{AttestationJ.objects.get(id=1).name}_{note.date.year}'
                ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -316,7 +316,7 @@ def export_me_xls(request, pk):
         'Дата измерения',
         'Индекс СО',
         'Номер внутренней партии',
-        'Т °C',
+        'Т, °C',
         'Термост-но. 20 мин',
         'Сод. нефть или октол',
     ]
@@ -392,12 +392,12 @@ def export_me_xls(request, pk):
 
     row_num = 8
     columns = [
-        'Время истечения 1, τ1',
-        'τ11, минут',
-        'τ11, секунд',
-        'τ21, минут',
-        'τ21, минут',
-        'τ21, секунд',
+        'Время истечения 1',
+        'τ11, мин',
+        'τ11, с',
+        'τ21, мин',
+        'τ21, мин',
+        'τ21, с',
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], style1)
@@ -408,7 +408,7 @@ def export_me_xls(request, pk):
 
     row_num = 9
     columns = [
-        'Время истечения 1, τ1',
+        'Время истечения 1',
         f'{note.plustimeminK1T1}:{ note.plustimesekK1T1}',
         note.timeK1T1_sec,
         f'{note.plustimeminK2T1}:{ note.plustimesekK2T1}',
@@ -421,12 +421,12 @@ def export_me_xls(request, pk):
 
     row_num = 10
     columns = [
-        'Время истечения 2, τ2',
-        'τ21, минут',
-        'τ21, секунд',
-        'τ22, минут',
-        'τ22, минут',
-        'τ22, секунд',
+        'Время истечения 2',
+        'τ12, мин',
+        'τ12, с',
+        'τ22, мин',
+        'τ22, мин',
+        'τ22, с',
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], style1)
@@ -449,7 +449,7 @@ def export_me_xls(request, pk):
 
     row_num = 11
     columns = [
-        'Время истечения 2, τ2',
+        'Время истечения 2',
         am21,
         as21,
         am22,
@@ -463,9 +463,9 @@ def export_me_xls(request, pk):
     row_num = 12
     columns = [
         'Время истечения среднее',
-        'τ1',
-        'τ2',
-        'τ2',
+        'τ1(сред.), c',
+        'τ2(сред.), c',
+        'τ2(сред.), c',
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], style1)
@@ -579,12 +579,13 @@ def export_me_xls(request, pk):
         'Абс. погр. (νсред * 0,3)/100',
         'Пред. знач. вязкости, νпред, мм2/с ',
         'Разница с νпред, %',
-        'Разница с νпред, %',
-        'Разница с νпред, %',
+        'Отличие АЗ <= 0,7%',
+        'Отличие АЗ <= 0,7%',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(row_num, row_num, 3, 5, style1)
+        ws.merge(row_num, row_num, 4, 5, style1)
+
 
     note.certifiedValue_text = str(note.certifiedValue_text).replace('.', ',')
     note.abserror = str(note.abserror).replace('.', ',')
@@ -594,18 +595,25 @@ def export_me_xls(request, pk):
         note.deltaOldCertifiedValue = '-'
     if not note.oldCertifiedValue:
         note.oldCertifiedValue = '-'
+    if not note.oldCertifiedValue:
+        note.resultWarning = '-'
+    if note.resultWarning and not note.oldCertifiedValue:
+        note.resultWarning = 'нет'
+    if note.resultWarning == '' and note.oldCertifiedValue:
+        note.resultWarning = 'да'
+
     row_num = 22
     columns = [
         note.certifiedValue_text,
         note.abserror,
         note.oldCertifiedValue,
         note.deltaOldCertifiedValue,
-        note.deltaOldCertifiedValue,
-        note.deltaOldCertifiedValue,
+        note.resultWarning,
+        note.resultWarning,
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(row_num, row_num, 3, 5, style2)
+        ws.merge(row_num, row_num, 4, 5, style2)
 
     row_num = 23
     columns = [
@@ -646,8 +654,6 @@ def export_me_xls(request, pk):
 
     wb.save(response)
     return response
-
-
 
 
 def export_protocol_xls(request, pk):

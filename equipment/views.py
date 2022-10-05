@@ -1016,7 +1016,6 @@ def export_mustver_xls(request):
     ws.col(8).width = 7000
 
     # стили
-
     al10 = Alignment()
     al10.horz = Alignment.HORZ_CENTER
     al10.vert = Alignment.VERT_CENTER
@@ -1096,36 +1095,54 @@ def export_me_xls(request):
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('График поверки СИ', cell_overwrite_ok=True)
 
-    # ширина столбцов
+    # ширина столбцов графика поверки
+    ws.col(0).width = 3000
+    ws.col(1).width = 3000
     ws.col(2).width = 4500
-    ws.col(8).width = 3000
+    ws.col(3).width = 3000
+    ws.col(4).width = 4200
+    ws.col(8).width = 4200
+    ws.col(9).width = 3000
+    ws.col(10).width = 4200
+    ws.col(12).width = 4200
+    ws.col(13).width = 4200
+    ws.col(14).width = 3000
+    ws.col(15).width = 3000
+    ws.col(16).width = 3000
+    ws.col(17).width = 3000
+
+    # стили
+    al10 = Alignment()
+    al10.horz = Alignment.HORZ_CENTER
+    al10.vert = Alignment.VERT_CENTER
+    al10.wrap = 1
+
+    b1 = Borders()
+    b1.left = 1
+    b1.right = 1
+    b1.top = 1
+    b1.bottom = 1
+
+    style10 = xlwt.XFStyle()
+    style10.font.bold = True
+    style10.font.name = 'Times New Roman'
+    style10.borders = b1
+    style10.alignment = al10
+
+    style20 = xlwt.XFStyle()
+    style20.font.name = 'Times New Roman'
+    style20.borders = b1
+    style20.alignment = al10
+
+    style30 = xlwt.XFStyle()
+    style30.font.name = 'Times New Roman'
+    style30.borders = b1
+    style30.alignment = al10
+    style30.num_format_str = 'DD.MM.YYYY'
 
     # заголовки, первый ряд
     row_num = 0
-
-    def set_style_top():
-        style = xlwt.XFStyle()
-        style.font.bold = True
-        style.font.name = 'Calibri'
-        style.borders.left = 1
-        style.borders.right = 1
-        style.borders.top = 1
-        style.borders.bottom = 1
-
-        style.alignment.wrap = 1
-        style.alignment.horz = 0x02
-        style.alignment.vert = 0x01
-
-
-        pattern = xlwt.Pattern()
-        pattern.pattern = xlwt.Pattern.SOLID_PATTERN
-        pattern.pattern_fore_colour = xlwt.Style.colour_map['tan']
-        style.pattern = pattern
-
-        return style
-
     columns = [
-                # '№',
                 'Внутренний  номер',
                 'Номер в госреестре',
                 'Наименование',
@@ -1139,35 +1156,16 @@ def export_me_xls(request):
                 'Ответственный за СИ',
                 'Статус',
                 'Ссылка на сведения о поверке',
-                'Краткий номер свидетельства',
+                'Номер свидетельства',
                 'Дата поверки/калибровки',
                 'Дата окончания свидетельства',
                 'Дата заказа поверки/калибровки',
+                'Дата заказа замены',
                 'Периодичность поверки /калибровки (месяцы)',
                 'Инвентарный номер',
-                'Ссылка на карточку',
                ]
-
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], set_style_top())
-
-
-    style = xlwt.XFStyle()
-
-
-
-    style.font.name = 'Calibri'
-
-    style.borders.left = 1
-    style.borders.right = 1
-    style.borders.top = 1
-    style.borders.bottom = 1
-
-    style.alignment.wrap = 1
-    style.alignment.horz = 0x02
-    style.alignment.vert = 0x01
-
-
+        ws.write(row_num, col_num, columns[col_num], style10)
 
     rows = MeasurEquipment.objects.all().\
         annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
@@ -1190,19 +1188,22 @@ def export_me_xls(request):
             'equipment__personchange__person__username',
             'equipment__status',
             'equipmentSM_ver__arshin',
-            'equipmentSM_ver__certnumbershort',
+            'equipmentSM_ver__certnumber',
             'equipmentSM_ver__date',
             'equipmentSM_ver__datedead',
             'equipmentSM_ver__dateorder',
+            'equipmentSM_ver__dateordernew',
             'charakters__calinterval',
             'equipment__invnumber',
-            'ecard',
         )
-
     for row in rows:
         row_num += 1
-        for col_num in range(len(row)):
-            ws.write(row_num, col_num, row[col_num], style)
+        for col_num in range(0, 14):
+            ws.write(row_num, col_num, row[col_num], style20)
+        for col_num in range(14, 18):
+            ws.write(row_num, col_num, row[col_num], style30)
+        for col_num in range(18, len(row)):
+            ws.write(row_num, col_num, row[col_num], style20)
 
     wb.save(response)
     return response
