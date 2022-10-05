@@ -21,6 +21,21 @@
         {% crispy form %}
     </form>
 </div>
+<br>
+<div style="text-align: center; margin-top: 20px">
+<h5>Выгрузить в EXEL список СИ для поверки</h5>
+ <form action="{% url 'export_mustver_xls' %}" target="blank" method="GET">
+        {% csrf_token %}
+        {% crispy form %}
+    </form>
+</div>
+<div style="text-align: center; margin-top: 20px">
+<h5>Сформировать список СИ которые надо заказать взамен СИ с истёкшей поверкой</h5>
+ <form action="{% url 'mustorder' %}" target="blank" method="GET">
+        {% csrf_token %}
+        {% crispy form %}
+    </form>
+</div>
 
 
 

@@ -46,7 +46,7 @@ class ContactsVerregView(LoginRequiredMixin, CreateView):
             if order.equipment.kategory == 'ИО':
                 return super().form_valid(form)
 
-
+# флаг1
 class SearchMustVerView(ListView):
     """ выводит список СИ у которых месяц заказа поверки совпадает с указанным либо раньше него"""
 
@@ -81,6 +81,40 @@ class SearchMustVerView(ListView):
         return queryset
 
 
+class SearchMustOrderView(ListView):
+    """ выводит список СИ у которых месяц заказа поверки совпадает с указанным либо раньше него"""
+
+    template_name = URL + '/measureequipment.html'
+    context_object_name = 'objects'
+    ordering = ['charakters_name']
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchMustOrderView, self).get_context_data(**kwargs)
+        context['URL'] = URL
+        context['form'] = SearchMEForm()
+        return context
+
+    def get_queryset(self):
+        serdate = self.request.GET['date']
+        queryset_get = Verificationequipment.objects.filter(haveorder=False).\
+            select_related('equipmentSM').values('equipmentSM'). \
+            annotate(id_actual=Max('id')).values('id_actual')
+        b = list(queryset_get)
+        set = []
+        for i in b:
+            a = i.get('id_actual')
+            set.append(a)
+        queryset_get1 = Verificationequipment.objects.filter(id__in=set).\
+            filter(dateordernew__lte=serdate).values('equipmentSM__id')
+        b = list(queryset_get1)
+        set1 = []
+        for i in b:
+            a = i.get('equipmentSM__id')
+            set1.append(a)
+        queryset = MeasurEquipment.objects.filter(id__in=set1).filter(equipment__status='Э')
+        return queryset
+
+
 class MeteorologicalParametersView(TemplateView):
     """ Представление, которое выводит формы для метеопараметров """
     template_name = URL + '/meteo.html'
@@ -95,14 +129,16 @@ class MetrologicalEnsuringView(TemplateView):
         context['form'] = DateForm()
         return context
 
+
 class VerificationLabelsView(TemplateView):
-    """выводит страницу с формой для ввода внутренних номеров для распечатки этикеток о метрологическом обслуживании приборов """
+    """выводит форму для ввода внутренних номеров для распечатки этикеток о метрологическом обслуживании приборов """
     template_name = URL + '/labels.html'
 
     def get_context_data(self, **kwargs):
         context = super(VerificationLabelsView, self).get_context_data(**kwargs)
         context['form'] = LabelEquipmentform()
         return context
+
 
 class RoomsCreateView(SuccessMessageMixin, CreateView):
     """ выводит форму добавления помещения """
@@ -182,6 +218,7 @@ class MeasurEquipmentCharaktersRegView(SuccessMessageMixin, CreateView):
         context['dopin'] = 'equipment/measurequipmentcharacterslist'
         return context
 
+
 class TestingEquipmentCharaktersRegView(SuccessMessageMixin, CreateView):
     """ выводит форму внесения характеристик ИО. """
     template_name = URL + '/reg.html'
@@ -194,6 +231,7 @@ class TestingEquipmentCharaktersRegView(SuccessMessageMixin, CreateView):
         context['title'] = 'Добавить характеристики ИО'
         context['dopin'] = 'equipment/testingequipmentcharacterslist'
         return context
+
 
 class MeasureequipmentregView(LoginRequiredMixin, CreateView):
     """ выводит форму регистрации СИ на основе ЛО и Госреестра """
@@ -286,6 +324,7 @@ class EquipmentView(ListView):
     ordering = ['exnumber']
     paginate_by = 12
 
+
 class VerificatorsView(ListView):
     """ Выводит список всех организаций поверителей """
     model = Verificators
@@ -322,6 +361,7 @@ class MeasurEquipmentCharaktersView(ListView):
         context['form'] = Searchreestrform()
         return context
 
+
 class TestingEquipmentCharaktersView(ListView):
     """ Выводит список характеристик ИО """
     model = TestingEquipmentCharakters
@@ -334,6 +374,7 @@ class TestingEquipmentCharaktersView(ListView):
         context = super(TestingEquipmentCharaktersView, self).get_context_data(**kwargs)
         context['form'] = Searchtestingform()
         return context
+
 
 class ReestrsearresView(TemplateView):
     """ Представление, которое выводит результаты поиска по списку характеристик ИО """
@@ -353,6 +394,7 @@ class ReestrsearresView(TemplateView):
         context['form'] = Searchreestrform(initial={'name': name})
         context['URL'] = URL
         return context
+
 
 class ChromatoView(TemplateView):
     """ Представление, которое выводит список принадлежностей для хроматографа """
@@ -394,6 +436,7 @@ class TestingEquipmentView(ListView):
         context['form'] = SearchMEForm()
         return context
 
+
 class HaveorderView(UpdateView):
     """ выводит форму добавления инфо о заказе поверки """
     template_name = 'equipment/reg.html'
@@ -413,8 +456,6 @@ class HaveorderView(UpdateView):
         return q
 
 
-
-
     def get_context_data(self, **kwargs):
         context = super(HaveorderView, self).get_context_data(**kwargs)
         context['title'] = "Заказана поверка или новое СИ"
@@ -428,7 +469,6 @@ class HaveorderView(UpdateView):
             return redirect(f"/equipment/measureequipmentall/")
         else:
             return redirect(f"/equipment/measureequipmentall/")
-
 
 
 class StrMeasurEquipmentView(View):
@@ -510,6 +550,7 @@ def EquipmentUpdate(request, str):
             }
     return render(request, 'equipment/individuality.html', data)
 
+
 class VerificationequipmentView(View):
     """ выводит историю поверок и форму для добавления комментария к истории поверок """
     def get(self, request, str):
@@ -557,6 +598,7 @@ class VerificationequipmentView(View):
         else:
             messages.success(request, f'Комментировать может только ответственный за поверку приборов')
             return redirect(reverse('measureequipmentver', kwargs={'str': str}))
+
 
 @login_required
 def VerificationReg(request, str):
@@ -641,7 +683,6 @@ class DocsConsView(View):
             return redirect(f'/equipment/docsreg/{str}')
 
 
-
 class PersonchangeFormView(View):
     """вывод формы смены ответсвенного за прибор, URL=personchangereg/<str:str>/"""
     def get(self, request, str):
@@ -668,6 +709,7 @@ class PersonchangeFormView(View):
             messages.success(request, f'Раздел для ответственного за поверку приборов')
             return redirect(f'/equipment/measureequipment/{str}')
 
+
 class RoomschangeFormView(View):
     """вывод формы смены помещения, URL=roomschangereg/<str:str>/"""
     def get(self, request, str):
@@ -693,6 +735,7 @@ class RoomschangeFormView(View):
         else:
             messages.success(request, f'Раздел для ответственного за поверку приборов')
             return redirect(f'/equipment/measureequipment/{str}')
+
 
 class SearchResultMeasurEquipmentView(TemplateView):
     """ Представление, которое выводит результаты поиска по списку средств измерений """
@@ -903,6 +946,146 @@ class SearchResultTestingEquipmentView(TemplateView):
 
 # -------------------
 
+# блок выгрузок данных в формате ексель
+
+
+# запросы к БД для выгрузо списков СИ
+get_id_room = Roomschange.objects.select_related('equipment').values('equipment'). \
+        annotate(id_actual=Max('id')).values('id_actual')
+list_ = list(get_id_room)
+setroom = []
+for n in list_:
+    setroom.append(n.get('id_actual'))
+
+get_id_person = Personchange.objects.select_related('equipment').values('equipment'). \
+        annotate(id_actual=Max('id')).values('id_actual')
+list_ = list(get_id_person)
+setperson = []
+for n in list_:
+    setperson.append(n.get('id_actual'))
+
+get_id_verification = Verificationequipment.objects.select_related('equipmentSM').values('equipmentSM'). \
+    annotate(id_actual=Max('id')).values('id_actual')
+list_ = list(get_id_verification)
+setver = []
+for n in list_:
+    setver.append(n.get('id_actual'))
+
+
+# флаг2
+def export_mustver_xls(request):
+    """представление для выгрузки СИ требующих поверки"""
+    # выборка из ексель по поиску по дате
+    serdate = request.GET['date']
+    queryset_get = Verificationequipment.objects.filter(haveorder=False). \
+        select_related('equipmentSM').values('equipmentSM'). \
+        annotate(id_actual=Max('id')).values('id_actual')
+    b = list(queryset_get)
+    set = []
+    for i in b:
+        a = i.get('id_actual')
+        set.append(a)
+    queryset_get1 = Verificationequipment.objects.filter(id__in=set). \
+        filter(dateorder__lte=serdate).values('equipmentSM__id')
+    b = list(queryset_get1)
+    set1 = []
+    for i in b:
+        a = i.get('equipmentSM__id')
+        set1.append(a)
+    queryset = MeasurEquipment.objects.filter(id__in=set1)
+
+    # собственно ексель
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = f'attachment; filename="{serdate}_mustver.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('1', cell_overwrite_ok=True)
+    ws.header_str = b''
+    ws.footer_str = b''
+
+
+
+    # ширина столбцов
+    ws.col(0).width = 3000
+    ws.col(1).width = 3000
+    ws.col(2).width = 6000
+    ws.col(3).width = 5000
+    ws.col(4).width = 3000
+    ws.col(5).width = 3000
+    ws.col(6).width = 4500
+    ws.col(7).width = 4500
+    ws.col(8).width = 7000
+
+    # стили
+
+    al10 = Alignment()
+    al10.horz = Alignment.HORZ_CENTER
+    al10.vert = Alignment.VERT_CENTER
+    al10.wrap = 1
+
+    b1 = Borders()
+    b1.left = 1
+    b1.right = 1
+    b1.top = 1
+    b1.bottom = 1
+
+    style10 = xlwt.XFStyle()
+    style10.font.bold = True
+    style10.font.name = 'Times New Roman'
+    style10.borders = b1
+    style10.alignment = al10
+
+    style20 = xlwt.XFStyle()
+    style20.font.name = 'Times New Roman'
+    style20.borders = b1
+    style20.alignment = al10
+
+    row_num = 1
+    columns = [
+        'Внутренний номер',
+        'Номер в гореестре',
+        'Название',
+        'Тип/модификация',
+        'Заводской номер',
+        'Год выпуска',
+        'Место хранения',
+        'Место поверки (предыдущей)',
+        'Сотрудник, ответственный за подготовку к поверке/аттестации',
+    ]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style10)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 1000
+
+    rows = queryset. \
+        annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipment__status='Э'). \
+        values_list(
+        'equipment__exnumber',
+        'charakters__reestr',
+        'charakters__name',
+        'mod_type',
+        'equipment__lot',
+        'equipment__yearmanuf',
+        'equipment__roomschange__roomnumber__roomnumber',
+        'equipmentSM_ver__place',
+        'equipment__personchange__person__username',
+    )
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], style20)
+            ws.row(row_num).height_mismatch = True
+            ws.row(row_num).height = 1500
+
+    wb.save(response)
+    return response
+
 
 def export_me_xls(request):
     '''представление для выгрузки списка всех СИ в ексель'''
@@ -966,9 +1149,6 @@ def export_me_xls(request):
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], set_style_top())
-        # ws.merge(0, 0, 3, 4)
-
-    # значения, остальные ряды
 
 
     style = xlwt.XFStyle()
@@ -987,26 +1167,6 @@ def export_me_xls(request):
     style.alignment.vert = 0x01
 
 
-    get_id_room = Roomschange.objects.select_related('equipment').values('equipment'). \
-        annotate(id_actual=Max('id')).values('id_actual')
-    list_ = list(get_id_room)
-    setroom = []
-    for n in list_:
-        setroom.append(n.get('id_actual'))
-
-    get_id_person = Personchange.objects.select_related('equipment').values('equipment'). \
-        annotate(id_actual=Max('id')).values('id_actual')
-    list_ = list(get_id_person)
-    setperson = []
-    for n in list_:
-        setperson.append(n.get('id_actual'))
-
-    get_id_verification = Verificationequipment.objects.select_related('equipmentSM').values('equipmentSM'). \
-        annotate(id_actual=Max('id')).values('id_actual')
-    list_ = list(get_id_verification)
-    setver = []
-    for n in list_:
-        setver.append(n.get('id_actual'))
 
     rows = MeasurEquipment.objects.all().\
         annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
