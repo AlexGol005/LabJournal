@@ -635,10 +635,12 @@ def export_me_xls(request, pk):
         note.deltaolddensity = '-'
         note.olddensity = '-'
         note.resultWarning = '-'
-    if note.resultWarning and not note.olddensity:
-        note.resultWarning = 'нет'
+    if note.resultWarning == '' and not note.olddensity:
+        note.resultWarning = '-'
     if note.resultWarning == '' and note.olddensity:
         note.resultWarning = 'да'
+    if note.resultWarning == '' and not note.olddensity:
+        note.resultWarning = 'нет'
 
     row_num = 21
     columns = [

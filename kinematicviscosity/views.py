@@ -593,14 +593,14 @@ def export_me_xls(request, pk):
 
     if not note.deltaOldCertifiedValue:
         note.deltaOldCertifiedValue = '-'
-    if not note.oldCertifiedValue:
         note.oldCertifiedValue = '-'
-    if not note.oldCertifiedValue:
         note.resultWarning = '-'
-    if note.resultWarning and not note.oldCertifiedValue:
-        note.resultWarning = 'нет'
+    if note.resultWarning == '' and not note.oldCertifiedValue:
+        note.resultWarning = '-'
     if note.resultWarning == '' and note.oldCertifiedValue:
         note.resultWarning = 'да'
+    if note.resultWarning == '' and not note.oldCertifiedValue:
+        note.resultWarning = 'нет'
 
     row_num = 22
     columns = [
