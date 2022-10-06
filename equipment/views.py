@@ -611,7 +611,7 @@ def EquipmentMetrologyUpdate(request, str):
 
 
 def VerificatorUpdate(request, str):
-    """выводит форму для обновления постоянных особенностей поверки"""
+    """выводит форму для обновления данных о сотруднике поверителе"""
     if request.method == "POST":
         form = VerificatorPersonCreationForm(request.POST,  instance=VerificatorPerson.objects.get(pk=str))
         if form.is_valid():
@@ -622,7 +622,7 @@ def VerificatorUpdate(request, str):
         form = VerificatorPersonCreationForm(instance=VerificatorPerson.objects.get(pk=str))
     data = {'form': form,
             }
-    return render(request, 'equipment/verificationreg.html', data)
+    return render(request, 'equipment/personverreg.html', data)
 
 
 class VerificationequipmentView(View):
