@@ -13,7 +13,12 @@
 <a href="{% url 'verificationlabels' %}" class="btn btn-warning" style="width: 210px">Распечать этикетки на СИ</a>
 {#<a href="{% url 'meteoreg' %}" class="btn btn-warning  mt-3" style="width: 210px">Распечать этикетки на ИО</a>#}
 </div>
+<div style="text-align: center; margin-top: 20px">
+<a href="{% url 'verificatorpersons' %}" class="btn btn-warning  mt-3" style="width: 210px" target="blank">
+Контакты поверителей</a>
+</div>
 <br>
+-----------------------------------------------------
 <div style="text-align: center; margin-top: 20px">
 <h5>Неповеренные к указанной дате СИ</h5>
  <form action="{% url 'notver' %}" target="blank" method="GET">
@@ -22,6 +27,7 @@
     </form>
 </div>
 <br>
+-----------------------------------------------------
 <div style="text-align: center; margin-top: 20px">
 <h5>Список СИ требующих поверки к указанной дате</h5>
  <form action="{% url 'mustver' %}" target="blank" method="GET">
@@ -30,6 +36,7 @@
     </form>
 </div>
 <br>
+-----------------------------------------------------
 <div style="text-align: center; margin-top: 20px">
 <h5>Выгрузить в EXEL список СИ для поверки</h5>
  <form action="{% url 'export_mustver_xls' %}" target="blank" method="GET">
@@ -37,16 +44,13 @@
         {% crispy form %}
     </form>
 </div>
+-----------------------------------------------------
 <div style="text-align: center; margin-top: 20px">
 <h5>Список СИ для заказа взамен СИ с истёкшей поверкой</h5>
  <form action="{% url 'mustorder' %}" target="blank" method="GET">
         {% csrf_token %}
         {% crispy form %}
     </form>
-</div>
-<div style="text-align: center; margin-top: 20px">
-<a href="{% url 'verificatorpersons' %}" class="btn btn-warning  mt-3" style="width: 210px" target="blank">
-Контакты поверителей</a>
 </div>
 
 
