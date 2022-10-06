@@ -20,5 +20,6 @@ admin.site.register(MeteorologicalParameters)
 admin.site.register(TestingEquipmentCharakters)
 admin.site.register(TestingEquipment)
 admin.site.register(Attestationequipment)
+admin.site.register(TestingEquipmentCharakters)
 
 
