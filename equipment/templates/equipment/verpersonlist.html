@@ -1,4 +1,4 @@
-{% extends 'main/base.html' %}
+{% extends 'main/superbase.html' %}
 {% load crispy_forms_tags %}
 
 {% block title %}
@@ -16,8 +16,8 @@
 Добавить сотрудника поверителя</a>
 </div>
 
-<div style="text-align: center; margin-top: 5px; margin-bottom: 15px">
-<h6>Контакты поверителей</h6></div>
+<div style="text-align: center; margin-top: 35px; margin-bottom: 15px">
+<h4>Контакты поверителей</h4></div>
     <table class="table table-bordered">
     <thead>
         <tr>
@@ -33,18 +33,17 @@
          </tr>
     </thead>
     <tbody>
-    {% for obj2 in note2 %}
+    {% for obj2 in objects %}
 <tr>
-<td> {{ obj2.verificators.company }}</td>
-<td> {{ obj2.verificators.name }}</td>
-<td> {{ obj2.verificators.telnumber }}</td>
-<td> {{ obj2.verificators.position }}</td>
-<td> {{ obj2.verificators.departamentn }}</td>
-<td> {{ obj2.verificators.departament }}</td>
-<td> {{ obj2.verificators.departamentadress }}</td>
-<td> {{ obj2.verificators.email }}</td>
-<td> {{ obj2.verificators.dop }}</td>
-
+<td> {{ obj2.company }}</td>
+<td> {{ obj2.name }}</td>
+<td> {{ obj2.telnumber }}</td>
+<td> {{ obj2.position }}</td>
+<td> {{ obj2.departamentn }}</td>
+<td> {{ obj2.departament }}</td>
+<td> {{ obj2.departamentadress }}</td>
+<td> {{ obj2.email }}</td>
+<td> {{ obj2.dop }}</td>
 </tr>
     {% endfor %}
     </tbody>
