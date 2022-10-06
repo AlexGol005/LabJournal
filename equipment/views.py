@@ -706,14 +706,14 @@ def EquipmentReg(request):
             form = EquipmentCreateForm(request.POST, request.FILES)
             if form.is_valid():
                 order = form.save(commit=False)
-                # try:
-                #     a = Equipment.objects.filter(exnumber__startswith=order.exnumber).last().exnumber
-                #     b = int(str(a)[-3::]) + 1
-                #     c = str(b).rjust(3, '0')
-                #     d = str(order.exnumber) + c
-                #     order.exnumber = d
-                # except:
-                #     order.exnumber = str(order.exnumber) + '001'
+                try:
+                    a = Equipment.objects.filter(exnumber__startswith=order.exnumber).last().exnumber
+                    b = int(str(a)[-3::]) + 1
+                    c = str(b).rjust(3, '0')
+                    d = str(order.exnumber) + c
+                    order.exnumber = d
+                except:
+                    order.exnumber = str(order.exnumber) + '001'
                 order.save()
                 if order.kategory == 'СИ':
                     return redirect(f'/equipment/measureequipmentreg/{order.exnumber}/')
