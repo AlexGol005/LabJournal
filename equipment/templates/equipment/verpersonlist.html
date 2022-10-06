@@ -30,6 +30,7 @@
             <th> Комната</th>
             <th> Емаил</th>
             <th> Примечание</th>
+            <th> Ред.</th>
          </tr>
     </thead>
     <tbody>
@@ -44,6 +45,7 @@
 <td> {{ obj2.departamentadress }}</td>
 <td> {{ obj2.email }}</td>
 <td> {{ obj2.dop }}</td>
+<td> <a href="{% url 'verificatorsupdate' obj2.pk %}"  class="btn btn-outline-warning mt-3">ред</a></td>
 </tr>
     {% endfor %}
     </tbody>
