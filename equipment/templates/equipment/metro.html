@@ -23,7 +23,7 @@
 </div>
 <br>
 <div style="text-align: center; margin-top: 20px">
-<h5>Сформировать список СИ у которых дата заказа поверки раньше или равна указанной</h5>
+<h5>Список СИ требующих поверки к указанной дате</h5>
  <form action="{% url 'mustver' %}" target="blank" method="GET">
         {% csrf_token %}
         {% crispy form %}
@@ -38,7 +38,7 @@
     </form>
 </div>
 <div style="text-align: center; margin-top: 20px">
-<h5>Сформировать список СИ которые надо заказать взамен СИ с истёкшей поверкой</h5>
+<h5>Список СИ для заказа взамен СИ с истёкшей поверкой</h5>
  <form action="{% url 'mustorder' %}" target="blank" method="GET">
         {% csrf_token %}
         {% crispy form %}

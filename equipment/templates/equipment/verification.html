@@ -7,17 +7,18 @@
 
 
 {% block content %}
-<div style="text-align: center;"><h4>История поверки средства измерения:
+<div style="text-align: center;"><h5>История поверки средства измерения:
 <br> <a href="/equipment/measureequipment/{{ title.exnumber }}/">
-{{ title.exnumber }}, {{title.measurequipment_set.all.last.charakters}}, зав. № {{title.lot}}  </a> </h4></div>
+{{ title.exnumber }}, {{title.measurequipment_set.all.last.charakters}}, зав. № {{title.lot}}  </a> </h5></div>
 <div style="text-align: center; margin-top: 20px; margin-bottom: 15px"><h6> Межповерочный интервал {{ calinterval }} мес. </h6></div>
 <div style="text-align: center; margin-top: 20px; margin-bottom: 15px"><h6> Планируемая дата отправки отправки в поверку: {{ dateorder|date:"M.Y"|default_if_none:" " }} </h6></div>
 
 {#таблица для вывода комментария#}
-
+{% if comment != '' %}
 <table class="table table-bordered">
 <td colspan="6"><b>Комментарий ответственного за поверку:</b> {{ comment }}</td>
 </table>
+{%  endif %}
 {#конец таблицы для вывода комментария#}
 {#таблица для вывода поверки#}
 <table class="table table-bordered">

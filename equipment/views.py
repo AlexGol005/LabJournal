@@ -509,7 +509,7 @@ class StrMeasurEquipmentView(View):
     def get(self, request, str):
         note = Verificationequipment.objects.filter(equipmentSM__equipment__exnumber=str).order_by('-pk')
         obj = get_object_or_404(MeasurEquipment, equipment__exnumber=str)
-        context =  {
+        context = {
             'obj': obj,
             'note': note,
         }
