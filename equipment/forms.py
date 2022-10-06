@@ -310,7 +310,7 @@ class VerificationRegForm(forms.ModelForm):
 
 class CommentsVerificationCreationForm(forms.ModelForm):
     """форма для комментария к истории поверки"""
-    note = forms.CharField(label='Обновить комментарий отвественного', max_length=10000000,
+    note = forms.CharField(label='Обновить комментарий отвественного', max_length=10000000, required=False,
                            widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': ''}))
 
