@@ -33,6 +33,8 @@
 </table>
 {%  endif %}
 {#конец таблицы ддля вывода постоянных особенностей поверки#}
+<a href="/equipment/measureequipment/verificationreg/{{ strreg }}/"  class="btn btn-warning mt-2 mr-2">
+ Внести запись о поверке</a>
 {#таблица для вывода поверки#}
 <table class="table table-bordered">
     <thead>
@@ -83,7 +85,7 @@
 </table>
 {#конец таблицы для вывода поверки#}
  <div style="text-align: center; margin-top: 10px">
-<a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/metrologyindividuality/"  class="btn btn-warning mt-2">
+<a href="/equipment/measureequipment/{{ title.exnumber }}/metrologyindividuality/"  class="btn btn-warning mt-2">
      Обновить постоянные особенности поверки</a></div>
 {#форма для комментария#}
     <div style="text-align: center; margin-top: 20px">
