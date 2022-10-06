@@ -727,11 +727,11 @@ class DateForm(forms.Form):
 
 class ContactsVerForm(ModelForm):
     """форма для добавления контактов поверителей"""
-    verificators = forms.ModelChoiceField(label='Организация',
+    verificators = forms.ModelChoiceField(label='Контактная информация',
                                         queryset=VerificatorPerson.objects.all(),
                                         widget=forms.Select(attrs={'class': 'form-control'}))
     dop = forms.CharField(label='Примечание', required=False,
-                                 widget=forms.Textarea(attrs={'class': 'form-control'}))
+                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = ContactsVer
