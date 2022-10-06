@@ -617,7 +617,7 @@ def VerificatorUpdate(request, str):
         if form.is_valid():
             order = form.save(commit=False)
             order.save()
-            return redirect(reverse('measureequipmentver', kwargs={'str': str}))
+            return redirect('verificatorpersons')
     else:
         form = VerificatorPersonCreationForm(instance=VerificatorPerson.objects.get(pk=str))
     data = {'form': form,
