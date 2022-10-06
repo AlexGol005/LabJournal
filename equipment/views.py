@@ -25,7 +25,7 @@ URL = 'equipment'
 class ContactsVerregView(LoginRequiredMixin, CreateView):
     """ выводит форму регистрации контактов поверителей"""
     form_class = ContactsVerForm
-    template_name = 'equipment/reg.html'
+    template_name = 'equipment/personverreg.html'
 
     def get_object(self, queryset=None):
         return get_object_or_404(Equipment, exnumber=self.kwargs['str'])

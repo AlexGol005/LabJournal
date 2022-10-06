@@ -45,12 +45,14 @@ CHOICESPLACE = (
         ('В ПА', 'В ПА'),
     )
 
+
 class Manufacturer(models.Model):
     companyName = models.CharField('Производитель', max_length=100, unique=True)
     companyAdress = models.CharField('Адрес', max_length=200, default='', blank=True)
     country = models.CharField('Страна', max_length=200, default='Россия', blank=True)
     telnumber = models.CharField('Телефон', max_length=200, default='', blank=True)
-    telnumberhelp = models.CharField('Телефон техподдержки для вопросов по оборудованию', max_length=200, default='', blank=True)
+    telnumberhelp = models.CharField('Телефон техподдержки для вопросов по оборудованию',
+                                     max_length=200, default='', blank=True)
 
     def __str__(self):
         return self.companyName
@@ -58,6 +60,7 @@ class Manufacturer(models.Model):
     class Meta:
         verbose_name = 'Производитель'
         verbose_name_plural = 'Производители'
+
 
 class Verificators(models.Model):
     companyName = models.CharField('Поверитель', max_length=100, unique=True)
@@ -73,22 +76,26 @@ class Verificators(models.Model):
         verbose_name = 'Поверитель организация'
         verbose_name_plural = 'Поверители организации'
 
+
 class VerificatorPerson(models.Model):
     company = models.ForeignKey(Verificators, on_delete=models.PROTECT, verbose_name='Компания',
                                 related_name='Verificators_company', blank=True, null=True)
-    verificator = models.ForeignKey(Verificators, on_delete=models.PROTECT, blank=True, null=True)
     name = models.CharField('ИМЯ', max_length=100, blank=True, null=True, default=' ')
-    departament = models.CharField('отдел', max_length=100, blank=True, null=True)
-    dop = models.CharField('Примечание', max_length=200, blank=True, null=True)
+    position = models.CharField('Должность', max_length=100, blank=True, null=True, default=' ')
+    departamentn = models.CharField('№ отдела', max_length=100, blank=True, null=True, default='-')
+    departament = models.CharField('Название отдела', max_length=100, blank=True, null=True)
+    departamentadress = models.CharField('Расположение отдела', max_length=100, blank=True, null=True)
     telnumber = models.CharField('Телефон', max_length=200, default='', blank=True)
     email = models.CharField('email', max_length=200, default='', blank=True)
+    dop = models.CharField('Примечание', max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return f'{self.name}, {self.position}, {self.telnumber}, отдел {self.departamentn} {self.departament}'
 
     class Meta:
         verbose_name = 'Поверитель сотрудник'
         verbose_name_plural = 'Поверители сотрудники'
+
 
 class Rooms(models.Model):
     roomnumber = models.CharField('Номер комнаты', max_length=10, default='', unique=True)
@@ -127,8 +134,6 @@ class Equipment(models.Model):
     pasport = models.CharField('Ссылка на паспорт', max_length=1000,  blank=True, null=True)
     instruction = models.CharField('Основная инструкция по эксплуатации', max_length=1000,  blank=True, null=True)
 
-
-
     def __str__(self):
         return f'Вн. № {self.exnumber}    Зав. № {self.lot} '
 
@@ -153,7 +158,6 @@ class Equipment(models.Model):
                 image3.thumbnail(resize)
                 image3.save(self.imginstruction3.path)
 
-
     # def get_absolute_url(self):
     #     """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
     #     return reverse('measureequipmentpk', kwargs={'str': self.exnumber})
@@ -161,6 +165,7 @@ class Equipment(models.Model):
     class Meta:
         verbose_name = 'Прибор'
         verbose_name_plural = 'Приборы'
+
 
 class Personchange(models.Model):
     person = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='Ответственный за оборудование')
@@ -173,6 +178,7 @@ class Personchange(models.Model):
     class Meta:
         verbose_name = 'Дата изменения ответственного'
         verbose_name_plural = 'Даты изменения ответственных'
+
 
 class Roomschange(models.Model):
     roomnumber = models.ForeignKey(Rooms, on_delete=models.PROTECT)
@@ -213,7 +219,7 @@ class MeasurEquipmentCharakters(models.Model):
     typename = models.CharField('Тип прибора', max_length=100, default='', blank=True, null=True)
     measurydiapason = models.CharField('Диапазон измерений', max_length=1000, default='', blank=True, null=True)
     accuracity = models.CharField('Класс точности /(разряд/), погрешность и /(или/) неопределённость /(класс, разряд/)',
-                              max_length=1000, default='', blank=True, null=True)
+                                  max_length=1000, default='', blank=True, null=True)
     aim = models.CharField('Наименование определяемых (измеряемых) характеристик (параметров) продукции',
                            max_length=90, blank=True, null=True)
 
@@ -224,6 +230,7 @@ class MeasurEquipmentCharakters(models.Model):
         verbose_name = 'Средство измерения описание типа'
         verbose_name_plural = 'Средства измерения описания типов'
         unique_together = ('reestr', 'modificname', 'typename', 'name')
+
 
 class TestingEquipmentCharakters(models.Model):
     name = models.CharField('Название прибора', max_length=100, default='')
@@ -245,6 +252,7 @@ class TestingEquipmentCharakters(models.Model):
         verbose_name_plural = 'СИспытательное оборудование, характеристики'
         unique_together = ('name', 'modificname', 'typename')
 
+
 class MeasurEquipment(models.Model):
     charakters = models.ForeignKey(MeasurEquipmentCharakters,  on_delete=models.PROTECT,
                                    verbose_name='Характеристики СИ', blank=True, null=True)
@@ -257,7 +265,8 @@ class MeasurEquipment(models.Model):
     newdatedead = models.CharField('Дата окончания последней поверки', blank=True, null=True, max_length=90)
 
     def __str__(self):
-        return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot}  № реестр {self.charakters.reestr}'
+        return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot} ' \
+               f' № реестр {self.charakters.reestr}'
 
     class Meta:
         verbose_name = 'Средство измерения'
@@ -265,12 +274,12 @@ class MeasurEquipment(models.Model):
         unique_together = ('charakters', 'equipment')
         ordering = ['charakters__name']
 
+
 class TestingEquipment(models.Model):
     charakters = models.ForeignKey(TestingEquipmentCharakters,  on_delete=models.PROTECT,
                                    verbose_name='Характеристики ИО', blank=True, null=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True,
                                   verbose_name='Оборудование')
-
 
     def __str__(self):
         return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot} '
@@ -278,6 +287,7 @@ class TestingEquipment(models.Model):
     class Meta:
         verbose_name = 'Испытательное оборудование'
         verbose_name_plural = 'Испытательное оборудование'
+
 
 class Verificationequipment(models.Model):
     equipmentSM = models.ForeignKey(MeasurEquipment, verbose_name='СИ',
@@ -291,22 +301,19 @@ class Verificationequipment(models.Model):
     price = models.DecimalField('Стоимость данной поверки', max_digits=100, decimal_places=2, null=True, blank=True)
     img = models.ImageField('Сертификат', upload_to='user_images', blank=True, null=True)
     statusver = models.CharField(max_length=300, choices=CHOICESVERIFIC, default='Поверен', null=True,
-                              verbose_name='Статус')
+                                 verbose_name='Статус')
     verificator = models.ForeignKey(Verificators, on_delete=models.PROTECT,
-                                          verbose_name='Поверитель', blank=True, null=True)
-
+                                    verbose_name='Поверитель', blank=True, null=True)
     verificatorperson = models.ForeignKey(VerificatorPerson, on_delete=models.PROTECT,
-                                    verbose_name='Поверитель имя', blank=True, null=True)
-
+                                          verbose_name='Поверитель имя', blank=True, null=True)
     place = models.CharField(max_length=300, choices=CHOICESPLACE, default='У поверителя', null=True,
-                              verbose_name='Место поверки')
+                             verbose_name='Место поверки')
     note = models.CharField('Примечание', max_length=900, blank=True, null=True)
     year = models.CharField('Год поверки (если нет точных дат)', max_length=900, blank=True, null=True)
     dateordernew = models.DateField('Дата заказа нового оборудования (если поверять не выгодно)',
                                     blank=True, null=True)
     haveorder = models.BooleanField(verbose_name='Заказана следующая поверка (или новое СИ)', default=False,
                                     blank=True)
-
 
     def __str__(self):
         return f'Поверка  вн № ' \
@@ -316,14 +323,14 @@ class Verificationequipment(models.Model):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
         return reverse('measureequipmentver', kwargs={'str': self.equipmentSM.equipment.exnumber})
 
-    def get_dateformat(self, dateneed):
+    @staticmethod
+    def get_dateformat(dateneed):
         dateformat = str(dateneed)
         day = dateformat[8:]
         month = dateformat[5:7]
         year = dateformat[:4]
         rdate = f'{day}.{month}.{year}'
         return rdate
-
 
     def save(self, *args, **kwargs):
         super().save()
@@ -343,8 +350,6 @@ class Verificationequipment(models.Model):
         note.newdatedead = newdatedead
         note.save()
 
-
-
     class Meta:
         verbose_name = 'Поверка прибора'
         verbose_name_plural = 'Поверки приборов'
@@ -361,15 +366,15 @@ class Attestationequipment(models.Model):
     price = models.DecimalField('Стоимость данной аттестации', max_digits=100, decimal_places=2, null=True, blank=True)
     img = models.ImageField('Аттестат', upload_to='user_images', blank=True, null=True)
     statusver = models.CharField(max_length=300, choices=CHOICESATT, default='Аттестован', null=True,
-                              verbose_name='Статус')
+                                 verbose_name='Статус')
     verificator = models.ForeignKey(Verificators, on_delete=models.PROTECT,
-                                          verbose_name='Поверитель', blank=True, null=True)
+                                    verbose_name='Поверитель', blank=True, null=True)
 
     verificatorperson = models.ForeignKey(VerificatorPerson, on_delete=models.PROTECT,
-                                    verbose_name='Поверитель имя', blank=True, null=True)
+                                          verbose_name='Поверитель имя', blank=True, null=True)
 
     place = models.CharField(max_length=300, choices=CHOICESPLACE, default='У поверителя', null=True,
-                              verbose_name='Место аттестации')
+                             verbose_name='Место аттестации')
     note = models.CharField('Примечание', max_length=900, blank=True, null=True)
 
     def __str__(self):
@@ -402,7 +407,6 @@ class CommentsEquipment(models.Model):
     type = models.CharField('Тип записи', max_length=90, blank=True, null=True, choices=NOTETYPE)
     img = models.ImageField('Фото', upload_to='user_images', blank=True, null=True, default='user_images/default.png')
 
-
     def __str__(self):
         return f' {self.author} , {self.forNote.exnumber},  {self.date}'
 
@@ -423,7 +427,6 @@ class CommentsEquipment(models.Model):
         verbose_name_plural = 'Записи о приборах'
 
 
-
 class CommentsVerificationequipment(models.Model):
     """комментарии к поверке """
     date = models.DateField('Дата', auto_now_add=True, db_index=True)
@@ -437,6 +440,7 @@ class CommentsVerificationequipment(models.Model):
     class Meta:
         verbose_name = 'Комментарий к поверке'
         verbose_name_plural = 'Комментарии к поверкам'
+
 
 class MeteorologicalParameters(models.Model):
     """метеорологические параметры в помещении """
@@ -468,11 +472,9 @@ class CompanyCard(models.Model):
     adress = models.CharField('Юридический адрес', max_length=500, blank=True, null=True)
     prohibitet = models.TextField('Запрет на тираж протокола',  blank=True, null=True)
     imglogoadress = models.ImageField('Картинка логотип с адресом', upload_to='user_images', blank=True, null=True,
-                                        default='user_images/default.png')
+                                      default='user_images/default.png')
     imglogoadress_mini = models.ImageField('Картинка логотип с адресом малая', upload_to='user_images',
                                            blank=True, null=True,  default='user_images/default.png')
-
-
 
     def __str__(self):
         return self.name
@@ -493,32 +495,10 @@ class CompanyCard(models.Model):
 
 class ContactsVer(models.Model):
     """контакты поверителей"""
-    equipment = models.ForeignKey(Equipment, verbose_name='Прибор', on_delete=models.CASCADE)
-    verificators = models.ForeignKey(Verificators, verbose_name='Организация', on_delete=models.CASCADE)
-    department = models.TextField('Отдел', max_length=1000, default='', blank=True, null=True)
-    note = models.TextField('Содержание', max_length=1000, default='', blank=True, null=True)
-
-    def get_absolute_url(self):
-        return reverse('contactsver')
+    equipment = models.ForeignKey(Equipment, verbose_name='Прибор', on_delete=models.PROTECT)
+    verificators = models.ForeignKey(VerificatorPerson, verbose_name='Организация', on_delete=models.PROTECT)
+    dop = models.CharField('Примечание', max_length=200, blank=True, null=True)
 
     class Meta:
-        verbose_name = 'Контакты поверителей'
-        verbose_name_plural = 'Контакты поверителей'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        verbose_name = 'Контакты поверителей для прибора'
+        verbose_name_plural = 'Контакты поверителей для прибора'

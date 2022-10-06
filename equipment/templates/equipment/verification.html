@@ -95,16 +95,29 @@
     <thead>
         <tr>
             <th>Организация</th>
-            <th> Отдел </th>
-            <th> Контактные данные</th>
+            <th> Имя </th>
+            <th> Телефон </th>
+            <th> Должность</th>
+            <th> № отдела</th>
+            <th> Отдел</th>
+            <th> Комната</th>
+            <th> Емаил</th>
+            <th> Примечание</th>
          </tr>
     </thead>
     <tbody>
     {% for obj2 in note2 %}
 <tr>
-<td> {{ obj2.verificators }}</td>
-<td> {{ obj2.department }}</td>
-<td> {{ obj2.note }}</td>
+<td> {{ obj2.verificators.company }}</td>
+<td> {{ obj2.verificators.name }}</td>
+<td> {{ obj2.verificators.telnumber }}</td>
+<td> {{ obj2.verificators.position }}</td>
+<td> {{ obj2.verificators.departamentn }}</td>
+<td> {{ obj2.verificators.departament }}</td>
+<td> {{ obj2.verificators.departamentadress }}</td>
+<td> {{ obj2.verificators.email }}</td>
+<td> {{ obj2.verificators.dop }}</td>
+
 </tr>
     {% endfor %}
     </tbody>

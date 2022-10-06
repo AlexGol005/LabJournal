@@ -1,0 +1,32 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+
+{% block content %}
+<div style="text-align: center; margin-top: 20px">
+<a href="{% url 'verificatorsreg' %}" class="btn btn-warning mr-5 mt-3" style="width: 210px" target="blank">
+Добавить организацию поверителя</a>
+<a href="{% url 'verificatorspersonsreg' %}" class="btn btn-warning  mt-3" style="width: 210px" target="blank">
+Добавить сотрудника поверителя</a>
+</div>
+<div style="text-align: center; margin-top: 35px" ><h4>
+{% if dopin %}
+<a href="/{{ dopin }}/">
+{% else %}
+<a href="/equipment/measureequipment/{{ dop.exnumber }}/">
+{% endif %}
+{{ title }}</a></h4></div>
+
+    <div style="text-align: center;"><h4>{{ dop }}</h4></div>
+    <br><br>
+    <form method="post" enctype="multipart/form-data" class="form-register">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-outline-warning" type="submit">Записать</button>
+    </form>
+    <br>
+
+{% endblock %}

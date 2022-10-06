@@ -206,6 +206,7 @@ class ManufacturerCreateForm(forms.ModelForm):
             'telnumberhelp'
                   ]
 
+
 class VerificationRegForm(forms.ModelForm):
     """форма для  внесения сведений о поверке"""
     date = forms.DateField(label='Дата поверки',
@@ -307,7 +308,6 @@ class VerificationRegForm(forms.ModelForm):
             Submit('submit', 'Внести')))
 
 
-
 class CommentsVerificationCreationForm(forms.ModelForm):
     """форма для комментария к истории поверки"""
     note = forms.CharField(label='Обновить комментарий отвественного', max_length=10000000,
@@ -362,9 +362,18 @@ class VerificatorPersonCreationForm(forms.ModelForm):
     name = forms.CharField(label='ФИО', max_length=10000000, required=False,
                            widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': ''}))
-    departament = forms.CharField(label='Отдел', max_length=10000000, required=False,
+    position = forms.CharField(label='Должность', max_length=10000000, required=False,
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                         'placeholder': ''}))
+    departamentn = forms.CharField(label='Отдел №', max_length=10000000, required=False,
                            widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': ''}))
+    departament = forms.CharField(label='Отдел название', max_length=10000000, required=False,
+                                  widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                'placeholder': ''}))
+    departamentadress = forms.CharField(label='Расположение отдела', max_length=10000000, required=False,
+                                  widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                'placeholder': ''}))
     telnumber = forms.CharField(label='Телефон', max_length=10000000, required=False,
                            widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': ''}))
@@ -380,7 +389,11 @@ class VerificatorPersonCreationForm(forms.ModelForm):
         model = VerificatorPerson
         fields = [
             'company',
-            'name', 'departament',
+            'name',
+            'position',
+            'departamentn',
+            'departament',
+            'departamentadress',
             'telnumber', 'email',
             'dop'
                   ]
@@ -715,18 +728,16 @@ class DateForm(forms.Form):
 class ContactsVerForm(ModelForm):
     """форма для добавления контактов поверителей"""
     verificators = forms.ModelChoiceField(label='Организация',
-                                        queryset=Verificators.objects.all(),
+                                        queryset=VerificatorPerson.objects.all(),
                                         widget=forms.Select(attrs={'class': 'form-control'}))
-    department = forms.CharField(label='Отдел', required=False,
-                          widget=forms.TextInput(attrs={'class': 'form-control'}))
-    note = forms.CharField(label='ФИО и телефон', required=False,
+    dop = forms.CharField(label='Примечание', required=False,
                                  widget=forms.Textarea(attrs={'class': 'form-control'}))
 
     class Meta:
         model = ContactsVer
         fields = [
             'verificators',
-            'department', 'note',
+             'dop'
                   ]
 
 
