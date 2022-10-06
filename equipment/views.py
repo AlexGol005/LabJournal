@@ -595,19 +595,34 @@ def EquipmentMetrologyUpdate(request, str):
 
     if person == request.user or request.user.is_superuser:
         if request.method == "POST":
-            form = MetrologyUpdateForm(request.POST, request.FILES,  instance=Equipment.objects.get(exnumber=str))
+            form = MetrologyUpdateForm(request.POST, instance=Equipment.objects.get(exnumber=str))
             if form.is_valid():
                 order = form.save(commit=False)
                 order.save()
-                return redirect(reverse('measureequipment', kwargs={'str': str}))
+                return redirect(reverse('measureequipmentver', kwargs={'str': str}))
     if person != request.user and not request.user.is_superuser:
         messages.success(request, f'. поменять статус может только ответственный за поверку.')
-        return redirect(reverse('measureequipment', kwargs={'str': str}))
+        return redirect(reverse('measureequipmentver', kwargs={'str': str}))
     else:
         form = MetrologyUpdateForm(instance=Equipment.objects.get(exnumber=str))
     data = {'form': form, 'title': title
             }
     return render(request, 'equipment/metrologyindividuality.html', data)
+
+
+def VerificatorUpdate(request, str):
+    """выводит форму для обновления постоянных особенностей поверки"""
+    if request.method == "POST":
+        form = VerificatorPersonCreationForm(request.POST,  instance=VerificatorPerson.objects.get(exnumber=str))
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.save()
+            return redirect(reverse('measureequipmentver', kwargs={'str': str}))
+    else:
+        form = VerificatorPersonCreationForm(instance=VerificatorPerson.objects.get(exnumber=str))
+    data = {'form': form,
+            }
+    return render(request, 'equipment/verificationreg.html', data)
 
 
 class VerificationequipmentView(View):
