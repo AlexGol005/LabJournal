@@ -58,15 +58,9 @@
             {% endif %}
         {{ obj.certnumber|default:" "}}
         </td>
-             <td> {{ obj.verificatorperson.name|default:" " }}
-        {% if obj.verificatorperson.telnumber %}
-        , телефон {{ obj.verificatorperson.telnumber|default:" " }}
-        {% endif %}
-        {% if obj.verificatorperson.departament %}
-        , отдел {{ obj.verificatorperson.departament|default:" " }}
-        {% endif %}
-        {% if obj.verificatorperson.dop %}
-        , примечание {{ obj.verificatorperson.dop|default:" " }}
+            <td>
+        {% if obj.verificatorperson.name %}
+         {{ obj.verificatorperson.name }}
         {% endif %}
         </td>
     </tr>
