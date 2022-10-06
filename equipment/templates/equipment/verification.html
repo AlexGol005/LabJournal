@@ -8,7 +8,7 @@
 
 {% block content %}
 <div style="text-align: center;"><h5>История поверки:
-<br> <a href="/equipment/measureequipment/{{ title.exnumber }}/">
+ <a href="/equipment/measureequipment/{{ title.exnumber }}/">
  {{title.measurequipment_set.all.last.charakters}}, заводской № {{title.lot}}, внутренний № {{ title.exnumber }}  </a> </h5></div>
 <div style="text-align: center; margin-top: 20px; margin-bottom: 15px"><h6> Межповерочный интервал {{ calinterval }} мес. </h6></div>
 <div style="text-align: center; margin-top: 20px; margin-bottom: 15px"><h6> Планируемая дата отправки отправки в поверку: {{ dateorder|date:"M.Y"|default_if_none:" " }} </h6></div>
