@@ -368,7 +368,7 @@ class VerificatorsView(ListView):
 class VerificatorsPersonsView(ListView):
     """ Выводит список всех сотрудников поверителей """
     model = VerificatorPerson
-    template_name = 'main/plainlist.html'
+    template_name = 'equipment/verpersonlist.html'
     context_object_name = 'objects'
 
 

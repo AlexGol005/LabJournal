@@ -1,0 +1,52 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Поверители
+{% endblock %}
+
+
+{% block content %}
+
+
+<div style="text-align: center; margin-top: 20px">
+<a href="{% url 'verificatorsreg' %}" class="btn btn-warning mr-5 mt-3" style="width: 210px" target="blank">
+Добавить организацию поверителя</a>
+<a href="{% url 'verificatorspersonsreg' %}" class="btn btn-warning  mt-3" style="width: 210px" target="blank">
+Добавить сотрудника поверителя</a>
+</div>
+
+<div style="text-align: center; margin-top: 5px; margin-bottom: 15px">
+<h6>Контакты поверителей</h6></div>
+    <table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Организация</th>
+            <th> Имя </th>
+            <th> Телефон </th>
+            <th> Должность</th>
+            <th> № отдела</th>
+            <th> Отдел</th>
+            <th> Комната</th>
+            <th> Емаил</th>
+            <th> Примечание</th>
+         </tr>
+    </thead>
+    <tbody>
+    {% for obj2 in note2 %}
+<tr>
+<td> {{ obj2.verificators.company }}</td>
+<td> {{ obj2.verificators.name }}</td>
+<td> {{ obj2.verificators.telnumber }}</td>
+<td> {{ obj2.verificators.position }}</td>
+<td> {{ obj2.verificators.departamentn }}</td>
+<td> {{ obj2.verificators.departament }}</td>
+<td> {{ obj2.verificators.departamentadress }}</td>
+<td> {{ obj2.verificators.email }}</td>
+<td> {{ obj2.verificators.dop }}</td>
+
+</tr>
+    {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}
