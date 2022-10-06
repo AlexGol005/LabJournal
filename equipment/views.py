@@ -613,13 +613,13 @@ def EquipmentMetrologyUpdate(request, str):
 def VerificatorUpdate(request, str):
     """выводит форму для обновления постоянных особенностей поверки"""
     if request.method == "POST":
-        form = VerificatorPersonCreationForm(request.POST,  instance=VerificatorPerson.objects.get(exnumber=str))
+        form = VerificatorPersonCreationForm(request.POST,  instance=VerificatorPerson.objects.get(pk=str))
         if form.is_valid():
             order = form.save(commit=False)
             order.save()
             return redirect(reverse('measureequipmentver', kwargs={'str': str}))
     else:
-        form = VerificatorPersonCreationForm(instance=VerificatorPerson.objects.get(exnumber=str))
+        form = VerificatorPersonCreationForm(instance=VerificatorPerson.objects.get(pk=str))
     data = {'form': form,
             }
     return render(request, 'equipment/verificationreg.html', data)
