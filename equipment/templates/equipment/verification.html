@@ -25,7 +25,7 @@
 {%  endif %}
 {#конец таблицы для вывода комментария#}
 {#таблица для вывода постоянных особенностей поверки#}
-{% if title.notemetrology != '' %}
+{% if title.notemetrology %}
 <table class="table table-bordered">
 <td colspan="6">
 {{ title.notemetrology }}
@@ -82,6 +82,9 @@
     </tbody>
 </table>
 {#конец таблицы для вывода поверки#}
+ <div style="text-align: center; margin-top: 10px">
+<a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/metrologyindividuality/"  class="btn btn-warning mt-2">
+     Обновить постоянные особенности поверки</a></div>
 {#форма для комментария#}
     <div style="text-align: center; margin-top: 20px">
 <form method="post" enctype="multipart/form-data" class="form-register">
@@ -92,9 +95,6 @@
 </form>
 {#конец формы для комментария#}
 
- <a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/individuality/"  class="btn btn-warning mt-2">
-     Добавить постоянные особенности поверки</a></div>
-</div>
 <br>
     <div style="text-align: center; margin-top: 5px; margin-bottom: 15px">
      <a href="/equipment/measureequipment/verificationreg/{{ strreg }}/"  class="btn btn-warning mt-2 mr-2">
