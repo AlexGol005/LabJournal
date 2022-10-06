@@ -257,8 +257,6 @@ class VerificationRegForm(forms.ModelForm):
     place = forms.ChoiceField(label='Место поверки',
                              choices=CHOICESPLACE,
                                widget=forms.Select(attrs={'class': 'form-control'}))
-    note = forms.CharField(label='Примечание', max_length=10000, required=False,
-                                    widget=forms.TextInput(attrs={'class': 'form-control'}))
     img = forms.ImageField(label='Сертификат', widget=forms.FileInput, required=False)
     dateordernew = forms.DateField(label='Дата заказа замены', required=False,
                                    help_text='Укажите, если поверка не выгодна',
@@ -275,7 +273,7 @@ class VerificationRegForm(forms.ModelForm):
         model = Verificationequipment
         fields = ['date', 'datedead', 'dateorder', 'arshin', 'certnumber',
                   'price', 'statusver',  'verificator', 'verificatorperson',
-                  'place', 'note', 'year',
+                  'place', 'year',
                   'dateordernew'
                   ]
 
@@ -300,8 +298,6 @@ class VerificationRegForm(forms.ModelForm):
                 Column('verificatorperson', css_class='form-group col-md-4 mb-0'),
                 Column('place', css_class='form-group col-md-4 mb-0'),
             ),
-            Row(
-                Column('note', css_class='form-group col-md-12 mb-1')),
             Row(
                 Column('img', css_class='form-group col-md-6 mb-1'),
                 Column('dateordernew', css_class='form-group col-md-6 mb-1')),
