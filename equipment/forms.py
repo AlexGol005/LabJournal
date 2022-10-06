@@ -304,8 +304,8 @@ class VerificationRegForm(forms.ModelForm):
                 Column('note', css_class='form-group col-md-12 mb-1')),
             Row(
                 Column('img', css_class='form-group col-md-4 mb-1'),
-                Column('dateordernew', css_class='form-group col-md-4 mb-1'),
-            Submit('submit', 'Внести')))
+                Column('dateordernew', css_class='form-group col-md-4 mb-1')),
+            Submit('submit', 'Внести'))
 
 
 class CommentsVerificationCreationForm(forms.ModelForm):
