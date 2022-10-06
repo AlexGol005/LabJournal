@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     path('measureequipmentall/', views.MeasurEquipmentView.as_view(), name='measureequipmentall'),
     path('measureequipmentall/mustver/', views.SearchMustVerView.as_view(), name='mustver'),
+    path('measureequipmentall/notver/', views.SearchNotVerView.as_view(), name='notver'),
     path('measureequipmentall/mustorder/', views.SearchMustOrderView.as_view(), name='mustorder'),
     path('testingequipmentall/', views.TestingEquipmentView.as_view(), name='testingequipmentall'),
     path('measureequipmentallsearres/', views.SearchResultMeasurEquipmentView.as_view(), name='measureequipmentallsearres'),

@@ -4,7 +4,6 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
 
-from django.contrib.auth.models import User
 from django.forms import ModelForm
 
 from equipment.models import*
@@ -209,9 +208,7 @@ class ManufacturerCreateForm(forms.ModelForm):
 
 class VerificationRegForm(forms.ModelForm):
     """форма для  внесения сведений о поверке"""
-
-
-    date = forms.DateField(label='Дата поверки', required=False,
+    date = forms.DateField(label='Дата поверки',
         widget=forms.DateInput(
             attrs={'class': 'form-control', 'placeholder': ''}),
         input_formats=(
@@ -220,7 +217,7 @@ class VerificationRegForm(forms.ModelForm):
             '%m/%d/%y',
             '%d.%m.%Y',
         ))
-    datedead = forms.DateField(label='Дата окончания поверки', required=False,
+    datedead = forms.DateField(label='Дата окончания поверки',
                            widget=forms.DateInput(
                                attrs={'class': 'form-control', 'placeholder': ''}),
                            input_formats=(
@@ -241,7 +238,7 @@ class VerificationRegForm(forms.ModelForm):
     arshin = forms.CharField(label='Ссылка на сведения о поверке в Аршин', max_length=10000,
                              required=False,
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
-    certnumber = forms.CharField(label='№ свидетельства о поверке', max_length=10000, required=False,
+    certnumber = forms.CharField(label='№ свидетельства о поверке', max_length=10000,
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
     price = forms.DecimalField(label='Стоимость данной поверки', max_digits=10, decimal_places=2, required=False,
                               widget=forms.TextInput(attrs={'class': 'form-control',
@@ -250,22 +247,18 @@ class VerificationRegForm(forms.ModelForm):
                                choices=CHOICESVERIFIC,
                                widget=forms.Select(attrs={'class': 'form-control'}))
 
-    verificator = forms.ModelChoiceField(label='Организация-поверитель', required=False,
+    verificator = forms.ModelChoiceField(label='Организация-поверитель',
                                          queryset=Verificators.objects.all(),
                                              widget=forms.Select(attrs={'class': 'form-control'}))
     verificatorperson = forms.ModelChoiceField(label='Имя поверителя', required=False,
                                          queryset=VerificatorPerson.objects.all(),
                                          widget=forms.Select(attrs={'class': 'form-control'}))
-
     place = forms.ChoiceField(label='Место поверки',
                              choices=CHOICESPLACE,
                                widget=forms.Select(attrs={'class': 'form-control'}))
     note = forms.CharField(label='Примечание', max_length=10000, required=False,
                                     widget=forms.TextInput(attrs={'class': 'form-control'}))
     img = forms.ImageField(label='Сертификат', widget=forms.FileInput, required=False)
-    year = forms.CharField(label='Год поверки', max_length=10000, required=False,
-                             help_text='Укажите год если не указываете точные даты поверки',
-                             widget=forms.TextInput(attrs={'class': 'form-control'}))
     dateordernew = forms.DateField(label='Дата заказа замены', required=False,
                                    help_text='Укажите, если поверка не выгодна',
                                 widget=forms.DateInput(
@@ -276,7 +269,6 @@ class VerificationRegForm(forms.ModelForm):
                                     '%m/%d/%y',
                                     '%d.%m.%Y',
                                 ))
-
 
     class Meta:
         model = Verificationequipment
@@ -312,8 +304,7 @@ class VerificationRegForm(forms.ModelForm):
             Row(
                 Column('img', css_class='form-group col-md-4 mb-1'),
                 Column('dateordernew', css_class='form-group col-md-4 mb-1'),
-                Column('year', css_class='form-group col-md-4 mb-1')),
-            Submit('submit', 'Внести'))
+            Submit('submit', 'Внести')))
 
 
 
@@ -334,6 +325,7 @@ class CommentsVerificationCreationForm(forms.ModelForm):
             Row(
                 Column('note', css_class='form-group col-md-10 mb-0'),
                 Row(Submit('submit', 'Обновить', css_class='btn  btn-info col-md-10 mb-3 mt-4 ml-4'))))
+
 
 class VerificatorsCreationForm(forms.ModelForm):
     """форма для внесения компании поверителя"""
@@ -393,6 +385,7 @@ class VerificatorPersonCreationForm(forms.ModelForm):
             'dop'
                   ]
 
+
 class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
     """форма для внесения госреестра"""
     reestr = forms.CharField(label='Номер в Госреестре', required=False,
@@ -423,7 +416,6 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': ''}))
 
-
     class Meta:
         model = MeasurEquipmentCharakters
         fields = [
@@ -435,6 +427,7 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
             'measurydiapason', 'accuracity',
             'aim'
                   ]
+
 
 class TestingEquipmentCharaktersCreateForm(forms.ModelForm):
     """форма для внесения характеристик ИО"""
@@ -482,6 +475,7 @@ class TestingEquipmentCharaktersCreateForm(forms.ModelForm):
             'ndoc',
                   ]
 
+
 class MeasurEquipmentCreateForm(forms.ModelForm):
     """форма для внесения СИ"""
     charakters = forms.ModelChoiceField(label='Госреестр', required=False,
@@ -506,6 +500,7 @@ class TestingEquipmentCreateForm(forms.ModelForm):
             'charakters',
                   ]
 
+
 class PersonchangeForm(forms.ModelForm):
     """форма для смены ответственного за ЛО"""
     person = forms.ModelChoiceField(label='Ответственный за ЛО',
@@ -518,6 +513,7 @@ class PersonchangeForm(forms.ModelForm):
             'person'
                   ]
 
+
 class RoomschangeForm(forms.ModelForm):
     """форма для смены Размещения ЛО"""
     roomnumber = forms.ModelChoiceField(label='Номер комнаты',
@@ -528,6 +524,7 @@ class RoomschangeForm(forms.ModelForm):
         fields = [
             'roomnumber'
                   ]
+
 
 class RoomsCreateForm(forms.ModelForm):
     """форма для внесения комнаты"""
@@ -540,6 +537,7 @@ class RoomsCreateForm(forms.ModelForm):
         fields = [
             'roomnumber', 'person'
                   ]
+
 
 class DocsConsCreateForm(forms.ModelForm):
     """форма для внесения документа или принадлежности"""
@@ -597,6 +595,7 @@ class MeteorologicalParametersRegForm(ModelForm):
             'equipment1', 'equipment2',
                   ]
 
+
 class Searchreestrform(forms.Form):
     "форма для поиска по полям списка госреестров"
     name = forms.CharField(label='Название', required=False,
@@ -617,7 +616,7 @@ class Searchreestrform(forms.Form):
                 Row(Submit('submit', 'Найти', css_class='btn  btn-info col-md-9 mb-3 mt-4 ml-4'))))
 
 class Searchtestingform(forms.Form):
-    "форма для поиска по полям списка госреестров"
+    """форма для поиска по полям списка свойств ИО"""
     name = forms.CharField(label='Название', required=False,
                            help_text='введите название частично или полностью',
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -723,13 +722,13 @@ class ContactsVerForm(ModelForm):
     note = forms.CharField(label='ФИО и телефон', required=False,
                                  widget=forms.Textarea(attrs={'class': 'form-control'}))
 
-
     class Meta:
         model = ContactsVer
         fields = [
             'verificators',
             'department', 'note',
                   ]
+
 
 class OrderMEUdateForm(forms.ModelForm):
     """форма для обозначения того, что заказана поверка, или ЛО на замену"""
@@ -739,10 +738,3 @@ class OrderMEUdateForm(forms.ModelForm):
         model = Verificationequipment
         fields = ['haveorder']
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.helper = FormHelper()
-    #     self.helper.layout = Layout(
-    #         Row(
-    #             Column('', css_class='form-group col-md-1 mb-0'),
-    #             Submit('submit', 'ок', css_class='btn  btn-info col-md-3 mb-1 mt-1 ml-1')))
