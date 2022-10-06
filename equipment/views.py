@@ -584,6 +584,32 @@ def EquipmentUpdate(request, str):
     return render(request, 'equipment/individuality.html', data)
 
 
+def EquipmentMetrologyUpdate(request, str):
+    """выводит форму для обновления постоянных особенностей поверки"""
+    title = Equipment.objects.get(exnumber=str)
+    try:
+        get_pk = title.personchange_set.latest('pk').pk
+        person = Personchange.objects.get(pk=get_pk).person
+    except:
+        person = 1
+
+    if person == request.user or request.user.is_superuser:
+        if request.method == "POST":
+            form = MetrologyUpdateForm(request.POST, request.FILES,  instance=Equipment.objects.get(exnumber=str))
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.save()
+                return redirect(reverse('measureequipment', kwargs={'str': str}))
+    if person != request.user and not request.user.is_superuser:
+        messages.success(request, f'. поменять статус может только ответственный за поверку.')
+        return redirect(reverse('measureequipment', kwargs={'str': str}))
+    else:
+        form = MetrologyUpdateForm(instance=Equipment.objects.get(exnumber=str))
+    data = {'form': form, 'title': title
+            }
+    return render(request, 'equipment/metrologyindividuality.html', data)
+
+
 class VerificationequipmentView(View):
     """ выводит историю поверок и форму для добавления комментария к истории поверок """
     def get(self, request, str):

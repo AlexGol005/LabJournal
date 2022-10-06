@@ -327,6 +327,20 @@ class CommentsVerificationCreationForm(forms.ModelForm):
                 Row(Submit('submit', 'Обновить', css_class='btn  btn-info col-md-10 mb-3 mt-4 ml-4'))))
 
 
+class MetrologyUpdateForm(forms.ModelForm):
+    """форма для обновления постоянные особенности метрологического обеспечения"""
+    notemetrology = forms.CharField(label='Указать постоянные особенности метрологического обеспечения',
+                                    max_length=10000,
+                                    required=False,
+                                    widget=forms.Textarea(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = Equipment
+        fields = [
+            'notemetrology'
+        ]
+
+
 class VerificatorsCreationForm(forms.ModelForm):
     """форма для внесения компании поверителя"""
     companyName = forms.CharField(label='Название организации', max_length=10000000,
@@ -628,6 +642,7 @@ class Searchreestrform(forms.Form):
                 Column('reestr', css_class='form-group col-md-3 mb-0'),
                 Row(Submit('submit', 'Найти', css_class='btn  btn-info col-md-9 mb-3 mt-4 ml-4'))))
 
+
 class Searchtestingform(forms.Form):
     """форма для поиска по полям списка свойств ИО"""
     name = forms.CharField(label='Название', required=False,
@@ -646,6 +661,7 @@ class Searchtestingform(forms.Form):
                 Column('name', css_class='form-group col-md-3 mb-0'),
                 Column('ndoc', css_class='form-group col-md-3 mb-0'),
                 Row(Submit('submit', 'Найти', css_class='btn  btn-info col-md-9 mb-3 mt-4 ml-4'))))
+
 
 class LabelEquipmentform(forms.Form):
     "форма для внесения номеров оборудования для распечатки этикеток о поверке/аттестации"
