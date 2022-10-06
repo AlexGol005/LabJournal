@@ -10,17 +10,7 @@
 <div style="text-align: center;"><h4>Внести сведения о поверке для:
 <br> <a href="/equipment/measureequipment/{{ title.exnumber }}/">
 {{ title.exnumber }}, {{title.measurequipment_set.all.last.charakters}}, зав. № {{title.lot}}  </a> </h4></div>
-
-<div style="text-align: center; margin-top: 20px">
-<a href="{% url 'verificatorsreg' %}" class="btn btn-warning mr-2 mt-3" style="width: 210px" target="blank">
-Добавить организацию поверителя</a>
-<a href="{% url 'verificatorspersonsreg' %}" class="btn btn-warning  mt-3" style="width: 210px" target="blank">
-Добавить сотрудника поверителя</a>
-<a href="{% url 'verificatorpersons' %}" class="btn btn-warning  ml-2 mt-3" style="width: 210px" target="blank">
-Контакты всех поверителей</a>
-</div>
-
-<br><br>
+<br>
 <div style="text-align: center;"><h4> Внести запись о поверке </h4></div>
 <form method="post" enctype="multipart/form-data" class="form-register">
 <form method="post" class="form-register">
@@ -29,4 +19,13 @@
 </form>
 </form>
 <br>
+<br>
+    <div style="text-align: center; margin-top: 20px">
+<a href="{% url 'verificatorsreg' %}" class="btn btn-warning mr-2 mt-3" style="width: 210px" target="blank">
+Добавить организацию поверителя</a>
+<a href="{% url 'verificatorspersonsreg' %}" class="btn btn-warning  mt-3" style="width: 210px" target="blank">
+Добавить сотрудника поверителя</a>
+<a href="{% url 'verificatorpersons' %}" class="btn btn-warning  ml-2 mt-3" style="width: 210px" target="blank">
+Контакты всех поверителей</a>
+</div>
 {% endblock %}
