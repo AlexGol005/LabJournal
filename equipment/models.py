@@ -160,11 +160,9 @@ class Equipment(models.Model):
                 resize = (1000, 1000)
                 image3.thumbnail(resize)
                 image3.save(self.imginstruction3.path)
-        a = Personchange.objects.create(equipment=self.pk)
-        a.person = User.objects.get(pk=1)
+        a = Personchange.objects.create(equipment=self.pk, person=User.objects.get(pk=1))
         a.save()
-        b = Roomschange.objects.create(equipment=self.pk)
-        b.roomnumber = Rooms.objects.get(pk=1)
+        b = Roomschange.objects.create(equipment=self.pk, roomnumber=Rooms.objects.get(pk=1))
         b.save()
         super(Equipment, self).save(*args, **kwargs)
 
