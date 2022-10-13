@@ -357,13 +357,16 @@ class Verificationequipment(models.Model):
                 image.thumbnail(resize)
                 image.save(self.img.path)
         # добавляем последнюю поверку к оборудованию
-        note = MeasurEquipment.objects.get(pk=self.equipmentSM.pk)
-        note.newcertnumber = self.certnumber
-        newdate = self.get_dateformat(self.date)
-        note.newdate = newdate
-        newdatedead = self.get_dateformat(self.datedead)
-        note.newdatedead = newdatedead
-        note.save()
+        try:
+            note = MeasurEquipment.objects.get(pk=self.equipmentSM.pk)
+            note.newcertnumber = self.certnumber
+            newdate = self.get_dateformat(self.date)
+            note.newdate = newdate
+            newdatedead = self.get_dateformat(self.datedead)
+            note.newdatedead = newdatedead
+            note.save()
+        except:
+            pass
 
     class Meta:
         verbose_name = 'Поверка прибора'
