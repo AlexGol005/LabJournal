@@ -1,4 +1,5 @@
 import datetime
+from datetime import datetime, timedelta
 from django import forms
 
 from crispy_forms.helper import FormHelper
@@ -38,7 +39,7 @@ class SearchMEForm(forms.Form):
 
 class NoteCreationForm(forms.ModelForm):
     """форма для  записей об оборудовании"""
-    date = forms.DateField(label='Дата', required=False, initial=datetime.date.today(),
+    date = forms.DateField(label='Дата', required=False, initial=datetime.now(),
                            widget=forms.DateInput(
                                attrs={'class': 'form-control', 'placeholder': ''}),
                            input_formats=(
@@ -71,7 +72,7 @@ class EquipmentCreateForm(forms.ModelForm):
                                                         'placeholder': 'А'}))
     lot = forms.CharField(label='Заводской номер', max_length=10000,
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
-    yearmanuf = forms.CharField(label='Год выпуска', max_length=10000, initial=datetime.date.today().year,
+    yearmanuf = forms.CharField(label='Год выпуска', max_length=10000, initial=datetime.now().year,
                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
     manufacturer = forms.ModelChoiceField(label='Производитель',
                                          queryset=Manufacturer.objects.all(),
@@ -80,7 +81,7 @@ class EquipmentCreateForm(forms.ModelForm):
                                choices=CHOICES,
                                widget=forms.Select(attrs={'class': 'form-control'}))
 
-    yearintoservice = forms.CharField(label='Год ввода в эксплуатацию', max_length=10000, initial=datetime.date.today().year,
+    yearintoservice = forms.CharField(label='Год ввода в эксплуатацию', max_length=10000, initial=datetime.now().year,
                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     new = forms.ChoiceField(label='Новый или б/у', initial='новый',
@@ -564,7 +565,7 @@ class RoomsCreateForm(forms.ModelForm):
 
 class DocsConsCreateForm(forms.ModelForm):
     """форма для внесения документа или принадлежности"""
-    date = forms.CharField(label='Дата',  initial=datetime.date.today().year,
+    date = forms.CharField(label='Дата',  initial=datetime.now().year,
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
     docs = forms.CharField(label='Наименование документа/принадлежности', initial='Паспорт', max_length=100,
                            widget=forms.TextInput(attrs={'class': 'form-control'}))
