@@ -1,9 +1,12 @@
+
+
 from django.db import models
 from PIL import Image
 from django.contrib.auth.models import User
 from decimal import *
 
 from django.urls import reverse
+from django.utils.datetime_safe import datetime
 
 CHOICES = (
         ('Э', 'Экс.'),
@@ -139,7 +142,6 @@ class Equipment(models.Model):
         return f'Вн. № {self.exnumber}    Зав. № {self.lot} '
 
     def save(self, *args, **kwargs):
-        super().save()
         if self.imginstruction1:
             image1 = Image.open(self.imginstruction1.path)
             if image1.height > 1000 or image1.width > 1000:
@@ -158,6 +160,13 @@ class Equipment(models.Model):
                 resize = (1000, 1000)
                 image3.thumbnail(resize)
                 image3.save(self.imginstruction3.path)
+        a = Personchange.objects.create(equipment=self.pk)
+        a.roomnumber = Rooms.objects.get(pk=1)
+        a.save()
+        b = Roomschange.objects.create(equipment=self.pk)
+        b.person = User.objects.get(pk=1)
+        b.save()
+        super(Equipment, self).save(*args, **kwargs)
 
     # def get_absolute_url(self):
     #     """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
@@ -268,6 +277,12 @@ class MeasurEquipment(models.Model):
     def __str__(self):
         return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot} ' \
                f' № реестр {self.charakters.reestr}'
+
+    def save(self, *args, **kwargs):
+        a = Verificationequipment.objects.create(equipmentSM=self.pk)
+        a.dateorder = datetime.now()
+        a.save()
+        super(MeasurEquipment, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Средство измерения'
