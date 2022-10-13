@@ -280,7 +280,8 @@ class MeasurEquipment(models.Model):
 
     def save(self, *args, **kwargs):
         a = Verificationequipment.objects.create(equipmentSM=self.pk)
-        a.dateorder = datetime.now()
+        now = datetime.now()
+        a.dateorder = now
         a.save()
         super(MeasurEquipment, self).save(*args, **kwargs)
 
