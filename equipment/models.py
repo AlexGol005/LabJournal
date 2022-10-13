@@ -195,7 +195,7 @@ class Roomschange(models.Model):
                                   verbose_name='Оборудование')
 
     def __str__(self):
-        return f'{self.equipment.exnumber} Перемещено {self.date} '
+        return f'{self.equipment} Перемещено {self.date} '
 
     class Meta:
         verbose_name = 'Дата перемещения прибора'
