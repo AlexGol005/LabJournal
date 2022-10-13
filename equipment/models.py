@@ -161,10 +161,10 @@ class Equipment(models.Model):
                 image3.thumbnail(resize)
                 image3.save(self.imginstruction3.path)
         a = Personchange.objects.create(equipment=self.pk)
-        a.roomnumber = Rooms.objects.get(pk=1)
+        a.person = User.objects.get(pk=1)
         a.save()
         b = Roomschange.objects.create(equipment=self.pk)
-        b.person = User.objects.get(pk=1)
+        b.roomnumber = Rooms.objects.get(pk=1)
         b.save()
         super(Equipment, self).save(*args, **kwargs)
 
