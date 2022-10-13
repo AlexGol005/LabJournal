@@ -142,6 +142,7 @@ class Equipment(models.Model):
         return f'Вн. № {self.exnumber}    Зав. № {self.lot} '
 
     def save(self, *args, **kwargs):
+        super().save()
         if self.imginstruction1:
             image1 = Image.open(self.imginstruction1.path)
             if image1.height > 1000 or image1.width > 1000:
@@ -160,10 +161,8 @@ class Equipment(models.Model):
                 resize = (1000, 1000)
                 image3.thumbnail(resize)
                 image3.save(self.imginstruction3.path)
-        # a = Personchange.objects.create(equipment=self.pk, person=User.objects.get(pk=1))
-        # a.save()
-        # b = Roomschange.objects.create(equipment=self.pk, roomnumber=Rooms.objects.get(pk=1))
-        # b.save()
+        Personchange.objects.create(equipment=self, person=User.objects.get(pk=1))
+        Roomschange.objects.create(equipment=self, roomnumber=Rooms.objects.get(pk=1))
         super(Equipment, self).save(*args, **kwargs)
 
     # def get_absolute_url(self):
@@ -277,10 +276,9 @@ class MeasurEquipment(models.Model):
                f' № реестр {self.charakters.reestr}'
 
     def save(self, *args, **kwargs):
-        a = Verificationequipment.objects.create(equipmentSM=self.pk)
+        super().save()
         now = datetime.now()
-        a.dateorder = now
-        a.save()
+        Verificationequipment.objects.create(equipmentSM=self, dateorder=now, statusver='не поверен')
         super(MeasurEquipment, self).save(*args, **kwargs)
 
     class Meta:
