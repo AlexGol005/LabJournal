@@ -52,7 +52,7 @@
     <tbody>
     {% for obj in objects %}
     <tr>
-        <td><a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/"  class="btn btn-outline-warning mt-3">СМ</a></td>
+        <td><a href="/equipment/testequipment/{{ obj.equipment.exnumber }}/"  class="btn btn-outline-warning mt-3">СМ</a></td>
         <td>{{ obj.equipment.exnumber }}</td>
          <td> {{ obj.charakters.name }}</td>
          <td>{{ obj.charakters.typename|default:" " }}/
