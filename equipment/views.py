@@ -576,7 +576,10 @@ def EquipmentUpdate(request, str):
                                   f'. Добавить особенности работы или поменять статус может только ответственный '
                                   f'за прибор или поверку.')
 
-        return redirect(reverse('measureequipment', kwargs={'str': str}))
+        if title.kategory == 'СИ':
+            return redirect(reverse('measureequipment', kwargs={'str': str}))
+        if title.kategory == 'ИО':
+            return redirect(reverse('testequipment', kwargs={'str': str}))
     else:
         form = EquipmentUpdateForm(instance=Equipment.objects.get(exnumber=str))
     data = {'form': form, 'title': title
