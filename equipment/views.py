@@ -569,7 +569,12 @@ def EquipmentUpdate(request, str):
             if form.is_valid():
                 order = form.save(commit=False)
                 order.save()
-                return redirect(reverse('measureequipment', kwargs={'str': str}))
+                if title.kategory == 'СИ':
+                    return redirect(reverse('measureequipment', kwargs={'str': str}))
+                if title.kategory == 'ИО':
+                    return redirect(reverse('testequipment', kwargs={'str': str}))
+                if title.kategory == 'ВО':
+                    return redirect(reverse('supequipment', kwargs={'str': str}))
     if person != request.user and not request.user.is_superuser:
         messages.success(request, f' Для внесения записей о приборе нажмите на кнопку ниже:'
                                   f' "Внести запись о приборе и смотреть записи (для всех пользователей)"'
@@ -580,6 +585,8 @@ def EquipmentUpdate(request, str):
             return redirect(reverse('measureequipment', kwargs={'str': str}))
         if title.kategory == 'ИО':
             return redirect(reverse('testequipment', kwargs={'str': str}))
+        if title.kategory == 'ВО':
+            return redirect(reverse('supequipment', kwargs={'str': str}))
     else:
         form = EquipmentUpdateForm(instance=Equipment.objects.get(exnumber=str))
     data = {'form': form, 'title': title
