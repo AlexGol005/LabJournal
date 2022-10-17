@@ -293,6 +293,9 @@ class TestingEquipment(models.Model):
                                    verbose_name='Характеристики ИО', blank=True, null=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True,
                                   verbose_name='Оборудование')
+    newcertnumber = models.CharField('Номер последнего аттестата', max_length=90, blank=True, null=True)
+    newdate = models.CharField('Дата последней аттестации', blank=True, null=True, max_length=90)
+    newdatedead = models.CharField('Дата окончания последней аттестации', blank=True, null=True, max_length=90)
 
     def __str__(self):
         return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot} '
