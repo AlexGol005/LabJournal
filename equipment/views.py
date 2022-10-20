@@ -2309,10 +2309,10 @@ def export_exvercard_xls(request, pk):
         'соответствует',
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(row_num, row_num, 0, 1, style1)
-        ws.merge(row_num, row_num, 3, 4, style1)
-        ws.merge(row_num, row_num, 5, 6, style1)
+        ws.write(row_num, col_num, columns[col_num], style11)
+        ws.merge(row_num, row_num, 0, 1, style11)
+        ws.merge(row_num, row_num, 3, 4, style11)
+        ws.merge(row_num, row_num, 5, 6, style11)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
@@ -2326,10 +2326,10 @@ def export_exvercard_xls(request, pk):
         'соответствует',
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(row_num, row_num, 0, 1, style1)
-        ws.merge(row_num, row_num, 3, 4, style1)
-        ws.merge(row_num, row_num, 5, 6, style1)
+        ws.write(row_num, col_num, columns[col_num], style11)
+        ws.merge(row_num, row_num, 0, 1, style11)
+        ws.merge(row_num, row_num, 3, 4, style11)
+        ws.merge(row_num, row_num, 5, 6, style11)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
@@ -2447,7 +2447,7 @@ def export_exvercard_xls(request, pk):
 
     row_num = 35
     columns = [
-        'Оборудование пригодно'
+        'Оборудование пригодно. Требования к установке и условиям окружающей среды соответствуют документации на оборудование'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
