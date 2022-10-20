@@ -1,0 +1,136 @@
+{% extends 'main/superbase.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Аттестация ИО
+{% endblock %}
+
+
+{% block content %}
+<div style="text-align: center;"><h5>История аттестаций:
+ <a href="/equipment/testequipment/{{ title.exnumber }}/">
+ {{title.testingequipment_set.all.last.charakters}}, заводской № {{title.lot}}, внутренний № {{ title.exnumber }}  </a> </h5></div>
+<div style="text-align: center; margin-top: 20px; margin-bottom: 15px"><h6> Межаттестационный интервал {{ calinterval }} мес. </h6></div>
+<div style="text-align: center; margin-top: 20px; margin-bottom: 15px"><h5> Планируемая дата аттестации: {{ dateorder|date:"m.Y"|default_if_none:" " }} </h5></div>
+
+{#таблица для вывода комментария#}
+{% if comment != '' %}
+<table class="table table-bordered">
+<td colspan="6">
+<div class="TransactionAmount Badresult">
+<b>Комментарий ответственного за аттестацию: {{ comment }}</b>
+</div>
+</td>
+</table>
+{%  endif %}
+{#конец таблицы для вывода комментария#}
+{#таблица для вывода постоянных особенностей поверки#}
+{% if title.notemetrology %}
+<table class="table table-bordered">
+<td colspan="6">
+{{ title.notemetrology }}
+</td>
+</table>
+{%  endif %}
+{#конец таблицы ддля вывода постоянных особенностей поверки#}
+<a href="/equipment/testingequipment/attestationreg/{{ strreg }}/"  class="btn btn-warning mt-2 mr-2">
+ Внести запись об аттестации</a>
+{#таблица для вывода аттестации#}
+<table class="table table-bordered mt-2">
+    <thead>
+        <tr>
+            <th>Аттестация от</th>
+            <th> Аттестация до </th>
+            <th> Место аттестации </th>
+            <th> Организация поверитель </th>
+            <th> Результат </th>
+            <th> Стоимость, <br> руб </th>
+            <th> Документ </th>
+            <th> Исполнитель аттестации </th>
+         </tr>
+    </thead>
+    <tbody>
+    {% for obj in note %}
+            <tr>
+         <td> {{ obj.date|date:"d.m.y"|default:" " }}{{ obj.year|default:" "}} </td>
+          <td> {{ obj.datedead|date:"d.m.y"|default:" " }}</td>
+        <td> {{ obj.place }}</td>
+         <td> {{ obj.verificator.companyName }}</td>
+        <td> {{ obj.statusver|default:" " }}</td>
+         <td>{{ obj.price|default:" "  }}</td>
+         <td>
+            {% if obj.img %}
+        <a href="{{ obj.arshin}}"  target="blank" >
+             {{ obj.certnumber|default:" "}}
+                  </a>
+            {% endif %}
+        {{ obj.certnumber|default:" "}}
+        </td>
+            <td>
+        {% if obj.verificatorperson.name %}
+         {{ obj.verificatorperson.name }}
+        {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{#конец таблицы для вывода поверки#}
+ <div style="text-align: center; margin-top: 10px">
+<a href="/equipment/measureequipment/{{ title.exnumber }}/metrologyindividuality/"  class="btn btn-warning mt-2">
+     Обновить постоянные особенности аттестации</a></div>
+{#форма для комментария#}
+    <div style="text-align: center; margin-top: 20px">
+<form method="post" enctype="multipart/form-data" class="form-register">
+    <form method="post" class="form-register">
+    {% csrf_token %}
+    {% crispy form %}
+</form>
+</form>
+{#конец формы для комментария#}
+
+<br>
+    <div style="text-align: center; margin-top: 5px; margin-bottom: 15px">
+     <a href="/equipment/testingequipment/attestationreg/{{ strreg }}/"  class="btn btn-warning mt-2 mr-2">
+ Внести запись о аттестации</a>
+     <a href="/equipment/contactsverreg/{{ strreg }}/"  class="btn btn-warning mt-2 mr-2">
+ Внести контакты поверителя</a>
+   </div>
+<div style="text-align: center; margin-top: 20px; margin-bottom: 15px">
+<h5>Контакты поверителей</h5></div>
+    <table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Организация</th>
+            <th> Имя </th>
+            <th> Телефон </th>
+            <th> Должность</th>
+            <th> № отдела</th>
+            <th> Отдел</th>
+            <th> Комната</th>
+            <th> Емаил</th>
+            <th> Примечание</th>
+            <th> Ред.</th>
+         </tr>
+    </thead>
+    <tbody>
+    {% for obj2 in note2 %}
+<tr>
+<td> {{ obj2.verificators.company.companyName }}</td>
+<td> {{ obj2.verificators.name }}</td>
+<td> {{ obj2.verificators.telnumber }}</td>
+<td> {{ obj2.verificators.position }}</td>
+<td> {{ obj2.verificators.departamentn }}</td>
+<td> {{ obj2.verificators.departament }}</td>
+<td> {{ obj2.verificators.departamentadress }}</td>
+<td> {{ obj2.verificators.email }}</td>
+<td> {{ obj2.verificators.dop }}</td>
+<td> <a href="{% url 'verificatorsupdate' obj2.verificators.pk %}"  class="btn btn-outline-warning mt-3">ред</a></td>
+
+
+</tr>
+    {% endfor %}
+    </tbody>
+    </table>
+    </div>
+{% endblock %}

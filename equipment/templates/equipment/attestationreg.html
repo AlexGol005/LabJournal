@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Внести аттестацию
+{% endblock %}
+{% block content %}
+<div style="text-align: center;"><h6>
+<br> <a href="/equipment/testequipment/{{ title.exnumber }}/">
+{{ title.exnumber }}, {{title.testingequipment_set.all.last.charakters}}, зав. № {{title.lot}}  </a> </h6></div>
+<br>
+<div style="text-align: center;"><h5> Внести сведения об аттестации </h5></div>
+<form method="post" enctype="multipart/form-data" class="form-register">
+<form method="post" class="form-register">
+{% csrf_token %}
+{% crispy form %}
+</form>
+</form>
+<br>
+<br>
+    <div style="text-align: center; margin-top: 20px">
+<a href="{% url 'verificatorsreg' %}" class="btn btn-warning mr-2 mt-3" style="width: 210px" target="blank">
+Добавить организацию поверителя</a>
+<a href="{% url 'verificatorspersonsreg' %}" class="btn btn-warning  mt-3" style="width: 210px" target="blank">
+Добавить сотрудника поверителя</a>
+<a href="{% url 'verificatorpersons' %}" class="btn btn-warning  ml-2 mt-3" style="width: 210px" target="blank">
+Контакты всех поверителей</a>
+</div>
+{% endblock %}

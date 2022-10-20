@@ -377,9 +377,9 @@ class Verificationequipment(models.Model):
 class Attestationequipment(models.Model):
     equipmentSM = models.ForeignKey(TestingEquipment, verbose_name='ИО',
                                     on_delete=models.PROTECT, related_name='equipmentSM_att', blank=True, null=True)
-    date = models.DateField('Дата аттестации')
-    datedead = models.DateField('Дата окончания аттестации')
-    dateorder = models.DateField('Дата заказа следующей аттестации')
+    date = models.DateField('Дата аттестации', blank=True, null=True)
+    datedead = models.DateField('Дата окончания аттестации', blank=True, null=True)
+    dateorder = models.DateField('Дата заказа следующей аттестации', blank=True, null=True)
     certnumber = models.CharField('Номер аттестата', max_length=90, blank=True, null=True)
     certnumbershort = models.CharField('Краткий номер свидетельства о аттестата', max_length=90, blank=True, null=True)
     price = models.DecimalField('Стоимость данной аттестации', max_digits=100, decimal_places=2, null=True, blank=True)
@@ -395,6 +395,12 @@ class Attestationequipment(models.Model):
     place = models.CharField(max_length=300, choices=CHOICESPLACE, default='У поверителя', null=True,
                              verbose_name='Место аттестации')
     note = models.CharField('Примечание', max_length=900, blank=True, null=True)
+    ndocs = models.CharField('Аттестован на методики', max_length=900, blank=True, null=True)
+    year = models.CharField('Год аттестации (если нет точных дат)', max_length=900, blank=True, null=True)
+    dateordernew = models.DateField('Дата заказа нового оборудования (если аттестовывать не выгодно)',
+                                    blank=True, null=True)
+    haveorder = models.BooleanField(verbose_name='Заказана следующая аттестация (или новое СИ)', default=False,
+                                    blank=True)
 
     def __str__(self):
         return f'Поверка {self.equipmentSM.charakters.name} вн № {self.equipmentSM.equipment.exnumber}'
@@ -459,6 +465,21 @@ class CommentsVerificationequipment(models.Model):
     class Meta:
         verbose_name = 'Комментарий к поверке'
         verbose_name_plural = 'Комментарии к поверкам'
+
+
+class CommentsAttestationequipment(models.Model):
+    """комментарии к аттестации """
+    date = models.DateField('Дата', auto_now_add=True, db_index=True)
+    note = models.TextField('Содержание', max_length=1000, default='')
+    forNote = models.ForeignKey(Equipment, verbose_name='К прибору', on_delete=models.CASCADE)
+    author = models.CharField('Автор', max_length=90, blank=True, null=True)
+
+    def get_absolute_url(self):
+        return reverse('testingequipmentatt', kwargs={'str': self.forNote.exnumber})
+
+    class Meta:
+        verbose_name = 'Комментарий к аттестации'
+        verbose_name_plural = 'Комментарии к аттестациям'
 
 
 class MeteorologicalParameters(models.Model):

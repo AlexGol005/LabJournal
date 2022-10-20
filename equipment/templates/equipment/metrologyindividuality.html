@@ -6,10 +6,19 @@
 
 
 {% block content %}
-    <div style="text-align: center;"><h5>Особенности поверки/аттестации:
-       <a href="/equipment/measureequipment/{{ title.exnumber }}/">
-    {{ title.exnumber }}, {{title.measurequipment_set.all.last.charakters}}, зав. № {{title.lot}}  </a> </h5></div>
+     {% if title.kategory == 'СИ' %}
+    <div style="text-align: center;"><h4>Особенности поверки/аттестации: <a href="/equipment/measureequipment/{{ title.exnumber }}/">
+    {{ title.exnumber }}, {{title.measurequipment_set.all.last.charakters}}, зав. № {{title.lot}}  </a> </h4></div>
     <br><br>
+    {% elif title.kategory == 'ИО' %}
+    <div style="text-align: center;"><h4>Особенности поверки/аттестации: <a href="/equipment/testequipment/{{ title.exnumber }}/">
+    {{ title.exnumber }}, {{title.testingequipment_set.all.last.charakters}}, зав. № {{title.lot}}  </a> </h4></div>
+    <br><br>
+    {% elif title.kategory == 'ВО' %}
+    <div style="text-align: center;"><h4>Особенности поверки/аттестации: <a href="/equipment/measureequipment/{{ title.exnumber }}/">
+    {{ title.exnumber }}, {{title.measurequipment_set.all.last.charakters}}, зав. № {{title.lot}}  </a> </h4></div>
+    <br><br>
+    {% endif %}
     <form method="post" enctype="multipart/form-data" class="form-register">
         {% csrf_token %}
         {{ form.as_p }}

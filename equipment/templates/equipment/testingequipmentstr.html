@@ -103,10 +103,10 @@
     </thead>
     <tbody>
     <tr>
-        <td>{{ obj.equipmentSM_ver.last.date|date:'d.m.y'|default:" " }}</td>
-         <td> {{ obj.equipmentSM_ver.last.datedead|date:'d.m.y'|default:" " }}</td>
-         <td> {{ obj.equipmentSM_ver.last.dateorder|date:'m.Y'|default:" " }}</td>
-         <td> {{ obj.equipmentSM_ver.last.certnumber}}</td>
+        <td>{{ obj.equipmentSM_att.last.date|date:'d.m.y'|default:" " }}</td>
+         <td> {{ obj.equipmentSM_att.last.datedead|date:'d.m.y'|default:" " }}</td>
+         <td> {{ obj.equipmentSM_att.last.dateorder|date:'m.Y'|default:" " }}</td>
+         <td> {{ obj.equipmentSM_att.last.certnumber}}</td>
     </tr>
     </tbody>
 </table>
@@ -114,10 +114,10 @@
 {# поверка кнопка1#}
 <div style="text-align: center; margin-top: 10px">
     {% if note %}
- <a href="/equipment/measureequipment/verification/{{ obj.equipment.exnumber }}/"  class="btn btn-info mt-2 mr-2">
+ <a href="/equipment/testingequipment/attestation/{{ obj.equipment.exnumber }}/"  class="btn btn-info mt-2 mr-2">
      Смотреть историю аттестаций</a>
     {% endif %}
-     <a href="/equipment/measureequipment/verificationreg/{{ obj.equipment.exnumber }}/"  class="btn btn-warning mt-2 mr-2">
+     <a href="/equipment/testingequipment/attestationreg/{{ obj.equipment.exnumber }}/"  class="btn btn-warning mt-2 mr-2">
      Внести запись об аттестации</a>
 {# поверка кнопка3#}
  <a href="{% url 'verificationlabels' %}"  target="blank" class="btn btn-warning mt-2 ">
@@ -168,9 +168,9 @@
         <tr>
             <th> Паспорт (ссылка)</th>
             <th> Основная инструкция <br> по <br>    эксплуатации прибора <br>в ООО "Петро- аналитика"</th>
-            <th> Диапазон измерений</th>
-            <th> Класс точности (разряд), погрешность и (или) неопреде- лённость (класс, разряд)</th>
-            <th> Наиме- нование опреде- ляемых <br>(изме- ряемых) характе- ристик (параметров) продукции </th>
+            <th> Основные технические характеристики</th>
+            <th> Наименование видов испытаний и/или определяемых характеристик (параметров) продукции</th>
+            <th> Наименование испытуемых групп объектов</th>
             <th> Видео- инструк- ция </th>
 
          </tr>
@@ -205,8 +205,8 @@
              {% endif %}
          </td>
         <td> {{ obj.charakters.measurydiapason }}</td>
-        <td> {{ obj.charakters.accuracity }}</td>
-        <td>{{ obj.charakters.aim }}</td>
+        <td> {{ obj.charakters.aim }}</td>
+        <td>{{ obj.charakters.aim2 }}</td>
         <td> пока пусто</td>
     </tr>
     </tbody>

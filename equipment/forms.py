@@ -305,6 +305,103 @@ class VerificationRegForm(forms.ModelForm):
             Submit('submit', 'Внести'))
 
 
+
+class AttestationRegForm(forms.ModelForm):
+    """форма для  внесения сведений об аттестации"""
+    date = forms.DateField(label='Дата аттестации', required=False,
+        widget=forms.DateInput(
+            attrs={'class': 'form-control', 'placeholder': ''}),
+        input_formats=(
+            '%Y-%m-%d',  # '2006-10-25'
+            '%m/%d/%Y',  # '10/25/2006'
+            '%m/%d/%y',
+            '%d.%m.%Y',
+        ))
+    datedead = forms.DateField(label='Дата окончания аттестации', required=False,
+                           widget=forms.DateInput(
+                               attrs={'class': 'form-control', 'placeholder': ''}),
+                           input_formats=(
+                               '%Y-%m-%d',  # '2006-10-25'
+                               '%m/%d/%Y',  # '10/25/2006'
+                               '%m/%d/%y',
+                               '%d.%m.%Y',
+                           ))
+    dateorder = forms.DateField(label='Дата заказа аттестации', required=False,
+                           widget=forms.DateInput(
+                               attrs={'class': 'form-control', 'placeholder': ''}),
+                           input_formats=(
+                               '%Y-%m-%d',  # '2006-10-25'
+                               '%m/%d/%Y',  # '10/25/2006'
+                               '%m/%d/%y',
+                               '%d.%m.%Y',
+                           ))
+    ndocs = forms.CharField(label='Аттестован на методики', max_length=10000, required=False,
+                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
+    certnumber = forms.CharField(label='№ аттестата', max_length=10000, required=False,
+                                  widget=forms.TextInput(attrs={'class': 'form-control'}))
+    price = forms.DecimalField(label='Стоимость данной атт.', max_digits=10, decimal_places=2, required=False,
+                              widget=forms.TextInput(attrs={'class': 'form-control',
+                                                            'placeholder': '0000.00'}))
+    statusver = forms.ChoiceField(label='Результат аттестации',
+                               choices=CHOICESATT,
+                               widget=forms.Select(attrs={'class': 'form-control'}))
+
+    verificator = forms.ModelChoiceField(label='Организация-поверитель',
+                                         queryset=Verificators.objects.all(),
+                                             widget=forms.Select(attrs={'class': 'form-control'}))
+    verificatorperson = forms.ModelChoiceField(label='Имя поверителя', required=False,
+                                         queryset=VerificatorPerson.objects.all(),
+                                         widget=forms.Select(attrs={'class': 'form-control'}))
+    place = forms.ChoiceField(label='Место аттестации',
+                             choices=CHOICESPLACE, initial='В ПА',
+                               widget=forms.Select(attrs={'class': 'form-control'}))
+    img = forms.ImageField(label='Аттестат', widget=forms.FileInput, required=False)
+    dateordernew = forms.DateField(label='Дата заказа замены', required=False,
+                                   help_text='Укажите, если аттестации не выгодна',
+                                widget=forms.DateInput(
+                                    attrs={'class': 'form-control', 'placeholder': ''}),
+                                input_formats=(
+                                    '%Y-%m-%d',
+                                    '%m/%d/%Y',
+                                    '%m/%d/%y',
+                                    '%d.%m.%Y',
+                                ))
+
+    class Meta:
+        model = Attestationequipment
+        fields = ['date', 'datedead', 'dateorder', 'ndocs', 'certnumber',
+                  'price', 'statusver',  'verificator', 'verificatorperson',
+                  'place', 'year',
+                  'dateordernew'
+                  ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('date', css_class='form-group col-md-4 mb-0'),
+                Column('datedead', css_class='form-group col-md-4 mb-0'),
+                Column('dateorder', css_class='form-group col-md-4 mb-0'),
+                ),
+            Row(
+                Column('ndocs', css_class='form-group col-md-12 mb-0')),
+            Row(
+                Column('certnumber', css_class='form-group col-md-4 mb-0'),
+                Column('statusver', css_class='form-group col-md-4 mb-0'),
+                Column('price', css_class='form-group col-md-4 mb-0'),
+            ),
+            Row(
+                Column('verificator', css_class='form-group col-md-4 mb-0'),
+                Column('verificatorperson', css_class='form-group col-md-4 mb-0'),
+                Column('place', css_class='form-group col-md-4 mb-0'),
+            ),
+            Row(
+                Column('img', css_class='form-group col-md-6 mb-1'),
+                Column('dateordernew', css_class='form-group col-md-6 mb-1')),
+            Submit('submit', 'Внести'))
+
+
 class CommentsVerificationCreationForm(forms.ModelForm):
     """форма для комментария к истории поверки"""
     note = forms.CharField(label='Обновить комментарий отвественного', max_length=10000000, required=False,
@@ -313,6 +410,25 @@ class CommentsVerificationCreationForm(forms.ModelForm):
 
     class Meta:
         model = CommentsVerificationequipment
+        fields = ['note']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('note', css_class='form-group col-md-10 mb-0'),
+                Row(Submit('submit', 'Обновить', css_class='btn  btn-info col-md-10 mb-3 mt-4 ml-4'))))
+
+
+class CommentsAttestationequipmentForm(forms.ModelForm):
+    """форма для комментария к истории аттестации"""
+    note = forms.CharField(label='Обновить комментарий отвественного', max_length=10000000, required=False,
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
+
+    class Meta:
+        model = CommentsAttestationequipment
         fields = ['note']
 
     def __init__(self, *args, **kwargs):
@@ -760,5 +876,13 @@ class OrderMEUdateForm(forms.ModelForm):
 
     class Meta:
         model = Verificationequipment
+        fields = ['haveorder']
+
+class OrderTEUdateForm(forms.ModelForm):
+    """форма для обозначения того, что заказана аттестация, или ЛО на замену"""
+    haveorder = forms.BooleanField(label='', required=False)
+
+    class Meta:
+        model = Attestationequipment
         fields = ['haveorder']
 

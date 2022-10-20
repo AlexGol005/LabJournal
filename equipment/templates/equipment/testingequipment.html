@@ -47,6 +47,9 @@
             <th> Ответств-й пользователь </th>
             <th> Статус прибора</th>
             <th> Аттестован до  </th>
+            <th> Аттестация план  </th>
+            <th> Заказана аттестация или замена </th>
+            <th> Карт. <br> exel  </th>
          </tr>
     </thead>
     <tbody>
@@ -62,7 +65,18 @@
         <td> {{ obj.equipment.roomschange_set.all.last.roomnumber.roomnumber }}</td>
         <td> {{ obj.equipment.personchange_set.all.last.person }}</td>
         <td> {{ obj.equipment.get_status_display }}</td>
-        <td> {{ obj.equipmentSM_ver.all.last.datedead|date:"d.m.Y"  }}</td>
+        <td> {{ obj.equipmentSM_att.all.last.datedead|date:"d.m.Y"  }}</td>
+            <td> {{ obj.equipmentSM_att.all.last.dateorder|date:"m.Y"  }}</td>
+        <td>
+            {% if obj.equipmentSM_att.all.last.haveorder %}
+            да
+            {% else %}
+        <a href="{% url 'haveorderatt' obj.pk %}" target="blank" class="btn btn-outline-warning mt-3">
+            нет</a>
+            {% endif %}
+        </td>
+        <td> <a href="{% url 'export_mecard_xls' obj.pk %}"  class="btn btn-outline-warning mt-3">
+            exel {{ obj.equipment.exnumber }}</a></td>
     </tr>
     {% endfor %}
     </tbody>

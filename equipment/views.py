@@ -44,7 +44,8 @@ class ContactsVerregView(LoginRequiredMixin, CreateView):
             if order.equipment.kategory == 'СИ':
                 return redirect(f'/equipment/measureequipment/verification/{self.kwargs["str"]}')
             if order.equipment.kategory == 'ИО':
-                return super().form_valid(form)
+                return redirect(f'/equipment/testingequipment/attestation/{self.kwargs["str"]}')
+
 
 # флаг1
 class SearchMustVerView(ListView):
@@ -470,7 +471,7 @@ class TestingEquipmentView(ListView):
         return context
 
 
-class HaveorderView(UpdateView):
+class HaveorderVerView(UpdateView):
     """ выводит форму добавления инфо о заказе поверки """
     template_name = 'equipment/reg.html'
     form_class = OrderMEUdateForm
@@ -490,7 +491,7 @@ class HaveorderView(UpdateView):
 
 
     def get_context_data(self, **kwargs):
-        context = super(HaveorderView, self).get_context_data(**kwargs)
+        context = super(HaveorderVerView, self).get_context_data(**kwargs)
         context['title'] = "Заказана поверка или новое СИ"
         return context
 
@@ -502,6 +503,40 @@ class HaveorderView(UpdateView):
             return redirect(f"/equipment/measureequipmentall/")
         else:
             return redirect(f"/equipment/measureequipmentall/")
+
+
+class HaveorderAttView(UpdateView):
+    """ выводит форму добавления инфо о заказе поверки """
+    template_name = 'equipment/reg.html'
+    form_class = OrderMEUdateForm
+
+    def get_object(self, queryset=None):
+        queryset_get = Attestationequipment.objects. \
+            select_related('equipmentSM').values('equipmentSM'). \
+            annotate(id_actual=Max('id')).values('id_actual')
+        b = list(queryset_get)
+        set = []
+        for i in b:
+            a = i.get('id_actual')
+            set.append(a)
+        q = Attestationequipment.objects.filter(id__in=set). \
+            get(equipmentSM_id=self.kwargs['pk'])
+        return q
+
+
+    def get_context_data(self, **kwargs):
+        context = super(HaveorderAttView, self).get_context_data(**kwargs)
+        context['title'] = "Заказана аттестация или новое ИО"
+        return context
+
+    def form_valid(self, form):
+        user = User.objects.get(username=self.request.user)
+        if user.is_superuser:
+            order = form.save(commit=False)
+            order.save()
+            return redirect(f"/equipment/testingequipmentall/")
+        else:
+            return redirect(f"/equipment/testingequipmentall/")
 
 
 class StrMeasurEquipmentView(View):
@@ -609,7 +644,10 @@ def EquipmentMetrologyUpdate(request, str):
             if form.is_valid():
                 order = form.save(commit=False)
                 order.save()
-                return redirect(reverse('measureequipmentver', kwargs={'str': str}))
+                if title.kategory == 'СИ':
+                    return redirect(reverse('measureequipmentver', kwargs={'str': str}))
+                if title.kategory == 'ИО':
+                    return redirect(reverse('testingequipmentatt', kwargs={'str': str}))
     if person != request.user and not request.user.is_superuser:
         messages.success(request, f'. поменять статус может только ответственный за поверку.')
         return redirect(reverse('measureequipmentver', kwargs={'str': str}))
@@ -684,6 +722,56 @@ class VerificationequipmentView(View):
             return redirect(reverse('measureequipmentver', kwargs={'str': str}))
 
 
+class AttestationequipmentView(View):
+    """ выводит историю аттестаций и форму для добавления комментария к истории аттестаций """
+    def get(self, request, str):
+        note = Attestationequipment.objects.filter(equipmentSM__equipment__exnumber=str).order_by('-pk')
+        note2 = ContactsVer.objects.filter(equipment__exnumber=str).order_by('-pk')
+        try:
+            strreg = note.latest('pk').equipmentSM.equipment.exnumber
+        except:
+            strreg = Equipment.objects.get(exnumber=str).exnumber
+        try:
+            calinterval = note.latest('pk').equipmentSM.charakters.calinterval
+        except:
+            calinterval = '-'
+        title = Equipment.objects.get(exnumber=str)
+        try:
+            dateorder = Attestationequipment.objects.filter(equipmentSM__equipment__exnumber=str).last().dateorder
+        except:
+            dateorder = 'не аттестован'
+        now = date.today()
+        try:
+            comment = CommentsAttestationequipment.objects.filter(forNote__exnumber=str).last().note
+        except:
+            comment = ''
+        form = CommentsAttestationequipmentForm(initial={'comment': comment})
+        data = {'note': note,
+                'note2': note2,
+                'title': title,
+                'calinterval': calinterval,
+                'now': now,
+                'dateorder': dateorder,
+                'form': form,
+                'comment': comment,
+                'strreg': strreg,
+                }
+        return render(request, 'equipment/attestation.html', data)
+
+    def post(self, request, str, *args, **kwargs):
+        form = CommentsAttestationequipmentForm(request.POST)
+        if request.user.is_superuser:
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.author = request.user
+                order.forNote = Equipment.objects.get(exnumber=str)
+                order.save()
+                return redirect(order)
+        else:
+            messages.success(request, f'Комментировать может только ответственный за поверку приборов')
+            return redirect(reverse('testingequipmentattestation', kwargs={'str': str}))
+
+
 @login_required
 def VerificationReg(request, str):
     """выводит форму для внесения сведений о поверке"""
@@ -706,6 +794,29 @@ def VerificationReg(request, str):
         'title': title
             }
     return render(request, 'equipment/verificationreg.html', data)
+
+@login_required
+def AttestationReg(request, str):
+    """выводит форму для внесения сведений об аттестации"""
+    title = Equipment.objects.get(exnumber=str)
+    if request.user.is_superuser:
+        if request.method == "POST":
+            form = AttestationRegForm(request.POST, request.FILES)
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.equipmentSM = TestingEquipment.objects.get(equipment__exnumber=str)
+                order.save()
+                return redirect(order)
+    if not request.user.is_superuser:
+        messages.success(request, 'Раздел доступен только инженеру по оборудованию')
+        return redirect(reverse('testingequipmentatt', kwargs={'str': str}))
+    else:
+        form = AttestationRegForm()
+    data = {
+        'form': form,
+        'title': title
+            }
+    return render(request, 'equipment/attestationreg.html', data)
 
 
 @login_required
@@ -788,7 +899,11 @@ class PersonchangeFormView(View):
                 order = form.save(commit=False)
                 order.equipment = Equipment.objects.get(exnumber=str)
                 order.save()
-                return redirect(f'/equipment/measureequipment/{str}')
+                if order.equipment.kategory == 'СИ':
+                    return redirect(f'/equipment/measureequipment/{str}')
+                if order.equipment.kategory == 'ИО':
+                    return redirect(f'/equipment/testequipment/{self.kwargs["str"]}')
+
         else:
             messages.success(request, f'Раздел для ответственного за поверку приборов')
             return redirect(f'/equipment/measureequipment/{str}')
@@ -815,7 +930,10 @@ class RoomschangeFormView(View):
                 order = form.save(commit=False)
                 order.equipment = Equipment.objects.get(exnumber=str)
                 order.save()
-                return redirect(f'/equipment/measureequipment/{str}')
+                if order.equipment.kategory == 'СИ':
+                    return redirect(f'/equipment/measureequipment/{str}')
+                if order.equipment.kategory == 'ИО':
+                    return redirect(f'/equipment/testequipment/{self.kwargs["str"]}')
         else:
             messages.success(request, f'Раздел для ответственного за поверку приборов')
             return redirect(f'/equipment/measureequipment/{str}')
@@ -979,12 +1097,12 @@ class SearchResultTestingEquipmentView(TemplateView):
             context['objects'] = objects
         if dateser and not name and not lot and not exnumber:
             objects = TestingEquipment.objects.\
-                filter(Q(equipmentSM_ver__datedead__gte=dateser) & Q(equipmentSM_att__id__in=set)). \
+                filter(Q(equipmentSM_att__datedead__gte=dateser) & Q(equipmentSM_att__id__in=set)). \
                 order_by('charakters__name')
             context['objects'] = objects
         if dateser and name and not lot and not exnumber:
             objects = TestingEquipment.objects.\
-                filter(Q(equipmentSM_ver__datedead__gte=dateser) & Q(equipmentSM_att__id__in=set)). \
+                filter(Q(equipmentSM_att__datedead__gte=dateser) & Q(equipmentSM_att__id__in=set)). \
                 filter(Q(charakters__name__icontains=name) | Q(charakters__name__icontains=name1)). \
                 order_by('charakters__name')
             context['objects'] = objects
@@ -1873,3 +1991,109 @@ def export_verificlabel_xls(request):
     wb.save(response)
     return response
 
+
+def export_exvercard_xls(request, pk):
+    '''представление для выгрузки протокола верификации в ексель'''
+    note = MeasurEquipment.objects.get(pk=pk)
+    company = CompanyCard.objects.get(pk=1)
+    cardname = pytils.translit.translify(note.equipment.exnumber) + ' ' +\
+                pytils.translit.translify(note.charakters.name) +\
+                ' ' + pytils.translit.translify(note.equipment.lot)
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = f'attachment; filename="{cardname}.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Основная информация', cell_overwrite_ok=True)
+
+    ws.col(0).width = 2700
+    ws.col(1).width = 2500
+    ws.col(2).width = 8000
+    ws.col(3).width = 3700
+    ws.col(4).width = 2500
+    ws.col(5).width = 4300
+    ws.col(6).width = 4000
+    ws.col(7).width = 4300
+    ws.col(8).width = 2000
+    ws.col(9).width = 2000
+
+    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
+    ws.insert_bitmap('logo.bmp', 0, 0)
+    ws.left_margin = 0
+    ws.header_str = b'&F c. &P  '
+    ws.footer_str = b' '
+    ws.start_page_number = 1
+
+    pattern = xlwt.Pattern()
+    pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+    pattern.pattern_fore_colour = 26
+
+    al1 = Alignment()
+    al1.horz = Alignment.HORZ_CENTER
+    al1.vert = Alignment.VERT_CENTER
+
+    b1 = Borders()
+    b1.left = 1
+    b1.right = 1
+    b1.bottom = 1
+    b1.top = 1
+
+    style1 = xlwt.XFStyle()
+    style1.font.height = 9 * 20
+    style1.font.name = 'Times new roman'
+    style1.alignment = al1
+    style1.alignment.wrap = 1
+    style1.borders = b1
+
+    style2 = xlwt.XFStyle()
+    style2.font.height = 9 * 20
+    style2.font.name = 'Times new roman'
+    style2.alignment = al1
+    style2.alignment.wrap = 1
+    style2.borders = b1
+    style2.pattern = pattern
+
+    style3 = xlwt.XFStyle()
+    style3.font.height = 15 * 20
+    style3.font.bold = True
+    style3.font.name = 'Times new roman'
+    style3.alignment = al1
+    style3.alignment.wrap = 1
+
+    style4 = xlwt.XFStyle()
+    style4.font.height = 9 * 20
+    style4.font.name = 'Times new roman'
+    style4.alignment = al1
+    style4.alignment.wrap = 1
+    style4.borders = b1
+    style4.num_format_str = 'DD.MM.YYYY'
+
+    style5 = xlwt.XFStyle()
+    style5.font.height = 20 * 20
+    style5.font.bold = True
+    style5.font.name = 'Times new roman'
+    style5.alignment = al1
+    style5.alignment.wrap = 1
+
+
+    row_num = 4
+    columns = [
+        'Регистрационная карточка на СИ и ИО'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style5)
+        ws.merge(row_num, row_num, 0, 9)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 5
+    columns = [
+        'Идентификационная и уникальная информация'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 9)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    wb.save(response)
+    return response

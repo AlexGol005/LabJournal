@@ -18,8 +18,11 @@
 
 {#карточка#}
 <div style="text-align: center; margin-top: 10px; margin-bottom: 50px">
- <a href="{% url 'export_mecard_xls' obj.pk %}"  class="btn btn-warning mt-2 ">
-     Распечатать карточку на прибор</a></div>
+    <a href="{% url 'export_mecard_xls' obj.pk %}"  class="btn btn-warning mt-2 ">
+    Распечатать карточку на прибор</a>
+    <a href="{% url 'export_exvercard_xls' obj.pk %}"  class="btn btn-warning mt-2 ">
+    Выгрузить шаблон протокола верификации</a>
+</div>
 
 
 {#таблица неизменные сведения о приборе#}
