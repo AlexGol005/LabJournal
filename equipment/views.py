@@ -2142,16 +2142,6 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 1100
 
-    row_num = 4
-    columns = [
-        f'Протокол верификации  № {note.equipment.exnumber}_{now.year}_1'
-    ]
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style5)
-        ws.merge(row_num, row_num, 0, 6)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
-
     row_num = 10
     columns = [
         '2. Верификация комплектности и установки оборудования'
