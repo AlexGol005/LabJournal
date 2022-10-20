@@ -2006,17 +2006,19 @@ def export_exvercard_xls(request, pk):
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('Протокол верификации СИ', cell_overwrite_ok=True)
 
-    ws.col(0).width = 2700
+    ws.col(0).width = 2600
     ws.col(1).width = 2500
-    ws.col(2).width = 8000
+    ws.col(2).width = 7900
     ws.col(3).width = 3700
     ws.col(4).width = 2500
+    ws.col(5).width = 2400
+    ws.col(6).width = 3600
 
 
     Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
     ws.insert_bitmap('logo.bmp', 0, 0)
     ws.left_margin = 0
-    ws.header_str = b'&F c. &P  '
+    ws.header_str = b'c. &P  '
     ws.footer_str = b' '
     ws.start_page_number = 1
 
@@ -2050,7 +2052,7 @@ def export_exvercard_xls(request, pk):
     style2.pattern = pattern
 
     style3 = xlwt.XFStyle()
-    style3.font.height = 15 * 20
+    style3.font.height = 11 * 20
     style3.font.bold = True
     style3.font.name = 'Times new roman'
     style3.alignment = al1
@@ -2065,7 +2067,7 @@ def export_exvercard_xls(request, pk):
     style4.num_format_str = 'DD.MM.YYYY'
 
     style5 = xlwt.XFStyle()
-    style5.font.height = 20 * 20
+    style5.font.height = 12 * 20
     style5.font.bold = True
     style5.font.name = 'Times new roman'
     style5.alignment = al1
@@ -2074,31 +2076,21 @@ def export_exvercard_xls(request, pk):
 
     row_num = 4
     columns = [
-        f'Протокол верификации СИ {note.equipment.exnumber}_{now.year}_1'
+        f'Протокол верификации СИ № {note.equipment.exnumber}_{now.year}_1 от {now} г.'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style5)
-        ws.merge(row_num, row_num, 0, 4)
+        ws.merge(row_num, row_num, 0, 6)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
     row_num = 5
     columns = [
-        'Идентификационная и уникальная информация'
+        '1. Идентификационная и уникальная информация'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style3)
-        ws.merge(row_num, row_num, 0, 4)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
-
-    row_num = 5
-    columns = [
-        'Идентификационная и уникальная информация'
-    ]
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style3)
-        ws.merge(row_num, row_num, 0, 9)
+        ws.merge(row_num, row_num, 0, 6)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
@@ -2109,14 +2101,14 @@ def export_exvercard_xls(request, pk):
         'Наименование',
         'Тип/модификация',
         'Заводской номер',
-        # 'Год выпуска',
-        # 'Производитель',
+        'Год выпуска',
+        'Производитель',
         # 'Год ввода в эксплуатацию в ООО "Петроаналитика" ',
         # 'Новый или б/у',
         # 'Инвентарный номер',
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.write(row_num, col_num, columns[col_num], style1)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 1100
 
@@ -2127,8 +2119,8 @@ def export_exvercard_xls(request, pk):
         note.charakters.name,
         f'{note.charakters.typename}/{note.charakters.modificname}',
         note.equipment.lot,
-        # note.equipment.yearmanuf,
-        # f'{note.equipment.manufacturer.country}, {note.equipment.manufacturer.companyName}',
+        note.equipment.yearmanuf,
+        f'{note.equipment.manufacturer.country}, {note.equipment.manufacturer.companyName}',
         # note.equipment.yearintoservice,
         # note.equipment.new,
         # note.equipment.invnumber,
@@ -2138,41 +2130,313 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 1100
 
-    row_num = 9
+    row_num = 4
     columns = [
-        # 'Внутренний номер',
-        # 'Номер в госреестре',
-        # 'Наименование',
-        # 'Тип/модификация',
-        # 'Заводской номер',
-        'Год выпуска',
-        'Производитель',
-        'Год ввода в эксплуатацию в ООО "Петроаналитика" ',
-        'Новый или б/у',
-        'Инвентарный номер',
+        f'Протокол верификации  № {note.equipment.exnumber}_{now.year}_1'
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.write(row_num, col_num, columns[col_num], style5)
+        ws.merge(row_num, row_num, 0, 6)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 1100
+    ws.row(row_num).height = 500
 
     row_num = 10
     columns = [
-        # note.equipment.exnumber,
-        # note.charakters.reestr,
-        # note.charakters.name,
-        # f'{note.charakters.typename}/{note.charakters.modificname}',
-        # note.equipment.lot,
-        note.equipment.yearmanuf,
-        f'{note.equipment.manufacturer.country}, {note.equipment.manufacturer.companyName}',
-        note.equipment.yearintoservice,
-        note.equipment.new,
-        note.equipment.invnumber,
+        '2. Верификация комплектности и установки оборудования'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 6)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 11
+    columns = [
+        '2.1 Соостветствие комплектности'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 6)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 12
+    columns = [
+        'Наименование',
+        'Наименование',
+        'Наименование',
+        'Оценка',
+        'Примечание',
+        'Примечание',
+        'Примечание',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 4, 6, style1)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 1100
+    ws.row(row_num).height = 500
+
+    row_num = 13
+    columns = [
+        'Комплектация по паспорту и/или упаковочному листу',
+        'Комплектация по паспорту и/или упаковочному листу',
+        'Комплектация по паспорту и/или упаковочному листу',
+        'соответствует',
+        '',
+        '',
+        '',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 4, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 14
+    columns = [
+        'Паспорт',
+        'Паспорт',
+        'Паспорт',
+        'есть',
+        '',
+        '',
+        '',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 4, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 15
+    columns = [
+        'Руководство по эксплуатации',
+        'Руководство по эксплуатации',
+        'Руководство по эксплуатации',
+        'есть',
+        '',
+        '',
+        '',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 4, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 16
+    columns = [
+        'Сведения о поверке',
+        'Сведения о поверке',
+        'Сведения о поверке',
+        'есть',
+        '',
+        '',
+        '',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 4, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 16
+    columns = [
+        'Версия программного обеспечения',
+        'Версия программного обеспечения',
+        'Версия программного обеспечения',
+        'не оснащено',
+        '',
+        '',
+        '',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 4, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 18
+    columns = [
+        '2.2 Соответствие  требованиям к условиям эксплуатации'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 6)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 19
+    columns = [
+        'Соответствие требованиям к  электропитанию'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 20
+    columns = [
+        'Наименование характеристики',
+        'Наименование характеристики',
+        'Требования руководства по эксплуатации, паспорта или описания типа',
+        'Состояние на момент верификации',
+        'Состояние на момент верификации',
+        'Оценка',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 1, style1)
+        ws.merge(row_num, row_num, 3, 4, style1)
+        ws.merge(row_num, row_num, 5, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 21
+    columns = [
+        'Напряжение питания сети, В',
+        'Напряжение питания сети, В',
+        'требуется',
+        'измерено',
+        'измерено',
+        'соответствует',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 1, style1)
+        ws.merge(row_num, row_num, 3, 4, style1)
+        ws.merge(row_num, row_num, 5, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 22
+    columns = [
+        'Частота, Гц',
+        'Частота, Гц',
+        'требуется',
+        'измерено',
+        'измерено',
+        'соответствует',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 1, style1)
+        ws.merge(row_num, row_num, 3, 4, style1)
+        ws.merge(row_num, row_num, 5, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 23
+    columns = [
+        'Соответствие требованиям к  микроклимату'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 24
+    columns = [
+        'Диапазон рабочих температур, °С',
+        'Диапазон рабочих температур, °С',
+        'требуется',
+        'измерено',
+        'измерено',
+        'соответствует',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 1, style1)
+        ws.merge(row_num, row_num, 3, 4, style1)
+        ws.merge(row_num, row_num, 5, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 25
+    columns = [
+        'Относительная влажность воздуха, %',
+        'Относительная влажность воздуха, %',
+        'требуется',
+        'измерено',
+        'измерено',
+        'соответствует',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 1, style1)
+        ws.merge(row_num, row_num, 3, 4, style1)
+        ws.merge(row_num, row_num, 5, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 26
+    columns = [
+        'Атмосферное давление, кПа',
+        'Атмосферное давление, кПа',
+        'не нормируется',
+        '-',
+        '-',
+        '-',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 1, style1)
+        ws.merge(row_num, row_num, 3, 4, style1)
+        ws.merge(row_num, row_num, 5, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 28
+    columns = [
+        '2.3 Соответствие  установки на рабочем месте требованиям документации на оборудование'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 6)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 29
+    columns = [
+        'Не требуется   либо: Пример описания установки: Установлено на лабораторном столе, '
+        'положение отрегулировано по уровню, промаркировано местоположение на столе'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1000
+
+    row_num = 30
+    columns = [
+        '3 Тестирование при внедрении оборудования'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 6)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 29
+    columns = [
+        'невозможно   либо: заполнить табличку '
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+
+
 
 
     wb.save(response)
