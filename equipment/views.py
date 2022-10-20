@@ -2083,12 +2083,6 @@ def export_exvercard_xls(request, pk):
     row_num = 4
     columns = [
         f'Протокол верификации СИ № {note.equipment.exnumber}_{now.year}_1 от {now} г.'
-        f'Протокол верификации СИ № {note.equipment.exnumber}_{now.year}_1 от {now} г.'
-        f'Протокол верификации СИ № {note.equipment.exnumber}_{now.year}_1 от {now} г.'
-        f'Протокол верификации СИ № {note.equipment.exnumber}_{now.year}_1 от {now} г.'
-        f'Протокол верификации СИ № {note.equipment.exnumber}_{now.year}_1 от {now} г.'
-        f'Протокол верификации СИ № {note.equipment.exnumber}_{now.year}_1 от {now} г.'
-        f'Протокол верификации СИ № {note.equipment.exnumber}_{now.year}_1 от {now} г.'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style5)
