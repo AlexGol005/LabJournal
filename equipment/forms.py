@@ -371,7 +371,8 @@ class AttestationRegForm(forms.ModelForm):
         model = Attestationequipment
         fields = ['date', 'datedead', 'dateorder', 'ndocs', 'certnumber',
                   'price', 'statusver',  'verificator', 'verificatorperson',
-                  'place', 'year',
+                  'place',
+                  # 'year',
                   'dateordernew'
                   ]
 
