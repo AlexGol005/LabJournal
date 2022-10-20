@@ -372,7 +372,7 @@ class AttestationRegForm(forms.ModelForm):
         fields = ['date', 'datedead', 'dateorder', 'ndocs', 'certnumber',
                   'price', 'statusver',  'verificator', 'verificatorperson',
                   'place',
-                  # 'year',
+                  'year',
                   'dateordernew'
                   ]
 
