@@ -2003,6 +2003,10 @@ def export_exvercard_xls(request, pk):
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{cardname}.xls"'
 
+    pattern = xlwt.Pattern()
+    pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+    pattern.pattern_fore_colour = 0x0D
+
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('Протокол верификации СИ', cell_overwrite_ok=True)
 
@@ -2021,10 +2025,6 @@ def export_exvercard_xls(request, pk):
     ws.header_str = b'  '
     ws.footer_str = b'c. &P '
     ws.start_page_number = 1
-
-    pattern = xlwt.Pattern()
-    pattern.pattern = xlwt.Pattern.SOLID_PATTERN
-    pattern.pattern_fore_colour = 26
 
     al1 = Alignment()
     al1.horz = Alignment.HORZ_CENTER
@@ -2049,18 +2049,20 @@ def export_exvercard_xls(request, pk):
     style10.alignment = al1
     style10.alignment.wrap = 1
 
-    pattern = xlwt.Pattern()
-    pattern.pattern = xlwt.Pattern.SOLID_PATTERN
-    pattern.pattern_fore_colour = 26
+    style110 = xlwt.XFStyle()
+    style110.font.height = 12 * 20
+    style110.font.name = 'Times new roman'
+    style110.alignment = al1
+    style110.alignment.wrap = 1
+    style110.pattern = pattern
 
     style11 = xlwt.XFStyle()
-    style11.font.height = 12 * 20
+    style11.font.height = 9 * 20
     style11.font.name = 'Times new roman'
     style11.alignment = al1
     style11.alignment.wrap = 1
     style11.borders = b1
     style11.pattern = pattern
-
 
     style2 = xlwt.XFStyle()
     style2.font.height = 9 * 20
@@ -2091,7 +2093,6 @@ def export_exvercard_xls(request, pk):
     style5.font.name = 'Times new roman'
     style5.alignment = al1
     style5.alignment.wrap = 1
-
 
     row_num = 4
     columns = [
@@ -2196,9 +2197,11 @@ def export_exvercard_xls(request, pk):
         'паспорт, стр. 7',
         'паспорт, стр. 7',
     ]
-    for col_num in range(len(columns)):
+    for col_num in range(4):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(row_num, row_num, 0, 2, style1)
+    for col_num in range(4, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style11)
         ws.merge(row_num, row_num, 4, 6, style11)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
@@ -2232,8 +2235,7 @@ def export_exvercard_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(row_num, row_num, 0, 2, style1)
-        ws.merge(row_num, row_num, 3, 3, style11)
+        ws.merge(row_num, row_num, 0, 2, style11)
         ws.merge(row_num, row_num, 4, 6, style1)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
@@ -2258,9 +2260,6 @@ def export_exvercard_xls(request, pk):
         values_list('equipment__roomschange__roomnumber__roomnumber').get(pk=pk)
     a = str(a)
     a = a[2:-3]
-
-
-
 
     row_num = 18
     columns = [
@@ -2354,10 +2353,10 @@ def export_exvercard_xls(request, pk):
         'соответствует',
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(row_num, row_num, 0, 1, style1)
-        ws.merge(row_num, row_num, 3, 4, style1)
-        ws.merge(row_num, row_num, 5, 6, style1)
+        ws.write(row_num, col_num, columns[col_num], style11)
+        ws.merge(row_num, row_num, 0, 1, style11)
+        ws.merge(row_num, row_num, 3, 4, style11)
+        ws.merge(row_num, row_num, 5, 6, style11)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
@@ -2371,10 +2370,10 @@ def export_exvercard_xls(request, pk):
         'соответствует',
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(row_num, row_num, 0, 1, style1)
-        ws.merge(row_num, row_num, 3, 4, style1)
-        ws.merge(row_num, row_num, 5, 6, style1)
+        ws.write(row_num, col_num, columns[col_num], style11)
+        ws.merge(row_num, row_num, 0, 1, style11)
+        ws.merge(row_num, row_num, 3, 4, style11)
+        ws.merge(row_num, row_num, 5, 6, style11)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
@@ -2388,10 +2387,10 @@ def export_exvercard_xls(request, pk):
         '-',
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(row_num, row_num, 0, 1, style1)
-        ws.merge(row_num, row_num, 3, 4, style1)
-        ws.merge(row_num, row_num, 5, 6, style1)
+        ws.write(row_num, col_num, columns[col_num], style11)
+        ws.merge(row_num, row_num, 0, 1, style11)
+        ws.merge(row_num, row_num, 3, 4, style11)
+        ws.merge(row_num, row_num, 5, 6, style11)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
@@ -2411,8 +2410,8 @@ def export_exvercard_xls(request, pk):
         'положение отрегулировано по уровню, промаркировано местоположение на столе'
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(row_num, row_num, 0, 6, style1)
+        ws.write(row_num, col_num, columns[col_num], style11)
+        ws.merge(row_num, row_num, 0, 6, style11)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 1000
 
@@ -2428,11 +2427,11 @@ def export_exvercard_xls(request, pk):
 
     row_num = 32
     columns = [
-        'Невозможно   либо:  Приложены результаты испытаний на оборудовании'
+        'Невозможно   либо:  Приложены результаты испытаний  оборудования'
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(row_num, row_num, 0, 6, style1)
+        ws.write(row_num, col_num, columns[col_num], style11)
+        ws.merge(row_num, row_num, 0, 6, style11)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
@@ -2534,8 +2533,8 @@ def export_exvercard_xls(request, pk):
         'И.Н. Федотов',
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style10)
-        ws.merge(row_num, row_num, 4, 6, style10)
+        ws.write(row_num, col_num, columns[col_num], style110)
+        ws.merge(row_num, row_num, 4, 6, style110)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
