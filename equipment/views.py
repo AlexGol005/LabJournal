@@ -21,6 +21,7 @@ from equipment.forms import*
 from equipment.models import*
 
 URL = 'equipment'
+now = date.today()
 
 class ContactsVerregView(LoginRequiredMixin, CreateView):
     """ выводит форму регистрации контактов поверителей"""
@@ -2003,18 +2004,14 @@ def export_exvercard_xls(request, pk):
     response['Content-Disposition'] = f'attachment; filename="{cardname}.xls"'
 
     wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('Основная информация', cell_overwrite_ok=True)
+    ws = wb.add_sheet('Протокол верификации СИ', cell_overwrite_ok=True)
 
     ws.col(0).width = 2700
     ws.col(1).width = 2500
     ws.col(2).width = 8000
     ws.col(3).width = 3700
     ws.col(4).width = 2500
-    ws.col(5).width = 4300
-    ws.col(6).width = 4000
-    ws.col(7).width = 4300
-    ws.col(8).width = 2000
-    ws.col(9).width = 2000
+
 
     Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
     ws.insert_bitmap('logo.bmp', 0, 0)
@@ -2077,11 +2074,21 @@ def export_exvercard_xls(request, pk):
 
     row_num = 4
     columns = [
-        'Регистрационная карточка на СИ и ИО'
+        f'Протокол верификации СИ {note.equipment.exnumber}_{now.year}_1'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style5)
-        ws.merge(row_num, row_num, 0, 9)
+        ws.merge(row_num, row_num, 0, 4)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 5
+    columns = [
+        'Идентификационная и уникальная информация'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 4)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
@@ -2094,6 +2101,79 @@ def export_exvercard_xls(request, pk):
         ws.merge(row_num, row_num, 0, 9)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
+
+    row_num = 7
+    columns = [
+        'Внутренний номер',
+        'Номер в госреестре',
+        'Наименование',
+        'Тип/модификация',
+        'Заводской номер',
+        # 'Год выпуска',
+        # 'Производитель',
+        # 'Год ввода в эксплуатацию в ООО "Петроаналитика" ',
+        # 'Новый или б/у',
+        # 'Инвентарный номер',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1100
+
+    row_num = 8
+    columns = [
+        note.equipment.exnumber,
+        note.charakters.reestr,
+        note.charakters.name,
+        f'{note.charakters.typename}/{note.charakters.modificname}',
+        note.equipment.lot,
+        # note.equipment.yearmanuf,
+        # f'{note.equipment.manufacturer.country}, {note.equipment.manufacturer.companyName}',
+        # note.equipment.yearintoservice,
+        # note.equipment.new,
+        # note.equipment.invnumber,
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1100
+
+    row_num = 9
+    columns = [
+        # 'Внутренний номер',
+        # 'Номер в госреестре',
+        # 'Наименование',
+        # 'Тип/модификация',
+        # 'Заводской номер',
+        'Год выпуска',
+        'Производитель',
+        'Год ввода в эксплуатацию в ООО "Петроаналитика" ',
+        'Новый или б/у',
+        'Инвентарный номер',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1100
+
+    row_num = 10
+    columns = [
+        # note.equipment.exnumber,
+        # note.charakters.reestr,
+        # note.charakters.name,
+        # f'{note.charakters.typename}/{note.charakters.modificname}',
+        # note.equipment.lot,
+        note.equipment.yearmanuf,
+        f'{note.equipment.manufacturer.country}, {note.equipment.manufacturer.companyName}',
+        note.equipment.yearintoservice,
+        note.equipment.new,
+        note.equipment.invnumber,
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1100
+
 
     wb.save(response)
     return response
