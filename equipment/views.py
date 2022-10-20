@@ -2058,6 +2058,7 @@ def export_exvercard_xls(request, pk):
     style11.font.name = 'Times new roman'
     style11.alignment = al1
     style11.alignment.wrap = 1
+    style11.borders = b1
     style11.pattern = pattern
 
 
