@@ -1450,6 +1450,7 @@ def export_mecard_xls(request, pk):
     pattern.pattern_fore_colour = 26
 
 
+
     al1 = Alignment()
     al1.horz = Alignment.HORZ_CENTER
     al1.vert = Alignment.VERT_CENTER
@@ -2017,7 +2018,7 @@ def export_exvercard_xls(request, pk):
     Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
     ws.insert_bitmap('logo.bmp', 0, 0)
     ws.left_margin = 0
-    ws.header_str = b'c. &P  '
+    ws.header_str = b'  '
     ws.footer_str = b'c. &P '
     ws.start_page_number = 1
 
@@ -2047,6 +2048,17 @@ def export_exvercard_xls(request, pk):
     style10.font.name = 'Times new roman'
     style10.alignment = al1
     style10.alignment.wrap = 1
+
+    pattern = xlwt.Pattern()
+    pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+    pattern.pattern_fore_colour = 26
+
+    style11 = xlwt.XFStyle()
+    style11.font.height = 12 * 20
+    style11.font.name = 'Times new roman'
+    style11.alignment = al1
+    style11.alignment.wrap = 1
+    style11.pattern = pattern
 
 
     style2 = xlwt.XFStyle()
@@ -2148,7 +2160,7 @@ def export_exvercard_xls(request, pk):
 
     row_num = 11
     columns = [
-        '2.1 Соостветствие комплектности'
+        '2.1 Соответствие комплектности'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style3)
@@ -2186,7 +2198,7 @@ def export_exvercard_xls(request, pk):
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(row_num, row_num, 0, 2, style1)
-        ws.merge(row_num, row_num, 4, 6, style1)
+        ws.merge(row_num, row_num, 4, 6, style11)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
@@ -2220,6 +2232,7 @@ def export_exvercard_xls(request, pk):
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 3, 3, style11)
         ws.merge(row_num, row_num, 4, 6, style1)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
@@ -2414,7 +2427,7 @@ def export_exvercard_xls(request, pk):
 
     row_num = 32
     columns = [
-        'невозможно   либо: заполнить табличку на следующем листе либо приложить результаты испытаний'
+        'Невозможно   либо:  Приложены результаты испытаний на оборудовании'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
