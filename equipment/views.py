@@ -1988,7 +1988,6 @@ def export_verificlabel_xls(request):
         i += 2
         j += 6
 
-
     wb.save(response)
     return response
 
@@ -2019,7 +2018,7 @@ def export_exvercard_xls(request, pk):
     ws.insert_bitmap('logo.bmp', 0, 0)
     ws.left_margin = 0
     ws.header_str = b'c. &P  '
-    ws.footer_str = b' '
+    ws.footer_str = b'c. &P '
     ws.start_page_number = 1
 
     pattern = xlwt.Pattern()
@@ -2042,6 +2041,13 @@ def export_exvercard_xls(request, pk):
     style1.alignment = al1
     style1.alignment.wrap = 1
     style1.borders = b1
+
+    style10 = xlwt.XFStyle()
+    style10.font.height = 12 * 20
+    style10.font.name = 'Times new roman'
+    style10.alignment = al1
+    style10.alignment.wrap = 1
+
 
     style2 = xlwt.XFStyle()
     style2.font.height = 9 * 20
@@ -2076,6 +2082,12 @@ def export_exvercard_xls(request, pk):
 
     row_num = 4
     columns = [
+        f'Протокол верификации СИ № {note.equipment.exnumber}_{now.year}_1 от {now} г.'
+        f'Протокол верификации СИ № {note.equipment.exnumber}_{now.year}_1 от {now} г.'
+        f'Протокол верификации СИ № {note.equipment.exnumber}_{now.year}_1 от {now} г.'
+        f'Протокол верификации СИ № {note.equipment.exnumber}_{now.year}_1 от {now} г.'
+        f'Протокол верификации СИ № {note.equipment.exnumber}_{now.year}_1 от {now} г.'
+        f'Протокол верификации СИ № {note.equipment.exnumber}_{now.year}_1 от {now} г.'
         f'Протокол верификации СИ № {note.equipment.exnumber}_{now.year}_1 от {now} г.'
     ]
     for col_num in range(len(columns)):
@@ -2179,13 +2191,13 @@ def export_exvercard_xls(request, pk):
 
     row_num = 13
     columns = [
-        'Комплектация по паспорту и/или упаковочному листу',
-        'Комплектация по паспорту и/или упаковочному листу',
-        'Комплектация по паспорту и/или упаковочному листу',
+        'Комплектация',
+        'Комплектация',
+        'Комплектация',
         'соответствует',
-        '',
-        '',
-        '',
+        'паспорт, стр. 7',
+        'паспорт, стр. 7',
+        'паспорт, стр. 7',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
@@ -2233,10 +2245,9 @@ def export_exvercard_xls(request, pk):
         'Сведения о поверке',
         'Сведения о поверке',
         'Сведения о поверке',
-        'есть',
-        '',
-        '',
-        '',
+        f'поверен до {note.newdatedead}',
+        f'№ {note.newcertnumber}',
+        f'№ {note.newcertnumber}',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
@@ -2245,26 +2256,17 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 16
-    columns = [
-        'Версия программного обеспечения',
-        'Версия программного обеспечения',
-        'Версия программного обеспечения',
-        'не оснащено',
-        '',
-        '',
-        '',
-    ]
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(row_num, row_num, 0, 2, style1)
-        ws.merge(row_num, row_num, 4, 6, style1)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+    a = MeasurEquipment.objects.all().filter(equipment__roomschange__in=setroom).\
+        values_list('equipment__roomschange__roomnumber__roomnumber').get(pk=pk)
+    a = str(a)
+    a = a[2:-3]
+
+
+
 
     row_num = 18
     columns = [
-        '2.2 Соответствие  требованиям к условиям эксплуатации'
+        f'2.2 Соответствие  требованиям к условиям эксплуатации в помещении № {a}'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style3)
@@ -2273,16 +2275,6 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height = 500
 
     row_num = 19
-    columns = [
-        'Соответствие требованиям к  электропитанию'
-    ]
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(row_num, row_num, 0, 6, style1)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
-
-    row_num = 20
     columns = [
         'Наименование характеристики',
         'Наименование характеристики',
@@ -2296,6 +2288,17 @@ def export_exvercard_xls(request, pk):
         ws.merge(row_num, row_num, 0, 1, style1)
         ws.merge(row_num, row_num, 3, 4, style1)
         ws.merge(row_num, row_num, 5, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+
+    row_num = 20
+    columns = [
+        'Соответствие требованиям к  электропитанию'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 6, style1)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
@@ -2415,9 +2418,9 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 1000
 
-    row_num = 30
+    row_num = 31
     columns = [
-        '3 Тестирование при внедрении оборудования'
+        '3. Тестирование при внедрении оборудования'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style3)
@@ -2425,9 +2428,9 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 31
+    row_num = 32
     columns = [
-        'невозможно   либо: заполнить табличку '
+        'невозможно   либо: заполнить табличку на следующем листе либо приложить результаты испытаний'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
@@ -2435,8 +2438,108 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
+    row_num = 34
+    columns = [
+        '4. Заключение по результатам верификации'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 6)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
 
+    row_num = 35
+    columns = [
+        'Оборудование пригодно'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
 
+    row_num = 37
+    columns = [
+        '',
+        '',
+        'Верификацию провели:'
+        '',
+        '',
+        '',
+        '',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style10)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 39
+    columns = [
+        '',
+        '',
+        'Начальник производства'
+        '',
+        '',
+        'Н.Ю. Пилявская',
+        'Н.Ю. Пилявская',
+        'Н.Ю. Пилявская',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style10)
+        ws.merge(row_num, row_num, 4, 6, style10)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 41
+    columns = [
+        '',
+        '',
+        'Заведующий АХЧ'
+        '',
+        '',
+        'А.В. Теленков',
+        'А.В. Теленков',
+        'А.В. Теленков',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style10)
+        ws.merge(row_num, row_num, 4, 6, style10)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 43
+    columns = [
+        '',
+        '',
+        'Инженер-химик II категории'
+        '',
+        '',
+        'А.Б. Головкина',
+        'А.Б. Головкина',
+        'А.Б. Головкина',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style10)
+        ws.merge(row_num, row_num, 4, 6, style10)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 45
+    columns = [
+        '',
+        '',
+        'Инженер-химик (исполнитель)'
+        '',
+        '',
+        'И.Н. Федотов',
+        'И.Н. Федотов',
+        'И.Н. Федотов',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style10)
+        ws.merge(row_num, row_num, 4, 6, style10)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
 
 
     wb.save(response)
