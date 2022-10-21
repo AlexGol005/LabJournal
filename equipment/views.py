@@ -2323,11 +2323,14 @@ def export_exvercard_xls(request, pk):
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 500
 
+        if note.charakters.voltage == '':
+            note.charakters.voltage = '-'
+
         row_num += 1
         columns = [
             'Напряжение питания сети, В',
             'Напряжение питания сети, В',
-            'требуется',
+            note.charakters.voltage,
             'измерено',
             'измерено',
             'соответствует',
@@ -2340,11 +2343,14 @@ def export_exvercard_xls(request, pk):
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 500
 
+        if note.charakters.frequency == '':
+            note.charakters.frequency = '-'
+
         row_num += 1
         columns = [
             'Частота, Гц',
             'Частота, Гц',
-            'требуется',
+            note.charakters.frequency,
             'измерено',
             'измерено',
             'соответствует',
@@ -2367,11 +2373,14 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
+    if note.charakters.temperature == '':
+        note.charakters.temperature = '-'
+
     row_num += 1
     columns = [
         'Диапазон рабочих температур, °С',
         'Диапазон рабочих температур, °С',
-        'требуется',
+        note.charakters.temperature,
         'измерено',
         'измерено',
         'соответствует',
@@ -2384,11 +2393,14 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
+    if note.charakters.humidicity == '':
+        note.charakters.humidicity = '-'
+
     row_num += 1
     columns = [
         'Относительная влажность воздуха, %',
         'Относительная влажность воздуха, %',
-        'требуется',
+        note.charakters.humidicity,
         'измерено',
         'измерено',
         'соответствует',
@@ -2401,11 +2413,14 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
+    if note.charakters.pressure == '':
+        note.charakters.pressure = '-'
+
     row_num += 1
     columns = [
         'Атмосферное давление, кПа',
         'Атмосферное давление, кПа',
-        'не нормируется',
+        note.charakters.pressure,
         '-',
         '-',
         '-',
