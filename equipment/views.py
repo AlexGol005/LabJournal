@@ -2213,7 +2213,7 @@ def export_exvercard_xls(request, pk):
 
     try:
         c = DocsCons.objects.filter(equipment__exnumber=b)
-        d = c.filter(docs__icontains='Паспорт')
+        d = c.filter(docs__icontains='аспорт')
         d = d[0]
         a = 'в наличии'
     except:
