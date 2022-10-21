@@ -230,6 +230,13 @@ class MeasurEquipmentCharakters(models.Model):
     aim = models.CharField('Наименование определяемых (измеряемых) характеристик (параметров) продукции',
                            max_length=90, blank=True, null=True)
     power = models.BooleanField('Работает от сети', default=False, blank=True)
+    voltage = models.CharField('напряжение', max_length=100, default='', blank=True, null=True)
+    frequency = models.CharField('частота', max_length=100, default='', blank=True, null=True)
+    temperature = models.CharField('температура', max_length=100, default='', blank=True, null=True)
+    humidicity = models.CharField('влажность', max_length=100, default='', blank=True, null=True)
+    pressure = models.CharField('давление', max_length=100, default='', blank=True, null=True)
+
+
 
 
     def __str__(self):
@@ -253,6 +260,11 @@ class TestingEquipmentCharakters(models.Model):
                             max_length=500, blank=True, null=True)
     ndoc = models.CharField('Методики испытаний', max_length=500, blank=True, null=True)
     power = models.BooleanField('Работает от сети', default=False, blank=True)
+    voltage = models.CharField('напряжение', max_length=100, default='', blank=True, null=True)
+    frequency = models.CharField('частота', max_length=100, default='', blank=True, null=True)
+    temperature = models.CharField('температура', max_length=100, default='', blank=True, null=True)
+    humidicity = models.CharField('влажность', max_length=100, default='', blank=True, null=True)
+    pressure = models.CharField('давление', max_length=100, default='', blank=True, null=True)
 
     def __str__(self):
         return f'{self.name}  {self.modificname}'
