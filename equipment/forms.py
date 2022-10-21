@@ -556,11 +556,27 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
                           initial='Определение вязкости нефти и нефтепродуктов',
                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': ''}))
-    power = forms.BooleanField(label='Работает от сети', required=True, initial=False)
-    needsetplace = forms.BooleanField(label='Требуется установка', required=True, initial=False)
-    voltage = forms.CharField(label='напряжение', required=False,
+    power = forms.BooleanField(label='Работает от сети', required=False, initial=False)
+    needsetplace = forms.BooleanField(label='Требуется установка', required=False, initial=False)
+    voltage = forms.CharField(label='Напряжение требуемое', required=False,
                              widget=forms.TextInput(attrs={'class': 'form-control',
                                                            'placeholder': ''}))
+    frequency = forms.CharField(label='Частота требуемая', required=False,
+                              widget=forms.TextInput(attrs={'class': 'form-control',
+                                                            'placeholder': ''}))
+    temperature = forms.CharField(label='Температура требуемая', required=False,
+                              widget=forms.TextInput(attrs={'class': 'form-control',
+                                                            'placeholder': ''}))
+    humidicity = forms.CharField(label='Влажность требуемая', required=False,
+                              widget=forms.TextInput(attrs={'class': 'form-control',
+                                                            'placeholder': ''}))
+    pressure = forms.CharField(label='Давление требуемое', required=False,
+                              widget=forms.TextInput(attrs={'class': 'form-control',
+                                                            'placeholder': ''}))
+    setplace = forms.CharField(label='Описание мероприятий по установке', required=False,
+                               widget=forms.Textarea(attrs={'class': 'form-control',
+                                                            'placeholder': ''}))
+
 
     class Meta:
         model = MeasurEquipmentCharakters
@@ -575,6 +591,11 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
             'power',
             'needsetplace',
             'voltage',
+            'frequency',
+            'temperature',
+            'humidicity',
+            'pressure',
+            'setplace',
                   ]
 
 
@@ -609,9 +630,26 @@ class TestingEquipmentCharaktersCreateForm(forms.ModelForm):
                           initial='ГОСТ 33, МИ-02-2018, ...',
                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': ''}))
-    power = forms.BooleanField(label='Работает от сети', required=True, initial=False)
-    needsetplace = forms.BooleanField(label='Требуется установка', required=True, initial=False)
-
+    power = forms.BooleanField(label='Работает от сети', required=False, initial=False)
+    needsetplace = forms.BooleanField(label='Требуется установка', required=False, initial=False)
+    voltage = forms.CharField(label='Напряжение требуемое', required=False,
+                              widget=forms.TextInput(attrs={'class': 'form-control',
+                                                            'placeholder': ''}))
+    frequency = forms.CharField(label='Частота требуемая', required=False,
+                                widget=forms.TextInput(attrs={'class': 'form-control',
+                                                              'placeholder': ''}))
+    temperature = forms.CharField(label='Температура требуемая', required=False,
+                                  widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                'placeholder': ''}))
+    humidicity = forms.CharField(label='Влажность требуемая', required=False,
+                                 widget=forms.TextInput(attrs={'class': 'form-control',
+                                                               'placeholder': ''}))
+    pressure = forms.CharField(label='Давление требуемое', required=False,
+                               widget=forms.TextInput(attrs={'class': 'form-control',
+                                                             'placeholder': ''}))
+    setplace = forms.CharField(label='Описание мероприятий по установке', required=False,
+                               widget=forms.Textarea(attrs={'class': 'form-control',
+                                                             'placeholder': ''}))
 
     class Meta:
         model = TestingEquipmentCharakters
@@ -626,6 +664,12 @@ class TestingEquipmentCharaktersCreateForm(forms.ModelForm):
             'ndoc',
             'power',
             'needsetplace',
+            'voltage',
+            'frequency',
+            'temperature',
+            'humidicity',
+            'pressure',
+            'setplace',
                   ]
 
 

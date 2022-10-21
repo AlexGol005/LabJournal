@@ -39,6 +39,7 @@
             <th> Методики испытаний </th>
             <th> Наименование видов испытаний и/или определяемых характеристик (параметров) продукции </th>
             <th> Наименование испытуемых групп объектов </th>
+            <th> Ред </th>
          </tr>
     </thead>
     <tbody>
@@ -52,6 +53,7 @@
         <td> {{ obj.ndoc }}</td>
         <td>{{ obj.aim }}</td>
         <td>{{ obj.aim2 }}</td>
+    <td> <a href="{% url 'testequipmentcharactersupdate' obj.pk %}"  class="btn btn-outline-warning mt-3">ред</a></td>
     </tr>
     {% endfor %}
     </tbody>

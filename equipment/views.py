@@ -254,6 +254,20 @@ class MeasurEquipmentCharaktersRegView(SuccessMessageMixin, CreateView):
         context['dopin'] = 'equipment/measurequipmentcharacterslist'
         return context
 
+def MeasurEquipmentCharaktersUpdateView(request, str):
+    """выводит форму для обновления данных о госреестре"""
+    if request.method == "POST":
+        form = MeasurEquipmentCharaktersCreateForm(request.POST,  instance=MeasurEquipmentCharakters.objects.get(pk=str))
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.save()
+            return redirect('measurequipmentcharacterslist')
+    else:
+        form = MeasurEquipmentCharaktersCreateForm(instance=MeasurEquipmentCharakters.objects.get(pk=str))
+    data = {'form': form,
+            }
+    return render(request, 'equipment/reg.html', data)
+
 
 class TestingEquipmentCharaktersRegView(SuccessMessageMixin, CreateView):
     """ выводит форму внесения характеристик ИО. """
@@ -267,6 +281,21 @@ class TestingEquipmentCharaktersRegView(SuccessMessageMixin, CreateView):
         context['title'] = 'Добавить характеристики ИО'
         context['dopin'] = 'equipment/testingequipmentcharacterslist'
         return context
+
+
+def TestingEquipmentCharaktersUpdateView(request, str):
+    """выводит форму для обновления данных о характеристиках ИО"""
+    if request.method == "POST":
+        form = TestingEquipmentCharaktersCreateForm(request.POST,  instance=TestingEquipmentCharakters.objects.get(pk=str))
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.save()
+            return redirect('testingequipmentcharacterslist')
+    else:
+        form = TestingEquipmentCharaktersCreateForm(instance=TestingEquipmentCharakters.objects.get(pk=str))
+    data = {'form': form,
+            }
+    return render(request, 'equipment/reg.html', data)
 
 
 class MeasureequipmentregView(LoginRequiredMixin, CreateView):
@@ -2095,11 +2124,11 @@ def export_exvercard_xls(request, pk):
     style5.alignment = al1
     style5.alignment.wrap = 1
 
-
-    a = get_dateformat(now)
+    dateverificformat = now
+    dateverific = get_dateformat(now)
     row_num = 4
     columns = [
-        f'Протокол верификации № {note.equipment.exnumber}_01/22 от {a} г. СИ вн.№ {note.equipment.exnumber}'
+        f'Протокол верификации № {note.equipment.exnumber}_01/22 от {dateverific} г. СИ вн.№ {note.equipment.exnumber}'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style5)
@@ -2284,6 +2313,19 @@ def export_exvercard_xls(request, pk):
         values_list('equipment__roomschange__roomnumber__roomnumber').get(pk=pk)
     a = str(a)
     a = a[2:-3]
+    # try:
+    microclimat = MeteorologicalParameters.objects.filter(roomnumber__roomnumber=a, date=dateverificformat)
+    microclimat = microclimat[len(microclimat)-1]
+    facttemperature = microclimat.temperature
+    facthumid = microclimat.humidity
+    factpress = microclimat.pressure
+    # except:
+    #     facttemperature = 'указать'
+    #     facthumid = 'указать'
+    #     factpress = 'указать'
+
+
+
 
     row_num = 18
     columns = [
@@ -2331,8 +2373,8 @@ def export_exvercard_xls(request, pk):
             'Напряжение питания сети, В',
             'Напряжение питания сети, В',
             note.charakters.voltage,
-            'измерено',
-            'измерено',
+            '240',
+            '240',
             'соответствует',
         ]
         for col_num in range(len(columns)):
@@ -2351,8 +2393,8 @@ def export_exvercard_xls(request, pk):
             'Частота, Гц',
             'Частота, Гц',
             note.charakters.frequency,
-            'измерено',
-            'измерено',
+            '50',
+            '50',
             'соответствует',
         ]
         for col_num in range(len(columns)):
@@ -2381,8 +2423,8 @@ def export_exvercard_xls(request, pk):
         'Диапазон рабочих температур, °С',
         'Диапазон рабочих температур, °С',
         note.charakters.temperature,
-        'измерено',
-        'измерено',
+        facttemperature,
+        facttemperature,
         'соответствует',
     ]
     for col_num in range(len(columns)):
@@ -2401,8 +2443,8 @@ def export_exvercard_xls(request, pk):
         'Относительная влажность воздуха, %',
         'Относительная влажность воздуха, %',
         note.charakters.humidicity,
-        'измерено',
-        'измерено',
+        facthumid,
+        facthumid,
         'соответствует',
     ]
     for col_num in range(len(columns)):
@@ -2421,8 +2463,8 @@ def export_exvercard_xls(request, pk):
         'Атмосферное давление, кПа',
         'Атмосферное давление, кПа',
         note.charakters.pressure,
-        '-',
-        '-',
+        factpress,
+        factpress,
         '-',
     ]
     for col_num in range(len(columns)):

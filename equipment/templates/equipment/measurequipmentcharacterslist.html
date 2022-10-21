@@ -38,6 +38,7 @@
             <th> Межпов. <br> интервал, <br>мес. </th>
             <th> Диапазон измерений </th>
             <th> Класс точности /(разряд/), погрешность и /(или/) неопределённость /(класс, разряд/) </th>
+            <th> Ред </th>
          </tr>
     </thead>
     <tbody>
@@ -50,6 +51,7 @@
         <td> {{ obj.calinterval }}</td>
         <td> {{ obj.measurydiapason }}</td>
         <td>{{ obj.accuracity }}</td>
+    <td> <a href="{% url 'measurequipmentcharactersupdate' obj.pk %}"  class="btn btn-outline-warning mt-3">ред</a></td>
     </tr>
     {% endfor %}
     </tbody>
