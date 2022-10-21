@@ -19,6 +19,7 @@ from xlwt import Alignment, Borders
 
 from equipment.forms import*
 from equipment.models import*
+from metods import get_dateformat
 
 URL = 'equipment'
 now = date.today()
@@ -2094,9 +2095,11 @@ def export_exvercard_xls(request, pk):
     style5.alignment = al1
     style5.alignment.wrap = 1
 
+
+    a = get_dateformat(now)
     row_num = 4
     columns = [
-        f'Протокол верификации СИ № {note.equipment.exnumber}_{now.year}_1 от {now} г.'
+        f'Протокол верификации № {note.equipment.exnumber}_01/22 от {a} г. СИ вн.№ {note.equipment.exnumber}'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style5)
@@ -2134,7 +2137,7 @@ def export_exvercard_xls(request, pk):
 
     row_num = 8
     columns = [
-        note.equipment.exnumber,
+        f'СИ {note.equipment.exnumber}',
         note.charakters.reestr,
         note.charakters.name,
         f'{note.charakters.typename}/{note.charakters.modificname}',
@@ -2192,7 +2195,7 @@ def export_exvercard_xls(request, pk):
         'Комплектация',
         'Комплектация',
         'Комплектация',
-        'соответствует',
+        'cоответствует',
         'паспорт, стр. 7',
         'паспорт, стр. 7',
         'паспорт, стр. 7',
@@ -2206,12 +2209,23 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
+    b = note.equipment.exnumber
+
+    try:
+        c = DocsCons.objects.filter(equipment__exnumber=b)
+        d = c.filter(docs__icontains='Паспорт')
+        d = d[0]
+        a = 'в наличии'
+    except:
+        a = 'отсутствует'
+
+
     row_num = 14
     columns = [
         'Паспорт',
         'Паспорт',
         'Паспорт',
-        'есть',
+        a,
         '',
         '',
         '',
@@ -2223,15 +2237,25 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
+    try:
+        c = DocsCons.objects.filter(equipment__exnumber=b)
+        d = c.filter(Q(docs__icontains='уководство')|Q(docs__icontains='нструкция')|Q(docs__icontains='ИНСТРУКЦИЯ'))
+        # d = d[0]
+        a = 'в наличии'
+        e = ''
+    except:
+        a = 'отсутствует'
+        e = 'необходимо разработать инструкцию на оборудование'
+
     row_num = 15
     columns = [
         'Руководство по эксплуатации',
         'Руководство по эксплуатации',
         'Руководство по эксплуатации',
-        'есть',
-        '',
-        '',
-        '',
+        a,
+        e,
+        e,
+        e,
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
@@ -2288,52 +2312,52 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
+    if note.charakters.power == True:
+        row_num += 1
+        columns = [
+            'Соответствие требованиям к  электропитанию'
+        ]
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style1)
+            ws.merge(row_num, row_num, 0, 6, style1)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
 
-    row_num = 20
-    columns = [
-        'Соответствие требованиям к  электропитанию'
-    ]
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(row_num, row_num, 0, 6, style1)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+        row_num += 1
+        columns = [
+            'Напряжение питания сети, В',
+            'Напряжение питания сети, В',
+            'требуется',
+            'измерено',
+            'измерено',
+            'соответствует',
+        ]
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style11)
+            ws.merge(row_num, row_num, 0, 1, style11)
+            ws.merge(row_num, row_num, 3, 4, style11)
+            ws.merge(row_num, row_num, 5, 6, style11)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
 
-    row_num = 21
-    columns = [
-        'Напряжение питания сети, В',
-        'Напряжение питания сети, В',
-        'требуется',
-        'измерено',
-        'измерено',
-        'соответствует',
-    ]
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style11)
-        ws.merge(row_num, row_num, 0, 1, style11)
-        ws.merge(row_num, row_num, 3, 4, style11)
-        ws.merge(row_num, row_num, 5, 6, style11)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+        row_num += 1
+        columns = [
+            'Частота, Гц',
+            'Частота, Гц',
+            'требуется',
+            'измерено',
+            'измерено',
+            'соответствует',
+        ]
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style11)
+            ws.merge(row_num, row_num, 0, 1, style11)
+            ws.merge(row_num, row_num, 3, 4, style11)
+            ws.merge(row_num, row_num, 5, 6, style11)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
 
-    row_num = 22
-    columns = [
-        'Частота, Гц',
-        'Частота, Гц',
-        'требуется',
-        'измерено',
-        'измерено',
-        'соответствует',
-    ]
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style11)
-        ws.merge(row_num, row_num, 0, 1, style11)
-        ws.merge(row_num, row_num, 3, 4, style11)
-        ws.merge(row_num, row_num, 5, 6, style11)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
-
-    row_num = 23
+    row_num += 1
     columns = [
         'Соответствие требованиям к  микроклимату'
     ]
@@ -2343,7 +2367,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 24
+    row_num += 1
     columns = [
         'Диапазон рабочих температур, °С',
         'Диапазон рабочих температур, °С',
@@ -2360,7 +2384,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 25
+    row_num += 1
     columns = [
         'Относительная влажность воздуха, %',
         'Относительная влажность воздуха, %',
@@ -2377,7 +2401,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 26
+    row_num += 1
     columns = [
         'Атмосферное давление, кПа',
         'Атмосферное давление, кПа',
@@ -2394,7 +2418,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 28
+    row_num += 2
     columns = [
         '2.3 Соответствие  установки на рабочем месте требованиям документации на оборудование'
     ]
@@ -2404,7 +2428,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 29
+    row_num += 1
     columns = [
         'Не требуется   либо: Пример описания установки: Установлено на лабораторном столе, '
         'положение отрегулировано по уровню, промаркировано местоположение на столе'
@@ -2415,7 +2439,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 1000
 
-    row_num = 31
+    row_num += 2
     columns = [
         '3. Тестирование при внедрении оборудования'
     ]
@@ -2425,7 +2449,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 32
+    row_num += 1
     columns = [
         'Невозможно   либо:  Приложены результаты испытаний  оборудования'
     ]
@@ -2435,7 +2459,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 34
+    row_num += 2
     columns = [
         '4. Заключение по результатам верификации'
     ]
@@ -2445,7 +2469,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 35
+    row_num += 1
     columns = [
         'Оборудование пригодно. Требования к установке и условиям окружающей среды соответствуют документации на оборудование'
     ]
@@ -2455,7 +2479,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 37
+    row_num += 2
     columns = [
         '',
         '',
@@ -2470,7 +2494,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 39
+    row_num += 2
     columns = [
         '',
         '',
@@ -2487,7 +2511,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 41
+    row_num += 2
     columns = [
         '',
         '',
@@ -2504,7 +2528,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 43
+    row_num += 2
     columns = [
         '',
         '',
@@ -2521,7 +2545,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 45
+    row_num += 2
     columns = [
         '',
         '',

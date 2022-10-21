@@ -28,3 +28,12 @@ def get_abserror(x_avg: Decimal, relerror: Decimal) -> Decimal:
     """находит абсолютную погрешность исходя из Хсреднего и относительной погрешности"""
     abserror = (x_avg * relerror) / Decimal('100')
     return abserror
+
+
+def get_dateformat(date):
+    dateformat = str(date)
+    day = dateformat[8:]
+    month = dateformat[5:7]
+    year = dateformat[:4]
+    rdate = f'{day}.{month}.{year}'
+    return rdate
