@@ -229,6 +229,8 @@ class MeasurEquipmentCharakters(models.Model):
                                   max_length=1000, default='', blank=True, null=True)
     aim = models.CharField('Наименование определяемых (измеряемых) характеристик (параметров) продукции',
                            max_length=90, blank=True, null=True)
+    power = models.BooleanField('Работает от сети', default=False, blank=True)
+
 
     def __str__(self):
         return f'госреестр: {self.reestr},  {self.name} {self.typename} {self.modificname}'
@@ -250,6 +252,7 @@ class TestingEquipmentCharakters(models.Model):
     aim2 = models.CharField('Наименование испытуемых групп объектов',
                             max_length=500, blank=True, null=True)
     ndoc = models.CharField('Методики испытаний', max_length=500, blank=True, null=True)
+    power = models.BooleanField('Работает от сети', default=False, blank=True)
 
     def __str__(self):
         return f'{self.name}  {self.modificname}'

@@ -556,6 +556,7 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
                           initial='Определение вязкости нефти и нефтепродуктов',
                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': ''}))
+    power = forms.BooleanField(label='Работает от сети', required=True, initial=False)
 
     class Meta:
         model = MeasurEquipmentCharakters
@@ -566,7 +567,8 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
             'modificname',
              'calinterval',
             'measurydiapason', 'accuracity',
-            'aim'
+            'aim',
+            'power',
                   ]
 
 
@@ -601,6 +603,7 @@ class TestingEquipmentCharaktersCreateForm(forms.ModelForm):
                           initial='ГОСТ 33, МИ-02-2018, ...',
                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': ''}))
+    power = forms.BooleanField(label='Работает от сети', required=True, initial=False)
 
 
     class Meta:
@@ -614,6 +617,7 @@ class TestingEquipmentCharaktersCreateForm(forms.ModelForm):
             'aim',
             'aim2',
             'ndoc',
+            'power',
                   ]
 
 
