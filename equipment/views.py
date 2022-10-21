@@ -2240,7 +2240,7 @@ def export_exvercard_xls(request, pk):
     try:
         c = DocsCons.objects.filter(equipment__exnumber=b)
         d = c.filter(Q(docs__icontains='уководство')|Q(docs__icontains='нструкция')|Q(docs__icontains='ИНСТРУКЦИЯ'))
-        # d = d[0]
+        d = d[0]
         a = 'в наличии'
         e = ''
     except:
