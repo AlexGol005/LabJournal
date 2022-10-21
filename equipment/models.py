@@ -235,6 +235,8 @@ class MeasurEquipmentCharakters(models.Model):
     temperature = models.CharField('температура', max_length=100, default='', blank=True, null=True)
     humidicity = models.CharField('влажность', max_length=100, default='', blank=True, null=True)
     pressure = models.CharField('давление', max_length=100, default='', blank=True, null=True)
+    setplace = models.CharField('описание мероприятий по установке', max_length=100, default='', blank=True, null=True)
+    needsetplace = models.BooleanField('Установка не требуется', default=False, blank=True)
 
 
 
@@ -265,6 +267,8 @@ class TestingEquipmentCharakters(models.Model):
     temperature = models.CharField('температура', max_length=100, default='', blank=True, null=True)
     humidicity = models.CharField('влажность', max_length=100, default='', blank=True, null=True)
     pressure = models.CharField('давление', max_length=100, default='', blank=True, null=True)
+    setplace = models.CharField('описание мероприятий по установке', max_length=100, default='', blank=True, null=True)
+    needsetplace = models.BooleanField('Установка не требуется', default=False, blank=True)
 
     def __str__(self):
         return f'{self.name}  {self.modificname}'

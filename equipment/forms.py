@@ -557,6 +557,10 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': ''}))
     power = forms.BooleanField(label='Работает от сети', required=True, initial=False)
+    needsetplace = forms.BooleanField(label='Требуется установка', required=True, initial=False)
+    voltage = forms.CharField(label='напряжение', required=False,
+                             widget=forms.TextInput(attrs={'class': 'form-control',
+                                                           'placeholder': ''}))
 
     class Meta:
         model = MeasurEquipmentCharakters
@@ -569,6 +573,8 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
             'measurydiapason', 'accuracity',
             'aim',
             'power',
+            'needsetplace',
+            'voltage',
                   ]
 
 
@@ -604,6 +610,7 @@ class TestingEquipmentCharaktersCreateForm(forms.ModelForm):
                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': ''}))
     power = forms.BooleanField(label='Работает от сети', required=True, initial=False)
+    needsetplace = forms.BooleanField(label='Требуется установка', required=True, initial=False)
 
 
     class Meta:
@@ -618,6 +625,7 @@ class TestingEquipmentCharaktersCreateForm(forms.ModelForm):
             'aim2',
             'ndoc',
             'power',
+            'needsetplace',
                   ]
 
 
