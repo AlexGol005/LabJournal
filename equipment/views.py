@@ -2435,20 +2435,24 @@ def export_exvercard_xls(request, pk):
             note.charakters.voltage = '-'
             st = style11
         else:
-            st = style11
+            st = style1
+
+
 
         row_num += 1
         columns = [
             'Напряжение питания сети, В',
             'Напряжение питания сети, В',
             note.charakters.voltage,
-            '240',
-            '240',
+            '220',
+            '220',
             'соответствует',
         ]
-        for col_num in range(len(columns)):
+        for col_num in range(3):
             ws.write(row_num, col_num, columns[col_num], st)
             ws.merge(row_num, row_num, 0, 1, st)
+        for col_num in range(3, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], st)
             ws.merge(row_num, row_num, 3, 4, st)
             ws.merge(row_num, row_num, 5, 6, st)
         ws.row(row_num).height_mismatch = True
@@ -2458,7 +2462,7 @@ def export_exvercard_xls(request, pk):
             note.charakters.frequency = '-'
             st = style11
         else:
-            st = style11
+            st = style1
 
         row_num += 1
         columns = [
@@ -2469,9 +2473,11 @@ def export_exvercard_xls(request, pk):
             '50',
             'соответствует',
         ]
-        for col_num in range(len(columns)):
+        for col_num in range(3):
             ws.write(row_num, col_num, columns[col_num], st)
             ws.merge(row_num, row_num, 0, 1, st)
+        for col_num in range(3, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], st)
             ws.merge(row_num, row_num, 3, 4, st)
             ws.merge(row_num, row_num, 5, 6, st)
         ws.row(row_num).height_mismatch = True
@@ -2641,8 +2647,7 @@ def export_exvercard_xls(request, pk):
 
         row_num += 1
         columns = [
-              'Пример описания установки: Установлено на лабораторном столе'
-            'положение отрегулировано по уровню, промаркировано местоположение на столе',
+              note.charakters.setplace
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], style11)
