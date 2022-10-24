@@ -2146,7 +2146,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 7
+    row_num +=2
     columns = [
         'Внутренний номер',
         'Номер в госреестре',
@@ -2164,7 +2164,8 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 1100
 
-    row_num = 8
+
+    row_num +=1
     columns = [
         f'СИ {note.equipment.exnumber}',
         note.charakters.reestr,
@@ -2182,7 +2183,41 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 1100
 
-    row_num = 10
+    row_num += 1
+    columns = [
+        'Диапазон измерений',
+        'Диапазон измерений',
+        'Диапазон измерений',
+        'Диапазон измерений',
+        'Класс точности, погрешность и/или неопределённость',
+        'Класс точности, погрешность и/или неопределённость',
+        'Класс точности, погрешность и/или неопределённость',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 3, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1100
+
+    row_num += 1
+    columns = [
+        note.charakters.measurydiapason,
+        note.charakters.measurydiapason,
+        note.charakters.measurydiapason,
+        note.charakters.measurydiapason,
+        note.charakters.accuracity,
+        note.charakters.accuracity,
+        note.charakters.accuracity,
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 3, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1100
+
+    row_num +=2
     columns = [
         '2. Верификация комплектности и установки оборудования'
     ]
@@ -2192,7 +2227,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 11
+    row_num +=1
     columns = [
         '2.1 Соответствие комплектности'
     ]
@@ -2202,7 +2237,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 12
+    row_num +=1
     columns = [
         'Наименование',
         'Наименование',
@@ -2219,7 +2254,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 13
+    row_num += 1
     columns = [
         'Комплектация',
         'Комплектация',
@@ -2249,7 +2284,7 @@ def export_exvercard_xls(request, pk):
         a = 'отсутствует'
 
 
-    row_num = 14
+    row_num +=1
     columns = [
         'Паспорт',
         'Паспорт',
@@ -2276,7 +2311,7 @@ def export_exvercard_xls(request, pk):
         a = 'отсутствует'
         e = 'необходимо разработать инструкцию на оборудование'
 
-    row_num = 15
+    row_num += 1
     columns = [
         'Руководство по эксплуатации',
         'Руководство по эксплуатации',
@@ -2293,7 +2328,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 16
+    row_num += 1
     columns = [
         'Сведения о поверке',
         'Сведения о поверке',
@@ -2313,21 +2348,21 @@ def export_exvercard_xls(request, pk):
         values_list('equipment__roomschange__roomnumber__roomnumber').get(pk=pk)
     a = str(a)
     a = a[2:-3]
-    # try:
-    microclimat = MeteorologicalParameters.objects.filter(roomnumber__roomnumber=a, date=dateverificformat)
-    microclimat = microclimat[len(microclimat)-1]
-    facttemperature = microclimat.temperature
-    facthumid = microclimat.humidity
-    factpress = microclimat.pressure
-    # except:
-    #     facttemperature = 'указать'
-    #     facthumid = 'указать'
-    #     factpress = 'указать'
+    try:
+        microclimat = MeteorologicalParameters.objects.filter(roomnumber__roomnumber=a, date=dateverificformat)
+        microclimat = microclimat[len(microclimat)-1]
+        facttemperature = microclimat.temperature
+        facthumid = microclimat.humidity
+        factpress = microclimat.pressure
+    except:
+        facttemperature = 'указать'
+        facthumid = 'указать'
+        factpress = 'указать'
 
 
 
 
-    row_num = 18
+    row_num +=2
     columns = [
         f'2.2 Соответствие  требованиям к условиям эксплуатации в помещении № {a}'
     ]
@@ -2337,7 +2372,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    row_num = 19
+    row_num += 1
     columns = [
         'Наименование характеристики',
         'Наименование характеристики',
