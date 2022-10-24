@@ -2041,7 +2041,8 @@ def export_exvercard_xls(request, pk):
                 pytils.translit.translify(note.charakters.name) +\
                 ' ' + pytils.translit.translify(note.equipment.lot)
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = f'attachment; filename="{userelat}_{cardname}.xls"'
+    filename = f"{userelat}_{cardname}.xls"[:-259]
+    response['Content-Disposition'] = f'attachment; filename={filename}'
 
     pattern = xlwt.Pattern()
     pattern.pattern = xlwt.Pattern.SOLID_PATTERN
