@@ -2639,7 +2639,7 @@ def export_exvercard_xls(request, pk):
             'Описание установки'
         ]
         for col_num in range(len(columns)):
-            ws.write(row_num, col_num, columns[col_num], st)
+            ws.write(row_num, col_num, columns[col_num], style3)
             ws.merge(row_num, row_num, 0, 6)
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 500
@@ -2650,8 +2650,8 @@ def export_exvercard_xls(request, pk):
               note.charakters.setplace
         ]
         for col_num in range(len(columns)):
-            ws.write(row_num, col_num, columns[col_num], style11)
-            ws.merge(row_num, row_num, 0, 6, style11)
+            ws.write(row_num, col_num, columns[col_num], st)
+            ws.merge(row_num, row_num, 0, 6, st)
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 500
 
