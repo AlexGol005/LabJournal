@@ -2490,15 +2490,13 @@ def export_exvercard_xls(request, pk):
 
     if note.charakters.temperature == '':
         note.charakters.temperature = '-'
-        st = style1
-    else:
-        st = style11
-    if facttemperature == 'указать':
         st1 = style11
     else:
         st1 = style1
-
-
+    if facttemperature == 'указать':
+        st2 = style11
+    else:
+        st2 = style1
 
 
     row_num += 1
@@ -2510,23 +2508,24 @@ def export_exvercard_xls(request, pk):
         facttemperature,
         'соответствует',
     ]
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], st)
-        ws.merge(row_num, row_num, 0, 1, st)
-        ws.merge(row_num, row_num, 3, 4, st1)
-        ws.merge(row_num, row_num, 5, 6, st)
+    for col_num in range(3):
+        ws.write(row_num, col_num, columns[col_num], st1)
+        ws.merge(row_num, row_num, 0, 1, st1)
+    for col_num in range(3, len(columns)):
+        ws.merge(row_num, row_num, 3, 4, st2)
+        ws.merge(row_num, row_num, 5, 6, st2)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
     if note.charakters.humidicity == '':
         note.charakters.humidicity = '-'
-        st = style1
-    else:
-        st = style11
-    if facthumid == 'указать':
         st1 = style11
     else:
         st1 = style1
+    if facthumid == 'указать':
+        st2 = style11
+    else:
+        st2 = style1
 
     row_num += 1
     columns = [
@@ -2537,24 +2536,25 @@ def export_exvercard_xls(request, pk):
         facthumid,
         'соответствует',
     ]
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], st)
-        ws.merge(row_num, row_num, 0, 1, st)
-        ws.merge(row_num, row_num, 3, 4, st1)
-        ws.merge(row_num, row_num, 5, 6, st)
+    for col_num in range(3):
+        ws.write(row_num, col_num, columns[col_num], st1)
+        ws.merge(row_num, row_num, 0, 1, st1)
+    for col_num in range(3, len(columns)):
+        ws.merge(row_num, row_num, 3, 4, st2)
+        ws.merge(row_num, row_num, 5, 6, st2)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
     if note.charakters.pressure == '':
         note.charakters.pressure = '-'
-        st = style1
+        st1 = style11
     else:
-        st = style11
+        st1 = style1
 
     if factpress == 'указать':
-        st = style11
+        st2 = style11
     else:
-        st = style1
+        st2 = style1
 
     row_num += 1
     columns = [
@@ -2565,11 +2565,12 @@ def export_exvercard_xls(request, pk):
         factpress,
         '-',
     ]
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], st)
-        ws.merge(row_num, row_num, 0, 1, st)
-        ws.merge(row_num, row_num, 3, 4, st)
-        ws.merge(row_num, row_num, 5, 6, st)
+    for col_num in range(3):
+        ws.write(row_num, col_num, columns[col_num], st1)
+        ws.merge(row_num, row_num, 0, 1, st1)
+    for col_num in range(3, len(columns)):
+        ws.merge(row_num, row_num, 3, 4, st2)
+        ws.merge(row_num, row_num, 5, 6, st2)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
