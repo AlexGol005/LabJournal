@@ -576,6 +576,10 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
     setplace = forms.CharField(label='Описание мероприятий по установке', required=False,
                                widget=forms.Textarea(attrs={'class': 'form-control',
                                                             'placeholder': ''}))
+    complectlist = forms.CharField(label='Где в паспорте комплектация', required=False,
+                                   widget=forms.Textarea(attrs={'class': 'form-control',
+                                                                'placeholder': ''}))
+    expresstest = forms.BooleanField(label='Возможно тестирование', required=False, initial=False)
 
 
     class Meta:
@@ -596,6 +600,8 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
             'humidicity',
             'pressure',
             'setplace',
+            'complectlist',
+            'expresstest',
                   ]
 
 
@@ -650,6 +656,10 @@ class TestingEquipmentCharaktersCreateForm(forms.ModelForm):
     setplace = forms.CharField(label='Описание мероприятий по установке', required=False,
                                widget=forms.Textarea(attrs={'class': 'form-control',
                                                              'placeholder': ''}))
+    complectlist = forms.CharField(label='Где в паспорте комплектация', required=False,
+                               widget=forms.Textarea(attrs={'class': 'form-control',
+                                                            'placeholder': ''}))
+    expresstest = forms.BooleanField(label='Возможно тестирование', required=False, initial=False)
 
     class Meta:
         model = TestingEquipmentCharakters
@@ -670,6 +680,8 @@ class TestingEquipmentCharaktersCreateForm(forms.ModelForm):
             'humidicity',
             'pressure',
             'setplace',
+            'complectlist',
+            'expresstest',
                   ]
 
 

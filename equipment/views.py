@@ -2027,11 +2027,21 @@ def export_exvercard_xls(request, pk):
     '''представление для выгрузки протокола верификации в ексель'''
     note = MeasurEquipment.objects.get(pk=pk)
     company = CompanyCard.objects.get(pk=1)
+    aa = MeasurEquipment.objects.all().filter(equipment__roomschange__in=setroom). \
+        values_list('equipment__roomschange__roomnumber__roomnumber').get(pk=pk)
+    aa = str(aa)
+    room = aa[2:-3]
+
+    bb = MeasurEquipment.objects.all().filter(equipment__personchange__in=setperson). \
+        values_list('equipment__personchange__person__username').get(pk=pk)
+    bb = str(bb)
+    usere = bb[2:-3]
+    userelat = pytils.translit.translify(usere)
     cardname = pytils.translit.translify(note.equipment.exnumber) + ' ' +\
                 pytils.translit.translify(note.charakters.name) +\
                 ' ' + pytils.translit.translify(note.equipment.lot)
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = f'attachment; filename="{cardname}.xls"'
+    response['Content-Disposition'] = f'attachment; filename="{userelat}_{cardname}.xls"'
 
     pattern = xlwt.Pattern()
     pattern.pattern = xlwt.Pattern.SOLID_PATTERN
@@ -2106,7 +2116,6 @@ def export_exvercard_xls(request, pk):
     style111.alignment = al1
     style111.alignment.wrap = 1
     style111.borders = b1
-    style111.pattern = pattern
 
     style2 = xlwt.XFStyle()
     style2.font.height = 9 * 20
@@ -2268,22 +2277,30 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
+    if note.charakters.complectlist != '':
+        a = note.charakters.complectlist
+        st = style1
+    else:
+        a = 'паспорт, стр. 7'
+        st = style11
+
+
     row_num += 1
     columns = [
         'Комплектация',
         'Комплектация',
         'Комплектация',
         'cоответствует',
-        'паспорт, стр. 7',
-        'паспорт, стр. 7',
-        'паспорт, стр. 7',
+        a,
+        a,
+        a,
     ]
     for col_num in range(4):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(row_num, row_num, 0, 2, style1)
     for col_num in range(4, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style11)
-        ws.merge(row_num, row_num, 4, 6, style11)
+        ws.write(row_num, col_num, columns[col_num], st)
+        ws.merge(row_num, row_num, 4, 6, st)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
@@ -2337,7 +2354,7 @@ def export_exvercard_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(row_num, row_num, 0, 2, style11)
+        ws.merge(row_num, row_num, 0, 2, style1)
         ws.merge(row_num, row_num, 4, 6, style1)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
@@ -2358,17 +2375,9 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    a = MeasurEquipment.objects.all().filter(equipment__roomschange__in=setroom).\
-        values_list('equipment__roomschange__roomnumber__roomnumber').get(pk=pk)
-    a = str(a)
-    room = a[2:-3]
 
-    a = MeasurEquipment.objects.all().filter(equipment__personchange__in=setperson). \
-        values_list('equipment__personchange__person__username').get(pk=pk)
-    a = str(a)
-    usere = a[2:-3]
     try:
-        microclimat = MeteorologicalParameters.objects.filter(roomnumber__roomnumber=a, date=dateverificformat)
+        microclimat = MeteorologicalParameters.objects.filter(roomnumber__roomnumber=aa, date=dateverificformat)
         microclimat = microclimat[len(microclimat)-1]
         facttemperature = microclimat.temperature
         facthumid = microclimat.humidity
@@ -2421,6 +2430,9 @@ def export_exvercard_xls(request, pk):
 
         if note.charakters.voltage == '':
             note.charakters.voltage = '-'
+            st = style11
+        else:
+            st = style11
 
         row_num += 1
         columns = [
@@ -2432,15 +2444,18 @@ def export_exvercard_xls(request, pk):
             'соответствует',
         ]
         for col_num in range(len(columns)):
-            ws.write(row_num, col_num, columns[col_num], style11)
-            ws.merge(row_num, row_num, 0, 1, style11)
-            ws.merge(row_num, row_num, 3, 4, style11)
-            ws.merge(row_num, row_num, 5, 6, style11)
+            ws.write(row_num, col_num, columns[col_num], st)
+            ws.merge(row_num, row_num, 0, 1, st)
+            ws.merge(row_num, row_num, 3, 4, st)
+            ws.merge(row_num, row_num, 5, 6, st)
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 500
 
         if note.charakters.frequency == '':
             note.charakters.frequency = '-'
+            st = style11
+        else:
+            st = style11
 
         row_num += 1
         columns = [
@@ -2452,10 +2467,10 @@ def export_exvercard_xls(request, pk):
             'соответствует',
         ]
         for col_num in range(len(columns)):
-            ws.write(row_num, col_num, columns[col_num], style11)
-            ws.merge(row_num, row_num, 0, 1, style11)
-            ws.merge(row_num, row_num, 3, 4, style11)
-            ws.merge(row_num, row_num, 5, 6, style11)
+            ws.write(row_num, col_num, columns[col_num], st)
+            ws.merge(row_num, row_num, 0, 1, st)
+            ws.merge(row_num, row_num, 3, 4, st)
+            ws.merge(row_num, row_num, 5, 6, st)
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 500
 
@@ -2471,6 +2486,16 @@ def export_exvercard_xls(request, pk):
 
     if note.charakters.temperature == '':
         note.charakters.temperature = '-'
+        st = style1
+    else:
+        st = style11
+    if facttemperature:
+        st1 = style1
+    else:
+        st1 = style11
+
+
+
 
     row_num += 1
     columns = [
@@ -2482,15 +2507,22 @@ def export_exvercard_xls(request, pk):
         'соответствует',
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style11)
-        ws.merge(row_num, row_num, 0, 1, style11)
-        ws.merge(row_num, row_num, 3, 4, style11)
-        ws.merge(row_num, row_num, 5, 6, style11)
+        ws.write(row_num, col_num, columns[col_num], st)
+        ws.merge(row_num, row_num, 0, 1, st)
+        ws.merge(row_num, row_num, 3, 4, st1)
+        ws.merge(row_num, row_num, 5, 6, st)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
     if note.charakters.humidicity == '':
         note.charakters.humidicity = '-'
+        st = style1
+    else:
+        st = style11
+    if facthumid:
+        st1 = style1
+    else:
+        st1 = style11
 
     row_num += 1
     columns = [
@@ -2502,15 +2534,23 @@ def export_exvercard_xls(request, pk):
         'соответствует',
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style11)
-        ws.merge(row_num, row_num, 0, 1, style11)
-        ws.merge(row_num, row_num, 3, 4, style11)
-        ws.merge(row_num, row_num, 5, 6, style11)
+        ws.write(row_num, col_num, columns[col_num], st)
+        ws.merge(row_num, row_num, 0, 1, st)
+        ws.merge(row_num, row_num, 3, 4, st1)
+        ws.merge(row_num, row_num, 5, 6, st)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
     if note.charakters.pressure == '':
         note.charakters.pressure = '-'
+        st = style1
+    else:
+        st = style11
+
+    if factpress:
+        st1 = style1
+    else:
+        st1 = style11
 
     row_num += 1
     columns = [
@@ -2522,10 +2562,10 @@ def export_exvercard_xls(request, pk):
         '-',
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style11)
-        ws.merge(row_num, row_num, 0, 1, style11)
-        ws.merge(row_num, row_num, 3, 4, style11)
-        ws.merge(row_num, row_num, 5, 6, style11)
+        ws.write(row_num, col_num, columns[col_num], st)
+        ws.merge(row_num, row_num, 0, 1, st)
+        ws.merge(row_num, row_num, 3, 4, st1)
+        ws.merge(row_num, row_num, 5, 6, st)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
@@ -2555,8 +2595,8 @@ def export_exvercard_xls(request, pk):
     for col_num in range(0, 1):
         ws.write(row_num, col_num, columns[col_num], style111)
     for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style11)
-        ws.merge(row_num, row_num, 1, 6, style11)
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 1, 6, style1)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 700
 
@@ -2569,12 +2609,17 @@ def export_exvercard_xls(request, pk):
     for col_num in range(0, 1):
         ws.write(row_num, col_num, columns[col_num], style111)
     for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style11)
-        ws.merge(row_num, row_num, 1, 6, style11)
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 1, 6, style1)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 700
 
     if note.charakters.needsetplace:
+        if not note.charakters.setplace:
+            st = style11
+        else:
+            st = style1
+
 
         row_num += 2
         columns = [
@@ -2610,30 +2655,37 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
+    if note.charakters.expresstest:
+        a = ''
+        b = '✓'
+    if not note.charakters.expresstest:
+        a = '✓'
+        b = ''
+
     row_num += 1
     columns = [
-        '✓',
+        a,
         'Тестирование невозможно'
     ]
     for col_num in range(0, 1):
         ws.write(row_num, col_num, columns[col_num], style111)
     for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style11)
-        ws.merge(row_num, row_num, 1, 6, style11)
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 1, 6, style1)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 700
 
     row_num += 1
     columns = [
-        '✓',
+        b,
         'Тестирование возможно. Результаты испытаний в приложении 1'
 
     ]
     for col_num in range(0, 1):
-        ws.write(row_num, col_num, columns[col_num], style111)
+        ws.write(row_num, col_num, columns[col_num], style1)
     for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style11)
-        ws.merge(row_num, row_num, 1, 6, style11)
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 1, 6, style1)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 700
 

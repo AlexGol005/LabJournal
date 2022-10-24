@@ -237,6 +237,9 @@ class MeasurEquipmentCharakters(models.Model):
     pressure = models.CharField('давление', max_length=100, default='', blank=True, null=True)
     setplace = models.CharField('описание мероприятий по установке', max_length=100, default='', blank=True, null=True)
     needsetplace = models.BooleanField('Установка не требуется', default=False, blank=True)
+    complectlist = models.CharField('Где в паспорте комплектация', max_length=100, default='', blank=True, null=True)
+    expresstest = models.BooleanField('Тестирование возможно? да/нет', default=False, blank=True)
+
 
 
 
@@ -269,13 +272,15 @@ class TestingEquipmentCharakters(models.Model):
     pressure = models.CharField('давление', max_length=100, default='', blank=True, null=True)
     setplace = models.CharField('описание мероприятий по установке', max_length=100, default='', blank=True, null=True)
     needsetplace = models.BooleanField('Установка не требуется', default=False, blank=True)
+    complectlist = models.CharField('Где в паспорте комплектация', max_length=100, default='', blank=True, null=True)
+    expresstest = models.BooleanField('Тестирование возможно? да/нет', default=False, blank=True)
 
     def __str__(self):
         return f'{self.name}  {self.modificname}'
 
     class Meta:
         verbose_name = 'Испытательное оборудование, характеристики'
-        verbose_name_plural = 'СИспытательное оборудование, характеристики'
+        verbose_name_plural = 'Испытательное оборудование, характеристики'
         unique_together = ('name', 'modificname', 'typename')
 
 
