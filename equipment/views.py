@@ -2197,8 +2197,6 @@ def export_exvercard_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(row_num, row_num, 0, 2, style1)
         ws.merge(row_num, row_num, 3, 6, style1)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 1100
 
     row_num += 1
     columns = [
@@ -2522,6 +2520,7 @@ def export_exvercard_xls(request, pk):
 
     row_num += 1
     columns = [
+        '□',
         'Не требуется'
     ]
     for col_num in range(len(columns)):
@@ -2532,6 +2531,7 @@ def export_exvercard_xls(request, pk):
 
     row_num += 1
     columns = [
+        '□',
         'Пример описания установки: Установлено на лабораторном столе'
         'положение отрегулировано по уровню, промаркировано местоположение на столе',
     ]
