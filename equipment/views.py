@@ -2197,7 +2197,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 1100
 
-    row_num += 1
+    row_num += 2
     columns = [
         'Диапазон измерений',
         'Диапазон измерений',
@@ -2211,6 +2211,8 @@ def export_exvercard_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(row_num, row_num, 0, 2, style1)
         ws.merge(row_num, row_num, 3, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 700
 
     row_num += 1
     columns = [
@@ -2648,15 +2650,15 @@ def export_exvercard_xls(request, pk):
 
     row_num += 1
     columns = [
-        f'Оборудование пригодно к эксплуатации. \
+        f'Оборудование пригодно к эксплуатации.\n \
         Требования к установке и условиям окружающей среды соответствуют документации \
-        на оборудование. Закреплено за помещением № {room}. Закреплено за ответственным пользователем: {usere}'
+        на оборудование.\n Закреплено за помещением № {room}.\n Закреплено за ответственным пользователем: {usere}'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(row_num, row_num, 0, 6, style1)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+    ws.row(row_num).height = 1500
 
     row_num += 2
     columns = [
