@@ -2364,9 +2364,9 @@ def export_exvercard_xls(request, pk):
     room = a[2:-3]
 
     a = MeasurEquipment.objects.all().filter(equipment__personchange__in=setperson). \
-        values_list('equipment__personchange__person').get(pk=pk)
+        values_list('equipment__personchange__person__username').get(pk=pk)
     a = str(a)
-    usere = a[:10]
+    usere = a[1:-3]
     try:
         microclimat = MeteorologicalParameters.objects.filter(roomnumber__roomnumber=a, date=dateverificformat)
         microclimat = microclimat[len(microclimat)-1]
@@ -2650,9 +2650,8 @@ def export_exvercard_xls(request, pk):
 
     row_num += 1
     columns = [
-        f'Оборудование пригодно к эксплуатации.\n \
-        Требования к установке и условиям окружающей среды соответствуют документации \
-        на оборудование.\n Закреплено за помещением № {room}.\n Закреплено за ответственным пользователем: {usere}'
+        f'Оборудование пригодно к эксплуатации.  Требования к установке и условиям окружающей среды соответствуют документации на оборудование\
+        \n Закреплено за помещением № {room}.\n Закреплено за ответственным пользователем: {usere}'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
