@@ -2522,12 +2522,22 @@ def export_exvercard_xls(request, pk):
 
     row_num += 1
     columns = [
-        'Не требуется   либо: Пример описания установки: Установлено на лабораторном столе, '
-        'положение отрегулировано по уровню, промаркировано местоположение на столе'
+        'Не требуется'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style11)
-        ws.merge(row_num, row_num, 0, 6, style11)
+        ws.merge(row_num, row_num, 1, 6, style11)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1000
+
+    row_num += 1
+    columns = [
+        'Пример описания установки: Установлено на лабораторном столе'
+        'положение отрегулировано по уровню, промаркировано местоположение на столе',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style11)
+        ws.merge(row_num, row_num, 1, 6, style11)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 1000
 
