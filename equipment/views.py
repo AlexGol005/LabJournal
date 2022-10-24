@@ -2494,9 +2494,9 @@ def export_exvercard_xls(request, pk):
     else:
         st1 = style1
     if facttemperature == 'указать':
-        st2 = style11
+        st3 = style11
     else:
-        st2 = style1
+        st3 = style1
 
 
     row_num += 1
@@ -2512,8 +2512,9 @@ def export_exvercard_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], st1)
         ws.merge(row_num, row_num, 0, 1, st1)
     for col_num in range(3, len(columns)):
-        ws.merge(row_num, row_num, 3, 4, st2)
-        ws.merge(row_num, row_num, 5, 6, st2)
+        ws.write(row_num, col_num, columns[col_num], st3)
+        ws.merge(row_num, row_num, 3, 4, st3)
+        ws.merge(row_num, row_num, 5, 6, st3)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
@@ -2523,9 +2524,9 @@ def export_exvercard_xls(request, pk):
     else:
         st1 = style1
     if facthumid == 'указать':
-        st2 = style11
+        st3 = style11
     else:
-        st2 = style1
+        st3 = style1
 
     row_num += 1
     columns = [
@@ -2540,8 +2541,9 @@ def export_exvercard_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], st1)
         ws.merge(row_num, row_num, 0, 1, st1)
     for col_num in range(3, len(columns)):
-        ws.merge(row_num, row_num, 3, 4, st2)
-        ws.merge(row_num, row_num, 5, 6, st2)
+        ws.write(row_num, col_num, columns[col_num], st3)
+        ws.merge(row_num, row_num, 3, 4, st3)
+        ws.merge(row_num, row_num, 5, 6, st3)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
@@ -2552,9 +2554,9 @@ def export_exvercard_xls(request, pk):
         st1 = style1
 
     if factpress == 'указать':
-        st2 = style11
+        st3 = style11
     else:
-        st2 = style1
+        st3 = style1
 
     row_num += 1
     columns = [
@@ -2569,8 +2571,9 @@ def export_exvercard_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], st1)
         ws.merge(row_num, row_num, 0, 1, st1)
     for col_num in range(3, len(columns)):
-        ws.merge(row_num, row_num, 3, 4, st2)
-        ws.merge(row_num, row_num, 5, 6, st2)
+        ws.write(row_num, col_num, columns[col_num], st3)
+        ws.merge(row_num, row_num, 3, 4, st3)
+        ws.merge(row_num, row_num, 5, 6, st3)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
