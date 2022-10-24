@@ -2285,7 +2285,7 @@ def export_exvercard_xls(request, pk):
         a = note.charakters.complectlist
         st = style1
     else:
-        a = 'паспорт, стр. 7'
+        a = 'упаковочный лист'
         st = style11
 
 
