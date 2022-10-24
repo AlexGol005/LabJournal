@@ -2552,9 +2552,9 @@ def export_exvercard_xls(request, pk):
         st = style11
 
     if factpress == 'указать':
-        st1 = style11
+        st = style11
     else:
-        st1 = style1
+        st = style1
 
     row_num += 1
     columns = [
@@ -2568,7 +2568,7 @@ def export_exvercard_xls(request, pk):
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], st)
         ws.merge(row_num, row_num, 0, 1, st)
-        ws.merge(row_num, row_num, 3, 4, st1)
+        ws.merge(row_num, row_num, 3, 4, st)
         ws.merge(row_num, row_num, 5, 6, st)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
