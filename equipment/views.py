@@ -2493,10 +2493,10 @@ def export_exvercard_xls(request, pk):
         st = style1
     else:
         st = style11
-    if facttemperature:
-        st1 = style1
-    else:
+    if facttemperature == 'указать':
         st1 = style11
+    else:
+        st1 = style1
 
 
 
@@ -2523,10 +2523,10 @@ def export_exvercard_xls(request, pk):
         st = style1
     else:
         st = style11
-    if facthumid:
-        st1 = style1
-    else:
+    if facthumid == 'указать':
         st1 = style11
+    else:
+        st1 = style1
 
     row_num += 1
     columns = [
@@ -2551,10 +2551,10 @@ def export_exvercard_xls(request, pk):
     else:
         st = style11
 
-    if factpress:
-        st1 = style1
-    else:
+    if factpress == 'указать':
         st1 = style11
+    else:
+        st1 = style1
 
     row_num += 1
     columns = [
@@ -2706,8 +2706,8 @@ def export_exvercard_xls(request, pk):
 
     row_num += 1
     columns = [
-        f'Пригодно к эксплуатации.  Требования к установке и условиям окружающей среды соответствуют документации на оборудование\
-        \n Закреплено за помещением № {room}.\n Закреплено за ответственным пользователем: {usere}'
+        f'Пригодно к эксплуатации.  Требования к установке и условиям окружающей среды соответствуют документации на оборудование.\
+        \n Закреплено за помещением № {room}.\n Закреплено за ответственным пользователем: {usere}.'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
