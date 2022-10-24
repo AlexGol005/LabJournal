@@ -2381,7 +2381,7 @@ def export_exvercard_xls(request, pk):
 
 
     try:
-        microclimat = MeteorologicalParameters.objects.get(roomnumber__roomnumber=aa, date=dateverificformat)
+        microclimat = MeteorologicalParameters.objects.get(roomnumber__roomnumber=room, date=dateverificformat)
         facttemperature = microclimat.temperature
         facthumid = microclimat.humidity
         factpress = microclimat.pressure
