@@ -2733,7 +2733,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    if usere != 'А.Б. Головкина':
+    if usere != 'А.Б.Головкина':
         st = style110
     else:
         st = style10
@@ -2777,9 +2777,9 @@ def export_exvercard_xls(request, pk):
         'Начальник производства'
         '',
         '',
-        'Н.Ю. Пилявская',
-        'Н.Ю. Пилявская',
-        'Н.Ю. Пилявская',
+        'Н.Ю.Пилявская',
+        'Н.Ю.Пилявская',
+        'Н.Ю.Пилявская',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style10)
@@ -2794,9 +2794,9 @@ def export_exvercard_xls(request, pk):
         'Заведующий АХЧ'
         '',
         '',
-        'А.В. Теленков',
-        'А.В. Теленков',
-        'А.В. Теленков',
+        'А.В.Теленков',
+        'А.В.Теленков',
+        'А.В.Теленков',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style10)
@@ -2804,7 +2804,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    if usere != 'А.Б. Головкина':
+    if usere != 'А.Б.Головкина':
 
         row_num += 2
         columns = [
@@ -2813,9 +2813,9 @@ def export_exvercard_xls(request, pk):
             'Инженер-химик II категории'
             '',
             '',
-            'А.Б. Головкина',
-            'А.Б. Головкина',
-            'А.Б. Головкина',
+            'А.Б.Головкина',
+            'А.Б.Головкина',
+            'А.Б.Головкина',
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], style10)
