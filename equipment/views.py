@@ -2686,7 +2686,7 @@ def export_exvercard_xls(request, pk):
 
     ]
     for col_num in range(0, 1):
-        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.write(row_num, col_num, columns[col_num], style111)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(row_num, row_num, 1, 6, style1)
