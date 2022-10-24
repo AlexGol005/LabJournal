@@ -2564,7 +2564,7 @@ def export_exvercard_xls(request, pk):
         note.charakters.pressure,
         factpress,
         factpress,
-        '-',
+        'соответствует',
     ]
     for col_num in range(3):
         ws.write(row_num, col_num, columns[col_num], st1)
