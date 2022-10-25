@@ -442,21 +442,29 @@ class TestingEquipmentCharaktersView(ListView):
 
 
 class ReestrsearresView(TemplateView):
-    """ Представление, которое выводит результаты поиска по списку характеристик ИО """
+    """ Представление, которое выводит результаты поиска по списку госреестров """
 
     template_name = URL + '/measurequipmentcharacterslist.html'
 
     def get_context_data(self, **kwargs):
         context = super(ReestrsearresView, self).get_context_data(**kwargs)
         name = self.request.GET['name']
+        reestr = self.request.GET['reestr']
         if self.request.GET['name']:
             name1 = self.request.GET['name'][0].upper() + self.request.GET['name'][1:]
-        if name:
+        reestr = self.request.GET['reestr']
+        if name and not reestr:
             objects = MeasurEquipmentCharakters.objects.\
             filter(Q(name__icontains=name)|Q(name__icontains=name1)).order_by('name')
             context['objects'] = objects
+        if reestr and not name:
+            objects = MeasurEquipmentCharakters.objects.filter(reestr__icontains=reestr)
             context['objects'] = objects
-        context['form'] = Searchreestrform(initial={'name': name})
+        if reestr and  name:
+            objects = MeasurEquipmentCharakters.objects.filter(reestr__icontains=reestr).\
+                filter(Q(name__icontains=name)|Q(name__icontains=name1)).order_by('name')
+            context['objects'] = objects
+        context['form'] = Searchreestrform(initial={'name': name, 'reestr': reestr})
         context['URL'] = URL
         return context
 
