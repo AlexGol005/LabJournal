@@ -10,6 +10,7 @@ from xlwt import Borders, Alignment
 
 # этот блок нужен для всех журналов
 from equipment.models import CompanyCard
+from metods import get_dateformat
 from .forms import *
 from utils_forms import*
 from .models import *
@@ -856,6 +857,8 @@ def export_protocol_xls(request, pk):
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style4)
         ws.merge(row_num, row_num, 0, 3, style4)
+
+    note.date = get_dateformat(note.date)
 
     row_num = 7
     columns = [
