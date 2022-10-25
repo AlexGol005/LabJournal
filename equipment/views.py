@@ -20,6 +20,7 @@ from xlwt import Alignment, Borders
 from equipment.forms import*
 from equipment.models import*
 from metods import get_dateformat
+from users.models import Profile
 
 URL = 'equipment'
 now = date.today()
@@ -2045,6 +2046,8 @@ def export_exvercard_xls(request, pk):
     bb = str(bb)
     usere = bb[2:-3]
     userelat = pytils.translit.translify(usere)
+    positionset = Profile.objects.get(user__username=usere)
+    position = positionset.userposition
     cardname = pytils.translit.translify(note.equipment.exnumber) + ' ' + pytils.translit.translify(note.equipment.lot)
     response = HttpResponse(content_type='application/ms-excel')
     filename = f"{userelat}_{cardname}"
@@ -2745,7 +2748,7 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height = 500
 
     if usere != 'А.Б.Головкина':
-        st = style110
+        st = style10
     else:
         st = style10
 
@@ -2753,7 +2756,7 @@ def export_exvercard_xls(request, pk):
     columns = [
         '',
         '',
-        'Инженер-химик 2 категории'
+        position,
         '',
         '',
        usere,
@@ -2821,7 +2824,7 @@ def export_exvercard_xls(request, pk):
         columns = [
             '',
             '',
-            'Инженер-химик II категории'
+            'Инженер-химик 2 категории'
             '',
             '',
             'А.Б.Головкина',
