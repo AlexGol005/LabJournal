@@ -356,8 +356,13 @@ class Verificationequipment(models.Model):
                                     blank=True)
 
     def __str__(self):
-        return f'Поверка  вн № ' \
-               f'   {self.equipmentSM.charakters.name} от {self.date} до {self.datedead} {self.year}'
+        try:
+            self.equipmentSM.equipment.exnumber
+            self.equipmentSM.charakters.name
+            return f'Поверка  вн № ' \
+               f'  {self.equipmentSM.equipment.exnumber} {self.equipmentSM.charakters.name} от {self.date} до {self.datedead} {self.year}'
+        except:
+            return {self.date}
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
