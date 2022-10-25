@@ -2045,9 +2045,7 @@ def export_exvercard_xls(request, pk):
     bb = str(bb)
     usere = bb[2:-3]
     userelat = pytils.translit.translify(usere)
-    cardname = pytils.translit.translify(note.equipment.exnumber) + ' ' +\
-                pytils.translit.translify(note.charakters.name) +\
-                ' ' + pytils.translit.translify(note.equipment.lot)
+    cardname = pytils.translit.translify(note.equipment.exnumber) + ' ' + pytils.translit.translify(note.equipment.lot)
     response = HttpResponse(content_type='application/ms-excel')
     filename = f"{userelat}_{cardname}"
     filename = str(filename)
