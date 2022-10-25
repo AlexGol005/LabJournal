@@ -2251,7 +2251,7 @@ def export_exvercard_xls(request, pk):
         ws.merge(row_num, row_num, 0, 2, style1)
         ws.merge(row_num, row_num, 3, 6, style1)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 1100
+    ws.row(row_num).height = 1500
 
     row_num +=2
     columns = [
