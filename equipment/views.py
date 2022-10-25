@@ -2043,7 +2043,7 @@ def export_exvercard_xls(request, pk):
     response = HttpResponse(content_type='application/ms-excel')
     filename = f"{userelat}_{cardname}"
     filename = str(filename)
-    filename = filename[:258]
+    filename = filename[:251]
 
     response['Content-Disposition'] = f'attachment; filename="{filename}.xls"'
     # response['Content-Disposition'] = f'attachment; filename="{cardname}.xls"'
