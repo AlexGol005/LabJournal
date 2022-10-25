@@ -946,12 +946,18 @@ def export_protocol_xls(request, pk):
     columns = [
         '4 Идентификационные данные объектов/образцов:',
         '4 Идентификационные данные объектов/образцов: ',
-        note.for_lot_and_name.nameVG.nameSM.object,
-        note.for_lot_and_name.nameVG.nameSM.object,
-        note.for_lot_and_name.nameVG.nameSM.object,
-        note.for_lot_and_name.nameVG.nameSM.object,
-        note.for_lot_and_name.nameVG.nameSM.object,
-        note.for_lot_and_name.nameVG.nameSM.object,
+        note.name,
+        note.name,
+        note.name,
+        note.name,
+        note.name,
+        note.name,
+        # note.for_lot_and_name.nameVG.nameSM.object,
+        # note.for_lot_and_name.nameVG.nameSM.object,
+        # note.for_lot_and_name.nameVG.nameSM.object,
+        # note.for_lot_and_name.nameVG.nameSM.object,
+        # note.for_lot_and_name.nameVG.nameSM.object,
+        # note.for_lot_and_name.nameVG.nameSM.object,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
