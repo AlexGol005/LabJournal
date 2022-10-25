@@ -1249,15 +1249,27 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(row_num, row_num, 2, 7, style7)
 
-    row_num = 28
-    columns = [
-        f'Анализ ГСО № {note.for_lot_and_name.nameVG.nameSM.number}'
-        f'  {note.for_lot_and_name.nameVG.name}  п. {note.lot}'
-        f' по {note.ndocument}',
-    ]
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style8)
-        ws.merge(28, 28, 0, 7, style8)
+    try:
+        row_num = 28
+        columns = [
+            f'Анализ ГСО № {note.for_lot_and_name.nameVG.nameSM.number}'
+            f'  {note.for_lot_and_name.nameVG.name}  п. {note.lot}'
+            f' по {note.ndocument}',
+        ]
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style8)
+            ws.merge(28, 28, 0, 7, style8)
+    except:
+        row_num = 28
+        columns = [
+            f'Анализ ГСО № ....'
+            f' ....  п. ...'
+            f' по {note.ndocument}',
+        ]
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style8)
+            ws.merge(28, 28, 0, 7, style8)
+
 
     row_num = 29
     columns = [
