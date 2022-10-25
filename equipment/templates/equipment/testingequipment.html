@@ -50,6 +50,7 @@
             <th> Аттестация план  </th>
             <th> Заказана аттестация или замена </th>
             <th> Карт. <br> exel  </th>
+            <th> Верифик. <br> exel  </th>
          </tr>
     </thead>
     <tbody>
@@ -77,6 +78,8 @@
         </td>
         <td> <a href="{% url 'export_mecard_xls' obj.pk %}"  class="btn btn-outline-warning mt-3">
             exel {{ obj.equipment.exnumber }}</a></td>
+        <td> <a href="{% url 'export_exvercardteste_xls' obj.pk %}"  class="btn btn-outline-warning mt-3">
+            шаблон верификации {{ obj.equipment.exnumber }}</a></td>
     </tr>
     {% endfor %}
     </tbody>

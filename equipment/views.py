@@ -2033,7 +2033,7 @@ def export_verificlabel_xls(request):
 
 
 def export_exvercard_xls(request, pk):
-    '''представление для выгрузки протокола верификации в ексель'''
+    '''представление для выгрузки протокола верификации СИ в ексель'''
     note = MeasurEquipment.objects.get(pk=pk)
     company = CompanyCard.objects.get(pk=1)
     aa = MeasurEquipment.objects.all().filter(equipment__roomschange__in=setroom). \
@@ -2837,6 +2837,815 @@ def export_exvercard_xls(request, pk):
         ws.row(row_num).height = 500
 
 
+    wb.save(response)
+    return response
+
+# флаг верификация ио
+def export_exvercardteste_xls(request, pk):
+    '''представление для выгрузки протокола верификации ИО в ексель'''
+    note = TestingEquipment.objects.get(pk=pk)
+    company = CompanyCard.objects.get(pk=1)
+    aa = TestingEquipment.objects.all().filter(equipment__roomschange__in=setroom). \
+        values_list('equipment__roomschange__roomnumber__roomnumber').get(pk=pk)
+    aa = str(aa)
+    room = aa[2:-3]
+
+    bb = TestingEquipment.objects.all().filter(equipment__personchange__in=setperson). \
+        values_list('equipment__personchange__person__username').get(pk=pk)
+    bb = str(bb)
+    usere = bb[2:-3]
+    userelat = pytils.translit.translify(usere)
+    positionset = Profile.objects.get(user__username=usere)
+    position = positionset.userposition
+    cardname = pytils.translit.translify(note.equipment.exnumber) + ' ' + pytils.translit.translify(note.equipment.lot)
+    response = HttpResponse(content_type='application/ms-excel')
+    filename = f"{userelat}_{cardname}"
+    filename = str(filename)
+    filename = filename[:251]
+
+    response['Content-Disposition'] = f'attachment; filename="{filename}.xls"'
+    # response['Content-Disposition'] = f'attachment; filename="{cardname}.xls"'
+    pattern = xlwt.Pattern()
+    pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+    pattern.pattern_fore_colour = 0x0D
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Протокол верификации ИО', cell_overwrite_ok=True)
+
+    ws.col(0).width = 2600
+    ws.col(1).width = 2500
+    ws.col(2).width = 7900
+    ws.col(3).width = 3700
+    ws.col(4).width = 2500
+    ws.col(5).width = 2400
+    ws.col(6).width = 3600
+
+
+    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
+    ws.insert_bitmap('logo.bmp', 0, 0)
+    ws.left_margin = 0
+    ws.header_str = b'  '
+    ws.footer_str = b'c. &P '
+    ws.start_page_number = 1
+
+    al1 = Alignment()
+    al1.horz = Alignment.HORZ_CENTER
+    al1.vert = Alignment.VERT_CENTER
+
+    b1 = Borders()
+    b1.left = 1
+    b1.right = 1
+    b1.bottom = 1
+    b1.top = 1
+
+    b5 = Borders()
+    b5.left = 5
+    b5.right = 5
+    b5.bottom = 5
+    b5.top = 5
+
+    style1 = xlwt.XFStyle()
+    style1.font.height = 9 * 20
+    style1.font.name = 'Times new roman'
+    style1.alignment = al1
+    style1.alignment.wrap = 1
+    style1.borders = b1
+
+    style10 = xlwt.XFStyle()
+    style10.font.height = 12 * 20
+    style10.font.name = 'Times new roman'
+    style10.alignment = al1
+    style10.alignment.wrap = 1
+
+    style110 = xlwt.XFStyle()
+    style110.font.height = 12 * 20
+    style110.font.name = 'Times new roman'
+    style110.alignment = al1
+    style110.alignment.wrap = 1
+    style110.pattern = pattern
+
+    style11 = xlwt.XFStyle()
+    style11.font.height = 9 * 20
+    style11.font.name = 'Times new roman'
+    style11.alignment = al1
+    style11.alignment.wrap = 1
+    style11.borders = b1
+    style11.pattern = pattern
+
+    style111 = xlwt.XFStyle()
+    style111.font.height = 12 * 20
+    style111.font.name = 'Times new roman'
+    style111.alignment = al1
+    style111.alignment.wrap = 1
+    style111.borders = b1
+
+    style2 = xlwt.XFStyle()
+    style2.font.height = 9 * 20
+    style2.font.name = 'Times new roman'
+    style2.alignment = al1
+    style2.alignment.wrap = 1
+    style2.borders = b1
+    style2.pattern = pattern
+
+    style3 = xlwt.XFStyle()
+    style3.font.height = 11 * 20
+    style3.font.bold = True
+    style3.font.name = 'Times new roman'
+    style3.alignment = al1
+    style3.alignment.wrap = 1
+
+    style4 = xlwt.XFStyle()
+    style4.font.height = 9 * 20
+    style4.font.name = 'Times new roman'
+    style4.alignment = al1
+    style4.alignment.wrap = 1
+    style4.borders = b1
+    style4.num_format_str = 'DD.MM.YYYY'
+
+    style5 = xlwt.XFStyle()
+    style5.font.height = 12 * 20
+    style5.font.bold = True
+    style5.font.name = 'Times new roman'
+    style5.alignment = al1
+    style5.alignment.wrap = 1
+
+    dateverificformat = now
+    dateverific = get_dateformat(now)
+    row_num = 4
+    columns = [
+        f'Протокол верификации № {note.equipment.exnumber}_01/22 от {dateverific} г. ИО вн.№ {note.equipment.exnumber}'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style5)
+        ws.merge(row_num, row_num, 0, 6)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 5
+    columns = [
+        '1. Идентификационная и уникальная информация'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 6)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num +=2
+    columns = [
+        'Внутренний номер',
+        'Наименование',
+        'Наименование',
+        'Тип/модификация',
+        'Заводской номер',
+        'Год выпуска',
+        'Производитель',
+        # 'Год ввода в эксплуатацию в ООО "Петроаналитика" ',
+        # 'Новый или б/у',
+        # 'Инвентарный номер',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 1, 2, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1100
+
+
+    row_num +=1
+    columns = [
+        f'СИ {note.equipment.exnumber}',
+        note.charakters.name,
+        note.charakters.name,
+        f'{note.charakters.typename}/{note.charakters.modificname}',
+        note.equipment.lot,
+        note.equipment.yearmanuf,
+        f'{note.equipment.manufacturer.country}, {note.equipment.manufacturer.companyName}',
+        # note.equipment.yearintoservice,
+        # note.equipment.new,
+        # note.equipment.invnumber,
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 1, 2, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1100
+
+    row_num += 2
+    columns = [
+        'Диапазон измерений',
+        'Диапазон измерений',
+        'Диапазон измерений',
+        'Класс точности, погрешность и/или неопределённость',
+        'Класс точности, погрешность и/или неопределённость',
+        'Класс точности, погрешность и/или неопределённость',
+        'Класс точности, погрешность и/или неопределённость',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 3, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 700
+
+    row_num += 1
+    columns = [
+        note.charakters.measurydiapason,
+        note.charakters.measurydiapason,
+        note.charakters.measurydiapason,
+        note.charakters.measurydiapason,
+        note.charakters.measurydiapason,
+        note.charakters.measurydiapason,
+        note.charakters.measurydiapason,
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 3, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1500
+
+    row_num +=2
+    columns = [
+        '2. Верификация комплектности и установки оборудования'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 6)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num +=1
+    columns = [
+        '2.1 Соответствие комплектности'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 6)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num +=1
+    columns = [
+        'Наименование',
+        'Наименование',
+        'Наименование',
+        'Оценка',
+        'Примечание',
+        'Примечание',
+        'Примечание',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 4, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    if note.charakters.complectlist != '':
+        a = note.charakters.complectlist
+        st = style1
+    else:
+        a = 'упаковочный лист'
+        st = style11
+
+
+    row_num += 1
+    columns = [
+        'Комплектация',
+        'Комплектация',
+        'Комплектация',
+        'cоответствует',
+        a,
+        a,
+        a,
+    ]
+    for col_num in range(4):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+    for col_num in range(4, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], st)
+        ws.merge(row_num, row_num, 4, 6, st)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    b = note.equipment.exnumber
+
+    try:
+        c = DocsCons.objects.filter(equipment__exnumber=b)
+        d = c.filter(docs__icontains='аспорт')
+        d = d[0]
+        a = 'в наличии'
+    except:
+        a = 'отсутствует'
+
+
+    row_num +=1
+    columns = [
+        'Паспорт',
+        'Паспорт',
+        'Паспорт',
+        a,
+        '',
+        '',
+        '',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 4, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    try:
+        c = DocsCons.objects.filter(equipment__exnumber=b)
+        d = c.filter(Q(docs__icontains='уководство')|Q(docs__icontains='нструкция')|Q(docs__icontains='ИНСТРУКЦИЯ')|Q(docs__icontains='аспорт'))
+        d = d[0]
+        a = 'в наличии'
+        e = ''
+    except:
+        a = 'отсутствует'
+        e = 'необходимо разработать инструкцию на оборудование'
+
+    row_num += 1
+    columns = [
+        'Руководство по эксплуатации',
+        'Руководство по эксплуатации',
+        'Руководство по эксплуатации',
+        a,
+        e,
+        e,
+        e,
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 4, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num += 1
+    columns = [
+        'Сведения об аттестации',
+        'Сведения об аттестации',
+        'Сведения об аттестации',
+        f'аттестован до {note.newdatedead}',
+        f'№ {note.newcertnumber}',
+        f'№ {note.newcertnumber}',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 2, style1)
+        ws.merge(row_num, row_num, 4, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+
+    try:
+        microclimat = MeteorologicalParameters.objects.get(roomnumber__roomnumber=room, date=dateverificformat)
+        facttemperature = microclimat.temperature
+        facthumid = microclimat.humidity
+        factpress = microclimat.pressure
+    except:
+        facttemperature = 'указать'
+        facthumid = 'указать'
+        factpress = 'указать'
+
+
+
+
+    row_num +=2
+    columns = [
+        f'2.2 Соответствие  требованиям к условиям эксплуатации в помещении № {room}'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 6)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num += 1
+    columns = [
+        'Наименование характеристики',
+        'Наименование характеристики',
+        'Требования руководства по эксплуатации, паспорта или описания типа',
+        'Состояние на момент верификации',
+        'Состояние на момент верификации',
+        'Оценка',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 1, style1)
+        ws.merge(row_num, row_num, 3, 4, style1)
+        ws.merge(row_num, row_num, 5, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    if note.charakters.power == True:
+        row_num += 1
+        columns = [
+            'Соответствие требованиям к  электропитанию'
+        ]
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style1)
+            ws.merge(row_num, row_num, 0, 6, style1)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
+
+        if note.charakters.voltage == '':
+            note.charakters.voltage = '-'
+            st = style11
+        else:
+            st = style1
+
+
+
+        row_num += 1
+        columns = [
+            'Напряжение питания сети, В',
+            'Напряжение питания сети, В',
+            note.charakters.voltage,
+            '220',
+            '220',
+            'соответствует',
+        ]
+        for col_num in range(3):
+            ws.write(row_num, col_num, columns[col_num], st)
+            ws.merge(row_num, row_num, 0, 1, st)
+        for col_num in range(3, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], st)
+            ws.merge(row_num, row_num, 3, 4, st)
+            ws.merge(row_num, row_num, 5, 6, st)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
+
+        if note.charakters.frequency == '':
+            note.charakters.frequency = '-'
+            st = style11
+        else:
+            st = style1
+
+        row_num += 1
+        columns = [
+            'Частота, Гц',
+            'Частота, Гц',
+            note.charakters.frequency,
+            '50',
+            '50',
+            'соответствует',
+        ]
+        for col_num in range(3):
+            ws.write(row_num, col_num, columns[col_num], st)
+            ws.merge(row_num, row_num, 0, 1, st)
+        for col_num in range(3, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], st)
+            ws.merge(row_num, row_num, 3, 4, st)
+            ws.merge(row_num, row_num, 5, 6, st)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
+
+    row_num += 1
+    columns = [
+        'Соответствие требованиям к  микроклимату'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    if note.charakters.temperature == '':
+        note.charakters.temperature = '-'
+        st1 = style11
+    else:
+        st1 = style1
+    if facttemperature == 'указать':
+        st3 = style11
+    else:
+        st3 = style1
+
+
+    row_num += 1
+    columns = [
+        'Диапазон рабочих температур, °С',
+        'Диапазон рабочих температур, °С',
+        note.charakters.temperature,
+        facttemperature,
+        facttemperature,
+        'соответствует',
+    ]
+    for col_num in range(3):
+        ws.write(row_num, col_num, columns[col_num], st1)
+        ws.merge(row_num, row_num, 0, 1, st1)
+    for col_num in range(3, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], st3)
+        ws.merge(row_num, row_num, 3, 4, st3)
+        ws.merge(row_num, row_num, 5, 6, st3)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    if note.charakters.humidicity == '':
+        note.charakters.humidicity = '-'
+        st1 = style11
+    else:
+        st1 = style1
+    if facthumid == 'указать':
+        st3 = style11
+    else:
+        st3 = style1
+
+    row_num += 1
+    columns = [
+        'Относительная влажность воздуха, %',
+        'Относительная влажность воздуха, %',
+        note.charakters.humidicity,
+        facthumid,
+        facthumid,
+        'соответствует',
+    ]
+    for col_num in range(3):
+        ws.write(row_num, col_num, columns[col_num], st1)
+        ws.merge(row_num, row_num, 0, 1, st1)
+    for col_num in range(3, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], st3)
+        ws.merge(row_num, row_num, 3, 4, st3)
+        ws.merge(row_num, row_num, 5, 6, st3)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    if note.charakters.pressure == '':
+        note.charakters.pressure = '-'
+        st1 = style11
+    else:
+        st1 = style1
+
+    if factpress == 'указать':
+        st3 = style11
+    else:
+        st3 = style1
+
+    row_num += 1
+    columns = [
+        'Атмосферное давление, кПа',
+        'Атмосферное давление, кПа',
+        note.charakters.pressure,
+        factpress,
+        factpress,
+        'соответствует',
+    ]
+    for col_num in range(3):
+        ws.write(row_num, col_num, columns[col_num], st1)
+        ws.merge(row_num, row_num, 0, 1, st1)
+    for col_num in range(3, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], st3)
+        ws.merge(row_num, row_num, 3, 4, st3)
+        ws.merge(row_num, row_num, 5, 6, st3)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num += 2
+    columns = [
+        '2.3 Соответствие  установки на рабочем месте требованиям документации на оборудование'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 6)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    if note.charakters.needsetplace:
+        a = ''
+        b = '✓'
+    if not note.charakters.needsetplace:
+        a = '✓'
+        b = ''
+
+
+    row_num += 1
+    columns = [
+        a,
+        'Установка не требуется'
+    ]
+    for col_num in range(0, 1):
+        ws.write(row_num, col_num, columns[col_num], style111)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 1, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 700
+
+
+    row_num += 1
+    columns = [
+        b,
+        'Требуется установка'
+    ]
+    for col_num in range(0, 1):
+        ws.write(row_num, col_num, columns[col_num], style111)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 1, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 700
+
+    if note.charakters.needsetplace:
+        if not note.charakters.setplace:
+            st = style11
+        else:
+            st = style1
+
+
+        row_num += 2
+        columns = [
+            'Описание установки'
+        ]
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style3)
+            ws.merge(row_num, row_num, 0, 6)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
+
+
+        row_num += 1
+        columns = [
+              note.charakters.setplace
+        ]
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], st)
+            ws.merge(row_num, row_num, 0, 6, st)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
+
+
+
+    row_num += 2
+    columns = [
+        '3. Тестирование при внедрении оборудования'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 6)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    if note.charakters.expresstest:
+        a = ''
+        b = '✓'
+    if not note.charakters.expresstest:
+        a = '✓'
+        b = ''
+
+    row_num += 1
+    columns = [
+        a,
+        'Тестирование невозможно'
+    ]
+    for col_num in range(0, 1):
+        ws.write(row_num, col_num, columns[col_num], style111)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 1, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 700
+
+    row_num += 1
+    columns = [
+        b,
+        'Тестирование возможно. Результаты испытаний в приложении 1'
+
+    ]
+    for col_num in range(0, 1):
+        ws.write(row_num, col_num, columns[col_num], style111)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 1, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 700
+
+    row_num += 2
+    columns = [
+        '4. Заключение по результатам верификации'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 6)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+
+    row_num += 1
+    columns = [
+        f'Пригодно к эксплуатации.  Требования к установке и условиям окружающей среды соответствуют документации на оборудование.\
+        \n Закреплено за помещением № {room}.\n Закреплено за ответственным пользователем: {usere}.'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 6, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1500
+
+    row_num += 2
+    columns = [
+        '',
+        '',
+        'Верификацию провел:'
+        '',
+        '',
+        '',
+        '',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style10)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    if usere != 'А.Б.Головкина':
+        st = style10
+    else:
+        st = style10
+
+    row_num += 2
+    columns = [
+        '',
+        '',
+        position,
+        '',
+       usere,
+       usere,
+       usere,
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], st)
+        ws.merge(row_num, row_num, 4, 6, st)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num += 2
+    columns = [
+        '',
+        '',
+        'Согласовано:'
+        '',
+        '',
+        '',
+        '',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style10)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num += 2
+    columns = [
+        '',
+        '',
+        'начальник производства'
+        '',
+        '',
+        'Н.Ю.Пилявская',
+        'Н.Ю.Пилявская',
+        'Н.Ю.Пилявская',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style10)
+        ws.merge(row_num, row_num, 4, 6, style10)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num += 2
+    columns = [
+        '',
+        '',
+        'заведующий АХЧ'
+        '',
+        '',
+        'А.В.Теленков',
+        'А.В.Теленков',
+        'А.В.Теленков',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style10)
+        ws.merge(row_num, row_num, 4, 6, style10)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    if usere != 'А.Б.Головкина':
+
+        row_num += 2
+        columns = [
+            '',
+            '',
+            'инженер-химик 2 категории'
+            '',
+            '',
+            'А.Б.Головкина',
+            'А.Б.Головкина',
+            'А.Б.Головкина',
+        ]
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style10)
+            ws.merge(row_num, row_num, 4, 6, style10)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
 
 
     wb.save(response)

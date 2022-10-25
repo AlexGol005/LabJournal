@@ -19,7 +19,10 @@
 {#карточка#}
 <div style="text-align: center; margin-top: 10px; margin-bottom: 50px">
  <a href="{% url 'export_mecard_xls' obj.pk %}"  class="btn btn-warning mt-2 ">
-     Распечатать карточку на прибор</a></div>
+     Распечатать карточку на прибор</a>
+    <a href="{% url 'export_exvercardteste_xls' obj.pk %}"  class="btn btn-warning mt-2 ">
+    Выгрузить шаблон протокола верификации</a>
+</div>
 
 
 {#таблица неизменные сведения о приборе#}
@@ -28,6 +31,7 @@
     <thead>
         <tr>
             <th>Внут.№</th>
+            <th>Свойства ИО</th>
             <th> Название </th>
             <th> Тип/модификация</th>
             <th> Заводской № </th>
@@ -38,6 +42,11 @@
     <tbody>
     <tr>
         <td>{{ obj.equipment.exnumber }}</td>
+        <td> <a href="{% url 'testequipmentcharactersupdate' obj.charakters.pk %}"  target="blank" >
+             СМ
+                  </a>
+
+             </td>
          <td> {{ obj.charakters.name }}</td>
         <td>{{ obj.charakters.typename|default:" " }}/
              {{ obj.charakters.modificname|default:" " }} </td>
