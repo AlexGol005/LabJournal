@@ -1138,16 +1138,21 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(21, 21, 2, 7, style7)
 
+    if note.ndocument == 'МИ-02-2018':
+        note.ndocument = 'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика'
+    if note.ndocument == 'ГОСТ 33-2016':
+        note.ndocument = 'ГОСТ 33-2016.НЕФТЬ И НЕФТЕПРОДУКТЫ. ПРОЗРАЧНЫЕ И НЕПРОЗРАЧНЫЕ ЖИДКОСТИ. Определение кинематической и динамической вязкости'
+
     row_num = 22
     columns = [
         '9 Метод измерений/методика \n измерений:  ',
         '9 Метод измерений/методика \n измерений:  ',
-        metodic,
-        metodic,
-        metodic,
-        metodic,
-        metodic,
-        metodic,
+        note.ndocument,
+        note.ndocument,
+        note.ndocument,
+        note.ndocument,
+        note.ndocument,
+        note.ndocument,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1202,12 +1207,12 @@ def export_protocol_xls(request, pk):
     columns = [
         '11 Обработка результатов испытаний:  ',
         '11 Обработка результатов испытаний:  ',
-        'В соответствии с МИ-02-2018  ',
-        'В соответствии с МИ-02-2018  ',
-        'В соответствии с МИ-02-2018  ',
-        'В соответствии с МИ-02-2018  ',
-        'В соответствии с МИ-02-2018  ',
-        'В соответствии с МИ-02-2018  ',
+        f'В соответствии с {note.ndocument}',
+        f'В соответствии с {note.ndocument}',
+        f'В соответствии с {note.ndocument}',
+        f'В соответствии с {note.ndocument}',
+        f'В соответствии с {note.ndocument}',
+        f'В соответствии с {note.ndocument}',
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1221,11 +1226,11 @@ def export_protocol_xls(request, pk):
         '12 Результаты испытаний:  ',
         '12 Результаты испытаний:  ',
         'приведены в таблице 1  ',
-        'В соответствии с МИ-02-2018  ',
-        'В соответствии с МИ-02-2018  ',
-        'В соответствии с МИ-02-2018  ',
-        'В соответствии с МИ-02-2018  ',
-        'В соответствии с МИ-02-2018  ',
+        f'В соответствии с {note.ndocument}  ',
+        f'В соответствии с {note.ndocument}  ',
+        f'В соответствии с {note.ndocument}  ',
+        f'В соответствии с {note.ndocument}  ',
+        f'В соответствии с {note.ndocument}  ',
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
