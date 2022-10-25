@@ -42,7 +42,11 @@
     <tbody>
     <tr>
         <td>{{ obj.equipment.exnumber }}</td>
-         <td> {{ obj.charakters.reestr }}</td>
+         <td> <a href="{% url 'measurequipmentcharactersupdate' obj.charakters.pk %}"  target="blank" >
+             {{ obj.charakters.reestr }}
+                  </a>
+
+             </td>
          <td> {{ obj.charakters.name }}</td>
         <td>{{ obj.charakters.typename|default:" " }}/
              {{ obj.charakters.modificname|default:" " }} </td>
