@@ -2758,7 +2758,6 @@ def export_exvercard_xls(request, pk):
         '',
         position,
         '',
-        '',
        usere,
        usere,
        usere,
