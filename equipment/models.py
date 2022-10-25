@@ -180,7 +180,10 @@ class Personchange(models.Model):
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.equipment.exnumber} Изменён ответственный {self.date}'
+        try:
+            return f'{self.equipment.exnumber} Изменён ответственный {self.date}'
+        except:
+            return '&'
 
     class Meta:
         verbose_name = 'Дата изменения ответственного'
@@ -299,11 +302,11 @@ class MeasurEquipment(models.Model):
         return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot} ' \
                f' № реестр {self.charakters.reestr}'
 
-    def save(self, *args, **kwargs):
-        super().save()
-        now = datetime.now()
-        Verificationequipment.objects.create(equipmentSM=self, dateorder=now, statusver='не поверен')
-        super(MeasurEquipment, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     super().save()
+    #     now = datetime.now()
+    #     Verificationequipment.objects.create(equipmentSM=self, dateorder=now, statusver='не поверен')
+    #     super(MeasurEquipment, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Средство измерения'
