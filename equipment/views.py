@@ -3043,37 +3043,23 @@ def export_exvercardteste_xls(request, pk):
 
     row_num += 2
     columns = [
-        'Диапазон измерений',
-        'Диапазон измерений',
-        'Диапазон измерений',
-        'Класс точности, погрешность и/или неопределённость',
-        'Класс точности, погрешность и/или неопределённость',
-        'Класс точности, погрешность и/или неопределённость',
-        'Класс точности, погрешность и/или неопределённость',
+        'Основные технические характеристики',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(row_num, row_num, 0, 2, style1)
-        ws.merge(row_num, row_num, 3, 6, style1)
+        ws.merge(row_num, row_num, 0, 6, style1)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 700
 
     row_num += 1
     columns = [
         note.charakters.measurydiapason,
-        note.charakters.measurydiapason,
-        note.charakters.measurydiapason,
-        note.charakters.measurydiapason,
-        note.charakters.measurydiapason,
-        note.charakters.measurydiapason,
-        note.charakters.measurydiapason,
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(row_num, row_num, 0, 2, style1)
-        ws.merge(row_num, row_num, 3, 6, style1)
+        ws.merge(row_num, row_num, 0, 6, style1)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 1500
+    ws.row(row_num).height = 1700
 
     row_num +=2
     columns = [
