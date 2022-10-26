@@ -2042,7 +2042,7 @@ def export_verificlabel_xls(request):
     wb.save(response)
     return response
 
-
+# флаг верифик
 def export_exvercard_xls(request, pk):
     '''представление для выгрузки протокола верификации СИ в ексель'''
     note = MeasurEquipment.objects.get(pk=pk)
