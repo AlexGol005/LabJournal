@@ -1291,6 +1291,7 @@ def export_mustver_xls(request):
         'Место хранения',
         'Место поверки (предыдущей)',
         'Сотрудник, ответственный за подготовку к поверке/аттестации',
+        'Постоянное примечание к поверке',
     ]
 
     for col_num in range(len(columns)):
@@ -1316,6 +1317,7 @@ def export_mustver_xls(request):
         'equipment__roomschange__roomnumber__roomnumber',
         'equipmentSM_ver__place',
         'equipment__personchange__person__username',
+        'equipment__notemetrology',
     ).order_by('-equipmentSM_ver__place')
 
     for row in rows:
