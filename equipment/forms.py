@@ -366,6 +366,9 @@ class AttestationRegForm(forms.ModelForm):
                                     '%m/%d/%y',
                                     '%d.%m.%Y',
                                 ))
+    year = forms.CharField(label='год аттестации', max_length=10000, required=False,
+                            widget=forms.TextInput(attrs={'class': 'form-control'}))
+
 
     class Meta:
         model = Attestationequipment
@@ -399,6 +402,7 @@ class AttestationRegForm(forms.ModelForm):
             ),
             Row(
                 Column('img', css_class='form-group col-md-6 mb-1'),
+                Column('year', css_class='form-group col-md-6 mb-1'),
                 Column('dateordernew', css_class='form-group col-md-6 mb-1')),
             Submit('submit', 'Внести'))
 
