@@ -1213,6 +1213,13 @@ setver = []
 for n in list_:
     setver.append(n.get('id_actual'))
 
+# get_id_comver = CommentsVerificationequipment.objects.select_related('forNote').values('forNote'). \
+#     annotate(id_actual=Max('id')).values('id_actual')
+# list_ = list(get_id_comver)
+# setcomver = []
+# for n in list_:
+#     setcomver.append(n.get('id_actual'))
+# setcomver = setcomver.append(None)
 
 # флаг2
 def export_mustver_xls(request):
@@ -1257,6 +1264,7 @@ def export_mustver_xls(request):
     ws.col(7).width = 4500
     ws.col(8).width = 7000
     ws.col(9).width = 5000
+    ws.col(10).width = 5000
 
     # стили
     al10 = Alignment()
