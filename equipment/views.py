@@ -1256,6 +1256,7 @@ def export_mustver_xls(request):
     ws.col(6).width = 4500
     ws.col(7).width = 4500
     ws.col(8).width = 7000
+    ws.col(9).width = 5000
 
     # стили
     al10 = Alignment()
