@@ -139,7 +139,7 @@ class Equipment(models.Model):
     instruction = models.CharField('Основная инструкция по эксплуатации', max_length=1000,  blank=True, null=True)
 
     def __str__(self):
-        return f'Вн. № {self.exnumber}    Зав. № {self.lot} '
+        return f'Вн. № {self.exnumber}    Зав. № {self.lot} - pk {self.pk}'
 
     def save(self, *args, **kwargs):
         super().save()
@@ -300,7 +300,7 @@ class MeasurEquipment(models.Model):
 
     def __str__(self):
         return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot} ' \
-               f' № реестр {self.charakters.reestr}'
+               f' № реестр {self.charakters.reestr} - pk {self.pk}'
 
     # def save(self, *args, **kwargs):
     #     super().save()
@@ -325,7 +325,7 @@ class TestingEquipment(models.Model):
     newdatedead = models.CharField('Дата окончания последней аттестации', blank=True, null=True, max_length=90)
 
     def __str__(self):
-        return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot} '
+        return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot} - pk {self.pk}'
 
     class Meta:
         verbose_name = 'Испытательное оборудование'
