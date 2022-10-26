@@ -441,14 +441,14 @@ class Attestationequipment(models.Model):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
         return reverse('testingequipmentatt', kwargs={'str': self.equipmentSM.equipment.exnumber})
 
-    @staticmethod
-    def get_dateformat(dateneed):
-        dateformat = str(dateneed)
-        day = dateformat[8:]
-        month = dateformat[5:7]
-        year = dateformat[:4]
-        rdate = f'{day}.{month}.{year}'
-        return rdate
+    # @staticmethod
+    # def get_dateformat(dateneed):
+    #     dateformat = str(dateneed)
+    #     day = dateformat[8:]
+    #     month = dateformat[5:7]
+    #     year = dateformat[:4]
+    #     rdate = f'{day}.{month}.{year}'
+    #     return rdate
 
     def save(self, *args, **kwargs):
         super().save()
@@ -459,16 +459,16 @@ class Attestationequipment(models.Model):
                 image.thumbnail(resize)
                 image.save(self.img.path)
                 # добавляем последнюю аттестацию к оборудованию
-            try:
-                note = TestingEquipment.objects.get(pk=self.equipmentSM.pk)
-                note.newcertnumber = self.certnumber
-                newdate = self.get_dateformat(self.date)
-                note.newdate = newdate
-                newdatedead = self.get_dateformat(self.datedead)
-                note.newdatedead = newdatedead
-                note.save()
-            except:
-                pass
+            # try:
+            #     note = TestingEquipment.objects.get(pk=self.equipmentSM.pk)
+            #     note.newcertnumber = self.certnumber
+            #     newdate = self.get_dateformat(self.date)
+            #     note.newdate = newdate
+            #     newdatedead = self.get_dateformat(self.datedead)
+            #     note.newdatedead = newdatedead
+            #     note.save()
+            # except:
+            #     pass
 
     class Meta:
         verbose_name = 'Аттестация прибора'
