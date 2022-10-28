@@ -2280,7 +2280,7 @@ style4.alignment = al1
 
 # флаг этикетки СИ
 def export_verificlabel_xls(request):
-    '''представление для выгрузки этикеток для указания поверки'''
+    '''представление для выгрузки этикеток для указания поверки и аттестации'''
     note = []
 
     for n in (request.GET['n1'], request.GET['n2'],
@@ -2373,15 +2373,24 @@ def export_verificlabel_xls(request):
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 270
 
+        if currentnote1.equipment.kategory == 'СИ':
+            a = 'поверка:'
+        if currentnote1.equipment.kategory == 'ИО':
+            a = 'аттестация:'
+        if currentnote2.equipment.kategory == 'СИ':
+            b = 'поверка:'
+        if currentnote2.equipment.kategory == 'ИО':
+            b = 'аттестация:'
+
         row_num = 2 + j
         columns = [
             '',
-            f'поверка:',
+            f'{a}',
             f'{currentnote1.newcertnumber}',
             f'{currentnote1.newcertnumber}',
             f'{currentnote1.newcertnumber}',
             '',
-            f'поверка:',
+            f'{b}',
             f'{currentnote2.newcertnumber}',
             f'{currentnote2.newcertnumber}',
             f'{currentnote2.newcertnumber}',
@@ -2427,18 +2436,27 @@ def export_verificlabel_xls(request):
         ws.merge(row_num, row_num, 1, 4, style1)
         ws.merge(row_num, row_num, 6, 9, style1)
 
+        if currentnote1.equipment.kategory == 'СИ':
+            a = 'поверку'
+        if currentnote1.equipment.kategory == 'ИО':
+            a = 'аттестацию:'
+        if currentnote2.equipment.kategory == 'СИ':
+            b = 'поверку'
+        if currentnote2.equipment.kategory == 'ИО':
+            b = 'аттестацию'
+
         row_num = 4 + j
         columns = [
             '',
-            f'Ответственный за поверку {"              "} А.Б.Головкина',
-            f'Ответственный за поверку {"              "} А.Б.Головкина',
-            f'Ответственный за поверку {"              "} А.Б.Головкина',
-            f'Ответственный за поверку {"              "} А.Б.Головкина',
+            f'Ответственный за {a} {"              "} А.Б.Головкина',
+            f'Ответственный за {a} {"              "} А.Б.Головкина',
+            f'Ответственный за {a} {"              "} А.Б.Головкина',
+            f'Ответственный за {a} {"              "} А.Б.Головкина',
             ' ',
-            f'Ответственный за поверку {"              "} А.Б.Головкина',
-            f'Ответственный за поверку {"              "} А.Б.Головкина',
-            f'Ответственный за поверку {"              "} А.Б.Головкина',
-            f'Ответственный за поверку {"              "} А.Б.Головкина',
+            f'Ответственный за {b} {"              "} А.Б.Головкина',
+            f'Ответственный за {b} {"              "} А.Б.Головкина',
+            f'Ответственный за {b} {"              "} А.Б.Головкина',
+            f'Ответственный за {b} {"              "} А.Б.Головкина',
             ' ',
         ]
         for col_num in range(1, 5):
