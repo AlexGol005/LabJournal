@@ -2439,11 +2439,11 @@ def export_verificlabel_xls(request):
         if currentnote1.equipment.kategory == 'СИ':
             a = 'поверку'
         if currentnote1.equipment.kategory == 'ИО':
-            a = 'аттестацию:'
+            a = 'аттест-ю:'
         if currentnote2.equipment.kategory == 'СИ':
             b = 'поверку'
         if currentnote2.equipment.kategory == 'ИО':
-            b = 'аттестацию'
+            b = 'аттест-ю'
 
         row_num = 4 + j
         columns = [
