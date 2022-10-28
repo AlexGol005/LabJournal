@@ -2182,7 +2182,7 @@ def export_tecard_xls(request, pk):
     row_num = 7
     columns = [
         'Год',
-        'Сведения о результатах поверки',
+        'Сведения о результатах аттестации',
         '',
         'Дата',
         'Описание',
@@ -2197,13 +2197,13 @@ def export_tecard_xls(request, pk):
         ws1.merge(row_num, row_num, 4, 6, style2)
 
 
-    rows_1 = Verificationequipment.objects.filter(equipmentSM__equipment=note.equipment). \
+    rows_1 = Attestationequipmentequipment.objects.filter(equipmentSM__equipment=note.equipment). \
         annotate(ver=Concat(
-        Value('Свидетельство о поверке: \n  '),
+        Value('Аттестат: \n  '),
         'certnumber',
         Value('\n от '), str('date'),
          Value('\n до '), str('datedead'),
-        Value('\n выдано '),
+        Value('\n выдан '),
         'verificator__companyName', output_field=CharField(),),
     ). \
         annotate(ver_year=Concat(
