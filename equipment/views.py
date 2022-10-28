@@ -2197,7 +2197,7 @@ def export_tecard_xls(request, pk):
         ws1.merge(row_num, row_num, 4, 6, style2)
 
 
-    rows_1 = Attestationequipmentequipment.objects.filter(equipmentSM__equipment=note.equipment). \
+    rows_1 = Attestationequipment.objects.filter(equipmentSM__equipment=note.equipment). \
         annotate(ver=Concat(
         Value('Аттестат: \n  '),
         'certnumber',
