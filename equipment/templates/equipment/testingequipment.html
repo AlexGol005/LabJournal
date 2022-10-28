@@ -76,7 +76,7 @@
             нет</a>
             {% endif %}
         </td>
-        <td> <a href="{% url 'export_mecard_xls' obj.pk %}"  class="btn btn-outline-warning mt-3">
+        <td> <a href="{% url 'export_tecard_xls' obj.pk %}"  class="btn btn-outline-warning mt-3">
             exel {{ obj.equipment.exnumber }}</a></td>
         <td> <a href="{% url 'export_exvercardteste_xls' obj.pk %}"  class="btn btn-outline-warning mt-3">
             шаблон верификации {{ obj.equipment.exnumber }}</a></td>

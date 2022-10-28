@@ -44,6 +44,7 @@ urlpatterns = [
     path('verificatorpersons/', views.VerificatorsPersonsView.as_view(), name='verificatorpersons'),
     path('verificatorspersonsreg/', views.VerificatorPersonCreationView.as_view(), name='verificatorspersonsreg'),
     path(r'^export1/xls/$/<int:pk>', views.export_mecard_xls, name='export_mecard_xls'),
+    path(r'^export111/xls/$/<int:pk>', views.export_tecard_xls, name='export_tecard_xls'),
     path(r'^export10/xls/$/<int:pk>', views.export_exvercard_xls, name='export_exvercard_xls'),
     path(r'^export100/xls/$/<int:pk>', views.export_exvercardteste_xls, name='export_exvercardteste_xls'),
     path(r'^export2/xls/$/', views.export_verificlabel_xls, name='export_verificlabel_xls'),
@@ -54,4 +55,5 @@ urlpatterns = [
     path('contactsverreg/<str:str>/', views.ContactsVerregView.as_view(), name='contactsverreg'),
     path('haveorder/<int:pk>/', views.HaveorderVerView.as_view(), name='haveorder'),
     path('haveorderatt/<int:pk>/', views.HaveorderAttView.as_view(), name='haveorderatt'),
+    path('lasttenequipment/', views.LastNewEquipmentView.as_view(), name='lasttenequipment'),
 ]

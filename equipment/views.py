@@ -118,6 +118,24 @@ class SearchNotVerView(ListView):
         return queryset
 
 
+class LastNewEquipmentView(ListView):
+    """ выводит список 10 приборов, которые были добавлены последними"""
+
+    template_name = URL + '/equipmentlist.html'
+    context_object_name = 'objects'
+    ordering = ['charakters_name']
+
+    def get_context_data(self, **kwargs):
+        context = super(LastNewEquipmentView, self).get_context_data(**kwargs)
+        context['URL'] = URL
+        return context
+
+    def get_queryset(self):
+        Total = Equipment.objects.count()
+        queryset = Equipment.objects.filter()[Total-10:Total]
+        return queryset
+
+
 class SearchMustOrderView(ListView):
     """ выводит список СИ у которых месяц заказа поверки совпадает с указанным либо раньше него"""
 
@@ -1714,7 +1732,7 @@ def export_mecard_xls(request, pk):
 
     row_num = 24
     columns = [
-        'Данные верификации о соответствии оборудования  установленным требованиям подтверждаются сведениями о поверке'
+        'Соответствие оборудования  установленным требованиям подтверждается протоколом верификации'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
@@ -1843,6 +1861,391 @@ def export_mecard_xls(request, pk):
     wb.save(response)
     return response
 
+# флаг карточки на ИО
+def export_tecard_xls(request, pk):
+    '''представление для выгрузки карточки на прибор (ИО) в ексель'''
+    note = TestingEquipment.objects.get(pk=pk)
+    company = CompanyCard.objects.get(pk=1)
+    cardname = pytils.translit.translify(note.equipment.exnumber) + ' ' +\
+                pytils.translit.translify(note.charakters.name) +\
+                ' ' + pytils.translit.translify(note.equipment.lot)
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = f'attachment; filename="{cardname}.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Основная информация', cell_overwrite_ok=True)
+
+    ws.col(0).width = 2700
+    ws.col(1).width = 2500
+    ws.col(2).width = 8000
+    ws.col(3).width = 3700
+    ws.col(4).width = 2500
+    ws.col(5).width = 4300
+    ws.col(6).width = 4000
+    ws.col(7).width = 4300
+    ws.col(8).width = 2000
+    ws.col(9).width = 2000
+
+    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
+    ws.insert_bitmap('logo.bmp', 0, 0)
+    ws.left_margin = 0
+    ws.header_str = b'&F c. &P  '
+    ws.footer_str = b' '
+    ws.start_page_number = 1
+
+
+
+    pattern = xlwt.Pattern()
+    pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+    pattern.pattern_fore_colour = 26
+
+
+
+    al1 = Alignment()
+    al1.horz = Alignment.HORZ_CENTER
+    al1.vert = Alignment.VERT_CENTER
+
+    b1 = Borders()
+    b1.left = 1
+    b1.right = 1
+    b1.bottom = 1
+    b1.top = 1
+
+    style1 = xlwt.XFStyle()
+    style1.font.height = 9 * 20
+    style1.font.name = 'Calibri'
+    style1.alignment = al1
+    style1.alignment.wrap = 1
+    style1.borders = b1
+
+    style2 = xlwt.XFStyle()
+    style2.font.height = 9 * 20
+    style2.font.name = 'Calibri'
+    style2.alignment = al1
+    style2.alignment.wrap = 1
+    style2.borders = b1
+    style2.pattern = pattern
+
+    style3 = xlwt.XFStyle()
+    style3.font.height = 15 * 20
+    style3.font.bold = True
+    style3.font.name = 'Calibri'
+    style3.alignment = al1
+    style3.alignment.wrap = 1
+
+    style4 = xlwt.XFStyle()
+    style4.font.height = 9 * 20
+    style4.font.name = 'Calibri'
+    style4.alignment = al1
+    style4.alignment.wrap = 1
+    style4.borders = b1
+    style4.num_format_str = 'DD.MM.YYYY'
+
+    style5 = xlwt.XFStyle()
+    style5.font.height = 20 * 20
+    style5.font.bold = True
+    style5.font.name = 'Calibri'
+    style5.alignment = al1
+    style5.alignment.wrap = 1
+
+    # for row_num in range(4):
+    #     for col_num in range(8):
+    #         ws.row(row_num).height_mismatch = True
+    #         ws.row(row_num).height = 500
+
+    row_num = 4
+    columns = [
+        'Регистрационная карточка на СИ и ИО'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style5)
+        ws.merge(row_num, row_num, 0, 9)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 5
+    columns = [
+        'Идентификационная и уникальная информация'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 9)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 7
+    columns = [
+        'Внутренний номер',
+        'Наименование',
+        'Наименование',
+        'Тип/модификация',
+        'Заводской номер',
+        'Год выпуска',
+        'Производитель',
+        'Год ввода в эксплуатацию в ООО "Петроаналитика" ',
+        'Новый или б/у',
+        'Инвентарный номер',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(row_num, row_num, 1, 2, style2)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1100
+
+    row_num = 8
+    columns = [
+        note.equipment.exnumber,
+        note.charakters.name,
+        note.charakters.name,
+        f'{note.charakters.typename}/{note.charakters.modificname}',
+        note.equipment.lot,
+        note.equipment.yearmanuf,
+        f'{note.equipment.manufacturer.country}, {note.equipment.manufacturer.companyName}',
+        note.equipment.yearintoservice,
+        note.equipment.new,
+        note.equipment.invnumber,
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 1, 2, style1)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1100
+
+    row_num = 9
+    columns = [
+        'Расположение и комплектность'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 0, 9)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num = 10
+    columns = [
+        'Документы, комплектные принадлежности, программное обеспечение',
+        'Документы, комплектные принадлежности, программное обеспечение',
+        'Документы, комплектные принадлежности, программное обеспечение',
+        'Документы, комплектные принадлежности, программное обеспечение',
+        'Ответственный за прибор',
+        'Ответственный за прибор',
+        'Расположение прибора',
+        'Расположение прибора',
+        'Расположение прибора',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(row_num, row_num, 0, 4, style2)
+        ws.merge(row_num, row_num, 5, 6, style2)
+        ws.merge(row_num, row_num, 7, 9, style2)
+
+    row_num = 11
+    columns = [
+        'год появления',
+        'наименование документа/комплектной принадлежности/ПО',
+        'наименование документа/комплектной принадлежности/ПО',
+        'откуда поступил документ/ принадлежность/ПО',
+        'откуда поступил документ/ принадлежность/ПО',
+        'дата',
+        'ответственный, ФИО',
+        'дата',
+        'номер комнаты',
+        'номер комнаты',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(row_num, row_num, 1, 2, style2)
+        ws.merge(row_num, row_num, 3, 4, style2)
+        ws.merge(row_num, row_num, 8, 9, style2)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    rows_1 = DocsCons.objects.filter(equipment=note.equipment). \
+        values_list(
+        'date',
+        'docs',
+        'docs',
+        'source',
+        'source',
+    )
+    rows_2 = Personchange.objects.filter(equipment=note.equipment). \
+        values_list(
+        'date',
+        'person__username',
+    )
+
+    rows_3 = Roomschange.objects.filter(equipment=note.equipment). \
+        values_list(
+        'date',
+        'roomnumber__roomnumber',
+    )
+
+
+    for row in rows_1:
+        row_num += 1
+        for col_num in range(5):
+            ws.write(row_num, col_num, row[col_num], style1)
+            ws.merge(row_num, row_num, 1, 2, style2)
+            ws.merge(row_num, row_num, 3, 4, style2)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
+    a = row_num
+
+    row_num = 11
+    for row in rows_2:
+        row_num += 1
+        for col_num in range(5, 7):
+            ws.write(row_num, col_num, row[col_num - 5], style4)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
+    b = row_num
+
+
+    row_num = 11
+    for row in rows_3:
+        row_num += 1
+        for col_num in range(7, 9):
+            ws.write(row_num, col_num, row[col_num - 7], style4)
+            ws.merge(row_num, row_num, 8, 9, style4)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
+    c = row_num
+
+    d = max(a, b, c)
+
+
+    row_num = 24
+    columns = [
+        'Соответствие оборудования  установленным требованиям подтверждается протоколом верификации'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(row_num, row_num, 0, 9, style2)
+
+    ws1 = wb.add_sheet('Данные о ремонте и аттестации', cell_overwrite_ok=True)
+
+    ws1.col(0).width = 1500
+    ws1.col(1).width = 7000
+    ws1.col(2).width = 1000
+    ws1.col(3).width = 2400
+    ws1.col(4).width = 2000
+    ws1.col(5).width = 4000
+    ws1.col(6).width = 14000
+    ws1.col(7).width = 4000
+
+    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
+    ws1.insert_bitmap('logo.bmp', 0, 0)
+    ws1.left_margin = 0
+
+    ws1.header_str = b'&F c. &P  '
+    ws1.footer_str = b' '
+    ws1.start_page_number = 2
+
+    row_num = 4
+    columns = [
+        'Особенности работы прибора',
+        'Особенности работы прибора',
+        note.equipment.individuality,
+        note.equipment.individuality,
+        note.equipment.individuality,
+        note.equipment.individuality,
+        note.equipment.individuality,
+    ]
+    for col_num in range(2):
+        ws1.write(row_num, col_num, columns[col_num], style2)
+        ws1.merge(row_num, row_num, 0, 1, style2)
+    for col_num in range(2, len(columns)):
+        ws1.write(row_num, col_num, columns[col_num], style1)
+        ws1.merge(row_num, row_num, 2, 7, style1)
+    ws1.row(row_num).height_mismatch = True
+    ws1.row(row_num).height = 2000
+
+
+    row_num = 6
+    columns = [
+        'Поверка',
+        'Поверка',
+        '',
+        'Техническое обслуживание и данные о повреждениях, неисправностях, модификациях и ремонте',
+        'Техническое обслуживание и данные о повреждениях, неисправностях, модификациях и ремонте',
+        'Техническое обслуживание и данные о повреждениях, неисправностях, модификациях и ремонте',
+        'Техническое обслуживание и данные о повреждениях, неисправностях, модификациях и ремонте',
+        'Техническое обслуживание и данные о повреждениях, неисправностях, модификациях и ремонте',
+    ]
+    for col_num in range(2):
+        ws1.write(row_num, col_num, columns[col_num], style2)
+        ws1.merge(row_num, row_num, 0, 1, style2)
+    for col_num in range(3, len(columns)):
+        ws1.write(row_num, col_num, columns[col_num], style2)
+        ws1.merge(row_num, row_num, 3, 7, style2)
+
+    row_num = 7
+    columns = [
+        'Год',
+        'Сведения о результатах поверки',
+        '',
+        'Дата',
+        'Описание',
+        'Описание',
+        'Описание',
+        'ФИО исполнителя',
+    ]
+    for col_num in range(2):
+        ws1.write(row_num, col_num, columns[col_num], style2)
+    for col_num in range(3, len(columns)):
+        ws1.write(row_num, col_num, columns[col_num], style2)
+        ws1.merge(row_num, row_num, 4, 6, style2)
+
+
+    rows_1 = Verificationequipment.objects.filter(equipmentSM__equipment=note.equipment). \
+        annotate(ver=Concat(
+        Value('Свидетельство о поверке: \n  '),
+        'certnumber',
+        Value('\n от '), str('date'),
+         Value('\n до '), str('datedead'),
+        Value('\n выдано '),
+        'verificator__companyName', output_field=CharField(),),
+    ). \
+        annotate(ver_year=Concat(
+        'date__year', 'year',
+         output_field=CharField(), ),
+    ). \
+        values_list(
+        'ver_year',
+        'ver',
+    )
+
+    rows_2 = CommentsEquipment.objects.filter(forNote=note.equipment). \
+        values_list(
+        'date',
+        'note',
+        'note',
+        'note',
+        'author',
+    )
+
+    for row in rows_1:
+        row_num += 1
+        for col_num in range(0, 1):
+            ws1.write(row_num, col_num, row[col_num], style4)
+        for col_num in range(1, 2):
+            ws1.write(row_num, col_num, row[col_num], style4)
+        ws1.row(row_num).height_mismatch = True
+        ws1.row(row_num).height = 1500
+
+    row_num = 7
+    for row in rows_2:
+        row_num += 1
+        for col_num in range(3, 8):
+            ws1.write(row_num, col_num, row[col_num - 3], style4)
+            ws1.merge(row_num, row_num, 4, 6, style1)
+        ws1.row(row_num).height_mismatch = True
+        ws1.row(row_num).height = 1500
+
+    wb.save(response)
+    return response
+
+
 # стили для exel (для этикеток)
 brd1 = Borders()
 brd1.left = 1
@@ -1875,6 +2278,7 @@ style4.font.bold = True
 style4.font.name = 'Calibri'
 style4.alignment = al1
 
+# флаг этикетки СИ
 def export_verificlabel_xls(request):
     '''представление для выгрузки этикеток для указания поверки'''
     note = []
@@ -1888,6 +2292,8 @@ def export_verificlabel_xls(request):
               request.GET['n13'], request.GET['n14']):
         try:
             MeasurEquipment.objects.get(equipment__exnumber=n)
+            note.append(MeasurEquipment.objects.get(equipment__exnumber=n))
+            TestingEquipment.objects.get(equipment__exnumber=n)
             note.append(MeasurEquipment.objects.get(equipment__exnumber=n))
         except:
             pass
@@ -1967,12 +2373,12 @@ def export_verificlabel_xls(request):
         row_num = 2 + j
         columns = [
             '',
-            f'Св-во поверки:',
+            f'поверка/аттестация:',
             f'{currentnote1.newcertnumber}',
             f'{currentnote1.newcertnumber}',
             f'{currentnote1.newcertnumber}',
             '',
-            f'Св-во поверки:',
+            f'поверка/аттестация:',
             f'{currentnote2.newcertnumber}',
             f'{currentnote2.newcertnumber}',
             f'{currentnote2.newcertnumber}',
@@ -1988,18 +2394,27 @@ def export_verificlabel_xls(request):
         ws.merge(row_num, row_num, 2, 4, style2)
         ws.merge(row_num, row_num, 7, 9, style2)
 
+        if currentnote1.equipment.kategory == 'СИ':
+            a = 'поверен'
+        if currentnote1.equipment.kategory == 'ИО':
+            a = 'аттестован'
+        if currentnote2.equipment.kategory == 'СИ':
+            b = 'поверен'
+        if currentnote2.equipment.kategory == 'ИО':
+            b = 'аттестован'
+
         row_num = 3 + j
         columns = [
             '',
-            f'поверен от {currentnote1.newdate} до {currentnote1.newdatedead}',
-            f'поверен от {currentnote1.newdate} до {currentnote1.newdatedead}',
-            f'поверен от {currentnote1.newdate} до {currentnote1.newdatedead}',
-            f'поверен от {currentnote1.newdate} до {currentnote1.newdatedead}',
+            f'{a} от {currentnote1.newdate} до {currentnote1.newdatedead}',
+            f'{a} от {currentnote1.newdate} до {currentnote1.newdatedead}',
+            f'{a} от {currentnote1.newdate} до {currentnote1.newdatedead}',
+            f'{a} от {currentnote1.newdate} до {currentnote1.newdatedead}',
             ' ',
-            f'поверен от {currentnote2.newdate} до {currentnote2.newdatedead}',
-            f'поверен от {currentnote2.newdate} до {currentnote2.newdatedead}',
-            f'поверен от {currentnote2.newdate} до {currentnote2.newdatedead}',
-            f'поверен от {currentnote2.newdate} до {currentnote2.newdatedead}',
+            f'{b} от {currentnote2.newdate} до {currentnote2.newdatedead}',
+            f'{b} от {currentnote2.newdate} до {currentnote2.newdatedead}',
+            f'{b} от {currentnote2.newdate} до {currentnote2.newdatedead}',
+            f'{b} от {currentnote2.newdate} до {currentnote2.newdatedead}',
             ' ',
             ]
         for col_num in range(1, 5):
