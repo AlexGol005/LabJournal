@@ -2293,6 +2293,9 @@ def export_verificlabel_xls(request):
         try:
             MeasurEquipment.objects.get(equipment__exnumber=n)
             note.append(MeasurEquipment.objects.get(equipment__exnumber=n))
+        except:
+            pass
+        try:
             TestingEquipment.objects.get(equipment__exnumber=n)
             note.append(TestingEquipment.objects.get(equipment__exnumber=n))
         except:
