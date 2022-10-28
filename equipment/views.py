@@ -2294,7 +2294,7 @@ def export_verificlabel_xls(request):
             MeasurEquipment.objects.get(equipment__exnumber=n)
             note.append(MeasurEquipment.objects.get(equipment__exnumber=n))
             TestingEquipment.objects.get(equipment__exnumber=n)
-            note.append(MeasurEquipment.objects.get(equipment__exnumber=n))
+            note.append(TestingEquipment.objects.get(equipment__exnumber=n))
         except:
             pass
     response = HttpResponse(content_type='application/ms-excel')
@@ -2373,12 +2373,12 @@ def export_verificlabel_xls(request):
         row_num = 2 + j
         columns = [
             '',
-            f'поверка/аттестация:',
+            f'поверка:',
             f'{currentnote1.newcertnumber}',
             f'{currentnote1.newcertnumber}',
             f'{currentnote1.newcertnumber}',
             '',
-            f'поверка/аттестация:',
+            f'поверка:',
             f'{currentnote2.newcertnumber}',
             f'{currentnote2.newcertnumber}',
             f'{currentnote2.newcertnumber}',
