@@ -137,6 +137,7 @@ class Equipment(models.Model):
     price = models.DecimalField('Стоимость', max_digits=100, decimal_places=2, null=True, blank=True)
     pasport = models.CharField('Ссылка на паспорт', max_length=1000,  blank=True, null=True)
     instruction = models.CharField('Основная инструкция по эксплуатации', max_length=1000,  blank=True, null=True)
+    repair = models.CharField('Контакты для ремонта', max_length=1000,  blank=True, null=True)
 
     def __str__(self):
         return f'Вн. № {self.exnumber}    Зав. № {self.lot} - pk {self.pk}'

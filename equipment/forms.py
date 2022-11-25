@@ -171,6 +171,8 @@ class EquipmentUpdateForm(forms.ModelForm):
                                                                  'placeholder': 'добавьте ссылку на видео'}))
     invnumber = forms.CharField(label='Инвентарный номер', max_length=10000, initial='б/н', required=False,
                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
+    repair = forms.CharField(label='Данные по ремонту', max_length=10000,  required=False,
+                                widget=forms.TextInput(attrs={'class': 'form-control'}))
 
 
     class Meta:
@@ -181,8 +183,8 @@ class EquipmentUpdateForm(forms.ModelForm):
             # 'imginstruction2',
             'pasport', 'instruction',
             'imginstruction3',
-
                   'video', 'invnumber',
+                  'repair'
         ]
 
 class ManufacturerCreateForm(forms.ModelForm):
