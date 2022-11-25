@@ -460,16 +460,16 @@ class Attestationequipment(models.Model):
                 image.thumbnail(resize)
                 image.save(self.img.path)
                 # добавляем последнюю аттестацию к оборудованию
-            try:
-                note = TestingEquipment.objects.get(pk=self.equipmentSM.pk)
-                note.newcertnumber = self.certnumber
-                newdate = self.get_dateformat(self.date)
-                note.newdate = newdate
-                newdatedead = self.get_dateformat(self.datedead)
-                note.newdatedead = newdatedead
-                note.save()
-            except:
-                pass
+        try:
+            note = TestingEquipment.objects.get(pk=self.equipmentSM.pk)
+            note.newcertnumber = self.certnumber
+            newdate = self.get_dateformat(self.date)
+            note.newdate = newdate
+            newdatedead = self.get_dateformat(self.datedead)
+            note.newdatedead = newdatedead
+            note.save()
+        except:
+            pass
 
     class Meta:
         verbose_name = 'Аттестация прибора'
