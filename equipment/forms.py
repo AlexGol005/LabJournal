@@ -105,6 +105,9 @@ class EquipmentCreateForm(forms.ModelForm):
     video = forms.CharField(label='Видео к прибору', max_length=10000, required=False,
                             widget=forms.TextInput(attrs={'class': 'form-control',
                                                           'placeholder': 'добавьте ссылку на видео'}))
+    price = forms.DecimalField(label='Стоимость', max_digits=10, decimal_places=2, required=False,
+                               widget=forms.TextInput(attrs={'class': 'form-control',
+                                                             'placeholder': '0000.00'}))
 
 
     class Meta:
@@ -113,7 +116,7 @@ class EquipmentCreateForm(forms.ModelForm):
             'exnumber', 'lot', 'yearmanuf', 'manufacturer', 'status',
             'yearintoservice', 'new', 'invnumber', 'kategory', 'individuality', 'notemaster',
             'imginstruction2', 'imginstruction1',
-            'imginstruction3', 'video'
+            'imginstruction3', 'video', 'price'
         ]
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -140,6 +143,8 @@ class EquipmentCreateForm(forms.ModelForm):
                 Column('imginstruction3', css_class='form-group col-md-12 mb-0')),
             Row(
                 Column('individuality', css_class='form-group col-md-12 mb-0')),
+            Row(
+                Column('price', css_class='form-group col-md-12 mb-0')),
 
             Row(Submit('submit', 'Записать', css_class='btn  btn-info col-md-11 mb-3 mt-4 ml-4')))
 
