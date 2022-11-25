@@ -81,6 +81,15 @@
 </table>
 </div>
 {% endif %}
+{#контакты для ремонта#}
+<br>
+{% if obj.equipment.repair  %}
+<div style="text-align: center; margin-top: 2px"><h6>Куда обратиться при поломке</h6>
+<table class="table table-bordered">
+<td colspan="6">{{ obj.equipment.repair }}</td>
+</table>
+</div>
+{% endif %}
 
 <div style="text-align: center; margin-top: 20px">
  <a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/individuality/"  class="btn btn-warning mt-2">
