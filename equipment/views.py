@@ -1526,7 +1526,7 @@ def export_me_xls(request):
                                       'equipment__manufacturer__companyName')). \
         filter(equipment__roomschange__in=setroom). \
         filter(equipment__personchange__in=setperson). \
-        filter(equipmentSM_ver__in=setver). \
+        filter(equipmentSM_att__in=setver). \
         exclude(equipment__status='C'). \
         values_list(
         'equipment__exnumber',
