@@ -1232,11 +1232,11 @@ for n in list_:
     setver.append(n.get('id_actual'))
 
 get_id_attestation = Attestationequipment.objects.select_related('equipmentSM').values('equipmentSM'). \
-    annotate(id_actual=Max('id')).values('id_actualatt')
+    annotate(id_actual=Max('id')).values('id_actual')
 list_ = list(get_id_attestation)
 setatt = []
 for n in list_:
-    setatt.append(n.get('id_actualatt'))
+    setatt.append(n.get('id_actual'))
 
 # get_id_comver = CommentsVerificationequipment.objects.select_related('forNote').values('forNote'). \
 #     annotate(id_actual=Max('id')).values('id_actual')
