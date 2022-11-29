@@ -1393,16 +1393,16 @@ def export_me_xls(request):
     # ширина столбцов графика аттестации
     ws1.col(0).width = 3000
     ws1.col(1).width = 4500
-    ws1.col(2).width = 3000
+    ws1.col(2).width = 3500
     ws1.col(3).width = 4200
     ws1.col(7).width = 4200
     ws1.col(8).width = 4200
-    ws1.col(10).width = 4200
+    ws1.col(9).width = 4200
     ws1.col(11).width = 4200
     ws1.col(12).width = 3000
     ws1.col(13).width = 3000
     ws1.col(14).width = 3000
-    ws1.col(15).width = 6000
+    ws1.col(18).width = 6000
 
     # стили
     al10 = Alignment()
@@ -1512,13 +1512,13 @@ def export_me_xls(request):
         'Место установки или хранения',
         'Ответственный за ИО',
         'Статус',
-        'Аттестован на методики',
         'Номер аттестата',
         'Дата аттестации',
         'Дата окончания аттестации',
         'Дата заказа аттестации',
         'Периодичность аттестации',
         'Инвентарный номер',
+        'Аттестован на методики',
     ]
     for col_num in range(len(columns)):
         ws1.write(row_num, col_num, columns[col_num], style10)
@@ -1553,11 +1553,11 @@ def export_me_xls(request):
     )
     for row in rows:
         row_num += 1
-        for col_num in range(0, 14):
+        for col_num in range(0, 12):
             ws1.write(row_num, col_num, row[col_num], style20)
-        for col_num in range(14, 18):
+        for col_num in range(12, 15):
             ws1.write(row_num, col_num, row[col_num], style30)
-        for col_num in range(18, len(row)):
+        for col_num in range(16, len(row)):
             ws1.write(row_num, col_num, row[col_num], style20)
 
     wb.save(response)
