@@ -1357,14 +1357,15 @@ def export_mustver_xls(request):
     wb.save(response)
     return response
 
-
+# флаг график поверки и аттестации
 def export_me_xls(request):
-    '''представление для выгрузки списка всех СИ в ексель'''
+    '''представление для выгрузки графика поверки и аттестации'''
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="measure equipment.xls"'
+    response['Content-Disposition'] = 'attachment; filename="equipment.xls"'
 
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('График поверки СИ', cell_overwrite_ok=True)
+    ws1 = wb.add_sheet('График аттестации ИО', cell_overwrite_ok=True)
 
     # ширина столбцов графика поверки
     ws.col(0).width = 3000
@@ -1381,6 +1382,22 @@ def export_me_xls(request):
     ws.col(15).width = 3000
     ws.col(16).width = 3000
     ws.col(17).width = 3000
+
+    # ширина столбцов графика аттестации
+    ws1.col(0).width = 3000
+    ws1.col(1).width = 3000
+    ws1.col(2).width = 4500
+    ws1.col(3).width = 3000
+    ws1.col(4).width = 4200
+    ws1.col(8).width = 4200
+    ws1.col(9).width = 3000
+    ws1.col(10).width = 4200
+    ws1.col(12).width = 4200
+    ws1.col(13).width = 4200
+    ws1.col(14).width = 3000
+    ws1.col(15).width = 3000
+    ws1.col(16).width = 3000
+    ws1.col(17).width = 3000
 
     # стили
     al10 = Alignment()
@@ -1411,7 +1428,7 @@ def export_me_xls(request):
     style30.alignment = al10
     style30.num_format_str = 'DD.MM.YYYY'
 
-    # заголовки, первый ряд
+    # заголовки графика поверки, первый ряд
     row_num = 0
     columns = [
                 'Внутренний  номер',
@@ -1467,6 +1484,72 @@ def export_me_xls(request):
             'charakters__calinterval',
             'equipment__invnumber',
         )
+    for row in rows:
+        row_num += 1
+        for col_num in range(0, 14):
+            ws.write(row_num, col_num, row[col_num], style20)
+        for col_num in range(14, 18):
+            ws.write(row_num, col_num, row[col_num], style30)
+        for col_num in range(18, len(row)):
+            ws.write(row_num, col_num, row[col_num], style20)
+
+        # заголовки графика аттестации, первый ряд
+    row_num = 0
+    columns = [
+        'Внутренний  номер',
+        ' ',
+        'Наименование',
+        'Тип/Модификация',
+        'Заводской номер',
+        'Год выпуска',
+        'Новый или б/у',
+        'Год ввода в эксплуатацию',
+        'Страна, наименование производителя',
+        'Место установки или хранения',
+        'Ответственный за ИО',
+        'Статус',
+        ' ',
+        'Номер аттестата',
+        'Дата аттестации',
+        'Дата окончания аттестации',
+        'Дата заказа аттестации',
+        ' ',
+        'Периодичность аттестации',
+        'Инвентарный номер',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style10)
+
+    rows = TestingEquipment.objects.all(). \
+        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipmentSM_ver__in=setver). \
+        exclude(equipment__status='C'). \
+        values_list(
+        'equipment__exnumber',
+        'equipment__exnumber',
+        'charakters__name',
+        'mod_type',
+        'equipment__lot',
+        'equipment__yearmanuf',
+        'equipment__new',
+        'equipment__yearintoservice',
+        'manuf_country',
+        'equipment__roomschange__roomnumber__roomnumber',
+        'equipment__personchange__person__username',
+        'equipment__status',
+        'equipmentSM_att__certnumber',
+        'equipmentSM_att__certnumber',
+        'equipmentSM_att__date',
+        'equipmentSM_att__datedead',
+        'equipmentSM_att__dateorder',
+        'equipment__exnumber',
+        'charakters__calinterval',
+        'equipment__invnumber',
+    )
     for row in rows:
         row_num += 1
         for col_num in range(0, 14):
