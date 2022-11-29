@@ -1497,7 +1497,7 @@ def export_me_xls(request):
     row_num = 0
     columns = [
         'Внутренний  номер',
-        ' ',
+        'Аттестован на методики',
         'Наименование',
         'Тип/Модификация',
         'Заводской номер',
@@ -1508,7 +1508,7 @@ def export_me_xls(request):
         'Место установки или хранения',
         'Ответственный за ИО',
         'Статус',
-        ' ',
+        'Аттестован на методики',
         'Номер аттестата',
         'Дата аттестации',
         'Дата окончания аттестации',
@@ -1530,7 +1530,7 @@ def export_me_xls(request):
         exclude(equipment__status='C'). \
         values_list(
         'equipment__exnumber',
-        'equipment__exnumber',
+        'equipmentSM_att__ndocs',
         'charakters__name',
         'mod_type',
         'equipment__lot',
@@ -1541,12 +1541,12 @@ def export_me_xls(request):
         'equipment__roomschange__roomnumber__roomnumber',
         'equipment__personchange__person__username',
         'equipment__status',
-        'equipmentSM_att__certnumber',
+        'equipmentSM_att__ndocs',
         'equipmentSM_att__certnumber',
         'equipmentSM_att__date',
         'equipmentSM_att__datedead',
         'equipmentSM_att__dateorder',
-        'equipment__exnumber',
+        'equipmentSM_att__ndocs',
         'charakters__calinterval',
         'equipment__invnumber',
     )
