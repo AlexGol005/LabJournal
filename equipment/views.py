@@ -1231,6 +1231,13 @@ setver = []
 for n in list_:
     setver.append(n.get('id_actual'))
 
+get_id_attestation = Attestationequipment.objects.select_related('equipmentSM').values('equipmentSM'). \
+    annotate(id_actual=Max('id')).values('id_actualatt')
+list_ = list(get_id_attestation)
+setatt = []
+for n in list_:
+    setatt.append(n.get('id_actualatt'))
+
 # get_id_comver = CommentsVerificationequipment.objects.select_related('forNote').values('forNote'). \
 #     annotate(id_actual=Max('id')).values('id_actual')
 # list_ = list(get_id_comver)
@@ -1526,7 +1533,7 @@ def export_me_xls(request):
                                       'equipment__manufacturer__companyName')). \
         filter(equipment__roomschange__in=setroom). \
         filter(equipment__personchange__in=setperson). \
-        filter(equipmentSM_att__in=setver). \
+        filter(equipmentSM_att__in=setatt). \
         exclude(equipment__status='C'). \
         values_list(
         'equipment__exnumber',
