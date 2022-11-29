@@ -1402,7 +1402,7 @@ def export_me_xls(request):
     ws1.col(12).width = 3000
     ws1.col(13).width = 3000
     ws1.col(14).width = 3000
-    ws1.col(17).width = 6500
+    ws1.col(17).width = 8500
 
     # стили
     al10 = Alignment()
