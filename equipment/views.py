@@ -1518,7 +1518,7 @@ def export_me_xls(request):
         'Инвентарный номер',
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style10)
+        ws1.write(row_num, col_num, columns[col_num], style10)
 
     rows = TestingEquipment.objects.all(). \
         annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
@@ -1553,11 +1553,11 @@ def export_me_xls(request):
     for row in rows:
         row_num += 1
         for col_num in range(0, 14):
-            ws.write(row_num, col_num, row[col_num], style20)
+            ws1.write(row_num, col_num, row[col_num], style20)
         for col_num in range(14, 18):
-            ws.write(row_num, col_num, row[col_num], style30)
+            ws1.write(row_num, col_num, row[col_num], style30)
         for col_num in range(18, len(row)):
-            ws.write(row_num, col_num, row[col_num], style20)
+            ws1.write(row_num, col_num, row[col_num], style20)
 
     wb.save(response)
     return response
