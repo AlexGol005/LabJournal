@@ -65,8 +65,8 @@ class ViscosimetersView(View):
         set = []
         for n in list_:
             set.append(n.get('id_actualkonstant'))
-        viscosimeters = Kalibration.objects.select_related('id_Viscosimeter').filter(id__in=set).order_by('id_Viscosimeter__viscosimeterType__diameter')\
-            # filter(id_Viscosimeter__equipmentSM__equipment__status__exact='Э').\
+        viscosimeters = Kalibration.objects.select_related('id_Viscosimeter').filter(id__in=set).order_by('id_Viscosimeter__viscosimeterType__diameter').\
+            filter(id_Viscosimeter__equipmentSM__equipment__status__exact='Э')
 
         data = {'viscosimeters': viscosimeters}
 
