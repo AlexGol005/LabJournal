@@ -245,7 +245,7 @@ def export_me_xls(request, pk):
     wb = xlwt.Workbook(encoding='utf-8')
     nn = str(note.name)[:18]
     nl = str(note.lot)[:6]
-    ws = wb.add_sheet(f'{nn}, п. {note.lot},{note.temperature}', cell_overwrite_ok=True)
+    ws = wb.add_sheet(f'{nn}, п. {nl},{note.temperature}', cell_overwrite_ok=True)
     ws.header_str = b''
     ws.footer_str = b''
 
