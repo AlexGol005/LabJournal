@@ -243,7 +243,9 @@ def export_me_xls(request, pk):
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}.xls"'
     wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet(f'{note.name}, п. {note.lot},{note.temperature}', cell_overwrite_ok=True)
+    nn = str(note.name)[:18]
+    nl = str(note.lot)[:6]
+    ws = wb.add_sheet(f'{nn}, п. {note.lot},{note.temperature}', cell_overwrite_ok=True)
     ws.header_str = b''
     ws.footer_str = b''
 
