@@ -23,6 +23,8 @@ admin.site.register(Attestationequipment)
 
 @admin.register(Verificationequipment)
 class NoteAdmin(admin.ModelAdmin):
-    search_fields = ['equipmentSM__equipment__exnumber', 'equipmentSM__charakters__name',]
+    search_fields = ['equipmentSM__equipment__exnumber']
+
+    # 'equipmentSM__charakters__name'
 
 
