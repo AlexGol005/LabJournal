@@ -10,7 +10,7 @@ admin.site.register(Personchange)
 admin.site.register(MeasurEquipment)
 admin.site.register(Equipment)
 admin.site.register(CommentsEquipment)
-admin.site.register(Verificationequipment)
+
 admin.site.register(Roomschange)
 admin.site.register(VerificatorPerson)
 admin.site.register(Verificators)
@@ -21,5 +21,8 @@ admin.site.register(TestingEquipmentCharakters)
 admin.site.register(TestingEquipment)
 admin.site.register(Attestationequipment)
 
+@admin.register(Verificationequipment)
+class NoteAdmin(admin.ModelAdmin):
+    search_fields = ['equipmentSM__equipment__exnumber']
 
 
