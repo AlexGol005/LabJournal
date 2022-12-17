@@ -272,7 +272,8 @@ class MeasurEquipmentCharaktersRegView(SuccessMessageMixin, CreateView):
         context['title'] = 'Добавить госреестр'
         context['dopin'] = 'equipment/measurequipmentcharacterslist'
         return context
-
+    
+@login_required
 def MeasurEquipmentCharaktersUpdateView(request, str):
     """выводит форму для обновления данных о госреестре"""
     if request.method == "POST":
@@ -301,7 +302,7 @@ class TestingEquipmentCharaktersRegView(SuccessMessageMixin, CreateView):
         context['dopin'] = 'equipment/testingequipmentcharacterslist'
         return context
 
-
+@login_required
 def TestingEquipmentCharaktersUpdateView(request, str):
     """выводит форму для обновления данных о характеристиках ИО"""
     if request.method == "POST":
