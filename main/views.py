@@ -20,10 +20,10 @@ class About(View):
    def get(self, request):
        return render(request, 'main/about.html')
     
- class IndexView(View):
-    # главная страница по основному адресу
-   def get(self, request):
-       return render(request, 'main/main.html')
+class IndexView(View):
+   # главная страница по основному адресу
+  def get(self, request):
+      return render(request, 'main/main.html')
 
 # @login_required
 class AttestationJView(View):
