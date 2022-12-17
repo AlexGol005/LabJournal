@@ -11,4 +11,5 @@ urlpatterns = [
     path('equipment/', views.EquipmentView.as_view(), name='eq'),
     path('attjreg/', views.AttestationJRegView, name='attjreg'),
     path('prodjreg/', views.ProductionJRegView, name='prodjreg'),
+    path('about/', views.ProductionJRegView, name='about'),
       ]
