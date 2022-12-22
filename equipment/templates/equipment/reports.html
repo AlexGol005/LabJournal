@@ -1,0 +1,26 @@
+{% extends 'main/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}
+планы и отчёты
+{% endblock %}
+
+
+{% block content %}
+<div style="text-align: center; margin-top: 20px">
+<h4>Планы и отчёты по оборудованию</h4>
+
+</div>
+
+----------------------------------------------------------------------------------------------------------
+<div style="text-align: center; margin-top: 20px">
+<h5>Список СИ и ИО прошедших поверку в указанном году</h5>
+ <form action="{% url 'verdone' %}" target="blank" method="GET">
+        {% csrf_token %}
+        {% crispy form %}
+    </form>
+</div>
+<br>
+----------------------------------------------------------------------------------------------------------
+
+{% endblock %}
