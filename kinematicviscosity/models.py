@@ -108,8 +108,8 @@ class ViscosityMJL(models.Model):
             if int(self.name[8:-1]) > 10:
                 self.exp = 12
     # переводим минуты в секунды
-        if (self.plustimeminK1T2 and self.plustimesekK1T2 and self.plustimeminK2T1 and self.plustimesekK2T1
-                and self.plustimeminK2T2 and self.plustimesekK2T2 and self.plustimeminK1T1 and self.plustimesekK1T1):
+        if (self.plustimeminK1T2  and self.plustimeminK2T1
+                and self.plustimeminK2T2  and self.plustimeminK1T1):
             self.timeK1T1_sec = get_sec(self.plustimeminK1T1, self.plustimesekK1T1)
             self.timeK1T2_sec = get_sec(self.plustimeminK1T2, self.plustimesekK1T2)
             self.timeK2T1_sec = get_sec(self.plustimeminK2T1, self.plustimesekK2T1)
@@ -121,18 +121,17 @@ class ViscosityMJL(models.Model):
     # стандартные вычисления среднего
             self.viscosityAVG = get_avg(self.viscosity1, self.viscosity2, 5)
         if (self.plustimeminK1T1 and self.plustimesekK1T1) and not (self.plustimeminK1T2
-                                                                    and self.plustimesekK1T2 and self.plustimeminK2T2
-                                                                    and self.plustimesekK2T2 and self.plustimeminK2T2
-                                                                    and self.plustimesekK2T2):
+                                                                     and self.plustimeminK2T2
+                                                                     and self.plustimeminK2T2
+                                                                    ):
             self.timeK1T1_sec = get_sec(self.plustimeminK1T1, self.plustimesekK1T1)
             self.timeK1_avg = self.timeK1T1_sec
             self.viscosity1 = (self.Konstant1 * self.timeK1_avg).quantize(Decimal('1.00000'), ROUND_HALF_UP)
             self.viscosityAVG = self.viscosity1
             self.resultMeas = 'экспрес оценка вязкости'
             self.cause = 'не в условиях повторяемости'
-        if (self.plustimeminK1T1 and self.plustimesekK1T1 and self.plustimeminK2T1 and self.plustimesekK2T1) \
-                and not (self.plustimeminK1T2 and self.plustimesekK1T2 and self.plustimeminK2T2 and
-                         self.plustimesekK2T2):
+        if (self.plustimeminK1T1 and self.plustimeminK2T1 ) \
+                and not (self.plustimeminK1T2 and self.plustimeminK2T2):
             self.timeK1T1_sec = get_sec(self.plustimeminK1T1, self.plustimesekK1T1)
             self.timeK2T1_sec = get_sec(self.plustimeminK2T1, self.plustimesekK2T1)
             self.timeK1_avg = self.timeK1T1_sec
