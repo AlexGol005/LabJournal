@@ -61,7 +61,7 @@ class RegView(RegView):
             aktualkalibration2 = Kalibration.objects.get(id=set2)
             order.Konstant2 = aktualkalibration2.konstant
         except:
-            pass
+            order.Konstant2 = 0
         order.Konstant1 = aktualkalibration1.konstant
         try:
             oldvalue = CvKinematicviscosityVG.objects.get(namelot__nameVG__name=order.name, namelot__lot=order.lot)
