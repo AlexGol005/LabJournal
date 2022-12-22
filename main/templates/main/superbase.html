@@ -27,18 +27,17 @@
       <li class="nav-item active">
         <a class="nav-link active" aria-current="page" href="/">LabJournal</a>
       </li>
-
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'att' %}">Испытания</a>
+ <li class="nav-item">
+        <a class="nav-link" href="{% url 'about' %}">О сайте</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'prod' %}">Приготовление</a>
+        <a class="nav-link" href="{% url 'att' %}">Испытания</a>
       </li>
     <li class="nav-item">
         <a class="nav-link" href="{% url 'cv' %}">АЗ</a>
       </li>
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'eq' %}">Оборудование</a>
+        <a class="nav-link" href="{% url 'eq' %}">Инфраструктура</a>
       </li>
       {% if not user.is_authenticated %}
         <a href="{% url 'reg' %}" >

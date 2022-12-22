@@ -915,15 +915,10 @@ class LabelEquipmentform(forms.Form):
 
 class DateForm(forms.Form):
     """форма для указания даты"""
-    date = forms.DateField(label='Дата',
+    date = forms.DateField(label='Дата в формате ГГГГ-ММ-ДД',
                            widget=forms.DateInput(
-                               attrs={'class': 'form-control', 'placeholder': ''}),
-                           input_formats=(
-                               '%Y-%m-%d',
-                               '%m/%d/%Y',
-                               '%m/%d/%y',
-                               '%d.%m.%Y',
-                           ))
+                               attrs={'class': 'form-control', 'placeholder': '2022-12-18'}))
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

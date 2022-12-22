@@ -10,15 +10,20 @@ from .models import AttestationJ, ProductionJ, CertifiedValueJ
 
 
 class TextHelloView(View):
-    #просто страница для примера, адрес hello
+    #пример
     def get(self, request: HttpRequest) -> HttpResponse:
         text = '<h1>Hello, World!!!</h1>'
         return HttpResponse(text)
 
-class IndexView(View):
-    # главная страница по основному адресу
+class About(View):
+    # о сайте
    def get(self, request):
-       return render(request, 'main/main.html')
+       return render(request, 'main/about.html')
+    
+class IndexView(View):
+   # главная страница по основному адресу
+  def get(self, request):
+      return render(request, 'main/main.html')
 
 # @login_required
 class AttestationJView(View):
