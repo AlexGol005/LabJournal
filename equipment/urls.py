@@ -35,6 +35,7 @@ urlpatterns = [
     path('personchangereg/<str:str>/', views.PersonchangeFormView.as_view(), name='personchangereg'),
     path('roomschangereg/<str:str>/', views.RoomschangeFormView.as_view(), name='roomschangereg'),
     path('meteo/', views.MeteorologicalParametersView.as_view(), name='meteo'),
+    path('reports/', views.ReportsView.as_view(), name='reports'),
     path('roomreg/', views.RoomsCreateView.as_view(), name='roomreg'),
     path('meteoreg/', views.MeteorologicalParametersCreateView.as_view(), name='meteoreg'),
     path('docsreg/<str:str>/', views.DocsConsView.as_view(), name='docsreg'),

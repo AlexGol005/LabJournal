@@ -175,6 +175,11 @@ class MeteorologicalParametersView(TemplateView):
     template_name = URL + '/meteo.html'
 
 
+class ReportsView(TemplateView):
+    """ Представление, которое выводит страницу с кнопками для вывода планов и отчётов по инфраструктуре"""
+    template_name = URL + '/reports.html'
+
+
 class MetrologicalEnsuringView(TemplateView):
     """выводит заглавную страницу для вывода данных по поверке и аттестации, списков в ексель и пр """
     template_name = URL + '/metro.html'
