@@ -52,16 +52,17 @@ class RegView(RegView):
         list1_ = list(get_id_actualconstant1)
         set1 = list1_[0].get('id_actualkonstant')
         aktualkalibration1 = Kalibration.objects.get(id=set1)
-        if order.ViscosimeterNumber2:
+        try:
             get_id_actualconstant2 = Kalibration.objects.select_related('id_Viscosimeter'). \
                 filter(id_Viscosimeter__exact=order.ViscosimeterNumber2). \
                 values('id_Viscosimeter').annotate(id_actualkonstant=Max('id')).values('id_actualkonstant')
             list2_ = list(get_id_actualconstant2)
             set2 = list2_[0].get('id_actualkonstant')
             aktualkalibration2 = Kalibration.objects.get(id=set2)
-        order.Konstant1 = aktualkalibration1.konstant
-        if order.ViscosimeterNumber2:
             order.Konstant2 = aktualkalibration2.konstant
+        except:
+            pass
+        order.Konstant1 = aktualkalibration1.konstant
         try:
             oldvalue = CvKinematicviscosityVG.objects.get(namelot__nameVG__name=order.name, namelot__lot=order.lot)
             if order.temperature == 20:
