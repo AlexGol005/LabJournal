@@ -57,4 +57,5 @@ urlpatterns = [
     path('haveorder/<int:pk>/', views.HaveorderVerView.as_view(), name='haveorder'),
     path('haveorderatt/<int:pk>/', views.HaveorderAttView.as_view(), name='haveorderatt'),
     path('lasttenequipment/', views.LastNewEquipmentView.as_view(), name='lasttenequipment'),
+    path('verdone/', views.VerdoneView.as_view(), name='verdone'),
 ]

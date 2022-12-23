@@ -179,6 +179,12 @@ class ReportsView(TemplateView):
     """ Представление, которое выводит страницу с кнопками для вывода планов и отчётов по инфраструктуре"""
     template_name = URL + '/reports.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(ReportsView, self).get_context_data(**kwargs)
+        context['URL'] = URL
+        context['form'] = YearForm()
+        return context
+
 
 class VerdoneView(ListView):
     """ выводит список СИ у которых год поверки совпадает с годом указанным в форме и поверку заказывала Петроаналитика"""
@@ -194,23 +200,8 @@ class VerdoneView(ListView):
         return context
 
     def get_queryset(self):
-        serdate = self.request.GET['date']
-        queryset_get = Verificationequipment.objects.\
-            select_related('equipmentSM').values('equipmentSM'). \
-            annotate(id_actual=Max('id')).values('id_actual')
-        b = list(queryset_get)
-        set = []
-        for i in b:
-            a = i.get('id_actual')
-            set.append(a)
-        queryset_get1 = Verificationequipment.objects.filter(id__in=set).\
-            filter(datedead__lte=serdate).values('equipmentSM__id')
-        b = list(queryset_get1)
-        set1 = []
-        for i in b:
-            a = i.get('equipmentSM__id')
-            set1.append(a)
-        queryset = MeasurEquipment.objects.filter(id__in=set1).exclude(equipment__status='C')
+        needyear = self.request.GET['date']
+        queryset = MeasurEquipment.objects.filter(newdate__contains=needyear)
         return queryset
 
 
