@@ -4414,7 +4414,7 @@ def export_metroyearprice_xls(request):
         filter(equipmentSM_ver__date__year=serdate). \
         filter(equipmentSM_ver__price__isnull=False).\
         values('equipmentSM_ver__date__month', 'equipmentSM_ver__price'). \
-        annotate(dcount=Count('equipmentSM_ver__date__month')).annotate(sumprice=Sum('equipmentSM_ver__price')). \
+        annotate(dcount=Count('equipmentSM_ver__date__month')).aggregate(sumprice=Sum('equipmentSM_ver__price')). \
         order_by(). \
         values_list(
         'equipmentSM_ver__date__month',
