@@ -4424,7 +4424,7 @@ def export_metroyearprice_xls(request):
     qt1 = TestingEquipment.objects. \
         filter(equipment__personchange__in=setperson). \
         filter(equipment__roomschange__in=setroom). \
-        filter(equipmentSM_att__in=setver). \
+        filter(equipmentSM_att__in=setatt). \
         filter(equipmentSM_att__date__year=serdate). \
         filter(equipmentSM_att__price__isnull=False). \
         values('equipmentSM_att__date__month'). \
