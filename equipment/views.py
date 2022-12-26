@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse, HttpRequest
 from datetime import datetime, timedelta
-from django.db.models import Max, Q, Value, CharField
+from django.db.models import Max, Q, Value, CharField, Count
 from django.db.models.functions import Upper, Concat, Extract, ExtractYear
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template.context_processors import request
@@ -4407,6 +4407,20 @@ def export_metroyearprice_xls(request):
         'equipmentSM_att__datedead'
     ).order_by('equipmentSM_att__date')
 
+    qs1 = MeasurEquipment.objects. \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipmentSM_ver__in=setver). \
+        filter(equipmentSM_ver__date__year=serdate). \
+        filter(equipmentSM_ver__price__isnull=False).\
+        values('equipmentSM_ver__date__month').\
+        annotate(dcount=Count('equipmentSM_ver__date__month')).\
+        order_by().\
+        values_list(
+        'dcount',
+        'equipmentSM_ver__date__month',
+    )
+
 
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="equipment.xls"'
@@ -4414,10 +4428,13 @@ def export_metroyearprice_xls(request):
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('СИ', cell_overwrite_ok=True)
     ws1 = wb.add_sheet('ИО', cell_overwrite_ok=True)
+    ws2 = wb.add_sheet('СИ по месяцам', cell_overwrite_ok=True)
     ws.header_str = b'  '
     ws.footer_str = b'c. &P '
     ws1.header_str = b'  '
     ws1.footer_str = b'c. &P '
+    ws2.header_str = b'  '
+    ws2.footer_str = b'c. &P '
 
     # ширина столбцов СИ
     ws.col(0).width = 3000
@@ -4517,6 +4534,22 @@ def export_metroyearprice_xls(request):
             ws1.write(row_num, col_num, row[col_num], style20)
         for col_num in range(6, len(row)):
             ws1.write(row_num, col_num, row[col_num], style30)
+
+        # заголовки подсчёт поверок СИ
+    row_num = 0
+    columns = [
+        'Месяц',
+        'Число поверок',
+    ]
+    for col_num in range(len(columns)):
+        ws2.write(row_num, col_num, columns[col_num], style10)
+
+    rows = qs1
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws2.write(row_num, col_num, row[col_num], style20)
+
     wb.save(response)
     return response
 
