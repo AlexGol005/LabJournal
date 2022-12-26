@@ -23,8 +23,26 @@
 <br>
 ----------------------------------------------------------------------------------------------------------
 <div style="text-align: center; margin-top: 20px">
-<h5>Список СИ и ИО прошедших поверку в указанном году без учёта ПА/не ПА</h5>
+<h5>Список СИ и ИО прошедших поверку в указанном году</h5>
  <form action="{% url 'export_metroyearprice_xls' %}" target="blank" method="GET">
+        {% csrf_token %}
+        {% crispy form %}
+    </form>
+</div>
+<br>
+----------------------------------------------------------------------------------------------------------
+<div style="text-align: center; margin-top: 20px">
+<h5>Список СИ и ИО прошедших поверку в указанном году только те где указана стоимость поверки/аттестации</h5>
+ <form action="{% url 'export_metroyearprice_xls' %}" target="blank" method="GET">
+        {% csrf_token %}
+        {% crispy form %}
+    </form>
+</div>
+<br>
+----------------------------------------------------------------------------------------------------------
+    <div style="text-align: center; margin-top: 20px">
+<h5>Список СИ и ИО прошедших поверку в указанном году только те где организатор работ - Петроаналитика </h5>
+ <form action="{% url 'export_metroyearcust_xls' %}" target="blank" method="GET">
         {% csrf_token %}
         {% crispy form %}
     </form>
