@@ -4565,7 +4565,7 @@ def export_metroyearprice_xls(request):
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
-            ws3.write(row_num, col_num, row[col_num], style20)
+            ws2.write(row_num, col_num, row[col_num], style20)
 
         # заголовки подсчёт аттестаций ИО
         row_num = 0
