@@ -58,4 +58,5 @@ urlpatterns = [
     path('haveorderatt/<int:pk>/', views.HaveorderAttView.as_view(), name='haveorderatt'),
     path('lasttenequipment/', views.LastNewEquipmentView.as_view(), name='lasttenequipment'),
     path('verdone/', views.VerdoneView.as_view(), name='verdone'),
+    path(r'^export70/xls/$', views.export_metroyear_xls, name='export_metroyear_xls'),
 ]
