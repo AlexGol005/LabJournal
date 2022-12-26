@@ -4253,6 +4253,7 @@ def export_metroyear_xls(request):
     ws1.col(1).width = 4500
     ws1.col(2).width = 3500
     ws1.col(3).width = 4200
+    ws1.col(4).width = 4500
 
 
     # стили
@@ -4303,7 +4304,7 @@ def export_metroyear_xls(request):
     for row in rows:
         row_num += 1
         for col_num in range(6):
-            ws1.write(row_num, col_num, row[col_num], style30)
+            ws1.write(row_num, col_num, row[col_num], style20)
         for col_num in range(6, len(row)):
             ws1.write(row_num, col_num, row[col_num], style30)
 
@@ -4326,7 +4327,7 @@ def export_metroyear_xls(request):
     for row in rows:
         row_num += 1
         for col_num in range(5):
-            ws1.write(row_num, col_num, row[col_num], style30)
+            ws1.write(row_num, col_num, row[col_num], style20)
         for col_num in range(5, len(row)):
             ws1.write(row_num, col_num, row[col_num], style30)
     wb.save(response)
