@@ -19,9 +19,13 @@ admin.site.register(CompanyCard)
 admin.site.register(MeteorologicalParameters)
 admin.site.register(TestingEquipmentCharakters)
 admin.site.register(TestingEquipment)
-admin.site.register(Attestationequipment)
+
 
 @admin.register(Verificationequipment)
+class NoteAdmin(admin.ModelAdmin):
+    search_fields = ['equipmentSM__equipment__exnumber']
+
+@admin.register(Attestationequipment)
 class NoteAdmin(admin.ModelAdmin):
     search_fields = ['equipmentSM__equipment__exnumber']
 
