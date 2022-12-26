@@ -4567,20 +4567,22 @@ def export_metroyearprice_xls(request):
         for col_num in range(len(row)):
             ws2.write(row_num, col_num, row[col_num], style20)
 
-        # заголовки подсчёт аттестаций ИО
-        # row_num = 0
-        # columns = [
-        #     'Месяц',
-        #     'Число аттестаций',
-        # ]
-        # for col_num in range(len(columns)):
-        #     ws3.write(row_num, col_num, columns[col_num], style10)
-        #
-        # rows = qt1
-        # for row in rows:
-        #     row_num += 1
-        #     for col_num in range(len(row)):
-        #         ws3.write(row_num, col_num, row[col_num], style20)
+        # заголовки подсчёт аттестаций СИ
+        row_num = 0
+        columns = [
+            'Месяц',
+            'Число аттестаций',
+        ]
+        for col_num in range(len(columns)):
+            ws3.write(row_num, col_num, columns[col_num], style10)
+
+        rows = qt1
+        for row in rows:
+            row_num += 1
+            for col_num in range(len(row)):
+                ws3.write(row_num, col_num, row[col_num], style20)
+
+
 
     wb.save(response)
     return response
