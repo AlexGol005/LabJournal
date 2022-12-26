@@ -4364,7 +4364,7 @@ def export_metroyear_xls(request):
     return response
 
 def export_metroyearprice_xls(request):
-    '''представление для выгрузки списка СИ и ИО поверка в год с учётом стоимости'''
+    '''представление для выгрузки списка СИ и ИО поверка в год для тех где есть стоимость работ'''
     serdate = request.GET['date']
     qs = MeasurEquipment.objects. \
         annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
@@ -4413,12 +4413,13 @@ def export_metroyearprice_xls(request):
         filter(equipmentSM_ver__in=setver). \
         filter(equipmentSM_ver__date__year=serdate). \
         filter(equipmentSM_ver__price__isnull=False).\
-        values('equipmentSM_ver__date__month').\
-        annotate(dcount=Count('equipmentSM_ver__date__month')).\
-        order_by().\
+        values('equipmentSM_ver__date__month', 'equipmentSM_ver__price'). \
+        annotate(dcount=Count('equipmentSM_ver__date__month'), sumprice=Sum('equipmentSM_ver__price')). \
+        order_by(). \
         values_list(
         'equipmentSM_ver__date__month',
         'dcount',
+        'sumprice',
     )
 
     qt1 = TestingEquipment.objects. \
@@ -4558,6 +4559,7 @@ def export_metroyearprice_xls(request):
     columns = [
         'Месяц',
         'Число поверок',
+        'Стоимость за месяц, руб',
     ]
     for col_num in range(len(columns)):
         ws2.write(row_num, col_num, columns[col_num], style10)
@@ -4573,6 +4575,7 @@ def export_metroyearprice_xls(request):
     columns = [
         'Месяц',
         'Число аттестаций',
+        'Стоимость за месяц, руб',
     ]
     for col_num in range(len(columns)):
         ws3.write(row_num, col_num, columns[col_num], style10)
@@ -4582,8 +4585,6 @@ def export_metroyearprice_xls(request):
         row_num += 1
         for col_num in range(len(row)):
             ws3.write(row_num, col_num, row[col_num], style20)
-
-
 
     wb.save(response)
     return response
@@ -4632,6 +4633,35 @@ def export_metroyearcust_xls(request):
         'equipmentSM_att__datedead'
     ).order_by('equipmentSM_att__date')
 
+    qs1 = MeasurEquipment.objects. \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipmentSM_ver__in=setver). \
+        filter(equipmentSM_ver__date__year=serdate). \
+        filter(equipmentSM_ver__cust=False). \
+        values('equipmentSM_ver__date__month', 'equipmentSM_ver__price'). \
+        annotate(dcount=Count('equipmentSM_ver__date__month'), sumprice=Sum('equipmentSM_ver__price')). \
+        order_by(). \
+        values_list(
+        'equipmentSM_ver__date__month',
+        'dcount',
+        'sumprice',
+    )
+
+    qt1 = TestingEquipment.objects. \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipmentSM_att__in=setatt). \
+        filter(equipmentSM_att__date__year=serdate). \
+        filter(equipmentSM_att__cust=False). \
+        values('equipmentSM_att__date__month', 'equipmentSM_att__price'). \
+        annotate(dcount1=Count('equipmentSM_att__date__month'), sumprice=Sum('equipmentSM_att__price')). \
+        order_by(). \
+        values_list(
+        'equipmentSM_att__date__month',
+        'dcount1',
+        'sumprice',
+    )
 
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="equipment.xls"'
@@ -4639,10 +4669,16 @@ def export_metroyearcust_xls(request):
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('СИ', cell_overwrite_ok=True)
     ws1 = wb.add_sheet('ИО', cell_overwrite_ok=True)
+    ws2 = wb.add_sheet('Количество поверок в месяц', cell_overwrite_ok=True)
+    ws3 = wb.add_sheet('Количество аттестаций в месяц', cell_overwrite_ok=True)
     ws.header_str = b'  '
     ws.footer_str = b'c. &P '
     ws1.header_str = b'  '
     ws1.footer_str = b'c. &P '
+    ws2.header_str = b'  '
+    ws2.footer_str = b'c. &P '
+    ws3.header_str = b'  '
+    ws3.footer_str = b'c. &P '
 
     # ширина столбцов СИ
     ws.col(0).width = 3000
@@ -4654,7 +4690,6 @@ def export_metroyearcust_xls(request):
     ws.col(7).width = 3000
     ws.col(8).width = 3000
 
-
     # ширина столбцов ИО
     ws1.col(0).width = 3000
     ws1.col(1).width = 4500
@@ -4664,7 +4699,6 @@ def export_metroyearcust_xls(request):
     ws1.col(5).width = 2600
     ws1.col(6).width = 3000
     ws1.col(7).width = 3000
-
 
     # стили
     al10 = Alignment()
@@ -4698,16 +4732,16 @@ def export_metroyearcust_xls(request):
     # заголовки СИ
     row_num = 0
     columns = [
-                'Внутренний  номер',
-                'Номер в госреестре',
-                'Наименование',
-                'Тип/Модификация',
-                'Заводской номер',
-                'Номер свидетельства',
-                'Стоимость поверки, руб.',
-                'Дата поверки/калибровки',
-                'Дата окончания свидетельства',
-               ]
+        'Внутренний  номер',
+        'Номер в госреестре',
+        'Наименование',
+        'Тип/Модификация',
+        'Заводской номер',
+        'Номер свидетельства',
+        'Стоимость поверки, руб.',
+        'Дата поверки/калибровки',
+        'Дата окончания свидетельства',
+    ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style10)
 
@@ -4718,7 +4752,6 @@ def export_metroyearcust_xls(request):
             ws.write(row_num, col_num, row[col_num], style20)
         for col_num in range(7, len(row)):
             ws.write(row_num, col_num, row[col_num], style30)
-
 
         # заголовки ИО, первый ряд
     row_num = 0
@@ -4742,5 +4775,38 @@ def export_metroyearcust_xls(request):
             ws1.write(row_num, col_num, row[col_num], style20)
         for col_num in range(6, len(row)):
             ws1.write(row_num, col_num, row[col_num], style30)
+
+        # заголовки подсчёт поверок СИ
+    row_num = 0
+    columns = [
+        'Месяц',
+        'Число поверок',
+        'Стоимость за месяц, руб',
+    ]
+    for col_num in range(len(columns)):
+        ws2.write(row_num, col_num, columns[col_num], style10)
+
+    rows = qs1
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws2.write(row_num, col_num, row[col_num], style20)
+
+    # заголовки подсчёт аттестаций СИ
+    row_num = 0
+    columns = [
+        'Месяц',
+        'Число аттестаций',
+        'Стоимость за месяц, руб',
+    ]
+    for col_num in range(len(columns)):
+        ws3.write(row_num, col_num, columns[col_num], style10)
+
+    rows = qt1
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws3.write(row_num, col_num, row[col_num], style20)
+
     wb.save(response)
     return response
