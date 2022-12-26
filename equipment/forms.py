@@ -249,7 +249,7 @@ class VerificationRegForm(forms.ModelForm):
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
     certnumber = forms.CharField(label='№ свидетельства о поверке', max_length=10000,
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
-    price = forms.DecimalField(label='Стоимость данной поверки', max_digits=10, decimal_places=2, required=False,
+    price = forms.DecimalField(label='Стоимость данной поверки', max_digits=10, decimal_places=2,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '0000.00'}))
     statusver = forms.ChoiceField(label='Результат поверки',
@@ -349,7 +349,7 @@ class AttestationRegForm(forms.ModelForm):
                                  widget=forms.TextInput(attrs={'class': 'form-control'}))
     certnumber = forms.CharField(label='№ аттестата', max_length=10000, required=False,
                                   widget=forms.TextInput(attrs={'class': 'form-control'}))
-    price = forms.DecimalField(label='Стоимость данной атт.', max_digits=10, decimal_places=2, required=False,
+    price = forms.DecimalField(label='Стоимость данной атт.', max_digits=10, decimal_places=2,
                               widget=forms.TextInput(attrs={'class': 'form-control',
                                                             'placeholder': '0000.00'}))
     statusver = forms.ChoiceField(label='Результат аттестации',
