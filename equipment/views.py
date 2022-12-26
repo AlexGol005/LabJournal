@@ -4421,19 +4421,19 @@ def export_metroyearprice_xls(request):
         'dcount',
     )
 
-    qt1 = TestingEquipment.objects. \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipmentSM_att__in=setver). \
-        filter(equipmentSM_att__date__year=serdate). \
-        filter(equipmentSM_att__price__isnull=False). \
-        values('equipmentSM_att__date__month'). \
-        annotate(dcount1=Count('equipmentSM_att__date__month')). \
-        order_by(). \
-        values_list(
-        'equipmentSM_att__date__month',
-        'dcount1',
-    )
+    # qt1 = TestingEquipment.objects. \
+    #     filter(equipment__personchange__in=setperson). \
+    #     filter(equipment__roomschange__in=setroom). \
+    #     filter(equipmentSM_att__in=setver). \
+    #     filter(equipmentSM_att__date__year=serdate). \
+    #     filter(equipmentSM_att__price__isnull=False). \
+    #     values('equipmentSM_att__date__month'). \
+    #     annotate(dcount1=Count('equipmentSM_att__date__month')). \
+    #     order_by(). \
+    #     values_list(
+    #     'equipmentSM_att__date__month',
+    #     'dcount1',
+    # )
 
 
     response = HttpResponse(content_type='application/ms-excel')
@@ -4443,15 +4443,15 @@ def export_metroyearprice_xls(request):
     ws = wb.add_sheet('СИ', cell_overwrite_ok=True)
     ws1 = wb.add_sheet('ИО', cell_overwrite_ok=True)
     ws2 = wb.add_sheet('Количество поверок в месяц', cell_overwrite_ok=True)
-    ws3 = wb.add_sheet('Количество аттестаций в месяц', cell_overwrite_ok=True)
+    # ws3 = wb.add_sheet('Количество аттестаций в месяц', cell_overwrite_ok=True)
     ws.header_str = b'  '
     ws.footer_str = b'c. &P '
     ws1.header_str = b'  '
     ws1.footer_str = b'c. &P '
     ws2.header_str = b'  '
     ws2.footer_str = b'c. &P '
-    ws3.header_str = b'  '
-    ws3.footer_str = b'c. &P '
+    # ws3.header_str = b'  '
+    # ws3.footer_str = b'c. &P '
 
     # ширина столбцов СИ
     ws.col(0).width = 3000
@@ -4568,19 +4568,19 @@ def export_metroyearprice_xls(request):
             ws2.write(row_num, col_num, row[col_num], style20)
 
         # заголовки подсчёт аттестаций ИО
-        row_num = 0
-        columns = [
-            'Месяц',
-            'Число аттестаций',
-        ]
-        for col_num in range(len(columns)):
-            ws3.write(row_num, col_num, columns[col_num], style10)
-
-        rows = qt1
-        for row in rows:
-            row_num += 1
-            for col_num in range(len(row)):
-                ws3.write(row_num, col_num, row[col_num], style20)
+        # row_num = 0
+        # columns = [
+        #     'Месяц',
+        #     'Число аттестаций',
+        # ]
+        # for col_num in range(len(columns)):
+        #     ws3.write(row_num, col_num, columns[col_num], style10)
+        #
+        # rows = qt1
+        # for row in rows:
+        #     row_num += 1
+        #     for col_num in range(len(row)):
+        #         ws3.write(row_num, col_num, row[col_num], style20)
 
     wb.save(response)
     return response
