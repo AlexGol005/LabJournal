@@ -4589,5 +4589,6 @@ def export_metroyearprice_xls(request):
     wb.save(response)
     return response
 
-# def export_metroyearcust_xls(request):
-#     '''представление для выгрузки списка СИ и ИО поверка в год без поверок заказанных поставщиками'''
+def export_metroyearcust_xls(request):
+    '''представление для выгрузки списка СИ и ИО поверка в год без поверок заказанных поставщиками'''
+    pass
