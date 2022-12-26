@@ -4429,12 +4429,12 @@ def export_metroyearprice_xls(request):
         filter(equipmentSM_att__date__year=serdate). \
         filter(equipmentSM_att__price__isnull=False). \
         values('equipmentSM_att__date__month', 'equipmentSM_att__price'). \
-        annotate(dcount1=Count('equipmentSM_att__date__month'), sumprice=Sum('equipmentSM_att__price')). \
+        annotate(dcount1=Count('equipmentSM_att__date__month'), sumprice1=Sum('equipmentSM_att__price')). \
         order_by(). \
         values_list(
         'equipmentSM_att__date__month',
         'dcount1',
-        'sumprice',
+        'sumprice1',
     )
 
 
