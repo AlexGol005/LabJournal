@@ -358,6 +358,8 @@ class Verificationequipment(models.Model):
                                     blank=True, null=True)
     haveorder = models.BooleanField(verbose_name='Заказана следующая поверка (или новое СИ)', default=False,
                                     blank=True)
+    cust = models.BooleanField(verbose_name='Поверку организует Петроаналитика', default=False,
+                                    blank=True)
 
     def __str__(self):
         try:
@@ -434,6 +436,8 @@ class Attestationequipment(models.Model):
                                     blank=True, null=True)
     haveorder = models.BooleanField(verbose_name='Заказана следующая аттестация (или новое СИ)', default=False,
                                     blank=True)
+    cust = models.BooleanField(verbose_name='Аттестацию организует Петроаналитика', default=False,
+                               blank=True)
 
     def __str__(self):
         return f'Поверка {self.equipmentSM.charakters.name} вн № {self.equipmentSM.equipment.exnumber}'

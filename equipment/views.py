@@ -4209,7 +4209,7 @@ def export_exvercardteste_xls(request, pk):
 
 # флаг шаблон ексель по приборам
 def export_metroyear_xls(request):
-    '''представление для выгрузки списка СИ и ИО для отчетов, кверисет подстваляется в зависимости от потребностей'''
+    '''представление для выгрузки списка СИ и ИО поверка в год без учёта стоимости'''
     serdate = request.GET['date']
     qs = MeasurEquipment.objects. \
         annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
@@ -4229,7 +4229,7 @@ def export_metroyear_xls(request):
         'equipmentSM_ver__price',
         'equipmentSM_ver__date',
         'equipmentSM_ver__datedead',
-    ).order_by('newdate')
+    ).order_by('equipmentSM_ver__date')
 
     qt = TestingEquipment.objects. \
         annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
@@ -4248,7 +4248,7 @@ def export_metroyear_xls(request):
         'equipmentSM_att__price',
         'equipmentSM_att__date',
         'equipmentSM_att__datedead'
-    ).order_by('newdate')
+    ).order_by('equipmentSM_att__date')
 
 
     response = HttpResponse(content_type='application/ms-excel')
@@ -4268,6 +4268,7 @@ def export_metroyear_xls(request):
     ws.col(2).width = 4500
     ws.col(3).width = 3000
     ws.col(4).width = 4200
+    ws.col(6).width = 2600
     ws.col(7).width = 3000
     ws.col(8).width = 3000
 
@@ -4278,6 +4279,162 @@ def export_metroyear_xls(request):
     ws1.col(2).width = 3500
     ws1.col(3).width = 4200
     ws1.col(4).width = 4500
+    ws1.col(5).width = 2600
+    ws1.col(6).width = 3000
+    ws1.col(7).width = 3000
+
+
+    # стили
+    al10 = Alignment()
+    al10.horz = Alignment.HORZ_CENTER
+    al10.vert = Alignment.VERT_CENTER
+    al10.wrap = 1
+
+    b1 = Borders()
+    b1.left = 1
+    b1.right = 1
+    b1.top = 1
+    b1.bottom = 1
+
+    style10 = xlwt.XFStyle()
+    style10.font.bold = True
+    style10.font.name = 'Times New Roman'
+    style10.borders = b1
+    style10.alignment = al10
+
+    style20 = xlwt.XFStyle()
+    style20.font.name = 'Times New Roman'
+    style20.borders = b1
+    style20.alignment = al10
+
+    style30 = xlwt.XFStyle()
+    style30.font.name = 'Times New Roman'
+    style30.borders = b1
+    style30.alignment = al10
+    style30.num_format_str = 'DD.MM.YYYY'
+
+    # заголовки СИ
+    row_num = 0
+    columns = [
+                'Внутренний  номер',
+                'Номер в госреестре',
+                'Наименование',
+                'Тип/Модификация',
+                'Заводской номер',
+                'Номер свидетельства',
+                'Стоимость поверки, руб.',
+                'Дата поверки/калибровки',
+                'Дата окончания свидетельства',
+               ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style10)
+
+    rows = qs
+    for row in rows:
+        row_num += 1
+        for col_num in range(7):
+            ws.write(row_num, col_num, row[col_num], style20)
+        for col_num in range(7, len(row)):
+            ws.write(row_num, col_num, row[col_num], style30)
+
+
+        # заголовки ИО, первый ряд
+    row_num = 0
+    columns = [
+        'Внутренний  номер',
+        'Наименование',
+        'Тип/Модификация',
+        'Заводской номер',
+        'Номер аттестата',
+        'Стоимость аттестации, руб.',
+        'Дата аттестации',
+        'Дата окончания аттестации',
+    ]
+    for col_num in range(len(columns)):
+        ws1.write(row_num, col_num, columns[col_num], style10)
+
+    rows = qt
+    for row in rows:
+        row_num += 1
+        for col_num in range(6):
+            ws1.write(row_num, col_num, row[col_num], style20)
+        for col_num in range(6, len(row)):
+            ws1.write(row_num, col_num, row[col_num], style30)
+    wb.save(response)
+    return response
+
+def export_metroyearprice_xls(request):
+    '''представление для выгрузки списка СИ и ИО поверка в год с учётом стоимости'''
+    serdate = request.GET['date']
+    qs = MeasurEquipment.objects. \
+        annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipmentSM_ver__in=setver). \
+        filter(equipmentSM_ver__date__year=serdate). \
+        values_list(
+        'equipment__exnumber',
+        'charakters__reestr',
+        'charakters__name',
+        'mod_type',
+        'equipment__lot',
+        'equipmentSM_ver__certnumber',
+        'equipmentSM_ver__price',
+        'equipmentSM_ver__date',
+        'equipmentSM_ver__datedead',
+    ).order_by('equipmentSM_ver__date')
+
+    qt = TestingEquipment.objects. \
+        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipmentSM_att__in=setatt). \
+        filter(equipmentSM_att__date__year=serdate). \
+        values_list(
+        'equipment__exnumber',
+        'charakters__name',
+        'mod_type',
+        'equipment__lot',
+        'equipmentSM_att__certnumber',
+        'equipmentSM_att__price',
+        'equipmentSM_att__date',
+        'equipmentSM_att__datedead'
+    ).order_by('equipmentSM_att__date')
+
+
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="equipment.xls"'
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('СИ', cell_overwrite_ok=True)
+    ws1 = wb.add_sheet('ИО', cell_overwrite_ok=True)
+    ws.header_str = b'  '
+    ws.footer_str = b'c. &P '
+    ws1.header_str = b'  '
+    ws1.footer_str = b'c. &P '
+
+    # ширина столбцов СИ
+    ws.col(0).width = 3000
+    ws.col(1).width = 3000
+    ws.col(2).width = 4500
+    ws.col(3).width = 3000
+    ws.col(4).width = 4200
+    ws.col(6).width = 2600
+    ws.col(7).width = 3000
+    ws.col(8).width = 3000
+
+
+    # ширина столбцов ИО
+    ws1.col(0).width = 3000
+    ws1.col(1).width = 4500
+    ws1.col(2).width = 3500
+    ws1.col(3).width = 4200
+    ws1.col(4).width = 4500
+    ws1.col(5).width = 2600
     ws1.col(6).width = 3000
     ws1.col(7).width = 3000
 

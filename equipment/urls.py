@@ -59,4 +59,5 @@ urlpatterns = [
     path('lasttenequipment/', views.LastNewEquipmentView.as_view(), name='lasttenequipment'),
     path('verdone/', views.VerdoneView.as_view(), name='verdone'),
     path(r'^export70/xls/$', views.export_metroyear_xls, name='export_metroyear_xls'),
+    path(r'^export71/xls/$', views.export_metroyearprice_xls, name='export_metroyearprice_xls'),
 ]

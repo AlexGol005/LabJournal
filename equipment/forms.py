@@ -265,6 +265,7 @@ class VerificationRegForm(forms.ModelForm):
     place = forms.ChoiceField(label='Место поверки',
                              choices=CHOICESPLACE,
                                widget=forms.Select(attrs={'class': 'form-control'}))
+    cust = forms.BooleanField(label='Поверка заказана поставщиком', required=False)
     img = forms.ImageField(label='Сертификат', widget=forms.FileInput, required=False)
     dateordernew = forms.DateField(label='Дата заказа замены', required=False,
                                    help_text='Укажите, если поверка не выгодна',
@@ -282,7 +283,8 @@ class VerificationRegForm(forms.ModelForm):
         fields = ['date', 'datedead', 'dateorder', 'arshin', 'certnumber',
                   'price', 'statusver',  'verificator', 'verificatorperson',
                   'place', 'year',
-                  'dateordernew'
+                  'dateordernew',
+                  'cust',
                   ]
 
     def __init__(self, *args, **kwargs):
@@ -305,6 +307,7 @@ class VerificationRegForm(forms.ModelForm):
                 Column('verificator', css_class='form-group col-md-4 mb-0'),
                 Column('verificatorperson', css_class='form-group col-md-4 mb-0'),
                 Column('place', css_class='form-group col-md-4 mb-0'),
+                Column('cust', css_class='form-group col-md-4 mb-0'),
             ),
             Row(
                 Column('img', css_class='form-group col-md-6 mb-1'),
@@ -362,6 +365,7 @@ class AttestationRegForm(forms.ModelForm):
     place = forms.ChoiceField(label='Место аттестации',
                              choices=CHOICESPLACE, initial='В ПА',
                                widget=forms.Select(attrs={'class': 'form-control'}))
+    cust = forms.BooleanField(label='Аттестация заказана поставщиком', required=False)
     img = forms.ImageField(label='Аттестат', widget=forms.FileInput, required=False)
     dateordernew = forms.DateField(label='Дата заказа замены', required=False,
                                    help_text='Укажите, если аттестации не выгодна',
@@ -383,7 +387,8 @@ class AttestationRegForm(forms.ModelForm):
                   'price', 'statusver',  'verificator', 'verificatorperson',
                   'place',
                   'year',
-                  'dateordernew'
+                  'dateordernew',
+                  'cust',
                   ]
 
     def __init__(self, *args, **kwargs):
@@ -406,6 +411,7 @@ class AttestationRegForm(forms.ModelForm):
                 Column('verificator', css_class='form-group col-md-4 mb-0'),
                 Column('verificatorperson', css_class='form-group col-md-4 mb-0'),
                 Column('place', css_class='form-group col-md-4 mb-0'),
+                Column('cust', css_class='form-group col-md-4 mb-0'),
             ),
             Row(
                 Column('img', css_class='form-group col-md-6 mb-1'),
