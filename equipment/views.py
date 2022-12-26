@@ -4374,6 +4374,7 @@ def export_metroyearprice_xls(request):
         filter(equipment__roomschange__in=setroom). \
         filter(equipmentSM_ver__in=setver). \
         filter(equipmentSM_ver__date__year=serdate). \
+        filter(equipmentSM_ver__price__isnull=False). \
         values_list(
         'equipment__exnumber',
         'charakters__reestr',
@@ -4394,6 +4395,7 @@ def export_metroyearprice_xls(request):
         filter(equipment__personchange__in=setperson). \
         filter(equipmentSM_att__in=setatt). \
         filter(equipmentSM_att__date__year=serdate). \
+        filter(equipmentSM_att__price__isnull=False). \
         values_list(
         'equipment__exnumber',
         'charakters__name',
