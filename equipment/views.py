@@ -4210,9 +4210,9 @@ qs = MeasurEquipment.objects. \
             'charakters__name',
             'mod_type',
             'equipment__lot',
-            'equipmentSM_ver__certnumber',
-            'equipmentSM_ver__date',
-            'equipmentSM_ver__datedead',
+            'newcertnumber',
+            'newdate',
+            'newdatedead',
         )
 qt = TestingEquipment.objects. \
     annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname')). \
@@ -4221,9 +4221,9 @@ qt = TestingEquipment.objects. \
     'charakters__name',
     'mod_type',
     'equipment__lot',
-    'equipmentSM_att__certnumber',
-    'equipmentSM_att__date',
-    'equipmentSM_att__datedead',
+    'newcertnumber',
+    'newdate',
+    'newdatedead',
 )
 
 
@@ -4302,8 +4302,10 @@ def export_metroyear_xls(request):
     rows = qs
     for row in rows:
         row_num += 1
-        for col_num in range(len(row)):
-            ws.write(row_num, col_num, row[col_num], style20)
+        for col_num in range(6):
+            ws1.write(row_num, col_num, row[col_num], style30)
+        for col_num in range(6, len(row)):
+            ws1.write(row_num, col_num, row[col_num], style30)
 
 
         # заголовки ИО, первый ряд
@@ -4323,7 +4325,9 @@ def export_metroyear_xls(request):
     rows = qt
     for row in rows:
         row_num += 1
-        for col_num in range(len(row)):
-            ws1.write(row_num, col_num, row[col_num], style20)
+        for col_num in range(5):
+            ws1.write(row_num, col_num, row[col_num], style30)
+        for col_num in range(5, len(row)):
+            ws1.write(row_num, col_num, row[col_num], style30)
     wb.save(response)
     return response
