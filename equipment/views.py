@@ -4304,9 +4304,9 @@ def export_metroyear_xls(request):
     for row in rows:
         row_num += 1
         for col_num in range(6):
-            ws1.write(row_num, col_num, row[col_num], style20)
+            ws.write(row_num, col_num, row[col_num], style20)
         for col_num in range(6, len(row)):
-            ws1.write(row_num, col_num, row[col_num], style30)
+            ws.write(row_num, col_num, row[col_num], style30)
 
 
         # заголовки ИО, первый ряд
