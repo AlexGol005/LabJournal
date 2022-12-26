@@ -4433,6 +4433,7 @@ def export_metroyearprice_xls(request):
         values_list(
         'equipmentSM_att__date__month',
         'dcount1',
+        'sumprice',
     )
 
 
