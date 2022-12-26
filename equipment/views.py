@@ -4429,11 +4429,12 @@ def export_metroyearprice_xls(request):
         filter(equipmentSM_att__date__year=serdate). \
         filter(equipmentSM_att__price__isnull=False). \
         values('equipmentSM_att__date__month'). \
-        annotate(dcount1=Count('equipmentSM_att__date__month')). \
+        annotate(dcount1=Count('equipmentSM_att__date__month'), s1=Sum('equipmentSM_ver__price')). \
         order_by(). \
         values_list(
         'equipmentSM_att__date__month',
         'dcount1',
+        's1',
     )
 
 
@@ -4558,6 +4559,7 @@ def export_metroyearprice_xls(request):
     columns = [
         'Месяц',
         'Число поверок',
+        'Сумма в месяц, руб',
     ]
     for col_num in range(len(columns)):
         ws2.write(row_num, col_num, columns[col_num], style10)
@@ -4573,6 +4575,7 @@ def export_metroyearprice_xls(request):
     columns = [
         'Месяц',
         'Число аттестаций',
+        'Сумма в месяц, руб',
     ]
     for col_num in range(len(columns)):
         ws3.write(row_num, col_num, columns[col_num], style10)
