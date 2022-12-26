@@ -4421,18 +4421,18 @@ def export_metroyearprice_xls(request):
         'dcount',
     )
 
-    qs2 = TestingEquipment.objects. \
+    qt1 = TestingEquipment.objects. \
         filter(equipment__personchange__in=setperson). \
         filter(equipment__roomschange__in=setroom). \
         filter(equipmentSM_att__in=setver). \
         filter(equipmentSM_att__date__year=serdate). \
         filter(equipmentSM_att__price__isnull=False). \
         values('equipmentSM_att__date__month'). \
-        annotate(dcount=Count('equipmentSM_att__date__month')). \
+        annotate(dcount1=Count('equipmentSM_att__date__month')). \
         order_by(). \
         values_list(
         'equipmentSM_att__date__month',
-        'dcount',
+        'dcount1',
     )
 
 
@@ -4576,7 +4576,7 @@ def export_metroyearprice_xls(request):
         for col_num in range(len(columns)):
             ws3.write(row_num, col_num, columns[col_num], style10)
 
-        rows = qs2
+        rows = qt1
         for row in rows:
             row_num += 1
             for col_num in range(len(row)):
