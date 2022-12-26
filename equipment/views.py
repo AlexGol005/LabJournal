@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse, HttpRequest
 from datetime import datetime, timedelta
-from django.db.models import Max, Q, Value, CharField, Count
+from django.db.models import Max, Q, Value, CharField, Count, Sum
 from django.db.models.functions import Upper, Concat, Extract, ExtractYear
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template.context_processors import request
@@ -4428,7 +4428,7 @@ def export_metroyearprice_xls(request):
         filter(equipmentSM_att__date__year=serdate). \
         filter(equipmentSM_att__price__isnull=False). \
         values('equipmentSM_att__date__month', 'equipmentSM_att__price'). \
-        annotate(dcount1=Count('equipmentSM_att__date__month'), sumprice=SUM('equipmentSM_att__price')). \
+        annotate(dcount1=Count('equipmentSM_att__date__month'), sumprice=Sum('equipmentSM_att__price')). \
         order_by(). \
         values_list(
         'equipmentSM_att__date__month',
