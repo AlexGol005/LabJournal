@@ -17,6 +17,8 @@ admin.site.register(CompanyCard)
 admin.site.register(MeteorologicalParameters)
 admin.site.register(TestingEquipmentCharakters)
 admin.site.register(TestingEquipment)
+admin.site.register(HelpingEquipment)
+admin.site.register(HelpingEquipmentCharakters)
 
 
 @admin.register(Verificationequipment)

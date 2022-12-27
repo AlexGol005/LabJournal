@@ -402,6 +402,33 @@ class TestingequipmentregView(LoginRequiredMixin, CreateView):
             return redirect(reverse('testequipmentreg', kwargs={'str': self.kwargs['str']}))
 
 
+class HelpingequipmentregView(LoginRequiredMixin, CreateView):
+    """ выводит форму регистрации ВО на основе ЛО и характеристик ВО """
+    form_class = HelpingEquipmentCreateForm
+    template_name = 'equipment/reg.html'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Equipment, exnumber=self.kwargs['str'])
+
+    def get_context_data(self, **kwargs):
+        context = super(HelpingequipmentregView, self).get_context_data(**kwargs)
+        context['title'] = 'Зарегистрировать ВО'
+        context['dop'] = Equipment.objects.get(exnumber=self.kwargs['str'])
+        return context
+
+    def form_valid(self, form):
+        user = User.objects.get(username=self.request.user)
+        if user.is_superuser:
+            if form.is_valid():
+                order = form.save(commit=False)
+                order.equipment = Equipment.objects.get(exnumber=self.kwargs['str'])
+                order.save()
+                return redirect(f'/equipment/helpequipment/{self.kwargs["str"]}')
+        else:
+            messages.success(request, f'Регистрировать может только ответственный за метрологическое обеспечение приборов')
+            return redirect(reverse('helpequipmentreg', kwargs={'str': self.kwargs['str']}))
+
+
 
 # class MeasureequipmentregView(View):
 #     """ выводит форму регистрации СИ на основе ЛО и Госреестра """
@@ -907,7 +934,7 @@ def AttestationReg(request, str):
             }
     return render(request, 'equipment/attestationreg.html', data)
 
-
+# флаг регистрация внесение нового оборудования
 @login_required
 def EquipmentReg(request):
     """выводит форму для регистрации  ЛО"""
@@ -916,19 +943,35 @@ def EquipmentReg(request):
             form = EquipmentCreateForm(request.POST, request.FILES)
             if form.is_valid():
                 order = form.save(commit=False)
-                try:
-                    a = Equipment.objects.filter(exnumber__startswith=order.exnumber).last().exnumber
-                    b = int(str(a)[-3::]) + 1
-                    c = str(b).rjust(3, '0')
-                    d = str(order.exnumber) + c
-                    order.exnumber = d
-                except:
-                    order.exnumber = str(order.exnumber) + '001'
+                if order.kategory == 'ВО':
+                    try:
+                        x = str(order.exnumber) + 'В'
+                        a = Equipment.objects.filter(kategory='ВО').\
+                            filter(exnumber__contains=x).last().exnumber
+                        b = int(str(a)[-3::]) + 1
+                        c = str(b).rjust(3, '0')
+                        d = str(order.exnumber) + 'В' + c
+                        order.exnumber = d
+                    except:
+                        order.exnumber = str(order.exnumber) + 'В001'
+                if order.kategory == 'ИО' or order.kategory == 'СИ':
+                    try:
+                        a = Equipment.objects.exclude(kategory='ВО').\
+                            filter(exnumber__startswith=order.exnumber).last().exnumber
+                        b = int(str(a)[-3::]) + 1
+                        c = str(b).rjust(3, '0')
+                        d = str(order.exnumber) + c
+                        order.exnumber = d
+                    except:
+                        order.exnumber = str(order.exnumber) + '001'
+                order.yearintoservice = now.year
                 order.save()
                 if order.kategory == 'СИ':
                     return redirect(f'/equipment/measureequipmentreg/{order.exnumber}/')
                 if order.kategory == 'ИО':
                     return redirect(f'/equipment/testequipmentreg/{order.exnumber}/')
+                if order.kategory == 'ВО':
+                    return redirect(f'/equipment/helpequipmentreg/{order.exnumber}/')
                 else:
                     return redirect('equipmentlist')
     if not request.user.is_superuser:

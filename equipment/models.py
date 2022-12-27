@@ -362,7 +362,7 @@ class TestingEquipment(models.Model):
         verbose_name_plural = 'Испытательное оборудование'
 
 class HelpingEquipment(models.Model):
-    charakters = models.ForeignKey(TestingEquipmentCharakters,  on_delete=models.PROTECT,
+    charakters = models.ForeignKey(HelpingEquipmentCharakters,  on_delete=models.PROTECT,
                                    verbose_name='Характеристики ВО', blank=True, null=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True,
                                   verbose_name='Оборудование')

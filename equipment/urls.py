@@ -32,6 +32,7 @@ urlpatterns = [
     path('testingequipmentcharactersreg/', views.TestingEquipmentCharaktersRegView.as_view(), name='testingequipmentcharactersreg'),
     path('measureequipmentreg/<str:str>/', views.MeasureequipmentregView.as_view(), name='measureequipmentreg'),
     path('testequipmentreg/<str:str>/', views.TestingequipmentregView.as_view(), name='testequipmentreg'),
+    path('helpequipmentreg/<str:str>/', views.HelpingequipmentregView.as_view(), name='helpequipmentreg'),
     path('personchangereg/<str:str>/', views.PersonchangeFormView.as_view(), name='personchangereg'),
     path('roomschangereg/<str:str>/', views.RoomschangeFormView.as_view(), name='roomschangereg'),
     path('meteo/', views.MeteorologicalParametersView.as_view(), name='meteo'),

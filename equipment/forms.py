@@ -81,8 +81,8 @@ class EquipmentCreateForm(forms.ModelForm):
                                choices=CHOICES,
                                widget=forms.Select(attrs={'class': 'form-control'}))
 
-    yearintoservice = forms.CharField(label='Год ввода в эксплуатацию', max_length=10000, initial=datetime.now().year,
-                                widget=forms.TextInput(attrs={'class': 'form-control'}))
+    # yearintoservice = forms.CharField(label='Год ввода в эксплуатацию', max_length=10000, initial=datetime.now().year,
+    #                             widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     new = forms.ChoiceField(label='Новый или б/у', initial='новый',
                                choices=(
@@ -114,10 +114,11 @@ class EquipmentCreateForm(forms.ModelForm):
         model = Equipment
         fields = [
             'exnumber', 'lot', 'yearmanuf', 'manufacturer', 'status',
-            'yearintoservice', 'new', 'invnumber', 'kategory', 'individuality', 'notemaster',
+             'new', 'invnumber', 'kategory', 'individuality', 'notemaster',
             'imginstruction2', 'imginstruction1',
-            'imginstruction3', 'video', 'price'
-        ]
+            'imginstruction3', 'video', 'price',]
+            # 'yearintoservice',
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -134,7 +135,8 @@ class EquipmentCreateForm(forms.ModelForm):
                 Column('new', css_class='form-group col-md-4 mb-0')),
             Row(
                 Column('status', css_class='form-group col-md-6 mb-0'),
-                Column('yearintoservice', css_class='form-group col-md-6 mb-0')),
+                # Column('yearintoservice', css_class='form-group col-md-6 mb-0')
+            ),
             Row(
                 Column('imginstruction1', css_class='form-group col-md-12 mb-0')),
             Row(
@@ -722,6 +724,19 @@ class TestingEquipmentCreateForm(forms.ModelForm):
 
     class Meta:
         model = TestingEquipment
+        fields = [
+            'charakters',
+                  ]
+
+
+class HelpingEquipmentCreateForm(forms.ModelForm):
+    """форма для внесения ВО"""
+    charakters = forms.ModelChoiceField(label='Характеристики вспомогательного оборудования', required=False,
+                                                         queryset=HelpingEquipmentCharakters.objects.all().order_by('name'),
+                                                         widget=forms.Select(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = HelpingEquipment
         fields = [
             'charakters',
                   ]
