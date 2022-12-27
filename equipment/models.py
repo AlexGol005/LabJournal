@@ -141,7 +141,7 @@ class Equipment(models.Model):
     repair = models.CharField('Контакты для ремонта', max_length=1000,  blank=True, null=True)
 
     def __str__(self):
-        return f'Вн. № {self.exnumber}    Зав. № {self.lot} - pk {self.pk}'
+        return f'Вн. № {self.exnumber}    Зав. № {self.lot} - pk {self.pk} дата {self.date}'
 
     def save(self, *args, **kwargs):
         super().save()
