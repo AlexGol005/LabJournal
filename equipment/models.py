@@ -113,6 +113,7 @@ class Rooms(models.Model):
 
 
 class Equipment(models.Model):
+    date = models.DateField('Дата', auto_now_add=True, blank=True, null=True)
     exnumber = models.CharField('Внутренний номер', max_length=100, default='', blank=True, null=True, unique=True)
     lot = models.CharField('Заводской номер', max_length=100, default='')
     yearmanuf = models.IntegerField('Год выпуска', default='', blank=True, null=True)
@@ -288,6 +289,34 @@ class TestingEquipmentCharakters(models.Model):
         unique_together = ('name', 'modificname', 'typename')
 
 
+class HelpingEquipmentCharakters(models.Model):
+    name = models.CharField('Название прибора', max_length=100, default='')
+    modificname = models.CharField('Модификация прибора', max_length=100, default='', blank=True, null=True)
+    typename = models.CharField('Тип прибора', max_length=100, default='', blank=True, null=True)
+    measurydiapason = models.CharField('Основные технические характеристики', max_length=1000,  blank=True, null=True)
+    aim = models.CharField('Назначение',
+                            max_length=500, blank=True, null=True)
+    ndoc = models.CharField('Методики испытаний', max_length=500, blank=True, null=True)
+    power = models.BooleanField('Работает от сети', default=False, blank=True)
+    voltage = models.CharField('напряжение', max_length=100, default='', blank=True, null=True)
+    frequency = models.CharField('частота', max_length=100, default='', blank=True, null=True)
+    temperature = models.CharField('температура', max_length=100, default='', blank=True, null=True)
+    humidicity = models.CharField('влажность', max_length=100, default='', blank=True, null=True)
+    pressure = models.CharField('давление', max_length=100, default='', blank=True, null=True)
+    setplace = models.CharField('описание мероприятий по установке', max_length=1000, default='', blank=True, null=True)
+    needsetplace = models.BooleanField('Установка не требуется', default=False, blank=True)
+    complectlist = models.CharField('Где в паспорте комплектация', max_length=100, default='', blank=True, null=True)
+    expresstest = models.BooleanField('Тестирование возможно? да/нет', default=False, blank=True)
+
+    def __str__(self):
+        return f'{self.name}  {self.modificname}'
+
+    class Meta:
+        verbose_name = 'Вспомогательное оборудование, характеристики'
+        verbose_name_plural = 'Вспомогательное оборудование, характеристики'
+        unique_together = ('name', 'modificname', 'typename')
+
+
 class MeasurEquipment(models.Model):
     charakters = models.ForeignKey(MeasurEquipmentCharakters,  on_delete=models.PROTECT,
                                    verbose_name='Характеристики СИ', blank=True, null=True)
@@ -331,6 +360,19 @@ class TestingEquipment(models.Model):
     class Meta:
         verbose_name = 'Испытательное оборудование'
         verbose_name_plural = 'Испытательное оборудование'
+
+class HelpingEquipment(models.Model):
+    charakters = models.ForeignKey(TestingEquipmentCharakters,  on_delete=models.PROTECT,
+                                   verbose_name='Характеристики ВО', blank=True, null=True)
+    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, blank=True, null=True,
+                                  verbose_name='Оборудование')
+
+    def __str__(self):
+        return f'Вн № {self.equipment.exnumber}  {self.charakters.name}  Зав № {self.equipment.lot} - pk {self.pk}'
+
+    class Meta:
+        verbose_name = 'Вспомогательное оборудование'
+        verbose_name_plural = 'Вспомогательное оборудование'
 
 
 class Verificationequipment(models.Model):
