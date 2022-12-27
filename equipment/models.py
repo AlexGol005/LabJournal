@@ -113,7 +113,7 @@ class Rooms(models.Model):
 
 
 class Equipment(models.Model):
-    date = models.DateField('Дата', auto_now_add=True, blank=True, null=True)
+    date = models.DateTimeField('Дата', auto_now_add=True, blank=True, null=True)
     exnumber = models.CharField('Внутренний номер', max_length=100, default='', blank=True, null=True, unique=True)
     lot = models.CharField('Заводской номер', max_length=100, default='')
     yearmanuf = models.IntegerField('Год выпуска', default='', blank=True, null=True)
