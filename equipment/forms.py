@@ -105,7 +105,7 @@ class EquipmentCreateForm(forms.ModelForm):
     video = forms.CharField(label='Видео к прибору', max_length=10000, required=False,
                             widget=forms.TextInput(attrs={'class': 'form-control',
                                                           'placeholder': 'добавьте ссылку на видео'}))
-    price = forms.DecimalField(label='Стоимость', max_digits=10, decimal_places=2, required=False,
+    price = forms.DecimalField(label='Стоимость', max_digits=10, decimal_places=2,
                                widget=forms.TextInput(attrs={'class': 'form-control',
                                                              'placeholder': '0000.00'}))
 
