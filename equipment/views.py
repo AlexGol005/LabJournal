@@ -4626,7 +4626,6 @@ def export_metroyearcust_xls(request):
         filter(equipmentSM_ver__in=setver). \
         filter(equipmentSM_ver__date__year=serdate). \
         filter(equipmentSM_ver__price__isnull=False). \
-        filter(equipmentSM_ver__cust=False). \
         values_list(
         'equipment__exnumber',
         'charakters__reestr',
