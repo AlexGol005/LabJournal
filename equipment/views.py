@@ -1634,7 +1634,7 @@ def export_me_xls(request):
         'charakters__calinterval',
         'equipment__invnumber',
         'equipmentSM_att__ndocs',
-        'charakters__measurydiapason'
+        'charakters__measurydiapason',
         'charakters__aim',
     )
     for row in rows:
