@@ -5194,9 +5194,9 @@ def export_planmetro_xls(request):
     rows = qs
     for row in rows:
         row_num += 1
-        for col_num in range(7):
+        for col_num in range(6):
             ws.write(row_num, col_num, row[col_num], style20)
-        for col_num in range(7, len(row)):
+        for col_num in range(6, len(row)):
             ws.write(row_num, col_num, row[col_num], style30)
 
         # заголовки ИО, первый ряд
