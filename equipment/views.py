@@ -1463,8 +1463,8 @@ def export_me_xls(request):
     ws.col(15).width = 3000
     ws.col(16).width = 3000
     ws.col(17).width = 3000
-    ws.col(18).width = 4500
-    ws.col(19).width = 4500
+    ws.col(20).width = 4500
+    ws.col(21).width = 4500
 
     # ширина столбцов графика аттестации
     ws1.col(0).width = 3000
@@ -5013,20 +5013,20 @@ def export_metronewyear_xls(request):
 
 
         # заголовки подсчёт по месяцам СИ
-    row_num = 0
-    columns = [
-        'Месяц',
-        'Число единиц',
-        'Сумма в месяц, руб',
-    ]
-    for col_num in range(len(columns)):
-        ws2.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qs1
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws2.write(row_num, col_num, row[col_num], style20)
+    # row_num = 0
+    # columns = [
+    #     'Месяц',
+    #     'Число единиц',
+    #     'Сумма в месяц, руб',
+    # ]
+    # for col_num in range(len(columns)):
+    #     ws2.write(row_num, col_num, columns[col_num], style10)
+    #
+    # rows = qs1
+    # for row in rows:
+    #     row_num += 1
+    #     for col_num in range(len(row)):
+    #         ws2.write(row_num, col_num, row[col_num], style20)
 
     # заголовки подсчёт по месяцам ИО
     row_num = 0
