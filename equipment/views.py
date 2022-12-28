@@ -4625,7 +4625,7 @@ def export_metroyearcust_xls(request):
         filter(equipment__roomschange__in=setroom). \
         filter(equipmentSM_ver__in=setver). \
         filter(equipmentSM_ver__date__year=serdate). \
-        filter(equipmentSM_ver__cust=False). \
+        filter(equipmentSM_ver__price__isnull=False). \
         values_list(
         'equipment__exnumber',
         'charakters__reestr',
