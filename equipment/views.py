@@ -5029,36 +5029,36 @@ def export_metronewyear_xls(request):
     #         ws2.write(row_num, col_num, row[col_num], style20)
 
     # заголовки подсчёт по месяцам ИО
-    row_num = 0
-    columns = [
-        'Месяц',
-        'Число единиц',
-        'Сумма в месяц, руб',
-    ]
-    for col_num in range(len(columns)):
-        ws3.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qt1
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws3.write(row_num, col_num, row[col_num], style20)
-
-        # заголовки подсчёт по месяцам ВО
-        row_num = 0
-        columns = [
-            'Месяц',
-            'Число единиц',
-            'Сумма в месяц, руб',
-        ]
-        for col_num in range(len(columns)):
-            ws5.write(row_num, col_num, columns[col_num], style10)
-
-        rows = qh1
-        for row in rows:
-            row_num += 1
-            for col_num in range(len(row)):
-                ws5.write(row_num, col_num, row[col_num], style20)
+    # row_num = 0
+    # columns = [
+    #     'Месяц',
+    #     'Число единиц',
+    #     'Сумма в месяц, руб',
+    # ]
+    # for col_num in range(len(columns)):
+    #     ws3.write(row_num, col_num, columns[col_num], style10)
+    #
+    # rows = qt1
+    # for row in rows:
+    #     row_num += 1
+    #     for col_num in range(len(row)):
+    #         ws3.write(row_num, col_num, row[col_num], style20)
+    #
+    #     # заголовки подсчёт по месяцам ВО
+    #     row_num = 0
+    #     columns = [
+    #         'Месяц',
+    #         'Число единиц',
+    #         'Сумма в месяц, руб',
+    #     ]
+    #     for col_num in range(len(columns)):
+    #         ws5.write(row_num, col_num, columns[col_num], style10)
+    #
+    #     rows = qh1
+    #     for row in rows:
+    #         row_num += 1
+    #         for col_num in range(len(row)):
+    #             ws5.write(row_num, col_num, row[col_num], style20)
 
     wb.save(response)
     return response
