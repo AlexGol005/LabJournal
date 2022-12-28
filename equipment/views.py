@@ -5086,7 +5086,7 @@ def export_planmetro_xls(request):
         'equipmentSM_ver__certnumber',
         'equipmentSM_ver__price',
         'equipmentSM_ver__dateorder__month',
-    ).order_by('equipmentSM_ver__date')
+    ).order_by('equipmentSM_ver__dateorder__month')
 
     qt = TestingEquipment.objects. \
         annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
