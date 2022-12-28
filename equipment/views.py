@@ -5011,8 +5011,7 @@ def export_metronewyear_xls(request):
         for col_num in range(len(row)):
             ws4.write(row_num, col_num, row[col_num], style20)
 
-
-        # заголовки подсчёт по месяцам СИ
+    # заголовки подсчёт по месяцам СИ
     row_num = 0
     columns = [
         'Месяц',
