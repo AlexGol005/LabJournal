@@ -4626,6 +4626,7 @@ def export_metroyearcust_xls(request):
         filter(equipmentSM_ver__in=setver). \
         filter(equipmentSM_ver__date__year=serdate). \
         filter(equipmentSM_ver__price__isnull=False). \
+        filter(equipmentSM_ver__cust=False). \
         values_list(
         'equipment__exnumber',
         'charakters__reestr',
@@ -4645,7 +4646,7 @@ def export_metroyearcust_xls(request):
         filter(equipment__roomschange__in=setroom). \
         filter(equipment__personchange__in=setperson). \
         filter(equipmentSM_att__in=setatt). \
-        filter(equipmentSM_att__date__year=serdate). \
+        filter(equipmentSM_att__price__isnull=False). \
         filter(equipmentSM_att__cust=False). \
         values_list(
         'equipment__exnumber',
@@ -4663,6 +4664,7 @@ def export_metroyearcust_xls(request):
         filter(equipment__roomschange__in=setroom). \
         filter(equipmentSM_ver__in=setver). \
         filter(equipmentSM_ver__date__year=serdate). \
+        filter(equipmentSM_ver__price__isnull=False). \
         filter(equipmentSM_ver__cust=False). \
         values('equipmentSM_ver__date__month'). \
         annotate(dcount=Count('equipmentSM_ver__date__month'), s=Sum('equipmentSM_ver__price')). \
@@ -4678,6 +4680,7 @@ def export_metroyearcust_xls(request):
         filter(equipment__roomschange__in=setroom). \
         filter(equipmentSM_att__in=setatt). \
         filter(equipmentSM_att__date__year=serdate). \
+        filter(equipmentSM_att__price__isnull=False). \
         filter(equipmentSM_att__cust=False). \
         values('equipmentSM_att__date__month'). \
         annotate(dcount1=Count('equipmentSM_att__date__month'), s1=Sum('equipmentSM_att__price')). \
