@@ -5139,7 +5139,7 @@ def export_planmetro_xls(request):
     )
 
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="equipment.xls"'
+    response['Content-Disposition'] = f'attachment; filename="pov_att_plan {serdate}.xls"'
 
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('СИ', cell_overwrite_ok=True)
