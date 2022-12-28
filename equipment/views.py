@@ -1568,7 +1568,7 @@ def export_me_xls(request):
             'equipmentSM_ver__dateordernew',
             'charakters__calinterval',
             'equipment__invnumber',
-            'charakters__measurydiapason'
+            'charakters__measurydiapason',
             'charakters__accuracity',
         )
     for row in rows:
