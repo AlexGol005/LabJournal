@@ -1530,6 +1530,8 @@ def export_me_xls(request):
                 'Дата заказа замены',
                 'Периодичность поверки /калибровки (месяцы)',
                 'Инвентарный номер',
+                'Диапазон измерений',
+                'Метрологические характеристики',
                ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style10)
@@ -1562,6 +1564,8 @@ def export_me_xls(request):
             'equipmentSM_ver__dateordernew',
             'charakters__calinterval',
             'equipment__invnumber',
+            'charakters__measurydiapason'
+            'charakters__accuracity',
         )
     for row in rows:
         row_num += 1
@@ -1593,6 +1597,8 @@ def export_me_xls(request):
         'Периодичность аттестации',
         'Инвентарный номер',
         'Аттестован на методики',
+        'Основные технические характеристики',
+        'Наименование видов испытаний',
     ]
     for col_num in range(len(columns)):
         ws1.write(row_num, col_num, columns[col_num], style10)
@@ -1624,6 +1630,8 @@ def export_me_xls(request):
         'charakters__calinterval',
         'equipment__invnumber',
         'equipmentSM_att__ndocs',
+        'charakters__measurydiapason'
+        'charakters__aim',
     )
     for row in rows:
         row_num += 1
