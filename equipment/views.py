@@ -4643,8 +4643,8 @@ def export_metroyearcust_xls(request):
         annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
                  manuf_country=Concat('equipment__manufacturer__country', Value(', '),
                                       'equipment__manufacturer__companyName')). \
-        filter(equipment__roomschange__in=setroom). \
         filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
         filter(equipmentSM_att__in=setatt). \
         filter(equipmentSM_att__date__year=serdate). \
         exclude(equipmentSM_att__cust=True). \
