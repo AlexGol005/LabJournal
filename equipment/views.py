@@ -5125,8 +5125,8 @@ def export_planmetro_xls(request):
         filter(equipment__personchange__in=setperson). \
         filter(equipmentSM_att__in=setatt). \
         filter(equipmentSM_att__dateorder__year=serdate). \
-        values('equipment__dateorder__month'). \
-        annotate(dcount1=Count('equipment__dateorder__month'), s1=Sum('equipment__price')). \
+        values('equipment_att__dateorder__month'). \
+        annotate(dcount1=Count('equipment_att__dateorder__month'), s1=Sum('equipment_att__price')). \
         order_by(). \
         values_list(
         'equipment__dateorder__month',
