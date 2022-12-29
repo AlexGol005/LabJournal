@@ -5120,19 +5120,19 @@ def export_planmetro_xls(request):
         's',
     )
 
-    qs1 = TestingEquipment.objects. \
+    qt1 = TestingEquipment.objects. \
         filter(equipment__personchange__in=setperson). \
         filter(equipment__roomschange__in=setroom). \
         filter(equipmentSM_att__in=setatt). \
         filter(equipmentSM_att__dateorder__year=serdate). \
-        values('equipmentSM_att__date__month'). \
-        annotate(dcount4=Count('equipmentSM_att__dateorder__month'), s4=Sum('equipmentSM_att__price')). \
-        order_by('equipment_att__dateorder__month'). \
         values_list(
         'equipmentSM_att__dateorder__month',
         'dcount4',
         's4',
     )
+# values('equipmentSM_att__date__month'). \
+#         annotate(dcount4=Count('equipmentSM_att__dateorder__month'), s4=Sum('equipmentSM_att__price')). \
+#         order_by('equipment_att__dateorder__month'). \
 
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="pov_att_plan {serdate}.xls"'
