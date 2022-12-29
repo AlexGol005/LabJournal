@@ -4638,6 +4638,7 @@ def export_metroyearcust_xls(request):
         'equipmentSM_ver__datedead',
     ).order_by('equipmentSM_ver__date')
 
+
     qt = TestingEquipment.objects. \
         annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
                  manuf_country=Concat('equipment__manufacturer__country', Value(', '),
@@ -4646,6 +4647,7 @@ def export_metroyearcust_xls(request):
         filter(equipment__personchange__in=setperson). \
         filter(equipmentSM_att__in=setatt). \
         filter(equipmentSM_att__price__isnull=False). \
+        filter(equipmentSM_att__date__year=serdate). \
         exclude(equipmentSM_att__cust=True). \
         values_list(
         'equipment__exnumber',
