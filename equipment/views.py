@@ -5113,7 +5113,7 @@ def export_planmetro_xls(request):
         filter(equipmentSM_ver__dateorder__year=serdate). \
         values('equipmentSM_ver__date__month'). \
         annotate(dcount=Count('equipmentSM_ver__dateorder__month'), s=Sum('equipmentSM_ver__price')). \
-        order_by(). \
+        order_by('equipment_att__dateorder__month'). \
         values_list(
         'equipmentSM_ver__dateorder__month',
         'dcount',
@@ -5127,7 +5127,7 @@ def export_planmetro_xls(request):
         filter(equipmentSM_att__dateorder__year=serdate). \
         values('equipment_att__dateorder__month'). \
         annotate(dcount1=Count('equipment_att__dateorder__month'), s1=Sum('equipment_att__price')). \
-        order_by(). \
+        order_by('equipment_att__dateorder__month'). \
         values_list(
         'equipment__dateorder__month',
         'dcount1',
