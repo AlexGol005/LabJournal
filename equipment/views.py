@@ -5106,34 +5106,34 @@ def export_planmetro_xls(request):
         'equipmentSM_att__dateorder__month',
     ).order_by('equipmentSM_att__dateorder__month')
 
-    qount_plan_verific = MeasurEquipment.objects. \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipmentSM_ver__in=setver). \
-        filter(equipmentSM_ver__dateorder__year=serdate). \
-        values('equipmentSM_ver__date__month'). \
-        annotate(dcount=Count('equipmentSM_ver__date__month'), s=Sum('equipmentSM_ver__price')). \
-        order_by(). \
-        values_list(
-        'equipmentSM_ver__date__month',
-        'dcount',
-        's',
-    )
-
-    qount_plan_att = TestingEquipment.objects. \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipmentSM_att__in=setatt). \
-        filter(equipmentSM_att__date__year=serdate). \
-        filter(equipmentSM_att__price__isnull=False). \
-        values('equipmentSM_att__date__month'). \
-        annotate(dcount1=Count('equipmentSM_att__date__month'), s1=Sum('equipmentSM_att__price')). \
-        order_by(). \
-        values_list(
-        'equipmentSM_att__date__month',
-        'dcount1',
-        's1',
-    )
+    # qount_plan_verific = MeasurEquipment.objects. \
+    #     filter(equipment__personchange__in=setperson). \
+    #     filter(equipment__roomschange__in=setroom). \
+    #     filter(equipmentSM_ver__in=setver). \
+    #     filter(equipmentSM_ver__dateorder__year=serdate). \
+    #     values('equipmentSM_ver__date__month'). \
+    #     annotate(dcount=Count('equipmentSM_ver__date__month'), s=Sum('equipmentSM_ver__price')). \
+    #     order_by(). \
+    #     values_list(
+    #     'equipmentSM_ver__date__month',
+    #     'dcount',
+    #     's',
+    # )
+    #
+    # qount_plan_att = TestingEquipment.objects. \
+    #     filter(equipment__personchange__in=setperson). \
+    #     filter(equipment__roomschange__in=setroom). \
+    #     filter(equipmentSM_att__in=setatt). \
+    #     filter(equipmentSM_att__date__year=serdate). \
+    #     filter(equipmentSM_att__price__isnull=False). \
+    #     values('equipmentSM_att__date__month'). \
+    #     annotate(dcount1=Count('equipmentSM_att__date__month'), s1=Sum('equipmentSM_att__price')). \
+    #     order_by(). \
+    #     values_list(
+    #     'equipmentSM_att__date__month',
+    #     'dcount1',
+    #     's1',
+    # )
 
 
 
@@ -5216,35 +5216,35 @@ def export_planmetro_xls(request):
         for col_num in range(len(row)):
             ws1.write(row_num, col_num, row[col_num], style20)
 
-        # заголовки подсчёт поверок СИ
-    row_num = 0
-    columns = [
-        'Месяц',
-        'Число поверок',
-    ]
-    for col_num in range(len(columns)):
-        ws2.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qount_plan_verific
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws2.write(row_num, col_num, row[col_num], style20)
-
-    # заголовки подсчёт аттестаций СИ
-    row_num = 0
-    columns = [
-        'Месяц',
-        'Число аттестаций',
-    ]
-    for col_num in range(len(columns)):
-        ws3.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qount_plan_att
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws3.write(row_num, col_num, row[col_num], style20)
+    #     # заголовки подсчёт поверок СИ
+    # row_num = 0
+    # columns = [
+    #     'Месяц',
+    #     'Число поверок',
+    # ]
+    # for col_num in range(len(columns)):
+    #     ws2.write(row_num, col_num, columns[col_num], style10)
+    #
+    # rows = qount_plan_verific
+    # for row in rows:
+    #     row_num += 1
+    #     for col_num in range(len(row)):
+    #         ws2.write(row_num, col_num, row[col_num], style20)
+    #
+    # # заголовки подсчёт аттестаций СИ
+    # row_num = 0
+    # columns = [
+    #     'Месяц',
+    #     'Число аттестаций',
+    # ]
+    # for col_num in range(len(columns)):
+    #     ws3.write(row_num, col_num, columns[col_num], style10)
+    #
+    # rows = qount_plan_att
+    # for row in rows:
+    #     row_num += 1
+    #     for col_num in range(len(row)):
+    #         ws3.write(row_num, col_num, row[col_num], style20)
 
     wb.save(response)
     return response
