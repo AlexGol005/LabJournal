@@ -5113,25 +5113,25 @@ def export_planmetro_xls(request):
         filter(equipmentSM_ver__dateorder__year=serdate). \
         values('equipmentSM_ver__date__month'). \
         annotate(dcount=Count('equipmentSM_ver__dateorder__month'), s=Sum('equipmentSM_ver__price')). \
-        order_by('equipment_att__dateorder__month'). \
+        order_by('equipment_ver__dateorder__month'). \
         values_list(
         'equipmentSM_ver__dateorder__month',
         'dcount',
         's',
     )
 
-    qt1 = TestingEquipment.objects. \
-        filter(equipment__roomschange__in=setroom). \
+    qs1 = TestingEquipment.objects. \
         filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
         filter(equipmentSM_att__in=setatt). \
         filter(equipmentSM_att__dateorder__year=serdate). \
-        values('equipment_att__dateorder__month'). \
-        annotate(dcount1=Count('equipment_att__dateorder__month'), s1=Sum('equipment_att__price')). \
+        values('equipmentSM_att__date__month'). \
+        annotate(dcount4=Count('equipmentSM_att__dateorder__month'), s4=Sum('equipmentSM_att__price')). \
         order_by('equipment_att__dateorder__month'). \
         values_list(
-        'equipment__dateorder__month',
-        'dcount1',
-        's1',
+        'equipmentSM_att__dateorder__month',
+        'dcount4',
+        's4',
     )
 
     response = HttpResponse(content_type='application/ms-excel')
