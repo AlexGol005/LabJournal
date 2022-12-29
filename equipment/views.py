@@ -5095,8 +5095,7 @@ def export_planmetro_xls(request):
         filter(equipment__roomschange__in=setroom). \
         filter(equipment__personchange__in=setperson). \
         filter(equipmentSM_att__in=setatt). \
-        filter(equipmentSM_att__date__year=serdate). \
-        filter(equipmentSM_att__cust=False). \
+        filter(equipmentSM_att__dateorder__year=serdate). \
         values_list(
         'equipment__exnumber',
         'charakters__name',
@@ -5104,36 +5103,32 @@ def export_planmetro_xls(request):
         'equipment__lot',
         'equipmentSM_att__certnumber',
         'equipmentSM_att__price',
-        'equipmentSM_att__date',
-        'equipmentSM_att__datedead'
-    ).order_by('equipmentSM_att__date')
+        'equipmentSM_att__dateorder__month',
+    ).order_by('equipmentSM_att__dateorder__month')
 
     qs1 = MeasurEquipment.objects. \
         filter(equipment__personchange__in=setperson). \
         filter(equipment__roomschange__in=setroom). \
         filter(equipmentSM_ver__in=setver). \
-        filter(equipmentSM_ver__date__year=serdate). \
-        filter(equipmentSM_ver__cust=False). \
+        filter(equipmentSM_ver__dateorder__year=serdate). \
         values('equipmentSM_ver__date__month'). \
-        annotate(dcount=Count('equipmentSM_ver__date__month'), s=Sum('equipmentSM_ver__price')). \
+        annotate(dcount=Count('equipmentSM_ver__dateorder__month'), s=Sum('equipmentSM_ver__price')). \
         order_by(). \
         values_list(
-        'equipmentSM_ver__date__month',
+        'equipmentSM_ver__dateorder__month',
         'dcount',
         's',
     )
 
     qt1 = TestingEquipment.objects. \
-        filter(equipment__personchange__in=setperson). \
         filter(equipment__roomschange__in=setroom). \
+        filter(equipment__personchange__in=setperson). \
         filter(equipmentSM_att__in=setatt). \
-        filter(equipmentSM_att__date__year=serdate). \
-        filter(equipmentSM_att__cust=False). \
-        values('equipmentSM_att__date__month'). \
-        annotate(dcount1=Count('equipmentSM_att__date__month'), s1=Sum('equipmentSM_att__price')). \
+        filter(equipmentSM_att__dateorder__year=serdate). \
+        annotate(dcount1=Count('equipmentSM_att__dateorder__month'), s1=Sum('equipmentSM_att__price')). \
         order_by(). \
         values_list(
-        'equipmentSM_att__date__month',
+        'equipmentSM_att__dateorder__month',
         'dcount1',
         's1',
     )
@@ -5205,9 +5200,8 @@ def export_planmetro_xls(request):
         'Тип/Модификация',
         'Заводской номер',
         'Номер аттестата',
-        'Стоимость аттестации, руб.',
-        'Дата аттестации',
-        'Дата окончания аттестации',
+        'Стоимость последней аттестации, руб. (при наличии)',
+        'Месяц заказа аттестации',
     ]
     for col_num in range(len(columns)):
         ws1.write(row_num, col_num, columns[col_num], style10)
@@ -5215,17 +5209,15 @@ def export_planmetro_xls(request):
     rows = qt
     for row in rows:
         row_num += 1
-        for col_num in range(6):
+        for col_num in range(len(row)):
             ws1.write(row_num, col_num, row[col_num], style20)
-        for col_num in range(6, len(row)):
-            ws1.write(row_num, col_num, row[col_num], style30)
 
         # заголовки подсчёт поверок СИ
     row_num = 0
     columns = [
         'Месяц',
         'Число поверок',
-        'Сумма в месяц, руб',
+        'Сумма в месяц, руб (в расчёте на известные стоимости поверок за предыдущий период)',
     ]
     for col_num in range(len(columns)):
         ws2.write(row_num, col_num, columns[col_num], style10)
@@ -5241,7 +5233,7 @@ def export_planmetro_xls(request):
     columns = [
         'Месяц',
         'Число аттестаций',
-        'Сумма в месяц, руб',
+        'Сумма в месяц, руб (в расчёте на известные стоимости аттестаций за предыдущий период)',
     ]
     for col_num in range(len(columns)):
         ws3.write(row_num, col_num, columns[col_num], style10)
