@@ -5106,32 +5106,36 @@ def export_planmetro_xls(request):
         'equipmentSM_att__dateorder__month',
     ).order_by('equipmentSM_att__dateorder__month')
 
-    qs1 = MeasurEquipment.objects. \
+    qount_plan_verific = MeasurEquipment.objects. \
         filter(equipment__personchange__in=setperson). \
         filter(equipment__roomschange__in=setroom). \
         filter(equipmentSM_ver__in=setver). \
         filter(equipmentSM_ver__dateorder__year=serdate). \
         values('equipmentSM_ver__date__month'). \
-        annotate(dcount=Count('equipmentSM_ver__dateorder__month')). \
+        annotate(dcount=Count('equipmentSM_ver__date__month'), s=Sum('equipmentSM_ver__price')). \
+        order_by(). \
         values_list(
-        'equipmentSM_ver__dateorder__month',
+        'equipmentSM_ver__date__month',
         'dcount',
-    ).order_by('equipment_ver__dateorder__month')
+        's',
+    )
 
-
-
-    qt1 = TestingEquipment.objects. \
+    qount_plan_att = TestingEquipment.objects. \
         filter(equipment__personchange__in=setperson). \
         filter(equipment__roomschange__in=setroom). \
         filter(equipmentSM_att__in=setatt). \
-        filter(equipmentSM_att__dateorder__year=serdate). \
-        values('equipmentSM_att__dateorder__month'). \
-                annotate(dcount4=Count('equipmentSM_att__dateorder__month')). \
-            order_by('equipment_att__dateorder__month'). \
+        filter(equipmentSM_att__date__year=serdate). \
+        filter(equipmentSM_att__price__isnull=False). \
+        values('equipmentSM_att__date__month'). \
+        annotate(dcount1=Count('equipmentSM_att__date__month'), s1=Sum('equipmentSM_att__price')). \
+        order_by(). \
         values_list(
-        'equipmentSM_att__dateorder__month',
-        'dcount4',
+        'equipmentSM_att__date__month',
+        'dcount1',
+        's1',
     )
+
+
 
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="pov_att_plan {serdate}.xls"'
@@ -5221,7 +5225,7 @@ def export_planmetro_xls(request):
     for col_num in range(len(columns)):
         ws2.write(row_num, col_num, columns[col_num], style10)
 
-    rows = qs1
+    rows = qount_plan_verific
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
@@ -5236,7 +5240,7 @@ def export_planmetro_xls(request):
     for col_num in range(len(columns)):
         ws3.write(row_num, col_num, columns[col_num], style10)
 
-    rows = qt1
+    rows = qount_plan_att
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
