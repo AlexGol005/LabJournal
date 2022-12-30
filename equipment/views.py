@@ -5385,8 +5385,7 @@ def base_planreport_xls(request, exel_file_name, measure_e, u_headers_me, str1 =
     return response
 
 def export_planmetro_xls(args):
-
-
+    serdate = request.GET['date']
     exel_file_name = 1
 
     u_headers_me = ['Номер аттестата',
@@ -5411,8 +5410,7 @@ def export_planmetro_xls(args):
     )
 
 
-
-    return base_planreport_xls(exel_file_name, measure_e, u_headers_me)
+    return base_planreport_xls(request, exel_file_name, measure_e, u_headers_me)
 
 
 
