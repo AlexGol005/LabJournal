@@ -4254,6 +4254,7 @@ def export_exvercardteste_xls(request, pk):
     wb.save(response)
     return response
 
+# флаг ексели отчёт и план по приборам
 '''несколько представлений для выгрузки отчётов в ексель'''
 
 # стили
@@ -4286,10 +4287,6 @@ style30.alignment = al10
 style30.num_format_str = 'DD.MM.YYYY'
 
 
-
-
-
-# флаг шаблон ексель по приборам
 def export_metroyear_xls(request):
     '''представление для выгрузки списка СИ и ИО поверка в год без учёта стоимости'''
     serdate = request.GET['date']
@@ -5067,114 +5064,300 @@ def export_metronewyear_xls(request):
 
 
 # флаг планы на следующий год
-def export_planmetro_xls(request):
-    '''представление для выгрузки плана поверки и аттестации на следующий год'''
-    serdate = request.GET['date']
-    qs = MeasurEquipment.objects. \
-        annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
-                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
-                                      'equipment__manufacturer__companyName')). \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipmentSM_ver__in=setver). \
-        filter(equipmentSM_ver__dateorder__year=serdate). \
-        values_list(
-        'equipment__exnumber',
-        'charakters__reestr',
-        'charakters__name',
-        'mod_type',
-        'equipment__lot',
-        'equipmentSM_ver__certnumber',
-        'equipmentSM_ver__price',
-        'equipmentSM_ver__dateorder__month',
-    ).order_by('equipmentSM_ver__dateorder__month')
+# def export_planmetro_xls(request):
+#     '''представление для выгрузки плана поверки и аттестации на следующий год'''
+#     serdate = request.GET['date']
+#     qs = MeasurEquipment.objects. \
+#         annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
+#                  manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+#                                       'equipment__manufacturer__companyName')). \
+#         filter(equipment__personchange__in=setperson). \
+#         filter(equipment__roomschange__in=setroom). \
+#         filter(equipmentSM_ver__in=setver). \
+#         filter(equipmentSM_ver__dateorder__year=serdate). \
+#         values_list(
+#         'equipment__exnumber',
+#         'charakters__reestr',
+#         'charakters__name',
+#         'mod_type',
+#         'equipment__lot',
+#         'equipmentSM_ver__certnumber',
+#         'equipmentSM_ver__price',
+#         'equipmentSM_ver__dateorder__month',
+#     ).order_by('equipmentSM_ver__dateorder__month')
+#
+#     qt = TestingEquipment.objects. \
+#         annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
+#                  manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+#                                       'equipment__manufacturer__companyName')). \
+#         filter(equipment__roomschange__in=setroom). \
+#         filter(equipment__personchange__in=setperson). \
+#         filter(equipmentSM_att__in=setatt). \
+#         filter(equipmentSM_att__dateorder__year=serdate). \
+#         values_list(
+#         'equipment__exnumber',
+#         'charakters__name',
+#         'mod_type',
+#         'equipment__lot',
+#         'equipmentSM_att__certnumber',
+#         'equipmentSM_att__price',
+#         'equipmentSM_att__dateorder__month',
+#     ).order_by('equipmentSM_att__dateorder__month')
+#
+#     qount_plan_verific = MeasurEquipment.objects. \
+#         filter(equipment__personchange__in=setperson). \
+#         filter(equipment__roomschange__in=setroom). \
+#         filter(equipmentSM_ver__in=setver). \
+#         filter(equipmentSM_ver__dateorder__year=serdate). \
+#         values('equipmentSM_ver__date__month'). \
+#         annotate(dcount=Count('equipmentSM_ver__date__month'), s=Sum('equipmentSM_ver__price')). \
+#         order_by(). \
+#         values_list(
+#         'equipmentSM_ver__date__month',
+#         'dcount',
+#         's',
+#     )
+#
+#     qount_plan_att = TestingEquipment.objects. \
+#         filter(equipment__personchange__in=setperson). \
+#         filter(equipment__roomschange__in=setroom). \
+#         filter(equipmentSM_att__in=setatt). \
+#         filter(equipmentSM_att__date__year=serdate). \
+#         filter(equipmentSM_att__price__isnull=False). \
+#         values('equipmentSM_att__date__month'). \
+#         annotate(dcount1=Count('equipmentSM_att__date__month'), s1=Sum('equipmentSM_att__price')). \
+#         order_by(). \
+#         values_list(
+#         'equipmentSM_att__date__month',
+#         'dcount1',
+#         's1',
+#     )
+#
+#
+#
+#     response = HttpResponse(content_type='application/ms-excel')
+#     response['Content-Disposition'] = f'attachment; filename="pov_att_plan {serdate}.xls"'
+#
+#     wb = xlwt.Workbook(encoding='utf-8')
+#     ws = wb.add_sheet('СИ', cell_overwrite_ok=True)
+#     ws1 = wb.add_sheet('ИО', cell_overwrite_ok=True)
+#     ws2 = wb.add_sheet('Количество поверок в месяц', cell_overwrite_ok=True)
+#     ws3 = wb.add_sheet('Количество аттестаций в месяц', cell_overwrite_ok=True)
+#     ws.header_str = b'  '
+#     ws.footer_str = b'c. &P '
+#     ws1.header_str = b'  '
+#     ws1.footer_str = b'c. &P '
+#     ws2.header_str = b'  '
+#     ws2.footer_str = b'c. &P '
+#     ws3.header_str = b'  '
+#     ws3.footer_str = b'c. &P '
+#
+#     # ширина столбцов СИ
+#     ws.col(0).width = 3000
+#     ws.col(1).width = 3000
+#     ws.col(2).width = 4500
+#     ws.col(3).width = 3000
+#     ws.col(4).width = 4200
+#     ws.col(6).width = 2600
+#     ws.col(7).width = 3000
+#     ws.col(8).width = 3000
+#
+#     # ширина столбцов ИО
+#     ws1.col(0).width = 3000
+#     ws1.col(1).width = 4500
+#     ws1.col(2).width = 3500
+#     ws1.col(3).width = 4200
+#     ws1.col(4).width = 4500
+#     ws1.col(5).width = 2600
+#     ws1.col(6).width = 3000
+#     ws1.col(7).width = 3000
+#
+#     # заголовки СИ
+#     row_num = 0
+#     columns = [
+#         'Внутренний  номер',
+#         'Номер в госреестре',
+#         'Наименование',
+#         'Тип/Модификация',
+#         'Заводской номер',
+#         'Номер текущего свидетельства',
+#         'Стоимость последней поверки, руб. (при наличии)',
+#         'Месяц заказа поверки',
+#     ]
+#     for col_num in range(len(columns)):
+#         ws.write(row_num, col_num, columns[col_num], style10)
+#
+#     rows = qs
+#     for row in rows:
+#         row_num += 1
+#         for col_num in range(len(columns)):
+#             ws.write(row_num, col_num, row[col_num], style20)
+#
+#
+#         # заголовки ИО, первый ряд
+#     row_num = 0
+#     columns = [
+#         'Внутренний  номер',
+#         'Наименование',
+#         'Тип/Модификация',
+#         'Заводской номер',
+#         'Номер аттестата',
+#         'Стоимость последней аттестации, руб. (при наличии)',
+#         'Месяц заказа аттестации',
+#     ]
+#     for col_num in range(len(columns)):
+#         ws1.write(row_num, col_num, columns[col_num], style10)
+#
+#     rows = qt
+#     for row in rows:
+#         row_num += 1
+#         for col_num in range(len(row)):
+#             ws1.write(row_num, col_num, row[col_num], style20)
+#
+#         # заголовки подсчёт поверок СИ
+#     row_num = 0
+#     columns = [
+#         'Месяц',
+#         'Число поверок',
+#     ]
+#     for col_num in range(len(columns)):
+#         ws2.write(row_num, col_num, columns[col_num], style10)
+#
+#     rows = qount_plan_verific
+#     for row in rows:
+#         row_num += 1
+#         for col_num in range(len(row)):
+#             ws2.write(row_num, col_num, row[col_num], style20)
+#
+#     # заголовки подсчёт аттестаций СИ
+#     row_num = 0
+#     columns = [
+#         'Месяц',
+#         'Число аттестаций',
+#     ]
+#     for col_num in range(len(columns)):
+#         ws3.write(row_num, col_num, columns[col_num], style10)
+#
+#     rows = qount_plan_att
+#     for row in rows:
+#         row_num += 1
+#         for col_num in range(len(row)):
+#             ws3.write(row_num, col_num, row[col_num], style20)
+#
+#     wb.save(response)
+#     return response
 
-    qt = TestingEquipment.objects. \
-        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
-                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
-                                      'equipment__manufacturer__companyName')). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipmentSM_att__in=setatt). \
-        filter(equipmentSM_att__dateorder__year=serdate). \
-        values_list(
-        'equipment__exnumber',
-        'charakters__name',
-        'mod_type',
-        'equipment__lot',
-        'equipmentSM_att__certnumber',
-        'equipmentSM_att__price',
-        'equipmentSM_att__dateorder__month',
-    ).order_by('equipmentSM_att__dateorder__month')
-
-    qount_plan_verific = MeasurEquipment.objects. \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipmentSM_ver__in=setver). \
-        filter(equipmentSM_ver__dateorder__year=serdate). \
-        values('equipmentSM_ver__date__month'). \
-        annotate(dcount=Count('equipmentSM_ver__date__month'), s=Sum('equipmentSM_ver__price')). \
-        order_by(). \
-        values_list(
-        'equipmentSM_ver__date__month',
-        'dcount',
-        's',
-    )
-
-    qount_plan_att = TestingEquipment.objects. \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipmentSM_att__in=setatt). \
-        filter(equipmentSM_att__date__year=serdate). \
-        filter(equipmentSM_att__price__isnull=False). \
-        values('equipmentSM_att__date__month'). \
-        annotate(dcount1=Count('equipmentSM_att__date__month'), s1=Sum('equipmentSM_att__price')). \
-        order_by(). \
-        values_list(
-        'equipmentSM_att__date__month',
-        'dcount1',
-        's1',
-    )
 
 
+
+# флаг классы ексель
+
+def base_planreport_xls(request, exel_file_name, measure_e, u_headers_me, str1 = 'СИ',
+                        str2 = 'ИО', str3 = 'ВО', str4 = 4, str5 = 5, str6 = 6):
 
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = f'attachment; filename="pov_att_plan {serdate}.xls"'
+    response['Content-Disposition'] = f'attachment; filename="{exel_file_name}.xls"'
+    serdate = request.GET['date']
+    # стили
+    al10 = Alignment()
+    al10.horz = Alignment.HORZ_CENTER
+    al10.vert = Alignment.VERT_CENTER
+    al10.wrap = 1
 
+    b1 = Borders()
+    b1.left = 1
+    b1.right = 1
+    b1.top = 1
+    b1.bottom = 1
+
+    # заголовки жирным шрифтом, с границами ячеек
+    style_headers = xlwt.XFStyle()
+    style_headers.font.bold = True
+    style_headers.font.name = 'Times New Roman'
+    style_headers.borders = b1
+    style_headers.alignment = al10
+
+    # обычные ячейки, с границами ячеек
+    style_plain = xlwt.XFStyle()
+    style_plain.font.name = 'Times New Roman'
+    style_plain.borders = b1
+    style_plain.alignment = al10
+
+    # обычные ячейки с датами, с границами ячеек
+    style_date = xlwt.XFStyle()
+    style_date.font.name = 'Times New Roman'
+    style_date.borders = b1
+    style_date.alignment = al10
+    style_date.num_format_str = 'DD.MM.YYYY'
+
+
+    # добавляем книгу и страницы
     wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('СИ', cell_overwrite_ok=True)
-    ws1 = wb.add_sheet('ИО', cell_overwrite_ok=True)
-    ws2 = wb.add_sheet('Количество поверок в месяц', cell_overwrite_ok=True)
-    ws3 = wb.add_sheet('Количество аттестаций в месяц', cell_overwrite_ok=True)
-    ws.header_str = b'  '
-    ws.footer_str = b'c. &P '
-    ws1.header_str = b'  '
-    ws1.footer_str = b'c. &P '
-    ws2.header_str = b'  '
-    ws2.footer_str = b'c. &P '
-    ws3.header_str = b'  '
-    ws3.footer_str = b'c. &P '
+    ws1 = wb.add_sheet(f'{str1}', cell_overwrite_ok=True)
+    ws2 = wb.add_sheet(f'{str2}', cell_overwrite_ok=True)
+    ws3 = wb.add_sheet(f'{str3}', cell_overwrite_ok=True)
+    ws4 = wb.add_sheet(f'{str4}', cell_overwrite_ok=True)
+    ws5 = wb.add_sheet(f'{str5}', cell_overwrite_ok=True)
+    ws6 = wb.add_sheet(f'{str6}', cell_overwrite_ok=True)
+
+    # убираем колонтитулы
+    ws1.header_str = b' '
+    ws1.footer_str = b' '
+    ws2.header_str = b' '
+    ws2.footer_str = b' '
+    ws3.header_str = b' '
+    ws3.footer_str = b' '
+    ws4.header_str = b' '
+    ws4.footer_str = b' '
+    ws5.header_str = b' '
+    ws5.footer_str = b' '
+    ws6.header_str = b' '
+    ws6.footer_str = b' '
 
     # ширина столбцов СИ
-    ws.col(0).width = 3000
-    ws.col(1).width = 3000
-    ws.col(2).width = 4500
-    ws.col(3).width = 3000
-    ws.col(4).width = 4200
-    ws.col(6).width = 2600
-    ws.col(7).width = 3000
-    ws.col(8).width = 3000
+    ws1.col(0).width = 3000
+    ws1.col(1).width = 3000
+    ws1.col(2).width = 4500
+    ws1.col(3).width = 3000
+    ws1.col(4).width = 4200
+    ws1.col(6).width = 2600
+    ws1.col(7).width = 3000
+    ws1.col(8).width = 3000
 
     # ширина столбцов ИО
-    ws1.col(0).width = 3000
-    ws1.col(1).width = 4500
-    ws1.col(2).width = 3500
-    ws1.col(3).width = 4200
-    ws1.col(4).width = 4500
-    ws1.col(5).width = 2600
-    ws1.col(6).width = 3000
-    ws1.col(7).width = 3000
+    ws2.col(0).width = 3000
+    ws2.col(1).width = 4500
+    ws2.col(2).width = 3500
+    ws2.col(3).width = 4200
+    ws2.col(4).width = 4500
+    ws2.col(5).width = 2600
+    ws2.col(6).width = 3000
+    ws2.col(7).width = 3000
 
+    # ширина столбцов ВО
+    ws3.col(0).width = 3000
+    ws3.col(1).width = 4500
+    ws3.col(2).width = 3500
+    ws3.col(3).width = 4200
+    ws3.col(4).width = 4500
+    ws3.col(5).width = 2600
+    ws3.col(6).width = 3000
+    ws3.col(7).width = 3000
+
+
+
+
+    testing_e = TestingEquipment.objects. \
+        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName'))
+
+    helping_e = HelpingEquipment.objects. \
+        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName'))
+
+    # записываем страницу 1 - СИ
     # заголовки СИ
     row_num = 0
     columns = [
@@ -5183,69 +5366,55 @@ def export_planmetro_xls(request):
         'Наименование',
         'Тип/Модификация',
         'Заводской номер',
-        'Номер текущего свидетельства',
-        'Стоимость последней поверки, руб. (при наличии)',
-        'Месяц заказа поверки',
     ]
+
+
+    columns = columns + u_headers_me
+
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qs
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(columns)):
-            ws.write(row_num, col_num, row[col_num], style20)
-
-
-        # заголовки ИО, первый ряд
-    row_num = 0
-    columns = [
-        'Внутренний  номер',
-        'Наименование',
-        'Тип/Модификация',
-        'Заводской номер',
-        'Номер аттестата',
-        'Стоимость последней аттестации, руб. (при наличии)',
-        'Месяц заказа аттестации',
-    ]
-    for col_num in range(len(columns)):
-        ws1.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qt
+        ws1.write(row_num, col_num, columns[col_num], style_headers)
+    # данные СИ
+    rows = measure_e
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
-            ws1.write(row_num, col_num, row[col_num], style20)
+            ws1.write(row_num, col_num, row[col_num], style_headers)
 
-        # заголовки подсчёт поверок СИ
-    row_num = 0
-    columns = [
-        'Месяц',
-        'Число поверок',
-    ]
-    for col_num in range(len(columns)):
-        ws2.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qount_plan_verific
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws2.write(row_num, col_num, row[col_num], style20)
-
-    # заголовки подсчёт аттестаций СИ
-    row_num = 0
-    columns = [
-        'Месяц',
-        'Число аттестаций',
-    ]
-    for col_num in range(len(columns)):
-        ws3.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qount_plan_att
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws3.write(row_num, col_num, row[col_num], style20)
-
+    # все сохраняем
     wb.save(response)
     return response
+
+def export_planmetro_xls(args):
+
+
+    exel_file_name = 1
+
+    u_headers_me = ['Номер аттестата',
+                    'Стоимость последней аттестации, руб. (при наличии)',
+                    'Месяц заказа аттестации',
+                    ]
+
+    measure_e = MeasurEquipment.objects. \
+        annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+        values_list(
+        'equipment__exnumber',
+        'charakters__reestr',
+        'charakters__name',
+        'mod_type',
+        'equipment__lot',
+        'equipmentSM_ver__certnumber',
+        'equipmentSM_ver__price',
+        'equipmentSM_ver__date',
+        'equipmentSM_ver__datedead',
+    )
+
+
+
+    return base_planreport_xls(exel_file_name, measure_e, u_headers_me)
+
+
+
+
+
