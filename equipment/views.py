@@ -4254,1009 +4254,25 @@ def export_exvercardteste_xls(request, pk):
     wb.save(response)
     return response
 
-# флаг ексели отчёт и план по приборам
-'''несколько представлений для выгрузки отчётов в ексель'''
+# флаг ексели отчёты и планы по приборам
+# Набор вьюшек для выгрузки планов и отчетов по оборудованию в exel
+# Так как планы и отчеты имеют сходную структуру. Они разделены на страницы для СИ, ИО, ВО,
+# а также на помесячные суммы, то
+# вначале идет общая базовая  функция.
+# В ней объединено все общее для всех планов и отчетов. Базовая функция  выполняется в индивидуальных функциях
+
+
+def base_planreport_xls(request, exel_file_name,
+                               measure_e, testing_e, helping_e,
+                               measure_e_months, testing_e_months, helping_e_months,
+                               u_headers_me, u_headers_te, u_headers_he,
+                               str1, str2, str3, str4, str5, str6):
+    """базовое шаблон представление для выгрузки планов и отчетов по СИ, ИО, ВО к которому обращаются частные представления"""
 
-# стили
-al10 = Alignment()
-al10.horz = Alignment.HORZ_CENTER
-al10.vert = Alignment.VERT_CENTER
-al10.wrap = 1
-
-b1 = Borders()
-b1.left = 1
-b1.right = 1
-b1.top = 1
-b1.bottom = 1
-
-style10 = xlwt.XFStyle()
-style10.font.bold = True
-style10.font.name = 'Times New Roman'
-style10.borders = b1
-style10.alignment = al10
-
-style20 = xlwt.XFStyle()
-style20.font.name = 'Times New Roman'
-style20.borders = b1
-style20.alignment = al10
-
-style30 = xlwt.XFStyle()
-style30.font.name = 'Times New Roman'
-style30.borders = b1
-style30.alignment = al10
-style30.num_format_str = 'DD.MM.YYYY'
-
-
-def export_metroyear_xls(request):
-    '''представление для выгрузки списка СИ и ИО поверка в год без учёта стоимости'''
-    serdate = request.GET['date']
-    qs = MeasurEquipment.objects. \
-        annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
-                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
-                                      'equipment__manufacturer__companyName')). \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipmentSM_ver__in=setver). \
-        filter(equipmentSM_ver__date__year=serdate). \
-        values_list(
-        'equipment__exnumber',
-        'charakters__reestr',
-        'charakters__name',
-        'mod_type',
-        'equipment__lot',
-        'equipmentSM_ver__certnumber',
-        'equipmentSM_ver__price',
-        'equipmentSM_ver__date',
-        'equipmentSM_ver__datedead',
-    ).order_by('equipmentSM_ver__date')
-
-    qt = TestingEquipment.objects. \
-        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
-                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
-                                      'equipment__manufacturer__companyName')). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipmentSM_att__in=setatt). \
-        filter(equipmentSM_att__date__year=serdate). \
-        values_list(
-        'equipment__exnumber',
-        'charakters__name',
-        'mod_type',
-        'equipment__lot',
-        'equipmentSM_att__certnumber',
-        'equipmentSM_att__price',
-        'equipmentSM_att__date',
-        'equipmentSM_att__datedead'
-    ).order_by('equipmentSM_att__date')
-
-
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="equipment.xls"'
-
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('СИ', cell_overwrite_ok=True)
-    ws1 = wb.add_sheet('ИО', cell_overwrite_ok=True)
-    ws.header_str = b'  '
-    ws.footer_str = b'c. &P '
-    ws1.header_str = b'  '
-    ws1.footer_str = b'c. &P '
-
-    # ширина столбцов СИ
-    ws.col(0).width = 3000
-    ws.col(1).width = 3000
-    ws.col(2).width = 4500
-    ws.col(3).width = 3000
-    ws.col(4).width = 4200
-    ws.col(6).width = 2600
-    ws.col(7).width = 3000
-    ws.col(8).width = 3000
-
-
-    # ширина столбцов ИО
-    ws1.col(0).width = 3000
-    ws1.col(1).width = 4500
-    ws1.col(2).width = 3500
-    ws1.col(3).width = 4200
-    ws1.col(4).width = 4500
-    ws1.col(5).width = 2600
-    ws1.col(6).width = 3000
-    ws1.col(7).width = 3000
-
-
-    # заголовки СИ
-    row_num = 0
-    columns = [
-                'Внутренний  номер',
-                'Номер в госреестре',
-                'Наименование',
-                'Тип/Модификация',
-                'Заводской номер',
-                'Номер свидетельства',
-                'Стоимость поверки, руб.',
-                'Дата поверки/калибровки',
-                'Дата окончания свидетельства',
-               ]
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qs
-    for row in rows:
-        row_num += 1
-        for col_num in range(7):
-            ws.write(row_num, col_num, row[col_num], style20)
-        for col_num in range(7, len(row)):
-            ws.write(row_num, col_num, row[col_num], style30)
-
-
-        # заголовки ИО, первый ряд
-    row_num = 0
-    columns = [
-        'Внутренний  номер',
-        'Наименование',
-        'Тип/Модификация',
-        'Заводской номер',
-        'Номер аттестата',
-        'Стоимость аттестации, руб.',
-        'Дата аттестации',
-        'Дата окончания аттестации',
-    ]
-    for col_num in range(len(columns)):
-        ws1.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qt
-    for row in rows:
-        row_num += 1
-        for col_num in range(6):
-            ws1.write(row_num, col_num, row[col_num], style20)
-        for col_num in range(6, len(row)):
-            ws1.write(row_num, col_num, row[col_num], style30)
-    wb.save(response)
-    return response
-
-def export_metroyearprice_xls(request):
-    '''представление для выгрузки списка СИ и ИО поверка в год с учётом стоимости'''
-    serdate = request.GET['date']
-    qs = MeasurEquipment.objects. \
-        annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
-                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
-                                      'equipment__manufacturer__companyName')). \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipmentSM_ver__in=setver). \
-        filter(equipmentSM_ver__date__year=serdate). \
-        filter(equipmentSM_ver__price__isnull=False). \
-        values_list(
-        'equipment__exnumber',
-        'charakters__reestr',
-        'charakters__name',
-        'mod_type',
-        'equipment__lot',
-        'equipmentSM_ver__certnumber',
-        'equipmentSM_ver__price',
-        'equipmentSM_ver__date',
-        'equipmentSM_ver__datedead',
-    ).order_by('equipmentSM_ver__date')
-
-    qt = TestingEquipment.objects. \
-        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
-                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
-                                      'equipment__manufacturer__companyName')). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipmentSM_att__in=setatt). \
-        filter(equipmentSM_att__date__year=serdate). \
-        filter(equipmentSM_att__price__isnull=False). \
-        values_list(
-        'equipment__exnumber',
-        'charakters__name',
-        'mod_type',
-        'equipment__lot',
-        'equipmentSM_att__certnumber',
-        'equipmentSM_att__price',
-        'equipmentSM_att__date',
-        'equipmentSM_att__datedead'
-    ).order_by('equipmentSM_att__date')
-
-    qs1 = MeasurEquipment.objects. \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipmentSM_ver__in=setver). \
-        filter(equipmentSM_ver__date__year=serdate). \
-        filter(equipmentSM_ver__price__isnull=False).\
-        values('equipmentSM_ver__date__month').\
-        annotate(dcount=Count('equipmentSM_ver__date__month'), s=Sum('equipmentSM_ver__price')).\
-        order_by().\
-        values_list(
-        'equipmentSM_ver__date__month',
-        'dcount',
-        's',
-    )
-
-    qt1 = TestingEquipment.objects. \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipmentSM_att__in=setatt). \
-        filter(equipmentSM_att__date__year=serdate). \
-        filter(equipmentSM_att__price__isnull=False). \
-        values('equipmentSM_att__date__month'). \
-        annotate(dcount1=Count('equipmentSM_att__date__month'), s1=Sum('equipmentSM_att__price')). \
-        order_by(). \
-        values_list(
-        'equipmentSM_att__date__month',
-        'dcount1',
-        's1',
-    )
-
-
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="equipment.xls"'
-
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('СИ', cell_overwrite_ok=True)
-    ws1 = wb.add_sheet('ИО', cell_overwrite_ok=True)
-    ws2 = wb.add_sheet('Количество поверок в месяц', cell_overwrite_ok=True)
-    ws3 = wb.add_sheet('Количество аттестаций в месяц', cell_overwrite_ok=True)
-    ws.header_str = b'  '
-    ws.footer_str = b'c. &P '
-    ws1.header_str = b'  '
-    ws1.footer_str = b'c. &P '
-    ws2.header_str = b'  '
-    ws2.footer_str = b'c. &P '
-    ws3.header_str = b'  '
-    ws3.footer_str = b'c. &P '
-
-    # ширина столбцов СИ
-    ws.col(0).width = 3000
-    ws.col(1).width = 3000
-    ws.col(2).width = 4500
-    ws.col(3).width = 3000
-    ws.col(4).width = 4200
-    ws.col(6).width = 2600
-    ws.col(7).width = 3000
-    ws.col(8).width = 3000
-
-
-    # ширина столбцов ИО
-    ws1.col(0).width = 3000
-    ws1.col(1).width = 4500
-    ws1.col(2).width = 3500
-    ws1.col(3).width = 4200
-    ws1.col(4).width = 4500
-    ws1.col(5).width = 2600
-    ws1.col(6).width = 3000
-    ws1.col(7).width = 3000
-
-    # заголовки СИ
-    row_num = 0
-    columns = [
-                'Внутренний  номер',
-                'Номер в госреестре',
-                'Наименование',
-                'Тип/Модификация',
-                'Заводской номер',
-                'Номер свидетельства',
-                'Стоимость поверки, руб.',
-                'Дата поверки/калибровки',
-                'Дата окончания свидетельства',
-               ]
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qs
-    for row in rows:
-        row_num += 1
-        for col_num in range(7):
-            ws.write(row_num, col_num, row[col_num], style20)
-        for col_num in range(7, len(row)):
-            ws.write(row_num, col_num, row[col_num], style30)
-
-
-        # заголовки ИО, первый ряд
-    row_num = 0
-    columns = [
-        'Внутренний  номер',
-        'Наименование',
-        'Тип/Модификация',
-        'Заводской номер',
-        'Номер аттестата',
-        'Стоимость аттестации, руб.',
-        'Дата аттестации',
-        'Дата окончания аттестации',
-    ]
-    for col_num in range(len(columns)):
-        ws1.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qt
-    for row in rows:
-        row_num += 1
-        for col_num in range(6):
-            ws1.write(row_num, col_num, row[col_num], style20)
-        for col_num in range(6, len(row)):
-            ws1.write(row_num, col_num, row[col_num], style30)
-
-        # заголовки подсчёт поверок СИ
-    row_num = 0
-    columns = [
-        'Месяц',
-        'Число поверок',
-        'Сумма в месяц, руб',
-    ]
-    for col_num in range(len(columns)):
-        ws2.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qs1
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws2.write(row_num, col_num, row[col_num], style20)
-
-    # заголовки подсчёт аттестаций СИ
-    row_num = 0
-    columns = [
-        'Месяц',
-        'Число аттестаций',
-        'Сумма в месяц, руб',
-    ]
-    for col_num in range(len(columns)):
-        ws3.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qt1
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws3.write(row_num, col_num, row[col_num], style20)
-
-
-
-    wb.save(response)
-    return response
-
-def export_metroyearcust_xls(request):
-    '''представление для выгрузки списка СИ и ИО поверка в год без поверок заказанных поставщиками'''
-    serdate = request.GET['date']
-    qs = MeasurEquipment.objects. \
-        annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
-                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
-                                      'equipment__manufacturer__companyName')). \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipmentSM_ver__in=setver). \
-        filter(equipmentSM_ver__date__year=serdate). \
-        exclude(equipmentSM_ver__cust=True). \
-        values_list(
-        'equipment__exnumber',
-        'charakters__reestr',
-        'charakters__name',
-        'mod_type',
-        'equipment__lot',
-        'equipmentSM_ver__certnumber',
-        'equipmentSM_ver__price',
-        'equipmentSM_ver__date',
-        'equipmentSM_ver__datedead',
-    ).order_by('equipmentSM_ver__date')
-
-
-    qt = TestingEquipment.objects. \
-        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
-                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
-                                      'equipment__manufacturer__companyName')). \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipmentSM_att__in=setatt). \
-        filter(equipmentSM_att__date__year=serdate). \
-        exclude(equipmentSM_att__cust=True). \
-        values_list(
-        'equipment__exnumber',
-        'charakters__name',
-        'mod_type',
-        'equipment__lot',
-        'equipmentSM_att__certnumber',
-        'equipmentSM_att__price',
-        'equipmentSM_att__date',
-        'equipmentSM_att__datedead'
-    ).order_by('equipmentSM_att__date')
-
-    qs1 = MeasurEquipment.objects. \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipmentSM_ver__in=setver). \
-        filter(equipmentSM_ver__date__year=serdate). \
-        filter(equipmentSM_ver__price__isnull=False). \
-        exclude(equipmentSM_ver__cust=True). \
-        values('equipmentSM_ver__date__month'). \
-        annotate(dcount=Count('equipmentSM_ver__date__month'), s=Sum('equipmentSM_ver__price')). \
-        order_by(). \
-        values_list(
-        'equipmentSM_ver__date__month',
-        'dcount',
-        's',
-    )
-
-    qt1 = TestingEquipment.objects. \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipmentSM_att__in=setatt). \
-        filter(equipmentSM_att__date__year=serdate). \
-        filter(equipmentSM_att__price__isnull=False). \
-        exclude(equipmentSM_att__cust=True). \
-        values('equipmentSM_att__date__month'). \
-        annotate(dcount1=Count('equipmentSM_att__date__month'), s1=Sum('equipmentSM_att__price')). \
-        order_by(). \
-        values_list(
-        'equipmentSM_att__date__month',
-        'dcount1',
-        's1',
-    )
-
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="equipment.xls"'
-
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('СИ', cell_overwrite_ok=True)
-    ws1 = wb.add_sheet('ИО', cell_overwrite_ok=True)
-    ws2 = wb.add_sheet('Количество поверок в месяц', cell_overwrite_ok=True)
-    ws3 = wb.add_sheet('Количество аттестаций в месяц', cell_overwrite_ok=True)
-    ws.header_str = b'  '
-    ws.footer_str = b'c. &P '
-    ws1.header_str = b'  '
-    ws1.footer_str = b'c. &P '
-    ws2.header_str = b'  '
-    ws2.footer_str = b'c. &P '
-    ws3.header_str = b'  '
-    ws3.footer_str = b'c. &P '
-
-    # ширина столбцов СИ
-    ws.col(0).width = 3000
-    ws.col(1).width = 3000
-    ws.col(2).width = 4500
-    ws.col(3).width = 3000
-    ws.col(4).width = 4200
-    ws.col(6).width = 2600
-    ws.col(7).width = 3000
-    ws.col(8).width = 3000
-
-    # ширина столбцов ИО
-    ws1.col(0).width = 3000
-    ws1.col(1).width = 4500
-    ws1.col(2).width = 3500
-    ws1.col(3).width = 4200
-    ws1.col(4).width = 4500
-    ws1.col(5).width = 2600
-    ws1.col(6).width = 3000
-    ws1.col(7).width = 3000
-
-    # заголовки СИ
-    row_num = 0
-    columns = [
-        'Внутренний  номер',
-        'Номер в госреестре',
-        'Наименование',
-        'Тип/Модификация',
-        'Заводской номер',
-        'Номер свидетельства',
-        'Стоимость поверки, руб.',
-        'Дата поверки/калибровки',
-        'Дата окончания свидетельства',
-    ]
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qs
-    for row in rows:
-        row_num += 1
-        for col_num in range(7):
-            ws.write(row_num, col_num, row[col_num], style20)
-        for col_num in range(7, len(row)):
-            ws.write(row_num, col_num, row[col_num], style30)
-
-        # заголовки ИО, первый ряд
-    row_num = 0
-    columns = [
-        'Внутренний  номер',
-        'Наименование',
-        'Тип/Модификация',
-        'Заводской номер',
-        'Номер аттестата',
-        'Стоимость аттестации, руб.',
-        'Дата аттестации',
-        'Дата окончания аттестации',
-    ]
-    for col_num in range(len(columns)):
-        ws1.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qt
-    for row in rows:
-        row_num += 1
-        for col_num in range(6):
-            ws1.write(row_num, col_num, row[col_num], style20)
-        for col_num in range(6, len(row)):
-            ws1.write(row_num, col_num, row[col_num], style30)
-
-        # заголовки подсчёт поверок СИ
-    row_num = 0
-    columns = [
-        'Месяц',
-        'Число поверок',
-        'Сумма в месяц, руб',
-    ]
-    for col_num in range(len(columns)):
-        ws2.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qs1
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws2.write(row_num, col_num, row[col_num], style20)
-
-    # заголовки подсчёт аттестаций СИ
-    row_num = 0
-    columns = [
-        'Месяц',
-        'Число аттестаций',
-        'Сумма в месяц, руб',
-    ]
-    for col_num in range(len(columns)):
-        ws3.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qt1
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws3.write(row_num, col_num, row[col_num], style20)
-
-    wb.save(response)
-    return response
-
-# флаг куплено за год
-
-def export_metronewyear_xls(request):
-    '''представление для выгрузки списка оборудования купленного за год'''
-    serdate = request.GET['date']
-    qs = MeasurEquipment.objects. \
-        annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
-                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
-                                      'equipment__manufacturer__companyName')). \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipmentSM_ver__in=setver). \
-        filter(equipment__yearintoservice=serdate). \
-        values_list(
-        'equipment__exnumber',
-        'charakters__reestr',
-        'charakters__name',
-        'mod_type',
-        'equipment__lot',
-        'equipment__price',
-    ).order_by('equipment__date')
-
-    qt = TestingEquipment.objects. \
-        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
-                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
-                                      'equipment__manufacturer__companyName')). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipmentSM_att__in=setatt). \
-        filter(equipment__yearintoservice=serdate). \
-        values_list(
-        'equipment__exnumber',
-        'charakters__name',
-        'mod_type',
-        'equipment__lot',
-        'equipment__price',
-    ).order_by('equipment__date')
-
-    qh = HelpingEquipment.objects. \
-        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
-                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
-                                      'equipment__manufacturer__companyName')). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__yearintoservice=serdate). \
-        values_list(
-        'equipment__exnumber',
-        'charakters__name',
-        'mod_type',
-        'equipment__lot',
-        'equipment__price',
-    ).order_by('equipment__date')
-
-    qs1 = MeasurEquipment.objects. \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipmentSM_ver__in=setver). \
-        filter(equipment__yearintoservice=serdate). \
-        values('equipment__date__month'). \
-        annotate(dcount=Count('equipment__date__month'), s=Sum('equipment__price')). \
-        order_by(). \
-        values_list(
-        'equipment__date__month',
-        'dcount',
-        's',
-    )
-
-    qt1 = TestingEquipment.objects. \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipmentSM_att__in=setatt). \
-        filter(equipment__yearintoservice=serdate). \
-        values('equipment__date__month'). \
-        annotate(dcount1=Count('equipment__date__month'), s1=Sum('equipment__price')). \
-        order_by(). \
-        values_list(
-        'equipment__date__month',
-        'dcount1',
-        's1',
-    )
-
-    qh1 = HelpingEquipment.objects. \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipment__yearintoservice=serdate). \
-        values('equipment__date__month'). \
-        annotate(dcount2=Count('equipment__date__month'), s2=Sum('equipment__price')). \
-        order_by(). \
-        values_list(
-        'equipment__date__month',
-        'dcount2',
-        's2',
-    )
-
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = f'attachment; filename="{serdate} purchased equipment.xls"'
-
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('СИ купленные', cell_overwrite_ok=True)
-    ws1 = wb.add_sheet('ИО купленные', cell_overwrite_ok=True)
-    ws2 = wb.add_sheet('Количество СИ в месяц', cell_overwrite_ok=True)
-    ws3 = wb.add_sheet('Количество ИО в месяц', cell_overwrite_ok=True)
-    ws4 = wb.add_sheet('ВО купленное', cell_overwrite_ok=True)
-    ws5 = wb.add_sheet('Количество ВО в месяц', cell_overwrite_ok=True)
-    ws.header_str = b'  '
-    ws.footer_str = b' '
-    ws1.header_str = b'  '
-    ws1.footer_str = b' '
-    ws2.header_str = b'  '
-    ws2.footer_str = b''
-    ws3.header_str = b'  '
-    ws3.footer_str = b''
-    ws4.header_str = b'  '
-    ws4.footer_str = b''
-    ws5.header_str = b'  '
-    ws5.footer_str = b''
-
-
-    # ширина столбцов СИ
-    ws.col(0).width = 3000
-    ws.col(1).width = 3000
-    ws.col(2).width = 4500
-    ws.col(3).width = 3000
-    ws.col(4).width = 4200
-    ws.col(6).width = 2600
-    ws.col(7).width = 3000
-    ws.col(8).width = 3000
-
-    # ширина столбцов ИО
-    ws1.col(0).width = 3000
-    ws1.col(1).width = 4500
-    ws1.col(2).width = 3500
-    ws1.col(3).width = 4200
-    ws1.col(4).width = 4500
-    ws1.col(5).width = 2600
-    ws1.col(6).width = 3000
-    ws1.col(7).width = 3000
-
-    # ширина столбцов ВО
-    ws4.col(0).width = 3000
-    ws4.col(1).width = 4500
-    ws4.col(2).width = 3500
-    ws4.col(3).width = 4200
-    ws4.col(4).width = 4500
-    ws4.col(5).width = 2600
-    ws4.col(6).width = 3000
-    ws4.col(7).width = 3000
-
-    # заголовки СИ
-    row_num = 0
-    columns = [
-        'Внутренний  номер',
-        'Номер в госреестре',
-        'Наименование',
-        'Тип/Модификация',
-        'Заводской номер',
-        'Стоимость',
-    ]
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qs
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws.write(row_num, col_num, row[col_num], style20)
-
-        # заголовки ИО, первый ряд
-    row_num = 0
-    columns = [
-        'Внутренний  номер',
-        'Наименование',
-        'Тип/Модификация',
-        'Заводской номер',
-        'Стоимость',
-    ]
-    for col_num in range(len(columns)):
-        ws1.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qt
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws1.write(row_num, col_num, row[col_num], style20)
-
-
-    # заголовки ВО, первый ряд
-    row_num = 0
-    columns = [
-        'Внутренний  номер',
-        'Наименование',
-        'Тип/Модификация',
-        'Заводской номер',
-        'Стоимость',
-    ]
-    for col_num in range(len(columns)):
-        ws4.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qh
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws4.write(row_num, col_num, row[col_num], style20)
-
-    # заголовки подсчёт по месяцам СИ
-    row_num = 0
-    columns = [
-        'Месяц',
-        'Число единиц',
-        'Сумма в месяц, руб',
-    ]
-    for col_num in range(len(columns)):
-        ws2.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qs1
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws2.write(row_num, col_num, row[col_num], style20)
-
-    # заголовки подсчёт по месяцам ИО
-    row_num = 0
-    columns = [
-        'Месяц',
-        'Число единиц',
-        'Сумма в месяц, руб',
-    ]
-    for col_num in range(len(columns)):
-        ws3.write(row_num, col_num, columns[col_num], style10)
-
-    rows = qt1
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws3.write(row_num, col_num, row[col_num], style20)
-
-        # заголовки подсчёт по месяцам ВО
-        row_num = 0
-        columns = [
-            'Месяц',
-            'Число единиц',
-            'Сумма в месяц, руб',
-        ]
-        for col_num in range(len(columns)):
-            ws5.write(row_num, col_num, columns[col_num], style10)
-
-        rows = qh1
-        for row in rows:
-            row_num += 1
-            for col_num in range(len(row)):
-                ws5.write(row_num, col_num, row[col_num], style20)
-
-    wb.save(response)
-    return response
-
-
-# флаг планы на следующий год
-# def export_planmetro_xls(request):
-#     '''представление для выгрузки плана поверки и аттестации на следующий год'''
-#     serdate = request.GET['date']
-#     qs = MeasurEquipment.objects. \
-#         annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
-#                  manuf_country=Concat('equipment__manufacturer__country', Value(', '),
-#                                       'equipment__manufacturer__companyName')). \
-#         filter(equipment__personchange__in=setperson). \
-#         filter(equipment__roomschange__in=setroom). \
-#         filter(equipmentSM_ver__in=setver). \
-#         filter(equipmentSM_ver__dateorder__year=serdate). \
-#         values_list(
-#         'equipment__exnumber',
-#         'charakters__reestr',
-#         'charakters__name',
-#         'mod_type',
-#         'equipment__lot',
-#         'equipmentSM_ver__certnumber',
-#         'equipmentSM_ver__price',
-#         'equipmentSM_ver__dateorder__month',
-#     ).order_by('equipmentSM_ver__dateorder__month')
-#
-#     qt = TestingEquipment.objects. \
-#         annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
-#                  manuf_country=Concat('equipment__manufacturer__country', Value(', '),
-#                                       'equipment__manufacturer__companyName')). \
-#         filter(equipment__roomschange__in=setroom). \
-#         filter(equipment__personchange__in=setperson). \
-#         filter(equipmentSM_att__in=setatt). \
-#         filter(equipmentSM_att__dateorder__year=serdate). \
-#         values_list(
-#         'equipment__exnumber',
-#         'charakters__name',
-#         'mod_type',
-#         'equipment__lot',
-#         'equipmentSM_att__certnumber',
-#         'equipmentSM_att__price',
-#         'equipmentSM_att__dateorder__month',
-#     ).order_by('equipmentSM_att__dateorder__month')
-#
-#     qount_plan_verific = MeasurEquipment.objects. \
-#         filter(equipment__personchange__in=setperson). \
-#         filter(equipment__roomschange__in=setroom). \
-#         filter(equipmentSM_ver__in=setver). \
-#         filter(equipmentSM_ver__dateorder__year=serdate). \
-#         values('equipmentSM_ver__date__month'). \
-#         annotate(dcount=Count('equipmentSM_ver__date__month'), s=Sum('equipmentSM_ver__price')). \
-#         order_by(). \
-#         values_list(
-#         'equipmentSM_ver__date__month',
-#         'dcount',
-#         's',
-#     )
-#
-#     qount_plan_att = TestingEquipment.objects. \
-#         filter(equipment__personchange__in=setperson). \
-#         filter(equipment__roomschange__in=setroom). \
-#         filter(equipmentSM_att__in=setatt). \
-#         filter(equipmentSM_att__date__year=serdate). \
-#         filter(equipmentSM_att__price__isnull=False). \
-#         values('equipmentSM_att__date__month'). \
-#         annotate(dcount1=Count('equipmentSM_att__date__month'), s1=Sum('equipmentSM_att__price')). \
-#         order_by(). \
-#         values_list(
-#         'equipmentSM_att__date__month',
-#         'dcount1',
-#         's1',
-#     )
-#
-#
-#
-#     response = HttpResponse(content_type='application/ms-excel')
-#     response['Content-Disposition'] = f'attachment; filename="pov_att_plan {serdate}.xls"'
-#
-#     wb = xlwt.Workbook(encoding='utf-8')
-#     ws = wb.add_sheet('СИ', cell_overwrite_ok=True)
-#     ws1 = wb.add_sheet('ИО', cell_overwrite_ok=True)
-#     ws2 = wb.add_sheet('Количество поверок в месяц', cell_overwrite_ok=True)
-#     ws3 = wb.add_sheet('Количество аттестаций в месяц', cell_overwrite_ok=True)
-#     ws.header_str = b'  '
-#     ws.footer_str = b'c. &P '
-#     ws1.header_str = b'  '
-#     ws1.footer_str = b'c. &P '
-#     ws2.header_str = b'  '
-#     ws2.footer_str = b'c. &P '
-#     ws3.header_str = b'  '
-#     ws3.footer_str = b'c. &P '
-#
-#     # ширина столбцов СИ
-#     ws.col(0).width = 3000
-#     ws.col(1).width = 3000
-#     ws.col(2).width = 4500
-#     ws.col(3).width = 3000
-#     ws.col(4).width = 4200
-#     ws.col(6).width = 2600
-#     ws.col(7).width = 3000
-#     ws.col(8).width = 3000
-#
-#     # ширина столбцов ИО
-#     ws1.col(0).width = 3000
-#     ws1.col(1).width = 4500
-#     ws1.col(2).width = 3500
-#     ws1.col(3).width = 4200
-#     ws1.col(4).width = 4500
-#     ws1.col(5).width = 2600
-#     ws1.col(6).width = 3000
-#     ws1.col(7).width = 3000
-#
-#     # заголовки СИ
-#     row_num = 0
-#     columns = [
-#         'Внутренний  номер',
-#         'Номер в госреестре',
-#         'Наименование',
-#         'Тип/Модификация',
-#         'Заводской номер',
-#         'Номер текущего свидетельства',
-#         'Стоимость последней поверки, руб. (при наличии)',
-#         'Месяц заказа поверки',
-#     ]
-#     for col_num in range(len(columns)):
-#         ws.write(row_num, col_num, columns[col_num], style10)
-#
-#     rows = qs
-#     for row in rows:
-#         row_num += 1
-#         for col_num in range(len(columns)):
-#             ws.write(row_num, col_num, row[col_num], style20)
-#
-#
-#         # заголовки ИО, первый ряд
-#     row_num = 0
-#     columns = [
-#         'Внутренний  номер',
-#         'Наименование',
-#         'Тип/Модификация',
-#         'Заводской номер',
-#         'Номер аттестата',
-#         'Стоимость последней аттестации, руб. (при наличии)',
-#         'Месяц заказа аттестации',
-#     ]
-#     for col_num in range(len(columns)):
-#         ws1.write(row_num, col_num, columns[col_num], style10)
-#
-#     rows = qt
-#     for row in rows:
-#         row_num += 1
-#         for col_num in range(len(row)):
-#             ws1.write(row_num, col_num, row[col_num], style20)
-#
-#         # заголовки подсчёт поверок СИ
-#     row_num = 0
-#     columns = [
-#         'Месяц',
-#         'Число поверок',
-#     ]
-#     for col_num in range(len(columns)):
-#         ws2.write(row_num, col_num, columns[col_num], style10)
-#
-#     rows = qount_plan_verific
-#     for row in rows:
-#         row_num += 1
-#         for col_num in range(len(row)):
-#             ws2.write(row_num, col_num, row[col_num], style20)
-#
-#     # заголовки подсчёт аттестаций СИ
-#     row_num = 0
-#     columns = [
-#         'Месяц',
-#         'Число аттестаций',
-#     ]
-#     for col_num in range(len(columns)):
-#         ws3.write(row_num, col_num, columns[col_num], style10)
-#
-#     rows = qount_plan_att
-#     for row in rows:
-#         row_num += 1
-#         for col_num in range(len(row)):
-#             ws3.write(row_num, col_num, row[col_num], style20)
-#
-#     wb.save(response)
-#     return response
-
-
-
-
-# флаг классы ексель
-
-def base_planreport_xls(request, exel_file_name, measure_e, u_headers_me, str1 = 'СИ',
-                        str2 = 'ИО', str3 = 'ВО', str4 = 4, str5 = 5, str6 = 6):
 
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{exel_file_name}.xls"'
+
     serdate = request.GET['date']
     # стили
     al10 = Alignment()
@@ -5319,7 +4335,7 @@ def base_planreport_xls(request, exel_file_name, measure_e, u_headers_me, str1 =
     ws1.col(1).width = 3000
     ws1.col(2).width = 4500
     ws1.col(3).width = 3000
-    ws1.col(4).width = 4200
+    ws1.col(4).width = 2000
     ws1.col(6).width = 2600
     ws1.col(7).width = 3000
     ws1.col(8).width = 3000
@@ -5329,7 +4345,7 @@ def base_planreport_xls(request, exel_file_name, measure_e, u_headers_me, str1 =
     ws2.col(1).width = 4500
     ws2.col(2).width = 3500
     ws2.col(3).width = 4200
-    ws2.col(4).width = 4500
+    ws2.col(4).width = 3000
     ws2.col(5).width = 2600
     ws2.col(6).width = 3000
     ws2.col(7).width = 3000
@@ -5339,64 +4355,187 @@ def base_planreport_xls(request, exel_file_name, measure_e, u_headers_me, str1 =
     ws3.col(1).width = 4500
     ws3.col(2).width = 3500
     ws3.col(3).width = 4200
-    ws3.col(4).width = 4500
+    ws3.col(4).width = 2000
     ws3.col(5).width = 2600
     ws3.col(6).width = 3000
     ws3.col(7).width = 3000
 
+    # колонки для разбиивок по месяцам
+    columns_month = [
+        'Месяц',
+        'Количество единиц оборудования',
+        'Сумма, руб',
+    ]
 
-
-
-    testing_e = TestingEquipment.objects. \
-        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
-                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
-                                      'equipment__manufacturer__companyName'))
-
-    helping_e = HelpingEquipment.objects. \
-        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
-                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
-                                      'equipment__manufacturer__companyName'))
 
     # записываем страницу 1 - СИ
     # заголовки СИ
     row_num = 0
     columns = [
-        'Внутренний  номер',
+        'Внутренний номер',
         'Номер в госреестре',
         'Наименование',
         'Тип/Модификация',
         'Заводской номер',
     ]
 
-
     columns = columns + u_headers_me
 
+    datecolumnme = []
+
+    # запись заголовков СИ
     for col_num in range(len(columns)):
         ws1.write(row_num, col_num, columns[col_num], style_headers)
-    # данные СИ
+        if 'Дата' in str(columns[col_num]) or 'дата' in str(columns[col_num]):
+            datecolumnme.append(col_num)
+
+    # данные СИ и их запись
     rows = measure_e
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
-            ws1.write(row_num, col_num, row[col_num], style_headers)
+            if col_num in datecolumnme:
+                ws1.write(row_num, col_num, row[col_num], style_date)
+            else:
+                ws1.write(row_num, col_num, row[col_num], style_plain)
+
+    # записываем страницу 2 - ИО
+    # заголовки ИО
+    row_num = 0
+    columns = [
+        'Внутренний номер',
+        'Наименование',
+        'Тип/Модификация',
+        'Заводской номер',
+    ]
+
+    columns = columns + u_headers_te
+
+    datecolumnte = []
+
+    # запись заголовков ИО
+    for col_num in range(len(columns)):
+        ws2.write(row_num, col_num, columns[col_num], style_headers)
+        if 'Дата' in str(columns[col_num]) or 'дата' in str(columns[col_num]):
+            datecolumnte.append(col_num)
+
+    # данные ИО и их запись
+    rows = testing_e
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            if col_num in datecolumnte:
+                ws2.write(row_num, col_num, row[col_num], style_date)
+            else:
+                ws2.write(row_num, col_num, row[col_num], style_plain)
+
+    # записываем страницу 3 - ВО
+    # заголовки ВО
+    row_num = 0
+    columns = [
+        'Внутренний номер',
+        'Наименование',
+        'Тип/Модификация',
+        'Заводской номер',
+    ]
+
+    columns = columns + u_headers_he
+
+    datecolumnhe = []
+
+    # запись заголовков ВО
+    for col_num in range(len(columns)):
+        ws3.write(row_num, col_num, columns[col_num], style_headers)
+        if 'Дата' in str(columns[col_num]) or 'дата' in str(columns[col_num]):
+            datecolumnhe.append(col_num)
+
+    # данные ВО и их запись
+    rows = helping_e
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            if col_num in datecolumnhe:
+                ws3.write(row_num, col_num, row[col_num], style_date)
+            else:
+                ws3.write(row_num, col_num, row[col_num], style_plain)
+
+    # записываем страницу 4 - подсчёт по месяцам для СИ (ПСИ)
+    # заголовки ПСИ
+    row_num = 0
+
+    # запись заголовков ПСИ
+    for col_num in range(len(columns_month)):
+        ws4.write(row_num, col_num, columns_month[col_num], style_headers)
+
+    # данные ПСИ и их запись
+    rows = measure_e_months
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws4.write(row_num, col_num, row[col_num], style_plain)
+
+    # записываем страницу 5 - подсчёт по месяцам для ИО (ПИО)
+    # заголовки ПИО
+    row_num = 0
+
+    # запись заголовков ПИО
+    for col_num in range(len(columns_month)):
+        ws5.write(row_num, col_num, columns_month[col_num], style_headers)
+
+    # данные ПИО и их запись
+    rows = testing_e_months
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws5.write(row_num, col_num, row[col_num], style_plain)
+
+    # записываем страницу 6 - подсчёт по месяцам для ВО (ПВО)
+    # заголовки ПВО
+    row_num = 0
+
+    # запись заголовков ПВО
+    for col_num in range(len(columns_month)):
+        ws6.write(row_num, col_num, columns_month[col_num], style_headers)
+
+    # данные ПВО и их запись
+    rows = helping_e_months
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws6.write(row_num, col_num, row[col_num], style_plain)
 
     # все сохраняем
     wb.save(response)
     return response
 
-def export_planmetro_xls(args):
+# флаг отчёты по поверке
+def export_metroyearcust_xls(request):
+    """представление для выгрузки - Список СИ и ИО прошедших поверку в указанном году только те где организатор работ - Петроаналитика"""
     serdate = request.GET['date']
-    exel_file_name = 1
+    exel_file_name = f'report_inner_metro {serdate}'
+    str1 = 'СИ'
+    str2 = 'ИО'
+    str3 = 3
+    str4 = 'СИ - поверено единиц в месяц'
+    str5 = 'ИО - аттестовано единиц в месяц'
+    str6 = 6
 
-    u_headers_me = ['Номер аттестата',
-                    'Стоимость последней аттестации, руб. (при наличии)',
-                    'Месяц заказа аттестации',
+
+    u_headers_me = ['Номер свидетельства',
+                    'Стоимость поверки, руб.',
+                    'Дата поверки/калибровки',
+                    'Дата окончания свидетельства',
                     ]
 
     measure_e = MeasurEquipment.objects. \
         annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
                  manuf_country=Concat('equipment__manufacturer__country', Value(', '),
                                       'equipment__manufacturer__companyName')). \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipmentSM_ver__in=setver). \
+        filter(equipmentSM_ver__date__year=serdate). \
+        exclude(equipmentSM_ver__cust=True). \
         values_list(
         'equipment__exnumber',
         'charakters__reestr',
@@ -5407,11 +4546,567 @@ def export_planmetro_xls(args):
         'equipmentSM_ver__price',
         'equipmentSM_ver__date',
         'equipmentSM_ver__datedead',
+    ).order_by('equipmentSM_ver__date')
+
+    u_headers_te = ['Номер аттестата',
+                    'Стоимость аттестации, руб.',
+                    'Дата аттестации',
+                    'Дата окончания аттестации',
+                    ]
+
+    testing_e = TestingEquipment.objects. \
+        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipmentSM_att__in=setatt). \
+        filter(equipmentSM_att__date__year=serdate). \
+        exclude(equipmentSM_att__cust=True). \
+        values_list(
+        'equipment__exnumber',
+        'charakters__name',
+        'mod_type',
+        'equipment__lot',
+        'equipmentSM_att__certnumber',
+        'equipmentSM_att__price',
+        'equipmentSM_att__date',
+        'equipmentSM_att__datedead'
+    ).order_by('equipmentSM_att__date')
+
+    u_headers_he = []
+    helping_e = []
+
+    measure_e_months = MeasurEquipment.objects. \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipmentSM_ver__in=setver). \
+        filter(equipmentSM_ver__date__year=serdate). \
+        filter(equipmentSM_ver__price__isnull=False). \
+        exclude(equipmentSM_ver__cust=True). \
+        values('equipmentSM_ver__date__month'). \
+        annotate(dcount=Count('equipmentSM_ver__date__month'), s=Sum('equipmentSM_ver__price')). \
+        order_by(). \
+        values_list(
+        'equipmentSM_ver__date__month',
+        'dcount',
+        's',
     )
 
+    testing_e_months = TestingEquipment.objects. \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipmentSM_att__in=setatt). \
+        filter(equipmentSM_att__date__year=serdate). \
+        filter(equipmentSM_att__price__isnull=False). \
+        exclude(equipmentSM_att__cust=True). \
+        values('equipmentSM_att__date__month'). \
+        annotate(dcount1=Count('equipmentSM_att__date__month'), s1=Sum('equipmentSM_att__price')). \
+        order_by(). \
+        values_list(
+        'equipmentSM_att__date__month',
+        'dcount1',
+        's1',
+    )
 
-    return base_planreport_xls(request, exel_file_name, measure_e, u_headers_me)
+    helping_e_months = []
 
+    return base_planreport_xls(request, exel_file_name,
+                        measure_e, testing_e, helping_e,
+                       measure_e_months, testing_e_months, helping_e_months,
+                        u_headers_me, u_headers_te, u_headers_he,
+                               str1, str2, str3, str4, str5, str6
+                               )
+
+def export_metroyearprice_xls(request):
+    """представление для выгрузки - Список СИ и ИО прошедших поверку в указанном году только те где
+    Список СИ и ИО прошедших поверку в указанном году только где указана стоимость"""
+    serdate = request.GET['date']
+    exel_file_name = f'report_all_withprice_metro {serdate}'
+    str1 = 'СИ'
+    str2 = 'ИО'
+    str3 = 3
+    str4 = 'СИ - поверено единиц в месяц'
+    str5 = 'ИО - аттестовано единиц в месяц'
+    str6 = 6
+
+
+    u_headers_me = ['Номер свидетельства',
+                    'Стоимость поверки, руб.',
+                    'Дата поверки/калибровки',
+                    'Дата окончания свидетельства',
+                    ]
+
+    measure_e = MeasurEquipment.objects. \
+        annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipmentSM_ver__in=setver). \
+        filter(equipmentSM_ver__date__year=serdate). \
+        filter(equipmentSM_ver__price__isnull=False). \
+        values_list(
+        'equipment__exnumber',
+        'charakters__reestr',
+        'charakters__name',
+        'mod_type',
+        'equipment__lot',
+        'equipmentSM_ver__certnumber',
+        'equipmentSM_ver__price',
+        'equipmentSM_ver__date',
+        'equipmentSM_ver__datedead',
+    ).order_by('equipmentSM_ver__date')
+
+    u_headers_te = ['Номер аттестата',
+                    'Стоимость аттестации, руб.',
+                    'Дата аттестации',
+                    'Дата окончания аттестации',
+                    ]
+
+    testing_e = TestingEquipment.objects. \
+        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipmentSM_att__in=setatt). \
+        filter(equipmentSM_att__date__year=serdate). \
+        filter(equipmentSM_att__price__isnull=False). \
+        values_list(
+        'equipment__exnumber',
+        'charakters__name',
+        'mod_type',
+        'equipment__lot',
+        'equipmentSM_att__certnumber',
+        'equipmentSM_att__price',
+        'equipmentSM_att__date',
+        'equipmentSM_att__datedead'
+    ).order_by('equipmentSM_att__date')
+
+    u_headers_he = []
+    helping_e = []
+
+    measure_e_months = MeasurEquipment.objects. \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipmentSM_ver__in=setver). \
+        filter(equipmentSM_ver__date__year=serdate). \
+        filter(equipmentSM_ver__price__isnull=False).\
+        values('equipmentSM_ver__date__month').\
+        annotate(dcount=Count('equipmentSM_ver__date__month'), s=Sum('equipmentSM_ver__price')).\
+        order_by().\
+        values_list(
+        'equipmentSM_ver__date__month',
+        'dcount',
+        's',
+    )
+
+    testing_e_months = TestingEquipment.objects. \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipmentSM_att__in=setatt). \
+        filter(equipmentSM_att__date__year=serdate). \
+        filter(equipmentSM_att__price__isnull=False). \
+        values('equipmentSM_att__date__month'). \
+        annotate(dcount1=Count('equipmentSM_att__date__month'), s1=Sum('equipmentSM_att__price')). \
+        order_by(). \
+        values_list(
+        'equipmentSM_att__date__month',
+        'dcount1',
+        's1',
+    )
+
+    helping_e_months = []
+
+    return base_planreport_xls(request, exel_file_name,
+                        measure_e, testing_e, helping_e,
+                       measure_e_months, testing_e_months, helping_e_months,
+                        u_headers_me, u_headers_te, u_headers_he,
+                               str1, str2, str3, str4, str5, str6
+                               )
+
+def export_metroyear_xls(request):
+    """представление для выгрузки -
+    Список СИ и ИО прошедших поверку в указанном году все, и те где НЕ указана стоимость, и поверенные поставщиком"""
+    serdate = request.GET['date']
+    exel_file_name = f'report_all_metro {serdate}'
+    str1 = 'СИ'
+    str2 = 'ИО'
+    str3 = 3
+    str4 = 4
+    str5 = 5
+    str6 = 6
+
+
+    u_headers_me = ['Номер свидетельства',
+                    'Стоимость поверки, руб.',
+                    'Дата поверки/калибровки',
+                    'Дата окончания свидетельства',
+                    ]
+
+    measure_e = MeasurEquipment.objects. \
+        annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipmentSM_ver__in=setver). \
+        filter(equipmentSM_ver__date__year=serdate). \
+        values_list(
+        'equipment__exnumber',
+        'charakters__reestr',
+        'charakters__name',
+        'mod_type',
+        'equipment__lot',
+        'equipmentSM_ver__certnumber',
+        'equipmentSM_ver__price',
+        'equipmentSM_ver__date',
+        'equipmentSM_ver__datedead',
+    ).order_by('equipmentSM_ver__date')
+
+    u_headers_te = ['Номер аттестата',
+                    'Стоимость аттестации, руб.',
+                    'Дата аттестации',
+                    'Дата окончания аттестации',
+                    ]
+
+    testing_e = TestingEquipment.objects. \
+        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipmentSM_att__in=setatt). \
+        filter(equipmentSM_att__date__year=serdate). \
+        values_list(
+        'equipment__exnumber',
+        'charakters__name',
+        'mod_type',
+        'equipment__lot',
+        'equipmentSM_att__certnumber',
+        'equipmentSM_att__price',
+        'equipmentSM_att__date',
+        'equipmentSM_att__datedead'
+    ).order_by('equipmentSM_att__date')
+
+    u_headers_he = []
+    helping_e = []
+
+    measure_e_months = []
+
+    testing_e_months = []
+
+    helping_e_months = []
+
+    return base_planreport_xls(request, exel_file_name,
+                        measure_e, testing_e, helping_e,
+                       measure_e_months, testing_e_months, helping_e_months,
+                        u_headers_me, u_headers_te, u_headers_he,
+                               str1, str2, str3, str4, str5, str6
+                               )
+
+# флаг отчёты по закупке
+def export_metronewyear_xls(request):
+    """представление для выгрузки -
+    Список купленного (введенного в эксплуатацию) СИ и ИО в указанном году"""
+    serdate = request.GET['date']
+    exel_file_name = f'purchased_equipment_{serdate}'
+    str1 = 'СИ'
+    str2 = 'ИО'
+    str3 = 'ВО'
+    str4 = 'Количество СИ в месяц'
+    str5 = 'Количество ИО в месяц'
+    str6 = 'Количество ВО в месяц'
+
+
+    u_headers_me = ['Стоимость',
+                    ]
+
+    measure_e = MeasurEquipment.objects. \
+        annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipmentSM_ver__in=setver). \
+        filter(equipment__yearintoservice=serdate). \
+        values_list(
+        'equipment__exnumber',
+        'charakters__reestr',
+        'charakters__name',
+        'mod_type',
+        'equipment__lot',
+        'equipment__price',
+    ).order_by('equipment__date')
+
+    u_headers_te = ['Стоимость',
+                    ]
+
+    testing_e = TestingEquipment.objects. \
+        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipmentSM_att__in=setatt). \
+        filter(equipment__yearintoservice=serdate). \
+        values_list(
+        'equipment__exnumber',
+        'charakters__name',
+        'mod_type',
+        'equipment__lot',
+        'equipment__price',
+    ).order_by('equipment__date')
+
+    u_headers_he = ['Стоимость',]
+    helping_e = HelpingEquipment.objects. \
+        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__yearintoservice=serdate). \
+        values_list(
+        'equipment__exnumber',
+        'charakters__name',
+        'mod_type',
+        'equipment__lot',
+        'equipment__price',
+    ).order_by('equipment__date')
+
+    measure_e_months = MeasurEquipment.objects. \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipmentSM_ver__in=setver). \
+        filter(equipment__yearintoservice=serdate). \
+        values('equipment__date__month'). \
+        annotate(dcount=Count('equipment__date__month'), s=Sum('equipment__price')). \
+        order_by(). \
+        values_list(
+        'equipment__date__month',
+        'dcount',
+        's',
+    )
+
+    testing_e_months = qt1 = TestingEquipment.objects. \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipmentSM_att__in=setatt). \
+        filter(equipment__yearintoservice=serdate). \
+        values('equipment__date__month'). \
+        annotate(dcount1=Count('equipment__date__month'), s1=Sum('equipment__price')). \
+        order_by(). \
+        values_list(
+        'equipment__date__month',
+        'dcount1',
+        's1',
+    )
+
+    helping_e_months = HelpingEquipment.objects. \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipment__yearintoservice=serdate). \
+        values('equipment__date__month'). \
+        annotate(dcount2=Count('equipment__date__month'), s2=Sum('equipment__price')). \
+        order_by(). \
+        values_list(
+        'equipment__date__month',
+        'dcount2',
+        's2',
+    )
+
+    return base_planreport_xls(request, exel_file_name,
+                        measure_e, testing_e, helping_e,
+                       measure_e_months, testing_e_months, helping_e_months,
+                        u_headers_me, u_headers_te, u_headers_he,
+                               str1, str2, str3, str4, str5, str6
+                               )
+# флаг план по поверке
+def export_planmetro_xls(request):
+    """представление для выгрузки плана поверки и аттестации на указанный год"""
+    serdate = request.GET['date']
+    exel_file_name = f'planmetro {serdate}'
+    str1 = 'СИ'
+    str2 = 'ИО'
+    str3 = 3
+    str4 = 'СИ-количество поверок в месяц'
+    str5 = 'ИО-кол-во аттестаций в месяц'
+    str6 = 6
+
+
+    u_headers_me = ['Номер текущего свидетельства',
+                    'Стоимость последней поверки, руб. (при наличии)',
+                    'Месяц заказа поверки',
+                    ]
+
+    measure_e = MeasurEquipment.objects. \
+        annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+                                filter(equipment__roomschange__in=setroom). \
+                                filter(equipment__personchange__in=setperson). \
+                                filter(equipmentSM_ver__in=setver). \
+                                filter(equipmentSM_ver__dateorder__year=serdate). \
+                                values_list(
+                                'equipment__exnumber',
+                                'charakters__reestr',
+                                'charakters__name',
+                                'mod_type',
+                                'equipment__lot',
+                                'equipmentSM_ver__certnumber',
+                                'equipmentSM_ver__price',
+                                'equipmentSM_ver__dateorder__month',
+                            ).order_by('equipmentSM_ver__dateorder__month')
+
+    u_headers_te = ['Номер текущего аттестата',
+                    'Стоимость последней аттестации, руб. (при наличии)',
+                    'Месяц заказа аттестации',
+                    ]
+
+    testing_e = TestingEquipment.objects. \
+        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipmentSM_att__in=setatt). \
+        filter(equipmentSM_att__dateorder__year=serdate). \
+        values_list(
+        'equipment__exnumber',
+        'charakters__name',
+        'mod_type',
+        'equipment__lot',
+        'equipmentSM_att__certnumber',
+        'equipmentSM_att__price',
+        'equipmentSM_att__dateorder__month',
+    ).order_by('equipmentSM_att__dateorder__month')
+
+    u_headers_he = []
+    helping_e = []
+    measure_e_months = MeasurEquipment.objects.\
+        filter(equipment__personchange__in=setperson).\
+        filter(equipmentSM_ver__dateorder__year=serdate).\
+        values('equipmentSM_ver__dateorder__month').\
+        annotate(dcount=Count('equipmentSM_ver__dateorder__month'), s=Sum('equipmentSM_ver__price')). \
+        order_by().\
+        values_list(
+        'equipmentSM_ver__dateorder__month',
+        'dcount',
+        's',
+    )
+
+    testing_e_months = TestingEquipment.objects.\
+        filter(equipment__personchange__in=setperson).\
+        filter(equipmentSM_att__dateorder__year=serdate).\
+        values('equipmentSM_att__dateorder__month').\
+        annotate(dcount=Count('equipmentSM_att__dateorder__month'), s=Sum('equipmentSM_att__price')). \
+        order_by().\
+        values_list(
+        'equipmentSM_att__dateorder__month',
+        'dcount',
+        's',
+    )
+    helping_e_months = []
+
+    return base_planreport_xls(request, exel_file_name,
+                               measure_e, testing_e, helping_e,
+                               measure_e_months, testing_e_months, helping_e_months,
+                               u_headers_me, u_headers_te, u_headers_he,
+                               str1, str2, str3, str4, str5, str6
+                               )
+
+# флаг план закупки по поверке
+def export_plan_purchaesing_xls(request):
+    """представление для выгрузки плана закупки по поверке и аттестации на указанный год"""
+    serdate = request.GET['date']
+    exel_file_name = f'plan_purchaesing_{serdate}'
+    str1 = 'СИ'
+    str2 = 'ИО'
+    str3 = 3
+    str4 = 'СИ-количество в месяц'
+    str5 = 'ИО-кол-во в месяц'
+    str6 = 6
+
+
+    u_headers_me = ['Номер текущего свидетельства',
+                    'Стоимость оборудования',
+                    'Месяц заказа замены',
+                    ]
+
+    measure_e = MeasurEquipment.objects. \
+        annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+                                filter(equipment__roomschange__in=setroom). \
+                                filter(equipment__personchange__in=setperson). \
+                                filter(equipmentSM_ver__dateordernew__year=serdate). \
+                                values_list(
+                                'equipment__exnumber',
+                                'charakters__reestr',
+                                'charakters__name',
+                                'mod_type',
+                                'equipment__lot',
+                                'equipmentSM_ver__certnumber',
+                                'equipment__price',
+                                'equipmentSM_ver__dateordernew__month',
+                            ).order_by('equipmentSM_ver__dateordernew__month')
+
+    u_headers_te = ['Номер текущего аттестата',
+                    'Стоимость оборудования',
+                    'Месяц заказа замены',
+                    ]
+
+    testing_e = TestingEquipment.objects. \
+        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipmentSM_att__dateordernew__year=serdate). \
+        values_list(
+        'equipment__exnumber',
+        'charakters__name',
+        'mod_type',
+        'equipment__lot',
+        'equipmentSM_att__certnumber',
+        'equipment__price',
+        'equipmentSM_att__dateordernew__month',
+    ).order_by('equipmentSM_att__dateordernew__month')
+
+    u_headers_he = []
+    helping_e = []
+    measure_e_months = MeasurEquipment.objects.\
+        filter(equipment__personchange__in=setperson).\
+        filter(equipmentSM_ver__dateordernew__year=serdate).\
+        values('equipmentSM_ver__dateordernew__month').\
+        annotate(dcount=Count('equipmentSM_ver__dateordernew__month'), s=Sum('equipment__price')). \
+        order_by().\
+        values_list(
+        'equipmentSM_ver__dateordernew__month',
+        'dcount',
+        's',
+    )
+
+    testing_e_months = TestingEquipment.objects.\
+        filter(equipment__personchange__in=setperson).\
+        filter(equipmentSM_att__dateordernew__year=serdate).\
+        values('equipmentSM_att__dateordernew__month').\
+        annotate(dcount=Count('equipmentSM_att__dateordernew__month'), s=Sum('equipment__price')). \
+        order_by().\
+        values_list(
+        'equipmentSM_att__dateordernew__month',
+        'dcount',
+        's',
+    )
+    helping_e_months = []
+
+    return base_planreport_xls(request, exel_file_name,
+                               measure_e, testing_e, helping_e,
+                               measure_e_months, testing_e_months, helping_e_months,
+                               u_headers_me, u_headers_te, u_headers_he,
+                               str1, str2, str3, str4, str5, str6
+                               )
 
 
 

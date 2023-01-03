@@ -330,7 +330,7 @@ def export_metroyearprice_xls(request):
 
     wb.save(response)
     return response
-
+# флаг в работе сейчас
 def export_metroyearcust_xls(request):
     '''представление для выгрузки списка СИ и ИО поверка в год без поверок заказанных поставщиками'''
     serdate = request.GET['date']
