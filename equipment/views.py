@@ -5040,6 +5040,7 @@ def export_plan_purchaesing_xls(request):
                                 filter(equipment__roomschange__in=setroom). \
                                 filter(equipment__personchange__in=setperson). \
                                 filter(equipmentSM_ver__dateordernew__year=serdate). \
+                                filter(equipmentSM_ver__haveorder=False). \
                                 values_list(
                                 'equipment__exnumber',
                                 'charakters__reestr',
@@ -5063,6 +5064,7 @@ def export_plan_purchaesing_xls(request):
         filter(equipment__roomschange__in=setroom). \
         filter(equipment__personchange__in=setperson). \
         filter(equipmentSM_att__dateordernew__year=serdate). \
+        filter(equipmentSM_att__haveorder=False). \
         values_list(
         'equipment__exnumber',
         'charakters__name',
@@ -5077,7 +5079,8 @@ def export_plan_purchaesing_xls(request):
     helping_e = []
     measure_e_months = MeasurEquipment.objects.\
         filter(equipment__personchange__in=setperson).\
-        filter(equipmentSM_ver__dateordernew__year=serdate).\
+        filter(equipmentSM_ver__dateordernew__year=serdate). \
+        filter(equipmentSM_ver__haveorder=False). \
         values('equipmentSM_ver__dateordernew__month').\
         annotate(dcount=Count('equipmentSM_ver__dateordernew__month'), s=Sum('equipment__price')). \
         order_by().\
@@ -5092,6 +5095,7 @@ def export_plan_purchaesing_xls(request):
         filter(equipmentSM_att__dateordernew__year=serdate).\
         values('equipmentSM_att__dateordernew__month').\
         annotate(dcount=Count('equipmentSM_att__dateordernew__month'), s=Sum('equipment__price')). \
+        filter(equipmentSM_att__haveorder=False). \
         order_by().\
         values_list(
         'equipmentSM_att__dateordernew__month',
