@@ -12,7 +12,7 @@
  {{title.measurequipment_set.all.last.charakters}}, заводской № {{title.lot}}, внутренний № {{ title.exnumber }}  </a> </h5></div>
 <div style="text-align: center; margin-top: 20px; margin-bottom: 15px"><h6> Межповерочный интервал {{ calinterval }} мес. </h6></div>
 <div style="text-align: center; margin-top: 20px; margin-bottom: 15px"><h5> Планируемая дата отправки в поверку: {{ dateorder|date:"m.Y"|default_if_none:" " }} </h5></div>
-
+<div style="text-align: center; margin-top: 20px; margin-bottom: 15px"><h5> Планируемая дата заказа замены: {{ dateordernew|date:"m.Y"|default_if_none:" " }} </h5></div>
 {#таблица для вывода комментария#}
 {% if comment != '' %}
 <table class="table table-bordered">

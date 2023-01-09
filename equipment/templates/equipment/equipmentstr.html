@@ -117,6 +117,7 @@
             <th> Дата поверки </th>
             <th> Поверен до </th>
             <th> Месяц заказа поверки </th>
+            <th> Месяц заказа замены </th>
             <th class="ind"> Ссылка ФГИС</th>
             <th class="ind">  № свидет. о поверке</th>
          </tr>
@@ -126,6 +127,7 @@
         <td>{{ obj.equipmentSM_ver.last.date|date:'d.m.y'|default:" " }}</td>
          <td> {{ obj.equipmentSM_ver.last.datedead|date:'d.m.y'|default:" " }}</td>
          <td> {{ obj.equipmentSM_ver.last.dateorder|date:'m.Y'|default:" " }}</td>
+         <td> {{ obj.equipmentSM_ver.last.dateordernew|date:'m.Y'|default:" " }}</td>
          <td class="ind">
              {% if obj.equipmentSM_ver.last.arshin %}
               <a href="{{ obj.equipmentSM_ver.last.arshin}}"  target="blank" >
