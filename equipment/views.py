@@ -5042,9 +5042,13 @@ def export_mustver_xls(request):
         set10.append(a)
 
     # ширина столбцов
-    ws.col(8).width = 7000
-    ws.col(9).width = 5000
-    ws.col(10).width = 5000
+    # ws1.col(8).width = 7000
+    # ws1.col(9).width = 5000
+    # ws1.col(10).width = 5000
+    #
+    # ws2.col(7).width = 7000
+    # ws2.col(8).width = 5000
+    # ws2.col(9).width = 5000
 
 
     u_headers_me = [
