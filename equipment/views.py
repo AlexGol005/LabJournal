@@ -176,7 +176,7 @@ class MeteorologicalParametersView(TemplateView):
 
 
 class ReportsView(TemplateView):
-    """ Представление, которое выводит страницу с кнопками для вывода планов и отчётов по инфраструктуре"""
+    """ Представление, которое выводит страницу с кнопками для вывода планов и отчётов по оборудованию"""
     template_name = URL + '/reports.html'
 
     def get_context_data(self, **kwargs):
@@ -1320,122 +1320,7 @@ for n in list_:
 # setcomver = setcomver.append(None)
 
 # флаг2
-def export_mustver_xls(request):
-    """представление для выгрузки СИ требующих поверки"""
-    # выборка из ексель по поиску по дате
-    serdate = request.GET['date']
-    queryset_get = Verificationequipment.objects.filter(haveorder=False). \
-        select_related('equipmentSM').values('equipmentSM'). \
-        annotate(id_actual=Max('id')).values('id_actual')
-    b = list(queryset_get)
-    set = []
-    for i in b:
-        a = i.get('id_actual')
-        set.append(a)
-    queryset_get1 = Verificationequipment.objects.filter(id__in=set). \
-        filter(dateorder__lte=serdate).values('equipmentSM__id')
-    b = list(queryset_get1)
-    set1 = []
-    for i in b:
-        a = i.get('equipmentSM__id')
-        set1.append(a)
-    queryset = MeasurEquipment.objects.filter(id__in=set1)
 
-    # собственно ексель
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = f'attachment; filename="{serdate}_mustver.xls"'
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('1', cell_overwrite_ok=True)
-    ws.header_str = b''
-    ws.footer_str = b''
-
-
-
-    # ширина столбцов
-    ws.col(0).width = 3000
-    ws.col(1).width = 3000
-    ws.col(2).width = 6000
-    ws.col(3).width = 5000
-    ws.col(4).width = 3000
-    ws.col(5).width = 3000
-    ws.col(6).width = 4500
-    ws.col(7).width = 4500
-    ws.col(8).width = 7000
-    ws.col(9).width = 5000
-    ws.col(10).width = 5000
-
-    # стили
-    al10 = Alignment()
-    al10.horz = Alignment.HORZ_CENTER
-    al10.vert = Alignment.VERT_CENTER
-    al10.wrap = 1
-
-    b1 = Borders()
-    b1.left = 1
-    b1.right = 1
-    b1.top = 1
-    b1.bottom = 1
-
-    style10 = xlwt.XFStyle()
-    style10.font.bold = True
-    style10.font.name = 'Times New Roman'
-    style10.borders = b1
-    style10.alignment = al10
-
-    style20 = xlwt.XFStyle()
-    style20.font.name = 'Times New Roman'
-    style20.borders = b1
-    style20.alignment = al10
-
-    row_num = 1
-    columns = [
-        'Внутренний номер',
-        'Номер в гореестре',
-        'Название',
-        'Тип/модификация',
-        'Заводской номер',
-        'Год выпуска',
-        'Место хранения',
-        'Место поверки (предыдущей)',
-        'Сотрудник, ответственный за подготовку к поверке/аттестации',
-        'Постоянное примечание к поверке',
-    ]
-
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style10)
-        ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 1000
-
-    rows = queryset. \
-        annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
-                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
-                                      'equipment__manufacturer__companyName')). \
-        filter(equipment__personchange__in=setperson). \
-        filter(equipment__roomschange__in=setroom). \
-        filter(equipment__status='Э'). \
-        filter(equipmentSM_ver__in=setver). \
-        values_list(
-        'equipment__exnumber',
-        'charakters__reestr',
-        'charakters__name',
-        'mod_type',
-        'equipment__lot',
-        'equipment__yearmanuf',
-        'equipment__roomschange__roomnumber__roomnumber',
-        'equipmentSM_ver__place',
-        'equipment__personchange__person__username',
-        'equipment__notemetrology',
-    ).order_by('-equipmentSM_ver__place')
-
-    for row in rows:
-        row_num += 1
-        for col_num in range(len(row)):
-            ws.write(row_num, col_num, row[col_num], style20)
-            ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 1500
-
-    wb.save(response)
-    return response
 
 # флаг график поверки и аттестации
 def export_me_xls(request):
@@ -5112,5 +4997,122 @@ def export_plan_purchaesing_xls(request):
                                )
 
 
+def export_mustver_xls(request):
+    """представление для выгрузки СИ требующих поверки и ИО требующих аттестации"""
+    # выборка из ексель по поиску по дате
+    serdate = request.GET['date']
+    exel_file_name = f'mustveratt_{serdate}'
+    str1 = 'СИ'
+    str2 = 'ИО'
+    str3 = 3
+    str4 = 4
+    str5 = 5
+    str6 = 6
+
+    queryset_get = Verificationequipment.objects.filter(haveorder=False). \
+        select_related('equipmentSM').values('equipmentSM'). \
+        annotate(id_actual=Max('id')).values('id_actual')
+    b = list(queryset_get)
+    set = []
+    for i in b:
+        a = i.get('id_actual')
+        set.append(a)
+    queryset_get1 = Verificationequipment.objects.filter(id__in=set). \
+        filter(dateorder__lte=serdate).values('equipmentSM__id')
+    b = list(queryset_get1)
+    set1 = []
+    for i in b:
+        a = i.get('equipmentSM__id')
+        set1.append(a)
+
+    queryset_get0 = Attestationequipment.objects.filter(haveorder=False). \
+        select_related('equipmentSM').values('equipmentSM'). \
+        annotate(id_actual=Max('id')).values('id_actual')
+    b = list(queryset_get0)
+    set10 = []
+    for i in b:
+        a = i.get('id_actual')
+        set10.append(a)
+    queryset_get10 = Attestationequipment.objects.filter(id__in=set10). \
+        filter(dateorder__lte=serdate).values('equipmentSM__id')
+    b = list(queryset_get10)
+    set10 = []
+    for i in b:
+        a = i.get('equipmentSM__id')
+        set10.append(a)
+
+    # ширина столбцов
+    ws.col(8).width = 7000
+    ws.col(9).width = 5000
+    ws.col(10).width = 5000
 
 
+    u_headers_me = [
+                    'Год выпуска',
+                    'Место хранения',
+                    'Место поверки (предыдущей)',
+                    'Сотрудник, ответственный за подготовку к поверке/аттестации',
+                    'Постоянное примечание к поверке',
+                    ]
+
+    measure_e = MeasurEquipment.objects.filter(id__in=set1). \
+        annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipment__status='Э'). \
+        filter(equipmentSM_ver__in=setver). \
+        values_list(
+        'equipment__exnumber',
+        'charakters__reestr',
+        'charakters__name',
+        'mod_type',
+        'equipment__lot',
+        'equipment__yearmanuf',
+        'equipment__roomschange__roomnumber__roomnumber',
+        'equipmentSM_ver__place',
+        'equipment__personchange__person__username',
+        'equipment__notemetrology',
+    ).order_by('-equipmentSM_ver__place')
+
+    u_headers_te = [
+                    'Год выпуска',
+                    'Место хранения',
+                    'Место аттестации (предыдущей)',
+                    'Сотрудник, ответственный за подготовку к поверке/аттестации',
+                    'Постоянное примечание к аттестации',
+                    ]
+
+    testing_e = TestingEquipment.objects.filter(id__in=set10). \
+        annotate(mod_type=Concat('charakters__typename', Value('/ '), 'charakters__modificname'),
+                 manuf_country=Concat('equipment__manufacturer__country', Value(', '),
+                                      'equipment__manufacturer__companyName')). \
+        filter(equipment__personchange__in=setperson). \
+        filter(equipment__roomschange__in=setroom). \
+        filter(equipment__status='Э'). \
+        filter(equipmentSM_att__in=setatt). \
+        values_list(
+        'equipment__exnumber',
+        'charakters__name',
+        'mod_type',
+        'equipment__lot',
+        'equipment__yearmanuf',
+        'equipment__roomschange__roomnumber__roomnumber',
+        'equipmentSM_att__place',
+        'equipment__personchange__person__username',
+        'equipment__notemetrology',
+    ).order_by('-equipmentSM_att__place')
+
+    measure_e_months = []
+    helping_e = []
+    helping_e_months = []
+    testing_e_months = []
+    u_headers_he = []
+
+    return base_planreport_xls(request, exel_file_name,
+                               measure_e, testing_e, helping_e,
+                               measure_e_months, testing_e_months, helping_e_months,
+                               u_headers_me, u_headers_te, u_headers_he,
+                               str1, str2, str3, str4, str5, str6
+                               )
