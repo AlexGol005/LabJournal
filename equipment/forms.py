@@ -599,7 +599,18 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
                                    widget=forms.Textarea(attrs={'class': 'form-control',
                                                                 'placeholder': ''}))
     expresstest = forms.BooleanField(label='Возможно тестирование', required=False, initial=False)
-
+    service0 = forms.CharField(label='ТО 0', required=False,
+                                  widget=forms.Textarea(attrs={'class': 'form-control',
+                                                               'placeholder': ''}))
+    service1 = forms.CharField(label='ТО 1', required=False,
+                                  widget=forms.Textarea(attrs={'class': 'form-control',
+                                                               'placeholder': ''}))
+    service2 = forms.CharField(label='ТО 2', required=False,
+                                  widget=forms.Textarea(attrs={'class': 'form-control',
+                                                               'placeholder': ''}))
+    servicecomment = forms.CharField(label='Примечание ТО', required=False,
+                                  widget=forms.Textarea(attrs={'class': 'form-control',
+                                                               'placeholder': ''}))
 
     class Meta:
         model = MeasurEquipmentCharakters
@@ -621,6 +632,10 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
             'setplace',
             'complectlist',
             'expresstest',
+            'service0',
+            'service1',
+            'service2',
+            'servicecomment',
                   ]
 
 
@@ -679,6 +694,18 @@ class TestingEquipmentCharaktersCreateForm(forms.ModelForm):
                                widget=forms.Textarea(attrs={'class': 'form-control',
                                                             'placeholder': ''}))
     expresstest = forms.BooleanField(label='Возможно тестирование', required=False, initial=False)
+    service0 = forms.CharField(label='ТО 0', required=False,
+                                  widget=forms.Textarea(attrs={'class': 'form-control',
+                                                               'placeholder': ''}))
+    service1 = forms.CharField(label='ТО 1', required=False,
+                                  widget=forms.Textarea(attrs={'class': 'form-control',
+                                                               'placeholder': ''}))
+    service2 = forms.CharField(label='ТО 2', required=False,
+                                  widget=forms.Textarea(attrs={'class': 'form-control',
+                                                               'placeholder': ''}))
+    servicecomment = forms.CharField(label='Примечание ТО', required=False,
+                                  widget=forms.Textarea(attrs={'class': 'form-control',
+                                                               'placeholder': ''}))
 
     class Meta:
         model = TestingEquipmentCharakters
@@ -701,6 +728,95 @@ class TestingEquipmentCharaktersCreateForm(forms.ModelForm):
             'setplace',
             'complectlist',
             'expresstest',
+            'service0',
+            'service1',
+            'service2',
+            'servicecomment',
+                  ]
+
+class HelpingEquipmentCharaktersCreateForm(forms.ModelForm):
+    """форма для внесения характеристик ВО"""
+    name = forms.CharField(label='Название прибора', max_length=10000000, required=False,
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
+    typename = forms.CharField(label='Тип', max_length=10000000, required=False, initial='нет типа',
+                               widget=forms.TextInput(attrs={'class': 'form-control',
+                                                             'placeholder': ''}))
+    modificname = forms.CharField(label='Модификация', max_length=10000000, required=False, initial='нет модификации',
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
+    measurydiapason = forms.CharField(label='Основные технические характеристики', max_length=10000000, required=False,
+                                  widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                'placeholder': ''}))
+    aim = forms.CharField(label='Наименование видов испытаний и/или определяемых характеристик (параметров) продукции',
+                          max_length=10000000, required=False,
+                          initial='Определение содержания механических примесей в нефтепродуктах',
+                          widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
+    ndoc = forms.CharField(label='Методики испытаний', max_length=10000000, required=False,
+                          initial='ГОСТ 33, МИ-02-2018, ...',
+                          widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
+    power = forms.BooleanField(label='Работает от сети', required=False, initial=False)
+    needsetplace = forms.BooleanField(label='Требуется установка', required=False, initial=False)
+    voltage = forms.CharField(label='Напряжение требуемое', required=False,
+                              widget=forms.TextInput(attrs={'class': 'form-control',
+                                                            'placeholder': ''}))
+    frequency = forms.CharField(label='Частота требуемая', required=False,
+                                widget=forms.TextInput(attrs={'class': 'form-control',
+                                                              'placeholder': ''}))
+    temperature = forms.CharField(label='Температура требуемая', required=False,
+                                  widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                'placeholder': ''}))
+    humidicity = forms.CharField(label='Влажность требуемая', required=False,
+                                 widget=forms.TextInput(attrs={'class': 'form-control',
+                                                               'placeholder': ''}))
+    pressure = forms.CharField(label='Давление требуемое', required=False,
+                               widget=forms.TextInput(attrs={'class': 'form-control',
+                                                             'placeholder': ''}))
+    setplace = forms.CharField(label='Описание мероприятий по установке', required=False,
+                               widget=forms.Textarea(attrs={'class': 'form-control',
+                                                             'placeholder': ''}))
+    complectlist = forms.CharField(label='Где в паспорте комплектация', required=False,
+                               widget=forms.Textarea(attrs={'class': 'form-control',
+                                                            'placeholder': ''}))
+    expresstest = forms.BooleanField(label='Возможно тестирование', required=False, initial=False)
+    service0 = forms.CharField(label='ТО 0', required=False,
+                                  widget=forms.Textarea(attrs={'class': 'form-control',
+                                                               'placeholder': ''}))
+    service1 = forms.CharField(label='ТО 1', required=False,
+                                  widget=forms.Textarea(attrs={'class': 'form-control',
+                                                               'placeholder': ''}))
+    service2 = forms.CharField(label='ТО 2', required=False,
+                                  widget=forms.Textarea(attrs={'class': 'form-control',
+                                                               'placeholder': ''}))
+    servicecomment = forms.CharField(label='Примечание ТО', required=False,
+                                  widget=forms.Textarea(attrs={'class': 'form-control',
+                                                               'placeholder': ''}))
+
+    class Meta:
+        model = TestingEquipmentCharakters
+        fields = [
+            'name',
+            'typename',
+            'modificname',
+            'measurydiapason',
+            'aim',
+            'ndoc',
+            'power',
+            'needsetplace',
+            'voltage',
+            'frequency',
+            'temperature',
+            'humidicity',
+            'pressure',
+            'setplace',
+            'complectlist',
+            'expresstest',
+            'service0',
+            'service1',
+            'service2',
+            'servicecomment',
                   ]
 
 

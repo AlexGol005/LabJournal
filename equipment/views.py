@@ -5041,16 +5041,6 @@ def export_mustver_xls(request):
         a = i.get('equipmentSM__id')
         set10.append(a)
 
-    # ширина столбцов
-    # ws1.col(8).width = 7000
-    # ws1.col(9).width = 5000
-    # ws1.col(10).width = 5000
-    #
-    # ws2.col(7).width = 7000
-    # ws2.col(8).width = 5000
-    # ws2.col(9).width = 5000
-
-
     u_headers_me = [
                     'Год выпуска',
                     'Место хранения',
@@ -5120,3 +5110,487 @@ def export_mustver_xls(request):
                                u_headers_me, u_headers_te, u_headers_he,
                                str1, str2, str3, str4, str5, str6
                                )
+
+# Ниже будут быгрузки ексель для переноса в LabBook
+# Поэтому: для удобства стили все далаем заново. В лаббуке стили с такими же названиями вынесены в файл exelbase
+# но! кроме размера шрифта - он 11!
+
+# блок стилей
+al10 = Alignment()
+al10.horz = Alignment.HORZ_CENTER
+al10.vert = Alignment.VERT_CENTER
+al10.wrap = 1
+
+al1 = Alignment()
+al1.horz = Alignment.HORZ_CENTER
+al1.vert = Alignment.VERT_CENTER
+
+al2 = Alignment()
+al2.horz = Alignment.HORZ_RIGHT
+al2.vert = Alignment.VERT_CENTER
+
+al20 = Alignment()
+al20.horz = Alignment.HORZ_RIGHT
+al20.vert = Alignment.VERT_CENTER
+al20.wrap = 1
+
+al3 = Alignment()
+al3.horz = Alignment.HORZ_LEFT
+al3.vert = Alignment.VERT_CENTER
+
+b1 = Borders()
+b1.left = 1
+b1.right = 1
+b1.top = 1
+b1.bottom = 1
+
+b2 = Borders()
+b2.left = 6
+b2.right = 6
+b2.bottom = 6
+b2.top = 6
+
+# размер шрифта
+size = 11
+# заголовки жирным шрифтом, с границами ячеек
+style_headers = xlwt.XFStyle()
+style_headers.font.bold = True
+style_headers.font.name = 'Times New Roman'
+style_headers.font.height = 20 * size
+style_headers.borders = b1
+style_headers.alignment = al10
+
+# обычные ячейки, с границами ячеек
+style_plain = xlwt.XFStyle()
+style_plain.font.name = 'Times New Roman'
+style_plain.font.height = 20 * size
+style_plain.borders = b1
+style_plain.alignment = al10
+
+# обычные ячейки, с толстыми границами ячеек
+style_plain_bb = xlwt.XFStyle()
+style_plain_bb.font.name = 'Times New Roman'
+style_plain_bb.font.height = 20 * size
+style_plain_bb.borders = b2
+style_plain_bb.alignment = al10
+
+# обычные ячейки с датами, с границами ячеек == style3
+style_date = xlwt.XFStyle()
+style_date.font.name = 'Times New Roman'
+style_date.font.height = 20 * size
+style_date.borders = b1
+style_date.alignment = al10
+style_date.num_format_str = 'DD.MM.YYYY г'
+
+# обычные ячейки, с границами ячеек, c форматом чисел '0.00'  == style4
+style_2dp = xlwt.XFStyle()
+style_2dp.font.name = 'Times New Roman'
+style_2dp.font.height = 20 * size
+style_2dp.borders = b1
+style_2dp.alignment = al1
+style_2dp.num_format_str = '0.00'
+
+# обычные ячейки, с границами ячеек, c форматом чисел '0.00000'  == style5
+style_5dp = xlwt.XFStyle()
+style_5dp.font.name = 'Times New Roman'
+style_5dp.font.height = 20 * size
+style_5dp.borders = b1
+style_5dp.alignment = al1
+style_5dp.num_format_str = '0.00000'
+
+# обычные ячейки, с границами ячеек, c форматом чисел '0.0000'
+style_4dp = xlwt.XFStyle()
+style_4dp.font.name = 'Times New Roman'
+style_4dp.font.height = 20 * size
+style_4dp.borders = b1
+style_4dp.alignment = al1
+style_4dp.num_format_str = '0.0000'
+
+# обычные ячейки, без границ  == style6
+style_plain_nobor = xlwt.XFStyle()
+style_plain_nobor.font.name = 'Times New Roman'
+style_plain_nobor.font.height = 20 * size
+style_plain_nobor.alignment = al10
+
+# обычные ячейки, без границ, сдвинуто вправо  == style7
+style_plain_nobor_r = xlwt.XFStyle()
+style_plain_nobor_r.font.name = 'Times New Roman'
+style_plain_nobor_r.font.height = 20 * size
+style_plain_nobor_r.alignment = al2
+
+# обычные ячейки, без границ, сдвинуто влево
+style_plain_nobor_l = xlwt.XFStyle()
+style_plain_nobor_l.font.name = 'Times New Roman'
+style_plain_nobor_l.font.height = 20 * size
+style_plain_nobor_l.alignment = al3
+
+# обычные ячейки, без границ, сдвинуто влево, c датовым форматом
+style_plain_nobor_l_date = xlwt.XFStyle()
+style_plain_nobor_l_date.font.name = 'Times New Roman'
+style_plain_nobor_l_date.font.height = 20 * size
+style_plain_nobor_l_date.alignment = al3
+style_plain_nobor_l_date.num_format_str = 'DD.MM.YYYY г.'
+
+# обычные ячейки, с границами, сдвинуто вправо  == style7
+style_plain_r = xlwt.XFStyle()
+style_plain_r.font.name = 'Times New Roman'
+style_plain_r.font.height = 20 * size
+style_plain_r.alignment = al20
+
+pattern_black = xlwt.Pattern()
+pattern_black.pattern = xlwt.Pattern.SOLID_PATTERN
+pattern_black.pattern_fore_colour = 0
+
+# чёрные ячейки
+style_black = xlwt.XFStyle()
+style_black.pattern = pattern_black
+
+def get_rows_service_shedule(row_num, ws, MODEL, to3):
+    for note in MODEL.objects.exclude(equipment__status='C'):
+        try:
+            person = Personchange.objects.filter(equipment__pk=note.pk).order_by('pk').last().person.username
+        except:
+            person = 'Ответственный за метрологическое обеспечение'
+        row_num += 1
+        columns = [
+            '',
+            f'{note.charakters.name}, {note.charakters.modificname}, {note.charakters.typename}',
+            f'{note.charakters.name}, {note.charakters.modificname}, {note.charakters.typename}',
+            f'{note.equipment.exnumber}',
+            f'{note.equipment.lot}',
+            '',
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
+            '10',
+            '11',
+            '12',
+            f'{person}',
+            f'{note.charakters.servicecomment}',
+        ]
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style_plain)
+            ws.merge(row_num, row_num, 1, 2, style_plain)
+            ws.merge(row_num, row_num + 1, 6, 6, style_plain)
+            ws.merge(row_num, row_num + 1, 7, 7, style_plain)
+            ws.merge(row_num, row_num + 1, 8, 8, style_plain)
+            ws.merge(row_num, row_num + 1, 9, 9, style_plain)
+            ws.merge(row_num, row_num + 1, 10, 10, style_plain)
+            ws.merge(row_num, row_num + 1, 11, 11, style_plain)
+            ws.merge(row_num, row_num + 1, 12, 12, style_plain)
+            ws.merge(row_num, row_num + 1, 13, 13, style_plain)
+            ws.merge(row_num, row_num + 1, 14, 14, style_plain)
+            ws.merge(row_num, row_num + 1, 15, 15, style_plain)
+            ws.merge(row_num, row_num + 1, 16, 16, style_plain)
+            ws.merge(row_num, row_num + 1, 17, 17, style_plain)
+            ws.merge(row_num, row_num + 4, 18, 18, style_plain)
+            ws.merge(row_num, row_num + 6, 19, 19, style_plain)
+            ws.merge(row_num, row_num + 4, 5, 5, style_plain)
+            ws.merge(row_num, row_num + 6, 0, 0, style_plain)
+            ws.row(row_num).height_mismatch = True
+            ws.row(row_num).height = 1200
+
+        person = 1
+        row_num += 1
+        columns = [
+            '',
+            'Тип технического обслуживания',
+            'Объем технического обслуживания',
+            '',
+            '',
+            '',
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
+            '10',
+            '11',
+            '12',
+            f'{person}',
+            f'{note.charakters.servicecomment}',
+        ]
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style_plain)
+            ws.merge(row_num, row_num, 2, 4, style_plain)
+
+        row_num += 1
+        columns = [
+            '',
+            f'ТО 0',
+            f'{note.charakters.service0}',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            f'{person}',
+            f'{note.charakters.servicecomment}',
+        ]
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style_plain)
+            ws.merge(row_num, row_num, 2, 4, style_plain)
+            ws.row(row_num).height_mismatch = True
+            ws.row(row_num).height = 500
+
+        row_num += 1
+        columns = [
+            '',
+            f'ТО 1',
+            f'{note.charakters.service1}',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            f'{person}',
+            f'{note.charakters.servicecomment}',
+        ]
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style_plain)
+            ws.merge(row_num, row_num, 2, 4, style_plain)
+            ws.row(row_num).height_mismatch = True
+            ws.row(row_num).height = 500
+
+        row_num += 1
+        columns = [
+            '',
+            f'ТО 2',
+            f'{note.charakters.service2}',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            f'{person}',
+            f'{note.charakters.servicecomment}',
+        ]
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style_plain)
+            ws.merge(row_num, row_num, 2, 4, style_headers)
+            ws.merge(row_num, row_num + 1, 1, 2, style_plain)
+            ws.row(row_num).height_mismatch = True
+            ws.row(row_num).height = 500
+
+        row_num += 1
+        columns = [
+            '',
+            f'ТО 3',
+            f'Поверка',
+            '',
+            '',
+            'план',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            f'Ответственный за метрологическое обеспечение',
+            f'{note.charakters.servicecomment}',
+        ]
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style_plain)
+            ws.merge(row_num, row_num, 2, 4, style_plain)
+            ws.merge(row_num, row_num + 1, 1, 1, style_plain)
+            ws.merge(row_num, row_num + 1, 2, 4, style_plain)
+            ws.merge(row_num, row_num + 1, 18, 18, style_plain)
+            ws.row(row_num).height_mismatch = True
+            ws.row(row_num).height = 400
+
+        row_num += 1
+        columns = [
+            '',
+            f'ТО 3',
+            f'{to3}',
+            '',
+            '',
+            'факт',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            f'Ответственный за метрологическое обеспечение',
+            f'{note.charakters.servicecomment}',
+        ]
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style_plain)
+            ws.row(row_num).height_mismatch = True
+            ws.row(row_num).height = 400
+
+        row_num += 1
+        columns = [
+            ''
+        ]
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style_black)
+            ws.merge(row_num, row_num, 0, 19, style_black)
+            ws.row(row_num).height_mismatch = True
+            ws.row(row_num).height = 40
+
+
+def export_maintenance_schedule_xls(request):
+    """представление для выгрузки графика ТО на указанную дату"""
+
+    # получаем дату от пользователя
+    serdate = request.GET['date']
+
+    # источники данных
+    note = MeasurEquipment.objects.exclude(equipment__status='C')
+
+    # создаем выгрузку
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = f'attachment; filename="TO_{serdate}.xls"'
+
+    # добавляем книгу и страницу с названием
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet(f'ТОиР СИ, ИО, ВО {serdate}', cell_overwrite_ok=True)
+    ws.header_str = b''
+    ws.footer_str = b''
+
+    # ширина столбцов
+    ws.col(0).width = 500
+    ws.col(1).width = 4700
+    ws.col(2).width = 10800
+    ws.col(3).width = 3000
+    ws.col(4).width = 3000
+    ws.col(5).width = 3200
+    ws.col(6).width = 1200
+    ws.col(7).width = 1200
+    ws.col(8).width = 1200
+    ws.col(9).width = 1200
+    ws.col(10).width = 1200
+    ws.col(11).width = 1200
+    ws.col(12).width = 1200
+    ws.col(13).width = 1200
+    ws.col(14).width = 1200
+    ws.col(15).width = 1200
+    ws.col(16).width = 1200
+    ws.col(17).width = 1200
+    ws.col(18).width = 6000
+    ws.col(19).width = 7000
+
+    # заголовки ТОиР
+    row_num = 10
+    columns = [
+        '',
+        'Наименование, модификация, тип',
+        'Наименование, модификация, тип',
+        'Внутренний номер',
+        'Заводской номер',
+        'Время выполнения ТОиР*',
+        'I КВАРТАЛ',
+        'I КВАРТАЛ',
+        'I КВАРТАЛ',
+        'II КВАРТАЛ',
+        'II КВАРТАЛ',
+        'II КВАРТАЛ',
+        'III КВАРТАЛ',
+        'III КВАРТАЛ',
+        'III КВАРТАЛ',
+        'IV КВАРТАЛ',
+        'IV КВАРТАЛ',
+        'IV КВАРТАЛ',
+        'Ответственный за техническое обслуживание',
+        'Примечание',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style_headers)
+        ws.merge(row_num, row_num, 1, 2, style_headers)
+        ws.merge(row_num, row_num, 6, 8, style_headers)
+        ws.merge(row_num, row_num, 9, 11, style_headers)
+        ws.merge(row_num, row_num, 12, 14, style_headers)
+        ws.merge(row_num, row_num, 15, 17, style_headers)
+
+    row_num += 1
+    columns = [
+        'СИ'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style_headers)
+        ws.merge(row_num, row_num, 0, 19, style_headers)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 600
+
+    MODEL = MeasurEquipment
+    to3 = 'Поверка'
+
+    get_rows_service_shedule(row_num, ws, MODEL, to3)
+
+    row_num += 1
+    columns = [
+        'ИО'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style_headers)
+        ws.merge(row_num, row_num, 0, 19, style_headers)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 600
+
+    MODEL = TestingEquipment
+    to3 = 'Аттестация'
+
+    get_rows_service_shedule(row_num, ws, MODEL, to3)
+
+
+
+
+
+
+    # все сохраняем
+    wb.save(response)
+    return response

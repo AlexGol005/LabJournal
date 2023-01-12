@@ -18,6 +18,15 @@
 Контакты поверителей</a>
 </div>
 <br>
+
+----------------------------------------------------------------------------------------------------------
+<div style="text-align: center; margin-top: 20px">
+<h5>Выгрузить в EXEL График ТОиР СИ ИО ВО</h5>
+ <form action="{% url 'export_maintenance_schedule_xls' %}" target="blank" method="GET">
+        {% csrf_token %}
+        {% crispy form %}
+    </form>
+</div>
 ----------------------------------------------------------------------------------------------------------
 <div style="text-align: center; margin-top: 20px">
 <h5>Неповеренные к указанной дате СИ</h5>
