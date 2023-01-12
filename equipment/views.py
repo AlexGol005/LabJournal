@@ -5245,7 +5245,17 @@ pattern_black.pattern_fore_colour = 0
 style_black = xlwt.XFStyle()
 style_black.pattern = pattern_black
 
-def get_rows_service_shedule(row_num, ws, MODEL, to3):
+def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type):
+    row_num += 1
+    columns = [
+        f'{equipment_type}'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style_headers)
+        ws.merge(row_num, row_num, 0, 19, style_headers)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 600
+
     for note in MODEL.objects.exclude(equipment__status='C'):
         try:
             person = Personchange.objects.filter(equipment__pk=note.pk).order_by('pk').last().person.username
@@ -5416,7 +5426,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3):
         columns = [
             '',
             f'ТО 3',
-            f'Поверка',
+            f'{to3}',
             '',
             '',
             'план',
@@ -5481,6 +5491,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3):
             ws.merge(row_num, row_num, 0, 19, style_black)
             ws.row(row_num).height_mismatch = True
             ws.row(row_num).height = 40
+    return row_num
 
 
 def export_maintenance_schedule_xls(request):
@@ -5488,9 +5499,6 @@ def export_maintenance_schedule_xls(request):
 
     # получаем дату от пользователя
     serdate = request.GET['date']
-
-    # источники данных
-    note = MeasurEquipment.objects.exclude(equipment__status='C')
 
     # создаем выгрузку
     response = HttpResponse(content_type='application/ms-excel')
@@ -5556,35 +5564,29 @@ def export_maintenance_schedule_xls(request):
         ws.merge(row_num, row_num, 12, 14, style_headers)
         ws.merge(row_num, row_num, 15, 17, style_headers)
 
-    row_num += 1
-    columns = [
-        'СИ'
-    ]
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style_headers)
-        ws.merge(row_num, row_num, 0, 19, style_headers)
-        ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 600
 
+    equipment_type = 'СИ'
     MODEL = MeasurEquipment
     to3 = 'Поверка'
 
-    get_rows_service_shedule(row_num, ws, MODEL, to3)
+    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type)
 
-    row_num += 1
-    columns = [
-        'ИО'
-    ]
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style_headers)
-        ws.merge(row_num, row_num, 0, 19, style_headers)
-        ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 600
+    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type) + 1
 
+    equipment_type = 'ИО'
     MODEL = TestingEquipment
     to3 = 'Аттестация'
 
-    get_rows_service_shedule(row_num, ws, MODEL, to3)
+    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type)
+
+    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type) + 1
+
+    equipment_type = 'ВО'
+    MODEL = HelpingEquipment
+    to3 = 'Проверка технических характеристик'
+
+    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type)
+
 
 
 
