@@ -5137,6 +5137,7 @@ al20.wrap = 1
 al3 = Alignment()
 al3.horz = Alignment.HORZ_LEFT
 al3.vert = Alignment.VERT_CENTER
+al3.wrap = 1
 
 b1 = Borders()
 b1.left = 1
@@ -5212,11 +5213,18 @@ style_plain_nobor.font.name = 'Times New Roman'
 style_plain_nobor.font.height = 20 * size
 style_plain_nobor.alignment = al10
 
+# обычные ячейки, без границ  жирный шрифт размер больше на 1
+style_plain_nobor_bold = xlwt.XFStyle()
+style_plain_nobor_bold.font.bold = True
+style_plain_nobor_bold.font.name = 'Times New Roman'
+style_plain_nobor_bold.font.height = 20 * (size + 1)
+style_plain_nobor_bold.alignment = al10
+
 # обычные ячейки, без границ, сдвинуто вправо  == style7
 style_plain_nobor_r = xlwt.XFStyle()
 style_plain_nobor_r.font.name = 'Times New Roman'
 style_plain_nobor_r.font.height = 20 * size
-style_plain_nobor_r.alignment = al2
+style_plain_nobor_r.alignment = al20
 
 # обычные ячейки, без границ, сдвинуто влево
 style_plain_nobor_l = xlwt.XFStyle()
@@ -5235,7 +5243,7 @@ style_plain_nobor_l_date.num_format_str = 'DD.MM.YYYY г.'
 style_plain_r = xlwt.XFStyle()
 style_plain_r.font.name = 'Times New Roman'
 style_plain_r.font.height = 20 * size
-style_plain_r.alignment = al20
+style_plain_r.alignment.wrap = 1
 
 pattern_black = xlwt.Pattern()
 pattern_black.pattern = xlwt.Pattern.SOLID_PATTERN
@@ -5256,7 +5264,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type):
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 600
 
-    for note in MODEL.objects.exclude(equipment__status='C'):
+    for note in MODEL:
         try:
             person = Personchange.objects.filter(equipment__pk=note.pk).order_by('pk').last().person.username
         except:
@@ -5333,6 +5341,8 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type):
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], style_plain)
             ws.merge(row_num, row_num, 2, 4, style_plain)
+            ws.row(row_num).height_mismatch = True
+            ws.row(row_num).height = 800
 
         row_num += 1
         columns = [
@@ -5532,8 +5542,46 @@ def export_maintenance_schedule_xls(request):
     ws.col(18).width = 6000
     ws.col(19).width = 7000
 
+    # шапка
+    company = CompanyCard.objects.get(pk=1)
+    row_num = 1
+    columns = [
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        f'{company.affirmationcompanyboss}',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style_plain_nobor_r)
+        ws.merge(row_num, row_num + 6, 19, 19, style_plain_nobor_r)
+
+    row_num += 2
+    columns = [
+        f'График технического обслуживания и ремонта оборудования '
+        f'(средств измерений, испытательного и вспомогательного оборудования) '
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style_plain_nobor_bold)
+        ws.merge(row_num, row_num, 0, 19, style_plain_nobor_bold)
+
     # заголовки ТОиР
-    row_num = 10
+    row_num += 2
     columns = [
         '',
         'Наименование, модификация, тип',
@@ -5564,9 +5612,8 @@ def export_maintenance_schedule_xls(request):
         ws.merge(row_num, row_num, 12, 14, style_headers)
         ws.merge(row_num, row_num, 15, 17, style_headers)
 
-
     equipment_type = 'СИ'
-    MODEL = MeasurEquipment
+    MODEL = MeasurEquipment.objects.exclude(equipment__status='C')
     to3 = 'Поверка'
 
     get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type)
@@ -5574,7 +5621,7 @@ def export_maintenance_schedule_xls(request):
     row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type) + 1
 
     equipment_type = 'ИО'
-    MODEL = TestingEquipment
+    MODEL = TestingEquipment.objects.exclude(equipment__status='C')
     to3 = 'Аттестация'
 
     get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type)
@@ -5582,10 +5629,22 @@ def export_maintenance_schedule_xls(request):
     row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type) + 1
 
     equipment_type = 'ВО'
-    MODEL = HelpingEquipment
+    MODEL = HelpingEquipment.objects.filter(charakters__kvasyattestation=True).exclude(equipment__status='C')
     to3 = 'Проверка технических характеристик'
 
     get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type)
+
+    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type) + 1
+
+    row_num += 2
+    columns = [
+        f'Виды и периодичность технического обслуживания'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style_plain_nobor_bold)
+        ws.merge(row_num, row_num, 0, 19, style_plain_nobor_bold)
+
+
 
 
 

@@ -793,6 +793,8 @@ class HelpingEquipmentCharaktersCreateForm(forms.ModelForm):
     servicecomment = forms.CharField(label='Примечание ТО', required=False,
                                   widget=forms.Textarea(attrs={'class': 'form-control',
                                                                'placeholder': ''}))
+    kvasyattestation = forms.BooleanField(label='применяется внутренняя аттестация (проверка зарактеристик)',
+                                          initial=False)
 
     class Meta:
         model = TestingEquipmentCharakters
@@ -817,6 +819,7 @@ class HelpingEquipmentCharaktersCreateForm(forms.ModelForm):
             'service1',
             'service2',
             'servicecomment',
+            'kvasyattestation'
                   ]
 
 

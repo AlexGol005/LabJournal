@@ -316,6 +316,8 @@ class HelpingEquipmentCharakters(models.Model):
     service1 = models.TextField('ТО 1', default='', blank=True, null=True)
     service2 = models.TextField('ТО 2', default='', blank=True, null=True)
     servicecomment = models.TextField('ТО примечание', default='', blank=True, null=True)
+    kvasyattestation = models.BooleanField('применяется внутренняя аттестация (проверка зарактеристик)',
+                                           default=False, blank=True)
 
     def __str__(self):
         return f'{self.name}  {self.modificname}'
