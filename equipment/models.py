@@ -652,3 +652,194 @@ class ContactsVer(models.Model):
     class Meta:
         verbose_name = 'Контакты поверителей для прибора'
         verbose_name_plural = 'Контакты поверителей для прибора'
+
+
+class ServiceEquipmentME(models.Model):
+    """Техобслуживание СИ"""
+    charakters = models.ForeignKey(MeasurEquipmentCharakters,  on_delete=models.PROTECT,
+                                   verbose_name='Характеристики СИ', related_name='mto')
+
+    equipment = models.ForeignKey(Equipment, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='Оборудование')
+
+    commentservice = models.TextField('Примечание к ТОиР', blank=True, null=True)
+
+    # ТО 0
+    descriptiont0 = models.TextField('Объем технического обслуживания ТО 0',  blank=True, null=True)
+    t0month1 = models.BooleanField('ТО 0 в месяце 1', default=False, blank=True)
+    t0month2 = models.BooleanField('ТО 0 в месяце 2', default=False, blank=True)
+    t0month3 = models.BooleanField('ТО 0 в месяце 3', default=False, blank=True)
+    t0month4 = models.BooleanField('ТО 0 в месяце 4', default=False, blank=True)
+    t0month5 = models.BooleanField('ТО 0 в месяце 5', default=False, blank=True)
+    t0month6 = models.BooleanField('ТО 0 в месяце 6', default=False, blank=True)
+    t0month7 = models.BooleanField('ТО 0 в месяце 7', default=False, blank=True)
+    t0month8 = models.BooleanField('ТО 0 в месяце 8', default=False, blank=True)
+    t0month9 = models.BooleanField('ТО 0 в месяце 9', default=False, blank=True)
+    t0month10 = models.BooleanField('ТО 0 в месяце 10', default=False, blank=True)
+    t0month11 = models.BooleanField('ТО 0 в месяце 11', default=False, blank=True)
+    t0month12 = models.BooleanField('ТО 0 в месяце 12', default=False, blank=True)
+
+    # ТО 1
+    descriptiont1 = models.TextField('Объем технического обслуживания ТО 1',  blank=True, null=True)
+    t1month1 = models.BooleanField('ТО 1 в месяце 1', default=False, blank=True)
+    t1month2 = models.BooleanField('ТО 1 в месяце 2', default=False, blank=True)
+    t1month3 = models.BooleanField('ТО 1 в месяце 3', default=False, blank=True)
+    t1month4 = models.BooleanField('ТО 1 в месяце 4', default=False, blank=True)
+    t1month5 = models.BooleanField('ТО 1 в месяце 5', default=False, blank=True)
+    t1month6 = models.BooleanField('ТО 1 в месяце 6', default=False, blank=True)
+    t1month7 = models.BooleanField('ТО 1 в месяце 7', default=False, blank=True)
+    t1month8 = models.BooleanField('ТО 1 в месяце 8', default=False, blank=True)
+    t1month9 = models.BooleanField('ТО 1 в месяце 9', default=False, blank=True)
+    t1month10 = models.BooleanField('ТО 1 в месяце 10', default=False, blank=True)
+    t1month11 = models.BooleanField('ТО 1 в месяце 11', default=False, blank=True)
+    t1month12 = models.BooleanField('ТО 1 в месяце 12', default=False, blank=True)
+
+    # ТО 2
+    descriptiont2 = models.TextField('Объем технического обслуживания ТО 2',  blank=True, null=True)
+    t2month1 = models.BooleanField('ТО 2 в месяце 1', default=False, blank=True)
+    t2month2 = models.BooleanField('ТО 2 в месяце 2', default=False, blank=True)
+    t2month3 = models.BooleanField('ТО 2 в месяце 3', default=False, blank=True)
+    t2month4 = models.BooleanField('ТО 2 в месяце 4', default=False, blank=True)
+    t2month5 = models.BooleanField('ТО 2 в месяце 5', default=False, blank=True)
+    t2month6 = models.BooleanField('ТО 2 в месяце 6', default=False, blank=True)
+    t2month7 = models.BooleanField('ТО 2 в месяце 7', default=False, blank=True)
+    t2month8 = models.BooleanField('ТО 2 в месяце 8', default=False, blank=True)
+    t2month9 = models.BooleanField('ТО 2 в месяце 9', default=False, blank=True)
+    t2month10 = models.BooleanField('ТО 2 в месяце 10', default=False, blank=True)
+    t2month11 = models.BooleanField('ТО 2 в месяце 11', default=False, blank=True)
+    t2month12 = models.BooleanField('ТО 2 в месяце 12', default=False, blank=True)
+
+
+    def __str__(self):
+        return self.charakters.name
+
+
+    class Meta:
+        verbose_name = 'Техобслуживание СИ'
+        verbose_name_plural = 'Техобслуживание СИ'
+
+
+class ServiceEquipmentTE(models.Model):
+    """Техобслуживание ИО"""
+    charakters = models.ForeignKey(TestingEquipmentCharakters, on_delete=models.PROTECT,
+                                   verbose_name='Характеристики ИО', related_name='mto')
+
+    equipment = models.ForeignKey(Equipment, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='Оборудование')
+
+    commentservice = models.TextField('Примечание к ТОиР', blank=True, null=True)
+
+    # ТО 0
+    descriptiont0 = models.TextField('Объем технического обслуживания ТО 0', blank=True, null=True)
+    t0month1 = models.BooleanField('ТО 0 в месяце 1', default=False, blank=True)
+    t0month2 = models.BooleanField('ТО 0 в месяце 2', default=False, blank=True)
+    t0month3 = models.BooleanField('ТО 0 в месяце 3', default=False, blank=True)
+    t0month4 = models.BooleanField('ТО 0 в месяце 4', default=False, blank=True)
+    t0month5 = models.BooleanField('ТО 0 в месяце 5', default=False, blank=True)
+    t0month6 = models.BooleanField('ТО 0 в месяце 6', default=False, blank=True)
+    t0month7 = models.BooleanField('ТО 0 в месяце 7', default=False, blank=True)
+    t0month8 = models.BooleanField('ТО 0 в месяце 8', default=False, blank=True)
+    t0month9 = models.BooleanField('ТО 0 в месяце 9', default=False, blank=True)
+    t0month10 = models.BooleanField('ТО 0 в месяце 10', default=False, blank=True)
+    t0month11 = models.BooleanField('ТО 0 в месяце 11', default=False, blank=True)
+    t0month12 = models.BooleanField('ТО 0 в месяце 12', default=False, blank=True)
+
+    # ТО 1
+    descriptiont1 = models.TextField('Объем технического обслуживания ТО 1', blank=True, null=True)
+    t1month1 = models.BooleanField('ТО 1 в месяце 1', default=False, blank=True)
+    t1month2 = models.BooleanField('ТО 1 в месяце 2', default=False, blank=True)
+    t1month3 = models.BooleanField('ТО 1 в месяце 3', default=False, blank=True)
+    t1month4 = models.BooleanField('ТО 1 в месяце 4', default=False, blank=True)
+    t1month5 = models.BooleanField('ТО 1 в месяце 5', default=False, blank=True)
+    t1month6 = models.BooleanField('ТО 1 в месяце 6', default=False, blank=True)
+    t1month7 = models.BooleanField('ТО 1 в месяце 7', default=False, blank=True)
+    t1month8 = models.BooleanField('ТО 1 в месяце 8', default=False, blank=True)
+    t1month9 = models.BooleanField('ТО 1 в месяце 9', default=False, blank=True)
+    t1month10 = models.BooleanField('ТО 1 в месяце 10', default=False, blank=True)
+    t1month11 = models.BooleanField('ТО 1 в месяце 11', default=False, blank=True)
+    t1month12 = models.BooleanField('ТО 1 в месяце 12', default=False, blank=True)
+
+    # ТО 2
+    descriptiont2 = models.TextField('Объем технического обслуживания ТО 2', blank=True, null=True)
+    t2month1 = models.BooleanField('ТО 2 в месяце 1', default=False, blank=True)
+    t2month2 = models.BooleanField('ТО 2 в месяце 2', default=False, blank=True)
+    t2month3 = models.BooleanField('ТО 2 в месяце 3', default=False, blank=True)
+    t2month4 = models.BooleanField('ТО 2 в месяце 4', default=False, blank=True)
+    t2month5 = models.BooleanField('ТО 2 в месяце 5', default=False, blank=True)
+    t2month6 = models.BooleanField('ТО 2 в месяце 6', default=False, blank=True)
+    t2month7 = models.BooleanField('ТО 2 в месяце 7', default=False, blank=True)
+    t2month8 = models.BooleanField('ТО 2 в месяце 8', default=False, blank=True)
+    t2month9 = models.BooleanField('ТО 2 в месяце 9', default=False, blank=True)
+    t2month10 = models.BooleanField('ТО 2 в месяце 10', default=False, blank=True)
+    t2month11 = models.BooleanField('ТО 2 в месяце 11', default=False, blank=True)
+    t2month12 = models.BooleanField('ТО 2 в месяце 12', default=False, blank=True)
+
+    def __str__(self):
+        return self.charakters.name
+
+    class Meta:
+        verbose_name = 'Техобслуживание ИО'
+        verbose_name_plural = 'Техобслуживание ИО'
+
+
+class ServiceEquipmentHE(models.Model):
+    """Техобслуживание ВО"""
+    charakters = models.ForeignKey(HelpingEquipmentCharakters, on_delete=models.PROTECT,
+                                   verbose_name='Характеристики ВО', related_name='mto')
+
+    equipment = models.ForeignKey(Equipment, on_delete=models.SET_NULL, blank=True, null=True,
+                                  verbose_name='Оборудование')
+
+    commentservice = models.TextField('Примечание к ТОиР', blank=True, null=True)
+
+    # ТО 0
+    descriptiont0 = models.TextField('Объем технического обслуживания ТО 0', blank=True, null=True)
+    t0month1 = models.BooleanField('ТО 0 в месяце 1', default=False, blank=True)
+    t0month2 = models.BooleanField('ТО 0 в месяце 2', default=False, blank=True)
+    t0month3 = models.BooleanField('ТО 0 в месяце 3', default=False, blank=True)
+    t0month4 = models.BooleanField('ТО 0 в месяце 4', default=False, blank=True)
+    t0month5 = models.BooleanField('ТО 0 в месяце 5', default=False, blank=True)
+    t0month6 = models.BooleanField('ТО 0 в месяце 6', default=False, blank=True)
+    t0month7 = models.BooleanField('ТО 0 в месяце 7', default=False, blank=True)
+    t0month8 = models.BooleanField('ТО 0 в месяце 8', default=False, blank=True)
+    t0month9 = models.BooleanField('ТО 0 в месяце 9', default=False, blank=True)
+    t0month10 = models.BooleanField('ТО 0 в месяце 10', default=False, blank=True)
+    t0month11 = models.BooleanField('ТО 0 в месяце 11', default=False, blank=True)
+    t0month12 = models.BooleanField('ТО 0 в месяце 12', default=False, blank=True)
+
+    # ТО 1
+    descriptiont1 = models.TextField('Объем технического обслуживания ТО 1', blank=True, null=True)
+    t1month1 = models.BooleanField('ТО 1 в месяце 1', default=False, blank=True)
+    t1month2 = models.BooleanField('ТО 1 в месяце 2', default=False, blank=True)
+    t1month3 = models.BooleanField('ТО 1 в месяце 3', default=False, blank=True)
+    t1month4 = models.BooleanField('ТО 1 в месяце 4', default=False, blank=True)
+    t1month5 = models.BooleanField('ТО 1 в месяце 5', default=False, blank=True)
+    t1month6 = models.BooleanField('ТО 1 в месяце 6', default=False, blank=True)
+    t1month7 = models.BooleanField('ТО 1 в месяце 7', default=False, blank=True)
+    t1month8 = models.BooleanField('ТО 1 в месяце 8', default=False, blank=True)
+    t1month9 = models.BooleanField('ТО 1 в месяце 9', default=False, blank=True)
+    t1month10 = models.BooleanField('ТО 1 в месяце 10', default=False, blank=True)
+    t1month11 = models.BooleanField('ТО 1 в месяце 11', default=False, blank=True)
+    t1month12 = models.BooleanField('ТО 1 в месяце 12', default=False, blank=True)
+
+    # ТО 2
+    descriptiont2 = models.TextField('Объем технического обслуживания ТО 2', blank=True, null=True)
+    t2month1 = models.BooleanField('ТО 2 в месяце 1', default=False, blank=True)
+    t2month2 = models.BooleanField('ТО 2 в месяце 2', default=False, blank=True)
+    t2month3 = models.BooleanField('ТО 2 в месяце 3', default=False, blank=True)
+    t2month4 = models.BooleanField('ТО 2 в месяце 4', default=False, blank=True)
+    t2month5 = models.BooleanField('ТО 2 в месяце 5', default=False, blank=True)
+    t2month6 = models.BooleanField('ТО 2 в месяце 6', default=False, blank=True)
+    t2month7 = models.BooleanField('ТО 2 в месяце 7', default=False, blank=True)
+    t2month8 = models.BooleanField('ТО 2 в месяце 8', default=False, blank=True)
+    t2month9 = models.BooleanField('ТО 2 в месяце 9', default=False, blank=True)
+    t2month10 = models.BooleanField('ТО 2 в месяце 10', default=False, blank=True)
+    t2month11 = models.BooleanField('ТО 2 в месяце 11', default=False, blank=True)
+    t2month12 = models.BooleanField('ТО 2 в месяце 12', default=False, blank=True)
+
+    def __str__(self):
+        return self.charakters.name
+
+    class Meta:
+        verbose_name = 'Техобслуживание ВО'
+        verbose_name_plural = 'Техобслуживание ВО'

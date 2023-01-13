@@ -19,6 +19,9 @@ admin.site.register(TestingEquipmentCharakters)
 admin.site.register(TestingEquipment)
 admin.site.register(HelpingEquipment)
 admin.site.register(HelpingEquipmentCharakters)
+admin.site.register(ServiceEquipmentME)
+admin.site.register(ServiceEquipmentTE)
+admin.site.register(ServiceEquipmentHE)
 
 
 @admin.register(Verificationequipment)
