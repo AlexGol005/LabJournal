@@ -5315,7 +5315,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type):
             ws.row(row_num).height_mismatch = True
             ws.row(row_num).height = 1200
 
-        person = 1
+
         row_num += 1
         columns = [
             '',
