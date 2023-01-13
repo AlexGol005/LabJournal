@@ -5267,7 +5267,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type):
 
     for note in MODEL:
         try:
-            person = Personchange.objects.filter(equipment__pk=note.pk).order_by('pk').last().person.username
+            person = Personchange.objects.filter(equipment__pk=note.equipment.pk).order_by('pk').last().person.username
         except:
             person = 'Ответственный за метрологическое обеспечение'
         row_num += 1
