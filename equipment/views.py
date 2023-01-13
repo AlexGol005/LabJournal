@@ -5614,7 +5614,7 @@ def export_maintenance_schedule_xls(request):
         ws.merge(row_num, row_num, 15, 17, style_headers)
 
     equipment_type = 'СИ'
-    MODEL = MeasurEquipment.objects.exclude(equipment__status='Cп. ')
+    MODEL = MeasurEquipment.objects.exclude(equipment__status='С')
     to3 = 'Поверка'
 
     get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type)
