@@ -616,6 +616,10 @@ class MeteorologicalParameters(models.Model):
 class CompanyCard(models.Model):
     """Карточка Петроаналитики """
     name = models.CharField('Название', max_length=90, blank=True, null=True)
+    nameboss = models.CharField('ФИО руководителя организации', max_length=90, blank=True, null=True)
+    positionboss = models.CharField('Должность руководителя организации', max_length=90, blank=True, null=True)
+    namemetrologequipment = models.CharField('ФИО инжененера по оборудованию', max_length=90, blank=True, null=True)
+    positionmetrologequipment = models.CharField('Должность инжененера по оборудованию', max_length=90, blank=True, null=True)
     sertificat9001 = models.CharField('Сертификат 9001', max_length=500, blank=True, null=True)
     affirmationproduction = models.CharField('Утверждаю начальник производства', max_length=90, blank=True, null=True)
     affirmationcompanyboss = models.CharField('Утверждаю генеральный директор', max_length=90, blank=True, null=True)

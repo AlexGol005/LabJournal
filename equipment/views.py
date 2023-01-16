@@ -4151,9 +4151,12 @@ def base_planreport_xls(request, exel_file_name,
                                measure_e, testing_e, helping_e,
                                measure_e_months, testing_e_months, helping_e_months,
                                u_headers_me, u_headers_te, u_headers_he,
-                               str1, str2, str3, str4, str5, str6):
+                               str1, str2, str3, str4, str5, str6, nameME, nameTE, nameHE):
     """базовое шаблон представление для выгрузки планов и отчетов по СИ, ИО, ВО к которому обращаются частные представления"""
 
+    # для выгрузки реквизитов организации
+    company = CompanyCard.objects.get(pk=1)
+    affirmation = f'УТВЕРЖДАЮ \n{company.positionboss}\n{company.name}\n____________/{company.nameboss}/'
 
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{exel_file_name}.xls"'
@@ -4252,26 +4255,69 @@ def base_planreport_xls(request, exel_file_name,
         'Сумма, руб',
     ]
 
-
-    # записываем страницу 1 - СИ
-    # заголовки СИ
-    row_num = 0
-    columns = [
+    # заголовки СИ (вынесены сюда для подсчёта длины строк ексель)
+    columnsME = [
         'Внутренний номер',
         'Номер в госреестре',
         'Наименование',
         'Тип/Модификация',
         'Заводской номер',
     ]
+    columnsME = columnsME + u_headers_me
+    lennME = len(columnsME)
 
-    columns = columns + u_headers_me
+    # заголовки ИО (вынесены сюда для подсчёта длины строк ексель)
+    columnsTE = [
+        'Внутренний номер',
+        'Наименование',
+        'Тип/Модификация',
+        'Заводской номер',
+    ]
+    columnsTE = columnsTE + u_headers_te
+    lennTE = len(columnsTE)
 
+    # заголовки ВО (вынесены сюда для подсчёта длины строк ексель)
+    columnsHE = [
+        'Внутренний номер',
+        'Наименование',
+        'Тип/Модификация',
+        'Заводской номер',
+    ]
+    columnsHE = columnsHE + u_headers_he
+    lennHE = len(columnsHE)
+
+    # записываем страницу 1 - СИ
+    # Шапка утверждаю todo
+
+    row_num = 0
+    c = [''] * (lennME - 3)
+    columns = c + [
+        affirmation,
+    ]
+    for col_num in range(len(columns)):
+        ws1.write(row_num, col_num, columns[col_num], style_plain_nobor_r)
+        ws1.merge(row_num, row_num, lennME - 3, lennME - 1, style_plain_nobor_r)
+        ws1.row(row_num).height_mismatch = True
+        ws1.row(row_num).height = 1600
+
+    row_num += 2
+    columns = [
+        f'{nameME}'
+    ]
+    for col_num in range(len(columns)):
+        ws1.write(row_num, col_num, columns[col_num], style_plain_nobor_bold)
+        ws1.merge(row_num, row_num, 0, lennME-1, style_plain_nobor_bold)
+        ws2.row(row_num).height_mismatch = True
+        ws2.row(row_num).height = 800
+
+    # заголовки СИ
+    row_num += 2
     datecolumnme = []
 
     # запись заголовков СИ
-    for col_num in range(len(columns)):
-        ws1.write(row_num, col_num, columns[col_num], style_headers)
-        if 'Дата' in str(columns[col_num]) or 'дата' in str(columns[col_num]):
+    for col_num in range(len(columnsME)):
+        ws1.write(row_num, col_num, columnsME[col_num], style_headers)
+        if 'Дата' in str(columnsME[col_num]) or 'дата' in str(columnsME[col_num]):
             datecolumnme.append(col_num)
 
     # данные СИ и их запись
@@ -4284,24 +4330,49 @@ def base_planreport_xls(request, exel_file_name,
             else:
                 ws1.write(row_num, col_num, row[col_num], style_plain)
 
-    # записываем страницу 2 - ИО
-    # заголовки ИО
-    row_num = 0
+    # подпись СИ
+    row_num += 2
     columns = [
-        'Внутренний номер',
-        'Наименование',
-        'Тип/Модификация',
-        'Заводской номер',
+        f'Разработал: \n{company.positionmetrologequipment} _____________ /{company.namemetrologequipment}/'
     ]
+    for col_num in range(len(columns)):
+        ws1.write(row_num, col_num, columns[col_num], style_plain_nobor_l)
+        ws1.merge(row_num, row_num, 0, lennME-1, style_plain_nobor_l)
+        ws1.row(row_num).height_mismatch = True
+        ws1.row(row_num).height = 1000
 
-    columns = columns + u_headers_te
 
+    # записываем страницу 2 - ИО
+    # Шапка утверждаю todo
+    row_num = 0
+    c = [''] * (lennTE - 2)
+    columns = c + [
+        affirmation,
+    ]
+    for col_num in range(len(columns)):
+        ws2.write(row_num, col_num, columns[col_num], style_plain_nobor_r)
+        ws2.merge(row_num, row_num, lennTE - 2, lennTE - 1, style_plain_nobor_r)
+        ws2.row(row_num).height_mismatch = True
+        ws2.row(row_num).height = 1600
+
+    row_num += 2
+    columns = [
+        f'{nameTE}'
+    ]
+    for col_num in range(len(columns)):
+        ws2.write(row_num, col_num, columns[col_num], style_plain_nobor_bold)
+        ws2.merge(row_num, row_num, 0, lennTE-1, style_plain_nobor_bold)
+        ws2.row(row_num).height_mismatch = True
+        ws2.row(row_num).height = 800
+
+    # заголовки ИО
+    row_num += 2
     datecolumnte = []
 
     # запись заголовков ИО
-    for col_num in range(len(columns)):
-        ws2.write(row_num, col_num, columns[col_num], style_headers)
-        if 'Дата' in str(columns[col_num]) or 'дата' in str(columns[col_num]):
+    for col_num in range(len(columnsTE)):
+        ws2.write(row_num, col_num, columnsTE[col_num], style_headers)
+        if 'Дата' in str(columnsTE[col_num]) or 'дата' in str(columnsTE[col_num]):
             datecolumnte.append(col_num)
 
     # данные ИО и их запись
@@ -4309,29 +4380,53 @@ def base_planreport_xls(request, exel_file_name,
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
-            if col_num in datecolumnte:
+            if col_num in datecolumnme:
                 ws2.write(row_num, col_num, row[col_num], style_date)
             else:
                 ws2.write(row_num, col_num, row[col_num], style_plain)
 
-    # записываем страницу 3 - ВО
-    # заголовки ВО
-    row_num = 0
+    # подпись ИО
+    row_num += 2
     columns = [
-        'Внутренний номер',
-        'Наименование',
-        'Тип/Модификация',
-        'Заводской номер',
+        f'Разработал: \n{company.positionmetrologequipment} _____________ /{company.namemetrologequipment}/'
     ]
+    for col_num in range(len(columns)):
+        ws2.write(row_num, col_num, columns[col_num], style_plain_nobor_l)
+        ws2.merge(row_num, row_num, 0, lennTE-1, style_plain_nobor_l)
+        ws2.row(row_num).height_mismatch = True
+        ws2.row(row_num).height = 1000
 
-    columns = columns + u_headers_he
+    # записываем страницу 3 - ВО
+    # Шапка утверждаю todo
+    row_num = 0
+    c = [''] * (lennHE - 2)
+    columns = c + [
+        affirmation,
+    ]
+    for col_num in range(len(columns)):
+        ws3.write(row_num, col_num, columns[col_num], style_plain_nobor_r)
+        ws3.merge(row_num, row_num, lennHE - 2, lennHE - 1, style_plain_nobor_r)
+        ws3.row(row_num).height_mismatch = True
+        ws3.row(row_num).height = 1600
 
+    row_num += 2
+    columns = [
+        f'{nameHE}'
+    ]
+    for col_num in range(len(columns)):
+        ws3.write(row_num, col_num, columns[col_num], style_plain_nobor_bold)
+        ws3.merge(row_num, row_num, 0, lennHE-1, style_plain_nobor_bold)
+        ws3.row(row_num).height_mismatch = True
+        ws3.row(row_num).height = 800
+
+    # заголовки ВО
+    row_num += 2
     datecolumnhe = []
 
     # запись заголовков ВО
-    for col_num in range(len(columns)):
-        ws3.write(row_num, col_num, columns[col_num], style_headers)
-        if 'Дата' in str(columns[col_num]) or 'дата' in str(columns[col_num]):
+    for col_num in range(len(columnsTE)):
+        ws3.write(row_num, col_num, columnsHE[col_num], style_headers)
+        if 'Дата' in str(columnsHE[col_num]) or 'дата' in str(columnsHE[col_num]):
             datecolumnhe.append(col_num)
 
     # данные ВО и их запись
@@ -4339,10 +4434,22 @@ def base_planreport_xls(request, exel_file_name,
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
-            if col_num in datecolumnhe:
+            if col_num in datecolumnme:
                 ws3.write(row_num, col_num, row[col_num], style_date)
             else:
                 ws3.write(row_num, col_num, row[col_num], style_plain)
+
+    # подпись ВО
+    row_num += 2
+    columns = [
+        f'Разработал: \n{company.positionmetrologequipment} _____________ /{company.namemetrologequipment}/'
+    ]
+    for col_num in range(len(columns)):
+        ws3.write(row_num, col_num, columns[col_num], style_plain_nobor_l)
+        ws3.merge(row_num, row_num, 0, lennHE-1, style_plain_nobor_l)
+        ws3.row(row_num).height_mismatch = True
+        ws3.row(row_num).height = 1000
+
 
     # записываем страницу 4 - подсчёт по месяцам для СИ (ПСИ)
     # заголовки ПСИ
@@ -4407,9 +4514,9 @@ def export_metroyearcust_xls(request):
 
 
     u_headers_me = ['Номер свидетельства',
-                    'Стоимость поверки, руб.',
                     'Дата поверки/калибровки',
                     'Дата окончания свидетельства',
+                    'Стоимость поверки, руб.',
                     ]
 
     measure_e = MeasurEquipment.objects. \
@@ -4428,15 +4535,15 @@ def export_metroyearcust_xls(request):
         'mod_type',
         'equipment__lot',
         'equipmentSM_ver__certnumber',
-        'equipmentSM_ver__price',
         'equipmentSM_ver__date',
         'equipmentSM_ver__datedead',
+        'equipmentSM_ver__price',
     ).order_by('equipmentSM_ver__date')
 
     u_headers_te = ['Номер аттестата',
-                    'Стоимость аттестации, руб.',
                     'Дата аттестации',
                     'Дата окончания аттестации',
+                    'Стоимость аттестации, руб.',
                     ]
 
     testing_e = TestingEquipment.objects. \
@@ -4454,9 +4561,9 @@ def export_metroyearcust_xls(request):
         'mod_type',
         'equipment__lot',
         'equipmentSM_att__certnumber',
-        'equipmentSM_att__price',
         'equipmentSM_att__date',
         'equipmentSM_att__datedead'
+        'equipmentSM_att__price',
     ).order_by('equipmentSM_att__date')
 
     u_headers_he = []
@@ -4495,13 +4602,18 @@ def export_metroyearcust_xls(request):
     )
 
     helping_e_months = []
+    company = CompanyCard.objects.get(pk=1)
+    nameME = f'Отчет по поверке средств измерений в {company.name} за {serdate} год'
+    nameTE = f'Отчет по аттестации испытательного оборудования в {company.name} за {serdate} год'
+    nameHE = ''
 
     return base_planreport_xls(request, exel_file_name,
                         measure_e, testing_e, helping_e,
                        measure_e_months, testing_e_months, helping_e_months,
                         u_headers_me, u_headers_te, u_headers_he,
-                               str1, str2, str3, str4, str5, str6
+                               str1, str2, str3, str4, str5, str6, nameME, nameTE, nameHE
                                )
+
 
 def export_metroyearprice_xls(request):
     """представление для выгрузки - Список СИ и ИО прошедших поверку в указанном году только те где
@@ -4517,9 +4629,9 @@ def export_metroyearprice_xls(request):
 
 
     u_headers_me = ['Номер свидетельства',
-                    'Стоимость поверки, руб.',
                     'Дата поверки/калибровки',
                     'Дата окончания свидетельства',
+                    'Стоимость поверки, руб.',
                     ]
 
     measure_e = MeasurEquipment.objects. \
@@ -4538,15 +4650,15 @@ def export_metroyearprice_xls(request):
         'mod_type',
         'equipment__lot',
         'equipmentSM_ver__certnumber',
-        'equipmentSM_ver__price',
         'equipmentSM_ver__date',
         'equipmentSM_ver__datedead',
+        'equipmentSM_ver__price',
     ).order_by('equipmentSM_ver__date')
 
     u_headers_te = ['Номер аттестата',
-                    'Стоимость аттестации, руб.',
                     'Дата аттестации',
                     'Дата окончания аттестации',
+                    'Стоимость аттестации, руб.',
                     ]
 
     testing_e = TestingEquipment.objects. \
@@ -4564,9 +4676,9 @@ def export_metroyearprice_xls(request):
         'mod_type',
         'equipment__lot',
         'equipmentSM_att__certnumber',
-        'equipmentSM_att__price',
         'equipmentSM_att__date',
         'equipmentSM_att__datedead'
+        'equipmentSM_att__price',
     ).order_by('equipmentSM_att__date')
 
     u_headers_he = []
@@ -4603,12 +4715,16 @@ def export_metroyearprice_xls(request):
     )
 
     helping_e_months = []
+    company = CompanyCard.objects.get(pk=1)
+    nameME = f'Отчет по поверке средств измерений в {company.name} за {serdate} год'
+    nameTE = f'Отчет по аттестации испытательного оборудования в {company.name} за {serdate} год'
+    nameHE = ''
 
     return base_planreport_xls(request, exel_file_name,
                         measure_e, testing_e, helping_e,
                        measure_e_months, testing_e_months, helping_e_months,
                         u_headers_me, u_headers_te, u_headers_he,
-                               str1, str2, str3, str4, str5, str6
+                               str1, str2, str3, str4, str5, str6, nameME, nameTE, nameHE
                                )
 
 def export_metroyear_xls(request):
@@ -4625,9 +4741,9 @@ def export_metroyear_xls(request):
 
 
     u_headers_me = ['Номер свидетельства',
-                    'Стоимость поверки, руб.',
                     'Дата поверки/калибровки',
                     'Дата окончания свидетельства',
+                    'Стоимость поверки, руб.',
                     ]
 
     measure_e = MeasurEquipment.objects. \
@@ -4645,15 +4761,15 @@ def export_metroyear_xls(request):
         'mod_type',
         'equipment__lot',
         'equipmentSM_ver__certnumber',
-        'equipmentSM_ver__price',
         'equipmentSM_ver__date',
         'equipmentSM_ver__datedead',
+        'equipmentSM_ver__price',
     ).order_by('equipmentSM_ver__date')
 
     u_headers_te = ['Номер аттестата',
-                    'Стоимость аттестации, руб.',
                     'Дата аттестации',
                     'Дата окончания аттестации',
+                    'Стоимость аттестации, руб.',
                     ]
 
     testing_e = TestingEquipment.objects. \
@@ -4670,9 +4786,9 @@ def export_metroyear_xls(request):
         'mod_type',
         'equipment__lot',
         'equipmentSM_att__certnumber',
-        'equipmentSM_att__price',
         'equipmentSM_att__date',
         'equipmentSM_att__datedead'
+        'equipmentSM_att__price',
     ).order_by('equipmentSM_att__date')
 
     u_headers_he = []
@@ -4683,12 +4799,16 @@ def export_metroyear_xls(request):
     testing_e_months = []
 
     helping_e_months = []
+    company = CompanyCard.objects.get(pk=1)
+    nameME = f'Отчет по поверке средств измерений в {company.name} за {serdate} год'
+    nameTE = f'Отчет по аттестации испытательного оборудования в {company.name} за {serdate} год'
+    nameHE = ''
 
     return base_planreport_xls(request, exel_file_name,
                         measure_e, testing_e, helping_e,
                        measure_e_months, testing_e_months, helping_e_months,
                         u_headers_me, u_headers_te, u_headers_he,
-                               str1, str2, str3, str4, str5, str6
+                               str1, str2, str3, str4, str5, str6, nameME, nameTE, nameHE
                                )
 
 # флаг отчёты по закупке
@@ -4800,12 +4920,17 @@ def export_metronewyear_xls(request):
         'dcount2',
         's2',
     )
+    company = CompanyCard.objects.get(pk=1)
+    nameME = f'Средства измерений введённые в эксплуатацию в {company.name} за {serdate} год'
+    nameTE = f'Испытательное оборудование введенное в эксплуатацию в {company.name} за {serdate} год'
+    nameHE = f'Вспомогательное оборудование введенное в эксплуатацию в {company.name} за {serdate} год'
+
 
     return base_planreport_xls(request, exel_file_name,
                         measure_e, testing_e, helping_e,
                        measure_e_months, testing_e_months, helping_e_months,
                         u_headers_me, u_headers_te, u_headers_he,
-                               str1, str2, str3, str4, str5, str6
+                               str1, str2, str3, str4, str5, str6, nameME, nameTE, nameHE
                                )
 # флаг план по поверке
 def export_planmetro_xls(request):
@@ -4821,8 +4946,8 @@ def export_planmetro_xls(request):
 
 
     u_headers_me = ['Номер текущего свидетельства',
-                    'Стоимость последней поверки, руб. (при наличии)',
                     'Месяц заказа поверки',
+                    'Стоимость последней поверки, руб. (при наличии)',
                     ]
 
     measure_e = MeasurEquipment.objects. \
@@ -4840,13 +4965,13 @@ def export_planmetro_xls(request):
                                 'mod_type',
                                 'equipment__lot',
                                 'equipmentSM_ver__certnumber',
-                                'equipmentSM_ver__price',
                                 'equipmentSM_ver__dateorder__month',
+                                'equipmentSM_ver__price',
                             ).order_by('equipmentSM_ver__dateorder__month')
 
     u_headers_te = ['Номер текущего аттестата',
-                    'Стоимость последней аттестации, руб. (при наличии)',
                     'Месяц заказа аттестации',
+                    'Стоимость последней аттестации, руб. (при наличии)',
                     ]
 
     testing_e = TestingEquipment.objects. \
@@ -4863,8 +4988,8 @@ def export_planmetro_xls(request):
         'mod_type',
         'equipment__lot',
         'equipmentSM_att__certnumber',
-        'equipmentSM_att__price',
         'equipmentSM_att__dateorder__month',
+        'equipmentSM_att__price',
     ).order_by('equipmentSM_att__dateorder__month')
 
     u_headers_he = []
@@ -4893,12 +5018,16 @@ def export_planmetro_xls(request):
         's',
     )
     helping_e_months = []
+    company = CompanyCard.objects.get(pk=1)
+    nameME = f'План поверки средств измерений в {company.name} за {serdate} год'
+    nameTE = f'План аттестации испытательного оборудования в {company.name} за {serdate} год'
+    nameHE = ''
 
     return base_planreport_xls(request, exel_file_name,
                                measure_e, testing_e, helping_e,
                                measure_e_months, testing_e_months, helping_e_months,
                                u_headers_me, u_headers_te, u_headers_he,
-                               str1, str2, str3, str4, str5, str6
+                               str1, str2, str3, str4, str5, str6, nameME, nameTE, nameHE
                                )
 
 # флаг план закупки по поверке
@@ -4915,8 +5044,8 @@ def export_plan_purchaesing_xls(request):
 
 
     u_headers_me = ['Номер текущего свидетельства',
-                    'Стоимость оборудования',
                     'Месяц заказа замены',
+                    'Стоимость оборудования',
                     ]
 
     measure_e = MeasurEquipment.objects. \
@@ -4934,13 +5063,13 @@ def export_plan_purchaesing_xls(request):
                                 'mod_type',
                                 'equipment__lot',
                                 'equipmentSM_ver__certnumber',
-                                'equipment__price',
                                 'equipmentSM_ver__dateordernew__month',
+                                'equipment__price',
                             ).order_by('equipmentSM_ver__dateordernew__month')
 
     u_headers_te = ['Номер текущего аттестата',
-                    'Стоимость оборудования',
                     'Месяц заказа замены',
+                    'Стоимость оборудования',
                     ]
 
     testing_e = TestingEquipment.objects. \
@@ -4957,8 +5086,8 @@ def export_plan_purchaesing_xls(request):
         'mod_type',
         'equipment__lot',
         'equipmentSM_att__certnumber',
-        'equipment__price',
         'equipmentSM_att__dateordernew__month',
+        'equipment__price',
     ).order_by('equipmentSM_att__dateordernew__month')
 
     u_headers_he = []
@@ -4989,12 +5118,16 @@ def export_plan_purchaesing_xls(request):
         's',
     )
     helping_e_months = []
+    company = CompanyCard.objects.get(pk=1)
+    nameME = f'Средства измерений - план закупки в {company.name} за {serdate} год'
+    nameTE = f'Испытательное оборудование - план закупки в {company.name} за {serdate} год'
+    nameHE = f'Вспомогательное оборудование - план закупки в {company.name} за {serdate} год'
 
     return base_planreport_xls(request, exel_file_name,
                                measure_e, testing_e, helping_e,
                                measure_e_months, testing_e_months, helping_e_months,
                                u_headers_me, u_headers_te, u_headers_he,
-                               str1, str2, str3, str4, str5, str6
+                               str1, str2, str3, str4, str5, str6, nameME, nameTE, nameHE
                                )
 
 
@@ -5104,12 +5237,16 @@ def export_mustver_xls(request):
     helping_e_months = []
     testing_e_months = []
     u_headers_he = []
+    nameME = f'Средства измерений - требуется поверка  на {serdate}'
+    nameTE = f'Испытательное оборудование - требуется аттестация на {serdate}'
+    nameHE = ''
+
 
     return base_planreport_xls(request, exel_file_name,
                                measure_e, testing_e, helping_e,
                                measure_e_months, testing_e_months, helping_e_months,
                                u_headers_me, u_headers_te, u_headers_he,
-                               str1, str2, str3, str4, str5, str6
+                               str1, str2, str3, str4, str5, str6, nameME, nameTE, nameHE
                                )
 
 # Ниже будут быгрузки ексель для переноса в LabBook
@@ -5504,7 +5641,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, descriptio
             ws.row(row_num).height = 40
     return row_num
 
-
+# график тоир техобслуживания
 def export_maintenance_schedule_xls(request):
     """представление для выгрузки графика ТО на указанную дату"""
 
@@ -5566,7 +5703,7 @@ def export_maintenance_schedule_xls(request):
         '',
         '',
         '',
-        f'{company.affirmationcompanyboss}',
+        affirmation,
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style_plain_nobor_r)
