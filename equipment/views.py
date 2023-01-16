@@ -4156,7 +4156,7 @@ def base_planreport_xls(request, exel_file_name,
 
     # для выгрузки реквизитов организации
     company = CompanyCard.objects.get(pk=1)
-    affirmation = f'УТВЕРЖДАЮ \n{company.positionboss}\n{company.name}\n____________/{company.nameboss}/'
+    affirmation = f'УТВЕРЖДАЮ \n{company.positionboss}\n{company.name}\n____________/{company.nameboss}/\n«__» ________20__ г.'
 
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{exel_file_name}.xls"'
@@ -4225,8 +4225,8 @@ def base_planreport_xls(request, exel_file_name,
     ws1.col(3).width = 3000
     ws1.col(4).width = 2000
     ws1.col(6).width = 2600
-    ws1.col(7).width = 3000
-    ws1.col(8).width = 3000
+    ws1.col(7).width = 4500
+    ws1.col(8).width = 4500
 
     # ширина столбцов ИО
     ws2.col(0).width = 3000
@@ -4235,8 +4235,8 @@ def base_planreport_xls(request, exel_file_name,
     ws2.col(3).width = 4200
     ws2.col(4).width = 3000
     ws2.col(5).width = 2600
-    ws2.col(6).width = 3000
-    ws2.col(7).width = 3000
+    ws2.col(6).width = 4500
+    ws2.col(7).width = 4500
 
     # ширина столбцов ВО
     ws3.col(0).width = 3000
@@ -4245,8 +4245,8 @@ def base_planreport_xls(request, exel_file_name,
     ws3.col(3).width = 4200
     ws3.col(4).width = 2000
     ws3.col(5).width = 2600
-    ws3.col(6).width = 3000
-    ws3.col(7).width = 3000
+    ws3.col(6).width = 4500
+    ws3.col(7).width = 4500
 
     # колонки для разбиивок по месяцам
     columns_month = [
@@ -4298,7 +4298,7 @@ def base_planreport_xls(request, exel_file_name,
         ws1.write(row_num, col_num, columns[col_num], style_plain_nobor_r)
         ws1.merge(row_num, row_num, lennME - 3, lennME - 1, style_plain_nobor_r)
         ws1.row(row_num).height_mismatch = True
-        ws1.row(row_num).height = 1600
+        ws1.row(row_num).height = 1900
 
     row_num += 2
     columns = [
@@ -4353,7 +4353,7 @@ def base_planreport_xls(request, exel_file_name,
         ws2.write(row_num, col_num, columns[col_num], style_plain_nobor_r)
         ws2.merge(row_num, row_num, lennTE - 2, lennTE - 1, style_plain_nobor_r)
         ws2.row(row_num).height_mismatch = True
-        ws2.row(row_num).height = 1600
+        ws2.row(row_num).height = 1900
 
     row_num += 2
     columns = [
@@ -4407,7 +4407,7 @@ def base_planreport_xls(request, exel_file_name,
         ws3.write(row_num, col_num, columns[col_num], style_plain_nobor_r)
         ws3.merge(row_num, row_num, lennHE - 2, lennHE - 1, style_plain_nobor_r)
         ws3.row(row_num).height_mismatch = True
-        ws3.row(row_num).height = 1600
+        ws3.row(row_num).height = 1900
 
     row_num += 2
     columns = [
@@ -5681,7 +5681,7 @@ def export_maintenance_schedule_xls(request):
     ws.col(19).width = 7000
 
     # шапка
-    company = CompanyCard.objects.get(pk=1)
+    affirmation = f'УТВЕРЖДАЮ \n{company.positionboss}\n{company.name}\n____________/{company.nameboss}/\n«__» ________20__ г.'
     row_num = 1
     columns = [
         '',
