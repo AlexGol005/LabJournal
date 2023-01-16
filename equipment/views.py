@@ -1327,7 +1327,7 @@ for n in list_:
 def export_me_xls(request):
     '''представление для выгрузки графика поверки и аттестации'''
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="equipment.xls"'
+    response['Content-Disposition'] = f'attachment; filename="pov_att_shedule_ {now.year}.xls"'
 
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('График поверки СИ', cell_overwrite_ok=True)
@@ -1350,6 +1350,8 @@ def export_me_xls(request):
     ws.col(17).width = 3000
     ws.col(20).width = 4500
     ws.col(21).width = 4500
+    ws.col(22).width = 4500
+    ws.col(23).width = 4500
 
     # ширина столбцов графика аттестации
     ws1.col(0).width = 3000
@@ -1366,6 +1368,10 @@ def export_me_xls(request):
     ws1.col(17).width = 8500
     ws1.col(18).width = 4500
     ws1.col(19).width = 4500
+    ws1.col(20).width = 4500
+    ws1.col(21).width = 4500
+    ws1.col(22).width = 4500
+    ws1.col(23).width = 4500
 
     # стили
     al10 = Alignment()
@@ -1385,6 +1391,11 @@ def export_me_xls(request):
     style10.borders = b1
     style10.alignment = al10
 
+    style100 = xlwt.XFStyle()
+    style100.font.bold = True
+    style100.font.name = 'Times New Roman'
+    style100.alignment = al10
+
     style20 = xlwt.XFStyle()
     style20.font.name = 'Times New Roman'
     style20.borders = b1
@@ -1396,8 +1407,20 @@ def export_me_xls(request):
     style30.alignment = al10
     style30.num_format_str = 'DD.MM.YYYY'
 
+    # название графика поверки, первый ряд
+    row_num = 1
+    columns = [
+        f'График поверки средств измерений на {now.year} год'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style100)
+        ws.merge(row_num, row_num, 0, 15, style100)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 600
+
+
     # заголовки графика поверки, первый ряд
-    row_num = 0
+    row_num += 2
     columns = [
                 'Внутренний  номер',
                 'Номер в госреестре',
@@ -1456,6 +1479,7 @@ def export_me_xls(request):
             'charakters__measurydiapason',
             'charakters__accuracity',
         )
+
     for row in rows:
         row_num += 1
         for col_num in range(0, 14):
@@ -1465,8 +1489,19 @@ def export_me_xls(request):
         for col_num in range(18, len(row)):
             ws.write(row_num, col_num, row[col_num], style20)
 
+        # название графика аттестации, первый ряд
+    row_num = 1
+    columns = [
+        f'График аттестации испытательного оборудования на {now.year} год'
+    ]
+    for col_num in range(len(columns)):
+        ws1.write(row_num, col_num, columns[col_num], style100)
+        ws1.merge(row_num, row_num, 0, 15, style100)
+        ws1.row(row_num).height_mismatch = True
+        ws1.row(row_num).height = 600
+
         # заголовки графика аттестации, первый ряд
-    row_num = 0
+    row_num += 2
     columns = [
         'Внутренний  номер',
         'Наименование',
