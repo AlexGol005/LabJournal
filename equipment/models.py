@@ -661,7 +661,7 @@ class ContactsVer(models.Model):
 class ServiceEquipmentME(models.Model):
     """Техобслуживание СИ"""
     charakters = models.ForeignKey(MeasurEquipmentCharakters,  on_delete=models.PROTECT,
-                                   verbose_name='Характеристики СИ', related_name='mto')
+                                   verbose_name='Характеристики СИ')
 
     equipment = models.ForeignKey(Equipment, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='Оборудование')
@@ -726,7 +726,7 @@ class ServiceEquipmentME(models.Model):
 class ServiceEquipmentTE(models.Model):
     """Техобслуживание ИО"""
     charakters = models.ForeignKey(TestingEquipmentCharakters, on_delete=models.PROTECT,
-                                   verbose_name='Характеристики ИО', related_name='mto')
+                                   verbose_name='Характеристики ИО')
 
     equipment = models.ForeignKey(Equipment, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='Оборудование')
@@ -789,7 +789,7 @@ class ServiceEquipmentTE(models.Model):
 class ServiceEquipmentHE(models.Model):
     """Техобслуживание ВО"""
     charakters = models.ForeignKey(HelpingEquipmentCharakters, on_delete=models.PROTECT,
-                                   verbose_name='Характеристики ВО', related_name='mto')
+                                   verbose_name='Характеристики ВО')
 
     equipment = models.ForeignKey(Equipment, on_delete=models.SET_NULL, blank=True, null=True,
                                   verbose_name='Оборудование')

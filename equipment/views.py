@@ -5426,7 +5426,7 @@ pattern_black.pattern_fore_colour = 0
 style_black = xlwt.XFStyle()
 style_black.pattern = pattern_black
 
-def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, description2):
+def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, MODEL2):
     row_num += 1
     columns = [
         f'{equipment_type}'
@@ -5442,6 +5442,9 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, descriptio
             person = Personchange.objects.filter(equipment__pk=note.equipment.pk).order_by('pk').last().person.username
         except:
             person = 'Ответственный за метрологическое обеспечение'
+
+        a = MODEL2
+        descriptiont2 = a.descriptiont2
         row_num += 1
         columns = [
             '',
@@ -5579,7 +5582,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, descriptio
         columns = [
             '',
             f'ТО 2',
-            f'{description2}',
+            f'{descriptiont2}',
             '',
             '',
             '',
@@ -5716,6 +5719,7 @@ def export_maintenance_schedule_xls(request):
     ws.col(19).width = 7000
 
     # шапка
+    company = CompanyCard.objects.get(pk=1)
     affirmation = f'УТВЕРЖДАЮ \n{company.positionboss}\n{company.name}\n____________/{company.nameboss}/\n«__» ________20__ г.'
     row_num = 1
     columns = [
@@ -5785,44 +5789,42 @@ def export_maintenance_schedule_xls(request):
         ws.merge(row_num, row_num, 12, 14, style_headers)
         ws.merge(row_num, row_num, 15, 17, style_headers)
 
+
     equipment_type = 'СИ'
     MODEL = MeasurEquipment.objects.exclude(equipment__status='С')
+    MODEL2 = ServiceEquipmentME.objects.get(charakters__pk=note.charakters.pk)
     to3 = 'Поверка'
-    note = MeasurEquipment.objects.get(pk=1)
+
     description0 = '1'
     description1 = '1'
 
-    a = note.charakters.mto.last()
-    description2 = a.charakters.mto.descriptiont2
+    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, MODEL2)
 
-
-
-
-    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, description2)
-
-    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, description2) + 1
+    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, MODEL2) + 1
 
     equipment_type = 'ИО'
     MODEL = TestingEquipment.objects.exclude(equipment__status='С')
+    MODEL2 = ServiceEquipmentTE
     to3 = 'Аттестация'
     description0 = '1'
     description1 = '1'
     description2 = '1'
 
-    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, description2)
+    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, MODEL2)
 
-    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, description2) + 1
+    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, MODEL2) + 1
 
     equipment_type = 'ВО'
     MODEL = HelpingEquipment.objects.filter(charakters__kvasyattestation=True).exclude(equipment__status='С')
+    MODEL2 = ServiceEquipmentHE
     to3 = 'Проверка технических характеристик'
     description0 = '1'
     description1 = '1'
     description2 = '1'
 
-    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, description2)
+    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, MODEL2)
 
-    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, description2) + 1
+    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, MODEL2) + 1
 
     row_num += 2
     columns = [
