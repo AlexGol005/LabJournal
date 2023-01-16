@@ -4424,7 +4424,7 @@ def base_planreport_xls(request, exel_file_name,
     datecolumnhe = []
 
     # запись заголовков ВО
-    for col_num in range(len(columnsTE)):
+    for col_num in range(len(columnsHE)):
         ws3.write(row_num, col_num, columnsHE[col_num], style_headers)
         if 'Дата' in str(columnsHE[col_num]) or 'дата' in str(columnsHE[col_num]):
             datecolumnhe.append(col_num)
