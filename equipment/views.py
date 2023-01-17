@@ -5437,8 +5437,6 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 600
 
-
-
     for note in MODEL:
         try:
             person = Personchange.objects.filter(equipment__pk=note.equipment.pk).order_by('pk').last().person.username
@@ -5457,12 +5455,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             descriptiont2 = ' '
             commentservice = ' '
 
-        try:
-            note2 = MODEL2.objects.get(charakters__pk=note.charakters.pk)
-            if note2.t2month1:
-                t2month1 = 'ТО-2'
-        except:
-            t2month1 = ' '
+        t2month1 = ' '
         t2month2 = ' '
         t2month3 = ' '
         t2month4 = ' '
