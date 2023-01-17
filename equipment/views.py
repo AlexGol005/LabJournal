@@ -5661,6 +5661,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             '',
             '',
             '',
+            '',
             f'{person}',
             f'{commentservice}',
         ]
