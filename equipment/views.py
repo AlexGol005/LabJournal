@@ -4929,7 +4929,7 @@ def export_metronewyear_xls(request):
         's',
     )
 
-    testing_e_months = qt1 = TestingEquipment.objects. \
+    testing_e_months = TestingEquipment.objects. \
         filter(equipment__personchange__in=setperson). \
         filter(equipment__roomschange__in=setroom). \
         filter(equipmentSM_att__in=setatt). \
@@ -5281,7 +5281,7 @@ def export_mustver_xls(request):
                                measure_e, testing_e, helping_e,
                                measure_e_months, testing_e_months, helping_e_months,
                                u_headers_me, u_headers_te, u_headers_he,
-                               str1, str2, str3, str4, str5, str6, nameME, nameTE, nameHE
+                               str1, str2, str3, str4, str5, str6, nameME, nameTE, nameHE,
                                )
 
 # Ниже будут быгрузки ексель для переноса в LabBook
@@ -5426,7 +5426,7 @@ pattern_black.pattern_fore_colour = 0
 style_black = xlwt.XFStyle()
 style_black.pattern = pattern_black
 
-def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, MODEL2):
+def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
     row_num += 1
     columns = [
         f'{equipment_type}'
@@ -5437,14 +5437,136 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, descriptio
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 600
 
+
+
     for note in MODEL:
         try:
             person = Personchange.objects.filter(equipment__pk=note.equipment.pk).order_by('pk').last().person.username
         except:
             person = 'Ответственный за метрологическое обеспечение'
 
-        a = MODEL2
-        descriptiont2 = a.descriptiont2
+        try:
+            note2 = MODEL2.objects.get(charakters__pk=note.charakters.pk)
+            descriptiont0 = note2.descriptiont0
+            descriptiont1 = note2.descriptiont1
+            descriptiont2 = note2.descriptiont2
+            commentservice = note2.commentservice
+            if note2.t0month1:
+                t0month1 = 'ТО-0'
+            if note2.t0month2:
+                t0month2 = 'ТО-0'
+            if note2.t0month3:
+                t0month3 = 'ТО-0'
+            if note2.t0month4:
+                t0month4 = 'ТО-0'
+            if note2.t0month5:
+                t0month5 = 'ТО-0'
+            if note2.t0month6:
+                t0month6 = 'ТО-0'
+            if note2.t0month7:
+                t0month7 = 'ТО-0'
+            if note2.t0month8:
+                t0month8 = 'ТО-0'
+            if note2.t0month9:
+                t0month9 = 'ТО-0'
+            if note2.t0month10:
+                t0month10 = 'ТО-0'
+            if note2.t0month11:
+                t0month11 = 'ТО-0'
+            if note2.t0month12:
+                t0month12 = 'ТО-0'
+            if note2.t1month1:
+                t1month1 = 'ТО-1'
+            if note2.t1month2:
+                t1month2 = 'ТО-1'
+            if note2.t1month3:
+                t1month3 = 'ТО-1'
+            if note2.t1month4:
+                t1month4 = 'ТО-1'
+            if note2.t1month5:
+                t1month5 = 'ТО-1'
+            if note2.t1month6:
+                t1month6 = 'ТО-1'
+            if note2.t1month7:
+                t1month7 = 'ТО-1'
+            if note2.t1month8:
+                t1month8 = 'ТО-1'
+            if note2.t1month9:
+                t1month9 = 'ТО-1'
+            if note2.t1month10:
+                t1month10 = 'ТО-1'
+            if note2.t1month11:
+                t1month11 = 'ТО-1'
+            if note2.t1month12:
+                t1month12 = 'ТО-1'
+            if note2.t2month1:
+                t2month1 = 'ТО-2'
+            if note2.t2month2:
+                t2month2 = 'ТО-2'
+            if note2.t2month3:
+                t2month3 = 'ТО-2'
+            if note2.t2month4:
+                t2month4 = 'ТО-2'
+            if note2.t2month5:
+                t2month5 = 'ТО-2'
+            if note2.t2month6:
+                t2month6 = 'ТО-2'
+            if note2.t2month7:
+                t2month7 = 'ТО-2'
+            if note2.t2month8:
+                t2month8 = 'ТО-2'
+            if note2.t2month9:
+                t2month9 = 'ТО-2'
+            if note2.t2month10:
+                t2month10 = 'ТО-2'
+            if note2.t2month10:
+                t2month10 = 'ТО-2'
+            if note2.t2month11:
+                t2month11 = 'ТО-2'
+            if note2.t2month12:
+                t2month12 = 'ТО-2'
+        except:
+            descriptiont0 = ' '
+            descriptiont1 = ' '
+            descriptiont2 = ' '
+            commentservice = ' '
+            t0month1 = ' '
+            t0month2 = ' '
+            t0month3 = ' '
+            t0month4 = ' '
+            t0month5 = ' '
+            t0month6 = ' '
+            t0month7 = ' '
+            t0month8 = ' '
+            t0month9 = ' '
+            t0month10 = ' '
+            t0month11 = ' '
+            t0month12 = ' '
+            t1month1 = ' '
+            t1month2 = ' '
+            t1month3 = ' '
+            t1month4 = ' '
+            t1month5 = ' '
+            t1month6 = ' '
+            t1month7 = ' '
+            t1month8 = ' '
+            t1month9 = ' '
+            t1month10 = ' '
+            t1month11 = ' '
+            t1month12 = ' '
+            t2month1 = ' '
+            t2month2 = ' '
+            t2month3 = ' '
+            t2month4 = ' '
+            t2month5 = ' '
+            t2month6 = ' '
+            t2month7 = ' '
+            t2month8 = ' '
+            t2month9 = ' '
+            t2month10 = ' '
+            t2month11 = ' '
+            t2month12 = ' '
+
         row_num += 1
         columns = [
             '',
@@ -5466,7 +5588,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, descriptio
             '11',
             '12',
             f'{person}',
-            f'{note.charakters.servicecomment}',
+            f'{commentservice}',
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], style_plain)
@@ -5512,7 +5634,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, descriptio
             '11',
             '12',
             f'{person}',
-            f'{note.charakters.servicecomment}',
+            f'{commentservice}',
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], style_plain)
@@ -5524,89 +5646,88 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, descriptio
         columns = [
             '',
             f'ТО 0',
-            f'',
+            f'{descriptiont0}',
             '',
             '',
             '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
+            t0month1,
+            t0month2,
+            t0month3,
+            t0month4,
+            t0month5,
+            t0month6,
+            t0month7,
+            t0month8,
+            t0month9,
+            t0month10,
+            t0month11,
+            t0month12,
             f'{person}',
-            f'{note.charakters.servicecomment}',
+            f'{commentservice}',
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], style_plain)
             ws.merge(row_num, row_num, 2, 4, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 500
+            ws.row(row_num).height = 1500
 
         row_num += 1
         columns = [
             '',
             f'ТО 1',
-            f'',
+            f'{descriptiont1}',
             '',
             '',
             '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
+            t1month1,
+            t1month2,
+            t1month3,
+            t1month4,
+            t1month5,
+            t1month6,
+            t1month7,
+            t1month8,
+            t1month9,
+            t1month10,
+            t1month11,
+            t1month12,
             f'{person}',
-            f'{note.charakters.servicecomment}',
+            f'{commentservice}',
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], style_plain)
             ws.merge(row_num, row_num, 2, 4, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 500
+            ws.row(row_num).height = 1500
 
         row_num += 1
         columns = [
             '',
             f'ТО 2',
             f'{descriptiont2}',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
+            f'',
+            f'',
+            f'',
+            t2month1,
+            t2month2,
+            t2month3,
+            t2month4,
+            t2month5,
+            t2month6,
+            t2month7,
+            t2month8,
+            t2month9,
+            t2month10,
+            t2month11,
+            t2month12,
             f'{person}',
-            f'{note.charakters.servicecomment}',
+            f'{commentservice}',
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], style_plain)
-            ws.merge(row_num, row_num, 2, 4, style_headers)
-            ws.merge(row_num, row_num + 1, 1, 2, style_plain)
+            ws.merge(row_num, row_num, 2, 4, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 500
+            ws.row(row_num).height = 1500
 
         row_num += 1
         columns = [
@@ -5629,7 +5750,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, descriptio
             '',
             '',
             f'Ответственный за метрологическое обеспечение',
-            f'{note.charakters.servicecomment}',
+            f'{commentservice}',
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], style_plain)
@@ -5661,7 +5782,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, descriptio
             '',
             '',
             f'Ответственный за метрологическое обеспечение',
-            f'{note.charakters.servicecomment}',
+            f'{commentservice}',
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], style_plain)
@@ -5792,27 +5913,23 @@ def export_maintenance_schedule_xls(request):
 
     equipment_type = 'СИ'
     MODEL = MeasurEquipment.objects.exclude(equipment__status='С')
-    MODEL2 = ServiceEquipmentME.objects.get(charakters__pk=note.charakters.pk)
+    MODEL2 = ServiceEquipmentME
     to3 = 'Поверка'
 
-    description0 = '1'
-    description1 = '1'
 
-    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, MODEL2)
+    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2)
 
-    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, MODEL2) + 1
+    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2) + 1
 
     equipment_type = 'ИО'
     MODEL = TestingEquipment.objects.exclude(equipment__status='С')
     MODEL2 = ServiceEquipmentTE
     to3 = 'Аттестация'
-    description0 = '1'
-    description1 = '1'
-    description2 = '1'
 
-    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, MODEL2)
 
-    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, MODEL2) + 1
+    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2)
+
+    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2) + 1
 
     equipment_type = 'ВО'
     MODEL = HelpingEquipment.objects.filter(charakters__kvasyattestation=True).exclude(equipment__status='С')
@@ -5822,9 +5939,9 @@ def export_maintenance_schedule_xls(request):
     description1 = '1'
     description2 = '1'
 
-    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, MODEL2)
+    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2)
 
-    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, description0, description1, MODEL2) + 1
+    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2) + 1
 
     row_num += 2
     columns = [
