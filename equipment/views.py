@@ -5451,38 +5451,17 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             descriptiont1 = note2.descriptiont1
             descriptiont2 = note2.descriptiont2
             commentservice = note2.commentservice
-            if note2.t2month1:
-                t2month1 = 'ТО-2'
-            if note2.t2month2:
-                t2month2 = 'ТО-2'
-            if note2.t2month3:
-                t2month3 = 'ТО-2'
-            if note2.t2month4:
-                t2month4 = 'ТО-2'
-            if note2.t2month5:
-                t2month5 = 'ТО-2'
-            if note2.t2month6:
-                t2month6 = 'ТО-2'
-            if note2.t2month7:
-                t2month7 = 'ТО-2'
-            if note2.t2month8:
-                t2month8 = 'ТО-2'
-            if note2.t2month9:
-                t2month9 = 'ТО-2'
-            if note2.t2month10:
-                t2month10 = 'ТО-2'
-            if note2.t2month10:
-                t2month10 = 'ТО-2'
-            if note2.t2month11:
-                t2month11 = 'ТО-2'
-            if note2.t2month12:
-                t2month12 = 'ТО-2'
         except:
             descriptiont0 = ' '
             descriptiont1 = ' '
             descriptiont2 = ' '
             commentservice = ' '
 
+        try:
+            note2 = MODEL2.objects.get(charakters__pk=note.charakters.pk)
+            if note2.t2month1:
+                t2month1 = 'ТО-2'
+        except:
             t2month1 = ' '
             t2month2 = ' '
             t2month3 = ' '
@@ -5495,6 +5474,43 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             t2month10 = ' '
             t2month11 = ' '
             t2month12 = ' '
+        # if note2.t2month2:
+        #     t2month2 = 'ТО-2'
+        # if note2.t2month3:
+        #     t2month3 = 'ТО-2'
+        # if note2.t2month4:
+        #     t2month4 = 'ТО-2'
+        # if note2.t2month5:
+        #     t2month5 = 'ТО-2'
+        # if note2.t2month6:
+        #     t2month6 = 'ТО-2'
+        # if note2.t2month7:
+        #     t2month7 = 'ТО-2'
+        # if note2.t2month8:
+        #     t2month8 = 'ТО-2'
+        # if note2.t2month9:
+        #     t2month9 = 'ТО-2'
+        # if note2.t2month10:
+        #     t2month10 = 'ТО-2'
+        # if note2.t2month10:
+        #     t2month10 = 'ТО-2'
+        # if note2.t2month11:
+        #     t2month11 = 'ТО-2'
+        # if note2.t2month12:
+        #     t2month12 = 'ТО-2'
+
+            # t2month1 = ' '
+            # t2month2 = ' '
+            # t2month3 = ' '
+            # t2month4 = ' '
+            # t2month5 = ' '
+            # t2month6 = ' '
+            # t2month7 = ' '
+            # t2month8 = ' '
+            # t2month9 = ' '
+            # t2month10 = ' '
+            # t2month11 = ' '
+            # t2month12 = ' '
 
 
         t1month1 = ' '
