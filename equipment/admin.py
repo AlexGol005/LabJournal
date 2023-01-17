@@ -19,7 +19,7 @@ admin.site.register(TestingEquipmentCharakters)
 admin.site.register(TestingEquipment)
 admin.site.register(HelpingEquipment)
 admin.site.register(HelpingEquipmentCharakters)
-admin.site.register(ServiceEquipmentME)
+
 admin.site.register(ServiceEquipmentTE)
 admin.site.register(ServiceEquipmentHE)
 
@@ -35,5 +35,9 @@ class NoteAdmin(admin.ModelAdmin):
 @admin.register(Equipment)
 class NoteAdmin(admin.ModelAdmin):
     search_fields = ['exnumber']
+
+@admin.register(ServiceEquipmentME)
+class NoteAdmin(admin.ModelAdmin):
+    search_fields = ['charakters__name']
 
 
