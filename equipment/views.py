@@ -5451,30 +5451,6 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             descriptiont1 = note2.descriptiont1
             descriptiont2 = note2.descriptiont2
             commentservice = note2.commentservice
-            if note2.t1month1:
-                t1month1 = 'ТО-1'
-            if note2.t1month2:
-                t1month2 = 'ТО-1'
-            if note2.t1month3:
-                t1month3 = 'ТО-1'
-            if note2.t1month4:
-                t1month4 = 'ТО-1'
-            if note2.t1month5:
-                t1month5 = 'ТО-1'
-            if note2.t1month6:
-                t1month6 = 'ТО-1'
-            if note2.t1month7:
-                t1month7 = 'ТО-1'
-            if note2.t1month8:
-                t1month8 = 'ТО-1'
-            if note2.t1month9:
-                t1month9 = 'ТО-1'
-            if note2.t1month10:
-                t1month10 = 'ТО-1'
-            if note2.t1month11:
-                t1month11 = 'ТО-1'
-            if note2.t1month12:
-                t1month12 = 'ТО-1'
             if note2.t2month1:
                 t2month1 = 'ТО-2'
             if note2.t2month2:
@@ -5507,18 +5483,6 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             descriptiont2 = ' '
             commentservice = ' '
 
-            t1month1 = ' '
-            t1month2 = ' '
-            t1month3 = ' '
-            t1month4 = ' '
-            t1month5 = ' '
-            t1month6 = ' '
-            t1month7 = ' '
-            t1month8 = ' '
-            t1month9 = ' '
-            t1month10 = ' '
-            t1month11 = ' '
-            t1month12 = ' '
             t2month1 = ' '
             t2month2 = ' '
             t2month3 = ' '
@@ -5531,6 +5495,20 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             t2month10 = ' '
             t2month11 = ' '
             t2month12 = ' '
+
+
+        t1month1 = ' '
+        t1month2 = ' '
+        t1month3 = ' '
+        t1month4 = ' '
+        t1month5 = ' '
+        t1month6 = ' '
+        t1month7 = ' '
+        t1month8 = ' '
+        t1month9 = ' '
+        t1month10 = ' '
+        t1month11 = ' '
+        t1month12 = ' '
 
         row_num += 1
         columns = [
