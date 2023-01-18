@@ -5449,14 +5449,82 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             descriptiont1 = note2.descriptiont1
             descriptiont2 = note2.descriptiont2
             commentservice = note2.commentservice
-            t1month1 = note2.t1month1
+            if note2.descriptiont0:
+                to0_shed = 'ежедневно'
+            else:
+                to0_shed = ' '
+            if note2.descriptiont1:
+                to1_shed = 'ежемесячно'
+            else:
+                to1_shed = ' '
+            if note2.t2month1 == True:
+                t2month1 = 'V'
+            else:
+                t2month1 = ' '
+            if note2.t2month2 == True:
+                t2month2 = 'V'
+            else:
+                t2month2 = ' '
+            if note2.t2month3 == True:
+                t2month3 = 'V'
+            else:
+                t2month3 = ' '
+            if note2.t2month4 == True:
+                t2month4 = 'V'
+            else:
+                t2month4 = ' '
+            if note2.t2month5 == True:
+                t2month5 = 'V'
+            else:
+                t2month5 = ' '
+            if note2.t2month6 == True:
+                t2month6 = 'V'
+            else:
+                t2month6 = ' '
+            if note2.t2month7 == True:
+                t2month7 = 'V'
+            else:
+                t2month7 = ' '
+            if note2.t2month8 == True:
+                t2month8 = 'V'
+            else:
+                t2month8 = ' '
+            if note2.t2month9 == True:
+                t2month9 = 'V'
+            else:
+                t2month9 = ' '
+            if note2.t2month10 == True:
+                t2month10 = 'V'
+            else:
+                t2month10 = ' '
+            if note2.t2month11 == True:
+                t2month11 = 'V'
+            else:
+                t2month11 = ' '
+            if note2.t2month12 == True:
+                t2month12 = 'V'
+            else:
+                t2month12 = ' '
 
         except:
             descriptiont0 = ' '
             descriptiont1 = ' '
             descriptiont2 = ' '
             commentservice = ' '
-            t1month1 = ''
+            t2month1 = ''
+            t2month2 = ''
+            t2month3 = ''
+            t2month4 = ''
+            t2month5 = ''
+            t2month6 = ''
+            t2month7 = ''
+            t2month8 = ''
+            t2month9 = ''
+            t2month10 = ''
+            t2month11 = ''
+            t2month12 = ''
+            to0_shed = ''
+            to1_shed = ''
 
 
         row_num += 1
@@ -5539,29 +5607,29 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             '',
             f'ТО 0',
             f'{descriptiont0}',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
+            to0_shed,
+            to0_shed,
+            to0_shed,
+            to0_shed,
+            to0_shed,
+            to0_shed,
+            to0_shed,
+            to0_shed,
+            to0_shed,
+            to0_shed,
+            to0_shed,
+            to0_shed,
+            to0_shed,
+            to0_shed,
             f'{person}',
             f'{commentservice}',
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], style_plain)
             ws.merge(row_num, row_num, 2, 4, style_plain)
+            ws.merge(row_num, row_num, 6, 17, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 2000
+            ws.row(row_num).height = 1200
 
         row_num += 1
         columns = [
@@ -5569,50 +5637,50 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             f'ТО 1',
             f'{descriptiont1}',
             '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            t1month1,
-
+            to1_shed,
+            to1_shed,
+            to1_shed,
+            to1_shed,
+            to1_shed,
+            to1_shed,
+            to1_shed,
+            to1_shed,
+            to1_shed,
+            to1_shed,
+            to1_shed,
+            to1_shed,
+            to1_shed,
+            to1_shed,
             f'{person}',
             f'{commentservice}',
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], style_plain)
             ws.merge(row_num, row_num, 2, 4, style_plain)
+            ws.merge(row_num, row_num, 6, 17, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 2000
+            ws.row(row_num).height = 1200
 
         row_num += 1
         columns = [
             '',
             f'ТО 2',
             f'{descriptiont2}',
-            f'',
-            f'',
-            f'',
+            f'{descriptiont2}',
+            f'{descriptiont2}',
             '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
+            t2month1,
+            t2month2,
+            t2month3,
+            t2month4,
+            t2month5,
+            t2month6,
+            t2month7,
+            t2month8,
+            t2month9,
+            t2month10,
+            t2month11,
+            t2month12,
             f'{person}',
             f'{commentservice}',
         ]
@@ -5620,7 +5688,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             ws.write(row_num, col_num, columns[col_num], style_plain)
             ws.merge(row_num, row_num, 2, 4, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 2000
+            ws.row(row_num).height = 1200
 
         row_num += 1
         columns = [
@@ -5652,7 +5720,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             ws.merge(row_num, row_num + 1, 2, 4, style_plain)
             ws.merge(row_num, row_num + 1, 18, 18, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 1000
+            ws.row(row_num).height = 600
 
         row_num += 1
         columns = [
@@ -5681,7 +5749,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             ws.write(row_num, col_num, columns[col_num], style_plain)
             ws.merge(row_num, row_num, 2, 4, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 1000
+            ws.row(row_num).height = 600
 
         row_num += 1
         columns = [

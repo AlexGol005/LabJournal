@@ -669,37 +669,13 @@ class ServiceEquipmentME(models.Model):
     commentservice = models.TextField('Примечание к ТОиР', default='')
 
     # ТО 0
-    descriptiont0 = models.TextField('Объем технического обслуживания ТО 0',  default='')
-    t0month1 = models.BooleanField('ТО 0 в месяце 1', default=False)
-    t0month2 = models.BooleanField('ТО 0 в месяце 2', default=False)
-    t0month3 = models.BooleanField('ТО 0 в месяце 3', default=False)
-    t0month4 = models.BooleanField('ТО 0 в месяце 4', default=False)
-    t0month5 = models.BooleanField('ТО 0 в месяце 5', default=False)
-    t0month6 = models.BooleanField('ТО 0 в месяце 6', default=False)
-    t0month7 = models.BooleanField('ТО 0 в месяце 7', default=False)
-    t0month8 = models.BooleanField('ТО 0 в месяце 8', default=False)
-    t0month9 = models.BooleanField('ТО 0 в месяце 9', default=False)
-    t0month10 = models.BooleanField('ТО 0 в месяце 10', default=False)
-    t0month11 = models.BooleanField('ТО 0 в месяце 11', default=False)
-    t0month12 = models.BooleanField('ТО 0 в месяце 12', default=False)
+    descriptiont0 = models.TextField('Объем технического обслуживания ТО 0',  default='', blank=True)
 
     # ТО 1
-    descriptiont1 = models.TextField('Объем технического обслуживания ТО 1',  default='')
-    t1month1 = models.BooleanField('ТО 1 в месяце 1', default=False)
-    t1month2 = models.BooleanField('ТО 1 в месяце 2', default=False)
-    t1month3 = models.BooleanField('ТО 1 в месяце 3', default=False)
-    t1month4 = models.BooleanField('ТО 1 в месяце 4', default=False)
-    t1month5 = models.BooleanField('ТО 1 в месяце 5', default=False)
-    t1month6 = models.BooleanField('ТО 1 в месяце 6', default=False)
-    t1month7 = models.BooleanField('ТО 1 в месяце 7', default=False)
-    t1month8 = models.BooleanField('ТО 1 в месяце 8', default=False)
-    t1month9 = models.BooleanField('ТО 1 в месяце 9', default=False)
-    t1month10 = models.BooleanField('ТО 1 в месяце 10', default=False)
-    t1month11 = models.BooleanField('ТО 1 в месяце 11', default=False)
-    t1month12 = models.BooleanField('ТО 1 в месяце 12', default=False)
+    descriptiont1 = models.TextField('Объем технического обслуживания ТО 1',  default='', blank=True)
 
     # ТО 2
-    descriptiont2 = models.TextField('Объем технического обслуживания ТО 2',  blank=True, null=True)
+    descriptiont2 = models.TextField('Объем технического обслуживания ТО 2',  default='', blank=True)
     t2month1 = models.BooleanField('ТО 2 в месяце 1', default=False)
     t2month2 = models.BooleanField('ТО 2 в месяце 2', default=False)
     t2month3 = models.BooleanField('ТО 2 в месяце 3', default=False)
@@ -715,7 +691,7 @@ class ServiceEquipmentME(models.Model):
 
 
     def __str__(self):
-        return self.charakters.name
+        return f'{self.charakters.name}, pk = {self.pk}'
 
 
     class Meta:
@@ -734,37 +710,13 @@ class ServiceEquipmentTE(models.Model):
     commentservice = models.TextField('Примечание к ТОиР', default='')
 
     # ТО 0
-    descriptiont0 = models.TextField('Объем технического обслуживания ТО 0',  default='')
-    t0month1 = models.BooleanField('ТО 0 в месяце 1', default=False)
-    t0month2 = models.BooleanField('ТО 0 в месяце 2', default=False)
-    t0month3 = models.BooleanField('ТО 0 в месяце 3', default=False)
-    t0month4 = models.BooleanField('ТО 0 в месяце 4', default=False)
-    t0month5 = models.BooleanField('ТО 0 в месяце 5', default=False)
-    t0month6 = models.BooleanField('ТО 0 в месяце 6', default=False)
-    t0month7 = models.BooleanField('ТО 0 в месяце 7', default=False)
-    t0month8 = models.BooleanField('ТО 0 в месяце 8', default=False)
-    t0month9 = models.BooleanField('ТО 0 в месяце 9', default=False)
-    t0month10 = models.BooleanField('ТО 0 в месяце 10', default=False)
-    t0month11 = models.BooleanField('ТО 0 в месяце 11', default=False)
-    t0month12 = models.BooleanField('ТО 0 в месяце 12', default=False)
+    descriptiont0 = models.TextField('Объем технического обслуживания ТО 0',  default='', blank=True)
 
     # ТО 1
-    descriptiont1 = models.TextField('Объем технического обслуживания ТО 1',  default='')
-    t1month1 = models.BooleanField('ТО 1 в месяце 1', default=False)
-    t1month2 = models.BooleanField('ТО 1 в месяце 2', default=False)
-    t1month3 = models.BooleanField('ТО 1 в месяце 3', default=False)
-    t1month4 = models.BooleanField('ТО 1 в месяце 4', default=False)
-    t1month5 = models.BooleanField('ТО 1 в месяце 5', default=False)
-    t1month6 = models.BooleanField('ТО 1 в месяце 6', default=False)
-    t1month7 = models.BooleanField('ТО 1 в месяце 7', default=False)
-    t1month8 = models.BooleanField('ТО 1 в месяце 8', default=False)
-    t1month9 = models.BooleanField('ТО 1 в месяце 9', default=False)
-    t1month10 = models.BooleanField('ТО 1 в месяце 10', default=False)
-    t1month11 = models.BooleanField('ТО 1 в месяце 11', default=False)
-    t1month12 = models.BooleanField('ТО 1 в месяце 12', default=False)
+    descriptiont1 = models.TextField('Объем технического обслуживания ТО 1',  default='', blank=True)
 
     # ТО 2
-    descriptiont2 = models.TextField('Объем технического обслуживания ТО 2',  blank=True, null=True)
+    descriptiont2 = models.TextField('Объем технического обслуживания ТО 2',  default='', blank=True)
     t2month1 = models.BooleanField('ТО 2 в месяце 1', default=False)
     t2month2 = models.BooleanField('ТО 2 в месяце 2', default=False)
     t2month3 = models.BooleanField('ТО 2 в месяце 3', default=False)
@@ -797,37 +749,13 @@ class ServiceEquipmentHE(models.Model):
     commentservice = models.TextField('Примечание к ТОиР', default='')
 
     # ТО 0
-    descriptiont0 = models.TextField('Объем технического обслуживания ТО 0',  default='')
-    t0month1 = models.BooleanField('ТО 0 в месяце 1', default=False)
-    t0month2 = models.BooleanField('ТО 0 в месяце 2', default=False)
-    t0month3 = models.BooleanField('ТО 0 в месяце 3', default=False)
-    t0month4 = models.BooleanField('ТО 0 в месяце 4', default=False)
-    t0month5 = models.BooleanField('ТО 0 в месяце 5', default=False)
-    t0month6 = models.BooleanField('ТО 0 в месяце 6', default=False)
-    t0month7 = models.BooleanField('ТО 0 в месяце 7', default=False)
-    t0month8 = models.BooleanField('ТО 0 в месяце 8', default=False)
-    t0month9 = models.BooleanField('ТО 0 в месяце 9', default=False)
-    t0month10 = models.BooleanField('ТО 0 в месяце 10', default=False)
-    t0month11 = models.BooleanField('ТО 0 в месяце 11', default=False)
-    t0month12 = models.BooleanField('ТО 0 в месяце 12', default=False)
+    descriptiont0 = models.TextField('Объем технического обслуживания ТО 0',  default='', blank=True)
 
     # ТО 1
-    descriptiont1 = models.TextField('Объем технического обслуживания ТО 1',  default='')
-    t1month1 = models.BooleanField('ТО 1 в месяце 1', default=False)
-    t1month2 = models.BooleanField('ТО 1 в месяце 2', default=False)
-    t1month3 = models.BooleanField('ТО 1 в месяце 3', default=False)
-    t1month4 = models.BooleanField('ТО 1 в месяце 4', default=False)
-    t1month5 = models.BooleanField('ТО 1 в месяце 5', default=False)
-    t1month6 = models.BooleanField('ТО 1 в месяце 6', default=False)
-    t1month7 = models.BooleanField('ТО 1 в месяце 7', default=False)
-    t1month8 = models.BooleanField('ТО 1 в месяце 8', default=False)
-    t1month9 = models.BooleanField('ТО 1 в месяце 9', default=False)
-    t1month10 = models.BooleanField('ТО 1 в месяце 10', default=False)
-    t1month11 = models.BooleanField('ТО 1 в месяце 11', default=False)
-    t1month12 = models.BooleanField('ТО 1 в месяце 12', default=False)
+    descriptiont1 = models.TextField('Объем технического обслуживания ТО 1',  default='', blank=True)
 
     # ТО 2
-    descriptiont2 = models.TextField('Объем технического обслуживания ТО 2',  blank=True, null=True)
+    descriptiont2 = models.TextField('Объем технического обслуживания ТО 2',  default='', blank=True)
     t2month1 = models.BooleanField('ТО 2 в месяце 1', default=False)
     t2month2 = models.BooleanField('ТО 2 в месяце 2', default=False)
     t2month3 = models.BooleanField('ТО 2 в месяце 3', default=False)
