@@ -5449,75 +5449,15 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             descriptiont1 = note2.descriptiont1
             descriptiont2 = note2.descriptiont2
             commentservice = note2.commentservice
+            t1month1 = note2.t1month1
+
         except:
             descriptiont0 = ' '
             descriptiont1 = ' '
             descriptiont2 = ' '
             commentservice = ' '
+            t1month1 = ''
 
-        t2month1 = ' '
-        t2month2 = ' '
-        t2month3 = ' '
-        t2month4 = ' '
-        t2month5 = ' '
-        t2month6 = ' '
-        t2month7 = ' '
-        t2month8 = ' '
-        t2month9 = ' '
-        t2month10 = ' '
-        t2month11 = ' '
-        t2month12 = ' '
-        # if note2.t2month2:
-        #     t2month2 = 'ТО-2'
-        # if note2.t2month3:
-        #     t2month3 = 'ТО-2'
-        # if note2.t2month4:
-        #     t2month4 = 'ТО-2'
-        # if note2.t2month5:
-        #     t2month5 = 'ТО-2'
-        # if note2.t2month6:
-        #     t2month6 = 'ТО-2'
-        # if note2.t2month7:
-        #     t2month7 = 'ТО-2'
-        # if note2.t2month8:
-        #     t2month8 = 'ТО-2'
-        # if note2.t2month9:
-        #     t2month9 = 'ТО-2'
-        # if note2.t2month10:
-        #     t2month10 = 'ТО-2'
-        # if note2.t2month10:
-        #     t2month10 = 'ТО-2'
-        # if note2.t2month11:
-        #     t2month11 = 'ТО-2'
-        # if note2.t2month12:
-        #     t2month12 = 'ТО-2'
-
-            # t2month1 = ' '
-            # t2month2 = ' '
-            # t2month3 = ' '
-            # t2month4 = ' '
-            # t2month5 = ' '
-            # t2month6 = ' '
-            # t2month7 = ' '
-            # t2month8 = ' '
-            # t2month9 = ' '
-            # t2month10 = ' '
-            # t2month11 = ' '
-            # t2month12 = ' '
-
-
-        t1month1 = ' '
-        t1month2 = ' '
-        t1month3 = ' '
-        t1month4 = ' '
-        t1month5 = ' '
-        t1month6 = ' '
-        t1month7 = ' '
-        t1month8 = ' '
-        t1month9 = ' '
-        t1month10 = ' '
-        t1month11 = ' '
-        t1month12 = ' '
 
         row_num += 1
         columns = [
@@ -5631,18 +5571,19 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             '',
             '',
             '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
             t1month1,
-            t1month2,
-            t1month3,
-            t1month4,
-            t1month5,
-            t1month6,
-            t1month7,
-            t1month8,
-            t1month9,
-            t1month10,
-            t1month11,
-            t1month12,
+
             f'{person}',
             f'{commentservice}',
         ]
@@ -5660,18 +5601,18 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             f'',
             f'',
             f'',
-            t2month1,
-            t2month2,
-            t2month3,
-            t2month4,
-            t2month5,
-            t2month6,
-            t2month7,
-            t2month8,
-            t2month9,
-            t2month10,
-            t2month11,
-            t2month12,
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
             f'{person}',
             f'{commentservice}',
         ]
