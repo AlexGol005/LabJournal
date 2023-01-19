@@ -5289,6 +5289,13 @@ def export_mustver_xls(request):
 # но! кроме размера шрифта - он 11!
 
 # блок стилей
+al100 = Alignment()
+al100.horz = Alignment.HORZ_CENTER
+al100.vert = Alignment.VERT_CENTER
+al100.rota = Alignment.ROTATION_STACKED
+
+
+
 al10 = Alignment()
 al10.horz = Alignment.HORZ_CENTER
 al10.vert = Alignment.VERT_CENTER
@@ -5340,6 +5347,16 @@ style_plain.font.name = 'Times New Roman'
 style_plain.font.height = 20 * size
 style_plain.borders = b1
 style_plain.alignment = al10
+
+# обычные ячейки, с границами ячеек повернут на 90 градусов
+style_plain_90 = xlwt.XFStyle()
+style_plain_90.font.name = 'Times New Roman'
+style_plain_90.font.height = 20 * size
+style_plain_90.borders = b1
+style_plain_90.alignment = al100
+
+
+xlwt.easyxf('align: rotation 90')
 
 # обычные ячейки, с толстыми границами ячеек
 style_plain_bb = xlwt.XFStyle()
@@ -5535,36 +5552,40 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             f'{note.equipment.exnumber}',
             f'{note.equipment.lot}',
             '',
-            '1',
-            '2',
-            '3',
-            '4',
-            '5',
-            '6',
-            '7',
-            '8',
-            '9',
-            '10',
-            '11',
-            '12',
+            'январь',
+            'февраль',
+            'март',
+            'апрель',
+            'май',
+            'июнь',
+            'июль',
+            'август',
+            'сентябрь',
+            'октябрь',
+            'ноябрь',
+            'декабрь',
             f'{person}',
             f'{commentservice}',
         ]
-        for col_num in range(len(columns)):
+        for col_num in range(7):
             ws.write(row_num, col_num, columns[col_num], style_plain)
             ws.merge(row_num, row_num, 1, 2, style_plain)
             ws.merge(row_num, row_num + 1, 6, 6, style_plain)
-            ws.merge(row_num, row_num + 1, 7, 7, style_plain)
-            ws.merge(row_num, row_num + 1, 8, 8, style_plain)
-            ws.merge(row_num, row_num + 1, 9, 9, style_plain)
-            ws.merge(row_num, row_num + 1, 10, 10, style_plain)
-            ws.merge(row_num, row_num + 1, 11, 11, style_plain)
-            ws.merge(row_num, row_num + 1, 12, 12, style_plain)
-            ws.merge(row_num, row_num + 1, 13, 13, style_plain)
-            ws.merge(row_num, row_num + 1, 14, 14, style_plain)
-            ws.merge(row_num, row_num + 1, 15, 15, style_plain)
-            ws.merge(row_num, row_num + 1, 16, 16, style_plain)
-            ws.merge(row_num, row_num + 1, 17, 17, style_plain)
+        for col_num in range(6, 18):
+            ws.write(row_num, col_num, columns[col_num], style_plain_90)
+            ws.merge(row_num, row_num + 1, 7, 7, style_plain_90)
+            ws.merge(row_num, row_num + 1, 8, 8, style_plain_90)
+            ws.merge(row_num, row_num + 1, 9, 9, style_plain_90)
+            ws.merge(row_num, row_num + 1, 10, 10, style_plain_90)
+            ws.merge(row_num, row_num + 1, 11, 11, style_plain_90)
+            ws.merge(row_num, row_num + 1, 12, 12, style_plain_90)
+            ws.merge(row_num, row_num + 1, 13, 13, style_plain_90)
+            ws.merge(row_num, row_num + 1, 14, 14, style_plain_90)
+            ws.merge(row_num, row_num + 1, 15, 15, style_plain_90)
+            ws.merge(row_num, row_num + 1, 16, 16, style_plain_90)
+            ws.merge(row_num, row_num + 1, 17, 17, style_plain_90)
+        for col_num in range(18, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style_plain)
             ws.merge(row_num, row_num + 4, 18, 18, style_plain)
             ws.merge(row_num, row_num + 6, 19, 19, style_plain)
             ws.merge(row_num, row_num + 4, 5, 5, style_plain)
@@ -5581,18 +5602,18 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             '',
             '',
             '',
-            '1',
-            '2',
-            '3',
-            '4',
-            '5',
-            '6',
-            '7',
-            '8',
-            '9',
-            '10',
-            '11',
-            '12',
+            'январь',
+            'февраль',
+            'март',
+            'апрель',
+            'май',
+            'июнь',
+            'июль',
+            'август',
+            'сентябрь',
+            'октябрь',
+            'ноябрь',
+            'декабрь',
             f'{person}',
             f'{commentservice}',
         ]
@@ -5600,7 +5621,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             ws.write(row_num, col_num, columns[col_num], style_plain)
             ws.merge(row_num, row_num, 2, 4, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 800
+            ws.row(row_num).height = 1000
 
         row_num += 1
         columns = [
