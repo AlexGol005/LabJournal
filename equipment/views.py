@@ -5543,6 +5543,9 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2):
             to0_shed = ''
             to1_shed = ''
 
+        # try:
+        #     note3 = MODEL3.objects.filter(dateorder__year=serdate.year)   todo
+
 
         row_num += 1
         columns = [
