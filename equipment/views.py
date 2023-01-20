@@ -5,7 +5,7 @@ import pytils.translit
 from datetime import timedelta, date
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse, HttpRequest
 from datetime import datetime, timedelta
@@ -176,15 +176,7 @@ class MeteorologicalParametersView(TemplateView):
     template_name = URL + '/meteo.html'
 
 
-class ReportsView(TemplateView):
-    """ Представление, которое выводит страницу с кнопками для вывода планов и отчётов по оборудованию"""
-    template_name = URL + '/reports.html'
 
-    def get_context_data(self, **kwargs):
-        context = super(ReportsView, self).get_context_data(**kwargs)
-        context['URL'] = URL
-        context['form'] = YearForm()
-        return context
 
 
 class VerdoneView(ListView):
@@ -206,14 +198,31 @@ class VerdoneView(ListView):
         return queryset
 
 
-class MetrologicalEnsuringView(TemplateView):
-    """выводит заглавную страницу для вывода данных по поверке и аттестации, списков в ексель и пр """
+class SuperuserRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_superuser
+
+
+class MetrologicalEnsuringView(LoginRequiredMixin, SuperuserRequiredMixin, TemplateView):
+    """выводит заглавную страницу для метрологического обеспечения """
     template_name = URL + '/metro.html'
+    success_message = "Раздел для ответственного за метрологию"
 
     def get_context_data(self, **kwargs):
         context = super(MetrologicalEnsuringView, self).get_context_data(**kwargs)
         context['form'] = DateForm()
         return context
+
+class ReportsView(TemplateView, SuperuserRequiredMixin):
+    """ Представление, которое выводит страницу с кнопками для вывода планов и отчётов по оборудованию"""
+    template_name = URL + '/reports.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ReportsView, self).get_context_data(**kwargs)
+        context['URL'] = URL
+        context['form'] = YearForm()
+        return context
+
 
 
 class VerificationLabelsView(TemplateView):
@@ -976,7 +985,7 @@ def EquipmentReg(request):
                     return redirect('equipmentlist')
     if not request.user.is_superuser:
         messages.success(request, 'Раздел доступен только инженеру по оборудованию')
-        return redirect('equipmentreg')
+        return redirect(f'/equipment/')
     else:
         form = EquipmentCreateForm()
         form2 = ManufacturerCreateForm(request.POST)
