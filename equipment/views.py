@@ -213,7 +213,7 @@ class MetrologicalEnsuringView(LoginRequiredMixin, SuperuserRequiredMixin, Templ
         context['form'] = DateForm()
         return context
 
-class ReportsView(TemplateView, SuperuserRequiredMixin):
+class ReportsView(LoginRequiredMixin, SuperuserRequiredMixin, TemplateView):
     """ Представление, которое выводит страницу с кнопками для вывода планов и отчётов по оборудованию"""
     template_name = URL + '/reports.html'
 
