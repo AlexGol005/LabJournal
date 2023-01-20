@@ -32,6 +32,11 @@ class NoteAdmin(admin.ModelAdmin):
 class NoteAdmin(admin.ModelAdmin):
     search_fields = ['equipmentSM__equipment__exnumber']
 
+
+@admin.register(Checkequipment)
+class NoteAdmin(admin.ModelAdmin):
+    search_fields = ['equipmentSM__equipment__exnumber']
+
 @admin.register(Equipment)
 class NoteAdmin(admin.ModelAdmin):
     search_fields = ['exnumber']

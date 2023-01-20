@@ -458,8 +458,8 @@ class Verificationequipment(models.Model):
             pass
 
     class Meta:
-        verbose_name = 'Поверка прибора'
-        verbose_name_plural = 'Поверки приборов'
+        verbose_name = 'Поверка СИ'
+        verbose_name_plural = 'Поверки СИ'
 
 
 class Attestationequipment(models.Model):
@@ -493,7 +493,7 @@ class Attestationequipment(models.Model):
                                blank=True)
 
     def __str__(self):
-        return f'Поверка {self.equipmentSM.charakters.name} вн № {self.equipmentSM.equipment.exnumber}'
+        return f'Аттестация {self.equipmentSM.charakters.name} вн № {self.equipmentSM.equipment.exnumber}'
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
@@ -529,8 +529,39 @@ class Attestationequipment(models.Model):
             pass
 
     class Meta:
-        verbose_name = 'Аттестация прибора'
-        verbose_name_plural = 'Аттестации приборов'
+        verbose_name = 'Аттестация ИО'
+        verbose_name_plural = 'Аттестации ИО'
+
+
+class Checkequipment(models.Model):
+    equipmentSM = models.ForeignKey(HelpingEquipment, verbose_name='ИО',
+                                    on_delete=models.PROTECT, related_name='equipmentSM_att', blank=True, null=True)
+    date = models.DateField('Дата проверки', blank=True, null=True)
+    datedead = models.DateField('Дата окончания срока проверки', blank=True, null=True)
+    dateorder = models.DateField('Дата следующей проверки план', blank=True, null=True)
+    certnumber = models.CharField('Номер протокола проверки', max_length=90, blank=True, null=True)
+
+
+    def __str__(self):
+        return f'Проверка характеристик {self.equipmentSM.charakters.name} вн № {self.equipmentSM.equipment.exnumber}'
+
+    def get_absolute_url(self):
+        """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
+        return reverse('helpingequipmentcheck', kwargs={'str': self.equipmentSM.equipment.exnumber})
+
+    @staticmethod
+    def get_dateformat(dateneed):
+        dateformat = str(dateneed)
+        day = dateformat[8:]
+        month = dateformat[5:7]
+        year = dateformat[:4]
+        rdate = f'{day}.{month}.{year}'
+        return rdate
+
+
+    class Meta:
+        verbose_name = 'Проверка характеристик ВО'
+        verbose_name_plural = 'Проверка характеристик ВО'
 
 
 class CommentsEquipment(models.Model):
