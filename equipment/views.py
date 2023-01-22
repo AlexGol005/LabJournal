@@ -5580,7 +5580,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
 
         # подставляем месяц плана поверки/аттестации/проверки
         try:
-            note3 = Verificationequipment.objects.filter(equipmentSM__equipment__pk=note.equipment.pk).exclude(
+            note3 = MODEL3.objects.filter(equipmentSM__equipment__pk=note.equipment.pk).exclude(
                 dateorder__isnull=True)
 
             q = note3.get(dateorder__year=year_search)
@@ -5626,9 +5626,8 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
 
         #  подставляем месяц факта поверки/аттестации/проверки
         try:
-            note3 = Verificationequipment.objects.filter(equipmentSM__equipment__pk=note.equipment.pk).exclude(
+            note3 = MODEL3.objects.filter(equipmentSM__equipment__pk=note.equipment.pk).exclude(
                 date__isnull=True)
-
             q = note3.get(date__year=year_search)
             t3monthf = int(q.date.month)
 
@@ -5657,18 +5656,6 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             if t3monthf == 12:
                 t3month12f = 'V'
         except:
-            t3month1 = ''
-            t3month2 = ''
-            t3month3 = ''
-            t3month4 = ''
-            t3month5 = ''
-            t3month6 = ''
-            t3month7 = ''
-            t3month8 = ''
-            t3month9 = ''
-            t3month10 = ''
-            t3month11 = ''
-            t3month12 = ''
             t3month1f = ''
             t3month2f = ''
             t3month3f = ''
