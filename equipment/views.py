@@ -5452,7 +5452,7 @@ pattern_black.pattern_fore_colour = 0
 style_black = xlwt.XFStyle()
 style_black.pattern = pattern_black
 
-def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3):
+def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3, year_search):
 
     row_num += 1
     columns = [
@@ -5553,9 +5553,39 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             to0_shed = ''
             to1_shed = ''
 
+        t3month1 = ''
+        t3month2 = ''
+        t3month3 = ''
+        t3month4 = ''
+        t3month5 = ''
+        t3month6 = ''
+        t3month7 = ''
+        t3month8 = ''
+        t3month9 = ''
+        t3month10 = ''
+        t3month11 = ''
+        t3month12 = ''
+        t3month1f = ''
+        t3month2f = ''
+        t3month3f = ''
+        t3month4f = ''
+        t3month5f = ''
+        t3month6f = ''
+        t3month7f = ''
+        t3month8f = ''
+        t3month9f = ''
+        t3month10f = ''
+        t3month11f = ''
+        t3month12f = ''
+
+        # подставляем месяц плана поверки/аттестации/проверки
         try:
-            note3 = MODEL3.objects.filter(dateorder__year=serdate.year).filter(equipmentSM__pk=note.equipment.pk)
-            t3month = note3.get(dateorder__month=serdate.month)
+            note3 = Verificationequipment.objects.filter(equipmentSM__equipment__pk=note.equipment.pk).exclude(
+                dateorder__isnull=True)
+
+            q = note3.get(dateorder__year=year_search)
+            t3month = int(q.dateorder.month)
+
             if t3month == 1:
                 t3month1 = 'V'
             if t3month == 2:
@@ -5577,7 +5607,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             if t3month == 10:
                 t3month10 = 'V'
             if t3month == 11:
-                t3month11= 'V'
+                t3month11 = 'V'
             if t3month == 12:
                 t3month12 = 'V'
         except:
@@ -5594,6 +5624,63 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             t3month11 = ''
             t3month12 = ''
 
+        #  подставляем месяц факта поверки/аттестации/проверки
+        try:
+            note3 = Verificationequipment.objects.filter(equipmentSM__equipment__pk=note.equipment.pk).exclude(
+                dateorder__isnull=True)
+
+            q = note3.get(date__year=year_search)
+            t3monthf = int(q.date.month)
+
+            if t3monthf == 1:
+                t3month1f = 'V'
+            if t3monthf == 2:
+                t3month2f = 'V'
+            if t3monthf == 3:
+                t3month3f = 'V'
+            if t3monthf == 4:
+                t3month4f = 'V'
+            if t3monthf == 5:
+                t3month5f = 'V'
+            if t3monthf == 6:
+                t3month6f = 'V'
+            if t3monthf == 7:
+                t3month7f = 'V'
+            if t3monthf == 8:
+                t3month8f = 'V'
+            if t3monthf == 9:
+                t3month9f = 'V'
+            if t3monthf == 10:
+                t3month10f = 'V'
+            if t3monthf == 11:
+                t3month11f = 'V'
+            if t3monthf == 12:
+                t3month12f = 'V'
+        except:
+            t3month1 = ''
+            t3month2 = ''
+            t3month3 = ''
+            t3month4 = ''
+            t3month5 = ''
+            t3month6 = ''
+            t3month7 = ''
+            t3month8 = ''
+            t3month9 = ''
+            t3month10 = ''
+            t3month11 = ''
+            t3month12 = ''
+            t3month1f = ''
+            t3month2f = ''
+            t3month3f = ''
+            t3month4f = ''
+            t3month5f = ''
+            t3month6f = ''
+            t3month7f = ''
+            t3month8f = ''
+            t3month9f = ''
+            t3month10f = ''
+            t3month11f = ''
+            t3month12f = ''
 
         row_num += 1
         columns = [
@@ -5767,10 +5854,9 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             '',
             f'ТО 3',
             f'{to3}',
-            '',
-            '',
+            f'{to3}',
+            f'{to3}',
             'план',
-            '',
             t3month1,
             t3month2,
             t3month3,
@@ -5800,22 +5886,21 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             '',
             f'ТО 3',
             f'{to3}',
-            '',
-            '',
+            f'{to3}',
+            f'{to3}',
             'факт',
-            '',
-            t3month1,
-            t3month2,
-            t3month3,
-            t3month4,
-            t3month5,
-            t3month6,
-            t3month7,
-            t3month8,
-            t3month9,
-            t3month10,
-            t3month11,
-            t3month12,
+            t3month1f,
+            t3month2f,
+            t3month3f,
+            t3month4f,
+            t3month5f,
+            t3month6f,
+            t3month7f,
+            t3month8f,
+            t3month9f,
+            t3month10f,
+            t3month11f,
+            t3month12f,
             f'Ответственный за метрологическое обеспечение',
             f'{commentservice}',
         ]
@@ -5842,6 +5927,7 @@ def export_maintenance_schedule_xls(request):
 
     # получаем дату от пользователя
     serdate = request.GET['date']
+    year_search = str(serdate)[0:4]
 
     # создаем выгрузку
     response = HttpResponse(content_type='application/ms-excel')
@@ -5957,9 +6043,9 @@ def export_maintenance_schedule_xls(request):
     MODEL3 = Verificationequipment
     to3 = 'Поверка'
 
-    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3)
+    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3, year_search)
 
-    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3) + 1
+    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3, year_search) + 1
 
     equipment_type = 'ИО'
     MODEL = TestingEquipment.objects.exclude(equipment__status='С')
@@ -5968,9 +6054,9 @@ def export_maintenance_schedule_xls(request):
     to3 = 'Аттестация'
 
 
-    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3)
+    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3, year_search)
 
-    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3) + 1
+    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3, year_search) + 1
 
     equipment_type = 'ВО'
     MODEL = HelpingEquipment.objects.filter(charakters__kvasyattestation=True).exclude(equipment__status='С')
@@ -5978,9 +6064,9 @@ def export_maintenance_schedule_xls(request):
     MODEL3 = Checkequipment
     to3 = 'Проверка технических характеристик'
 
-    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3)
+    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3, year_search)
 
-    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3) + 1
+    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3, year_search) + 1
 
     row_num += 2
     columns = [
