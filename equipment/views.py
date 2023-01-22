@@ -5553,7 +5553,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             to0_shed = ''
             to1_shed = ''
 
-        t3month1 = ''
+        t3month1 = '111'
         t3month2 = ''
         t3month3 = ''
         t3month4 = ''
