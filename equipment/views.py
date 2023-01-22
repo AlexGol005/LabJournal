@@ -1336,7 +1336,7 @@ for n in list_:
 def export_me_xls(request):
     '''представление для выгрузки графика поверки и аттестации'''
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = f'attachment; filename="pov_att_shedule_ {now.year}.xls"'
+    response['Content-Disposition'] = f'attachment; filename="pov_att_shedule_{now.year}.xls"'
 
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('График поверки СИ', cell_overwrite_ok=True)
@@ -4331,8 +4331,6 @@ def base_planreport_xls(request, exel_file_name,
     lennHE = len(columnsHE)
 
     # записываем страницу 1 - СИ
-    # Шапка утверждаю todo
-
     row_num = 0
     c = [''] * (lennME - 3)
     columns = c + [
@@ -4441,7 +4439,6 @@ def base_planreport_xls(request, exel_file_name,
         ws2.row(row_num).height = 1000
 
     # записываем страницу 3 - ВО
-    # Шапка утверждаю todo
     row_num = 0
     c = [''] * (lennHE - 2)
     columns = c + [
@@ -4721,7 +4718,7 @@ def export_metroyearprice_xls(request):
         'equipment__lot',
         'equipmentSM_att__certnumber',
         'equipmentSM_att__date',
-        'equipmentSM_att__datedead'
+        'equipmentSM_att__datedead',
         'equipmentSM_att__price',
     ).order_by('equipmentSM_att__date')
 
@@ -5303,8 +5300,6 @@ al100.horz = Alignment.HORZ_CENTER
 al100.vert = Alignment.VERT_CENTER
 al100.rota = Alignment.ROTATION_STACKED
 
-
-
 al10 = Alignment()
 al10.horz = Alignment.HORZ_CENTER
 al10.vert = Alignment.VERT_CENTER
@@ -5452,7 +5447,7 @@ pattern_black.pattern_fore_colour = 0
 style_black = xlwt.XFStyle()
 style_black.pattern = pattern_black
 
-def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3, year_search):
+def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, MODEL3, year_search):
 
     row_num += 1
     columns = [
@@ -6030,9 +6025,9 @@ def export_maintenance_schedule_xls(request):
     MODEL3 = Verificationequipment
     to3 = 'Поверка'
 
-    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3, year_search)
+    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, MODEL3, year_search)
 
-    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3, year_search) + 1
+    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, MODEL3, year_search) + 1
 
     equipment_type = 'ИО'
     MODEL = TestingEquipment.objects.exclude(equipment__status='С')
@@ -6043,7 +6038,7 @@ def export_maintenance_schedule_xls(request):
 
     get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3, year_search)
 
-    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3, year_search) + 1
+    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, MODEL3, year_search) + 1
 
     equipment_type = 'ВО'
     MODEL = HelpingEquipment.objects.filter(charakters__kvasyattestation=True).exclude(equipment__status='С')
@@ -6051,9 +6046,9 @@ def export_maintenance_schedule_xls(request):
     MODEL3 = Checkequipment
     to3 = 'Проверка технических характеристик'
 
-    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3, year_search)
+    get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, MODEL3, year_search)
 
-    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, serdate, MODEL3, year_search) + 1
+    row_num = get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, MODEL3, year_search) + 1
 
     row_num += 2
     columns = [
