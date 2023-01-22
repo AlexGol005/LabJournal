@@ -5716,7 +5716,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             ws.merge(row_num, row_num + 4, 5, 5, style_plain)
             ws.merge(row_num, row_num + 6, 0, 0, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 1200
+            ws.row(row_num).height = 1400
 
 
         row_num += 1
@@ -5746,7 +5746,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             ws.write(row_num, col_num, columns[col_num], style_plain)
             ws.merge(row_num, row_num, 2, 4, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 1000
+            ws.row(row_num).height = 2000
 
         row_num += 1
         columns = [
@@ -5775,7 +5775,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             ws.merge(row_num, row_num, 2, 4, style_plain)
             ws.merge(row_num, row_num, 6, 17, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 1200
+            ws.row(row_num).height = 2000
 
         row_num += 1
         columns = [
@@ -5805,7 +5805,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             ws.merge(row_num, row_num, 2, 4, style_plain)
             ws.merge(row_num, row_num, 6, 17, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 1200
+            ws.row(row_num).height = 2000
 
         row_num += 1
         columns = [
@@ -5834,7 +5834,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             ws.write(row_num, col_num, columns[col_num], style_plain)
             ws.merge(row_num, row_num, 2, 4, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 1200
+            ws.row(row_num).height = 2000
 
         row_num += 1
         columns = [
@@ -5866,7 +5866,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             ws.merge(row_num, row_num + 1, 2, 4, style_plain)
             ws.merge(row_num, row_num + 1, 18, 18, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 600
+            ws.row(row_num).height = 1000
 
         row_num += 1
         columns = [
@@ -5895,7 +5895,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             ws.write(row_num, col_num, columns[col_num], style_plain)
             ws.merge(row_num, row_num, 2, 4, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 600
+            ws.row(row_num).height = 1000
 
         row_num += 1
         columns = [
@@ -5928,11 +5928,11 @@ def export_maintenance_schedule_xls(request):
 
     # ширина столбцов
     ws.col(0).width = 500
-    ws.col(1).width = 4700
-    ws.col(2).width = 10800
-    ws.col(3).width = 3000
+    ws.col(1).width = 2400
+    ws.col(2).width = 5000
+    ws.col(3).width = 2000
     ws.col(4).width = 3000
-    ws.col(5).width = 3200
+    ws.col(5).width = 2800
     ws.col(6).width = 1200
     ws.col(7).width = 1200
     ws.col(8).width = 1200
@@ -5945,8 +5945,8 @@ def export_maintenance_schedule_xls(request):
     ws.col(15).width = 1200
     ws.col(16).width = 1200
     ws.col(17).width = 1200
-    ws.col(18).width = 6000
-    ws.col(19).width = 7000
+    ws.col(18).width = 3000
+    ws.col(19).width = 4000
 
     # шапка
     company = CompanyCard.objects.get(pk=1)
