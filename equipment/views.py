@@ -5716,13 +5716,13 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             ws.merge(row_num, row_num + 4, 5, 5, style_plain)
             ws.merge(row_num, row_num + 6, 0, 0, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 1400
+            ws.row(row_num).height = 2400
 
 
         row_num += 1
         columns = [
             '',
-            'Тип технического обслуживания',
+            'Тип ТО',
             'Объем технического обслуживания',
             '',
             '',
@@ -5746,7 +5746,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             ws.write(row_num, col_num, columns[col_num], style_plain)
             ws.merge(row_num, row_num, 2, 4, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 2000
+            ws.row(row_num).height = 500
 
         row_num += 1
         columns = [
@@ -5775,7 +5775,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             ws.merge(row_num, row_num, 2, 4, style_plain)
             ws.merge(row_num, row_num, 6, 17, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 2000
+            ws.row(row_num).height = 2500
 
         row_num += 1
         columns = [
@@ -5805,7 +5805,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             ws.merge(row_num, row_num, 2, 4, style_plain)
             ws.merge(row_num, row_num, 6, 17, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 2000
+            ws.row(row_num).height = 2500
 
         row_num += 1
         columns = [
@@ -5834,7 +5834,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             ws.write(row_num, col_num, columns[col_num], style_plain)
             ws.merge(row_num, row_num, 2, 4, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 2000
+            ws.row(row_num).height = 2500
 
         row_num += 1
         columns = [
@@ -5866,7 +5866,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             ws.merge(row_num, row_num + 1, 2, 4, style_plain)
             ws.merge(row_num, row_num + 1, 18, 18, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 1000
+            ws.row(row_num).height = 1300
 
         row_num += 1
         columns = [
@@ -5895,7 +5895,7 @@ def get_rows_service_shedule(row_num, ws, MODEL, to3, equipment_type, MODEL2, se
             ws.write(row_num, col_num, columns[col_num], style_plain)
             ws.merge(row_num, row_num, 2, 4, style_plain)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 1000
+            ws.row(row_num).height = 1300
 
         row_num += 1
         columns = [
@@ -5927,12 +5927,12 @@ def export_maintenance_schedule_xls(request):
     ws.footer_str = b''
 
     # ширина столбцов
-    ws.col(0).width = 500
-    ws.col(1).width = 2400
-    ws.col(2).width = 5000
+    ws.col(0).width = 200
+    ws.col(1).width = 2000
+    ws.col(2).width = 4000
     ws.col(3).width = 2000
     ws.col(4).width = 3000
-    ws.col(5).width = 2800
+    ws.col(5).width = 2000
     ws.col(6).width = 1200
     ws.col(7).width = 1200
     ws.col(8).width = 1200
@@ -5945,7 +5945,7 @@ def export_maintenance_schedule_xls(request):
     ws.col(15).width = 1200
     ws.col(16).width = 1200
     ws.col(17).width = 1200
-    ws.col(18).width = 3000
+    ws.col(18).width = 4500
     ws.col(19).width = 4000
 
     # шапка
@@ -5970,13 +5970,13 @@ def export_maintenance_schedule_xls(request):
         '',
         '',
         '',
-        '',
-        '',
+        affirmation,
+        affirmation,
         affirmation,
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style_plain_nobor_r)
-        ws.merge(row_num, row_num + 6, 19, 19, style_plain_nobor_r)
+        ws.merge(row_num, row_num + 6, 17, 19, style_plain_nobor_r)
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 2000
 
@@ -6012,7 +6012,7 @@ def export_maintenance_schedule_xls(request):
         'IV КВАРТАЛ',
         'IV КВАРТАЛ',
         'IV КВАРТАЛ',
-        'Ответственный за техническое обслуживание',
+        'Ответственный за ТО',
         'Примечание',
     ]
     for col_num in range(len(columns)):
@@ -6106,7 +6106,7 @@ def export_maintenance_schedule_xls(request):
         ws.write(row_num, col_num, columns[col_num], style_plain)
         ws.merge(row_num, row_num, 3, 17, style_plain)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 2000
+        ws.row(row_num).height = 3000
 
     row_num += 1
     columns = [
@@ -6135,7 +6135,7 @@ def export_maintenance_schedule_xls(request):
         ws.write(row_num, col_num, columns[col_num], style_plain)
         ws.merge(row_num, row_num, 3, 17, style_plain)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 2000
+        ws.row(row_num).height = 3000
 
     row_num += 1
     columns = [
@@ -6164,7 +6164,7 @@ def export_maintenance_schedule_xls(request):
         ws.write(row_num, col_num, columns[col_num], style_plain)
         ws.merge(row_num, row_num, 3, 17, style_plain)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 2000
+        ws.row(row_num).height = 3000
 
     row_num += 1
     columns = [
@@ -6193,7 +6193,7 @@ def export_maintenance_schedule_xls(request):
         ws.write(row_num, col_num, columns[col_num], style_plain)
         ws.merge(row_num, row_num, 3, 17, style_plain)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 2000
+        ws.row(row_num).height = 3000
 
     # все сохраняем
     wb.save(response)
