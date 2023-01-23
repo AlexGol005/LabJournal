@@ -1543,7 +1543,7 @@ def export_me_xls(request):
         filter(equipment__roomschange__in=setroom). \
         filter(equipment__personchange__in=setperson). \
         filter(equipmentSM_att__in=setatt). \
-        exclude(equipment__status='C'). \
+        exclude(equipment__status='С'). \
         values_list(
         'equipment__exnumber',
         'charakters__name',
