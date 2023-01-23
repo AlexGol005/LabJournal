@@ -1463,7 +1463,7 @@ def export_me_xls(request):
         filter(equipment__roomschange__in=setroom).\
         filter(equipment__personchange__in=setperson).\
         filter(equipmentSM_ver__in=setver).\
-        exclude(equipment__status='C').\
+        exclude(equipment__status='Сп.').\
         values_list(
             'equipment__exnumber',
             'charakters__reestr',
@@ -4385,7 +4385,7 @@ def base_planreport_xls(request, exel_file_name,
 
 
     # записываем страницу 2 - ИО
-    # Шапка утверждаю todo
+    # Шапка утверждаю
     row_num = 0
     c = [''] * (lennTE - 2)
     columns = c + [
