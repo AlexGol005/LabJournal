@@ -244,11 +244,6 @@ class MeasurEquipmentCharakters(models.Model):
     needsetplace = models.BooleanField('Установка не требуется', default=False, blank=True)
     complectlist = models.CharField('Где в паспорте комплектация', max_length=100, default='', blank=True, null=True)
     expresstest = models.BooleanField('Тестирование возможно? да/нет', default=False, blank=True)
-    service0 = models.TextField('ТО 0', default='', blank=True, null=True)
-    service1 = models.TextField('ТО 1', default='', blank=True, null=True)
-    service2 = models.TextField('ТО 2', default='', blank=True, null=True)
-    servicecomment = models.TextField('ТО примечание', default='', blank=True, null=True)
-
 
     def __str__(self):
         return f'госреестр: {self.reestr},  {self.name} {self.typename} {self.modificname}'
@@ -280,10 +275,6 @@ class TestingEquipmentCharakters(models.Model):
     needsetplace = models.BooleanField('Установка не требуется', default=False, blank=True)
     complectlist = models.CharField('Где в паспорте комплектация', max_length=100, default='', blank=True, null=True)
     expresstest = models.BooleanField('Тестирование возможно? да/нет', default=False, blank=True)
-    service0 = models.TextField('ТО 0', default='', blank=True, null=True)
-    service1 = models.TextField('ТО 1', default='', blank=True, null=True)
-    service2 = models.TextField('ТО 2', default='', blank=True, null=True)
-    servicecomment = models.TextField('ТО примечание', default='', blank=True, null=True)
 
     def __str__(self):
         return f'{self.name}  {self.modificname}'
@@ -312,10 +303,6 @@ class HelpingEquipmentCharakters(models.Model):
     needsetplace = models.BooleanField('Установка не требуется', default=False, blank=True)
     complectlist = models.CharField('Где в паспорте комплектация', max_length=100, default='', blank=True, null=True)
     expresstest = models.BooleanField('Тестирование возможно? да/нет', default=False, blank=True)
-    service0 = models.TextField('ТО 0', default='', blank=True, null=True)
-    service1 = models.TextField('ТО 1', default='', blank=True, null=True)
-    service2 = models.TextField('ТО 2', default='', blank=True, null=True)
-    servicecomment = models.TextField('ТО примечание', default='', blank=True, null=True)
     kvasyattestation = models.BooleanField('применяется внутренняя аттестация (проверка зарактеристик)',
                                            default=False, blank=True)
 
