@@ -1,3 +1,11 @@
+@media screen and (min-width: 1200px) {
+    .table-list {
+        max-width: fit-content !important;
+    }
+}
+
+
+
 body {
   background: rgba(123, 245, 244, 0.47);
 }
@@ -105,3 +113,4 @@ td.ind {
     max-width: 100px !important;
     word-wrap: break-word;
 }
+
