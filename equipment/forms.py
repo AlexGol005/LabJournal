@@ -279,6 +279,9 @@ class VerificationRegForm(forms.ModelForm):
                                     '%m/%d/%y',
                                     '%d.%m.%Y',
                                 ))
+    extra = forms.CharField(label='Дополнительная информация/выписка из сведений о поверке',
+                                  widget=forms.Textarea(attrs={'class': 'form-control'}), required=False)
+
 
     class Meta:
         model = Verificationequipment
@@ -287,6 +290,7 @@ class VerificationRegForm(forms.ModelForm):
                   'place', 'year',
                   'dateordernew',
                   'cust',
+                  'extra',
                   ]
 
     def __init__(self, *args, **kwargs):
@@ -314,6 +318,8 @@ class VerificationRegForm(forms.ModelForm):
             Row(
                 Column('img', css_class='form-group col-md-6 mb-1'),
                 Column('dateordernew', css_class='form-group col-md-6 mb-1')),
+            Row(
+                Column('extra', css_class='form-group col-md-12 mb-1')),
             Submit('submit', 'Внести'))
 
 
@@ -381,6 +387,8 @@ class AttestationRegForm(forms.ModelForm):
                                 ))
     year = forms.CharField(label='год аттестации', max_length=10000, required=False,
                             widget=forms.TextInput(attrs={'class': 'form-control'}))
+    extra = forms.CharField(label='Дополнительная информация/выписка из аттестата',
+                                  widget=forms.Textarea(attrs={'class': 'form-control'}), required=False)
 
 
     class Meta:
@@ -391,6 +399,7 @@ class AttestationRegForm(forms.ModelForm):
                   'year',
                   'dateordernew',
                   'cust',
+                  'extra',
                   ]
 
     def __init__(self, *args, **kwargs):
@@ -419,6 +428,8 @@ class AttestationRegForm(forms.ModelForm):
                 Column('img', css_class='form-group col-md-6 mb-1'),
                 Column('year', css_class='form-group col-md-6 mb-1'),
                 Column('dateordernew', css_class='form-group col-md-6 mb-1')),
+            Row(
+                Column('extra', css_class='form-group col-md-12 mb-1')),
             Submit('submit', 'Внести'))
 
 
