@@ -153,6 +153,18 @@
 {# поверка кнопка3#}
  <a href="{% url 'verificationlabels' %}"  target="blank" class="btn btn-warning mt-2 ">
      Распечатать этикетку</a></div>
+
+
+{#    выписка #}
+<div style="text-align: center; margin-top: 20px"><h4>
+Выписка из текущей поверки </h4></div>
+<div style="text-align: center;">
+<table class="table table-bordered">
+    <tr>
+        <td>{{ obj.equipmentSM_ver.last.extra|default_if_none:'-' }}</td>
+    </tr>
+</table>
+</div>
 {#расположение и комплектность#}
 <div style="text-align: center; margin-top: 20px"><h4>
 Расположение и комплекность </h4></div>
