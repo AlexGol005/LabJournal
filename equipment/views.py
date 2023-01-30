@@ -4263,34 +4263,57 @@ def base_planreport_xls(request, exel_file_name,
     ws6.footer_str = b' '
 
     # ширина столбцов СИ
-    ws1.col(0).width = 3000
-    ws1.col(1).width = 3000
+    ws1.col(0).width = 2500
+    ws1.col(1).width = 2500
     ws1.col(2).width = 4500
-    ws1.col(3).width = 3000
-    ws1.col(4).width = 2000
-    ws1.col(6).width = 2600
+    ws1.col(3).width = 4500
+    ws1.col(4).width = 2500
+    ws1.col(6).width = 2500
     ws1.col(7).width = 4500
-    ws1.col(8).width = 4500
+    ws1.col(7).width = 7500
+    ws1.col(8).width = 7500
+    ws1.col(9).width = 7500
+    ws1.col(10).width = 7500
+    ws1.col(11).width = 7500
+    ws1.col(12).width = 7500
+    ws1.col(13).width = 7500
+    ws1.col(14).width = 7500
+    ws1.col(15).width = 7500
 
     # ширина столбцов ИО
-    ws2.col(0).width = 3000
-    ws2.col(1).width = 4500
-    ws2.col(2).width = 3500
-    ws2.col(3).width = 4200
-    ws2.col(4).width = 3000
-    ws2.col(5).width = 2600
-    ws2.col(6).width = 4500
+    ws2.col(0).width = 2500
+    ws2.col(1).width = 2500
+    ws2.col(2).width = 4500
+    ws2.col(3).width = 4500
+    ws2.col(4).width = 2500
+    ws2.col(5).width = 4500
+    ws2.col(6).width = 2500
     ws2.col(7).width = 4500
+    ws2.col(8).width = 7500
+    ws2.col(9).width = 7500
+    ws2.col(10).width = 7500
+    ws2.col(11).width = 7500
+    ws2.col(12).width = 7500
+    ws2.col(13).width = 7500
+    ws2.col(14).width = 7500
+    ws2.col(15).width = 7500
 
     # ширина столбцов ВО
-    ws3.col(0).width = 3000
-    ws3.col(1).width = 4500
-    ws3.col(2).width = 3500
-    ws3.col(3).width = 4200
-    ws3.col(4).width = 2000
-    ws3.col(5).width = 2600
-    ws3.col(6).width = 4500
+    ws3.col(0).width = 2500
+    ws3.col(1).width = 2500
+    ws3.col(2).width = 4500
+    ws3.col(3).width = 4500
+    ws3.col(4).width = 2500
+    ws3.col(5).width = 4500
+    ws3.col(6).width = 2500
     ws3.col(7).width = 4500
+    ws3.col(8).width = 7500
+    ws3.col(9).width = 7500
+    ws3.col(11).width = 7500
+    ws3.col(12).width = 7500
+    ws3.col(13).width = 7500
+    ws3.col(14).width = 7500
+    ws3.col(15).width = 7500
 
     # колонки для разбиивок по месяцам
     columns_month = [
@@ -5222,6 +5245,7 @@ def export_mustver_xls(request):
                     'Место поверки (предыдущей)',
                     'Сотрудник, ответственный за подготовку к поверке/аттестации',
                     'Постоянное примечание к поверке',
+                    'Выписка из последних сведений о поверке',
                     ]
 
     measure_e = MeasurEquipment.objects.filter(id__in=set1). \
@@ -5243,6 +5267,7 @@ def export_mustver_xls(request):
         'equipmentSM_ver__place',
         'equipment__personchange__person__username',
         'equipment__notemetrology',
+        'equipmentSM_ver__extra',
     ).order_by('-equipmentSM_ver__place')
 
     u_headers_te = [
@@ -5251,6 +5276,7 @@ def export_mustver_xls(request):
                     'Место аттестации (предыдущей)',
                     'Сотрудник, ответственный за подготовку к поверке/аттестации',
                     'Постоянное примечание к аттестации',
+                    'Выписка из последнего аттестата',
                     ]
 
     testing_e = TestingEquipment.objects.filter(id__in=set10). \
@@ -5271,6 +5297,7 @@ def export_mustver_xls(request):
         'equipmentSM_att__place',
         'equipment__personchange__person__username',
         'equipment__notemetrology',
+        'equipmentSM_ver__extra'
     ).order_by('-equipmentSM_att__place')
 
     measure_e_months = []
