@@ -5297,7 +5297,7 @@ def export_mustver_xls(request):
         'equipmentSM_att__place',
         'equipment__personchange__person__username',
         'equipment__notemetrology',
-        'equipmentSM_ver__extra'
+        'equipmentSM_att__extra'
     ).order_by('-equipmentSM_att__place')
 
     measure_e_months = []
