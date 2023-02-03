@@ -18,7 +18,7 @@ def register(request):
 
     return render(
         request,
-        'users/registration.html',
+        'users/passwords.html',
         {
             'title': 'Страница регистрации',
             'form': form
