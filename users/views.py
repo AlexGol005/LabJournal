@@ -27,23 +27,23 @@ def register(request):
 @login_required
 def profile(request):
     if request.method == "POST":
-        # profailForm = ProfileUdateForm(request.POST, request.FILES,  instance=request.user.profile)
-        userUpdadeForm = UserUdateForm(request.POST, instance=request.user)
+        profailForm = ProfileUdateForm(request.POST, request.FILES,  instance=request.user.profile)
+        # userUpdadeForm = UserUdateForm(request.POST, instance=request.user)
         # if profailForm.is_valid() and userUpdadeForm.is_valid():
-        if userUpdadeForm.is_valid():
-            # profailForm.save()
-            userUpdadeForm.save()
+        if profailForm.is_valid():
+            profailForm.save()
+            # userUpdadeForm.save()
             messages.success(request, f'данные были успешно обновлены')
             return redirect('profile')
 
     else:
-        # profailForm = ProfileUdateForm(instance=request.user.profile)
-        userUpdadeForm = UserUdateForm(instance=request.user)
+        profailForm = ProfileUdateForm(instance=request.user.profile)
+        # userUpdadeForm = UserUdateForm(instance=request.user)
 
     data = {
-            'userUpdadeForm': userUpdadeForm
+            'profailForm': profailForm,
             }
-    # 'profailForm': profailForm,
+    # 'userUpdadeForm': userUpdadeForm
 
 
     return render(request, 'users/profile.html', data)
