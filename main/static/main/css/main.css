@@ -114,3 +114,6 @@ td.ind {
     word-wrap: break-word;
 }
 
+.no-gutters {
+  margin-right: 0;
+  margin-left: 0;}
