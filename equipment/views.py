@@ -5030,7 +5030,7 @@ def export_planmetro_xls(request):
                                 'mod_type',
                                 'equipment__lot',
                                 'equipmentSM_ver__certnumber',
-                                'equipmentSM_ver__dateodead',
+                                'equipmentSM_ver__datedead',
                                 'equipmentSM_ver__dateorder__month',
                                 'equipmentSM_ver__price',
                             ).order_by('equipmentSM_ver__dateorder__month')
