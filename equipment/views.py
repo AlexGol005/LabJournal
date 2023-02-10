@@ -5010,6 +5010,7 @@ def export_planmetro_xls(request):
 
 
     u_headers_me = ['Номер текущего свидетельства',
+                    'Поверка действует до',
                     'Месяц заказа поверки',
                     'Стоимость последней поверки, руб. (при наличии)',
                     ]
@@ -5029,11 +5030,13 @@ def export_planmetro_xls(request):
                                 'mod_type',
                                 'equipment__lot',
                                 'equipmentSM_ver__certnumber',
+                                'equipmentSM_ver__dateodead',
                                 'equipmentSM_ver__dateorder__month',
                                 'equipmentSM_ver__price',
                             ).order_by('equipmentSM_ver__dateorder__month')
 
     u_headers_te = ['Номер текущего аттестата',
+                    'аттестат действует до',
                     'Месяц заказа аттестации',
                     'Стоимость последней аттестации, руб. (при наличии)',
                     ]
@@ -5052,6 +5055,7 @@ def export_planmetro_xls(request):
         'mod_type',
         'equipment__lot',
         'equipmentSM_att__certnumber',
+        'equipmentSM_att__datedead',
         'equipmentSM_att__dateorder__month',
         'equipmentSM_att__price',
     ).order_by('equipmentSM_att__dateorder__month')
