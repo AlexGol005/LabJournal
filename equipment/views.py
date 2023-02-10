@@ -4445,7 +4445,7 @@ def base_planreport_xls(request, exel_file_name,
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
-            if col_num in datecolumnme:
+            if col_num in datecolumnte:
                 ws2.write(row_num, col_num, row[col_num], style_date)
             else:
                 ws2.write(row_num, col_num, row[col_num], style_plain)
