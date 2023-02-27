@@ -82,8 +82,7 @@ class SearchMustVerView(ListView):
         for i in b:
             a = i.get('equipmentSM__id')
             set1.append(a)
-        queryset = MeasurEquipment.objects.filter(id__in=set1).exclude(equipment__status='Сп.').\
-            exclude(equipment__status='Р').exclude(equipment__status='Д')
+        queryset = MeasurEquipment.objects.exclude(equipment__status='С').filter(id__in=set1)
         return queryset
 
 class SearchNotVerView(ListView):
