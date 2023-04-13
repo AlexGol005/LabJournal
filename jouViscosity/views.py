@@ -72,14 +72,14 @@ class SearchKinematicResultView(TemplateView):
             context['objects2'] = objects2
             context['objects3'] = objects3
         if name and not lot:
-            objects = MODEL.objects.filter(namelot__nameVG__nameSM__name='ВЖ-2-ПА').\
+            objects = MODEL.objects.filter(namelot__nameVG__nameSM__name='ВЖ-2-ПА').exclude(namelot__availability=False).\
                 filter(namelot__nameVG__name=name).\
                 order_by('namelot__nameVG__rangeindex',  'namelot__lot')
 
-            objects2 = MODEL2.objects.filter(namelot__nameVG__name=name).\
+            objects2 = MODEL2.objects.filter(namelot__nameVG__name=name).exclude(namelot__availability=False).\
                 order_by('namelot__nameVG__rangeindex', 'namelot__lot')
 
-            objects3 = MODEL.objects.exclude(namelot__nameVG__nameSM__name='ВЖ-2-ПА').\
+            objects3 = MODEL.objects.exclude(namelot__nameVG__nameSM__name='ВЖ-2-ПА').exclude(namelot__availability=False).\
                 filter(namelot__nameVG__name=name).order_by('namelot__nameVG__rangeindex', 'namelot__lot')
 
             context['objects'] = objects
