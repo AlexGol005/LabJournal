@@ -27,14 +27,14 @@ class AllKinematicviscosityView(ListView):
     context_object_name = 'objects'
 
     def get_queryset(self):
-        queryset = MODEL.objects.filter(namelot__nameVG__nameSM__name='ВЖ-2-ПА').\
+        queryset = MODEL.objects.filter(namelot__nameVG__nameSM__name='ВЖ-2-ПА').exclude(namelot__availability=False).\
             order_by('namelot__nameVG__rangeindex', 'namelot__lot')
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super(AllKinematicviscosityView, self).get_context_data(**kwargs)
-        objects2 = MODEL2.objects.all().order_by('namelot__nameVG__rangeindex', 'namelot__lot')
-        objects3 = MODEL.objects.exclude(namelot__nameVG__nameSM__name='ВЖ-2-ПА').\
+        objects2 = MODEL2.objects.exclude(namelot__availability=False).order_by('namelot__nameVG__rangeindex', 'namelot__lot')
+        objects3 = MODEL.objects.exclude(namelot__nameVG__nameSM__name='ВЖ-2-ПА').exclude(namelot__availability=False).\
             order_by('namelot__nameVG__nameSM__name', 'namelot__nameVG__rangeindex', 'namelot__lot')
 
         context['objects2'] = objects2
