@@ -46,7 +46,7 @@
             <th> Результат </th>
             <th> Стоимость, <br> руб </th>
             <th> Документ </th>
-            <th> Исполнитель аттестации </th>
+            <th> Доп. сведения </th>
          </tr>
     </thead>
     <tbody>
@@ -67,8 +67,8 @@
         {{ obj.certnumber|default:" "}}
         </td>
             <td>
-        {% if obj.verificatorperson.name %}
-         {{ obj.verificatorperson.name }}
+        {% if obj.extra %}
+         {{ obj.extra }}
         {% endif %}
         </td>
     </tr>
