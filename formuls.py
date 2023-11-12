@@ -55,12 +55,16 @@ def  numberDigits(avg: Decimal, abserror: Decimal) -> Decimal:
     return: АЗ СО в формате Decimal
     '''
     if abserror >= K+1:
-        if abserror <= 29.4:
-            certifiedValue = Decimal(avg).quantize(Decimal(1), ROUND_HALF_UP)
+        abserror = Decimal(abserror).quantize(Decimal('1'), ROUND_HALF_UP)
+        certifiedValue = Decimal(avg).quantize(Decimal('1'), ROUND_HALF_UP)
+        if abserror <= 29:
             return certifiedValue
-        if abserror > 29.4:
-            certifiedValue = Decimal(avg).quantize(Decimal('0.0001'), ROUND_HALF_UP)
-            return certifiedValue
+        if abserror > 29:
+            abserror = str(abserror)
+            if int(abserror[0]) <= K:
+                len_certifiedValue = len(str(certifiedValue))
+                certifiedValue = (str(certifiedValue)[: -len(abserror)]).rstrip('0000')
+                return Decimal(certifiedValue)
     abserror = str(abserror)
     index = abserror.find(".")
     if index > 0:
