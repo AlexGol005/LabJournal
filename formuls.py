@@ -63,9 +63,9 @@ def  numberDigits(avg: Decimal, abserror: Decimal) -> Decimal:
             abserror = str(abserror)
             if int(abserror[0]) <= K:
                 certifiedValue = (str(certifiedValue)[: -(len(abserror))]) + '.' + str(certifiedValue)[-(len(abserror)):]
-                certifiedValue = Decimal(certifiedValue).quantize(Decimal('1'), ROUND_HALF_UP)
-                tail = (len(abserror) - 2) * '0'
-                certifiedValue = str(certifiedValue) + tail
+                # certifiedValue = Decimal(certifiedValue).quantize(Decimal('1'), ROUND_HALF_UP)
+                # tail = (len(abserror) - 2) * '0'
+                # certifiedValue = str(certifiedValue) + tail
                 return Decimal(certifiedValue)
     abserror = str(abserror)
     index = abserror.find(".")
