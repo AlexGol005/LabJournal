@@ -72,6 +72,7 @@ def  numberDigits(avg: Decimal, abserror: Decimal) -> Decimal:
                 certifiedValue = Decimal(certifiedValue).quantize(Decimal('1'), ROUND_HALF_UP)
                 tail = (len(abserror) - 1) * '0'
                 certifiedValue = str(certifiedValue) + tail
+                return Decimal(certifiedValue)
     abserror = str(abserror)
     index = abserror.find(".")
     if index > 0:
