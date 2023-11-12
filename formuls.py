@@ -59,7 +59,7 @@ def  numberDigits(avg: Decimal, abserror: Decimal) -> Decimal:
             certifiedValue = Decimal(avg).quantize(Decimal(1), ROUND_HALF_UP)
             return certifiedValue
         if abserror > 29.4:
-            certifiedValue = Decimal(avg).quantize(Decimal(10000), ROUND_HALF_UP)
+            certifiedValue = Decimal(avg).quantize(Decimal('1.0'), ROUND_HALF_UP)
             return certifiedValue
     abserror = str(abserror)
     index = abserror.find(".")
