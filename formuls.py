@@ -62,8 +62,9 @@ def  numberDigits(avg: Decimal, abserror: Decimal) -> Decimal:
         if abserror > 29:
             abserror = str(abserror)
             if int(abserror[0]) <= K:
-                len_certifiedValue = len(str(certifiedValue))
-                certifiedValue = (str(certifiedValue)[: -len(abserror)]).rstrip('0000')
+                certifiedValue = (str(certifiedValue)[: -len(abserror)])
+                tail = len(abserror) * '0'
+                certifiedValue = certifiedValue + tail
                 return Decimal(certifiedValue)
     abserror = str(abserror)
     index = abserror.find(".")
