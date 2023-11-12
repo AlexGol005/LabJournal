@@ -62,7 +62,7 @@ def  numberDigits(avg: Decimal, abserror: Decimal) -> Decimal:
         if abserror > 29:
             abserror = str(abserror)
             if int(abserror[0]) <= K:
-                certifiedValue = (str(certifiedValue)[: -(len(abserror) - 1)]) + '.' + str(certifiedValue)[-(len(abserror) - 1):]
+                certifiedValue = (str(certifiedValue)[: -(len(abserror))]) + '.' + str(certifiedValue)[-(len(abserror)):]
                 # certifiedValue = Decimal(certifiedValue).quantize(Decimal('1'), ROUND_HALF_UP)
                 # tail = (len(abserror) - 2) * '0'
                 # certifiedValue = str(certifiedValue) + tail
