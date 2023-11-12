@@ -63,7 +63,7 @@ def  numberDigits(avg: Decimal, abserror: Decimal) -> Decimal:
             abserror = str(abserror)
             if int(abserror[0]) <= K:
                 certifiedValue = (str(certifiedValue)[: -(len(abserror) - 2)]) + '.' + str(certifiedValue)[-(len(abserror) - 2):]
-                certifiedValue = Decimal(certifiedValue).quantize(Decimal('10'), ROUND_HALF_UP)
+                certifiedValue = Decimal(certifiedValue).quantize(Decimal('10000'), ROUND_HALF_UP)
                 tail = (len(abserror) - 2) * '0'
                 certifiedValue = str(certifiedValue) + tail
                 return Decimal(certifiedValue)
