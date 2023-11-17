@@ -19,7 +19,7 @@
 {#карточка#}
 <div style="text-align: center; margin-top: 10px; margin-bottom: 50px">
     <a href="{% url 'export_mecard_xls' obj.pk %}"  class="btn btn-warning mt-2 ">
-    Распечатать карточку на прибор</a>
+    Выгрузить  карточку на прибор</a>
     <a href="{% url 'export_exvercard_xls' obj.pk %}"  class="btn btn-warning mt-2 ">
     Выгрузить шаблон протокола верификации</a>
 </div>
@@ -235,7 +235,7 @@
              ссылка на паспорт
                   </a>
              {% else  %}
-             нет ссылки на паспорт
+             раздел в работе
              {% endif %}
          </td>
          <td class="ind">
@@ -244,13 +244,13 @@
              ссылка на инструкцию
                   </a>
              {% else  %}
-             нет ссылки на инструкции
+             раздел в работе
              {% endif %}
          </td>
         <td> {{ obj.charakters.measurydiapason }}</td>
         <td> {{ obj.charakters.accuracity }}</td>
         <td>{{ obj.charakters.aim }}</td>
-        <td> пока пусто</td>
+        <td> раздел в работе</td>
     </tr>
     </tbody>
 </table>
@@ -270,10 +270,12 @@
     </thead>
     <tbody>
     <tr>
-        <td>{% if obj.equipment.imginstruction3 %}
-        <a href="{{ obj.equipment.imginstruction1.url }}" target="blank">
-        <img class="bd-placeholder-img mr-2 rounded" width=50px height=70px src="{{ obj.equipment.imginstruction3.url }}">
-        </a>{% endif %}</td>
+        <td>
+            #{% if obj.equipment.imginstruction3 %}
+        #<a href="{{ obj.equipment.imginstruction1.url }}" target="blank">
+        #<img class="bd-placeholder-img mr-2 rounded" width=50px height=70px src="{{ obj.equipment.imginstruction3.url }}">
+       # </a>{% endif %} 
+            раздел в работе</td>
         <td>{{ obj.equipment.price|default:" " }}</td>
         <td> {{ obj.equipment.invnumber|default:"б/н" }}</td>
     </tr>
