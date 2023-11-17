@@ -612,17 +612,17 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
                                                                 'placeholder': ''}))
     expresstest = forms.BooleanField(label='Возможно тестирование', required=False, initial=False)
     # service0 = forms.CharField(label='ТО 0', required=False,
-                                  widget=forms.Textarea(attrs={'class': 'form-control',
-                                                               'placeholder': ''}))
+                                 # widget=forms.Textarea(attrs={'class': 'form-control',
+                                                             #  'placeholder': ''}))
     # service1 = forms.CharField(label='ТО 1', required=False,
-                                  widget=forms.Textarea(attrs={'class': 'form-control',
-                                                               'placeholder': ''}))
+                                #  widget=forms.Textarea(attrs={'class': 'form-control',
+                                                               #'placeholder': ''}))
     # service2 = forms.CharField(label='ТО 2', required=False,
-                                  widget=forms.Textarea(attrs={'class': 'form-control',
-                                                               'placeholder': ''}))
+                                #  widget=forms.Textarea(attrs={'class': 'form-control',
+                                                           #   'placeholder': ''}))
     # servicecomment = forms.CharField(label='Примечание ТО', required=False,
-                                  widget=forms.Textarea(attrs={'class': 'form-control',
-                                                               'placeholder': ''}))
+                                 # widget=forms.Textarea(attrs={'class': 'form-control',
+                                                              # 'placeholder': ''}))
 
     class Meta:
         model = MeasurEquipmentCharakters
@@ -708,17 +708,17 @@ class TestingEquipmentCharaktersCreateForm(forms.ModelForm):
                                                             'placeholder': ''}))
     expresstest = forms.BooleanField(label='Возможно тестирование', required=False, initial=False)
     # service0 = forms.CharField(label='ТО 0', required=False,
-                                  widget=forms.Textarea(attrs={'class': 'form-control',
-                                                               'placeholder': ''}))
+                                 # widget=forms.Textarea(attrs={'class': 'form-control',
+                                                              # 'placeholder': ''}))
     # service1 = forms.CharField(label='ТО 1', required=False,
-                                  widget=forms.Textarea(attrs={'class': 'form-control',
-                                                               'placeholder': ''}))
+                              #    widget=forms.Textarea(attrs={'class': 'form-control',
+                                                            #   'placeholder': ''}))
     # service2 = forms.CharField(label='ТО 2', required=False,
-                                  widget=forms.Textarea(attrs={'class': 'form-control',
-                                                               'placeholder': ''}))
+                               #   widget=forms.Textarea(attrs={'class': 'form-control',
+                                                            #   'placeholder': ''}))
    #  servicecomment = forms.CharField(label='Примечание ТО', required=False,
-                                  widget=forms.Textarea(attrs={'class': 'form-control',
-                                                               'placeholder': ''}))
+                                #  widget=forms.Textarea(attrs={'class': 'form-control',
+                                                              # 'placeholder': ''}))
 
     class Meta:
         model = TestingEquipmentCharakters
