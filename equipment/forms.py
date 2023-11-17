@@ -99,12 +99,12 @@ class EquipmentCreateForm(forms.ModelForm):
                                     #   required=False)
     # imginstruction3 = forms.ImageField(label='Право владения', widget=forms.FileInput, required=False)
     # individuality = forms.CharField(label='Индивидуальные особенности прибора', max_length=10000, required=False,
-                                    widget=forms.TextInput(attrs={'class': 'form-control'}))
+                                 #   widget=forms.TextInput(attrs={'class': 'form-control'}))
     # notemaster = forms.CharField(label='Примечание (или временное предостережение)', max_length=10000, required=False,
-                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
+                                # widget=forms.TextInput(attrs={'class': 'form-control'}))
     # video = forms.CharField(label='Видео к прибору', max_length=10000, required=False,
-                            widget=forms.TextInput(attrs={'class': 'form-control',
-                                                          'placeholder': 'добавьте ссылку на видео'}))
+                          #  widget=forms.TextInput(attrs={'class': 'form-control',
+                                                         # 'placeholder': 'добавьте ссылку на видео'}))
     price = forms.DecimalField(label='Стоимость', max_digits=10, decimal_places=2,
                                widget=forms.TextInput(attrs={'class': 'form-control',
                                                              'placeholder': '0000.00'}))
@@ -114,7 +114,8 @@ class EquipmentCreateForm(forms.ModelForm):
         model = Equipment
         fields = [
             'exnumber', 'lot', 'yearmanuf', 'manufacturer', 'status',
-             'new', 'invnumber', 'kategory', 'individuality', 'notemaster',
+             'new', 'invnumber', 'kategory', 
+            'individuality', 'notemaster',
             'imginstruction2', 'imginstruction1',
             'imginstruction3', 'video', 'price',]
             # 'yearintoservice',
