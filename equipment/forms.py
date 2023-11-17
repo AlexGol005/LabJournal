@@ -94,15 +94,15 @@ class EquipmentCreateForm(forms.ModelForm):
     kategory = forms.ChoiceField(label='Категория', initial='Средство измерения',
                                choices=KATEGORY,
                                widget=forms.Select(attrs={'class': 'form-control'}))
-    imginstruction1 = forms.ImageField(label='Паспорт', widget=forms.FileInput, required=False)
-    imginstruction2 = forms.ImageField(label='Внутренняя инструкция', widget=forms.FileInput,
+    # imginstruction1 = forms.ImageField(label='Паспорт', widget=forms.FileInput, required=False)
+    # imginstruction2 = forms.ImageField(label='Внутренняя инструкция', widget=forms.FileInput,
                                        required=False)
-    imginstruction3 = forms.ImageField(label='Право владения', widget=forms.FileInput, required=False)
-    individuality = forms.CharField(label='Индивидуальные особенности прибора', max_length=10000, required=False,
+    # imginstruction3 = forms.ImageField(label='Право владения', widget=forms.FileInput, required=False)
+    # individuality = forms.CharField(label='Индивидуальные особенности прибора', max_length=10000, required=False,
                                     widget=forms.TextInput(attrs={'class': 'form-control'}))
-    notemaster = forms.CharField(label='Примечание (или временное предостережение)', max_length=10000, required=False,
+    # notemaster = forms.CharField(label='Примечание (или временное предостережение)', max_length=10000, required=False,
                                  widget=forms.TextInput(attrs={'class': 'form-control'}))
-    video = forms.CharField(label='Видео к прибору', max_length=10000, required=False,
+    # video = forms.CharField(label='Видео к прибору', max_length=10000, required=False,
                             widget=forms.TextInput(attrs={'class': 'form-control',
                                                           'placeholder': 'добавьте ссылку на видео'}))
     price = forms.DecimalField(label='Стоимость', max_digits=10, decimal_places=2,
