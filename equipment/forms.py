@@ -115,10 +115,10 @@ class EquipmentCreateForm(forms.ModelForm):
         fields = [
             'exnumber', 'lot', 'yearmanuf', 'manufacturer', 'status',
              'new', 'invnumber', 'kategory', 
-            'individuality', 'notemaster',
-            'imginstruction2', 'imginstruction1',
-            'imginstruction3', 'video', 'price',]
-            # 'yearintoservice',
+             'price',]
+            # 'yearintoservice', 'individuality', 'notemaster',
+            # 'imginstruction2', 'imginstruction1',
+            # 'imginstruction3', 'video',
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
