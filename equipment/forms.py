@@ -611,16 +611,16 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
                                    widget=forms.Textarea(attrs={'class': 'form-control',
                                                                 'placeholder': ''}))
     expresstest = forms.BooleanField(label='Возможно тестирование', required=False, initial=False)
-    service0 = forms.CharField(label='ТО 0', required=False,
+    # service0 = forms.CharField(label='ТО 0', required=False,
                                   widget=forms.Textarea(attrs={'class': 'form-control',
                                                                'placeholder': ''}))
-    service1 = forms.CharField(label='ТО 1', required=False,
+    # service1 = forms.CharField(label='ТО 1', required=False,
                                   widget=forms.Textarea(attrs={'class': 'form-control',
                                                                'placeholder': ''}))
-    service2 = forms.CharField(label='ТО 2', required=False,
+    # service2 = forms.CharField(label='ТО 2', required=False,
                                   widget=forms.Textarea(attrs={'class': 'form-control',
                                                                'placeholder': ''}))
-    servicecomment = forms.CharField(label='Примечание ТО', required=False,
+    # servicecomment = forms.CharField(label='Примечание ТО', required=False,
                                   widget=forms.Textarea(attrs={'class': 'form-control',
                                                                'placeholder': ''}))
 
@@ -644,11 +644,12 @@ class MeasurEquipmentCharaktersCreateForm(forms.ModelForm):
             'setplace',
             'complectlist',
             'expresstest',
-            'service0',
-            'service1',
-            'service2',
-            'servicecomment',
+            
                   ]
+       # 'service0',
+        #     'service1',
+         #    'service2',
+          #   'servicecomment',
 
 
 class TestingEquipmentCharaktersCreateForm(forms.ModelForm):
@@ -706,16 +707,16 @@ class TestingEquipmentCharaktersCreateForm(forms.ModelForm):
                                widget=forms.Textarea(attrs={'class': 'form-control',
                                                             'placeholder': ''}))
     expresstest = forms.BooleanField(label='Возможно тестирование', required=False, initial=False)
-    service0 = forms.CharField(label='ТО 0', required=False,
+    # service0 = forms.CharField(label='ТО 0', required=False,
                                   widget=forms.Textarea(attrs={'class': 'form-control',
                                                                'placeholder': ''}))
-    service1 = forms.CharField(label='ТО 1', required=False,
+    # service1 = forms.CharField(label='ТО 1', required=False,
                                   widget=forms.Textarea(attrs={'class': 'form-control',
                                                                'placeholder': ''}))
-    service2 = forms.CharField(label='ТО 2', required=False,
+    # service2 = forms.CharField(label='ТО 2', required=False,
                                   widget=forms.Textarea(attrs={'class': 'form-control',
                                                                'placeholder': ''}))
-    servicecomment = forms.CharField(label='Примечание ТО', required=False,
+   #  servicecomment = forms.CharField(label='Примечание ТО', required=False,
                                   widget=forms.Textarea(attrs={'class': 'form-control',
                                                                'placeholder': ''}))
 
@@ -740,11 +741,12 @@ class TestingEquipmentCharaktersCreateForm(forms.ModelForm):
             'setplace',
             'complectlist',
             'expresstest',
-            'service0',
-            'service1',
-            'service2',
-            'servicecomment',
+            
                   ]
+       # 'service0',
+         #    'service1',
+         #    'service2',
+           #  'servicecomment',
 
 class HelpingEquipmentCharaktersCreateForm(forms.ModelForm):
     """форма для внесения характеристик ВО"""
