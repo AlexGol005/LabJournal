@@ -94,7 +94,7 @@
 
 <div style="text-align: center; margin-top: 20px">
  <a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/individuality/"  class="btn btn-warning mt-2">
-     Добавить особенности работы прибора, инструкцию и пр. (для ответственного за прибор)</a></div>
+     Поменять статус прибора и добавить примечания (раздел только для суперпользователя)</a></div>
 </div>
 
 {#записи о приборе#}
@@ -271,10 +271,10 @@
     <tbody>
     <tr>
         <td>
-            #{% if obj.equipment.imginstruction3 %}
-        #<a href="{{ obj.equipment.imginstruction1.url }}" target="blank">
-        #<img class="bd-placeholder-img mr-2 rounded" width=50px height=70px src="{{ obj.equipment.imginstruction3.url }}">
-       # </a>{% endif %} 
+           {# #{% if obj.equipment.imginstruction3 %}#}
+        {#<a href="{{ obj.equipment.imginstruction1.url }}" target="blank">#}
+        {#<img class="bd-placeholder-img mr-2 rounded" width=50px height=70px src="{{ obj.equipment.imginstruction3.url }}">#}
+       {# </a>{% endif %} #}
             раздел в работе</td>
         <td>{{ obj.equipment.price|default:" " }}</td>
         <td> {{ obj.equipment.invnumber|default:"б/н" }}</td>
