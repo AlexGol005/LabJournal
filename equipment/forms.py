@@ -96,7 +96,7 @@ class EquipmentCreateForm(forms.ModelForm):
                                widget=forms.Select(attrs={'class': 'form-control'}))
     # imginstruction1 = forms.ImageField(label='Паспорт', widget=forms.FileInput, required=False)
     # imginstruction2 = forms.ImageField(label='Внутренняя инструкция', widget=forms.FileInput,
-                                       required=False)
+                                    #   required=False)
     # imginstruction3 = forms.ImageField(label='Право владения', widget=forms.FileInput, required=False)
     # individuality = forms.CharField(label='Индивидуальные особенности прибора', max_length=10000, required=False,
                                     widget=forms.TextInput(attrs={'class': 'form-control'}))
