@@ -244,8 +244,7 @@ def export_me_xls(request, pk):
     """представление для выгрузки отдельной странички журнала в ексель"""
     note = MODEL.objects.get(pk=pk)
     try:
-        comment = Comments.objects.filter(forNote=note.pk):
-    
+        comment = Comments.objects.filter(forNote=note.pk)    
         comment = comment.first().name
     except:
         comment = ''
