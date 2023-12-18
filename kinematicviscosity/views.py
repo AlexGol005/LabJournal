@@ -243,6 +243,7 @@ al3.vert = Alignment.VERT_CENTER
 def export_me_xls(request, pk):
     """представление для выгрузки отдельной странички журнала в ексель"""
     note = MODEL.objects.get(pk=pk)
+    comment = Comments.objects.filter(comments=note.pk)
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}.xls"'
     wb = xlwt.Workbook(encoding='utf-8')
@@ -564,7 +565,7 @@ def export_me_xls(request, pk):
 
     row_num = 19
     columns = [
-        f'Результат измерений: {note.resultMeas}'
+        f'Результат измерений: {note.resultMeas}; {comment.name}'
     ]
 
     for col_num in range(len(columns)):
