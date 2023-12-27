@@ -165,8 +165,8 @@ class SearchResultView(Constants, TemplateView):
         lot = self.request.GET['lot']
         temperature = self.request.GET['temperature']
         if name and lot and temperature:
-            objects = MODEL.objects.filter(name=name).filter(lot=lot).filter(temperature=temperature).\
-                .order_by('-pk')
+            objects = MODEL.objects.filter(name=name).filter(lot=lot).filter(temperature=temperature).order_by('-pk')
+                
             context['objects'] = objects
         if name and lot and not temperature:
             objects = MODEL.objects.filter(name=name).filter(lot=lot).order_by('-pk')
@@ -176,7 +176,7 @@ class SearchResultView(Constants, TemplateView):
             context['objects'] = objects
         if name and temperature and not lot:
             objects = MODEL.objects.filter(name=name).filter(temperature=temperature).\
-                .order_by('-pk')
+                order_by('-pk')
             context['objects'] = objects
         context['journal'] = JOURNAL.objects.filter(for_url=URL)
         context['formSM'] = SearchForm(initial={'name': name, 'lot': lot, 'temperature': temperature})
