@@ -2635,15 +2635,19 @@ def export_exvercard_xls(request, pk):
     '''представление для выгрузки протокола верификации СИ в ексель'''
     note = MeasurEquipment.objects.get(pk=pk)
     company = CompanyCard.objects.get(pk=1)
-    aa = MeasurEquipment.objects.all().filter(equipment__roomschange__in=setroom). \
-        values_list('equipment__roomschange__roomnumber__roomnumber').get(pk=pk)
-    aa = str(aa)
-    room = aa[2:-3]
-
-    bb = MeasurEquipment.objects.all().filter(equipment__personchange__in=setperson). \
-        values_list('equipment__personchange__person__username').get(pk=pk)
-    bb = str(bb)
-    usere = bb[2:-3]
+    # aa = MeasurEquipment.objects.all().filter(equipment__roomschange__in=setroom). \
+    #     values_list('equipment__roomschange__roomnumber__roomnumber').get(pk=pk)
+    # aa = Roomschange.objects.all().filter(equipment=100). \
+    #     values_list('equipment__roomschange__roomnumber__roomnumber').get(pk=pk)
+    # aa = str(aa)
+    # room = aa[2:-3]
+    #
+    # bb = MeasurEquipment.objects.all().filter(equipment__personchange__in=setperson). \
+    #     values_list('equipment__personchange__person__username').get(pk=pk)
+    # bb = str(bb)
+    # usere = bb[2:-3]
+    room = '1'
+    usere = '2'
     userelat = pytils.translit.translify(usere)
     positionset = Profile.objects.get(user__username=usere)
     position = positionset.userposition
@@ -4152,11 +4156,11 @@ def export_exvercardteste_xls(request, pk):
     columns = [
         '',
         '',
-        'position',
+        position,
         '',
-       'usere',
-       'usere',
-       'usere',
+       usere,
+       usere,
+       usere,
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], st)
