@@ -2650,7 +2650,8 @@ def export_exvercard_xls(request, pk):
     usere = '2'
     userelat = pytils.translit.translify(usere)
     positionset = Profile.objects.get(user__username=usere)
-    position = positionset.userposition
+    # position = positionset.userposition
+    position = '3'
     cardname = pytils.translit.translify(note.equipment.exnumber) + ' ' + pytils.translit.translify(note.equipment.lot)
     response = HttpResponse(content_type='application/ms-excel')
     filename = f"{userelat}_{cardname}"
