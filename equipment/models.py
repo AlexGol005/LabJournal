@@ -139,6 +139,10 @@ class Equipment(models.Model):
     pasport = models.CharField('Ссылка на паспорт', max_length=1000,  blank=True, null=True)
     instruction = models.CharField('Основная инструкция по эксплуатации', max_length=1000,  blank=True, null=True)
     repair = models.CharField('Контакты для ремонта', max_length=1000,  blank=True, null=True)
+    protocol = models.BooleanField(verbose_name='Протокол верификации', default=False,
+                                    blank=True)
+    accreditation = models.BooleanField(verbose_name='Использование для образцов из ОА', default=False,
+                                    blank=True)
 
     def __str__(self):
         return f'Вн. № {self.exnumber}    Зав. № {self.lot} - pk {self.pk} дата {self.date}'
@@ -401,6 +405,7 @@ class Verificationequipment(models.Model):
     cust = models.BooleanField(verbose_name='Поверку организует Поставщик', default=False,
                                     blank=True)
     extra = models.TextField('Дополнительная информация', blank=True, null=True)
+
 
     def __str__(self):
         try:

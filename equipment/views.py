@@ -1343,40 +1343,40 @@ def export_me_xls(request):
     ws1 = wb.add_sheet('График аттестации ИО', cell_overwrite_ok=True)
 
     # ширина столбцов графика поверки
-    ws.col(0).width = 3000
     ws.col(1).width = 3000
-    ws.col(2).width = 4500
-    ws.col(3).width = 3000
-    ws.col(4).width = 4200
-    ws.col(8).width = 4200
-    ws.col(9).width = 3000
-    ws.col(10).width = 4200
-    ws.col(12).width = 4200
+    ws.col(2).width = 3000
+    ws.col(3).width = 4500
+    ws.col(4).width = 3000
+    ws.col(5).width = 4200
+    ws.col(9).width = 4200
+    ws.col(10).width = 3000
+    ws.col(11).width = 4200
     ws.col(13).width = 4200
-    ws.col(14).width = 3000
+    ws.col(14).width = 4200
     ws.col(15).width = 3000
     ws.col(16).width = 3000
     ws.col(17).width = 3000
-    ws.col(20).width = 6500
+    ws.col(18).width = 3000
     ws.col(21).width = 6500
-    ws.col(22).width = 9000
+    ws.col(22).width = 6500
+    ws.col(23).width = 9000
 
     # ширина столбцов графика аттестации
-    ws1.col(0).width = 3000
-    ws1.col(1).width = 4500
-    ws1.col(2).width = 3500
-    ws1.col(3).width = 4200
-    ws1.col(7).width = 4200
+    ws1.col(1).width = 3000
+    ws1.col(2).width = 4500
+    ws1.col(3).width = 3500
+    ws1.col(4).width = 4200
     ws1.col(8).width = 4200
     ws1.col(9).width = 4200
-    ws1.col(11).width = 4200
-    ws1.col(12).width = 3000
+    ws1.col(10).width = 4200
+    ws1.col(12).width = 4200
     ws1.col(13).width = 3000
     ws1.col(14).width = 3000
-    ws1.col(17).width = 8500
-    ws1.col(18).width = 6500
+    ws1.col(15).width = 3000
+    ws1.col(18).width = 8500
     ws1.col(19).width = 6500
-    ws1.col(20).width = 9000
+    ws1.col(20).width = 6500
+    ws1.col(21).width = 9000
 
     # стили
     al10 = Alignment()
@@ -1427,9 +1427,10 @@ def export_me_xls(request):
     # заголовки графика поверки, первый ряд
     row_num += 2
     columns = [
+                '№ п/п',
                 'Внутренний  номер',
                 'Номер в госреестре',
-                'Наименование',
+                'Наименование СИ, заводской номер',
                 'Тип/Модификация',
                 'Заводской номер',
                 'Год выпуска',
@@ -1445,17 +1446,21 @@ def export_me_xls(request):
                 'Дата окончания свидетельства',
                 'Дата заказа поверки/калибровки',
                 'Дата заказа замены',
-                'Периодичность поверки /калибровки (месяцы)',
+                'Периодичность поверки /калибровки',
                 'Инвентарный номер',
                 'Диапазон измерений',
                 'Метрологические характеристики',
                 'Дополнительная информация/\nвыписка из текущих сведений о поверке',
+                'Протокол верификации да/нет',
+                'Использование для образцов из ОА да/нет',
                ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style10)
 
     rows = MeasurEquipment.objects.all().\
-        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
+        annotate(big_name=Concat('charakters__name', Value(' '),'charakters__typename', Value(' '), 'charakters__modificname', \
+         Value(', зав. № '), 'equipment__lot'),
+                 mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
     manuf_country=Concat('equipment__manufacturer__country', Value(', '), 'equipment__manufacturer__companyName')).\
         filter(equipment__roomschange__in=setroom).\
         filter(equipment__personchange__in=setperson).\
@@ -1464,7 +1469,7 @@ def export_me_xls(request):
         values_list(
             'equipment__exnumber',
             'charakters__reestr',
-            'charakters__name',
+            'big_name',
             'mod_type',
             'equipment__lot',
             'equipment__yearmanuf',
@@ -1484,17 +1489,39 @@ def export_me_xls(request):
             'equipment__invnumber',
             'charakters__measurydiapason',
             'charakters__accuracity',
-            'equipmentSM_ver__extra'
+            'equipmentSM_ver__extra',
+            'equipment__protocol',
+            'equipment__accreditation',
         )
 
     for row in rows:
         row_num += 1
         for col_num in range(0, 14):
-            ws.write(row_num, col_num, row[col_num], style20)
+            ws.write(row_num, col_num + 1, row[col_num], style20)
         for col_num in range(14, 18):
-            ws.write(row_num, col_num, row[col_num], style30)
-        for col_num in range(18, len(row)):
-            ws.write(row_num, col_num, row[col_num], style20)
+            ws.write(row_num, col_num + 1, row[col_num], style30)
+        for col_num in range(18, 19):
+            c = row[col_num]
+            if c == 24:
+                c = '24 месяца'
+            else:
+                c = f'{c} месяцев'
+
+            ws.write(row_num, col_num + 1, f'{c}', style20)
+        for col_num in range(19, 23):
+            ws.write(row_num, col_num + 1, row[col_num], style20)
+        for col_num in range(23, len(row)):
+            b = row[col_num]
+            if not b:
+                b = 'нет'
+            else:
+                b = 'да'
+            ws.write(row_num, col_num + 1, f'{b}', style20)
+    a = row_num
+    for col_num in range(1):
+        for row_num in range(4, a + 1):
+            ws.write(row_num, col_num, f'{row_num - 3}', style20)
+
 
         # название графика аттестации, первый ряд
     row_num = 1
@@ -1510,8 +1537,9 @@ def export_me_xls(request):
         # заголовки графика аттестации, первый ряд
     row_num += 2
     columns = [
+        '№ п/п',
         'Внутренний  номер',
-        'Наименование',
+        'Наименование ИО, заводской номер',
         'Тип/Модификация',
         'Заводской номер',
         'Год выпуска',
@@ -1531,12 +1559,16 @@ def export_me_xls(request):
         'Основные технические характеристики',
         'Наименование видов испытаний',
         'Дополнительная информация/\nвыписка из текущего аттестата',
+        'Протокол верификации да/нет',
+        'Использование для образцов из ОА да/нет',
     ]
     for col_num in range(len(columns)):
         ws1.write(row_num, col_num, columns[col_num], style10)
 
     rows = TestingEquipment.objects.all(). \
-        annotate(mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
+        annotate(big_name=Concat('charakters__name', Value(' '),'charakters__typename', Value(' '), 'charakters__modificname', \
+         Value(', зав. № '), 'equipment__lot'),
+        mod_type=Concat('charakters__typename', Value(' '), 'charakters__modificname'),
                  manuf_country=Concat('equipment__manufacturer__country', Value(', '),
                                       'equipment__manufacturer__companyName')). \
         filter(equipment__roomschange__in=setroom). \
@@ -1545,7 +1577,7 @@ def export_me_xls(request):
         exclude(equipment__status='С'). \
         values_list(
         'equipment__exnumber',
-        'charakters__name',
+        'big_name',
         'mod_type',
         'equipment__lot',
         'equipment__yearmanuf',
@@ -1564,16 +1596,37 @@ def export_me_xls(request):
         'equipmentSM_att__ndocs',
         'charakters__measurydiapason',
         'charakters__aim',
-        'equipmentSM_att__extra'
+        'equipmentSM_att__extra',
+        'equipment__protocol',
+        'equipment__accreditation',
     )
     for row in rows:
         row_num += 1
         for col_num in range(0, 12):
-            ws1.write(row_num, col_num, row[col_num], style20)
+            ws1.write(row_num, col_num + 1, row[col_num], style20)
         for col_num in range(12, 15):
-            ws1.write(row_num, col_num, row[col_num], style30)
-        for col_num in range(15, len(row)):
-            ws1.write(row_num, col_num, row[col_num], style20)
+            ws1.write(row_num, col_num + 1, row[col_num], style30)
+        for col_num in range(15, 16):
+            c = row[col_num]
+            if c == 24:
+                c = '24 месяца'
+            else:
+                c = f'{c} месяцев'
+
+            ws1.write(row_num, col_num + 1, f'{c}', style20)
+        for col_num in range(16, 21):
+            ws1.write(row_num, col_num + 1, row[col_num], style20)
+        for col_num in range(21, len(row)):
+            b = row[col_num]
+            if not b:
+                b = 'нет'
+            else:
+                b = 'да'
+            ws1.write(row_num, col_num + 1, f'{b}', style20)
+    a = row_num
+    for col_num in range(1):
+        for row_num in range(4, a + 1):
+            ws1.write(row_num, col_num, f'{row_num - 3}', style20)
 
     wb.save(response)
     return response

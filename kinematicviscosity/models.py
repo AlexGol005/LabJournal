@@ -33,8 +33,8 @@ class ViscosityMJL(models.Model):
     exp = models.IntegerField('Срок годности, месяцев',  blank=True, null=True)
     date_exp = models.DateField('Годен до', blank=True, null=True)
     # вычисляемые поля для всех моделей
-    kriteriy = models.DecimalField('Критерий приемлемости измерений', max_digits=2, decimal_places=2, null=True)
-    accMeasurement = models.DecimalField('Оценка приемлемости измерений', max_digits=5, decimal_places=2, null=True)
+    kriteriy = models.DecimalField('Критерий приемлемости измерений', max_digits=2, decimal_places=1, null=True)
+    accMeasurement = models.DecimalField('Оценка приемлемости измерений', max_digits=5, decimal_places=1, null=True)
     resultMeas = models.CharField('Результат измерений уд/неуд', max_length=100, default='неудовлетворительно',
                                   null=True)
     cause = models.CharField('Причина', max_length=100, default='', null=True, blank=True)
@@ -139,13 +139,13 @@ class ViscosityMJL(models.Model):
             self.viscosity1 = (self.Konstant1 * self.timeK1_avg).quantize(Decimal('1.00000'), ROUND_HALF_UP)
             self.viscosity2 = (self.Konstant2 * self.timeK2_avg).quantize(Decimal('1.00000'), ROUND_HALF_UP)
             self.viscosityAVG = get_avg(self.viscosity1, self.viscosity2, 5)
-        self.accMeasurement = get_acc_measurement(Decimal(self.viscosity1), Decimal(self.viscosity2))
+        self.accMeasurement = get_acc_measurement(Decimal(self.viscosity1), Decimal(self.viscosity2), 1)
         if self.constit == 'да':
-            self.kriteriy = Decimal(0.30)
+            self.kriteriy = Decimal(0.3)
         if self.constit == 'нет':
-            self.kriteriy = Decimal(0.20)
+            self.kriteriy = Decimal(0.2)
         if self.constit == 'другое':
-            self.kriteriy = Decimal(0.30)
+            self.kriteriy = Decimal(0.3)
         if self.constit == 'по ГОСТ 33':
             self.kriteriy = Decimal(0.35)
         if self.accMeasurement <= self.kriteriy:
@@ -161,7 +161,7 @@ class ViscosityMJL(models.Model):
         if self.oldCertifiedValue and self.certifiedValue:
             self.oldCertifiedValue = self.oldCertifiedValue.replace(',', '.')
             self.deltaOldCertifiedValue = \
-                get_acc_measurement(Decimal(self.oldCertifiedValue), self.certifiedValue, 2)
+                get_acc_measurement(Decimal(self.oldCertifiedValue), self.certifiedValue, 1)
             if self.deltaOldCertifiedValue:
                 if self.deltaOldCertifiedValue > Decimal(0.7):
                     self.resultWarning = 'Результат отличается от предыдущего > 0,7 %. Рекомендовано измерить повторно.'

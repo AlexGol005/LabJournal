@@ -316,7 +316,7 @@ def export_me_xls(request, pk):
 
     row_num = 0
     columns = [
-                 f'{AttestationJ.objects.get(id=1).name}_{note.date.year}'
+                 f'{AttestationJ.objects.get(id=1).name}___{note.date.year}'
                ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -631,9 +631,9 @@ def export_me_xls(request, pk):
         'Исполнитель',
         'Исполнитель.',
         'Исполнитель',
-        'ОТК',
-        'ОТК',
-        'ОТК',
+        '',
+        '',
+        '',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
