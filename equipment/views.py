@@ -2649,7 +2649,8 @@ def export_exvercard_xls(request, pk):
     room = '1'
     usere = '2'
     userelat = pytils.translit.translify(usere)
-    positionset = Profile.objects.get(user__username=usere)
+    # positionset = Profile.objects.get(user__username=usere)
+    positionset = '4'
     # position = positionset.userposition
     position = '3'
     cardname = pytils.translit.translify(note.equipment.exnumber) + ' ' + pytils.translit.translify(note.equipment.lot)
