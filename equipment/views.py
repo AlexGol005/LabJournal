@@ -4152,11 +4152,11 @@ def export_exvercardteste_xls(request, pk):
     columns = [
         '',
         '',
-        position,
+        'position',
         '',
-       usere,
-       usere,
-       usere,
+       'usere',
+       'usere',
+       'usere',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], st)
