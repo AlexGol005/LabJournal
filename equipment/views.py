@@ -2647,9 +2647,16 @@ def export_exvercard_xls(request, pk):
     # bb = str(bb)
     # usere = bb[2:-3]
     room = '1'
-    room = Roomschange.objects.filter(equipment__exnumber=note.equipment.exnumber)
-    room = room.last().roomnumber
-    usere = '2'
+    try:
+        room = Roomschange.objects.filter(equipment__exnumber=note.equipment.exnumber)
+        room = room.last().roomnumber
+    except:
+        room = 'не указано'
+    try:
+        usere = Personchange.objects.filter(equipment__exnumber=note.equipment.exnumber)
+        usere = usere.last().person.name
+    except:
+        usere = 'не указано'
     userelat = pytils.translit.translify(usere)
     # positionset = Profile.objects.get(user__username=usere)
     # position = positionset.userposition
