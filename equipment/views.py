@@ -2657,7 +2657,7 @@ def export_exvercard_xls(request, pk):
     except:
         usere = 'не указано'
     position = Personchange.objects.filter(equipment__exnumber=note.equipment.exnumber)
-    position = position.last().person.user.userposition
+    position = position.last().person.userposition
     userelat = pytils.translit.translify(usere)
     # positionset = Profile.objects.get(user__username=usere)
     # position = positionset.userposition
