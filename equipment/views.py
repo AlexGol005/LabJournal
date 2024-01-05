@@ -2654,7 +2654,7 @@ def export_exvercard_xls(request, pk):
         room = 'не указано'
     try:
         usere = Personchange.objects.filter(equipment__exnumber=note.equipment.exnumber)
-        usere = usere.last().person.name
+        # usere = usere.last().person.name
     except:
         usere = 'не указано'
     userelat = pytils.translit.translify(usere)
