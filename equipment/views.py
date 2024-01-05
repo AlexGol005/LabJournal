@@ -2652,14 +2652,14 @@ def export_exvercard_xls(request, pk):
         room = room.last().roomnumber
     except:
         room = 'не указано'
-    try:
-        usere = Personchange.objects.filter(equipment__exnumber=note.equipment.exnumber)
-        # usere = usere.last().person.name
-        usere = usere.last().person
-        position = usere.last().person
-        usere = str(usere)
-    except:
-        usere = 'не указано'
+    # try:
+    usere = Personchange.objects.filter(equipment__exnumber=note.equipment.exnumber)
+    # usere = usere.last().person.name
+    usere = usere.last().person
+    position = usere.last().person
+    usere = str(usere)
+    # except:
+    #     usere = 'не указано'
     userelat = pytils.translit.translify(usere)
     # positionset = Profile.objects.get(user__username=usere)
     # position = positionset.userposition
