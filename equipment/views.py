@@ -2660,12 +2660,7 @@ def export_exvercard_xls(request, pk):
     except:
         usere = 'не указано'
         position = 'не указано'
-
-
     userelat = pytils.translit.translify(usere)
-    # positionset = Profile.objects.get(user__username=usere)
-    # position = positionset.userposition
-    # position = '3'
     cardname = pytils.translit.translify(note.equipment.exnumber) + ' ' + pytils.translit.translify(note.equipment.lot)
     response = HttpResponse(content_type='application/ms-excel')
     filename = f"{userelat}_{cardname}"
@@ -3435,24 +3430,22 @@ def export_exvercard_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    if usere != 'А.Б.Головкина':
-
-        row_num += 2
-        columns = [
-            '',
-            '',
-            'инженер по качеству'
-            '',
-            '',
-            'М.В.Петров',
-            'М.В.Петров',
-            'М.В.Петров',
-        ]
-        for col_num in range(len(columns)):
-            ws.write(row_num, col_num, columns[col_num], style10)
-            ws.merge(row_num, row_num, 4, 6, style10)
-        ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 500
+    row_num += 2
+    columns = [
+        '',
+        '',
+        'инженер по качеству'
+        '',
+        '',
+        'М.В.Петров',
+        'М.В.Петров',
+        'М.В.Петров',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style10)
+        ws.merge(row_num, row_num, 4, 6, style10)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
 
 
     wb.save(response)
@@ -3463,18 +3456,22 @@ def export_exvercardteste_xls(request, pk):
     '''представление для выгрузки протокола верификации ИО в ексель'''
     note = TestingEquipment.objects.get(pk=pk)
     company = CompanyCard.objects.get(pk=1)
-    aa = TestingEquipment.objects.all().filter(equipment__roomschange__in=setroom). \
-        values_list('equipment__roomschange__roomnumber__roomnumber').get(pk=pk)
-    aa = str(aa)
-    room = aa[2:-3]
-
-    bb = TestingEquipment.objects.all().filter(equipment__personchange__in=setperson). \
-        values_list('equipment__personchange__person__username').get(pk=pk)
-    bb = str(bb)
-    usere = bb[2:-3]
+    try:
+        room = Roomschange.objects.filter(equipment__exnumber=note.equipment.exnumber)
+        room = room.last().roomnumber
+    except:
+        room = 'не указано'
+    try:
+        usere = Personchange.objects.filter(equipment__exnumber=note.equipment.exnumber)
+        usere = usere.last().person
+        usere = str(usere)
+        a = User.objects.get(username=usere)
+        b = Profile.objects.get(user=a)
+        position = b.userposition
+    except:
+        usere = 'не указано'
+        position = 'не указано'
     userelat = pytils.translit.translify(usere)
-    positionset = Profile.objects.get(user__username=usere)
-    position = positionset.userposition
     cardname = pytils.translit.translify(note.equipment.exnumber) + ' ' + pytils.translit.translify(note.equipment.lot)
     response = HttpResponse(content_type='application/ms-excel')
     filename = f"{userelat}_{cardname}"
@@ -4162,10 +4159,8 @@ def export_exvercardteste_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    if usere != 'А.Б.Головкина':
-        st = style10
-    else:
-        st = style10
+
+    st = style10
 
     row_num += 2
     columns = [
@@ -4232,24 +4227,23 @@ def export_exvercardteste_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
-    if usere != 'А.Б.Головкина':
 
-        row_num += 2
-        columns = [
-            '',
-            '',
-            'инженер-химик 2 категории'
-            '',
-            '',
-            'А.Б.Головкина',
-            'А.Б.Головкина',
-            'А.Б.Головкина',
-        ]
-        for col_num in range(len(columns)):
-            ws.write(row_num, col_num, columns[col_num], style10)
-            ws.merge(row_num, row_num, 4, 6, style10)
-        ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 500
+    row_num += 2
+    columns = [
+        '',
+        '',
+        'инженер-химик 2 категории'
+        '',
+        '',
+        'А.Б.Головкина',
+        'А.Б.Головкина',
+        'А.Б.Головкина',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style10)
+        ws.merge(row_num, row_num, 4, 6, style10)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
 
 
     wb.save(response)
