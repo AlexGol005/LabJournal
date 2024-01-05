@@ -2647,10 +2647,11 @@ def export_exvercard_xls(request, pk):
     # bb = str(bb)
     # usere = bb[2:-3]
     room = '1'
+    room = Roomschange.objects.filter(equipment__exnumber=note.equipment.exnumber)
+    room = room.last().roomnumber
     usere = '2'
     userelat = pytils.translit.translify(usere)
     # positionset = Profile.objects.get(user__username=usere)
-    positionset = '4'
     # position = positionset.userposition
     position = '3'
     cardname = pytils.translit.translify(note.equipment.exnumber) + ' ' + pytils.translit.translify(note.equipment.lot)
@@ -3428,12 +3429,12 @@ def export_exvercard_xls(request, pk):
         columns = [
             '',
             '',
-            'инженер-химик 2 категории'
+            'инженер по качеству'
             '',
             '',
-            'А.Б.Головкина',
-            'А.Б.Головкина',
-            'А.Б.Головкина',
+            'М.В.Петров',
+            'М.В.Петров',
+            'М.В.Петров',
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], style10)
