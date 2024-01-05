@@ -2645,24 +2645,23 @@ def export_exvercard_xls(request, pk):
     # bb = MeasurEquipment.objects.all().filter(equipment__personchange__in=setperson). \
     #     values_list('equipment__personchange__person__username').get(pk=pk)
     # bb = str(bb)
-    # usere = bb[2:-3]
-    room = '1'
     try:
         room = Roomschange.objects.filter(equipment__exnumber=note.equipment.exnumber)
         room = room.last().roomnumber
     except:
         room = 'не указано'
-    # try:
-    usere = Personchange.objects.filter(equipment__exnumber=note.equipment.exnumber)
-    # usere = usere.last().person.name
-    usere = usere.last().person
-    usere = str(usere)
-    # except:
-    #     usere = 'не указано'
+    try:
+        usere = Personchange.objects.filter(equipment__exnumber=note.equipment.exnumber)
+        usere = usere.last().person
+        usere = str(usere)
+    except:
+        usere = 'не указано'
+    position = Personchange.objects.filter(equipment__exnumber=note.equipment.exnumber)
+    position = position.last().person.user.userposition
     userelat = pytils.translit.translify(usere)
     # positionset = Profile.objects.get(user__username=usere)
     # position = positionset.userposition
-    position = '3'
+    # position = '3'
     cardname = pytils.translit.translify(note.equipment.exnumber) + ' ' + pytils.translit.translify(note.equipment.lot)
     response = HttpResponse(content_type='application/ms-excel')
     filename = f"{userelat}_{cardname}"
