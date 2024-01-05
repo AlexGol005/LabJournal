@@ -2656,7 +2656,6 @@ def export_exvercard_xls(request, pk):
     usere = Personchange.objects.filter(equipment__exnumber=note.equipment.exnumber)
     # usere = usere.last().person.name
     usere = usere.last().person
-    position = usere.last().person
     usere = str(usere)
     # except:
     #     usere = 'не указано'
