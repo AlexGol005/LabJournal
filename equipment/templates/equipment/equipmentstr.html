@@ -13,17 +13,47 @@
 <h6>тип: {{ obj.charakters.typename|default:" " }}
 модификация: {{ obj.charakters.modificname|default:" " }}.
 Заводской номер: <b>{{ obj.equipment.lot }}</b></h6>
+        Статус:
+        {% if obj.equipment.status == 'Э'%}
+        в эксплуатации
+                {% elif obj.equipment.status == 'РЕ'%}
+        в ремонте
+                {% elif obj.equipment.status == 'С'%}
+        списан
+                {% elif obj.equipment.status == 'Р'%}
+        в резерве
+                {% elif obj.equipment.status == 'Д'%}
+        другое
+        {% endif %}
+        <br>
+        ОА:
+        {% if obj.equipment.accreditation %}
+        да
+        {% else %}
+        нет
+         {% endif %}
+        ;
+
+        &nbsp&nbsp Протокол верификации:
+        {% if obj.equipment.protocol %}
+        да
+        {% else %}
+        нет
+         {% endif %}
+
 </div>
 <br>
 
 {#карточка#}
-<div style="text-align: center; margin-top: 10px; margin-bottom: 50px">
-    <a href="{% url 'export_mecard_xls' obj.pk %}"  class="btn btn-warning mt-2 ">
+<div style="text-align: center; margin-top: 10px">
+    <a href="{% url 'export_mecard_xls' obj.pk %}"  class="btn btn-warning mt-2 mb-2 mr-2 ml-2">
     Выгрузить  карточку на прибор</a>
-    <a href="{% url 'export_exvercard_xls' obj.pk %}"  class="btn btn-warning mt-2 ">
+    <a href="{% url 'export_exvercard_xls' obj.pk %}"  class="btn btn-warning mt-2  mb-2 mr-2 ml-2">
     Выгрузить шаблон протокола верификации</a>
 </div>
-
+<div style="text-align: center">
+ <a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/individuality/"  class="btn btn-info mt-2 mb-5">
+     Поменять статус прибора и добавить примечания (раздел только для суперпользователя)</a></div>
 
 {#таблица неизменные сведения о приборе#}
 <div style="text-align: center;">
@@ -59,7 +89,7 @@
 </table>
 </div>
 {#примечание#}
-<br>
+
 {% if obj.equipment.notemaster  %}
 <div style="text-align: center; margin-top: 2px; color: red" ><h6>Внимание!</h6>
 <table class="table table-bordered">
@@ -83,7 +113,7 @@
 {% endif %}
 
 {#контакты для ремонта#}
-<br>
+
 {% if obj.equipment.repair  %}
 <div style="text-align: center; margin-top: 2px"><h6>Куда обратиться при поломке</h6>
 <table class="table table-bordered">
@@ -92,9 +122,7 @@
 </div>
 {% endif %}
 
-<div style="text-align: center; margin-top: 20px">
- <a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/individuality/"  class="btn btn-warning mt-2">
-     Поменять статус прибора и добавить примечания (раздел только для суперпользователя)</a></div>
+
 </div>
 
 {#записи о приборе#}

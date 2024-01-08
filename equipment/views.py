@@ -25,6 +25,13 @@ from users.models import Profile
 
 URL = 'equipment'
 now = date.today()
+STATUS = (
+        ('Э', 'Экс.'),
+        ('РЕ', 'Рем.'),
+        ('С', 'Сп.'),
+        ('Р', 'Рез.'),
+        ('Д', 'Др.'),
+    )
 
 class ContactsVerregView(LoginRequiredMixin, CreateView):
     """ выводит форму регистрации контактов поверителей"""
@@ -717,6 +724,7 @@ class CommentsView(View):
 def EquipmentUpdate(request, str):
     """выводит форму для обновления разрешенных полей оборудования ответственному за оборудование"""
     title = Equipment.objects.get(exnumber=str)
+    kat = title.kategory
     try:
         get_pk = title.personchange_set.latest('pk').pk
         person = Personchange.objects.get(pk=get_pk).person
@@ -749,7 +757,7 @@ def EquipmentUpdate(request, str):
             return redirect(reverse('supequipment', kwargs={'str': str}))
     else:
         form = EquipmentUpdateForm(instance=Equipment.objects.get(exnumber=str))
-    data = {'form': form, 'title': title
+    data = {'form': form, 'title': title, 'kat': kat
             }
     return render(request, 'equipment/individuality.html', data)
 

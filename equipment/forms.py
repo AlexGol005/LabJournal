@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from django import forms
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column
+from crispy_forms.layout import Layout, Submit, Row, Column, HTML
 
 from django.forms import ModelForm
 
@@ -60,6 +60,9 @@ class NoteCreationForm(forms.ModelForm):
                               help_text='впишите автора если вы не авторизованы',
                               widget=forms.TextInput(attrs={'class': 'form-control'}))
 
+
+
+
     class Meta:
         model = CommentsEquipment
         fields = ['date', 'type', 'note', 'img', 'author']
@@ -110,15 +113,8 @@ class EquipmentCreateForm(forms.ModelForm):
                                                              'placeholder': '0000.00'}))
 
 
-    class Meta:
-        model = Equipment
-        fields = [
-            'exnumber', 'lot', 'yearmanuf', 'manufacturer', 'status',
-             'new', 'invnumber', 'kategory', 
-             'price',]
-            # 'yearintoservice', 'individuality', 'notemaster',
-            # 'imginstruction2', 'imginstruction1',
-            # 'imginstruction3', 'video',
+
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -151,10 +147,19 @@ class EquipmentCreateForm(forms.ModelForm):
 
             Row(Submit('submit', 'Записать', css_class='btn  btn-info col-md-11 mb-3 mt-4 ml-4')))
 
+    class Meta:
+        model = Equipment
+        fields = [
+            'exnumber', 'lot', 'yearmanuf', 'manufacturer', 'status',
+            'new', 'invnumber', 'kategory',
+            'price', ]
+
 
 
 class EquipmentUpdateForm(forms.ModelForm):
     """форма для обновления разрешенных полей оборудования ответственному за оборудование"""
+    protocol = forms.BooleanField(label="Есть протокол верификации", required=False)
+    accreditation = forms.BooleanField(label="Используется для образцов из ОА", required=False)
     status = forms.ChoiceField(label='Выберите статус прибора (если требуется изменить статус)', required=False,
                                   choices=CHOICES,
                                   widget=forms.Select(attrs={'class': 'form-control'}))
@@ -180,12 +185,67 @@ class EquipmentUpdateForm(forms.ModelForm):
     invnumber = forms.CharField(label='Инвентарный номер', max_length=10000, initial='б/н', required=False,
                                 widget=forms.TextInput(attrs={'class': 'form-control'}))
     repair = forms.CharField(label='Данные по ремонту', max_length=10000,  required=False,
-                                widget=forms.TextInput(attrs={'class': 'form-control'}))
+                                widget=forms.Textarea(attrs={'class': 'form-control'}))
 
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+
+            Row(
+                Column('protocol', css_class='form-group col-md-3 mb-0'),
+                Column('accreditation', css_class='form-group col-md-3 mb-0'),
+                Submit('submit', 'Сохранить изменения' , css_class='form-group col-md-5 mb-5 ml-1'),
+            ),
+            Row(
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                HTML('&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('status', css_class='form-group col-md-7 mb-0'),
+                Column('invnumber', css_class='form-group col-md-5 mb-0'),
+            ),
+            Row(
+                Column('repair', css_class='form-group col-md-12 mb-0'),
+            ),
+            Row(
+                Column('individuality', css_class='form-group col-md-12 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('notemaster', css_class='form-group col-md-12 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('pasport', css_class='form-group col-md-12 mb-0'),
+            ),
+            Row(
+                Column('instruction', css_class='form-group col-md-12 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('video', css_class='form-group col-md-12 mb-0'),
+            ),
+
+            Submit('submit', 'Сохранить изменения')
+        )
 
     class Meta:
         model = Equipment
-        fields = [
+        fields = ['protocol', 'accreditation',
             'status', 'individuality', 'notemaster',
             # 'imginstruction1',
             # 'imginstruction2',

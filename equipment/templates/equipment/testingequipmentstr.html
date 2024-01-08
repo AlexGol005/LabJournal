@@ -13,6 +13,34 @@
 <h6>тип: {{ obj.charakters.typename|default:" " }}
 модификация: {{ obj.charakters.modificname|default:" " }}.
 Заводской номер: <b>{{ obj.equipment.lot }}</b></h6>
+        Статус:
+        {% if obj.equipment.status == 'Э'%}
+        в эксплуатации
+                {% elif obj.equipment.status == 'РЕ'%}
+        в ремонте
+                {% elif obj.equipment.status == 'С'%}
+        списан
+                {% elif obj.equipment.status == 'Р'%}
+        в резерве
+                {% elif obj.equipment.status == 'Д'%}
+        другое
+        {% endif %}
+        <br>
+        ОА:
+        {% if obj.equipment.accreditation %}
+        да
+        {% else %}
+        нет
+         {% endif %}
+        ;
+
+        &nbsp&nbsp Протокол верификации:
+        {% if obj.equipment.protocol %}
+        да
+        {% else %}
+        нет
+         {% endif %}
+
 </div>
 <br>
 
@@ -91,9 +119,6 @@
 </div>
 {% endif %}
 
-<div style="text-align: center; margin-top: 20px">
- <a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/individuality/"  class="btn btn-warning mt-2">
-     Поменять статус прибора и добавить примечания (раздел только для суперпользователя)</a></div>
 </div>
 
 {#записи о приборе#}
