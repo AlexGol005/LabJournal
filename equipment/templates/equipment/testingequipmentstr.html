@@ -13,7 +13,7 @@
 <h6>тип: {{ obj.charakters.typename|default:" " }}
 модификация: {{ obj.charakters.modificname|default:" " }}.
 Заводской номер: <b>{{ obj.equipment.lot }}</b></h6>
-        Статус:
+                Статус:
         {% if obj.equipment.status == 'Э'%}
         в эксплуатации
                 {% elif obj.equipment.status == 'РЕ'%}
@@ -45,13 +45,15 @@
 <br>
 
 {#карточка#}
-<div style="text-align: center; margin-top: 10px; margin-bottom: 50px">
- <a href="{% url 'export_tecard_xls' obj.pk %}"  class="btn btn-warning mt-2 ">
-     Выгрузить  карточку на прибор</a>
-    <a href="{% url 'export_exvercardteste_xls' obj.pk %}"  class="btn btn-warning mt-2 ">
+<div style="text-align: center; margin-top: 10px">
+    <a href="{% url 'export_mecard_xls' obj.pk %}"  class="btn btn-warning mt-2 mb-2 mr-2 ml-2">
+    Выгрузить  карточку на прибор</a>
+    <a href="{% url 'export_exvercard_xls' obj.pk %}"  class="btn btn-warning mt-2  mb-2 mr-2 ml-2">
     Выгрузить шаблон протокола верификации</a>
 </div>
-
+<div style="text-align: center">
+ <a href="/equipment/measureequipment/{{ obj.equipment.exnumber }}/individuality/"  class="btn btn-info mt-2 mb-5">
+     Поменять статус прибора и добавить примечания (раздел только для суперпользователя)</a></div>
 
 {#таблица неизменные сведения о приборе#}
 <div style="text-align: center;">
