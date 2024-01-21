@@ -159,6 +159,9 @@ class Dinamicviscosity(models.Model):
             self.deltaolddensity = get_acc_measurement(Decimal(self.olddensity), self.density_avg)
             if self.deltaolddensity > Decimal(0.7):
                 self.resultWarning = 'плотность отличается от предыдущей на > 0,7 %. Рекомендовано измерить повторно'
+                if self.name[0:2] == 'ВЖ' and self.deltaolddensity <= Decimal(0.48):
+                    self.density_avg = self.olddensity
+                    self.resultWarning = 'Отличие результата от предыдущего не превышает CD (0,48%). Плотность остается прежней.'
         if not self.havedensity:
             self.date_exp = date.today() + timedelta(days=30 * self.exp)
         # связь с конкретной партией
