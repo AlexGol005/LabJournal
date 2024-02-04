@@ -149,7 +149,7 @@ class Dinamicviscosity(models.Model):
                     self.cause = 'Δ > r'
             if self.name[0:2] == 'ВЖ':
                 if int(self.name[8:-1]) <= 10:
-                    self.exp = 6
+                    self.exp = 12
                 if 1000 > int(self.name[8:-1]) > 10:
                     self.exp = 12
                 if int(self.name[8:-1]) >= 1000:

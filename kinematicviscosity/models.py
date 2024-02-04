@@ -104,7 +104,7 @@ class ViscosityMJL(models.Model):
     # срок годности зависит от диапазона ВЖ
         if self.name[0:2] == 'ВЖ':
             if int(self.name[8:-1]) <= 10:
-                self.exp = 6
+                self.exp = 12
             if int(self.name[8:-1]) > 10:
                 self.exp = 12
     # переводим минуты в секунды
