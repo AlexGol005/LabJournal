@@ -83,11 +83,9 @@ class RegView(RegView):
                 order.olddensity = olddencity.cvtminus20
         except ObjectDoesNotExist:
             pass
-
-        try:
-            kinematicviscosity = CvKinematicviscosityVG.objects.get(namelot__nameVG__name=order.name,
+        kinematicviscosity = CvKinematicviscosityVG.objects.get(namelot__nameVG__name=order.name,
                                                                     namelot__lot=order.lot)
-            if order.temperature == 20:
+        if order.temperature == 20:
                 if kinematicviscosity.cvt20dead >= date.today():
                     order.kinematicviscosity = kinematicviscosity.cvt20
                     order.kinematicviscositydead = kinematicviscosity.cvt20dead
@@ -112,7 +110,8 @@ class RegView(RegView):
                     order.kinematicviscosity = kinematicviscosity.cvt80
                     order.kinematicviscositydead = kinematicviscosity.cvt80dead
             if order.temperature == 100:             
-                    order.kinematicviscosity = 'hh'   
+                    order.kinematicviscosity = kinematicviscosity.cvt100
+                    order.kinematicviscositydead = kinematicviscosity.cvt100dead   
             if order.temperature == 150:
                 if kinematicviscosity.cvt150dead >= date.today():
                     order.kinematicviscosity = kinematicviscosity.cvt150
@@ -120,9 +119,11 @@ class RegView(RegView):
             if order.temperature == -20:
                 if kinematicviscosity.cvtminus20dead >= date.today():
                     order.kinematicviscosity = kinematicviscosity.cvtminus20
-                    order.kinematicviscositydead = kinematicviscosity.cvtminus20dead
-        except:
-            pass
+                    order.kinematicviscositydead = kinematicviscosity.cvtminus20dead    
+
+        
+            
+        
             """вставка окончание"""
         order.save()
         return super().form_valid(form)
