@@ -92,6 +92,7 @@ class Dinamicviscosity(models.Model):
             if not self.kinematicviscosity:
                 self.resultWarningkinematic = 'Нет актуального значения кинематической вязкости. Динамика не рассчитана. ' \
                                               'Измерьте динамику и заполните новую форму'
+            
             if self.kinematicviscosity:
                 self.dinamicviscosity_not_rouned = Decimal(self.kinematicviscosity) * self.density_avg
                 self.abserror = mrerrow((Decimal(self.relerror) * self.dinamicviscosity_not_rouned) / Decimal(100))
@@ -116,6 +117,7 @@ class Dinamicviscosity(models.Model):
                     if not self.kinematicviscosity:
                         self.resultWarningkinematic = 'Нет актуального значения кинематической вязкости. Динамика не рассчитана. ' \
                                                       'Измерьте динамику и заполните новую форму'
+                    self.kinematicviscosity = 2
                     if self.kinematicviscosity:
                         self.dinamicviscosity_not_rouned = Decimal(self.kinematicviscosity) * self.density_avg
                         self.abserror = mrerrow(
@@ -136,6 +138,7 @@ class Dinamicviscosity(models.Model):
                     self.resultMeas = 'удовлетворительно'
                     self.cause = ''
                     self.density_avg = get_avg(self.density1, self.density2, 4)
+                    self.kinematicviscosity = 3
                     if not self.kinematicviscosity:
                         self.resultWarningkinematic = 'Нет актуального значения кинематической вязкости. Динамика не рассчитана. ' \
                                                       'Измерьте динамику и заполните новую форму'
