@@ -113,7 +113,7 @@ class RegView(RegView):
                     order.kinematicviscositydead = kinematicviscosity.cvt80dead
             if order.temperature == 100:
                 if kinematicviscosity.cvt20dead >= date.today():
-                    order.kinematicviscosity = kinematicviscosity.cvt100
+                    order.kinematicviscosity = 1000
                     order.kinematicviscositydead = kinematicviscosity.cvt100dead
             if order.temperature == 150:
                 if kinematicviscosity.cvt150dead >= date.today():
