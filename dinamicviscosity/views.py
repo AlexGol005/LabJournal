@@ -89,37 +89,39 @@ class RegView(RegView):
                 if kinematicviscosity.cvt20dead >= date.today():
                     order.kinematicviscosity = kinematicviscosity.cvt20
                     order.kinematicviscositydead = kinematicviscosity.cvt20dead
-            if order.temperature == 25:
+        if order.temperature == 25:
                 if kinematicviscosity.cvt25dead >= date.today():
                     order.kinematicviscosity = kinematicviscosity.cvt25
                     order.kinematicviscositydead = kinematicviscosity.cvt25dead
-            if order.temperature == 40:
+        if order.temperature == 40:
                 if kinematicviscosity.cvt40dead >= date.today():
                     order.kinematicviscosity = kinematicviscosity.cvt40
                     order.kinematicviscositydead = kinematicviscosity.cvt40dead
-            if order.temperature == 50:
+        if order.temperature == 50:
                 if kinematicviscosity.cvt50dead >= date.today():
                     order.kinematicviscosity = kinematicviscosity.cvt50
                     order.kinematicviscositydead = kinematicviscosity.cvt50dead
-            if order.temperature == 60:
+        if order.temperature == 60:
                 if kinematicviscosity.cvt60dead >= date.today():
                     order.kinematicviscosity = kinematicviscosity.cvt60
                     order.kinematicviscositydead = kinematicviscosity.cvt60dead
-            if order.temperature == 80:
+        if order.temperature == 80:
                 if kinematicviscosity.cvt80dead >= date.today():
                     order.kinematicviscosity = kinematicviscosity.cvt80
                     order.kinematicviscositydead = kinematicviscosity.cvt80dead
-            if order.temperature == 100:             
+        if order.temperature == 100:  
+                if kinematicviscosity.cvt100dead >= date.today():
                     order.kinematicviscosity = kinematicviscosity.cvt100
                     order.kinematicviscositydead = kinematicviscosity.cvt100dead   
-            if order.temperature == 150:
+        if order.temperature == 150:
                 if kinematicviscosity.cvt150dead >= date.today():
                     order.kinematicviscosity = kinematicviscosity.cvt150
                     order.kinematicviscositydead = kinematicviscosity.cvt150dead
-            if order.temperature == -20:
+        if order.temperature == -20:
                 if kinematicviscosity.cvtminus20dead >= date.today():
                     order.kinematicviscosity = kinematicviscosity.cvtminus20
-                    order.kinematicviscositydead = kinematicviscosity.cvtminus20dead    
+                    order.kinematicviscositydead = kinematicviscosity.cvtminus20dead 
+   
 
         
             
