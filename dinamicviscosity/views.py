@@ -124,8 +124,9 @@ class RegView(RegView):
                     order.kinematicviscosity = kinematicviscosity.cvtminus20
                     order.kinematicviscositydead = kinematicviscosity.cvtminus20dead
         except:
-            order.kinematicviscosity = 150
+            pass
             """вставка окончание"""
+        order.kinematicviscosity = 150
         order.save()
         return super().form_valid(form)
 # конец блока стандартных 'View' но с индивидуальностями
