@@ -34,7 +34,7 @@ class ViscosityMJL(models.Model):
     date_exp = models.DateField('Годен до', blank=True, null=True)
     # вычисляемые поля для всех моделей
     kriteriy = models.DecimalField('Критерий приемлемости измерений', max_digits=2, decimal_places=1, null=True)
-    accMeasurement = models.DecimalField('Оценка приемлемости измерений', max_digits=5, decimal_places=1, null=True)
+    accMeasurement = models.DecimalField('Оценка приемлемости измерений', max_digits=10, decimal_places=4, null=True)
     resultMeas = models.CharField('Результат измерений уд/неуд', max_length=100, default='неудовлетворительно',
                                   null=True)
     cause = models.CharField('Причина', max_length=100, default='', null=True, blank=True)
