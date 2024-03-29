@@ -139,7 +139,7 @@ class ViscosityMJL(models.Model):
             self.viscosity1 = (self.Konstant1 * self.timeK1_avg).quantize(Decimal('1.00000'), ROUND_HALF_UP)
             self.viscosity2 = (self.Konstant2 * self.timeK2_avg).quantize(Decimal('1.00000'), ROUND_HALF_UP)
             self.viscosityAVG = get_avg(self.viscosity1, self.viscosity2, 5)
-        self.accMeasurement = get_acc_measurement(Decimal(self.viscosity1), Decimal(self.viscosity2), 1)
+        self.accMeasurement = get_acc_measurement(Decimal(self.viscosity1), Decimal(self.viscosity2), 4)
         if self.constit == 'да':
             self.kriteriy = Decimal(0.3)
         if self.constit == 'нет':
