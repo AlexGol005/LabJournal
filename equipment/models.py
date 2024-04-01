@@ -629,6 +629,11 @@ class MeteorologicalParameters(models.Model):
                                    on_delete=models.PROTECT, blank=True, related_name='equipment1meteo')
     equipment2 = models.ForeignKey(MeasurEquipment, verbose_name='Барометр', null=True,
                                    on_delete=models.PROTECT, blank=True, related_name='equipment2meteo')
+        
+    def save(self, *args, **kwargs):
+            """костыль для добавления приборов, так как я забыла как это сделать через вьюшку"""
+        self.equipment1 = MeasurEquipment.objects.get(exnumber='Г074')
+        super(MeteorologicalParameters, self).save(*args, **kwargs)
 
     def __str__(self):
         return f' {self.date} , {self.roomnumber.roomnumber}'
