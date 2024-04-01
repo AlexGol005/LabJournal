@@ -631,7 +631,7 @@ class MeteorologicalParameters(models.Model):
                                    on_delete=models.PROTECT, blank=True, related_name='equipment2meteo')
         
     def save(self, *args, **kwargs):
-            """костыль для добавления приборов, так как я забыла как это сделать через вьюшку"""
+        """костыль для добавления приборов, так как я забыла как это сделать через вьюшку"""
         self.equipment1 = MeasurEquipment.objects.get(exnumber='Г074')
         super(MeteorologicalParameters, self).save(*args, **kwargs)
 
