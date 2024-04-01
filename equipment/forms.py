@@ -1015,7 +1015,7 @@ class MeteorologicalParametersRegForm(ModelForm):
    # equipment1 = forms.ModelChoiceField(label='Гигрометр',
                                         #queryset=MeasurEquipment.objects.filter(charakters__name__contains='Гигрометр'),
                                         #widget=forms.Select(attrs={'class': 'form-control'}))
-    equipment2 = forms.ModelChoiceField(label='Барометр',
+   # equipment2 = forms.ModelChoiceField(label='Барометр',
                                         queryset=MeasurEquipment.objects.filter(charakters__name__contains='Барометр'),
                                         widget=forms.Select(attrs={'class': 'form-control'}))
 
@@ -1026,7 +1026,7 @@ class MeteorologicalParametersRegForm(ModelForm):
             'date',
             'roomnumber', 'pressure',
             'temperature', 'humidity',
-            'equipment2',
+           # 'equipment2',
            # 'equipment1', 
                   ]
 
