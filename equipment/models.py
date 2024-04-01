@@ -633,6 +633,7 @@ class MeteorologicalParameters(models.Model):
     def save(self, *args, **kwargs):
         """костыль для добавления приборов, так как я забыла как это сделать через вьюшку"""
         self.equipment1 = MeasurEquipment.objects.get(equipment__exnumber='Г074')
+        self.equipment2 = MeasurEquipment.objects.get(equipment__exnumber='Б001')
         super(MeteorologicalParameters, self).save(*args, **kwargs)
 
     def __str__(self):
