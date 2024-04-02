@@ -102,6 +102,9 @@ class ViscosityMJL(models.Model):
 
     def save(self, *args, **kwargs):
     # срок годности зависит от диапазона ВЖ
+        self.equipment2 = self.ViscosimeterNumber1
+        self.equipment3 = self.ViscosimeterNumber2
+    # срок годности зависит от диапазона ВЖ
         if self.name[0:2] == 'ВЖ':
             if int(self.name[8:-1]) <= 10:
                 self.exp = 12
