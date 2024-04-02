@@ -101,11 +101,17 @@ class ViscosityMJL(models.Model):
 
 
     def save(self, *args, **kwargs):
-    # срок годности зависит от диапазона ВЖ
-        x = self.ViscosimeterNumber2
+    # добавляем вискозиметры для протокола
+        x = self.ViscosimeterNumber1
         y = x.equipmentSM.equipment.exnumber
         self.equipment2 = MeasurEquipment.objects.get(equipment__exnumber=y)
-    #    self.equipment3 = self.ViscosimeterNumber2
+        x1 = self.ViscosimeterNumber2
+        y1 = x1.equipmentSM.equipment.exnumber
+        self.equipment3 = MeasurEquipment.objects.get(equipment__exnumber=y1)
+        
+    # костыль для добавления секундомера и термометра
+        self.equipment1 = MeasurEquipment.objects.get(equipment__exnumber='С003')
+        self.equipment4 = MeasurEquipment.objects.get(equipment__exnumber='Т035')
         
     # срок годности зависит от диапазона ВЖ
         if self.name[0:2] == 'ВЖ':
