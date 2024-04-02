@@ -109,9 +109,10 @@ class ViscosityMJL(models.Model):
         y1 = x1.equipmentSM.equipment.exnumber
         self.equipment3 = MeasurEquipment.objects.get(equipment__exnumber=y1)
         
-    # костыль для добавления секундомера и термометра
+    # костыль для добавления секундомера и термометра и комнаты
         self.equipment1 = MeasurEquipment.objects.get(equipment__exnumber='С003')
         self.equipment4 = MeasurEquipment.objects.get(equipment__exnumber='Т035')
+        self.room = Rooms.objects.get(roomnumber='474')
         
     # срок годности зависит от диапазона ВЖ
         if self.name[0:2] == 'ВЖ':
