@@ -869,13 +869,13 @@ def export_protocol_xls(request, pk):
         ws.merge(row_num, row_num, 0, 3, style4)
 
     note.date = get_dateformat(note.date)
-
+    dp = datetime.datetime.now()
     row_num = 7
     columns = [
-        f'от   {note.date}',
-        f'от   {note.date}',
-        f'от   {note.date}',
-        f'от   {note.date}',
+        f'от   {dp}',
+        f'от   {dp}',
+        f'от   {dp}',
+        f'от   {dp}',
         '',
         '',
         '',
@@ -889,8 +889,8 @@ def export_protocol_xls(request, pk):
     columns = [
         '',
         '',
-        'по',
-        note.ndocument,
+        ' ',
+        f' по {note.ndocument}',
         '',
         '',
         '',
