@@ -899,7 +899,7 @@ def export_protocol_xls(request, pk):
         m = 'ноября'
     if m == '12':
         m = 'декабря'
-    dp = f'{y}.{m}.{y}'
+    dp = f'{d} {m} {y}'
     columns = [
         f'от   {dp}',
         f'от   {dp}',
