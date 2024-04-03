@@ -1079,7 +1079,7 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(17, 17, 2, 7, style7)
 
-    p = str(meteo.pressure).replase('.', ',')
+    p = str(meteo.pressure).replace('.', ',')
     row_num = 18
     columns = [
         '',
@@ -1098,7 +1098,7 @@ def export_protocol_xls(request, pk):
         ws.merge(18, 18, 2, 7, style7)
 
     row_num = 19
-    t = str(meteo.temperature).replase('.', ',')
+    t = str(meteo.temperature).replace('.', ',')
     columns = [
         '',
         'температура, °С',
@@ -1116,7 +1116,7 @@ def export_protocol_xls(request, pk):
         ws.merge(19, 19, 2, 7, style7)
 
     row_num = 20
-    h = str(meteo.humidity).replase('.', ',')
+    h = str(meteo.humidity).replace('.', ',')
     columns = [
         '',
         'влажность, %',
