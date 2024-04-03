@@ -738,7 +738,7 @@ def export_protocol_xls(request, pk):
     Image.open(company.imglogoadress.path).convert("RGB").save('logo.bmp')
     ws.insert_bitmap('logo.bmp', 0, 2)
     sheet = wb.get_sheet(0)
-    sheet.header_str = b'1/1'
+    sheet.header_str = b'1'
     sheet.footer_str = b' '
 
     style1 = xlwt.XFStyle()
@@ -1079,16 +1079,17 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(17, 17, 2, 7, style7)
 
+    p = str(meteo.pressure).replase('.', ',')
     row_num = 18
     columns = [
         '',
         'давление, кПа',
-        meteo.pressure,
-        meteo.pressure,
-        meteo.pressure,
-        meteo.pressure,
-        meteo.pressure,
-        meteo.pressure,
+        p,
+        p,
+        p,
+        p,
+        p,
+        p,
     ]
     for col_num in range(1, 2):
         ws.write(row_num, col_num, columns[col_num], style7)
@@ -1097,15 +1098,16 @@ def export_protocol_xls(request, pk):
         ws.merge(18, 18, 2, 7, style7)
 
     row_num = 19
+    t = str(meteo.temperature).replase('.', ',')
     columns = [
         '',
         'температура, °С',
-        meteo.temperature,
-        meteo.temperature,
-        meteo.temperature,
-        meteo.temperature,
-        meteo.temperature,
-        meteo.temperature,
+        t,
+        t,
+        t,
+        t,
+        t,
+        t,
     ]
     for col_num in range(1, 2):
         ws.write(row_num, col_num, columns[col_num], style7)
@@ -1114,15 +1116,16 @@ def export_protocol_xls(request, pk):
         ws.merge(19, 19, 2, 7, style7)
 
     row_num = 20
+    h = str(meteo.humidity).replase('.', ',')
     columns = [
         '',
         'влажность, %',
-        meteo.humidity,
-        meteo.humidity,
-        meteo.humidity,
-        meteo.humidity,
-        meteo.humidity,
-        meteo.humidity,
+        h,
+        h,
+        h,
+        h,
+        h,
+        h,
     ]
     for col_num in range(1, 2):
         ws.write(row_num, col_num, columns[col_num], style7)
@@ -1229,6 +1232,8 @@ def export_protocol_xls(request, pk):
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(row_num, row_num, 2, 7, style7)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
 
     row_num = 26
     columns = [
@@ -1308,13 +1313,16 @@ def export_protocol_xls(request, pk):
     ws.row(row_num).height = 1050
 
     row_num = 30
+    v1 = Decimal(note.viscosity1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
+    v2 = Decimal(note.viscosity2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
+    v = str(note.certifiedValue_text).replace('.', ',')
     columns = [
         'Кинематическая вязкость',
         'Кинематическая вязкость',
         note.temperature,
-        note.viscosity1,
-        note.viscosity2,
-        note.certifiedValue_text,
+        v1,
+        v2,
+        v,
         note.accMeasurement,
         note.kriteriy,
     ]
