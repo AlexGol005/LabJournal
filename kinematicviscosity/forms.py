@@ -28,9 +28,9 @@ class StrJournalCreationForm(forms.ModelForm):
                            widget=forms.TextInput(attrs={'class': 'form-control',
                                                          'placeholder': 'Наименование пробы'}
                                                   ))
-    numberexample = forms.CharField(initial=' ', label='Номер(а) флакона', max_length=100, required=False,
+    numberexample = forms.CharField(label='Номер(а) флакона', max_length=100, required=False,
                            widget=forms.TextInput(attrs={'class': 'form-control',
-                                                         'placeholder': 'При необходимости'}
+                                                         'placeholder': 'Впишите если требуется'}
                                                   ))                                      
                                                   
     
