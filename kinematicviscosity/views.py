@@ -749,6 +749,16 @@ def export_protocol_xls(request, pk):
         measureresult = str(note.certifiedValue_text).replace('.',',')
     if note.aim != aimoptional[1][1]:
         measureresult = note.certifiedValue
+    if note.aim == aimoptional[0][1]:
+       conclusion = conclusionoptional[0]
+    if note.aim == aimoptional[1][1]:
+       conclusion = conclusionoptional[1]
+    if note.aim == aimoptional[2][1]:
+       conclusion = conclusionoptional[2]
+    if note.aim == aimoptional[3][1]:
+       conclusion = conclusionoptional[3]
+    if note.aim == aimoptional[4][1]:
+       conclusion = conclusionoptional[4]
 
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}_protocol.xls"'
