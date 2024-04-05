@@ -1015,8 +1015,8 @@ def export_protocol_xls(request, pk):
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(12, 12, 2, 7, style7)
-        ws.row(12.height_mismatch = True
-        ws.row(12).height = 600
+    ws.row(12).height_mismatch = True
+    ws.row(12).height = 600
 
     row_num = 13
     columns = [
