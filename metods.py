@@ -1,4 +1,6 @@
 from decimal import *
+import datetime
+
 
 def get_avg(X1: Decimal, X2: Decimal, nums: int = 6):
     """
