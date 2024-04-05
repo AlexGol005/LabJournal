@@ -31,13 +31,4 @@ conclusionoptional = (
     ('Результаты подчинены нормальному распределению, выбросы отсутствуют, партия признана однородной'),
     ('Другое', 'Другое'))
 
-if aim == aimoptional[0][1]:
-  conclusion = conclusionoptional[0]
-if aim == aimoptional[1][1]:
-  conclusion = conclusionoptional[1]
-if aim == aimoptional[2][1]:
-  conclusion = conclusionoptional[2]
-if aim == aimoptional[3][1]:
-  conclusion = conclusionoptional[3]
-if aim == aimoptional[4][1]:
-  conclusion = conclusionoptional[4]
+
