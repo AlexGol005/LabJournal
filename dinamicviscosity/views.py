@@ -755,7 +755,7 @@ def export_protocol_xls(request, pk):
 
     kinematic = ViscosityMJL.objects.filter(name=note.name, lot=note.lot, temperature=note.temperature).last()
 
-        if note.name[0:2] == 'ВЖ':
+    if note.name[0:2] == 'ВЖ':
         constit = constitoptional[0]
     if note.name[0:2] == 'CC':
         constit = constitoptional[1]
