@@ -360,7 +360,7 @@ def export_me_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(row_num, row_num, 0, 5, style1)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 200
+        ws.row(row_num).height = 300
 
     row_num = 5
     columns = [
@@ -537,7 +537,7 @@ def export_me_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(row_num, row_num, 0, 5, style1)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 200
+        ws.row(row_num).height = 300
 
     row_num = 17
     columns = [
@@ -590,7 +590,7 @@ def export_me_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(row_num, row_num, 0, 5, style1)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 200
+        ws.row(row_num).height = 300
 
     row_num = 21
     columns = [
@@ -650,7 +650,7 @@ def export_me_xls(request, pk):
         ws.merge(row_num, row_num, 0, 2, style1)
         ws.merge(row_num, row_num, 3, 5, style1)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 200
+        ws.row(row_num).height = 300
         
 
     row_num = 24
@@ -1031,7 +1031,7 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(12, 12, 2, 7, style7)
     ws.row(12).height_mismatch = True
-    ws.row(12).height = 900
+    ws.row(12).height = 1200
 
     row_num = 13
     columns = [
