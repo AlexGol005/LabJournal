@@ -21,10 +21,19 @@ class StrJournalCreationForm(forms.ModelForm):
     ndocument = forms.ChoiceField(label='Метод испытаний', required=True,
                                   choices=ndocumentoptional,
                                   widget=forms.Select(attrs={'class': 'form-control'}))
+    aim = forms.ChoiceField(label='Wtkm испытаний', required=True,
+                                  choices=aimoptional,
+                                  widget=forms.Select(attrs={'class': 'form-control'}))
     name = forms.CharField(initial='ВЖ-2-ПА(100)', label='Наименование пробы', max_length=100, required=True,
                            widget=forms.TextInput(attrs={'class': 'form-control',
                                                          'placeholder': 'Наименование пробы'}
                                                   ))
+    numberexample = forms.CharField(initial=' ', label='Номер(а) флакона', max_length=100, required=False,
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                         'placeholder': 'Впишите если требуется'}
+                                                  ))                                      
+                                                  
+    
     lot = forms.CharField(label='Партия', max_length=100, required=True,
                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': 'Партия'}
@@ -95,14 +104,16 @@ class StrJournalCreationForm(forms.ModelForm):
         self.helper.layout = Layout(
             Row(
                 Column('name', css_class='form-group col-md-4 mb-0'),
-                Column('lot', css_class='form-group col-md-4 mb-0'),
-                Column('temperature', css_class='form-group col-md-4 mb-0'),
+                Column('lot', css_class='form-group col-md-2 mb-0'),
+                Column('temperature', css_class='form-group col-md-2 mb-0'),
+                Column('numberexample', css_class='form-group col-md-2 mb-0'),
                 css_class='form-row'
             ),
             Row(
                 Column('ndocument', css_class='form-group col-md-4 mb-0'),
-                Column('termostatition', css_class='form-group col-md-4 mb-0'),
-                Column('temperatureCheck', css_class='form-group col-md-4 mb-0'),
+                Column('aim', css_class='form-group col-md-4 mb-0'),
+                Column('termostatition', css_class='form-group col-md-2 mb-0'),
+                Column('temperatureCheck', css_class='form-group col-md-2 mb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -144,6 +155,7 @@ class StrJournalCreationForm(forms.ModelForm):
                   'ViscosimeterNumber2',
                   'plustimeminK2T1', 'plustimesekK2T1',
                   'plustimeminK2T2', 'plustimesekK2T2', 'ndocument',
+                  'aim', 'numberexample',
                   ]
 
 
