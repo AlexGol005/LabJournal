@@ -1246,12 +1246,12 @@ def export_protocol_xls(request, pk):
     columns = [
         '11 Обработка результатов испытаний:  ',
         '11 Обработка результатов испытаний:  ',
-        f'В соответствии с {note.ndocument}',
-        f'В соответствии с {note.ndocument}',
-        f'В соответствии с {note.ndocument}',
-        f'В соответствии с {note.ndocument}',
-        f'В соответствии с {note.ndocument}',
-        f'В соответствии с {note.ndocument}',
+        f'В соответствии с {normdocument}',
+        f'В соответствии с {normdocument}',
+        f'В соответствии с {normdocument}',
+        f'В соответствии с {normdocument}',
+        f'В соответствии с {normdocument}',
+        f'В соответствии с {normdocument}',
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
