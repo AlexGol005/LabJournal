@@ -739,7 +739,7 @@ def export_protocol_xls(request, pk):
         constit = constitoptional[1]
     if note.name[0:2] == 'ТМ':
         constit = constitoptional[2]
-    if note.name[0:2] !== 'ВЖ' and note.name[0:2] !== 'СС' and note.name[0:2] !== 'TM':
+    if note.name[0:2] != 'ВЖ' and note.name[0:2] != 'СС' and note.name[0:2] != 'TM':
         constit = constitoptional[3]
         
     ndocument = note.ndocument
