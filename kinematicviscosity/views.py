@@ -1022,12 +1022,12 @@ def export_protocol_xls(request, pk):
     columns = [
         '5 Дата отбора проб:',
         '5 Дата отбора проб: ',
-        'Не проводился',
-        'Не проводился',
-        'Не проводился',
-        'Не проводился',
-        'Не проводился',
-        'Не проводился',
+        takesamples,
+        takesamples,
+        takesamples,
+        takesamples,
+        takesamples,
+        takesamples,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
