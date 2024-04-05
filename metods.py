@@ -37,3 +37,12 @@ def get_dateformat(date):
     year = dateformat[:4]
     rdate = f'{day}.{month}.{year}'
     return rdate
+
+def get_comma(x):
+    """костыль который меняет точку на запятую""""
+    xstr = str(x)
+    xcomma = xstr.replace('.', ',')
+    x = xcomma
+    return x
+    
+
