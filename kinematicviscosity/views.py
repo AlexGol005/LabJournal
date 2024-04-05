@@ -876,11 +876,12 @@ def export_protocol_xls(request, pk):
         '',
         '',
         '',
-        '',
+        fordate,
         fordate,
         ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 6, 8, style3)
 
     row_num = 6
     columns = [
@@ -1380,7 +1381,7 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(row_num, row_num, 2, 7, style7)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 600
+    ws.row(row_num).height = 1000
 
     row_num = 33
     columns = [
