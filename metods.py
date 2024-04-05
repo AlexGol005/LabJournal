@@ -29,7 +29,6 @@ def get_abserror(x_avg: Decimal, relerror: Decimal) -> Decimal:
     abserror = (x_avg * relerror) / Decimal('100')
     return abserror
 
-
 def get_dateformat(date):
     dateformat = str(date)
     day = dateformat[8:]
@@ -38,11 +37,4 @@ def get_dateformat(date):
     rdate = f'{day}.{month}.{year}'
     return rdate
 
-def get_comma(x):
-    """костыль который меняет точку на запятую""""
-    # xstr = str(x)
-    # xcomma = xstr.replace('.', ',')
-    # x = xcomma
-    return x
     
-
