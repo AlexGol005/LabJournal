@@ -68,6 +68,6 @@ def get_datenow():
         m = 'ноября'
     if m == '12':
         m = 'декабря'
-    dp = f'{d} {m} {y}'
+    dp_now = f'{d} {m} {y}'
     return dp_now
     
