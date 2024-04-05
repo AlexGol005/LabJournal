@@ -1,4 +1,3 @@
-import datetime
 
 from main.models import AttestationJ
 
