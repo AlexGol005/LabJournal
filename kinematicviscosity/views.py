@@ -730,9 +730,9 @@ def export_protocol_xls(request, pk):
         constit = constitoptional[2]
     ndocument = note.ndocument
     if note.aim == 'Характеризация':
-        measureresult = get_comma(note.certifiedValue_text)
+        measureresult = note.certifiedValue_text
     if note.aim != 'Характеризация':
-        measureresult = get_comma(note.certifiedValue)
+        measureresult = note.certifiedValue
 
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}_protocol.xls"'
