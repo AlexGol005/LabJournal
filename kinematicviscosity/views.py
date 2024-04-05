@@ -730,7 +730,7 @@ def export_protocol_xls(request, pk):
         constit = constitoptional[2]
     ndocument = note.ndocument
     if note.aim == 'Характеризация':
-        measureresult = note.certifiedValue_text
+        measureresult = str(note.certifiedValue_text).replace('.',',')
     if note.aim != 'Характеризация':
         measureresult = note.certifiedValue
 
