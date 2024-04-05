@@ -36,5 +36,36 @@ def get_dateformat(date):
     year = dateformat[:4]
     rdate = f'{day}.{month}.{year}'
     return rdate
-
+    
+def get_datenow():
+    dp = datetime.datetime.now()
+    y = str(dp)[0:4]
+    d = str(dp)[8:10]
+    m = str(dp)[5:7]
+    if m == '01':
+        m = 'января'
+    if m == '02':
+        m = 'февраля'
+    if m == '03':
+        m = 'марта'
+    if m == '04':
+        m = 'апреля'
+    if m == '05':
+        m = 'мая'
+    if m == '06':
+        m = 'июня'
+    if m == '07':
+        m = 'июля'
+    if m == '08':
+        m = 'августа'
+    if m == '09':
+        m = 'сентября'
+    if m == '10':
+        m = 'октября'
+    if m == '11':
+        m = 'ноября'
+    if m == '12':
+        m = 'декабря'
+    dp = f'{d} {m} {y}'
+    return dp_now
     
