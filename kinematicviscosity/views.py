@@ -729,6 +729,10 @@ def export_protocol_xls(request, pk):
     if note.name[0:2] == 'ТМ':
         constit = constitoptional[2]
     ndocument = note.ndocument
+    if note.aim == 'Характеризация':
+        measureresult = get_comma(note.certifiedValue_text)
+    if note.aim != 'Характеризация':
+        measureresult = get_comma(note.certifiedValue)
 
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}_protocol.xls"'
@@ -1339,14 +1343,13 @@ def export_protocol_xls(request, pk):
     row_num = 30
     v1 = Decimal(note.viscosity1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
     v2 = Decimal(note.viscosity2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
-    v = str(note.certifiedValue_text).replace('.', ',')
     columns = [
         'Кинематическая вязкость',
         'Кинематическая вязкость',
         note.temperature,
         v1,
         v2,
-        v,
+        measureresult,
         note.accMeasurement,
         note.kriteriy,
     ]
