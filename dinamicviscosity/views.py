@@ -1162,7 +1162,7 @@ def export_protocol_xls(request, pk):
 
 
     row_num = 18
-     p = str(meteo.pressure).replace('.', ',')
+    p = str(meteo.pressure).replace('.', ',')
     columns = [
         '',
         'давление, кПа',
