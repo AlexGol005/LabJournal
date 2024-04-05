@@ -18,7 +18,9 @@ from utils_forms import*
 from .models import *
 
 from .j_constants import *
+from kinematicviscosity.j_constants import *
 from utils import *
+from textconstants import *
 
 MODEL = Dinamicviscosity
 COMMENTMODEL = CommentsDinamicviscosity
@@ -690,7 +692,7 @@ def export_me_xls(request, pk):
     return response
 
 
-
+# флажок протокол
 def export_protocol_xls(request, pk):
     '''представление для выгрузки протокола испытаний в ексель'''
     company = CompanyCard.objects.get(pk=1)
@@ -753,11 +755,31 @@ def export_protocol_xls(request, pk):
 
     kinematic = ViscosityMJL.objects.filter(name=note.name, lot=note.lot, temperature=note.temperature).last()
 
-
-
-
-
-    # OuterRef('equipment1__equipmentSM_ver__certnumber'),)
+        if note.name[0:2] == 'ВЖ':
+        constit = constitoptional[0]
+    if note.name[0:2] == 'CC':
+        constit = constitoptional[1]
+    if note.name[0:2] == 'ТМ':
+        constit = constitoptional[2]
+    if note.name[0:2] != 'ВЖ' and note.name[0:2] != 'СС' and note.name[0:2] != 'TM':
+        constit = constitoptional[3]
+        
+    ndocument = note.ndocument
+    
+    if note.aim == aimoptional[1][1]:
+        measureresult = str(note.certifiedValue_text).replace('.',',')
+    if note.aim != aimoptional[1][1]:
+        measureresult = note.certifiedValue
+    if note.aim == aimoptional[0][1]:
+       conclusion = conclusionoptional[0]
+    if note.aim == aimoptional[1][1]:
+       conclusion = conclusionoptional[1]
+    if note.aim == aimoptional[2][1]:
+       conclusion = conclusionoptional[2]
+    if note.aim == aimoptional[3][1]:
+       conclusion = conclusionoptional[3]
+    if note.aim == aimoptional[4][1]:
+       conclusion = conclusionoptional[4]
 
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}_protocol.xls"'
@@ -885,14 +907,14 @@ def export_protocol_xls(request, pk):
 
     row_num = 4
     columns = [
-        'Сертифицирован на соотвествие требованиям национального стандарта \nГОСТ Р ИСО 9001-2015 \nорганом по сертификации СМК ООО "ACEPT Бюро" \n от 23.06.2022г., сертификат действителен до 24.12.2025 г.',
-        'Сертифицирован на соотвествие требованиям национального стандарта \nГОСТ Р ИСО 9001-2015 \nорганом по сертификации СМК ООО "ACEPT Бюро" \n от 23.06.2022г., сертификат действителен до 24.12.2025 г.',
-        'Сертифицирован на соотвествие требованиям национального стандарта \nГОСТ Р ИСО 9001-2015 \nорганом по сертификации СМК ООО "ACEPT Бюро" \n от 23.06.2022г., сертификат действителен до 24.12.2025 г.',
-        'Сертифицирован на соотвествие требованиям национального стандарта \nГОСТ Р ИСО 9001-2015 \nорганом по сертификации СМК ООО "ACEPT Бюро" \n от 23.06.2022г., сертификат действителен до 24.12.2025 г.',
+        sertificat9001,
+        sertificat9001,
+        sertificat9001,
+        sertificat9001,
         '',
         '',
-        'УТВЕРЖДАЮ \nНачальник производства \nООО "Петроаналитика"\n___________ /Н.Ю. Пилявская',
-        'УТВЕРЖДАЮ \nНачальник производства \nООО "Петроаналитика"\n___________ /Н.Ю. Пилявская',
+        affirmationprod,
+        affirmationprod,
     ]
     for col_num in range(3):
         ws.write(row_num, col_num, columns[col_num], style1)
@@ -911,18 +933,20 @@ def export_protocol_xls(request, pk):
         '',
         '',
         '',
-        '',
-    '"___" _______ "20___"',
+        fordate,
+        fordate,
         ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style3)
+        ws.merge(row_num, row_num, 7, 8, style3)
+
 
     row_num = 6
     columns = [
-        'ПРОТОКОЛ ИСПЫТАНИЙ №',
-        'ПРОТОКОЛ ИСПЫТАНИЙ №',
-        'ПРОТОКОЛ ИСПЫТАНИЙ №',
-        'ПРОТОКОЛ ИСПЫТАНИЙ №',
+         nameprot,
+         nameprot,
+         nameprot,
+         nameprot,
         '',
         '',
         '',
@@ -933,11 +957,12 @@ def export_protocol_xls(request, pk):
         ws.merge(6, 6, 0, 3, style4)
 
     row_num = 7
+    dp = get_datenow()
     columns = [
-        f'от {note.date}',
-        f'от {note.date}',
-        f'от {note.date}',
-        f'от {note.date}',
+        f'от  {dp}',
+        f'от  {dp}',
+        f'от  {dp}',
+        f'от  {dp}',
         '',
         '',
         '',
@@ -951,8 +976,8 @@ def export_protocol_xls(request, pk):
     columns = [
         '',
         '',
-        'по',
-        note.ndocument,
+        ' ',
+        f' по {note.ndocument}',
         '',
         '',
         '',
@@ -1021,12 +1046,12 @@ def export_protocol_xls(request, pk):
     columns = [
         '4 Идентификационные данные объектов/образцов:',
         '4 Идентификационные данные объектов/образцов: ',
-        note.for_lot_and_name.nameVG.nameSM.object,
-        note.for_lot_and_name.nameVG.nameSM.object,
-        note.for_lot_and_name.nameVG.nameSM.object,
-        note.for_lot_and_name.nameVG.nameSM.object,
-        note.for_lot_and_name.nameVG.nameSM.object,
-        note.for_lot_and_name.nameVG.nameSM.object,
+        constit,
+        constit,
+        constit,
+        constit,
+        constit,
+        constit,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1041,12 +1066,12 @@ def export_protocol_xls(request, pk):
     columns = [
         '5 Дата отбора проб:',
         '5 Дата отбора проб: ',
-        note.date,
-        note.date,
-        note.date,
-        note.date,
-        note.date,
-        note.date,
+        takesamples,
+        takesamples,
+        takesamples,
+        takesamples,
+        takesamples,
+        takesamples,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1137,15 +1162,16 @@ def export_protocol_xls(request, pk):
 
 
     row_num = 18
+     p = str(meteo.pressure).replace('.', ',')
     columns = [
         '',
         'давление, кПа',
-        meteo.pressure,
-        meteo.pressure,
-        meteo.pressure,
-        meteo.pressure,
-        meteo.pressure,
-        meteo.pressure,
+        p,
+        p,
+        p,
+        p,
+        p,
+        p,
     ]
     for col_num in range(1, 2):
         ws.write(row_num, col_num, columns[col_num], style7)
@@ -1154,15 +1180,16 @@ def export_protocol_xls(request, pk):
         ws.merge(18, 18, 2, 7, style7)
 
     row_num = 19
+    t = str(meteo.temperature).replace('.', ',')
     columns = [
         '',
         'температура, °С',
-        meteo.temperature,
-        meteo.temperature,
-        meteo.temperature,
-        meteo.temperature,
-        meteo.temperature,
-        meteo.temperature,
+        t,
+        t,
+        t,
+        t,
+        t,
+        t,
     ]
     for col_num in range(1, 2):
         ws.write(row_num, col_num, columns[col_num], style7)
@@ -1191,12 +1218,12 @@ def export_protocol_xls(request, pk):
     columns = [
         '8 Измеряемый параметр: ',
         '8 Измеряемый параметр: ',
-        'динамическая вязкость',
-        'динамическая вязкость',
-        'динамическая вязкость',
-        'динамическая вязкость',
-        'динамическая вязкость',
-        'динамическая вязкость',
+        measureparameter,
+        measureparameter,
+        measureparameter,
+        measureparameter,
+        measureparameter,
+        measureparameter,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1206,15 +1233,21 @@ def export_protocol_xls(request, pk):
         ws.merge(21, 21, 2, 7, style7)
 
     row_num = 22
+    if note.ndocument == 'МИ-02-2018':
+        normdocument = ndocumentoptional[0][1]
+    if note.ndocument == 'ГОСТ 33-2016':
+        normdocument = ndocumentoptional[2][1]
+    if note.ndocument != 'ГОСТ 33-2016' and  note.ndocument != 'МИ-02-2018':
+        normdocument = ndocumentoptional[1][1]
     columns = [
         '9 Метод измерений/методика \n измерений:  ',
         '9 Метод измерений/методика \n измерений:  ',
-        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика"',
-        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика"',
-        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика"',
-        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика"',
-        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика"',
-        'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости. Утверждена в ООО "Петроаналитика"',
+        normdocument,
+        normdocument,
+        normdocument,
+        normdocument,
+        normdocument,
+        normdocument,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1289,12 +1322,12 @@ def export_protocol_xls(request, pk):
     columns = [
         '11 Обработка результатов испытаний:  ',
         '11 Обработка результатов испытаний:  ',
-        'В соответствии с МИ-02-2018  ',
-        'В соответствии с МИ-02-2018  ',
-        'В соответствии с МИ-02-2018  ',
-        'В соответствии с МИ-02-2018  ',
-        'В соответствии с МИ-02-2018  ',
-        'В соответствии с МИ-02-2018  ',
+         f'В соответствии с {normdocument}',
+         f'В соответствии с {normdocument}',
+         f'В соответствии с {normdocument}',
+         f'В соответствии с {normdocument}',
+         f'В соответствии с {normdocument}',
+        f'В соответствии с {normdocument}'
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1310,11 +1343,11 @@ def export_protocol_xls(request, pk):
         '12 Результаты испытаний:  ',
         '12 Результаты испытаний:  ',
         'приведены в таблице 1  ',
-        'В соответствии с МИ-02-2018  ',
-        'В соответствии с МИ-02-2018  ',
-        'В соответствии с МИ-02-2018  ',
-        'В соответствии с МИ-02-2018  ',
-        'В соответствии с МИ-02-2018  ',
+        f'В соответствии с {note.ndocument}  ',
+        f'В соответствии с {note.ndocument}  ',
+        f'В соответствии с {note.ndocument}  ',
+        f'В соответствии с {note.ndocument}  ',
+        f'В соответствии с {note.ndocument}  ',
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1343,9 +1376,7 @@ def export_protocol_xls(request, pk):
 
     row_num = 29
     columns = [
-        f'Анализ ГСО № {note.for_lot_and_name.nameVG.nameSM.number}'
-        f'  {note.for_lot_and_name.nameVG.name}  п. {note.lot}'
-        f' по {note.ndocument}',
+        f'Испытание {note.name_rm} по {ndocument}'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style8)
@@ -1359,8 +1390,8 @@ def export_protocol_xls(request, pk):
         'Измеренное значение Х1, Па * с ',
         'Измеренное значение Х2, Па * с ',
         'Измеренное значение Хср, Па * с ',
-        'Результат контрольной процедуры измерения, rk, % ',
-        'Норматив контроля, r, % ',
+        'Результат контрольной процедуры измерения, rk, % отн.',
+        'Норматив контроля, r, % отн.',
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style9)
@@ -1438,9 +1469,7 @@ def export_protocol_xls(request, pk):
     columns = [
         'Выводы: ',
         'Выводы: ',
-        'Контроль повторяемости результатов измерений кинематической и динамической вязкости удовлетворителен, '
-        'так как расхождение между результатами измерений '
-        'в условиях повторяемости не превышает норматив контроля  ',
+         conclusion,
 
     ]
     for col_num in range(2):
