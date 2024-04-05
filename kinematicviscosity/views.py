@@ -1306,14 +1306,14 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(row_num, row_num, 2, 7, style7)
 
-    try:
-        row_num = 28
-        columns = [
-            f'Испытание {name_rm} по {ndocument}'
-        ]
-        for col_num in range(len(columns)):
-            ws.write(row_num, col_num, columns[col_num], style8)
-            ws.merge(28, 28, 0, 7, style8)
+  
+    row_num = 28
+    columns = [
+        f'Испытание {name_rm} по {ndocument}'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style8)
+        ws.merge(28, 28, 0, 7, style8)
 
 
 
