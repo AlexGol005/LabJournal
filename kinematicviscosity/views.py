@@ -720,6 +720,13 @@ def export_protocol_xls(request, pk):
                                         )).\
         get(date__exact=note.date, roomnumber__roomnumber__exact=note.room)
 
+    if note.name[0:2] == 'ВЖ':
+        constit = constitoptional[0]
+    if note.name[0:2] == 'CC':
+        constit = constitoptional[1]
+    if note.name[0:2] == 'ТМ':
+        constit = constitoptional[2]
+
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}_protocol.xls"'
     wb = xlwt.Workbook()
@@ -983,7 +990,9 @@ def export_protocol_xls(request, pk):
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(11, 11, 2, 7, style7)
-
+        
+    
+    
     row_num = 12
     columns = [
         '4 Идентификационные данные объектов/образцов:',
@@ -1160,11 +1169,11 @@ def export_protocol_xls(request, pk):
     columns = [
         '8 Измеряемый параметр: ',
         '8 Измеряемый параметр: ',
-        'Время истечения определённого объема жидкости под влиянием силы тяжести при заданной температуре',
-        'Время истечения определённого объема жидкости под влиянием силы тяжести при заданной температуре',
-        'Время истечения определённого объема жидкости под влиянием силы тяжести при заданной температуре',
-        'Время истечения определённого объема жидкости под влиянием силы тяжести при заданной температуре',
-        'Время истечения определённого объема жидкости под влиянием силы тяжести при заданной температуре',
+         measureparameter,
+         measureparameter,
+         measureparameter,
+         measureparameter,
+         measureparameter,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1357,16 +1366,18 @@ def export_protocol_xls(request, pk):
     for col_num in range(3, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style8)
 
+    
+    
     row_num = 31
     columns = [
         'Дополнительные сведения: ',
         'Дополнительные сведения: ',
-        dopaim,
-        dopaim,
-        dopaim,
-        dopaim,
-        dopaim,
-        dopaim,
+        note.aim,
+        note.aim,
+        note.aim,
+        note.aim,
+        note.aim,
+        note.aim,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
