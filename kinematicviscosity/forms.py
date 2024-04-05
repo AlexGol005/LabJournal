@@ -21,7 +21,7 @@ class StrJournalCreationForm(forms.ModelForm):
     ndocument = forms.ChoiceField(label='Метод испытаний', required=True,
                                   choices=ndocumentoptional,
                                   widget=forms.Select(attrs={'class': 'form-control'}))
-    aim = forms.ChoiceField(label='Wtkm испытаний', required=True,
+    aim = forms.ChoiceField(label='Цель испытаний', required=True,
                                   choices=aimoptional,
                                   widget=forms.Select(attrs={'class': 'form-control'}))
     name = forms.CharField(initial='ВЖ-2-ПА(100)', label='Наименование пробы', max_length=100, required=True,
@@ -106,7 +106,7 @@ class StrJournalCreationForm(forms.ModelForm):
                 Column('name', css_class='form-group col-md-4 mb-0'),
                 Column('lot', css_class='form-group col-md-2 mb-0'),
                 Column('temperature', css_class='form-group col-md-2 mb-0'),
-                Column('numberexample', css_class='form-group col-md-2 mb-0'),
+                Column('numberexample', css_class='form-group col-md-4 mb-0'),
                 css_class='form-row'
             ),
             Row(
