@@ -98,6 +98,10 @@ class ViscosityMJL(models.Model):
                                    on_delete=models.PROTECT, blank=True, related_name='equipment3kinematic')
     equipment4 = models.ForeignKey(MeasurEquipment, verbose_name='Термометр', null=True,
                                    on_delete=models.PROTECT, blank=True, related_name='equipment4kinematic')
+    aim = models.CharField('Цель испытаний', max_length=100, choices=aimoptional,
+                                  default=aimoptional[0][0],
+                                  blank=True, null=True)
+    numberexample = models.CharField('Номер(а) экземпляра', max_length=100, default=' ', null=True)
 
 
     def save(self, *args, **kwargs):
