@@ -744,9 +744,9 @@ def export_protocol_xls(request, pk):
         
     ndocument = note.ndocument
     
-    if note.aim == 'Характеризация':
+    if note.aim == aimoptional[1][1]:
         measureresult = str(note.certifiedValue_text).replace('.',',')
-    if note.aim != 'Характеризация':
+    if note.aim != aimoptional[1][1]:
         measureresult = note.certifiedValue
 
     response = HttpResponse(content_type='application/ms-excel')
@@ -1003,8 +1003,6 @@ def export_protocol_xls(request, pk):
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(12, 12, 2, 7, style7)
-    ws.row(12).height_mismatch = True
-    ws.row(12).height = 1200
 
     row_num = 13
     columns = [
@@ -1176,20 +1174,22 @@ def export_protocol_xls(request, pk):
         ws.merge(21, 21, 2, 7, style7)
 
     if note.ndocument == 'МИ-02-2018':
-        note.ndocument = 'МИ-02-2018. Методика измерений  кинематической и динамической вязкости жидкости'
+        normdocument = ndocumentoptional[0][1]
     if note.ndocument == 'ГОСТ 33-2016':
-        note.ndocument = 'ГОСТ 33-2016.НЕФТЬ И НЕФТЕПРОДУКТЫ. ПРОЗРАЧНЫЕ И НЕПРОЗРАЧНЫЕ ЖИДКОСТИ. Определение кинематической и динамической вязкости'
+        normdocument = ndocumentoptional[2][1]
+    if note.ndocument != 'ГОСТ 33-2016' and  note.ndocument == 'МИ-02-2018'
+        normdocument = ndocumentoptional[1][1]
 
     row_num = 22
     columns = [
         '9 Метод измерений/методика \n измерений:  ',
         '9 Метод измерений/методика \n измерений:  ',
-        note.ndocument,
-        note.ndocument,
-        note.ndocument,
-        note.ndocument,
-        note.ndocument,
-        note.ndocument,
+        normdocument,
+        normdocument,
+        normdocument,
+        normdocument,
+        normdocument,
+        normdocument,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1330,8 +1330,8 @@ def export_protocol_xls(request, pk):
     v1 = Decimal(note.viscosity1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
     v2 = Decimal(note.viscosity2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
     columns = [
-        'Кинематическая вязкость',
-        'Кинематическая вязкость',
+        attcharacteristic,
+        attcharacteristic,
         note.temperature,
         v1,
         v2,
@@ -1370,11 +1370,8 @@ def export_protocol_xls(request, pk):
     row_num = 32
     columns = [
         'Выводы: ',
-        'Выводы: ',
-        'Контроль повторяемости результатов измерений кинематической вязкости удовлетворителен, '
-        'так как расхождение между результатами измерений кинематической вязкости '
-        'в условиях повторяемости не превышает норматив контроля  ',
-
+        'Выводы: ',  
+        conclusion,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
