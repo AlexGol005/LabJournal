@@ -40,9 +40,9 @@ def get_dateformat(date):
 
 def get_comma(x):
     """костыль который меняет точку на запятую""""
-    xstr = str(x)
-    xcomma = xstr.replace('.', ',')
-    x = xcomma
+    # xstr = str(x)
+    # xcomma = xstr.replace('.', ',')
+    # x = xcomma
     return x
     
 
