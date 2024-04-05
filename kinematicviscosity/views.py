@@ -679,7 +679,7 @@ def export_me_xls(request, pk):
     wb.save(response)
     return response
 
-
+# флажок протокол
 def export_protocol_xls(request, pk):
     """представление для выгрузки протокола испытаний в ексель"""
     company = CompanyCard.objects.get(pk=1)
@@ -739,9 +739,11 @@ def export_protocol_xls(request, pk):
         constit = constitoptional[1]
     if note.name[0:2] == 'ТМ':
         constit = constitoptional[2]
-    else:
-        constit = note.name[0:2]
+    if note.name[0:2] !== 'ВЖ' and note.name[0:2] !== 'СС' and note.name[0:2] !== 'TM':
+        constit = constitoptional[3]
+        
     ndocument = note.ndocument
+    
     if note.aim == 'Характеризация':
         measureresult = str(note.certifiedValue_text).replace('.',',')
     if note.aim != 'Характеризация':
