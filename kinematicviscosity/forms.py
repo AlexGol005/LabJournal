@@ -30,7 +30,7 @@ class StrJournalCreationForm(forms.ModelForm):
                                                   ))
     numberexample = forms.CharField(initial=' ', label='Номер(а) флакона', max_length=100, required=False,
                            widget=forms.TextInput(attrs={'class': 'form-control',
-                                                         'placeholder': 'Впишите если требуется'}
+                                                         'placeholder': 'При необходимости'}
                                                   ))                                      
                                                   
     
