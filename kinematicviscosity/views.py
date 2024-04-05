@@ -1177,7 +1177,7 @@ def export_protocol_xls(request, pk):
         normdocument = ndocumentoptional[0][1]
     if note.ndocument == 'ГОСТ 33-2016':
         normdocument = ndocumentoptional[2][1]
-    if note.ndocument != 'ГОСТ 33-2016' and  note.ndocument == 'МИ-02-2018'
+    if note.ndocument != 'ГОСТ 33-2016' and  note.ndocument != 'МИ-02-2018':
         normdocument = ndocumentoptional[1][1]
 
     row_num = 22
