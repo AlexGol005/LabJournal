@@ -328,7 +328,7 @@ def export_me_xls(request, pk):
         'Индекс СО',
         'Номер внутренней партии',
         'Т, °C',
-        'Термост-но. 20 мин',
+        '№ флакона',
         'Сод. нефть или октол',
     ]
     for col_num in range(len(columns)):
@@ -342,7 +342,7 @@ def export_me_xls(request, pk):
         note.name,
         note.lot,
         note.temperature,
-        'V',
+        note.numberexample,
         note.constit,
     ]
     for col_num in range(1, 4):
