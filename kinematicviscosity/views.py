@@ -726,6 +726,9 @@ def export_protocol_xls(request, pk):
         constit = constitoptional[1]
     if note.name[0:2] == 'ТМ':
         constit = constitoptional[2]
+    if note.name[0:2] == 'ТМ':
+        constit = constitoptional[2]
+    ndocument = note.ndocument
 
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}_protocol.xls"'
@@ -1306,23 +1309,12 @@ def export_protocol_xls(request, pk):
     try:
         row_num = 28
         columns = [
-            f'Анализ ГСО № {note.for_lot_and_name.nameVG.nameSM.number}'
-            f'  {note.for_lot_and_name.nameVG.name}  п. {note.lot}'
-            f' по {note.ndocument}',
+            f'Испытание {name_rm} по {ndocument}'
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], style8)
             ws.merge(28, 28, 0, 7, style8)
-    except:
-        row_num = 28
-        columns = [
-            f'Анализ ГСО № ....'
-            f' ....  п. ...'
-            f' по {note.ndocument}',
-        ]
-        for col_num in range(len(columns)):
-            ws.write(row_num, col_num, columns[col_num], style8)
-            ws.merge(28, 28, 0, 7, style8)
+
 
 
     row_num = 29
