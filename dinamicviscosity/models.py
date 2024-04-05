@@ -84,9 +84,19 @@ class Dinamicviscosity(models.Model):
                                    on_delete=models.PROTECT, blank=True, related_name='equipment4dinamic')
     equipment5 = models.ForeignKey(MeasurEquipment, verbose_name='Весы', null=True,
                                    on_delete=models.PROTECT, blank=True, related_name='equipment5dinamic')
+    aim = models.CharField('Цель испытаний', max_length=100, choices=aimoptional,
+                                  default=aimoptional[0][0],
+                                  blank=True, null=True)
+    numberexample = models.CharField('Номер(а) экземпляра', max_length=100, default=' ', null=True)
 
 
     def save(self, *args, **kwargs):
+        # костыль для добавления секундомера и термометра и комнаты и весов
+        self.equipment1 = MeasurEquipment.objects.get(equipment__exnumber='С003')
+        self.equipment4 = MeasurEquipment.objects.get(equipment__exnumber='Т035')
+        self.equipment5 = MeasurEquipment.objects.get(equipment__exnumber='В005')
+        self.room = Rooms.objects.get(roomnumber='474')
+        
         if self.havedensity and self.density_avg and self.densitydead:
             self.resultMeas = 'плотность измерена ранее'
             if not self.kinematicviscosity:
