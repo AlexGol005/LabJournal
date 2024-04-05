@@ -18,7 +18,6 @@ from utils_forms import*
 from .models import *
 
 from .j_constants import *
-from kinematicviscosity.j_constants import *
 from utils import *
 from textconstants import *
 
