@@ -17,6 +17,7 @@ from .models import *
 
 from .j_constants import *
 from utils import *
+from textconstants import *
 
 MODEL = ViscosityMJL
 COMMENTMODEL = Comments
