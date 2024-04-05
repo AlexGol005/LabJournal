@@ -20,3 +20,5 @@ JOURNAL = AttestationJ
 journal = 'attestationJ'
 URL = 'dinamicviscosity'
 NAME = 'динамика'
+
+measureparameter = 'плотность'
