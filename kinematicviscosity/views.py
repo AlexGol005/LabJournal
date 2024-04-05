@@ -634,7 +634,7 @@ def export_me_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style2)
         ws.merge(row_num, row_num, 4, 5, style2)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 900
+        ws.row(row_num).height = 1100
 
     row_num = 23
     columns = [
