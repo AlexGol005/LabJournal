@@ -1309,7 +1309,7 @@ def export_protocol_xls(request, pk):
   
     row_num = 28
     columns = [
-        f'Испытание {name_rm} по {ndocument}'
+        f'Испытание {note.name_rm} по {ndocument}'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style8)
