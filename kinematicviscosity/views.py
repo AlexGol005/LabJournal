@@ -359,6 +359,8 @@ def export_me_xls(request, pk):
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(row_num, row_num, 0, 5, style1)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 200
 
     row_num = 5
     columns = [
@@ -534,6 +536,8 @@ def export_me_xls(request, pk):
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(row_num, row_num, 0, 5, style1)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 200
 
     row_num = 17
     columns = [
@@ -569,12 +573,14 @@ def export_me_xls(request, pk):
 
     row_num = 19
     columns = [
-        f'Результат измерений: {note.resultMeas}; {comment}'
+        f'{note.aim}; {note.resultMeas}; {comment}'
     ]
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(row_num, row_num, 0, 5, style1)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 600
 
     row_num = 20
     columns = [
@@ -583,6 +589,8 @@ def export_me_xls(request, pk):
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(row_num, row_num, 0, 5, style1)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 200
 
     row_num = 21
     columns = [
@@ -625,6 +633,8 @@ def export_me_xls(request, pk):
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
         ws.merge(row_num, row_num, 4, 5, style2)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 900
 
     row_num = 23
     columns = [
@@ -639,6 +649,9 @@ def export_me_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(row_num, row_num, 0, 2, style1)
         ws.merge(row_num, row_num, 3, 5, style1)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 200
+        
 
     row_num = 24
     columns = [
