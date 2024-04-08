@@ -209,8 +209,8 @@ class StrJournalProtocolUdateForm(forms.ModelForm):
     """стандартная"""
     equipment1 = forms.ModelChoiceField(label='Плотномер', required=False,
                                         queryset=MeasurEquipment.objects.\
-                                        filter(Q(charakters__name__contains='Плотномер')|\
-                                               Q(charakters__name__contains='плотномер')),
+                                        filter(Q(charakters__name__contains='плотности')|\
+                                               Q(charakters__name__contains='плотности')),
                                         widget=forms.Select(attrs={'class': 'form-control'}))
     equipment2 = forms.ModelChoiceField(label='Термометр', required=False,
                                         queryset=MeasurEquipment.objects. \
