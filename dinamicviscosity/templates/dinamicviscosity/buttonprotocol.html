@@ -25,7 +25,7 @@
     {% endif %}
 <br><br>
 
-{% if  note.equipment1 and note.equipment2 and note.equipment3 and note.equipment4 and note.equipment5  %}
+{% if  note.equipment1 and note.equipment2 and note.equipment3 and note.equipment4 %}
 <table class="table table-bordered">
 <td ><b>1)</b> {{ note.equipment1|default:" " }}<br>
 <b>2)</b> {{ note.equipment2|default:" " }}<br>
@@ -40,7 +40,7 @@
 {% else  %}
 <div style="text-align: center;">
 <a href="{% url 'dinamicviscosityprotocolhead' note.pk %}" class="btn btn-warning mr-5 mt-3" style="width: 300px" target="blank">
-Добавить использованные для измерения СИ  <br>
+Изменить использованные для измерения СИ  <br>
 </a></div>
 {% endif %}
 <br><br>
