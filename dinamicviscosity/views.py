@@ -18,10 +18,11 @@ from utils_forms import*
 from .models import *
 
 from .j_constants import *
+from kinematicviscosity.constvisc import *
 from utils import *
 from metods import *
 from textconstants import *
-from kinematicviscosity.constvisc import *
+
 
 MODEL = Dinamicviscosity
 COMMENTMODEL = CommentsDinamicviscosity
