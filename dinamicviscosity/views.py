@@ -19,6 +19,7 @@ from .models import *
 
 from .j_constants import *
 from utils import *
+from metods import *
 from textconstants import *
 from kinematicviscosity.constvisc import *
 
