@@ -715,6 +715,7 @@ def export_protocol_xls(request, pk):
                                         Value(' действительно до '), 'equipment2__newdatedead',
                                         Value('; \n'), 
                                         'equipment3__charakters__name',
+                                        Value(' тип '), 'equipment3__charakters__typename',
 
  
                                         )). \
