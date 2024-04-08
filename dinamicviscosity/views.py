@@ -1438,11 +1438,12 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(32, 32, 0, 2, style8)
     for col_num in range(3, 5):
         ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(32, 32, 2, 4, style7)
     for col_num in range(6, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(32, 32, 5, 7, style7)
 
     row_num = 33
     columns = [
