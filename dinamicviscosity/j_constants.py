@@ -30,3 +30,4 @@ conclusionoptional = (
 parameter = 'плотность'
 attcharacteristic = 'Плотность'
 measureparameter = 'Плотность'
+countparameter = 'Динамическая вязкость (расчёт):'
