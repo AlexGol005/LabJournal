@@ -727,22 +727,7 @@ def export_protocol_xls(request, pk):
                                        Value(' действительно до '), 'equipment5__newdatedead',
                                        )).get(pk=pk)
                                       
-    meteo = MeteorologicalParameters.objects. \
-                    annotate(equipment_meteo=Concat('equipment1__charakters__name',
-                                        Value(' тип '), 'equipment1__charakters__typename',
-                                        Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
-                                        Value(' от '), 'equipment1__newdate',
-                                        # Value(', '),
-                                        Value(' действительно до '), 'equipment1__newdatedead',
-                                        Value('; \n'),
-                                        'equipment2__charakters__name',
-                                        Value(' тип '), 'equipment2__charakters__typename',
-                                        Value(', свидетельство о поверке № '), 'equipment2__newcertnumber',
-                                        Value(' от '), 'equipment2__newdate',
-                                        # Value(', '),
-                                        Value(' действительно до '), 'equipment2__newdatedead',
-                                        )).\
-        get(date__exact=note.date, roomnumber__roomnumber__exact=note.room)
+
 
     kinematic = ViscosityMJL.objects.filter(name=note.name, lot=note.lot, temperature=note.temperature).last()
 
