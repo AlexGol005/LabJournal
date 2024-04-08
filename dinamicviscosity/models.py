@@ -82,8 +82,8 @@ class Dinamicviscosity(models.Model):
                                    on_delete=models.PROTECT, blank=True, related_name='equipment2dinamic')
     equipment3 = models.ForeignKey(MeasurEquipment, verbose_name='Весы', null=True,
                                     on_delete=models.PROTECT, blank=True, related_name='equipment3dinamic')
-    equipment3 = models.ForeignKey(MeasurEquipment, verbose_name='Пикнометр', null=True,
-                                    on_delete=models.PROTECT, blank=True, related_name='equipment3dinamic')
+    equipment4 = models.ForeignKey(MeasurEquipment, verbose_name='Пикнометр', null=True,
+                                    on_delete=models.PROTECT, blank=True, related_name='equipment4dinamic')
     aim = models.CharField('Цель испытаний', max_length=100, choices=aimoptional,
                                   default=aimoptional[0][0],
                                   blank=True, null=True)
