@@ -701,40 +701,26 @@ def export_protocol_xls(request, pk):
     note = MODEL.objects.\
         annotate(name_rm=Concat(Value('СО '), 'name', Value(' п. '), 'lot')).\
         annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')). \
-        annotate(equipment_set=Concat('equipment1__charakters__name',
+        annotate(equipment_set1=Concat('equipment1__charakters__name',
                                         Value(' тип '), 'equipment1__charakters__typename',
                                         Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
                                         Value(' от '), 'equipment1__newdate',
-                                        # Value(', '),
                                         Value(' действительно до '), 'equipment1__newdatedead',
-                                        Value('; \n'),
-                                        'equipment2__charakters__name',
-                                        Value(' тип '), 'equipment2__charakters__typename',
-                                        Value(', свидетельство о поверке № '), 'equipment2__newcertnumber',
-                                        Value(' от '), 'equipment2__newdate',
-                                        # Value(', '),
-                                        Value(' действительно до '), 'equipment2__newdatedead',
+                                        Value('; \n')                                        
                                         )). \
-        annotate(equipment_set2=Concat('equipment3__charakters__name',
+        annotate(equipment_set2=Concat('equipment2__charakters__name',
+                                       Value(' тип '), 'equipment2__charakters__typename',
+                                       Value(', свидетельство о поверке № '), 'equipment2__newcertnumber',
+                                       Value(' от '), 'equipment2__newdate',
+                                       Value(' действительно до '), 'equipment2__newdatedead',
+                                       Value('; \n'),
+                                       'equipment3__charakters__name',
                                        Value(' тип '), 'equipment3__charakters__typename',
                                        Value(', свидетельство о поверке № '), 'equipment3__newcertnumber',
                                        Value(' от '), 'equipment3__newdate',
                                        # Value(', '),
                                        Value(' действительно до '), 'equipment3__newdatedead',
-                                       Value('; \n'),
-                                       'equipment4__charakters__name',
-                                       Value(' тип '), 'equipment4__charakters__typename',
-                                       Value(', свидетельство о поверке № '), 'equipment4__newcertnumber',
-                                       Value(' от '), 'equipment4__newdate',
-                                       # Value(', '),
-                                       Value(' действительно до '), 'equipment4__newdatedead',
-                                       )). \
-        annotate(equipment_set3=Concat('equipment5__charakters__name',
-                                       Value(' тип '), 'equipment5__charakters__typename',
-                                       Value(', свидетельство о поверке № '), 'equipment3__newcertnumber',
-                                       Value(' от '), 'equipment3__newdate',
-                                       # Value(', '),
-                                       Value(' действительно до '), 'equipment5__newdatedead',
+                                       'equipment4__charakters__name'
                                        )). \
         get(pk=pk)
 
@@ -1265,12 +1251,12 @@ def export_protocol_xls(request, pk):
     columns = [
         '10 Средства измерений:  ',
         '10 Средства измерений:  ',
-        note.equipment_set,
-        note.equipment_set,
-        note.equipment_set,
-        note.equipment_set,
-        note.equipment_set,
-        note.equipment_set,
+        note.equipment_set1,
+        note.equipment_set1,
+        note.equipment_set1,
+        note.equipment_set1,
+        note.equipment_set1,
+        note.equipment_set1,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1301,25 +1287,6 @@ def export_protocol_xls(request, pk):
     ws.row(24).height_mismatch = True
     ws.row(24).height = 800
 
-    row_num = 25
-    columns = [
-        '  ',
-        '  ',
-        note.equipment_set3,
-        note.equipment_set3,
-        note.equipment_set3,
-        note.equipment_set3,
-        note.equipment_set3,
-        note.equipment_set3,
-    ]
-    for col_num in range(2):
-        ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(25, 25, 0, 1, style6)
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(25, 25, 2, 7, style7)
-    ws.row(25).height_mismatch = True
-    ws.row(25).height = 500
 
     row_num = 26
     columns = [
