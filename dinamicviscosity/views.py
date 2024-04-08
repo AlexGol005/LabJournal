@@ -787,8 +787,6 @@ def export_protocol_xls(request, pk):
     response['Content-Disposition'] = f'attachment; filename="{note.pk}_protocol.xls"'
     wb = xlwt.Workbook()
     ws = wb.add_sheet('protocol', cell_overwrite_ok=True)
-    Image.open(company.imglogoadress.path).convert("RGB").save('logo.bmp')
-    ws.insert_bitmap('logo.bmp', 0, 2)
     sheet = wb.get_sheet(0)
     sheet.header_str = b'1/1'
     sheet.footer_str = b' '
@@ -802,6 +800,9 @@ def export_protocol_xls(request, pk):
     ws.col(6).width = 2700
     ws.col(7).width = 3900
     ws.col(8).width = 3900
+
+    Image.open(company.imglogoadress.path).convert("RGB").save('logo.bmp')
+    ws.insert_bitmap('logo.bmp', 0, 2)
 
 
     al1 = Alignment()
