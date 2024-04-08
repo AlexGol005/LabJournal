@@ -29,4 +29,4 @@ conclusionoptional = (
     ('Другое', 'Другое'))
 parameter = 'плотность'
 attcharacteristic = 'Плотность'
-measureparameter = 'плотность'
+measureparameter = 'Плотность'
