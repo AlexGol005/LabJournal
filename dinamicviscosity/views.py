@@ -719,9 +719,9 @@ def export_protocol_xls(request, pk):
                                         Value(', свидетельство о поверке № '), 'equipment3__newcertnumber',
                                         Value(' от '), 'equipment3__newdate',
                                         Value(' действительно до '), 'equipment3__newdatedead',
-                                        Value('; \n')
+                                        'equipment4__charakters__name'
                                         )). \
-        get(pk=pk)
+        get(pk=pk) 
 
     meteo = MeteorologicalParameters.objects. \
         annotate(equipment_meteo=Concat('equipment1__charakters__name',
