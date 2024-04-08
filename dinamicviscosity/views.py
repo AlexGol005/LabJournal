@@ -1425,7 +1425,7 @@ def export_protocol_xls(request, pk):
          note.density1,
          note.density2,
          note.density_avg,
-         note.accMeasurement,
+         str(note.accMeasurement),
          note.kriteriy,
         ]
 
