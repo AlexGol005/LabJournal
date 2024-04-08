@@ -1444,9 +1444,9 @@ def export_protocol_xls(request, pk):
         f'вязкость кинематическая при температуре измерений: {note.kinematicviscosity} мм2/с; ',
         f'вязкость кинематическая при температуре измерений: {note.kinematicviscosity} мм2/с; ',
         f'вязкость кинематическая при температуре измерений: {note.kinematicviscosity} мм2/с; ',
-        f'вязкость динамическая: {note.kinematicviscosity} Па*с.',
-        f'вязкость динамическая : {note.kinematicviscosity} Па*с.',
-        f'вязкость динамическая : {note.kinematicviscosity} Па*с.',
+        f'вязкость динамическая: {note.dinamicviscosity} Па*с.',
+        f'вязкость динамическая : {note.dinamicviscosity} Па*с.',
+        f'вязкость динамическая : {note.dinamicviscosity} Па*с.',
     ]
     for col_num in range(5):
         ws.write(row_num, col_num, columns[col_num], style7)
