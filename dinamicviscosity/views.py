@@ -1440,23 +1440,20 @@ def export_protocol_xls(request, pk):
 
     row_num += 1
     columns = [
-        countparameter,
-        countparameter,
         f'вязкость кинематическая при температуре измерений: {note.kinematicviscosity} мм2/с; ',
         f'вязкость кинематическая при температуре измерений: {note.kinematicviscosity} мм2/с; ',
         f'вязкость кинематическая при температуре измерений: {note.kinematicviscosity} мм2/с; ',
-        f'вязкость динамическая рассчитанная: {note.kinematicviscosity} Па*с.',
-        f'вязкость динамическая рассчитанная: {note.kinematicviscosity} Па*с.',
+        f'вязкость кинематическая при температуре измерений: {note.kinematicviscosity} мм2/с; ',
+        f'вязкость динамическая: {note.kinematicviscosity} Па*с.',
+        f'вязкость динамическая : {note.kinematicviscosity} Па*с.',
+        f'вязкость динамическая : {note.kinematicviscosity} Па*с.',
     ]
-    for col_num in range(2):
+    for col_num in range(5):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, row_num, 0, 1, style7)
-    for col_num in range(2, 5):
+        ws.merge(row_num, row_num, 0, 4, style7)
+    for col_num in range(5, 8):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, row_num, 2, 5, style7)
-    for col_num in range(6, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, row_num, 6, 7, style7)
+        ws.merge(row_num, row_num, 5, 7, style7)
 
     row_num +=1
     columns = [
