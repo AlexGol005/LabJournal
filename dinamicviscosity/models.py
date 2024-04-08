@@ -97,6 +97,8 @@ class Dinamicviscosity(models.Model):
         self.equipment1 = MeasurEquipment.objects.get(equipment__exnumber='С003')
         self.equipment4 = MeasurEquipment.objects.get(equipment__exnumber='Т035')
         self.equipment5 = MeasurEquipment.objects.get(equipment__exnumber='В005')
+        self.equipment5 = MeasurEquipment.objects.get(equipment__exnumber='В025')
+        self.equipment5 = MeasurEquipment.objects.get(equipment__exnumber='В026')
         self.room = Rooms.objects.get(roomnumber='474')
         
         if self.havedensity and self.density_avg and self.densitydead:
