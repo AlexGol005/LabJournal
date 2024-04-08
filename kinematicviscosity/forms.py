@@ -4,6 +4,9 @@ from django.db.models import  Q
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
 from .models import *
+from .j_constants import *
+from textconstants import *
+from .constvist import *
 
 input_formats = (
     '%Y-%m-%d',
