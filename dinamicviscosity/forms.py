@@ -207,31 +207,27 @@ class SearchForm(forms.Form):
 class StrJournalProtocolUdateForm(forms.ModelForm):
     """форма для  обновления записи в журнале: поля модели оборудование для протокола"""
     """стандартная"""
-    equipment1 = forms.ModelChoiceField(label='Секундомер', required=False,
+    equipment1 = forms.ModelChoiceField(label='Плотномер', required=False,
                                         queryset=MeasurEquipment.objects.\
                                         filter(Q(charakters__name__contains='Секундомер')|\
                                                Q(charakters__name__contains='секундомер')),
                                         widget=forms.Select(attrs={'class': 'form-control'}))
-    equipment2 = forms.ModelChoiceField(label='Вискозиметр1', required=False,
+    equipment2 = forms.ModelChoiceField(label='Термометр', required=False,
                                         queryset=MeasurEquipment.objects. \
                                         filter(Q(charakters__name__contains='Вискозиметр') | \
                                                Q(charakters__name__contains='вискозиметр')),
                                         widget=forms.Select(attrs={'class': 'form-control'}))
-    equipment3 = forms.ModelChoiceField(label='Вискозиметр2', required=False,
+    equipment3 = forms.ModelChoiceField(label='Весы', required=False,
                                         queryset=MeasurEquipment.objects. \
                                         filter(Q(charakters__name__contains='Вискозиметр') | \
                                                Q(charakters__name__contains='вискозиметр')),
                                         widget=forms.Select(attrs={'class': 'form-control'}))
-    equipment4 = forms.ModelChoiceField(label='Термометр', required=False,
+    equipment4 = forms.ModelChoiceField(label='Пикнометр', required=False,
                                         queryset=MeasurEquipment.objects. \
                                         filter(Q(charakters__name__contains='Термометр') | \
                                                Q(charakters__name__contains='термометр')),
                                         widget=forms.Select(attrs={'class': 'form-control'}))
-    equipment5 = forms.ModelChoiceField(label='Весы', required=False,
-                                        queryset=MeasurEquipment.objects. \
-                                        filter(Q(charakters__name__contains='Весы') | \
-                                               Q(charakters__name__contains='весы')),
-                                        widget=forms.Select(attrs={'class': 'form-control'}))
+
 
 
     class Meta:
@@ -239,7 +235,7 @@ class StrJournalProtocolUdateForm(forms.ModelForm):
         fields = [
             'equipment1',
             'equipment2', 'equipment3',
-            'equipment4', 'equipment5',
+            'equipment4', 
         ]
 
 class StrJournalUdateForm(forms.ModelForm):
