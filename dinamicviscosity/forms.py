@@ -9,6 +9,8 @@ from django.db.models import Q
 from equipment.models import Rooms, MeasurEquipment
 from .models import*
 from .j_constants import *
+from textconstants import *
+from kinematicviscosity.constvist import *
 
 MODEL = Dinamicviscosity
 COMMENTMODEL = CommentsDinamicviscosity
