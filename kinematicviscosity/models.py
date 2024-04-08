@@ -13,7 +13,7 @@ from formuls import mrerrow, numberDigits
 from metods import get_sec, get_avg, get_acc_measurement
 from .j_constants import *
 from textconstants import *
-from .constvist import *
+from .constvisc import *
 
 
 
