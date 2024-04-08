@@ -78,10 +78,10 @@ class Dinamicviscosity(models.Model):
                              on_delete=models.PROTECT, blank=True)
     equipment1 = models.ForeignKey(MeasurEquipment, verbose_name='Секундомер', null=True,
                                    on_delete=models.PROTECT, blank=True, related_name='equipment1dinamic')
-    # equipment2 = models.ForeignKey(MeasurEquipment, verbose_name='Вискозиметр1', null=True,
-                                   # on_delete=models.PROTECT, blank=True, related_name='equipment2dinamic')
-    # equipment3 = models.ForeignKey(MeasurEquipment, verbose_name='Вискозиметр2', null=True,
-                                   # on_delete=models.PROTECT, blank=True, related_name='equipment3dinamic')
+    equipment2 = models.ForeignKey(MeasurEquipment, verbose_name='Вискозиметр1', null=True,
+                                   on_delete=models.PROTECT, blank=True, related_name='equipment2dinamic')
+    equipment3 = models.ForeignKey(MeasurEquipment, verbose_name='Вискозиметр2', null=True,
+                                    on_delete=models.PROTECT, blank=True, related_name='equipment3dinamic')
     equipment4 = models.ForeignKey(MeasurEquipment, verbose_name='Термометр', null=True,
                                    on_delete=models.PROTECT, blank=True, related_name='equipment4dinamic')
     equipment5 = models.ForeignKey(MeasurEquipment, verbose_name='Весы', null=True,
