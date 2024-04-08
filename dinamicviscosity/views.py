@@ -1269,7 +1269,7 @@ def export_protocol_xls(request, pk):
             ws.write(row_num, col_num, columns[col_num], style7)
             ws.merge(row_num, row_num, 2, 7, style7)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 500
+        ws.row(row_num).height = 600
 
     if note.equipment == 'пикнометром':
         row_num +=1
@@ -1290,7 +1290,7 @@ def export_protocol_xls(request, pk):
             ws.write(row_num, col_num, columns[col_num], style7)
             ws.merge(row_num, row_num, 2, 7, style7)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 500
+        ws.row(row_num).height = 600
 
         row_num +=1
         columns = [
@@ -1310,7 +1310,7 @@ def export_protocol_xls(request, pk):
             ws.write(row_num, col_num, columns[col_num], style7)
             ws.merge(row_num, row_num, 2, 7, style7)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 500
+        ws.row(row_num).height = 600
 
         row_num +=1
         columns = [
@@ -1330,7 +1330,7 @@ def export_protocol_xls(request, pk):
             ws.write(row_num, col_num, columns[col_num], style7)
             ws.merge(row_num, row_num, 2, 7, style7)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 300
+        ws.row(row_num).height = 500
 
 
     row_num +=1
@@ -1451,12 +1451,12 @@ def export_protocol_xls(request, pk):
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(row_num, row_num, 0, 1, style7)
-    for col_num in range(3, 5):
+    for col_num in range(2, 5):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, row_num, 3, 5, style7)
+        ws.merge(row_num, row_num, 2, 5, style7)
     for col_num in range(6, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, row_num, 5, 7, style7)
+        ws.merge(row_num, row_num, 6, 7, style7)
 
     row_num +=1
     columns = [
