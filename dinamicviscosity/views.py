@@ -713,13 +713,17 @@ def export_protocol_xls(request, pk):
                                         Value(', свидетельство о поверке № '), 'equipment2__newcertnumber',
                                         Value(' от '), 'equipment2__newdate',
                                         Value(' действительно до '), 'equipment2__newdatedead',
-                                        Value('; \n'), 
-                                        'equipment3__charakters__name',
+                                        Value('; \n')
+                                        )). \
+        annotate(equipment_set3=Concat('equipment3__charakters__name',
                                         Value(' тип '), 'equipment3__charakters__typename',
                                         Value(', свидетельство о поверке № '), 'equipment3__newcertnumber',
                                         Value(' от '), 'equipment3__newdate',
                                         Value(' действительно до '), 'equipment3__newdatedead',
-                                        'equipment4__charakters__name'
+                                        Value('; \n')
+                                        )). \
+        annotate(equipment_set4=Concat('equipment4__charakters__name',
+                                        
                                         )). \
         get(pk=pk) 
 
@@ -1264,7 +1268,7 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(row_num, row_num, 2, 7, style7)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 400
+    ws.row(row_num).height = 200
 
     row_num +=1
     columns = [
@@ -1284,7 +1288,47 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(row_num, row_num, 2, 7, style7)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 800
+    ws.row(row_num).height = 200
+
+        row_num +=1
+    columns = [
+        '  ',
+        '  ',
+        note.equipment_set3,
+        note.equipment_set3,
+        note.equipment_set3,
+        note.equipment_set3,
+        note.equipment_set3,
+        note.equipment_set3,
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(row_num, row_num, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(row_num, row_num, 2, 7, style7)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 200
+
+    row_num +=1
+    columns = [
+        '  ',
+        '  ',
+        note.equipment_set4,
+        note.equipment_set4,
+        note.equipment_set4,
+        note.equipment_set4,
+        note.equipment_set4,
+        note.equipment_set4,
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(row_num, row_num, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(row_num, row_num, 2, 7, style7)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 200
 
 
     row_num +=1
