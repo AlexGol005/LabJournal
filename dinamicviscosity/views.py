@@ -719,9 +719,6 @@ def export_protocol_xls(request, pk):
                                         Value(', свидетельство о поверке № '), 'equipment3__newcertnumber',
                                         Value(' от '), 'equipment3__newdate',
                                         Value(' действительно до '), 'equipment3__newdatedead',
-                                        Value('; \n'), 
-
- 
                                         )). \
         get(pk=pk)
 
