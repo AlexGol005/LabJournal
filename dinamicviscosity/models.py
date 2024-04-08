@@ -76,16 +76,14 @@ class Dinamicviscosity(models.Model):
     #  поля для записи - помещения, оборудования - для подготовки протокола анализа
     room = models.ForeignKey(Rooms, verbose_name='Номер комнаты', null=True,
                              on_delete=models.PROTECT, blank=True)
-    equipment1 = models.ForeignKey(MeasurEquipment, verbose_name='Секундомер', null=True,
+    equipment1 = models.ForeignKey(MeasurEquipment, verbose_name='Плотномер', null=True,
                                    on_delete=models.PROTECT, blank=True, related_name='equipment1dinamic')
-    equipment2 = models.ForeignKey(MeasurEquipment, verbose_name='Вискозиметр1', null=True,
+    equipment2 = models.ForeignKey(MeasurEquipment, verbose_name='Термометр', null=True,
                                    on_delete=models.PROTECT, blank=True, related_name='equipment2dinamic')
-    equipment3 = models.ForeignKey(MeasurEquipment, verbose_name='Вискозиметр2', null=True,
+    equipment3 = models.ForeignKey(MeasurEquipment, verbose_name='Весы', null=True,
                                     on_delete=models.PROTECT, blank=True, related_name='equipment3dinamic')
-    equipment4 = models.ForeignKey(MeasurEquipment, verbose_name='Термометр', null=True,
-                                   on_delete=models.PROTECT, blank=True, related_name='equipment4dinamic')
-    equipment5 = models.ForeignKey(MeasurEquipment, verbose_name='Весы', null=True,
-                                   on_delete=models.PROTECT, blank=True, related_name='equipment5dinamic')
+    equipment3 = models.ForeignKey(MeasurEquipment, verbose_name='Пикнометр', null=True,
+                                    on_delete=models.PROTECT, blank=True, related_name='equipment3dinamic')
     aim = models.CharField('Цель испытаний', max_length=100, choices=aimoptional,
                                   default=aimoptional[0][0],
                                   blank=True, null=True)
@@ -93,12 +91,11 @@ class Dinamicviscosity(models.Model):
 
 
     def save(self, *args, **kwargs):
-        # костыль для добавления секундомера и термометра и комнаты и весов
-        self.equipment1 = MeasurEquipment.objects.get(equipment__exnumber='С003')
-        self.equipment4 = MeasurEquipment.objects.get(equipment__exnumber='Т035')
-        self.equipment5 = MeasurEquipment.objects.get(equipment__exnumber='В005')
-        self.equipment5 = MeasurEquipment.objects.get(equipment__exnumber='В025')
-        self.equipment5 = MeasurEquipment.objects.get(equipment__exnumber='В026')
+        # костыль для добавления приборов и комнаты
+        self.equipment1 = MeasurEquipment.objects.get(equipment__exnumber='П005')
+        self.equipment2 = MeasurEquipment.objects.get(equipment__exnumber='Т035')
+        self.equipment3 = MeasurEquipment.objects.get(equipment__exnumber='В005')
+        self.equipment4 = MeasurEquipment.objects.get(equipment__exnumber='К005')
         self.room = Rooms.objects.get(roomnumber='474')
         
         if self.havedensity and self.density_avg and self.densitydead:
