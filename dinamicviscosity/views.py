@@ -714,6 +714,7 @@ def export_protocol_xls(request, pk):
                                         Value(' от '), 'equipment2__newdate',
                                         Value(' действительно до '), 'equipment2__newdatedead',
                                         Value('; \n'), 
+                                       'equipment3__charakters__name',
  
                                         )). \
         get(pk=pk)
