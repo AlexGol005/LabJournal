@@ -209,23 +209,23 @@ class StrJournalProtocolUdateForm(forms.ModelForm):
     """стандартная"""
     equipment1 = forms.ModelChoiceField(label='Плотномер', required=False,
                                         queryset=MeasurEquipment.objects.\
-                                        filter(Q(charakters__name__contains='Секундомер')|\
-                                               Q(charakters__name__contains='секундомер')),
+                                        filter(Q(charakters__name__contains='Плотномер')|\
+                                               Q(charakters__name__contains='плотномер')),
                                         widget=forms.Select(attrs={'class': 'form-control'}))
     equipment2 = forms.ModelChoiceField(label='Термометр', required=False,
                                         queryset=MeasurEquipment.objects. \
-                                        filter(Q(charakters__name__contains='Вискозиметр') | \
-                                               Q(charakters__name__contains='вискозиметр')),
+                                        filter(Q(charakters__name__contains='Термометр') | \
+                                               Q(charakters__name__contains='термометр')),
                                         widget=forms.Select(attrs={'class': 'form-control'}))
     equipment3 = forms.ModelChoiceField(label='Весы', required=False,
                                         queryset=MeasurEquipment.objects. \
-                                        filter(Q(charakters__name__contains='Вискозиметр') | \
-                                               Q(charakters__name__contains='вискозиметр')),
+                                        filter(Q(charakters__name__contains='Весы') | \
+                                               Q(charakters__name__contains='весы')),
                                         widget=forms.Select(attrs={'class': 'form-control'}))
     equipment4 = forms.ModelChoiceField(label='Пикнометр', required=False,
                                         queryset=MeasurEquipment.objects. \
-                                        filter(Q(charakters__name__contains='Термометр') | \
-                                               Q(charakters__name__contains='термометр')),
+                                        filter(Q(charakters__name__contains='Пикнометр') | \
+                                               Q(charakters__name__contains='пикнометр')),
                                         widget=forms.Select(attrs={'class': 'form-control'}))
 
 
