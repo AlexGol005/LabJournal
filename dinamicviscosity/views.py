@@ -1250,85 +1250,87 @@ def export_protocol_xls(request, pk):
     ws.row(22).height_mismatch = True
     ws.row(22).height = 500
 
-    row_num +=1
-    columns = [
-        '10 Средства измерений:  ',
-        '10 Средства измерений:  ',
-        note.equipment_set1,
-        note.equipment_set1,
-        note.equipment_set1,
-        note.equipment_set1,
-        note.equipment_set1,
-        note.equipment_set1,
-    ]
-    for col_num in range(2):
-        ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(row_num, row_num, 0, 1, style6)
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, row_num, 2, 7, style7)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 200
+    if note.equipment == 'денсиметром':
+        row_num +=1
+        columns = [
+            '10 Средства измерений:  ',
+            '10 Средства измерений:  ',
+            note.equipment_set1,
+            note.equipment_set1,
+            note.equipment_set1,
+            note.equipment_set1,
+            note.equipment_set1,
+            note.equipment_set1,
+        ]
+        for col_num in range(2):
+            ws.write(row_num, col_num, columns[col_num], style6)
+            ws.merge(row_num, row_num, 0, 1, style6)
+        for col_num in range(1, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style7)
+            ws.merge(row_num, row_num, 2, 7, style7)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
 
-    row_num +=1
-    columns = [
-        '  ',
-        '  ',
-        note.equipment_set2,
-        note.equipment_set2,
-        note.equipment_set2,
-        note.equipment_set2,
-        note.equipment_set2,
-        note.equipment_set2,
-    ]
-    for col_num in range(2):
-        ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(row_num, row_num, 0, 1, style6)
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, row_num, 2, 7, style7)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 200
+    if note.equipment == 'пикнометром':
+        row_num +=1
+        columns = [
+            '  ',
+            '  ',
+            note.equipment_set2,
+            note.equipment_set2,
+            note.equipment_set2,
+            note.equipment_set2,
+            note.equipment_set2,
+            note.equipment_set2,
+        ]
+        for col_num in range(2):
+            ws.write(row_num, col_num, columns[col_num], style6)
+            ws.merge(row_num, row_num, 0, 1, style6)
+        for col_num in range(1, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style7)
+            ws.merge(row_num, row_num, 2, 7, style7)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
 
-    row_num +=1
-    columns = [
-        '  ',
-        '  ',
-        note.equipment_set3,
-        note.equipment_set3,
-        note.equipment_set3,
-        note.equipment_set3,
-        note.equipment_set3,
-        note.equipment_set3,
-    ]
-    for col_num in range(2):
-        ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(row_num, row_num, 0, 1, style6)
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, row_num, 2, 7, style7)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 200
+        row_num +=1
+        columns = [
+            '  ',
+            '  ',
+            note.equipment_set3,
+            note.equipment_set3,
+            note.equipment_set3,
+            note.equipment_set3,
+            note.equipment_set3,
+            note.equipment_set3,
+        ]
+        for col_num in range(2):
+            ws.write(row_num, col_num, columns[col_num], style6)
+            ws.merge(row_num, row_num, 0, 1, style6)
+        for col_num in range(1, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style7)
+            ws.merge(row_num, row_num, 2, 7, style7)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
 
-    row_num +=1
-    columns = [
-        '  ',
-        '  ',
-        note.equipment_set4,
-        note.equipment_set4,
-        note.equipment_set4,
-        note.equipment_set4,
-        note.equipment_set4,
-        note.equipment_set4,
-    ]
-    for col_num in range(2):
-        ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(row_num, row_num, 0, 1, style6)
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, row_num, 2, 7, style7)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 200
+        row_num +=1
+        columns = [
+            '  ',
+            '  ',
+            note.equipment_set4,
+            note.equipment_set4,
+            note.equipment_set4,
+            note.equipment_set4,
+            note.equipment_set4,
+            note.equipment_set4,
+        ]
+        for col_num in range(2):
+            ws.write(row_num, col_num, columns[col_num], style6)
+            ws.merge(row_num, row_num, 0, 1, style6)
+        for col_num in range(1, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style7)
+            ws.merge(row_num, row_num, 2, 7, style7)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 300
 
 
     row_num +=1
@@ -1448,9 +1450,10 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(row_num, row_num, 0, 1, style7)
     for col_num in range(3, 5):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, row_num, 2, 4, style7)
+        ws.merge(row_num, row_num, 3, 5, style7)
     for col_num in range(6, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(row_num, row_num, 5, 7, style7)
