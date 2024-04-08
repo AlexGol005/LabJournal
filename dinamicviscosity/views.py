@@ -20,7 +20,7 @@ from .models import *
 from .j_constants import *
 from utils import *
 from textconstants import *
-from kinematicviscosity.constvist import *
+from kinematicviscosity.constvisc import *
 
 MODEL = Dinamicviscosity
 COMMENTMODEL = CommentsDinamicviscosity
