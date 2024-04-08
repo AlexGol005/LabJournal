@@ -941,7 +941,7 @@ def export_protocol_xls(request, pk):
         ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style3)
-        ws.merge(row_num, row_num, 7, 8, style3)
+        ws.merge(row_num, row_num, 6, 7, style3)
 
 
     row_num = 6
@@ -1405,28 +1405,18 @@ def export_protocol_xls(request, pk):
     ws.row(30).height = 1000
 
     row_num = 31
-    if kinematic:
-        columns = [
-            'Кинематическая вязкость',
-            'Кинематическая вязкость',
-            note.temperature,
-            kinematic.viscosity1,
-            kinematic.viscosity2,
-            kinematic.certifiedValue_text,
-            kinematic.accMeasurement,
-            note.kriteriy,
+ 
+    columns = [
+         measureparameter,
+         measureparameter,
+         note.temperature,
+         note.density1,
+         note.density2,
+         note.density_avg,
+         note.accMeasurement,
+         note.kriteriy,
         ]
-    else:
-        columns = [
-            'Кинематическая вязкость',
-            'Кинематическая вязкость',
-            note.temperature,
-            '',
-            '',
-            '',
-            '',
-            note.kriteriy,
-        ]
+
 
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style8)
@@ -1438,28 +1428,32 @@ def export_protocol_xls(request, pk):
 
     row_num = 32
     columns = [
-        'Динамическая вязкость (расчёт)*',
-        'Динамическая вязкость (расчёт)*',
-        note.temperature,
-        note.dinamicviscosity_not_rouned,
-        note.dinamicviscosity_not_rouned,
-        note.certifiedValue,
-        '0,0',
-        note.kriteriy,
+        countparameter,
+        countparameter,
+        f'вязкость кинематическая при температуре измерений: {note.kinematicviscosity} мм2/с; ',
+        f'вязкость кинематическая при температуре измерений: {note.kinematicviscosity} мм2/с; ',
+        f'вязкость кинематическая при температуре измерений: {note.kinematicviscosity} мм2/с; ',
+        f'вязкость динамическая рассчитанная: {note.kinematicviscosity} Па*с.',
+        f'вязкость динамическая рассчитанная: {note.kinematicviscosity} Па*с.',
     ]
     for col_num in range(2):
-        ws.write(row_num, col_num, columns[col_num], style8)
-        ws.merge(32, 32, 0, 1, style8)
-    for col_num in range(2, 3):
-        ws.write(row_num, col_num, columns[col_num], style11)
-    for col_num in range(3, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style8)
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(32, 32, 0, 2, style8)
+    for col_num in range(3, 5):
+        ws.write(row_num, col_num, columns[col_num], style7)
+    for col_num in range(6, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
 
     row_num = 33
     columns = [
         'Дополнительные сведения: ',
         'Дополнительные сведения: ',
-        f'Плотность при  {note.temperature} °C = {note.density_avg} г/мл',
+        note.aim,
+        note.aim,
+        note.aim,
+        note.aim,
+        note.aim,
+
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
