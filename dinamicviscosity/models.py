@@ -13,7 +13,7 @@ from formuls import mrerrow, numberDigits
 from viscosimeters.models import Viscosimeters, Kalibration
 from .j_constants import *
 from textconstants import *
-from kinematicviscosity.constvist import *
+from kinematicviscosity.constvisc import *
 
 
 class Dinamicviscosity(models.Model):
