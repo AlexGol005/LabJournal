@@ -722,7 +722,7 @@ def export_protocol_xls(request, pk):
                                         Value(' действительно до '), 'equipment3__newdatedead',
                                         Value('; \n')
                                         )). \
-        annotate(equipment_set4=Concat('equipment4__charakters__name',
+        annotate(equipment_set4=Concat('equipment4__charakters__name', Value('. \n')
                                         
                                         )). \
         get(pk=pk) 
