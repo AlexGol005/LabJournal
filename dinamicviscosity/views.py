@@ -701,27 +701,13 @@ def export_protocol_xls(request, pk):
     note = MODEL.objects.\
         annotate(name_rm=Concat(Value('СО '), 'name', Value(' п. '), 'lot')).\
         annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')). \
-            annotate(equipment_set1=Concat('equipment1__charakters__name',
+        annotate(equipment_set1=Concat('equipment1__charakters__name',
                                         Value(' тип '), 'equipment1__charakters__typename',
                                         Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
                                         Value(' от '), 'equipment1__newdate',
                                         Value(' действительно до '), 'equipment1__newdatedead',
                                         Value('; \n')                                        
                                         )). \
-        annotate(equipment_set2=Concat('equipment2__charakters__name',
-                                       Value(' тип '), 'equipment2__charakters__typename',
-                                       Value(', свидетельство о поверке № '), 'equipment2__newcertnumber',
-                                       Value(' от '), 'equipment2__newdate',
-                                       Value(' действительно до '), 'equipment2__newdatedead',
-                                       Value('; \n'),
-                                       'equipment3__charakters__name',
-                                       Value(' тип '), 'equipment3__charakters__typename',
-                                       Value(', свидетельство о поверке № '), 'equipment3__newcertnumber',
-                                       Value(' от '), 'equipment3__newdate',
-                                       # Value(', '),
-                                       Value(' действительно до '), 'equipment3__newdatedead',
-                                        Value('equipment4__charakters__name')
-                                       )). \
         get(pk=pk)
 
     meteo = MeteorologicalParameters.objects. \
@@ -1271,12 +1257,12 @@ def export_protocol_xls(request, pk):
     columns = [
         '  ',
         '  ',
-        note.equipment_set2,
-        note.equipment_set2,
-        note.equipment_set2,
-        note.equipment_set2,
-        note.equipment_set2,
-        note.equipment_set2,
+        note.equipment_set1,
+        note.equipment_set1,
+        note.equipment_set1,
+        note.equipment_set1,
+        note.equipment_set1,
+        note.equipment_set1,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
