@@ -705,18 +705,28 @@ def export_protocol_xls(request, pk):
                                         Value(' тип '), 'equipment1__charakters__typename',
                                         Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
                                         Value(' от '), 'equipment1__newdate',
-                        
+                                        # Value(', '),
                                         Value(' действительно до '), 'equipment1__newdatedead',
                                         Value('; \n'),
-                                      
-        annotate(equipment_set2=Concat(
-                                       
+                                        'equipment2__charakters__name',
+                                        Value(' тип '), 'equipment2__charakters__typename',
+                                        Value(', свидетельство о поверке № '), 'equipment2__newcertnumber',
+                                        Value(' от '), 'equipment2__newdate',
+                                        # Value(', '),
+                                        Value(' действительно до '), 'equipment2__newdatedead',
+                                        )). \
+        annotate(equipment_set2=Concat('equipment3__charakters__name',
+                                       Value(' тип '), 'equipment3__charakters__typename',
+                                       Value(', свидетельство о поверке № '), 'equipment3__newcertnumber',
+                                       Value(' от '), 'equipment3__newdate',
+                                       # Value(', '),
+                                       Value(' действительно до '), 'equipment3__newdatedead',
                                        Value('; \n'),
                                        'equipment4__charakters__name',
                                        Value(' тип '), 'equipment4__charakters__typename',
                                        Value(', свидетельство о поверке № '), 'equipment4__newcertnumber',
                                        Value(' от '), 'equipment4__newdate',
-                                      
+                                       # Value(', '),
                                        Value(' действительно до '), 'equipment4__newdatedead',
                                        )). \
         annotate(equipment_set3=Concat('equipment5__charakters__name',
@@ -725,12 +735,28 @@ def export_protocol_xls(request, pk):
                                        Value(' от '), 'equipment3__newdate',
                                        # Value(', '),
                                        Value(' действительно до '), 'equipment5__newdatedead',
-                                       )).get(pk=pk)
-                                      
+                                       )). \
+        get(pk=pk)
 
-
+    meteo = MeteorologicalParameters.objects. \
+        annotate(equipment_meteo=Concat('equipment1__charakters__name',
+                                        Value(' тип '), 'equipment1__charakters__typename',
+                                        Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
+                                        Value(' от '), 'equipment1__newdate',
+                                        # Value(', '),
+                                        Value(' действительно до '), 'equipment1__newdatedead',
+                                        Value('; \n'),
+                                        'equipment2__charakters__name',
+                                        Value(' тип '), 'equipment2__charakters__typename',
+                                        Value(', свидетельство о поверке № '), 'equipment2__newcertnumber',
+                                        Value(' от '), 'equipment2__newdate',
+                                        # Value(', '),
+                                        Value(' действительно до '), 'equipment2__newdatedead',
+                                        )).\
+        get(date__exact=note.date, roomnumber__roomnumber__exact=note.room)
     kinematic = ViscosityMJL.objects.filter(name=note.name, lot=note.lot, temperature=note.temperature).last()
 
+    
     if note.name[0:2] == 'ВЖ':
         constit = constitoptional[0]
     if note.name[0:2] == 'CC':
