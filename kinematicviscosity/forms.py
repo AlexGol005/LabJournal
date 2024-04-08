@@ -6,7 +6,7 @@ from crispy_forms.layout import Layout, Submit, Row, Column
 from .models import *
 from .j_constants import *
 from textconstants import *
-from .constvist import *
+from .constvisc import *
 
 input_formats = (
     '%Y-%m-%d',
