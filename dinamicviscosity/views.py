@@ -1290,7 +1290,7 @@ def export_protocol_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 200
 
-        row_num +=1
+    row_num +=1
     columns = [
         '  ',
         '  ',
