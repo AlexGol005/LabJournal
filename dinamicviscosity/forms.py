@@ -97,6 +97,14 @@ class StrJournalCreationForm(forms.ModelForm):
     havedensity = forms.BooleanField(label='У меня есть плотность, измеренная ранее',
                                   required=False)
 
+    aim = forms.ChoiceField(label='Цель испытаний', required=True,
+                                  choices=aimoptional,
+                                  widget=forms.Select(attrs={'class': 'form-control'}))
+    numberexample = forms.CharField(initial=' - ', label='Номер(а) флакона', max_length=100, required=False,
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                         'placeholder': 'Впишите если требуется'}
+                                                  ))                                      
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -104,13 +112,15 @@ class StrJournalCreationForm(forms.ModelForm):
         self.helper.layout = Layout(
             Row(
                 Column('name', css_class='form-group col-md-4 mb-0'),
-                Column('lot', css_class='form-group col-md-4 mb-0'),
-                Column('temperature', css_class='form-group col-md-4 mb-0'),
+                Column('lot', css_class='form-group col-md-2 mb-0'),
+                Column('temperature', css_class='form-group col-md-2 mb-0'),
+                Column('numberexample', css_class='form-group col-md-4 mb-0'),
 
                 css_class='form-row'
             ),
             Row(
                 Column('ndocument', css_class='form-group col-md-6 mb-0'),
+                Column('aim', css_class='form-group col-md-4 mb-0'),
 
                 css_class='form-row'
             ),
@@ -162,7 +172,7 @@ class StrJournalCreationForm(forms.ModelForm):
                   'piknometer_volume',
                   'piknometer_mass1', 'piknometer_mass2',
                   'equipment', 'piknometer_plus_SM_mass1', 'piknometer_plus_SM_mass2',
-                  'density_avg', 'densitydead', 'havedensity'
+                  'density_avg', 'densitydead', 'havedensity', 'aim', 'numberexample'
                   ]
 
 
