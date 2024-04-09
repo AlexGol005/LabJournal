@@ -1343,7 +1343,7 @@ def export_protocol_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 1050
 
-    if note.seria == False:
+    if note.seria == False or note.seria == '0':
     
         row_num +=1
         v1 = Decimal(note.viscosity1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
@@ -1366,7 +1366,7 @@ def export_protocol_xls(request, pk):
         for col_num in range(3, len(columns)):
             ws.write(row_num, col_num, columns[col_num], style8)
 
-    if note.seria == True:
+    if note.seria == True and note.seria != '0':
         row_num +=1
         v1 = Decimal(note.viscosity1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
         v2 = Decimal(note.viscosity2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
