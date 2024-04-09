@@ -1366,7 +1366,7 @@ def export_protocol_xls(request, pk):
         for col_num in range(3, len(columns)):
             ws.write(row_num, col_num, columns[col_num], style8)
 
-    if note.seria == True and note.seria != 0 and note.seria != '0':
+    if note.seria == True or note.seria != 0 or note.seria != '0':
         
         a = note.seria
         qseria = ViscosityMJL.objects.all().filter(seria=a). \
