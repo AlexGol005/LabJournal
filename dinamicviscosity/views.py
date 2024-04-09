@@ -1436,7 +1436,7 @@ def export_protocol_xls(request, pk):
     row_num +=1
     d1 = str(Decimal(note.density1).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
     d2 = str(Decimal(note.density2).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
-    d2 = str(Decimal(note.density_avg).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+    d = str(Decimal(note.density_avg).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
     columns = [
          measureparameter,
          measureparameter,
