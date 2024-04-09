@@ -1383,6 +1383,26 @@ def export_protocol_xls(request, pk):
             row_num += 1
             for col_num in range(0, 4):
                 ws.write(row_num, col_num + 1, row[col_num], style8)
+                row_num +=1
+        v1 = Decimal(note.viscosity1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
+        v2 = Decimal(note.viscosity2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
+        columns = [
+           'gg',
+            'gg',
+            'gg',
+            'gg',
+            'gg',
+            'gg',
+            'gg',
+            'gg',
+        ]
+        for col_num in range(2):
+            ws.write(row_num, col_num, columns[col_num], style8)
+            ws.merge(row_num, row_num, 0, 1, style8)
+        for col_num in range(2, 3):
+            ws.write(row_num, col_num, columns[col_num], style11)
+        for col_num in range(3, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style8)
 
 
     
