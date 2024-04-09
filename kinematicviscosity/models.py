@@ -104,6 +104,7 @@ class ViscosityMJL(models.Model):
                                   default=aimoptional[0][0],
                                   blank=True, null=True)
     numberexample = models.CharField('Номер(а) экземпляра', max_length=100, default=' ', null=True)
+    seria = models.CharField('Номер серии измерений (для однородности)', max_length=100, default='0', null=True)
 
 
     def save(self, *args, **kwargs):
