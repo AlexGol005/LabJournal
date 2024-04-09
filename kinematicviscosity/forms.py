@@ -100,6 +100,12 @@ class StrJournalCreationForm(forms.ModelForm):
                                         widget=forms.TextInput(attrs={'class': 'form-control',
                                                                       'placeholder': 'АЗ через точку'}
                                                                ))
+    numberexample = forms.CharField(initial='0', label='Номер серии измерений', 
+                                    help_text='Введите уникальный номер серии измерений, например вида: "№партииГГММДД" для формирования притокола измерения однородности. Для всех измерений серии номер должен быть одинаковый. Если это не серия измерений, то в этом поле должен быть указан "0"',
+                                    max_length=100, required=False,
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                         'placeholder': 'По умолчанию сюда впишите ноль'}
+                                                  ))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -145,6 +151,9 @@ class StrJournalCreationForm(forms.ModelForm):
                 Column('plustimesekK2T2', css_class='form-group col-md-2 mb-0'),
 
             ),
+            Row(
+                Column('seria', css_class='form-group col-md-12 mb-0'),
+            ),
             Submit('submit', 'Внести запись в журнал')
         )
 
@@ -158,7 +167,7 @@ class StrJournalCreationForm(forms.ModelForm):
                   'ViscosimeterNumber2',
                   'plustimeminK2T1', 'plustimesekK2T1',
                   'plustimeminK2T2', 'plustimesekK2T2', 'ndocument',
-                  'aim', 'numberexample',
+                  'aim', 'numberexample', 'seria'
                   ]
 
 
