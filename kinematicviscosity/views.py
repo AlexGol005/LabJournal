@@ -1382,12 +1382,12 @@ def export_protocol_xls(request, pk):
         for row in qseria:
             row_num += 1
             for col_num in range(2):
-                ws.write(row_num, col_num, columns[col_num], style8)
+                ws.write(row_num, col_num + 1, columns[col_num], style8)
                 ws.merge(row_num, row_num, 0, 1, style8)
             for col_num in range(2, 3):
-                ws.write(row_num, col_num, columns[col_num], style11)
+                ws.write(row_num, col_num + 1, columns[col_num], style11)
             for col_num in range(3, len(columns)):
-                ws.write(row_num, col_num, columns[col_num], style8)
+                ws.write(row_num, col_num + 1, columns[col_num], style8)
 
     
     row_num +=1
