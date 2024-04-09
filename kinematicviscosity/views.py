@@ -1367,7 +1367,7 @@ def export_protocol_xls(request, pk):
             ws.write(row_num, col_num, columns[col_num], style8)
 
     if note.seria == True or note.seria != 0 or note.seria != '0':
-                row_num +=1
+        row_num +=1
         v1 = Decimal(note.viscosity1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
         v2 = Decimal(note.viscosity2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
         columns = [
