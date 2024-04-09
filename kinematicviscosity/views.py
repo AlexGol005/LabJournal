@@ -1367,26 +1367,28 @@ def export_protocol_xls(request, pk):
             ws.write(row_num, col_num, columns[col_num], style8)
 
     if  note.seria != '0':
-        row_num +=1
-        v1 = Decimal(note.viscosity1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
-        v2 = Decimal(note.viscosity2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
-        columns = [
-            attcharacteristic,
-            attcharacteristic,
-            note.temperature,
-            'dd',
-            v2,
-            measureresult,
-            note.accMeasurement,
-            note.kriteriy,
-        ]
-        for col_num in range(2):
-            ws.write(row_num, col_num, columns[col_num], style8)
-            ws.merge(row_num, row_num, 0, 1, style8)
-        for col_num in range(2, 3):
-            ws.write(row_num, col_num, columns[col_num], style11)
-        for col_num in range(3, len(columns)):
-            ws.write(row_num, col_num, columns[col_num], style8)
+
+        a = note.seria
+        qseria = ViscosityMJL.objects.all().filter(seria=a). \
+        values_list(
+        'viscosity1',
+        'viscosity2',
+        'temperature',
+        'certifiedValue',
+        'accMeasurement',
+        'kriteriy',
+        )
+        
+        for row in qseria:
+            row_num += 1
+
+            for col_num in range(2):
+                ws.write(row_num, col_num, columns[col_num], style8)
+                ws.merge(row_num, row_num, 0, 1, style8)
+            for col_num in range(2, 3):
+                ws.write(row_num, col_num, columns[col_num], style11)
+            for col_num in range(3, len(columns)):
+                ws.write(row_num, col_num, columns[col_num], style8)
             
 
 
