@@ -40,6 +40,7 @@
 			<th colspan="2"><div style="text-align: center;">
 
               &nbsp&nbspТ°C&nbsp&nbsp</div></th>
+			<th colspan="1"><div style="text-align: center;">Номер флакона</div></th>
 			<th colspan="4"><div style="text-align: center;">Сод.&nbspнефть или октол</div></th>
 		</tr>
 		<tr>
@@ -48,6 +49,7 @@
 			<td colspan="1"><div style="text-align: center;">{{ note.lot}}</div></td>
 			<td colspan="2"><div style="text-align: center;">{{ note.temperature|striptags}}</div></td>
 			<td colspan="4"><div style="text-align: center;">{{ note.constit}}</div></td>
+			<td colspan="4"><div style="text-align: center;">{{ numberexample|default_if_none:" "}}</div></td>
 		</tr>
 {# конец полустандартного верха таблицы#}
 {# совсем уникальная часть таблицы#}
@@ -135,6 +137,9 @@
                 {% endif %}
             </td>
 			<td colspan="5"><div style="text-align: center;">{{ note.dinamicviscosity_not_rouned|default_if_none:" "|striptags }}</div></td>
+		</tr>
+		<tr>
+			<th colspan="9"><div style="text-align: center;">{{ note.aim|default_if_none:" "}}</div></th>
 		</tr>
         <tr>
 			<th colspan="9"><div style="text-align: center;">Фиксация результатов</div></th>
