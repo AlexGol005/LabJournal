@@ -1369,7 +1369,7 @@ def export_protocol_xls(request, pk):
     if note.seria == True and note.seria != 0 and note.seria != '0':
         
         a = note.seria
-        qseria = ViscosityMJL.objects.filter(seria=a). \
+        qseria = ViscosityMJL.objects.all().filter(seria=a). \
         values_list(
         'viscosity1',
         'viscosity2',
