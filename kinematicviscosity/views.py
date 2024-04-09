@@ -660,14 +660,16 @@ def export_me_xls(request, pk):
         str(note.performer),
         str(note.performer),
         str(note.performer),
-        '',
-        '',
-        '',
+        note.seria,
+        note.seria,
+        note.seria,
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
         ws.merge(row_num, row_num, 0, 2, style2)
         ws.merge(row_num, row_num, 3, 5, style2)
+
+    
 
 
     row_num = 27
@@ -1312,17 +1314,17 @@ def export_protocol_xls(request, pk):
         ws.merge(row_num, row_num, 2, 7, style7)
 
   
-    row_num = 28
+    row_num +=1
     columns = [
         f'Испытание {note.name_rm} по {ndocument}'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style8)
-        ws.merge(28, 28, 0, 7, style8)
+        ws.merge(row_num, row_num, 0, 7, style8)
 
 
 
-    row_num = 29
+    row_num +=1
     columns = [
         'Аттестуемая характеристика',
         'Аттестуемая характеристика',
@@ -1341,7 +1343,7 @@ def export_protocol_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 1050
 
-    row_num = 30
+    row_num +=1
     v1 = Decimal(note.viscosity1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
     v2 = Decimal(note.viscosity2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
     columns = [
@@ -1356,15 +1358,36 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style8)
-        ws.merge(30, 30, 0, 1, style8)
+        ws.merge(row_num, row_num, 0, 1, style8)
     for col_num in range(2, 3):
         ws.write(row_num, col_num, columns[col_num], style11)
     for col_num in range(3, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style8)
 
+    if note.seria == True and note.seria != 0 and note.seria != '0':
+        row_num +=1
+        v1 = Decimal(note.viscosity1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
+        v2 = Decimal(note.viscosity2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
+        columns = [
+            attcharacteristic,
+            attcharacteristic,
+            note.temperature,
+            v1,
+            v2,
+            measureresult,
+            note.accMeasurement,
+            note.kriteriy,
+        ]
+        for col_num in range(2):
+            ws.write(row_num, col_num, columns[col_num], style8)
+            ws.merge(row_num, row_num, 0, 1, style8)
+        for col_num in range(2, 3):
+            ws.write(row_num, col_num, columns[col_num], style11)
+        for col_num in range(3, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style8)
+
     
-    
-    row_num = 31
+    row_num +=1
     columns = [
         'Дополнительные сведения: ',
         'Дополнительные сведения: ',
@@ -1377,12 +1400,12 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(31, 31, 0, 1, style6)
+        ws.merge(row_num, row_num, 0, 1, style6)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(31, 31, 2, 7, style7)
+        ws.merge(row_num, row_num, 2, 7, style7)
 
-    row_num = 32
+    row_num +=1
     columns = [
         'Выводы: ',
         'Выводы: ',  
@@ -1390,14 +1413,14 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(32, 32, 0, 1, style6)
+        ws.merge(row_num, row_num, 0, 1, style6)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(row_num, row_num, 2, 7, style7)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 1000
 
-    row_num = 33
+    row_num +=1
     columns = [
         company.prohibitet
     ]
@@ -1407,7 +1430,7 @@ def export_protocol_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 1000
 
-    row_num = 35
+    row_num +=1
     columns = [
         'Исполнитель: ',
         'Исполнитель: ',
@@ -1416,7 +1439,7 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style6)
         ws.merge(row_num, row_num, 0, 1, style6)
 
-    row_num = 36
+    row_num +=1
     columns = [
         note.performer.profile.userposition,
         note.performer.profile.userposition,
