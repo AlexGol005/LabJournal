@@ -145,7 +145,7 @@ class ProtocolbuttonView(Constants, TemplateView):
                 get(Q(date__exact=note.date) & Q(roomnumber__exact=note.room))
         except:
             context['meteo'] = 1
-        if note.room and note.equipment1:
+        if note.room and note.equipment1 and context['meteo'] != 1:
             context['title'] = 'Есть все данные для формирования протокола'
         else:
             context['title'] = 'Добавьте данные для формирования протокола'
