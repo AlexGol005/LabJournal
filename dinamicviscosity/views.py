@@ -1434,14 +1434,16 @@ def export_protocol_xls(request, pk):
     ws.row(row_num).height = 1000
 
     row_num +=1
- 
+    d1 = str(Decimal(note.density1).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+    d2 = str(Decimal(note.density2).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+    d2 = str(Decimal(note.density_avg).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
     columns = [
          measureparameter,
          measureparameter,
          note.temperature,
-         note.density1,
-         note.density2,
-         note.density_avg,
+         d1,
+         d2,
+         d,
          str(note.accMeasurement).replace('.',','),
          note.kriteriy,
         ]
@@ -1456,14 +1458,16 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style8)
 
     row_num += 1
+    a=str(note.certifiedValue).replace('.',',')
+    b=str(note.kinematicviscosity).replace('.',',')
     columns = [
-        f'вязкость кинематическая при температуре измерений: {note.kinematicviscosity} мм2/с; ',
-        f'вязкость кинематическая при температуре измерений: {note.kinematicviscosity} мм2/с; ',
-        f'вязкость кинематическая при температуре измерений: {note.kinematicviscosity} мм2/с; ',
-        f'вязкость кинематическая при температуре измерений: {note.kinematicviscosity} мм2/с; ',
-        f'вязкость динамическая: {note.certifiedValue} Па*с.',
-        f'вязкость динамическая : {note.certifiedValue} Па*с.',
-        f'вязкость динамическая : {note.certifiedValue} Па*с.',
+        f'вязкость кинематическая при температуре измерений: {b} мм2/с; ',
+        f'вязкость кинематическая при температуре измерений: {b} мм2/с; ',
+        f'вязкость кинематическая при температуре измерений: {b} мм2/с; ',
+        f'вязкость кинематическая при температуре измерений: {b} мм2/с; ',
+        f'вязкость динамическая: {a} Па*с.',
+        f'вязкость динамическая : {a} Па*с.',
+        f'вязкость динамическая : {a} Па*с.',
     ]
     for col_num in range(5):
         ws.write(row_num, col_num, columns[col_num], style7)
