@@ -100,7 +100,7 @@ class StrJournalCreationForm(forms.ModelForm):
                                         widget=forms.TextInput(attrs={'class': 'form-control',
                                                                       'placeholder': 'АЗ через точку'}
                                                                ))
-    numberexample = forms.CharField(initial='0', label='Номер серии измерений.Введите уникальный номер серии измерений, например вида: "№партииГГММДД" для формирования притокола измерения однородности. Для всех измерений серии номер должен быть одинаковый. Если это не серия измерений, то в этом поле должен быть указан "0"', 
+    numberexample = forms.CharField(initial='0', label='Номер серии измерений', 
                                     help_text='',
                                     max_length=100, required=False,
                            widget=forms.TextInput(attrs={'class': 'form-control',
