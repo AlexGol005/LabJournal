@@ -775,9 +775,9 @@ def export_protocol_xls(request, pk):
     ndocument = note.ndocument
     
     if note.aim == aimoptional[1][1]:
-        measureresult = str(note.certifiedValue_text).replace('.',',')
+        measureresult = str(note.certifiedValue).replace('.',',')
     if note.aim != aimoptional[1][1]:
-        measureresult = note.certifiedValue
+        measureresult = str(note.certifiedValue).replace('.',',')
     if note.aim == aimoptional[0][1]:
        conclusion = conclusionoptional[0]
     if note.aim == aimoptional[1][1]:
