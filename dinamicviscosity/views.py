@@ -572,15 +572,32 @@ def export_me_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style1)
         ws.merge(15, 15, 0, 4, style1)
 
+
     row_num = 16
+    columns = [
+        f'Цель: {note.aim}'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(16, 16, 0, 4, style1)
+        
+    row_num +=1 
+    columns = [
+        f'Номер флакона: {note.numberexample}'
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style1)
+        ws.merge(row_num, row_num, 0, 4, style1)
+
+    row_num +=1
     columns = [
         'Расчёт динамической вязкости'
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(16, 16, 0, 4, style1)
+        ws.merge(row_num, row_num, 0, 4, style1)
 
-    row_num = 17
+    row_num +=1
     columns = [
         'Вязкость кинематическая при температуре измерений, ν, мм2/с',
         'Вязкость кинематическая при температуре измерений, ν, мм2/с',
@@ -590,12 +607,12 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(17, 17, 0, 1, style1)
-        ws.merge(17, 17, 2, 4, style1)
+        ws.merge(row_num, row_num, 0, 1, style1)
+        ws.merge(row_num, row_num, 2, 4, style1)
 
     note.kinematicviscosity = str(note.kinematicviscosity).replace('.', ',')
 
-    row_num = 18
+    row_num += 1
     columns = [
        note.kinematicviscosity,
        note.kinematicviscosity,
@@ -605,20 +622,20 @@ def export_me_xls(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(18, 18, 0, 1, style2)
-        ws.merge(18, 18, 2, 4, style2)
+        ws.merge(row_num, row_num, 0, 1, style2)
+        ws.merge(row_num, row_num, 2, 4, style2)
 
 
-    row_num = 19
+    row_num +=1
     columns = [
        ' Результат испытаний'
     ]
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(19, 19, 0, 4, style1)
+        ws.merge(row_num, row_num, 0, 4, style1)
 
-    row_num = 20
+    row_num +=1
     columns = [
         'АЗ, Дин. вязк., Па * с',
         'Абс. погр.  (νдин сред. * 0,3)/ 1000',
@@ -644,7 +661,7 @@ def export_me_xls(request, pk):
     if note.resultWarning == '' and not note.olddensity:
         note.resultWarning = 'нет'
 
-    row_num = 21
+    row_num +=1
     columns = [
         note.certifiedValue,
         note.abserror,
@@ -656,7 +673,7 @@ def export_me_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style2)
 
 
-    row_num = 22
+    row_num +=1
     columns = [
         'Исполнитель',
         'Исполнитель',
@@ -669,7 +686,7 @@ def export_me_xls(request, pk):
         ws.merge(row_num, row_num, 0, 2, style1)
         ws.merge(row_num, row_num, 3, 4, style1)
 
-    row_num = 23
+    row_num +=1
     columns = [
         str(note.performer),
         str(note.performer),
@@ -682,7 +699,7 @@ def export_me_xls(request, pk):
         ws.merge(row_num, row_num, 0, 2, style1)
         ws.merge(row_num, row_num, 3, 4, style1)
 
-    row_num = 26
+    row_num +=1
     columns = [
         'Страница №           ',
     ]
