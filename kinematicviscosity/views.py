@@ -1377,22 +1377,8 @@ def export_protocol_xls(request, pk):
         'certifiedValue',
         'accMeasurement',
         'kriteriy',
-    )
+        )
         
-        row_num +=1
-        v1 = Decimal(note.viscosity1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
-        v2 = Decimal(note.viscosity2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
-        columns = [
-            attcharacteristic,
-            attcharacteristic,
-            note.temperature,
-            v1,
-            v2,
-            measureresult,
-            note.accMeasurement,
-            note.kriteriy,
-        ]
-
         for row in qseria:
             row_num += 1
             for col_num in range(2):
