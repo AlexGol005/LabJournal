@@ -96,7 +96,11 @@ class Dinamicviscosity(models.Model):
         self.equipment2 = MeasurEquipment.objects.get(equipment__exnumber='Т035')
         self.equipment3 = MeasurEquipment.objects.get(equipment__exnumber='В005')
         self.equipment4 = MeasurEquipment.objects.get(equipment__exnumber='К005')
-        self.room = Rooms.objects.get(roomnumber='474')
+        if self.equipment == 'Плотномер'
+            self.room = Rooms.objects.get(roomnumber='249')
+        if self.equipment != 'Плотномер'
+            self.room = Rooms.objects.get(roomnumber='474')
+
         
         if self.havedensity and self.density_avg and self.densitydead:
             self.resultMeas = 'плотность измерена ранее'
