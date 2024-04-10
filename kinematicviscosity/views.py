@@ -1404,15 +1404,16 @@ def export_protocol_xls(request, pk):
             row_num += 1
             for col_num in range(0, 5):
                 ws.write(row_num, col_num + 2, row[col_num], style8)
-                count = row_num
-        row_num = count1 + 2
+        counthe = row_num
+            
+        row_num1 = count1 + 2
         columns = [
         f'Кинематическая вязкость, мм2/с при {note.temperature} °С',
         f'Кинематическая вязкость, мм2/с при {note.temperature} °С',
         ]
         for col_num in range(2):
-            ws.write(row_num, col_num, columns[col_num], style8)
-            ws.merge(row_num, row_num, 0, 1, style8)
+            ws.write(row_num1, col_num, columns[col_num], style8)
+            ws.merge(row_num1, row_num1, 0, 1, style8)
 
 
 
