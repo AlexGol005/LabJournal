@@ -183,6 +183,26 @@ class SearchResultView(Constants, TemplateView):
         context['journal'] = JOURNAL.objects.filter(for_url=URL)
         context['formSM'] = SearchForm(initial={'name': name, 'lot': lot, 'temperature': temperature})
         context['formdate'] = SearchDateForm()
+        context['formS'] = SearchSeriaForm()
+        context['URL'] = URL
+        return context
+
+class SearchResultSeriaView(Constants, TemplateView):
+    """ Представление, которое выводит результаты поиска по серии """
+    """нестандартное"""
+    template_name = URL + '/journal.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchResultView, self).get_context_data(**kwargs)
+        seria = self.request.GET['seria']
+        if seria:
+            objects = MODEL.objects.filter(seria=seria).\
+            order_by('-pk')
+            context['objects'] = objects
+        context['journal'] = JOURNAL.objects.filter(for_url=URL)
+        context['formSM'] = SearchForm()
+        context['formS'] = SearchSeriaForm()
+        context['formdate'] = SearchDateForm()
         context['URL'] = URL
         return context
 
@@ -193,7 +213,9 @@ def filterview(request, pk):
     journal = JOURNAL.objects.filter(for_url=URL)
     objects = MODEL.objects.all()
     formSM = SearchForm()
+    formS = SearchSeriaForm()
     formdate = SearchDateForm()
+    
     if pk == 1:
         now = datetime.datetime.now() - timedelta(minutes=60 * 24 * 7)
         objects = objects.filter(date__gte=now).order_by('-pk')
