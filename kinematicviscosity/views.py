@@ -1338,14 +1338,14 @@ def export_protocol_xls(request, pk):
         'Измеренное значение Хср, мм2/с ',
         'Оценка приемлемости измерений, % отн. ',
         'Норматив контроля, r, % отн. ',
-    ]
-    for col_num in range(2):
-        ws.write(row_num, col_num, columns[col_num], style9)
-        ws.merge(row_num, row_num, 0, 1, style9)
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style9)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 1050
+        ]
+        for col_num in range(2):
+            ws.write(row_num, col_num, columns[col_num], style9)
+            ws.merge(row_num, row_num, 0, 1, style9)
+        for col_num in range(1, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style9)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 1050
     
         row_num +=1
         v1 = Decimal(note.viscosity1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
@@ -1380,14 +1380,14 @@ def export_protocol_xls(request, pk):
         'Измеренное значение Х2, мм2/с ',
         'Измеренное значение Хср, мм2/с ',
         'Норматив контроля, r, % отн. Оценка приемлемости измерений, % отн.  ',
-    ]
-    for col_num in range(2):
-        ws.write(row_num, col_num, columns[col_num], style9)
-        ws.merge(row_num, row_num, 0, 1, style9)
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style9)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 1050
+        ]
+        for col_num in range(2):
+            ws.write(row_num, col_num, columns[col_num], style9)
+            ws.merge(row_num, row_num, 0, 1, style9)
+        for col_num in range(1, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style9)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 1050
 
         a = note.seria
         qseria = ViscosityMJL.objects.all().filter(seria=a). \
