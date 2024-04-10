@@ -267,6 +267,7 @@ class SearchSeriaForm(forms.Form):
         self.helper.layout = Layout(
             Row(
                 Column('seria', css_class='form-group col-md-5 mb-0'),
+                Submit('submit', 'Найти', css_class='btn  btn-info col-md-2 mb-3 mt-4 ml-4'),
                 css_class='form-row'
             ))
 
