@@ -26,6 +26,14 @@
         {% crispy formSM %}
     </form>
 {#конец формы для поиска по ГСО#}
+    
+{#форма для поиска по серии #}
+{#стандартная#}
+    <form action="/attestationJ/{{ URL }}/searchresult/" method="GET">
+        {% csrf_token %}
+        {% crispy formS %}
+    </form>
+{#конец формы для поиска по ГСО#}
 
 {#основная таблица#}
 {# уникальная #}
