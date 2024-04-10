@@ -194,7 +194,7 @@ class SearchResultSeriaView(Constants, TemplateView):
     template_name = URL + '/journal.html'
 
     def get_context_data(self, **kwargs):
-        context = super(SearchResultView, self).get_context_data(**kwargs)
+        context = super(SearchResultSeriaView, self).get_context_data(**kwargs)
         seria = self.request.GET['seria']
         if seria:
             objects = MODEL.objects.filter(seria=seria).\
@@ -234,7 +234,7 @@ def filterview(request, pk):
     elif pk == 7:
         objects = objects.filter(performer=request.user).filter(fixation__exact=True).filter(
             date__gte=datetime.datetime.now()).order_by('-pk')
-    return render(request, URL + "/journal.html", {'objects': objects, 'journal': journal, 'formSM': formSM, 'URL': URL,
+    return render(request, URL + "/journal.html", {'objects': objects, 'journal': journal, 'formSM': formSM, 'URL': URL, 'formS': formS,
                                                    'formdate': formdate})
 
 
