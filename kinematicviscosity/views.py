@@ -1413,7 +1413,15 @@ def export_protocol_xls(request, pk):
         ]
         for col_num in range(2):
             ws.write(row_num1, col_num, columns[col_num], style8)
-            ws.merge(row_num1, row_num1, 0, 1, style8)
+            ws.merge(row_num1, counthe, 0, 1, style8)
+
+        row_num2 = count1 + 2
+        columns = [
+        note.kriteriy,
+        ]
+        for col_num in range(7, 8):
+            ws.write(row_num2, col_num, columns[col_num], style8)
+            ws.merge(row_num2, counthe, 7, 7, style8)
 
 
 
