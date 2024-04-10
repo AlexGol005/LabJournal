@@ -1324,8 +1324,12 @@ def export_protocol_xls(request, pk):
 
 
 
-    row_num +=1
-    columns = [
+
+
+    if note.seria == False or note.seria == '0':
+
+        row_num +=1
+        columns = [
         'Аттестуемая характеристика',
         'Аттестуемая характеристика',
         'Т °C',
@@ -1342,8 +1346,6 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style9)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 1050
-
-    if note.seria == False or note.seria == '0':
     
         row_num +=1
         v1 = Decimal(note.viscosity1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
@@ -1368,12 +1370,32 @@ def export_protocol_xls(request, pk):
 
     if  note.seria != '0':
 
+        row_num +=1
+        columns = [
+        'Аттестуемая характеристика',
+        'Аттестуемая характеристика',
+        'Номер экземпляра СО',
+        'Т °C',
+        'Измеренное значение Х1, мм2/с ',
+        'Измеренное значение Х2, мм2/с ',
+        'Измеренное значение Хср, мм2/с ',
+        'Норматив контроля, r, % отн. Оценка приемлемости измерений, % отн.  ',
+    ]
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style9)
+        ws.merge(row_num, row_num, 0, 1, style9)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style9)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 1050
+
         a = note.seria
         qseria = ViscosityMJL.objects.all().filter(seria=a). \
         values_list(
+        'temperature',
         'viscosity1',
         'viscosity2',
-        'temperature',
+        
         'certifiedValue',
         'accMeasurement',
         'kriteriy',
@@ -1382,7 +1404,7 @@ def export_protocol_xls(request, pk):
         for row in qseria:
             row_num += 1
             for col_num in range(0, 5):
-                ws.write(row_num, col_num + 1, row[col_num], style8)
+                ws.write(row_num, col_num + 3, row[col_num], style8)
 
 
 
