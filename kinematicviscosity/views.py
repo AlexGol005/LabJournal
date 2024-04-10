@@ -32,6 +32,7 @@ class Constants:
     NAME = NAME
     journal = journal
     SearchForm = SearchForm
+    SearchSeriaForm = SearchSeriaForm
     SearchDateForm = SearchDateForm
 # конец блока для всех журналов
 
