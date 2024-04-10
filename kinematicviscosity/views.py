@@ -1401,7 +1401,7 @@ def export_protocol_xls(request, pk):
         
         for row in qseria:
             row_num += 1
-            for col_num in range(1, 6):
+            for col_num in range(1, 5):
                 ws.write(row_num, col_num, row[col_num], style8)
 
 
