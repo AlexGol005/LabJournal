@@ -6,6 +6,8 @@ from .models import *
 
 @admin.register(ViscosityMJL)  # связываем админку с моделью
 class NoteAdmin(admin.ModelAdmin):
+
+    list_filter = ["name", "lot", "temperature"]
     # exclude = ('performer',)  # скрыть performer поле, чтобы оно не отображалось в форме изменений
 
     def save_model(self, request, obj, form, change):
