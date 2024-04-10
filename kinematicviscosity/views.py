@@ -1405,7 +1405,7 @@ def export_protocol_xls(request, pk):
             for col_num in range(0, 5):
                 ws.write(row_num, col_num + 2, row[col_num], style8)
         count = row_num
-        row_num = count1 + 1
+        row_num = count1 + 2
         columns = [
         f'Кинематическая вязкость, мм2/с при {note.temperature} °С',
         f'Кинематическая вязкость, мм2/с при {note.temperature} °С',
