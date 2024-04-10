@@ -1397,12 +1397,11 @@ def export_protocol_xls(request, pk):
         'viscosity2',    
         'certifiedValue',
         'accMeasurement',
-        'kriteriy',
         )
         
         for row in qseria:
             row_num += 1
-            for col_num in range(1, 7):
+            for col_num in range(1, 6):
                 ws.write(row_num, col_num + 1, row[col_num], style8)
 
 
