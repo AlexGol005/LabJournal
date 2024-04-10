@@ -1419,9 +1419,9 @@ def export_protocol_xls(request, pk):
         columns = [
         note.kriteriy,
         ]
-        for col_num in range(6,7):
-            ws.write(row_num2, col_num, columns[col_num], style8)
-            ws.merge(row_num2, counthe, 6, 6, style8)
+        for col_num in range(1):
+            ws.write(row_num2, col_num + 6, columns[col_num], style8)
+            ws.merge(row_num2, counthe, 7, 7, style8)
 
 
 
