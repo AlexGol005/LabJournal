@@ -22,6 +22,7 @@ class Constants:
     NAME = None
     journal = None
     SearchForm = None
+    SearchS = None
     SearchDateForm = None
     paginate_by = 8
 
@@ -108,6 +109,7 @@ class AllStrView(Constants, ListView):
         context = super(AllStrView, self).get_context_data(**kwargs)
         context['journal'] = self.JOURNAL.objects.filter(for_url=self.URL)
         context['formSM'] = self.SearchForm
+        context['formS'] = self.SearchS
         context['formdate'] = self.SearchDateForm
         context['URL'] = self.URL
         return context
@@ -183,6 +185,7 @@ class DateSearchResultView(Constants, TemplateView):
         datefinish = self.request.GET['datefinish']
         context['journal'] = self.JOURNAL.objects.filter(for_url=self.URL)
         context['formSM'] = self.SearchForm
+        context['formS'] = self.SearchS
         context['formdate'] = self.SearchDateForm(initial={'datestart': datestart, 'datefinish': datefinish})
         context['URL'] = self.URL
         try:
