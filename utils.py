@@ -22,7 +22,7 @@ class Constants:
     NAME = None
     journal = None
     SearchForm = None
-    SearchS = None
+    SearchSeriaForm = None
     SearchDateForm = None
     paginate_by = 8
 
