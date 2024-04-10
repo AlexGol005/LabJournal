@@ -1391,7 +1391,7 @@ def export_protocol_xls(request, pk):
 
         a = note.seria
         qseria = ViscosityMJL.objects.all().filter(seria=a). \
-        annotate(char=Concat(Value('Кинематическая вязкость при '),'temperature', Value(' °C ')))
+        annotate(char=Concat(Value('Кинематическая вязкость при '),'temperature', Value(' °C '))).\
         values_list(
         'char',
         'char',
