@@ -257,6 +257,19 @@ class SearchForm(forms.Form):
                 css_class='form-row'
             ))
 
+class SearchSeriaForm(forms.Form):
+    "форма для поиска по полям серии измерений"
+    "при копировании поменять поля на нужные"
+    seria = forms.CharField(label='Серия измерений',  required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('ыукшф', css_class='form-group col-md-5 mb-0'),
+                css_class='form-row'
+            ))
 
 
 
