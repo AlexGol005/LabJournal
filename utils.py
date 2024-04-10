@@ -109,7 +109,7 @@ class AllStrView(Constants, ListView):
         context = super(AllStrView, self).get_context_data(**kwargs)
         context['journal'] = self.JOURNAL.objects.filter(for_url=self.URL)
         context['formSM'] = self.SearchForm
-        context['formS'] = self.SearchS
+        context['formS'] = self.SearchSeriaForm
         context['formdate'] = self.SearchDateForm
         context['URL'] = self.URL
         return context
