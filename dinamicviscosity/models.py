@@ -92,10 +92,10 @@ class Dinamicviscosity(models.Model):
 
     def save(self, *args, **kwargs):
         # костыль для добавления приборов и комнаты
-        self.equipment1 = MeasurEquipment.objects.get(equipment__exnumber='П005')
-        self.equipment2 = MeasurEquipment.objects.get(equipment__exnumber='Т035')
-        self.equipment3 = MeasurEquipment.objects.get(equipment__exnumber='В005')
-        self.equipment4 = MeasurEquipment.objects.get(equipment__exnumber='К005')
+        self.equipment1 = MeasurEquipment.objects.get(equipment__exnumber=densimeter)
+        self.equipment2 = MeasurEquipment.objects.get(equipment__exnumber=termometer)
+        self.equipment3 = MeasurEquipment.objects.get(equipment__exnumber=balance)
+        self.equipment4 = MeasurEquipment.objects.get(equipment__exnumber=piknometer)
         if self.equipment == 'денсиметром':
             self.room = Rooms.objects.get(roomnumber='249')
         if self.equipment != 'денсиметром':
