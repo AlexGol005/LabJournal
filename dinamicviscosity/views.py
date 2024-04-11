@@ -1433,16 +1433,30 @@ def export_protocol_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 1000
 
-    row_num +=1
+    #ниже поиск х1 и х2 по кинематике
+    ser = ViscosityMJL.objects.filter(fixation=True).filter(certifiedValue_text=note.kinematicviscosity).\
+                filter(lot=note.lot).filter(temperature=note.temperature).filter(name=note.name).last().viscosity1 
+    vk1 = str(Decimal(ser.viscosity1 ).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+    vk2 = str(Decimal(ser.viscosity2 ).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+    a=str(note.certifiedValue).replace('.',',')
+    b=str(note.kinematicviscosity).replace('.',',')
     d1 = str(Decimal(note.density1).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
     d2 = str(Decimal(note.density2).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
-    d = str(Decimal(note.density_avg).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+    
+    vd1 = ser.viscosity1 * note.density1
+    vd1 = str(Decimal(vd1).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+    vd2 = ser.viscosity2 * note.density2
+    vd2 = str(Decimal(vd2).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+    d = str(Decimal(note.certifiedValue).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+
+    row_num +=1
+    
     columns = [
          measureparameter,
          measureparameter,
          note.temperature,
-         d1,
-         d2,
+         vd1,
+         vd2,
          d,
          str(note.accMeasurement).replace('.',','),
          note.kriteriy,
@@ -1458,19 +1472,14 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style8)
 
     row_num += 1
-    #ниже поиск х1 и х2 по кинематике
-    ser = ViscosityMJL.objects.filter(fixation=True).filter(certifiedValue_text=note.kinematicviscosity).\
-                filter(lot=note.lot).filter(temperature=note.temperature).filter(name=note.name).last().viscosity1 
-    a=str(note.certifiedValue).replace('.',',')
-    b=str(note.kinematicviscosity).replace('.',',')
     columns = [
-        f'вязкость кинематическая при температуре измерений: {b} мм2/с; ',
-        f'вязкость кинематическая при температуре измерений: {b} мм2/с; ',
-        f'вязкость кинематическая при температуре измерений: {b} мм2/с; ',
-        f'вязкость кинематическая при температуре измерений: {b} мм2/с; ',
-        f'вязкость динамическая: {ser} мПа*с.',
-        f'вязкость динамическая : {ser} мПа*с.',
-        f'вязкость динамическая : {ser} мПа*с.',
+        f'вязкость кинематическая при температуре измерений: X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
+        f'вязкость кинематическая при температуре измерений: X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
+        f'вязкость кинематическая при температуре измерений: X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
+        f'вязкость кинематическая при температуре измерений: X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
+        f'плотность при температуре измерений: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
+        f'плотность при температуре измерений: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
+        f'плотность при температуре измерений: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
     ]
     for col_num in range(5):
         ws.write(row_num, col_num, columns[col_num], style7)
