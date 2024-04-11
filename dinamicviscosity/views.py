@@ -1394,14 +1394,14 @@ def export_protocol_xls(request, pk):
 
     row_num +=1
     columns = [
-            '  ',
-            '  ',
-            equipment_set6,
-            equipment_set6,
-            equipment_set6,
-            equipment_set6,
-            equipment_set6,
-            equipment_set6,
+        '  ',
+        '  ',
+        equipment_set6,
+        equipment_set6,
+        equipment_set6,
+        equipment_set6,
+        equipment_set6,
+        equipment_set6,
         ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
