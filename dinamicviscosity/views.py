@@ -1376,12 +1376,12 @@ def export_protocol_xls(request, pk):
         columns = [
             '  ',
             '  ',
-            note.equipment_set5,
-            note.equipment_set5,
-            note.equipment_set5,
-            note.equipment_set5,
-            note.equipment_set5,
-            note.equipment_set5,
+            equipment_set5,
+            equipment_set5,
+            equipment_set5,
+            equipment_set5,
+            equipment_set5,
+            equipment_set5,
         ]
         for col_num in range(2):
             ws.write(row_num, col_num, columns[col_num], style6)
@@ -1396,12 +1396,12 @@ def export_protocol_xls(request, pk):
         columns = [
             '  ',
             '  ',
-            note.equipment_set6,
-            note.equipment_set6,
-            note.equipment_set6,
-            note.equipment_set6,
-            note.equipment_set6,
-            note.equipment_set6,
+            equipment_set6,
+            equipment_set6,
+            equipment_set6,
+            equipment_set6,
+            equipment_set6,
+            equipment_set6,
         ]
         for col_num in range(2):
             ws.write(row_num, col_num, columns[col_num], style6)
@@ -1416,12 +1416,12 @@ def export_protocol_xls(request, pk):
         columns = [
             '  ',
             '  ',
-            note.equipment_set7,
-            note.equipment_set7,
-            note.equipment_set7,
-            note.equipment_set7,
-            note.equipment_set7,
-            note.equipment_set7,
+            equipment_set7,
+            equipment_set7,
+            equipment_set7,
+            equipment_set7,
+            equipment_set7,
+            equipment_set7,
         ]
         for col_num in range(2):
             ws.write(row_num, col_num, columns[col_num], style6)
