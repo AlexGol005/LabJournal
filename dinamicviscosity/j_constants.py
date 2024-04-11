@@ -28,6 +28,6 @@ conclusionoptional = (
     ('Результаты подчинены нормальному распределению, выбросы отсутствуют, партия признана однородной'),
     ('Другое', 'Другое'))
 parameter = 'плотность'
-attcharacteristic = 'Плотность'
-measureparameter = 'Плотность'
+attcharacteristic = 'Динамическая вязкость'
+measureparameter = 'Динамическая вязкость'
 countparameter = 'Динамическая вязкость (расчёт):'
