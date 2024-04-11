@@ -807,7 +807,8 @@ def export_protocol_xls(request, pk):
 
     if ser.equipment2:
         equipment_set5 = ser.equipment2
-    equipment_set5 = 'тут будет вискозиметер'
+    if not ser.equipment2:
+        equipment_set5 = 'тут будет вискозиметер в записи его нет'
     equipment_set6 = str(ser.equipment3)
     equipment_set7 = str(ser.equipment1)
         
