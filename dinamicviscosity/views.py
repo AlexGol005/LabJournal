@@ -805,11 +805,11 @@ def export_protocol_xls(request, pk):
     vd2 = str(Decimal(vd2).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
     d = str(note.certifiedValue).replace('.',',')
 
-    if ser.viscosimeter1:
+    if ser.equipment2:
         equipment_set5 = ser.viscosimeter1
     equipment_set5 = 'тут будет вискозиметер'
-    equipment_set6 = 'тут будет вискозиметер2'
-    equipment_set7 = 'тут будет секундомер'
+    equipment_set6 = ser.equipment3
+    equipment_set7 = ser.equipment1
         
 
     response = HttpResponse(content_type='application/ms-excel')
