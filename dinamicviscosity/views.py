@@ -1435,7 +1435,7 @@ def export_protocol_xls(request, pk):
 
     #ниже поиск х1 и х2 по кинематике
     ser = ViscosityMJL.objects.filter(fixation=True).filter(certifiedValue_text=note.kinematicviscosity).\
-                filter(lot=note.lot).filter(temperature=note.temperature).filter(name=note.name).last().viscosity1 
+                filter(lot=note.lot).filter(temperature=note.temperature).filter(name=note.name).last() 
     vk1 = str(Decimal(ser.viscosity1 ).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
     vk2 = str(Decimal(ser.viscosity2 ).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
     a=str(note.certifiedValue).replace('.',',')
