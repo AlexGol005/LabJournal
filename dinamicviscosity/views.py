@@ -806,7 +806,7 @@ def export_protocol_xls(request, pk):
     d = str(note.certifiedValue).replace('.',',')
 
     if ser.equipment2:
-        equipment_set5 = ser.viscosimeter1
+        equipment_set5 = ser.equipment2
     equipment_set5 = 'тут будет вискозиметер'
     equipment_set6 = ser.equipment3
     equipment_set7 = ser.equipment1
