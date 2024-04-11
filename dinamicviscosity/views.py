@@ -1372,28 +1372,28 @@ def export_protocol_xls(request, pk):
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 500
 
-        row_num +=1
-        columns = [
-            '  ',
-            '  ',
-            equipment_set5,
-            equipment_set5,
-            equipment_set5,
-            equipment_set5,
-            equipment_set5,
-            equipment_set5,
+    row_num +=1
+    columns = [
+        '  ',
+        '  ',
+        equipment_set5,
+        equipment_set5,
+        equipment_set5,
+        equipment_set5,
+        equipment_set5,
+        equipment_set5,
         ]
-        for col_num in range(2):
-            ws.write(row_num, col_num, columns[col_num], style6)
-            ws.merge(row_num, row_num, 0, 1, style6)
-        for col_num in range(1, len(columns)):
-            ws.write(row_num, col_num, columns[col_num], style7)
-            ws.merge(row_num, row_num, 2, 7, style7)
-        ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 500
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(row_num, row_num, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(row_num, row_num, 2, 7, style7)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
 
-        row_num +=1
-        columns = [
+    row_num +=1
+    columns = [
             '  ',
             '  ',
             equipment_set6,
@@ -1403,35 +1403,38 @@ def export_protocol_xls(request, pk):
             equipment_set6,
             equipment_set6,
         ]
-        for col_num in range(2):
-            ws.write(row_num, col_num, columns[col_num], style6)
-            ws.merge(row_num, row_num, 0, 1, style6)
-        for col_num in range(1, len(columns)):
-            ws.write(row_num, col_num, columns[col_num], style7)
-            ws.merge(row_num, row_num, 2, 7, style7)
-        ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 500
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(row_num, row_num, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(row_num, row_num, 2, 7, style7)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
 
-        row_num +=1
-        columns = [
-            '  ',
-            '  ',
-            equipment_set7,
-            equipment_set7,
-            equipment_set7,
-            equipment_set7,
-            equipment_set7,
-            equipment_set7,
+
+        
+    row_num +=1
+    columns = [
+        '  ',
+        '  ',
+        equipment_set7,
+        equipment_set7,
+        equipment_set7,
+        equipment_set7,
+        equipment_set7,
+        equipment_set7,
         ]
-        for col_num in range(2):
-            ws.write(row_num, col_num, columns[col_num], style6)
-            ws.merge(row_num, row_num, 0, 1, style6)
-        for col_num in range(1, len(columns)):
-            ws.write(row_num, col_num, columns[col_num], style7)
-            ws.merge(row_num, row_num, 2, 7, style7)
-        ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 500
+    for col_num in range(2):
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(row_num, row_num, 0, 1, style6)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(row_num, row_num, 2, 7, style7)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
 
+            
 
     row_num +=1
     columns = [
