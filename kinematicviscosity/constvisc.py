@@ -23,4 +23,7 @@ metodic = 'МИ-02-2018. Методика измерений  кинематич
 
 timer = 'С003'
 termometer = 'Т035'
+balance= 'В005'
+piknometer = 'К005'
+densimeter = 'П005'
 
