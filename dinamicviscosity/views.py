@@ -789,6 +789,29 @@ def export_protocol_xls(request, pk):
     if note.aim == aimoptional[4][1]:
        conclusion = conclusionoptional[4]
 
+    #ниже поиск х1 и х2 по кинематике
+    ser = ViscosityMJL.objects.filter(fixation=True).filter(certifiedValue_text=note.kinematicviscosity).\
+                filter(lot=note.lot).filter(temperature=note.temperature).filter(name=note.name).last() 
+    vk1 = str(Decimal(ser.viscosity1 ).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+    vk2 = str(Decimal(ser.viscosity2 ).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+    a=str(note.certifiedValue).replace('.',',')
+    b=str(note.kinematicviscosity).replace('.',',')
+    d1 = str(Decimal(note.density1).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+    d2 = str(Decimal(note.density2).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+    
+    vd1 = ser.viscosity1 * note.density1
+    vd1 = str(Decimal(vd1).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+    vd2 = ser.viscosity2 * note.density2
+    vd2 = str(Decimal(vd2).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+    d = str(note.certifiedValue).replace('.',',')
+
+    if ser.viscosimeter1:
+        equipment_set5 = ser.viscosimeter1
+    equipment_set5 = 'тут будет вискозиметер'
+    equipment_set6 = 'тут будет вискозиметер2'
+    equipment_set7 = 'тут будет секундомер'
+        
+
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}_protocol.xls"'
     wb = xlwt.Workbook()
@@ -1349,6 +1372,66 @@ def export_protocol_xls(request, pk):
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 500
 
+        row_num +=1
+        columns = [
+            '  ',
+            '  ',
+            note.equipment_set5,
+            note.equipment_set5,
+            note.equipment_set5,
+            note.equipment_set5,
+            note.equipment_set5,
+            note.equipment_set5,
+        ]
+        for col_num in range(2):
+            ws.write(row_num, col_num, columns[col_num], style6)
+            ws.merge(row_num, row_num, 0, 1, style6)
+        for col_num in range(1, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style7)
+            ws.merge(row_num, row_num, 2, 7, style7)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
+
+        row_num +=1
+        columns = [
+            '  ',
+            '  ',
+            note.equipment_set6,
+            note.equipment_set6,
+            note.equipment_set6,
+            note.equipment_set6,
+            note.equipment_set6,
+            note.equipment_set6,
+        ]
+        for col_num in range(2):
+            ws.write(row_num, col_num, columns[col_num], style6)
+            ws.merge(row_num, row_num, 0, 1, style6)
+        for col_num in range(1, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style7)
+            ws.merge(row_num, row_num, 2, 7, style7)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
+
+        row_num +=1
+        columns = [
+            '  ',
+            '  ',
+            note.equipment_set7,
+            note.equipment_set7,
+            note.equipment_set7,
+            note.equipment_set7,
+            note.equipment_set7,
+            note.equipment_set7,
+        ]
+        for col_num in range(2):
+            ws.write(row_num, col_num, columns[col_num], style6)
+            ws.merge(row_num, row_num, 0, 1, style6)
+        for col_num in range(1, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style7)
+            ws.merge(row_num, row_num, 2, 7, style7)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 500
+
 
     row_num +=1
     columns = [
@@ -1433,21 +1516,7 @@ def export_protocol_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 1000
 
-    #ниже поиск х1 и х2 по кинематике
-    ser = ViscosityMJL.objects.filter(fixation=True).filter(certifiedValue_text=note.kinematicviscosity).\
-                filter(lot=note.lot).filter(temperature=note.temperature).filter(name=note.name).last() 
-    vk1 = str(Decimal(ser.viscosity1 ).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
-    vk2 = str(Decimal(ser.viscosity2 ).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
-    a=str(note.certifiedValue).replace('.',',')
-    b=str(note.kinematicviscosity).replace('.',',')
-    d1 = str(Decimal(note.density1).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
-    d2 = str(Decimal(note.density2).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
-    
-    vd1 = ser.viscosity1 * note.density1
-    vd1 = str(Decimal(vd1).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
-    vd2 = ser.viscosity2 * note.density2
-    vd2 = str(Decimal(vd2).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
-    d = str(note.certifiedValue).replace('.',',')
+
 
     row_num +=1
     
