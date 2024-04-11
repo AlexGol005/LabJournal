@@ -1225,8 +1225,8 @@ def export_protocol_xls(request, pk):
 
     row_num = 21
     columns = [
-        '8 Измеряемый параметр: ',
-        '8 Измеряемый параметр: ',
+        '8 Определяемый параметр: ',
+        '8 Определяемый параметр: ',
         measureparameter,
         measureparameter,
         measureparameter,
@@ -1460,7 +1460,7 @@ def export_protocol_xls(request, pk):
     row_num += 1
     #ниже поиск х1 и х2 по кинематике
     ser = ViscosityMJL.objects.filter(fixation=True).filter(certifiedValue_text=note.kinematicviscosity).\
-                filter(lot=note.lot).filter(temperature=note.temperature).filter(name=note.name)
+                filter(lot=note.lot).filter(temperature=note.temperature).filter(name=note.name).last()
     a=str(note.certifiedValue).replace('.',',')
     b=str(note.kinematicviscosity).replace('.',',')
     columns = [
