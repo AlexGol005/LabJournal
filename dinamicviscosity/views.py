@@ -1378,8 +1378,8 @@ def export_protocol_xls(request, pk):
 
         row_num +=1
         columns = [
-            '  ',
-            '  ',
+            '10 Средства измерений: ',
+            '10 Средства измерений: ',
             note.equipment_set3,
             note.equipment_set3,
             note.equipment_set3,
