@@ -27,3 +27,5 @@ balance= 'В005'
 piknometer = 'К005'
 densimeter = 'П005'
 
+exnumber_viscosimeter1 = 'В038'
+
