@@ -832,20 +832,20 @@ def export_protocol_xls(request, pk):
     
     
     if ser.equipment2:
-        equipment_set5 = f'{ser.equipment2.charakters.name} тип {ser.equipment2.charakters.typename}, зав. № {ser.equipment2.lot}, свидетельство о поверке № {ser.equipment2.newcertnumber} от {ser.equipment2.newdate} действительно до {ser.equipment2.newdatedead};'
+        equipment_set5 = f'{ser.equipment2.charakters.name} тип {ser.equipment2.charakters.typename}, зав. № {ser.equipment2.equipment.lot}, свидетельство о поверке № {ser.equipment2.newcertnumber} от {ser.equipment2.newdate} действительно до {ser.equipment2.newdatedead};'
     if not ser.equipment2:
         viscosimeter1_forset = MeasurEquipment.objects.get(equipment__exnumber=exnumber_viscosimeter1)
-        equipment_set5 = f'{viscosimeter1_forset.charakters.name} тип {viscosimeter1_forset.charakters.typename}, зав. № {viscosimeter1_forset.lot}, свидетельство о поверке № {viscosimeter1_forset.newcertnumber} от {viscosimeter1_forset.newdate} действительно до {viscosimeter1_forset.newdatedead};'
+        equipment_set5 = f'{viscosimeter1_forset.charakters.name} тип {viscosimeter1_forset.charakters.typename}, зав. № {viscosimeter1_forset.equipment.lot}, свидетельство о поверке № {viscosimeter1_forset.newcertnumber} от {viscosimeter1_forset.newdate} действительно до {viscosimeter1_forset.newdatedead};'
     if ser.equipment3:
-        equipment_set6 = f'{ser.equipment3.charakters.name} тип {ser.equipment3.charakters.typename}, зав. № {ser.equipment3.lot}, свидетельство о поверке № {ser.equipment3.newcertnumber} от {ser.equipment3.newdate} действительно до {ser.equipment3.newdatedead};'
+        equipment_set6 = f'{ser.equipment3.charakters.name} тип {ser.equipment3.charakters.typename}, зав. № {ser.equipment3.equipment.lot}, свидетельство о поверке № {ser.equipment3.newcertnumber} от {ser.equipment3.newdate} действительно до {ser.equipment3.newdatedead};'
     if not ser.equipment3:
         viscosimeter2_forset = MeasurEquipment.objects.get(equipment__exnumber=exnumber_viscosimeter2)
-        equipment_set6 = f'{viscosimeter2_forset.charakters.name} тип {viscosimeter2_forset.charakters.typename}, зав. № {viscosimeter2_forset.lot}, свидетельство о поверке № {viscosimeter2_forset.newcertnumber} от {viscosimeter2_forset.newdate} действительно до {viscosimeter2_forset.newdatedead};'
+        equipment_set6 = f'{viscosimeter2_forset.charakters.name} тип {viscosimeter2_forset.charakters.typename}, зав. № {viscosimeter2_forset.equipment.lot}, свидетельство о поверке № {viscosimeter2_forset.newcertnumber} от {viscosimeter2_forset.newdate} действительно до {viscosimeter2_forset.newdatedead};'
     if ser.equipment1:
-        equipment_set7 = f'{ser.equipment1.charakters.name} тип {ser.equipment1.charakters.typename}, зав. № {ser.equipment1.lot}, свидетельство о поверке № {ser.equipment1.newcertnumber} от {ser.equipment1.newdate} действительно до {ser.equipment1.newdatedead};'
+        equipment_set7 = f'{ser.equipment1.charakters.name} тип {ser.equipment1.charakters.typename}, зав. № {ser.equipment1.equipment.lot}, свидетельство о поверке № {ser.equipment1.newcertnumber} от {ser.equipment1.newdate} действительно до {ser.equipment1.newdatedead};'
     if not ser.equipment1:
         timer_forset = MeasurEquipment.objects.get(equipment__exnumber=timer)
-        equipment_set7 = f'{timer_forset.charakters.name} тип {timer_forset.charakters.typename}, зав. № {timer_forset.lot}, свидетельство о поверке № {timer_forset.newcertnumber} от {timer_forset.newdate} действительно до {timer_forset.newdatedead}.'
+        equipment_set7 = f'{timer_forset.charakters.name} тип {timer_forset.charakters.typename}, зав. № {timer_forset.equipment.lot}, свидетельство о поверке № {timer_forset.newcertnumber} от {timer_forset.newdate} действительно до {timer_forset.newdatedead}.'
     
 
         
