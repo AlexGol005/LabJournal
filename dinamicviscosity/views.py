@@ -752,7 +752,8 @@ def export_protocol_xls(request, pk):
                                         Value(' от '), 'equipment1__newdate',
                                         Value(' действительно до '), 'equipment1__newdatedead',
                                         Value('; \n'),
-                                        'equipment2__charakters__name',
+                                        )).\
+        annotate(equipment_meteo1=Concat('equipment2__charakters__name',                                        
                                         Value(' тип '), 'equipment2__charakters__typename',
                                         Value(' зав. № '), 'equipment2__equipment__lot',
                                         Value(', свидетельство о поверке № '), 'equipment2__newcertnumber',
