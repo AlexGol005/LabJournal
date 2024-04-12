@@ -1208,13 +1208,33 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(1, 2):
         ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(16, 17, 0, 1, style7)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(16, 16, 2, 7, style7)
     ws.row(16).height_mismatch = True
     ws.row(16).height = 800
 
-    row_num = 17
+    row_num += 1
+    columns = [
+        '',
+        '7.1 Условия проведения \n измерений соответствуют требованиям рабочей \n эксплуатации средств измерений:',
+        meteo.equipment_meteo1,
+        meteo.equipment_meteo1,
+        meteo.equipment_meteo1,
+        meteo.equipment_meteo1,
+        meteo.equipment_meteo1,
+        meteo.equipment_meteo1,
+    ]
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], style7)
+    for col_num in range(1, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], style7)
+        ws.merge(row_num, row_num, 2, 7, style7)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 400
+
+    row_num = += 1
     columns = [
         '',
         '7.2 Условия окружающей среды:',
@@ -1229,10 +1249,10 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(17, 17, 2, 7, style7)
+        ws.merge(row_num, row_num, 2, 7, style7)
 
 
-    row_num = 18
+    row_num +=1
     p = str(meteo.pressure).replace('.', ',')
     columns = [
         '',
@@ -1248,9 +1268,9 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(18, 18, 2, 7, style7)
+        ws.merge(row_num, row_num, 2, 7, style7)
 
-    row_num = 19
+    row_num +=1
     t = str(meteo.temperature).replace('.', ',')
     columns = [
         '',
@@ -1266,9 +1286,9 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(19, 19, 2, 7, style7)
+        ws.merge(row_num, row_num, 2, 7, style7)
 
-    row_num = 20
+    row_num +=1
     columns = [
         '',
         'влажность, %',
@@ -1283,9 +1303,9 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(20, 20, 2, 7, style7)
+        ws.merge(row_num, row_num, 2, 7, style7)
 
-    row_num = 21
+    row_num +=1
     columns = [
         '8 Определяемый параметр: ',
         '8 Определяемый параметр: ',
@@ -1298,10 +1318,10 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(21, 21, 0, 1, style6)
+        ws.merge(row_num, row_num, 0, 1, style6)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(21, 21, 2, 7, style7)
+        ws.merge(row_num, row_num, 2, 7, style7)
 
     row_num +=1
     if note.ndocument == 'МИ-02-2018':
@@ -1326,8 +1346,8 @@ def export_protocol_xls(request, pk):
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(row_num, row_num, 2, 7, style7)
-    ws.row(22).height_mismatch = True
-    ws.row(22).height = 500
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
 
     if note.equipment == 'денсиметром':
         row_num +=1
