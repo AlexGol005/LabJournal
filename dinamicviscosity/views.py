@@ -819,7 +819,7 @@ def export_protocol_xls(request, pk):
         equipment_set7 = f'{ser.equipment1.charakters.name} тип {ser.equipment1.charakters.typename}, свидетельство о поверке № {ser.equipment1.newcertnumber} от {ser.equipment1.newdate} действительно до {ser.equipment1.newdatedead};'
     if not ser.equipment1:
         timer_forset = MeasurEquipment.objects.get(equipment__exnumber=timer)
-        equipment_set7 = f'{timer_forset.charakters.name} тип {timer_forset.charakters.typename}, свидетельство о поверке № {timer_forset.newcertnumber} от {timer_forset.newdate} действительно до {timer_forset.newdatedead};'
+        equipment_set7 = f'{timer_forset.charakters.name} тип {timer_forset.charakters.typename}, свидетельство о поверке № {timer_forset.newcertnumber} от {timer_forset.newdate} действительно до {timer_forset.newdatedead}.'
     
 
         
