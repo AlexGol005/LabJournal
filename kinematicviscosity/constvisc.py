@@ -27,7 +27,7 @@ balance= 'В005'
 piknometer = 'К005'
 densimeter = 'П005'
 
-exnumber_viscosimeter1 = 'В038'
-exnumber_viscosimeter2 = 'В038'
+exnumber_viscosimeter1 = [0, 'В030', 'В026', 'В051', 'В023', 'В020', 'В045', 'В016', 'В015']
+exnumber_viscosimeter2 = [0, 'В031', 'В025', 'В033', 'В034', 'В032', 'В046', 'В017', 'В038']
 
 
