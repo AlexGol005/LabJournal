@@ -1278,7 +1278,7 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(row_num, row_num + 4, 0, 1, style6)
+        ws.merge(row_num, row_num + 4, 1, 1, style6)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(row_num, row_num, 2, 7, style7)
@@ -1287,8 +1287,8 @@ def export_protocol_xls(request, pk):
 
     row_num +=1
     columns = [
-        '10 Средства измерений:  ',
-        '10 Средства измерений:  ',
+        '',
+        '',
         note.equipment_set1,
         note.equipment_set1,
         note.equipment_set1,
@@ -1307,8 +1307,8 @@ def export_protocol_xls(request, pk):
 
     row_num +=1
     columns = [
-        '10 Средства измерений:  ',
-        '10 Средства измерений:  ',
+        '',
+        '',
         note.equipment_set2,
         note.equipment_set2,
         note.equipment_set2,
@@ -1327,8 +1327,8 @@ def export_protocol_xls(request, pk):
 
     row_num +=1
     columns = [
-        '10 Средства измерений:  ',
-        '10 Средства измерений:  ',
+        '',
+        '',
         note.equipment_set3,
         note.equipment_set3,
         note.equipment_set3,
@@ -1349,12 +1349,12 @@ def export_protocol_xls(request, pk):
     columns = [
         '  ',
         '  ',
-        note.equipment_set2,
-        note.equipment_set2,
-        note.equipment_set2,
-        note.equipment_set2,
-        note.equipment_set2,
-        note.equipment_set2,
+        note.equipment_set4,
+        note.equipment_set4,
+        note.equipment_set4,
+        note.equipment_set4,
+        note.equipment_set4,
+        note.equipment_set4,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
