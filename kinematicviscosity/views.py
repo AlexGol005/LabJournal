@@ -38,7 +38,7 @@ class Constants:
 
 def SeriaUpdate(request, str):
     """выводит страницу с формой для обновления номера серии измерений""" 
-    title = f'{ViscosityMJL.objects.get(pk=str).name}, п. ViscosityMJL.objects.get(pk=str).lot}'
+    title = f'{ViscosityMJL.objects.get(pk=str).name}, п. {ViscosityMJL.objects.get(pk=str).lot}'
     if request.method == "POST":
         form = SeriaUpdateForm(request.POST, request.FILES,  instance=ViscosityMJL.objects.get(pk=str))
         if form.is_valid():
