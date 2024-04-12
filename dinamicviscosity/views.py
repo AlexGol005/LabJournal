@@ -720,6 +720,7 @@ def export_protocol_xls(request, pk):
         annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')). \
         annotate(equipment_set1=Concat('equipment1__charakters__name',
                                         Value(' тип '), 'equipment1__charakters__typename',
+                                        Value(' , зав. № '), 'equipment1__equipment__lot',
                                         Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
                                         Value(' от '), 'equipment1__newdate',
                                         Value(' действительно до '), 'equipment1__newdatedead',
@@ -727,6 +728,7 @@ def export_protocol_xls(request, pk):
                                         )). \
         annotate(equipment_set2=Concat('equipment2__charakters__name',
                                         Value(' тип '), 'equipment2__charakters__typename',
+                                        Value(' , зав. № '), 'equipment2__equipment__lot',
                                         Value(', свидетельство о поверке № '), 'equipment2__newcertnumber',
                                         Value(' от '), 'equipment2__newdate',
                                         Value(' действительно до '), 'equipment2__newdatedead',
@@ -734,6 +736,7 @@ def export_protocol_xls(request, pk):
                                         )). \
         annotate(equipment_set3=Concat('equipment3__charakters__name',
                                         Value(' тип '), 'equipment3__charakters__typename',
+                                        Value(' , зав. № '), 'equipment3__equipment__lot',
                                         Value(', свидетельство о поверке № '), 'equipment3__newcertnumber',
                                         Value(' от '), 'equipment3__newdate',
                                         Value(' действительно до '), 'equipment3__newdatedead',
@@ -747,7 +750,7 @@ def export_protocol_xls(request, pk):
     meteo = MeteorologicalParameters.objects. \
         annotate(equipment_meteo=Concat('equipment1__charakters__name',
                                         Value(' тип '), 'equipment1__charakters__typename',
-                                        Value(' зав. № '), 'equipment1__equipment__lot',                                        
+                                        Value(' , зав. № '), 'equipment1__equipment__lot',                                        
                                         Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
                                         Value(' от '), 'equipment1__newdate',
                                         Value(' действительно до '), 'equipment1__newdatedead',
@@ -755,7 +758,7 @@ def export_protocol_xls(request, pk):
                                         )).\
         annotate(equipment_meteo1=Concat('equipment2__charakters__name',                                        
                                         Value(' тип '), 'equipment2__charakters__typename',
-                                        Value(' зав. № '), 'equipment2__equipment__lot',
+                                        Value(' , зав. № '), 'equipment2__equipment__lot',
                                         Value(', свидетельство о поверке № '), 'equipment2__newcertnumber',
                                         Value(' от '), 'equipment2__newdate',
                                         Value(' действительно до '), 'equipment2__newdatedead',
