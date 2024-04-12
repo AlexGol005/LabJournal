@@ -747,6 +747,7 @@ def export_protocol_xls(request, pk):
     meteo = MeteorologicalParameters.objects. \
         annotate(equipment_meteo=Concat('equipment1__charakters__name',
                                         Value(' тип '), 'equipment1__charakters__typename',
+                                        Value(' зав. № '), 'equipment1__equipment__lot',                                        
                                         Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
                                         Value(' от '), 'equipment1__newdate',
                                         # Value(', '),
@@ -754,6 +755,7 @@ def export_protocol_xls(request, pk):
                                         Value('; \n'),
                                         'equipment2__charakters__name',
                                         Value(' тип '), 'equipment2__charakters__typename',
+                                        Value(' зав. № '), 'equipment2__equipment__lot',
                                         Value(', свидетельство о поверке № '), 'equipment2__newcertnumber',
                                         Value(' от '), 'equipment2__newdate',
                                         # Value(', '),
@@ -1586,10 +1588,10 @@ def export_protocol_xls(request, pk):
 
     row_num += 1
     columns = [
-        f'При температуре измерений: вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
-        f'При температуре измерений: вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
-        f'При температуре измерений: вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
-        f'При температуре измерений: вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
+        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
+        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
+        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
+        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
         f'плотность: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
         f'плотность: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
         f'плотность: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
