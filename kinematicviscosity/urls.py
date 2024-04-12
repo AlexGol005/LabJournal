@@ -23,6 +23,7 @@ urlpatterns = [
     path('protocolhead/<slug:pk>', views.ProtocolHeadView.as_view(), name=URL + 'protocolhead'),
     path('protocolbutton/<slug:pk>', views.ProtocolbuttonView.as_view(), name=URL + 'protocolbutton'),
     path('protocolroom/<slug:pk>', views.RoomsUpdateView.as_view(), name=URL + 'protocolroom'),
+    path('seriaupdate/<str:str>', views.SeriaUpdate, name='seriaupdate' + 'str'),
 
 ]
 # path('/search_location/result/', views.SearchResultView.as_view(), name=URL + 'search'),
