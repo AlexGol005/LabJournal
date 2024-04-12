@@ -1111,6 +1111,7 @@ def export_protocol_xls(request, pk):
         ws.merge(row_num, row_num, 2, 7, style7)
 
     row_num +=1
+    r = row_num + 1
     columns = [
         '',
         '7.1 Условия проведения \n измерений соответствуют требованиям рабочей \n эксплуатации средств измерений:',
@@ -1123,7 +1124,7 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(1, 2):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, row_num + 1, 1, 1, style7)
+        ws.merge(row_num, r, 1, 1, style7)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(row_num, row_num, 2, 7, style7)
@@ -1278,7 +1279,7 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(row_num, row_num + 4, 1, 1, style6)
+        ws.merge(row_num, row_num + 4, 0, 1, style6)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(row_num, row_num, 2, 7, style7)
