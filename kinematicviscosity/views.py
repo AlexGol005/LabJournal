@@ -36,6 +36,22 @@ class Constants:
     SearchDateForm = SearchDateForm
 # конец блока для всех журналов
 
+def SeriaUpdate(request, str):
+    """выводит страницу с формой для обновления номера серии измерений""" 
+    title = f'{ViscosityMJL.objects.get(pk=str).name}, п. ViscosityMJL.objects.get(pk=str).lot}'
+    if request.method == "POST":
+        form = SeriaUpdateForm(request.POST, request.FILES,  instance=ViscosityMJL.objects.get(pk=str))
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.save()
+            return redirect(reverse('measureequipment', kwargs={'str': str}))                
+    else:
+        form = SeriaUpdateForm(instance=ViscosityMJL.objects.get(pk=str))
+    data = {'form': form, 'title': title
+            }
+    return render(request, 'equipment/reg.html', data)
+
+
 # блок стандартных 'View' но с индивидуальностями,  возможно унаследованных от стандартных классов из модуля utils
 
 
