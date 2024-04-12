@@ -154,7 +154,7 @@
 		    </tr>
 {# конец блока оценки результатов #}
         <tr>
-			<td colspan="9">  {{note.aim}};   Серия: {{ note.seria }} </td></td>
+			<td colspan="9">  {{note.aim}} </td></td>
 		<tr>
 			<th colspan="9"><div style="text-align: center;">Фиксация результатов</div></th>
 		</tr>
@@ -184,14 +184,16 @@
 {# полустандартный низ таблицы с формой фиксации АЗ и кнопкой "комментарии" #}
         <tr>
 			<th colspan="1">Исполнитель </th>
-            <th colspan="2"><div style="text-align: center;">отпр.</div></th>
+            <th colspan="2"><div style="text-align: center;">Номер серии</div></th>
+	    <th colspan="2">поменять № серии</th>
             <th colspan="3"><div style="text-align: center;">внесено</div></th>
-            <th colspan="2">ОТК</th>
             <th colspan="1">комментарии</th>
 		</tr>
 		<tr>
 			<th colspan="1">{{ note.performer }} </th>
-            <td colspan="2"></td>
+            <td colspan="2">{{ note.seria }}</td>
+	   <td colspan="2"><div style="text-align: center;">
+            </div></td>
             <td colspan="3">
                 {% if note.resultMeas == 'удовлетворительно' and not note.fixation %}
                 <form method="post" >
@@ -206,8 +208,7 @@
                 нет АЗ
                 {% endif %}
            </td>
-            <td colspan="2"><div style="text-align: center;">
-            </div></td>
+            
             <th colspan="1">
             {% if not counter %}
                 <a href="/attestationJ/{{ URL }}/attestation/{{ note.id }}/comments/"  class="btn btn-outline-warning mt-3">комментировать</a> 
