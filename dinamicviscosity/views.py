@@ -809,9 +809,9 @@ def export_protocol_xls(request, pk):
     if 10 < Decimal(ser.certifiedValue_text) < 50:
         exnumber_viscosimeter1 = exnumber_viscosimeter1_set[3]
         exnumber_viscosimeter2 = exnumber_viscosimeter2_set[3]
-else:
-    exnumber_viscosimeter1 = exnumber_viscosimeter1_set[1]
-    exnumber_viscosimeter2 = exnumber_viscosimeter2_set[1]
+    else:
+        exnumber_viscosimeter1 = exnumber_viscosimeter1_set[1]
+        exnumber_viscosimeter2 = exnumber_viscosimeter2_set[1]
     
     
     if ser.equipment2:
