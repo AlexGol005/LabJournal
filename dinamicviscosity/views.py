@@ -806,11 +806,13 @@ def export_protocol_xls(request, pk):
     d = str(note.certifiedValue).replace('.',',')
 
     if ser.equipment2:
-        equipment_set5 = str(ser.equipment2)
+        equipment_set5 = f'{ser.equipment2.charakters.name} тип {ser.equipment2.charakters.typename}, свидетельство о поверке № {ser.equipment2.newcertnumber} от {ser.equipment2.newdate} действительно до {ser.equipment2.newdatedead};'
     if not ser.equipment2:
         equipment_set5 = 'тут будет вискозиметер в записи его нет'
     equipment_set6 = str(ser.equipment3)
     equipment_set7 = str(ser.equipment1)
+    
+
         
 
     response = HttpResponse(content_type='application/ms-excel')
