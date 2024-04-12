@@ -1234,7 +1234,7 @@ def export_protocol_xls(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 400
 
-    row_num = += 1
+    row_num += 1
     columns = [
         '',
         '7.2 Условия окружающей среды:',
