@@ -808,7 +808,8 @@ def export_protocol_xls(request, pk):
     if ser.equipment2:
         equipment_set5 = f'{ser.equipment2.charakters.name} тип {ser.equipment2.charakters.typename}, свидетельство о поверке № {ser.equipment2.newcertnumber} от {ser.equipment2.newdate} действительно до {ser.equipment2.newdatedead};'
     if not ser.equipment2:
-        equipment_set5 = 'тут будет вискозиметер в записи его нет'
+        viscosimeter1_forset = MeasurEquipment.objects.get(equipment__exnumber=exnumber_viscosimeter1)
+        equipment_set5 = f'{viscosimeter1_forset.charakters.name} тип {viscosimeter1_forset.charakters.typename}, свидетельство о поверке № {viscosimeter1_forset.newcertnumber} от {viscosimeter1_forset.newdate} действительно до {viscosimeter1_forset.newdatedead};'
     equipment_set6 = str(ser.equipment3)
     equipment_set7 = str(ser.equipment1)
     
