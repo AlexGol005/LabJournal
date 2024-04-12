@@ -44,7 +44,7 @@ def SeriaUpdate(request, str):
         if form.is_valid():
             order = form.save(commit=False)
             order.save()
-            return redirect(/'kinematicviscositystr', kwargs={'str': str})  
+            return redirect('kinematicviscositystr', kwargs={'str': str})  
     else:
         form = SeriaUpdateForm(instance=ViscosityMJL.objects.get(pk=str))
     data = {'form': form, 'title': title
