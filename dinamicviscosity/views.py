@@ -810,8 +810,16 @@ def export_protocol_xls(request, pk):
     if not ser.equipment2:
         viscosimeter1_forset = MeasurEquipment.objects.get(equipment__exnumber=exnumber_viscosimeter1)
         equipment_set5 = f'{viscosimeter1_forset.charakters.name} тип {viscosimeter1_forset.charakters.typename}, свидетельство о поверке № {viscosimeter1_forset.newcertnumber} от {viscosimeter1_forset.newdate} действительно до {viscosimeter1_forset.newdatedead};'
-    equipment_set6 = str(ser.equipment3)
-    equipment_set7 = str(ser.equipment1)
+    if ser.equipment3:
+        equipment_set6 = f'{ser.equipment3.charakters.name} тип {ser.equipment3.charakters.typename}, свидетельство о поверке № {ser.equipment3.newcertnumber} от {ser.equipment3.newdate} действительно до {ser.equipment3.newdatedead};'
+    if not ser.equipment3:
+        viscosimeter2_forset = MeasurEquipment.objects.get(equipment__exnumber=exnumber_viscosimeter2)
+        equipment_set6 = f'{viscosimeter2_forset.charakters.name} тип {viscosimeter2_forset.charakters.typename}, свидетельство о поверке № {viscosimeter2_forset.newcertnumber} от {viscosimeter2_forset.newdate} действительно до {viscosimeter2_forset.newdatedead};'
+    if ser.equipment1:
+        equipment_set7 = f'{ser.equipment1.charakters.name} тип {ser.equipment1.charakters.typename}, свидетельство о поверке № {ser.equipment1.newcertnumber} от {ser.equipment1.newdate} действительно до {ser.equipment1.newdatedead};'
+    if not ser.equipment1:
+        timer_forset = MeasurEquipment.objects.get(equipment__exnumber=timer)
+        equipment_set7 = f'{timer.charakters.name} тип {timer.charakters.typename}, свидетельство о поверке № timer.newcertnumber} от {timer.newdate} действительно до {timer.newdatedead};'
     
 
         
