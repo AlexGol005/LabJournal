@@ -28,4 +28,6 @@ piknometer = 'К005'
 densimeter = 'П005'
 
 exnumber_viscosimeter1 = 'В038'
+exnumber_viscosimeter2 = 'В038'
+
 
