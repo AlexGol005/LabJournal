@@ -805,6 +805,15 @@ def export_protocol_xls(request, pk):
     vd2 = str(Decimal(vd2).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
     d = str(note.certifiedValue).replace('.',',')
 
+    
+    if 10 < Decimal(ser.certifiedValue_text) < 50 
+        exnumber_viscosimeter1 = exnumber_viscosimeter1_set[3]
+        exnumber_viscosimeter2 = exnumber_viscosimeter2_set[3]
+else:
+    exnumber_viscosimeter1 = exnumber_viscosimeter1_set[1]
+    exnumber_viscosimeter2 = exnumber_viscosimeter2_set[1]
+    
+    
     if ser.equipment2:
         equipment_set5 = f'{ser.equipment2.charakters.name} тип {ser.equipment2.charakters.typename}, свидетельство о поверке № {ser.equipment2.newcertnumber} от {ser.equipment2.newdate} действительно до {ser.equipment2.newdatedead};'
     if not ser.equipment2:
