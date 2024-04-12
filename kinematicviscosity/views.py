@@ -750,15 +750,14 @@ def export_protocol_xls(request, pk):
                                         Value(' , зав. № '), 'equipment1__equipment__lot',
                                         Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
                                         Value(' от '), 'equipment1__newdate',
-                                        # Value(', '),
                                         Value(' действительно до '), 'equipment1__newdatedead',
                                         Value('; \n'),
-                                        'equipment2__charakters__name',
+                                        )).\
+        annotate(equipment_meteo1=Concat('equipment2__charakters__name',                                        
                                         Value(' тип '), 'equipment2__charakters__typename',
                                         Value(' , зав. № '), 'equipment2__equipment__lot',
                                         Value(', свидетельство о поверке № '), 'equipment2__newcertnumber',
                                         Value(' от '), 'equipment2__newdate',
-                                        # Value(', '),
                                         Value(' действительно до '), 'equipment2__newdatedead',
                                         )).\
         get(date__exact=note.date, roomnumber__roomnumber__exact=note.room)
