@@ -1134,7 +1134,7 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(12, 12, 2, 7, style7)
     ws.row(12).height_mismatch = True
-    ws.row(12).height = 500
+    ws.row(12).height = 300
 
     row_num = 13
     columns = [
@@ -1519,7 +1519,7 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(row_num, row_num, 2, 7, style7)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+    ws.row(row_num).height = 200
 
     row_num +=1
     columns = [
