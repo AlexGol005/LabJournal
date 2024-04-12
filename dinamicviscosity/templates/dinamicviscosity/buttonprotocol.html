@@ -25,25 +25,7 @@
     {% endif %}
 <br><br>
 
-{% if  note.equipment1 and note.equipment2 and note.equipment3 and note.equipment4 %}
-<table class="table table-bordered">
-<td ><b>1)</b> {{ note.equipment1|default:" " }}<br>
-<b>2)</b> {{ note.equipment2|default:" " }}<br>
-<b>3)</b> {{ note.equipment3|default:" " }}<br>
-<b>4)</b>{{ note.equipment4|default:" " }}<br>
-<b>5)</b> {{ note.equipment5|default:" " }}</td>
 
-</table><div style="text-align: center;">
-    <a href="{% url 'dinamicviscosityprotocolhead'  note.pk %}" class="btn btn-warning mr-5 mt-3" style="width: 600px" target="blank">
-Изменить использованные для измерения СИ  <br>
-</a></div>
-{% else  %}
-<div style="text-align: center;">
-<a href="{% url 'dinamicviscosityprotocolhead' note.pk %}" class="btn btn-warning mr-5 mt-3" style="width: 300px" target="blank">
-Изменить использованные для измерения СИ  <br>
-</a></div>
-{% endif %}
-<br><br>
 
 {% if title == 'Есть все данные для формирования протокола' %}
 <div style="text-align: center;">
