@@ -18,6 +18,17 @@ input_formats = (
 MODEL = ViscosityMJL
 COMMENTMODEL = Comments
 
+class SeriaUpdateForm(forms.ModelForm):
+    """форма для обновления номера серии"""
+    seria = forms.CharField(label='Номер серии', max_length=10000000, required=False,
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
+
+    class Meta:
+        model = ViscosityMJL
+        fields = ['seria']
+
+
 class StrJournalCreationForm(forms.ModelForm):
     """форма для внесения записи в журнал"""
     """поменять: fields, initial"""
