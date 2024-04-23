@@ -201,7 +201,7 @@ class Clorinesalts(models.Model):
     # dfkdead = models.DateField('Дифенилкарбазид  годен до', null=True, blank=True)
 
     # backvolume = models.DecimalField('Объём холостой пробы, мл', max_digits=4, decimal_places=2,
-                                                 null=True, blank=True)
+                                                # null=True, blank=True)
     # V1E1 = models.DecimalField('Воронка1, экстракт1', max_digits=4, decimal_places=2, null=True, blank=True)
     # V1E2 = models.DecimalField('Воронка1, экстракт2', max_digits=4, decimal_places=2, null=True, blank=True)
     # V1E3 = models.DecimalField('Воронка1, экстракт3', max_digits=4, decimal_places=2, null=True, blank=True)
