@@ -9,10 +9,14 @@ from crispy_forms.layout import Layout, Submit, Row, Column, HTML
 
 from clorinesalts.models import Clorinesalts, CommentsClorinesalts, IndicatorDFK, TitrantHg, GetTitrHg, DOCUMENTS, \
     MATERIAL, CHOICES, SOLVENTS, BEHAVIOUR, ClorinesaltsCV, TYPE, CommentsClorinesaltsCV
+from .j_constants import *
+from textconstants import *
+from equipment.models import MeasurEquipment, Rooms
 
 MODEL = Clorinesalts
 COMMENTMODEL = CommentsClorinesalts
 MATERIAL1 = MATERIAL[0:-1]
+
 
 
 class StrJournalCreationForm(forms.ModelForm):
@@ -97,8 +101,7 @@ class StrJournalCreationForm(forms.ModelForm):
                 css_class='form-row'
             ),
 
-            Row(
-                HTML('Воронка №1'),
+  
 
 
             Submit('submit', 'Внести запись в журнал'))
