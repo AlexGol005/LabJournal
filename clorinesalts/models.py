@@ -322,13 +322,13 @@ class Clorinesalts(models.Model):
                           self.R = R[i][0]
                           self.CD = CD[i][0]
 
-            # сравниваем х1-х2 со сходимостью и комментируем результат измерений
-            self.factconvergence = (self.x1 - self.x2).copy_abs().quantize(Decimal('1.00'), ROUND_HALF_UP)
-            if self.factconvergence > Decimal(self.r):
-                self.resultMeas = 'Неудовлетворительно'
-                self.cause = '|Х1 - Х2| > r'
-            if self.factconvergence <= Decimal(self.r):
-                self.resultMeas = 'Удовлетворительно'
+        # сравниваем х1-х2 со сходимостью и комментируем результат измерений
+        self.factconvergence = (self.x1 - self.x2).copy_abs().quantize(Decimal('1.00'), ROUND_HALF_UP)
+        if self.factconvergence > Decimal(self.r):
+            self.resultMeas = 'Неудовлетворительно'
+            self.cause = '|Х1 - Х2| > r'
+        if self.factconvergence <= Decimal(self.r):
+            self.resultMeas = 'Удовлетворительно'
         super(Clorinesalts, self).save(*args, **kwargs)
 
 
