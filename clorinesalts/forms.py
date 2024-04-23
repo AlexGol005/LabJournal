@@ -35,7 +35,7 @@ class StrJournalCreationForm(forms.ModelForm):
                                         ' Для ХСН: индекс ГСО, например 10; '
                                         'Для ГК: Х; Если выбрано "Другое" то укажите полное название пробы',
                               widget=forms.TextInput(attrs={'class': 'form-control',
-                                                            'placeholder': '100'}))
+                                                            'placeholder': 'ХС'}))
     lot = forms.CharField(label='Партия', max_length=100, required=True,
                           widget=forms.TextInput(attrs={'class': 'form-control',
                                                         'placeholder': 'Партия'}))
