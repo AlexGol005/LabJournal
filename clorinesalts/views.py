@@ -278,16 +278,16 @@ class SearchResultView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(SearchResultView, self).get_context_data(**kwargs)
         name = self.request.GET['name']
-        namedop = self.request.GET['namedop']
+        index = self.request.GET['index']
         lot = self.request.GET['lot']
         if name and lot:
-            objects = MODEL.objects.filter(name=name).filter(namedop=namedop).filter(lot=lot).order_by('-pk')
+            objects = MODEL.objects.filter(name=name).filter(index=index).filter(lot=lot).order_by('-pk')
             context['objects'] = objects
         if name and not lot:
-            objects = MODEL.objects.filter(name=name).filter(namedop=namedop).order_by('-pk')
+            objects = MODEL.objects.filter(name=name).filter(index=index).order_by('-pk')
             context['objects'] = objects
         context['journal'] = JOURNAL.objects.filter(for_url=URL)
-        context['formSM'] = SearchForm(initial={'name': name, 'namedop': namedop,'lot': lot})
+        context['formSM'] = SearchForm(initial={'name': name, 'index': index,'lot': lot})
         context['formdate'] = SearchDateForm()
         context['URL'] = URL
         return context
@@ -301,16 +301,16 @@ class SearchCVResultView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(SearchCVResultView, self).get_context_data(**kwargs)
         name = self.request.GET['name']
-        namedop = self.request.GET['namedop']
+        index = self.request.GET['index']
         lot = self.request.GET['lot']
         if name and lot:
-            objects = ClorinesaltsCV.objects.filter(fixation=True).filter(clorinesalts__name=name).filter(clorinesalts__namedop=namedop).filter(clorinesalts__lot=lot).order_by('-pk')
+            objects = ClorinesaltsCV.objects.filter(fixation=True).filter(clorinesalts__name=name).filter(clorinesalts__index=index).filter(clorinesalts__lot=lot).order_by('-pk')
             context['objects'] = objects
         if name and not lot:
-            objects = ClorinesaltsCV.objects.filter(fixation=True).filter(clorinesalts__name=name).filter(clorinesalts__namedop=namedop).order_by('-pk')
+            objects = ClorinesaltsCV.objects.filter(fixation=True).filter(clorinesalts__name=name).filter(clorinesalts__index=index).order_by('-pk')
             context['objects'] = objects
         context['journal'] = JOURNAL.objects.filter(for_url=URL)
-        context['formSM'] = SearchForm(initial={'name': name, 'namedop': namedop,'lot': lot})
+        context['formSM'] = SearchForm(initial={'name': name, 'index': index,'lot': lot})
         context['formdate'] = SearchDateForm()
         context['URL'] = URL
         return context
@@ -767,7 +767,7 @@ def export_Clorinesalts_xls(request, pk):
     row_num = 3
     columns = [
         f'{note.date}',
-        f'{ note.name}({ note.namedop})',
+        f'{ note.name}({ note.index})',
         f'{note.lot}',
         f'{note.constit}',
         f'{note.projectconc}',
