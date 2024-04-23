@@ -13,6 +13,7 @@ from metods import get_avg, get_acc_measurement, get_abserror
 from formuls import mrerrow, numberDigits
 from .j_constants import *
 from textconstants import *
+from equipment.models import MeasurEquipment, Rooms
 
 MATERIAL = (('ХСН-ПА-1', 'ХСН-ПА-1'),
            ('ХСН-ПА-2', 'ХСН-ПА-2'),
