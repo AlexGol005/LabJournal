@@ -11,6 +11,8 @@ from jougascondensate.models import LotGKCS, GKCS, GKCSrange, CVclorinesaltsGKCS
 
 from metods import get_avg, get_acc_measurement, get_abserror
 from formuls import mrerrow, numberDigits
+from .j_constants import *
+from textconstants import *
 
 MATERIAL = (('ХСН-ПА-1', 'ХСН-ПА-1'),
            ('ХСН-ПА-2', 'ХСН-ПА-2'),
@@ -245,8 +247,8 @@ class Clorinesalts(models.Model):
     # order_cv_value_end = models.CharField('Диапазон по заказу до, мг/л', max_length=90, null=True, blank=True)
     room = models.ForeignKey(Rooms, verbose_name='Номер комнаты', null=True,
                                             on_delete=models.PROTECT,  blank=True)
-    equipment1 = models.ForeignKey('Бюретка', max_length=100, choices=buroptional,
-                                  default=aimoptional[0][0],
+    equipment1 = models.CharField('Бюретка', max_length=100, choices=buroptional,
+                                  default=buroptional[0][0],
                                   blank=True, null=True')
 
 
