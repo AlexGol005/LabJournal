@@ -247,7 +247,7 @@ class Clorinesalts(models.Model):
     # order_cv_value_end = models.CharField('Диапазон по заказу до, мг/л', max_length=90, null=True, blank=True)
     equipment1 = models.CharField('Бюретка', max_length=100, choices=buroptional,
                                   default=buroptional[0][0],
-                                  blank=True, null=True')
+                                  blank=True, null=True)
     room = models.ForeignKey(Rooms, verbose_name='Номер комнаты', null=True,
                                             on_delete=models.PROTECT,  blank=True)
 
