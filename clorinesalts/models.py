@@ -316,7 +316,7 @@ class Clorinesalts(models.Model):
 
         # определяем сходимость, воспроизводимость и CD, соответствующие диапазону, сначала вычисляем среднее:
         self.x_avg = get_avg(self.x1, self.x2, 4)
-        for i in range(5)
+        for i in range(5):
                if self.range == CHOICES[i][0]:
                           self.r = r[i][0]
                           self.R = R[i][0]
