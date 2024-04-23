@@ -185,7 +185,7 @@ class Clorinesalts(models.Model):
 
     # exp = models.IntegerField('Срок годности измерения, месяцев', blank=True, null=True, default=24)
     # date_exp = models.DateField('Измерение годно до', blank=True, null=True)
-    ndocconvergence = models.CharField('Повторяемость, мг/дм3', max_length=90, null=True, blank=True)
+    r = models.CharField('Повторяемость, мг/дм3', max_length=90, null=True, blank=True)
 
     # aliquotvolume = models.DecimalField('Аликвота пробы, мл', max_digits=3, decimal_places=0, null=True, blank=True)
     # solventvolume = models.DecimalField('Объём растворителя, мл', max_digits=3, decimal_places=0, null=True, blank=True)
@@ -237,8 +237,8 @@ class Clorinesalts(models.Model):
                                   null=True, blank=True)
     cause = models.CharField('Причина', max_length=100, default='', null=True, blank=True)
 
-    ndocreproducibility = models.CharField('Воспроизводимость, мг/л', max_length=90, null=True, blank=True)
-    ndoccd = models.CharField('Критическая разность, мг/л', max_length=90, null=True, blank=True)
+    r = models.CharField('Воспроизводимость, мг/л', max_length=90, null=True, blank=True)
+    CD = models.CharField('Критическая разность, мг/л', max_length=90, null=True, blank=True)
 
     # order_cv_value_begin = models.CharField('Диапазон по заказу от, мг/л', max_length=90, null=True, blank=True)
     # order_cv_value_end = models.CharField('Диапазон по заказу до, мг/л', max_length=90, null=True, blank=True)
@@ -316,36 +316,18 @@ class Clorinesalts(models.Model):
 
         # определяем сходимость, воспроизводимость и CD, соответствующие диапазону, сначала вычисляем среднее:
         self.x_avg = get_avg(self.x1, self.x2, 4)
-        if self.x_avg:
-            
-            if self.x_avg < Decimal(10):
-                self.ndocconvergence = '1.5'
-                self.ndocreproducibility = '4.2'
-                self.ndoccd = '2.8'
-            if Decimal(10) <= self.x_avg < Decimal(50):
-                self.ndocconvergence = '3.0'
-                self.ndocreproducibility = '8.5'
-                self.ndoccd = '5.7'
-            if Decimal(50) <= self.x_avg < Decimal(200):
-                self.ndocconvergence = '6.0'
-                self.ndocreproducibility = '18.0'
-                self.ndoccd = '12.2'
-            if Decimal(200) <= self.x_avg <= Decimal(1000):
-                self.ndocconvergence = '25'
-                self.ndocreproducibility = '79.3'
-                self.ndoccd = '53.9'
-            if Decimal(1000) < self.x_avg:
-                self.ndocconvergence = str((self.x_avg * Decimal('0.04')).quantize(Decimal('1.00'), ROUND_HALF_UP))
-                self.ndocreproducibility = 0
-                self.ndoccd = 0
-
+        for i in range(5)
+               if self.range == CHOICES[i][0]:
+                          self.r = r[i][0]
+                          self.R = R[i][0]
+                          self.CD = CD[i][0]
 
             # сравниваем х1-х2 со сходимостью и комментируем результат измерений
             self.factconvergence = (self.x1 - self.x2).copy_abs().quantize(Decimal('1.00'), ROUND_HALF_UP)
-            if self.factconvergence > Decimal(self.ndocconvergence):
+            if self.factconvergence > Decimal(self.r):
                 self.resultMeas = 'Неудовлетворительно'
                 self.cause = '|Х1 - Х2| > r'
-            if self.factconvergence <= Decimal(self.ndocconvergence):
+            if self.factconvergence <= Decimal(self.r):
                 self.resultMeas = 'Удовлетворительно'
         super(Clorinesalts, self).save(*args, **kwargs)
 
