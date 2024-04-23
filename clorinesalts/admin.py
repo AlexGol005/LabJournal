@@ -15,7 +15,7 @@ class NoteAdmin(admin.ModelAdmin):
 
 @admin.register(Clorinesalts)
 class NoteAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'namedop', 'lot', 'x1', 'x2', 'resultMeas', 'performer')
+    list_display = ('id', 'name', 'index', 'lot', 'x1', 'x2', 'resultMeas', 'performer')
 
 
 @admin.register(ClorinesaltsCV)
