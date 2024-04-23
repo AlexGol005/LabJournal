@@ -65,6 +65,9 @@ class StrJournalCreationForm(forms.ModelForm):
                                          widget=forms.TextInput(attrs={'class': 'form-control',
                                                                        'placeholder': 'X2, мг/л'}
                                                                 ))
+    equipment1 = forms.ChoiceField(label='Номер бюретки', required=True,
+                                  choices=buroptional,
+                                  widget=forms.Select(attrs={'class': 'form-control'}))
 
 
     def __init__(self, *args, **kwargs):
@@ -94,7 +97,11 @@ class StrJournalCreationForm(forms.ModelForm):
                 css_class='form-row'
             ),
             Row(
-                HTML('Номер серии измерений (для протокола по однородности'),
+                Column('equipment1', css_class='form-group col-md-10 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                HTML(''),
                 css_class='form-row'
             ),
 
@@ -113,7 +120,7 @@ class StrJournalCreationForm(forms.ModelForm):
         model = MODEL
         fields = ['index', 'numberexample',
                   'name', 'lot', 'aim',
-                  'range', 'x1', 'x2',
+                  'range', 'x1', 'x2', equipment1
                   ]
 
 
