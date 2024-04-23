@@ -163,7 +163,7 @@ class SearchForm(forms.Form):
     name = forms.ChoiceField(label='Наименование', required=True,
                              choices=MATERIAL1,
                              widget=forms.Select(attrs={'class': 'form-control'}))
-    namedop = forms.CharField(label='Индекс', initial='100',
+    index = forms.CharField(label='Индекс', initial='100',
                               help_text='Для СС-ТН: Х, ХПВ или ХПВС;'
                                         ' Для ХСН: индекс ГСО, например 10;',
                               widget=forms.TextInput(attrs={'class': 'form-control',
@@ -177,7 +177,7 @@ class SearchForm(forms.Form):
         self.helper.layout = Layout(
             Row(
                 Column('name', css_class='form-group col-md-4 mb-0'),
-                Column('namedop', css_class='form-group col-md-4 mb-0'),
+                Column('index', css_class='form-group col-md-4 mb-0'),
                 Column('lot', css_class='form-group col-md-2 mb-0'),
                 Submit('submit', 'Найти', css_class='btn  btn-info col-md-2 mb-3 mt-4 ml-4'),
                 css_class='form-row'
