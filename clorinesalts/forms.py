@@ -74,14 +74,17 @@ class StrJournalCreationForm(forms.ModelForm):
 
             Row(
                 Column('name', css_class='form-group col-md-4 mb-0'),
-                Column('index', css_class='form-group col-md-6 mb-0'),
-                Column('lot', css_class='form-group col-md-3 mb-0'),
+                Column('index', css_class='form-group col-md-8 mb-0'),
                 css_class='form-row'
             ),
 
             Row(
-                Column('numberexample', css_class='form-group col-md-3 mb-0'),
+                Column('lot', css_class='form-group col-md-3 mb-0'),
                 Column('range', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row'
+            ),
+            Row(
+                Column('numberexample', css_class='form-group col-md-3 mb-0'),
                 Column('aim', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
@@ -90,16 +93,16 @@ class StrJournalCreationForm(forms.ModelForm):
                 Column('x2', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
-
+            Row(
+                HTML('Номер серии измерений (для протокола по однородности'),
+                css_class='form-row'
+            ),
 
             Row(
                 Column('seria', css_class='form-group col-md-10 mb-0'),
                 css_class='form-row'
             ),
-            Row(
-                HTML(''),
-                css_class='form-row'
-            ),
+
 
   
 
