@@ -18,19 +18,14 @@ MATERIAL = (('ХСН-ПА-1', 'ХСН-ПА-1'),
            ('ГК-ПА-2', 'ГК-ПА-2'),
            ('другое', 'другое'))
 
-DOCUMENTS = (('ГОСТ 21534 (Метод А)', 'ГОСТ 21534 (Метод А)'),
-             ('другое', 'другое'))
+
 
 # RELERROR_XSN_1 = 5  # относительная погрешность ХС ХСН-ПА-1 из описания типа, %
 # RELERROR_XSN_2 = 2  # относительная погрешность ХС ХСН-ПА-2 из описания типа, %
 # RELERROR_SSTN = 1  # относительная погрешность ХС СС-ТН-ПА-1 из описания типа, %
 # RELERROR_GK = 3  # относительная погрешность ХС ГК-ПА-2 из описания типа, %
 
-CHOICES = (('до 50 мг/л', 'до 50 мг/л'),
-           ('50 - 100 мг/л', '50 - 100 мг/л'),
-           ('100 - 200 мг/л', '100 - 200 мг/л'),
-           ('200 - 500 мг/л', '200 - 500 мг/л'),
-           ('500 - 1000 мг/л', '500 - 1000 мг/л'))
+
 
 SOLVENTS = (('орто-ксилол', 'орто-ксилол'),)
 
@@ -178,11 +173,11 @@ class Clorinesalts(models.Model):
     performer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='performercs', blank=True)
     name = models.CharField('Наименование', max_length=100, choices=MATERIAL, default='ХСН-ПА-1',
                                  blank=True)
-    # namedop = models.CharField('Другое или индекс СО', max_length=100, null=True, blank=True)
+    index = models.CharField('Другое или индекс СО', max_length=100, null=True, blank=True)
     lot = models.CharField('Партия', max_length=90, null=True, blank=True)
-    constit = models.CharField('Диапазон содержания хлористых солей', max_length=300, choices=CHOICES,
+    range = models.CharField('Диапазон содержания хлористых солей', max_length=300, choices=CHOICES,
                                default= 'до 50 мг/л', null=True, blank=True)
-    projectconc = models.CharField('Расчётное содержание хлористых солей', max_length=300, null=True, blank=True)
+    # projectconc = models.CharField('Расчётное содержание хлористых солей', max_length=300, null=True, blank=True)
     # que = models.IntegerField('Очередность отбора пробы', blank=True, null=True, default=1)
     # solvent = models.CharField('Растворитель', max_length=90, choices=SOLVENTS, default='орто-ксилол',
                                # blank=True)
