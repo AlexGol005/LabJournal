@@ -612,7 +612,7 @@ class ClorinesaltsCV(models.Model):
         super(ClorinesaltsCV, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f' {self.clorinesalts.name}({self.clorinesalts.namedop}) п.{self.clorinesalts.lot};   {self.date}'
+        return f' {self.clorinesalts.name}({self.clorinesalts.index}) п.{self.clorinesalts.lot};   {self.date}'
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
