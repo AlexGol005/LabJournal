@@ -15,11 +15,7 @@ from .j_constants import *
 from textconstants import *
 from equipment.models import MeasurEquipment, Rooms
 
-MATERIAL = (('ХСН-ПА-1', 'ХСН-ПА-1'),
-           ('ХСН-ПА-2', 'ХСН-ПА-2'),
-           ('СС-ТН-ПА-1', 'СС-ТН-ПА-1'),
-           ('ГК-ПА-2', 'ГК-ПА-2'),
-           ('другое', 'другое'))
+
 
 
 
@@ -174,11 +170,11 @@ class Clorinesalts(models.Model):
                                  blank=True)
     date = models.DateField('Дата', auto_now_add=True, db_index=True, blank=True)
     performer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='performercs', blank=True)
-    name = models.CharField('Наименование', max_length=100, choices=MATERIAL, default='ХСН-ПА-1',
+    name = models.CharField('Наименование', max_length=100, choices=MATERIAL, default='СС-ТН-ПА-1',
                                  blank=True)
     index = models.CharField('Другое или индекс СО', max_length=100, null=True, blank=True)
     lot = models.CharField('Партия', max_length=90, null=True, blank=True)
-    range = models.CharField('Диапазон содержания хлористых солей', max_length=300, choices=CHOICES,
+    range = models.CharField('Диапазон содержания хлористых солей', max_length=3000, choices=CHOICES,
                                default= 'до 50 мг/л', null=True, blank=True)
     # projectconc = models.CharField('Расчётное содержание хлористых солей', max_length=300, null=True, blank=True)
     # que = models.IntegerField('Очередность отбора пробы', blank=True, null=True, default=1)
@@ -246,7 +242,7 @@ class Clorinesalts(models.Model):
 
     # order_cv_value_begin = models.CharField('Диапазон по заказу от, мг/л', max_length=90, null=True, blank=True)
     # order_cv_value_end = models.CharField('Диапазон по заказу до, мг/л', max_length=90, null=True, blank=True)
-    equipment1 = models.CharField('Бюретка', max_length=100, choices=buroptional,
+    equipment1 = models.CharField('Бюретка', max_length=500, choices=buroptional,
                                   default=buroptional[0][0],
                                   blank=True, null=True)
     room = models.ForeignKey(Rooms, verbose_name='Номер комнаты', null=True,
@@ -355,7 +351,7 @@ class Clorinesalts(models.Model):
 
 
     def __str__(self):
-        return f'{self.date}; {self.name}({self.namedop})  п.{self.lot}; Х1={self.x1} мг/л, Х2={self.x2} мг/л; Исполнитель: {self.performer} '
+        return f'{self.date}; {self.name}({self.index})  п.{self.lot}; Х1={self.x1} мг/л, Х2={self.x2} мг/л; Исполнитель: {self.performer} '
 
     def get_absolute_url(self):
         """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
