@@ -74,7 +74,7 @@ class StrJournalCreationForm(forms.ModelForm):
 
             Row(
                 Column('name', css_class='form-group col-md-3 mb-0'),
-                Column('index', css_class='form-group col-md-6 mb-0'),
+                Column('index', css_class='form-group col-md-8 mb-0'),
                 css_class='form-row'
             ),
 
