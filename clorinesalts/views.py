@@ -185,19 +185,19 @@ def RegNoteJournalView(request):
         if form.is_valid():
             order = form.save(commit=False)
             order.performer = request.user
-            a = order.lotHg[-1]
-            try:
-                get_id_actual = GetTitrHg.objects.select_related('lot'). \
-                    filter(lot__exact=a). \
-                    values('lot').annotate(id_actual=Max('id')).values('id_actual')
-                list_ = list(get_id_actual)
-                set = list_[0].get('id_actual')
-                aktualTiter = GetTitrHg.objects.get(id=set)
-                order.titerHg = Decimal(aktualTiter.titr)
-                order.titerHgdead = aktualTiter.datedead
-            except:
-                pass
-            order.dfkdead = IndicatorDFK.objects.last().datedead
+            # a = order.lotHg[-1]
+            # try:
+                # get_id_actual = GetTitrHg.objects.select_related('lot'). \
+                    # filter(lot__exact=a). \
+                    # values('lot').annotate(id_actual=Max('id')).values('id_actual')
+                # list_ = list(get_id_actual)
+                # set = list_[0].get('id_actual')
+                # aktualTiter = GetTitrHg.objects.get(id=set)
+                # order.titerHg = Decimal(aktualTiter.titr)
+                # order.titerHgdead = aktualTiter.datedead
+            # except:
+                # pass
+            # order.dfkdead = IndicatorDFK.objects.last().datedead
             order.save()
             return redirect(order)
     else:
