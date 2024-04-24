@@ -35,13 +35,13 @@
 			<th colspan="6">Определение содержания хлористых солей в нефтепродуктах по {{ note.ndocument }}</th>
 		</tr>
 		<tr>
-			<th>
+			<th colspan="2">
 
                 Дата</th>
-			<th>Наименование</th>
+			<th colspan="2">Наименование</th>
 			<th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspПартия&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>
 			</tr>
-		<td>{{note.date|date:"d.m.Y"}}</td>
+		<td colspan="2">{{note.date|date:"d.m.Y"}}</td>
 			<td> {% if note.name != 'другое' %}
                 {{ note.name}}({{ note.index}})
                 {% elif note.name == 'другое' %}
@@ -49,9 +49,9 @@
                 {% endif %}
 				<td>{{ note.lot}}</td>
 		<tr>
-			<th>№ флакона</th>
-			<th>Номер серии измерений</th>
-			<th>Цель измерений</th>
+			<th colspan="1">№ флакона</th>
+			<th colspan="2">Номер серии измерений</th>
+			<th colspan="3">Цель измерений</th>
 		</tr>
 		<tr>
 			
@@ -65,12 +65,14 @@
 	
 			
 		<tr>
-			<th>X1, мг/л</th>
-			<td colspan="2">{{ note.x1|default_if_none:" "}}</td>
-			<th>X2, мг/л</th>
-			<td colspan="2">{{ note.x2|default_if_none:" "}}</td>
-						<th>Xср, мг/л</th>
-			<td colspan="2">{{ note.x_avg|default_if_none:" "}}</td>
+			<td colspan="3">Х1, мг/л </td>
+			<td colspan="3">Х2, мг/л</td>
+			<td colspan="3">Хсред, мг/л</td>
+		</tr>
+						<tr>
+			<th colspan="3">{{ note.x1}} </td>
+			<th colspan="3">{{ note.x2}}</td>
+			<th colspan="3">{{ note.x_avg}}</td>
 		</tr>
 		<tr>
 			<td colspan="3">r, мг/л </td>
@@ -78,13 +80,13 @@
 			<td colspan="3">CD, мг/л</td>
 		</tr>
 				<tr>
-			<td colspan="3">{{ note.r}} </td>
-			<td colspan="3">{{ note.R}}</td>
-			<td colspan="3">{{ note.CD}}</td>
+			<th colspan="3">{{ note.r}} </td>
+			<th colspan="3">{{ note.R}}</td>
+			<th colspan="3">{{ note.CD}}</td>
 		</tr>
 				
 				<tr>
-			<td colspan="3">{{ note.equipment1}} </td>
+			<td colspan="6">{{ note.equipment1}} </td>
 
 		</tr>
 		<tr>
@@ -104,7 +106,7 @@
             </td>
 		</tr>
 			<tr>
-            <td colspan="3">Исполнитель: {{ note.performer}}</td>
+            <td colspan="2">Исполнитель: {{ note.performer}}</td>
 			<td colspan="2">
                  
                 <a href="/attestationJ/{{ URL }}/clorinesaltsstrcv/{{ note.id }}/"  class="btn btn-outline-warning mt-3">
@@ -112,15 +114,15 @@
                 </a>
   
             </td>
-			<td colspan="1">{% if not counter %}
+			<td colspan="2">{% if not counter %}
                 <a href="/attestationJ/{{ URL }}/attestation/{{ note.id }}/comments/"  class="btn btn-outline-warning mt-3">комментировать</a>
                 {% elif counter %}
                 <a href="/attestationJ/{{ URL }}/attestation/{{ note.id }}/comments/"  class="btn btn-outline-warning mt-3">смотреть комментарии</a>
                 {% endif %}</td>
 		</tr>
-			<tr>
+			<tr><td colspan="6">
 				{{ note.maincomment|default_if_none:" " }}
-			</tr>
+			</td></tr>
 	</tbody>
 </table>
 </div>
