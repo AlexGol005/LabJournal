@@ -265,7 +265,7 @@ class Clorinesalts(models.Model):
         for i in range(4):
                if self.range == CHOICES[i][0]:
                    self.r1 = roptional[i][0]
-                   self.R1 = Roptional[i][0]
+                   self.R2 = Roptional[i][0]
                    self.CD1 = CDoptional[i][0]
 
 
