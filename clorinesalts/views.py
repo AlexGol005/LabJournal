@@ -25,6 +25,9 @@ from metods import *
 from .forms import *
 from utils_forms import*
 from .models import *
+from .j_constants import *
+from utils import *
+from textconstants import *
 
 JOURNAL = AttestationJ
 MODEL = Clorinesalts
