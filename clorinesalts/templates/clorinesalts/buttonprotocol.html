@@ -1,0 +1,36 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% block title %}
+{{ titlehead }}
+{% endblock %}
+
+
+{% block content %}
+<div style="text-align: center;"><h3>{{ title }}</h3></div>
+
+<br><br>
+{% if meteo != 1  %}
+<table class="table table-bordered">
+<td ><b>Дата:</b> {{ meteo.date|date:'d.m.Y' }}<br>
+<b>Помещение:</b> {{ meteo.roomnumber.roomnumber }}<br>
+<b>Температура:</b> {{ meteo.temperature }}<br>
+<b>Давление:</b> {{ meteo.pressure }}<br>
+<b>Влажность:</b> {{ meteo.humidity }}</td>
+</table>
+    {% elif  meteo == 1  %}
+        <div style="text-align: center;">
+      <a href="{% url 'meteoreg' %}" class="btn btn-warning mr-5 mt-3" style="width: 300px" target="blank">
+      Добавить метеоданные для комнаты {{ note.room.roomnumber }}, <br>
+          за дату {{ note.date|date:"d.m.Y" }}</a></div>
+    {% endif %}
+<br><br>
+
+
+
+{% if title == 'Есть все данные для формирования протокола' %}
+<div style="text-align: center;">
+<a href="{% url 'export_clorinesalts_protocol_xls' note.pk %}"
+class="btn btn-info mr-5 mt-3"
+style="width: 210px">Скачать протокол анализа</a></div>
+{% endif %}
+{% endblock %}
