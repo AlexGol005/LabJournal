@@ -34,6 +34,18 @@ COLONTITUL = 'ИСП_ГОСТ 21534 (метод А)'
 from utils_forms import*
 from .j_constants import *
 
+class Constants:
+    URL = URL
+    JOURNAL = JOURNAL
+    MODEL = MODEL
+    COMMENTMODEL = COMMENTMODEL
+    NAME = NAME
+    journal = journal
+    SearchForm = SearchForm
+    SearchSeriaForm = SearchSeriaForm
+    SearchDateForm = SearchDateForm
+
+
 class ProtocolbuttonView(Constants, ProtocolbuttonView):
     """ Выводит кнопку для формирования протокола """
     template_name = URL + '/buttonprotocol.html'
