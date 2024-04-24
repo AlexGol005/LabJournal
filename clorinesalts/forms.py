@@ -17,6 +17,21 @@ MODEL = Clorinesalts
 COMMENTMODEL = CommentsClorinesalts
 MATERIAL1 = MATERIAL[0:-1]
 
+
+class SearchSeriaForm(forms.Form):
+    "форма для поиска по полям серии измерений"
+    seria = forms.CharField(label='Серия измерений',  required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('seria', css_class='form-group col-md-5 mb-0'),
+                Submit('submit', 'Найти', css_class='btn  btn-info col-md-2 mb-3 mt-4 ml-4'),
+                css_class='form-row'
+            ))
+
 class SeriaUpdateForm(forms.ModelForm):
     """форма для обновления номера серии"""
     seria = forms.CharField(label='Номер серии', max_length=10000000, required=False,
