@@ -23,9 +23,6 @@ class StrJournalCreationForm(forms.ModelForm):
     """форма для внесения записи об аттестации в журнал"""
     """поменять: fields"""
 
-    ndocument = forms.ChoiceField(label='Метод испытаний', required=True,
-                                  choices=DOCUMENTS,
-                                  widget=forms.Select(attrs={'class': 'form-control'}))
     name = forms.ChoiceField(label='Наименование пробы', required=True,
                              choices=MATERIAL,
                              widget=forms.Select(attrs={'class': 'form-control'}))
