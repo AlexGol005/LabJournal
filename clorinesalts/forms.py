@@ -126,7 +126,7 @@ class StrJournalCreationForm(forms.ModelForm):
         model = MODEL
         fields = ['index', 'numberexample',
                   'name', 'lot', 'aim',
-                  'range', 'x1', 'x2', 'equipment1', 'maincomment', 'date'
+                  'range', 'x1', 'x2', 'equipment1', 'maincomment', 'date', 'seria'
                   ]
 
 
