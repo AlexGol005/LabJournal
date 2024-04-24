@@ -236,9 +236,9 @@ class Clorinesalts(models.Model):
     resultMeas = models.CharField('Результат измерений уд/неуд', max_length=100, default='неудовлетворительно',
                                   null=True, blank=True)
     cause = models.CharField('Причина', max_length=100, default='', null=True, blank=True)
-    r_ = models.CharField('Повторяемость, мг/л', max_length=90, null=True, blank=True)
-    R_ = models.CharField('Воспроизводимость, мг/л', max_length=90, null=True, blank=True)
-    CD_ = models.CharField('Критическая разность, мг/л', max_length=90, null=True, blank=True)
+    r1 = models.CharField('Повторяемость, мг/л', max_length=90, null=True, blank=True)
+    R1 = models.CharField('Воспроизводимость, мг/л', max_length=90, null=True, blank=True)
+    CD1 = models.CharField('Критическая разность, мг/л', max_length=90, null=True, blank=True)
     relerror = models.CharField('Погрешность относительная (описание типа)', max_length=90, null=True, blank=True)
     maincomment = models.CharField('Комментарии', max_length=6000, null=True, blank=True)
 
@@ -264,9 +264,9 @@ class Clorinesalts(models.Model):
         self.x_avg = numberDigits(x_avg, abserror)
         for i in range(4):
                if self.range == CHOICES[i][0]:
-                          self.r_ = roptional[i][0]
-                          self.R_ = Roptional[i][0]
-                          self.CD_ = CDoptional[i][0]
+                   self.r1 = roptional[i][0]
+                   self.R1 = Roptional[i][0]
+                   self.CD1 = CDoptional[i][0]
 
 
 
