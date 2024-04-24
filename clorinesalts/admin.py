@@ -18,9 +18,6 @@ class NoteAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'index', 'lot', 'x1', 'x2', 'resultMeas', 'performer')
 
 
-@admin.register(ClorinesaltsCV)
-class NoteAdmin(admin.ModelAdmin):
-    list_display = ('id', 'certifiedValue')
 
 
 
