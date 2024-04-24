@@ -23,7 +23,7 @@ class StrJournalCreationForm(forms.ModelForm):
     """форма для внесения записи об аттестации в журнал"""
     """поменять: fields"""
 
-    date = models.DateField(
+    date = forms.DateField(
         label= 'Дата измерений', required=False, initial=datetime.date.today
     )
     name = forms.ChoiceField(label='Наименование пробы', required=True,
