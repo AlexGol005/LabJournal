@@ -158,7 +158,7 @@ class IndicatorDFK(models.Model):
 class Clorinesalts(models.Model):
     ndocument = models.CharField('Метод испытаний', max_length=100, choices=DOCUMENTS, default='ГОСТ 21534 (Метод А)',
                                  blank=True)
-    date = models.DateField('Дата', auto_now_add=True, db_index=True, blank=True)
+    date = models.DateField('Дата', blank=True)
     performer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='performercs', blank=True)
     name = models.CharField('Наименование', max_length=100, choices=MATERIAL, default='СС-ТН-ПА-1',
                                  blank=True)
@@ -173,9 +173,9 @@ class Clorinesalts(models.Model):
     seria = models.CharField('Номер серии измерений (для однородности)', max_length=100, default='0', null=True)
 
 
-    x1 = models.DecimalField('X1', max_digits=7, decimal_places=3, null=True, blank=True)
-    x2 = models.DecimalField('X2', max_digits=7, decimal_places=3, null=True, blank=True)
-    x_avg = models.DecimalField('X2', max_digits=7, decimal_places=3, null=True, blank=True)
+    x1 = models.DecimalField('X1', max_digits=8, decimal_places=4, null=True, blank=True)
+    x2 = models.DecimalField('X2', max_digits=8, decimal_places=4, null=True, blank=True)
+    x_avg = models.CharField('X2', null=True, blank=True)
     factconvergence = models.CharField('Расхождение между результатами Х1-Х2, мг/л', max_length=90, null=True, blank=True)
     resultMeas = models.CharField('Результат измерений уд/неуд', max_length=100, default='неудовлетворительно',
                                   null=True, blank=True)
@@ -203,7 +203,8 @@ class Clorinesalts(models.Model):
         x_avg = get_avg(self.x1, self.x2, 4)
         abserror1 = Decimal(x_avg) * Decimal(self.relerror) / Decimal(100)
         self.abserror = mrerrow(Decimal(abserror1))
-        self.x_avg = numberDigits(x_avg, self.abserror)
+        x_avg = numberDigits(x_avg, self.abserror)
+        self.x_avg = str(x_avg).replace('.',',')
         for i in range(4):
                if self.range == CHOICES[i][0]:
                    self.repr1 = roptional[i][0]
