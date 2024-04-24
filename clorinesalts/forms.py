@@ -108,6 +108,11 @@ class StrJournalCreationForm(forms.ModelForm):
                 Column('seria', css_class='form-group col-md-10 mb-0'),
                 css_class='form-row'
             ),
+            Row(
+                Column('maincomment', css_class='form-group col-md-10 mb-0'),
+                css_class='form-row'
+            ),
+
 
 
   
@@ -119,7 +124,7 @@ class StrJournalCreationForm(forms.ModelForm):
         model = MODEL
         fields = ['index', 'numberexample',
                   'name', 'lot', 'aim',
-                  'range', 'x1', 'x2', 'equipment1'
+                  'range', 'x1', 'x2', 'equipment1', 'maincomment'
                   ]
 
 
