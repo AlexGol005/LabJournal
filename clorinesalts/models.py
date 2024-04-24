@@ -254,7 +254,7 @@ class Clorinesalts(models.Model):
 
     def save(self, *args, **kwargs):
         for i in range(5):
-            if self.name == CHOICES[i][0]:
+            if self.name == MATERIAL[i][0]:
                           self.relerror = relerroroptional[i]
         self.room = Rooms.objects.get(roomnumber='474')
         # определяем сходимость, воспроизводимость и CD, соответствующие диапазону, сначала вычисляем среднее:
