@@ -156,16 +156,6 @@ class IndicatorDFK(models.Model):
         verbose_name_plural = 'Индикатор ДФК'
 
 class Clorinesalts(models.Model):
-    # type = models.CharField('Назначение измерений', max_length=300, choices=TYPE,
-                                # default= 'Расчёт АЗ', null=True, blank=True)
-    # for_lot_and_nameLotCSN = models.ForeignKey(LotCSN, verbose_name='Измерение для: СО и партия (ХСН)', on_delete=models.PROTECT,
-                                          # blank=True, null=True)
-    # for_lot_and_nameLotSSTN = models.ForeignKey(LotSSTN, verbose_name='Измерение для: СО и партия(СС-ТН)',
-                                                # on_delete=models.PROTECT,
-                                               #  blank=True, null=True)
-    # for_lot_and_nameLotGKCS = models.ForeignKey(LotGKCS, verbose_name='Измерение для: СО и партия (ГК)',
-                                                # on_delete=models.PROTECT,
-                                                # blank=True, null=True)
     ndocument = models.CharField('Метод испытаний', max_length=100, choices=DOCUMENTS, default='ГОСТ 21534 (Метод А)',
                                  blank=True)
     date = models.DateField('Дата', auto_now_add=True, db_index=True, blank=True)
@@ -176,52 +166,6 @@ class Clorinesalts(models.Model):
     lot = models.CharField('Партия', max_length=90, null=True, blank=True)
     range = models.CharField('Диапазон содержания хлористых солей', max_length=3000, choices=CHOICES,
                                default= 'до 50 мг/л', null=True, blank=True)
-    # projectconc = models.CharField('Расчётное содержание хлористых солей', max_length=300, null=True, blank=True)
-    # que = models.IntegerField('Очередность отбора пробы', blank=True, null=True, default=1)
-    # solvent = models.CharField('Растворитель', max_length=90, choices=SOLVENTS, default='орто-ксилол',
-                               # blank=True)
-    # truevolume = models.BooleanField('Для каждой экстракции: горячей воды на экстракцию 100 мл, промывка  + 35 мл, промывка фильтра + 15 мл')
-    # behaviour = models.CharField('Поведение пробы', max_length=100, choices=BEHAVIOUR, default='Расслаивается')
-
-    # exp = models.IntegerField('Срок годности измерения, месяцев', blank=True, null=True, default=24)
-    # date_exp = models.DateField('Измерение годно до', blank=True, null=True)
-
-
-    # aliquotvolume = models.DecimalField('Аликвота пробы, мл', max_digits=3, decimal_places=0, null=True, blank=True)
-    # solventvolume = models.DecimalField('Объём растворителя, мл', max_digits=3, decimal_places=0, null=True, blank=True)
-
-    # lotHg = models.CharField('Партия раствора нитрата ртути', max_length=90, null=True, blank=True)
-    # titerHg = models.DecimalField('Титр нитрата ртути, мг/см3', max_digits=5, decimal_places=4, null=True, blank=True)
-    # Hgdate = models.DateField('Дата изготовления нитрата ртути', null=True, blank=True)
-    # titerHgdate = models.DateField('Дата установки титра', null=True, blank=True)
-    # titerHgdead = models.DateField('Титр годен до', null=True, blank=True)
-
-    # dfkdate = models.DateField('Дата изготовления дифенилкарбазида', null=True, blank=True)
-    # dfkdead = models.DateField('Дифенилкарбазид  годен до', null=True, blank=True)
-
-    # backvolume = models.DecimalField('Объём холостой пробы, мл', max_digits=4, decimal_places=2,
-                                                # null=True, blank=True)
-    # V1E1 = models.DecimalField('Воронка1, экстракт1', max_digits=4, decimal_places=2, null=True, blank=True)
-    # V1E2 = models.DecimalField('Воронка1, экстракт2', max_digits=4, decimal_places=2, null=True, blank=True)
-    # V1E3 = models.DecimalField('Воронка1, экстракт3', max_digits=4, decimal_places=2, null=True, blank=True)
-    # V1E4 = models.DecimalField('Воронка1, экстракт4', max_digits=4, decimal_places=2, null=True, blank=True)
-    # V1E5 = models.DecimalField('Воронка1, экстракт5', max_digits=4, decimal_places=2, null=True, blank=True)
-    # V2E1 = models.DecimalField('Воронка2, экстракт1', max_digits=4, decimal_places=2, null=True, blank=True)
-    # V2E2 = models.DecimalField('Воронка2, экстракт2', max_digits=4, decimal_places=2, null=True, blank=True)
-    # V2E3 = models.DecimalField('Воронка2, экстракт3', max_digits=4, decimal_places=2, null=True, blank=True)
-    # V2E4 = models.DecimalField('Воронка2, экстракт4', max_digits=4, decimal_places=2, null=True, blank=True)
-    # V2E5 = models.DecimalField('Воронка2, экстракт5', max_digits=4, decimal_places=2, null=True, blank=True)
-
-    # aV1E1 = models.DecimalField('А в1э1', max_digits=2, decimal_places=1, null=True, blank=True, default=Decimal('1'))
-    # aV1E2 = models.DecimalField('А в1э2', max_digits=2, decimal_places=1, null=True, blank=True, default=Decimal('1'))
-    # aV1E3 = models.DecimalField('А в1э3', max_digits=2, decimal_places=1, null=True, blank=True, default=Decimal('1'))
-    # aV1E4 = models.DecimalField('А в1э4', max_digits=2, decimal_places=1, null=True, blank=True, default=Decimal('1'))
-    # aV1E5 = models.DecimalField('А в1э5', max_digits=2, decimal_places=1, null=True, blank=True, default=Decimal('1'))
-    # aV2E1 = models.DecimalField('А в2э1', max_digits=2, decimal_places=1, null=True, blank=True, default=Decimal('1'))
-    # aV2E2 = models.DecimalField('А в2э2', max_digits=2, decimal_places=1, null=True, blank=True, default=Decimal('1'))
-    # aV2E3 = models.DecimalField('А в2э3', max_digits=2, decimal_places=1, null=True, blank=True, default=Decimal('1'))
-    # aV2E4 = models.DecimalField('А в2э4', max_digits=2, decimal_places=1, null=True, blank=True, default=Decimal('1'))
-    # aV2E5 = models.DecimalField('А в2э5', max_digits=2, decimal_places=1, null=True, blank=True, default=Decimal('1'))
     aim = models.CharField('Цель испытаний', max_length=100, choices=aimoptional,
                                   default=aimoptional[0][0],
                                   blank=True, null=True)
@@ -240,10 +184,8 @@ class Clorinesalts(models.Model):
     Rep2 = models.CharField('Воспроизводимость, мг/л', max_length=90, null=True, blank=True)
     CD1 = models.CharField('Критическая разность, мг/л', max_length=90, null=True, blank=True)
     relerror = models.CharField('Погрешность относительная (описание типа)', max_length=90, null=True, blank=True)
+    abserror = models.CharField('Погрешность абсолютная', max_length=90, null=True, blank=True)
     maincomment = models.CharField('Комментарии', max_length=6000, null=True, blank=True)
-
-    # order_cv_value_begin = models.CharField('Диапазон по заказу от, мг/л', max_length=90, null=True, blank=True)
-    # order_cv_value_end = models.CharField('Диапазон по заказу до, мг/л', max_length=90, null=True, blank=True)
     equipment1 = models.CharField('Бюретка', max_length=500, choices=buroptional,
                                   default=buroptional[0][0],
                                   blank=True, null=True)
@@ -260,7 +202,7 @@ class Clorinesalts(models.Model):
         # определяем сходимость, воспроизводимость и CD, соответствующие диапазону, сначала вычисляем среднее:
         x_avg = get_avg(self.x1, self.x2, 4)
         abserror1 = Decimal(x_avg) * Decimal(self.relerror) / Decimal(100)
-        abserror = mrerrow(Decimal(abserror1))
+        self.abserror = mrerrow(Decimal(abserror1))
         self.x_avg = numberDigits(x_avg, abserror)
         for i in range(4):
                if self.range == CHOICES[i][0]:
