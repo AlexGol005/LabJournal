@@ -23,6 +23,9 @@ class StrJournalCreationForm(forms.ModelForm):
     """форма для внесения записи об аттестации в журнал"""
     """поменять: fields"""
 
+    date = models.DateField(
+        label= 'Дата измерений', required=False, initial=datetime.date.today
+    )
     name = forms.ChoiceField(label='Наименование пробы', required=True,
                              choices=MATERIAL,
                              widget=forms.Select(attrs={'class': 'form-control'}))
@@ -74,8 +77,8 @@ class StrJournalCreationForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
 
-            Row(
-                Column('name', css_class='form-group col-md-3 mb-0'),
+            Row(Column('date', css_class='form-group col-md-2 mb-0'),
+                Column('name', css_class='form-group col-md-1 mb-0'),
                 Column('index', css_class='form-group col-md-8 mb-0'),
                 css_class='form-row'
             ),
@@ -113,18 +116,13 @@ class StrJournalCreationForm(forms.ModelForm):
                 css_class='form-row'
             ),
 
-
-
-  
-
-
             Submit('submit', 'Внести запись в журнал'))
 
     class Meta:
         model = MODEL
         fields = ['index', 'numberexample',
                   'name', 'lot', 'aim',
-                  'range', 'x1', 'x2', 'equipment1', 'maincomment'
+                  'range', 'x1', 'x2', 'equipment1', 'maincomment', 'date'
                   ]
 
 
