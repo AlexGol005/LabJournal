@@ -117,10 +117,8 @@
             <td colspan="3">Исполнитель: {{ note.performer}}</td>
 			<td colspan="3">
                  
-                <a href="/attestationJ/{{ URL }}/clorinesaltsstrcv/{{ note.id }}/"  class="btn btn-outline-warning mt-3">
-                    Поменять номер серии
-                </a>
-  
+                <a href="/attestationJ/clorinesalts/seriaupdate/{{ note.id }}"  class="btn btn-outline-warning mt-3"> Поменять номер серии</a>
+
             </td>
 			<td colspan="3">{% if not counter %}
                 <a href="/attestationJ/{{ URL }}/attestation/{{ note.id }}/comments/"  class="btn btn-outline-warning mt-3">комментировать</a>
