@@ -239,6 +239,7 @@ class Clorinesalts(models.Model):
 
     r = models.CharField('Воспроизводимость, мг/л', max_length=90, null=True, blank=True)
     CD = models.CharField('Критическая разность, мг/л', max_length=90, null=True, blank=True)
+    relerror = models.CharField('Погрешность относительная 9описание типа)', max_length=90, null=True, blank=True)
 
     # order_cv_value_begin = models.CharField('Диапазон по заказу от, мг/л', max_length=90, null=True, blank=True)
     # order_cv_value_end = models.CharField('Диапазон по заказу до, мг/л', max_length=90, null=True, blank=True)
@@ -251,76 +252,22 @@ class Clorinesalts(models.Model):
 
 
     def save(self, *args, **kwargs):
+        for i in range(5):
+            if self.name == CHOICES[i][0]:
+                          self.relerror = relerroroptional[i]
         self.room = Rooms.objects.get(roomnumber='474')
-        # связь с конкретной партией и  относительной погрешностью СО
-        # if self.name == 'СС-ТН-ПА-1':
-            # pk_SSTN = SSTN.objects.get(name=self.name)
-            # a = SSTNrange.objects.get_or_create(rangeindex=self.namedop, nameSM=pk_SSTN)
-            # b = a[0]
-            # LotSSTN.objects.get_or_create(lot=self.lot, nameSM=b)
-            # self.for_lot_and_nameLotSSTN = LotSSTN.objects.get(lot=self.lot, nameSM=b)
-        # if self.name == 'ХСН-ПА-1' or self.name == 'ХСН-ПА-2':
-            # pk_CSN = CSN.objects.get(name=self.name)
-            # a = CSNrange.objects.get_or_create(rangeindex=self.namedop, nameSM=pk_CSN)
-            # b = a[0]
-            # LotCSN.objects.get_or_create(lot=self.lot, nameSM=b)
-            # self.for_lot_and_nameLotCSN = LotCSN.objects.get(lot=self.lot, nameSM=b)
-            # начало и конец диапазона
-            # self.order_cv_value_begin = self.for_lot_and_nameLotCSN.nameSM.typebegin
-            # self.order_cv_value_end = self.for_lot_and_nameLotCSN.nameSM.typeend
-        # if self.name == 'ГК-ПА-2':
-            # pk_GKCS = GKCS.objects.get(name=self.name)
-            # a = GKCSrange.objects.get_or_create(rangeindex=self.namedop, nameSM=pk_GKCS)
-            # b = a[0]
-            # LotGKCS.objects.get_or_create(lot=self.lot, nameSM=b)
-            # self.for_lot_and_nameLotGKCS = LotGKCS.objects.get(lot=self.lot, nameSM=b)
-        # else:
-            # self.order_cv_value_begin = Decimal(0)
-            # self.order_cv_value_end = Decimal(0)
-        # расчёты первичные
-         # clearvolume11 = self.V1E1 - self.backvolume
-         # clearvolume12 = self.V1E2 - self.backvolume
-         # clearvolume13 = self.V1E3 - self.backvolume
-         # clearvolume21 = self.V2E1 - self.backvolume
-         # clearvolume22 = self.V2E2 - self.backvolume
-         # clearvolume23 = self.V2E3 - self.backvolume
-
-         # if self.titerHg and self.titerHgdead >= date.today():
-             # cV1E1 = (clearvolume11 * self.titerHg * Decimal('1000') * self.aV1E1) / self.aliquotvolume
-             # cV1E2 = (clearvolume12 * self.titerHg * Decimal('1000') * self.aV1E2) / self.aliquotvolume
-             # cV1E3 = (clearvolume13 * self.titerHg * Decimal('1000') * self.aV1E3) / self.aliquotvolume
-             # cV2E1 = (clearvolume21 * self.titerHg * Decimal('1000') * self.aV2E1) / self.aliquotvolume
-             # cV2E2 = (clearvolume22 * self.titerHg * Decimal('1000') * self.aV2E2) / self.aliquotvolume
-             # cV2E3 = (clearvolume23 * self.titerHg * Decimal('1000') * self.aV2E3) / self.aliquotvolume
-             # self.x1 = cV1E1 + cV1E2 + cV1E3
-             # self.x2 = cV2E1 + cV2E2 + cV2E3
-            # if self.V1E4:
-                 # clearvolume14 = self.V1E4 - self.backvolume
-                 # cV1E4 = (clearvolume14 * self.titerHg * Decimal('1000') * self.aV1E1) / self.aliquotvolume
-                 # self.x1 = self.x1 + cV1E4
-             # if self.V2E4:
-                 # clearvolume24 = self.V2E4 - self.backvolume
-                 # cV2E4 = (clearvolume24 * self.titerHg * Decimal('1000') * self.aV1E5) / self.aliquotvolume
-                 # self.x2 = self.x2 + cV2E4
-             # if self.V1E5:
-                 # clearvolume15 = self.V1E5 - self.backvolume
-                 # cV1E5 = (clearvolume15 * self.titerHg * Decimal('1000') * self.aV1E5) / self.aliquotvolume
-                 # self.x1 = self.x1 + cV1E5
-             # if self.V2E5:
-                 # clearvolume25 = self.V2E5 - self.backvolume
-                 # cV2E5 = (clearvolume25 * self.titerHg * Decimal('1000') * self.aV1E1) / self.aliquotvolume
-                 # self.x2 = self.x2 + cV2E5
-         # if not self.titerHg or self.titerHgdead < date.today():
-             # self.resultMeas = 'Не установлен или просрочен титр раствора нитрата ртути'
-
-
         # определяем сходимость, воспроизводимость и CD, соответствующие диапазону, сначала вычисляем среднее:
-        self.x_avg = get_avg(self.x1, self.x2, 4)
+        x_avg = get_avg(self.x1, self.x2, 4)
+        abserror = Decimal(x_avg) * Decimal(self.relerror) / Decimal(100)
+        abserror = mrerrow(abserror)
+        self.x_avg = numberDigits(x_avg, abserror)
         for i in range(4):
                if self.range == CHOICES[i][0]:
                           self.r = r[i][0]
                           self.R = R[i][0]
                           self.CD = CD[i][0]
+
+
 
         # сравниваем х1-х2 со сходимостью и комментируем результат измерений
         self.factconvergence = (self.x1 - self.x2).copy_abs().quantize(Decimal('1.00'), ROUND_HALF_UP)
