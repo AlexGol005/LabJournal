@@ -17,7 +17,15 @@ MODEL = Clorinesalts
 COMMENTMODEL = CommentsClorinesalts
 MATERIAL1 = MATERIAL[0:-1]
 
+class SeriaUpdateForm(forms.ModelForm):
+    """форма для обновления номера серии"""
+    seria = forms.CharField(label='Номер серии', max_length=10000000, required=False,
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': ''}))
 
+    class Meta:
+        model = clorinesalts
+        fields = ['seria']
 
 class StrJournalCreationForm(forms.ModelForm):
     """форма для внесения записи об аттестации в журнал"""
