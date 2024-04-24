@@ -34,6 +34,21 @@ class StrDPKView(View):
     def get(self, request, pk):
         obj = get_object_or_404(IndicatorDFK, pk=pk)
         return render(request, URL + '/strDPK.html',  {'obj': obj})
+        
+def SeriaUpdate(request, str):
+    """выводит страницу с формой для обновления номера серии измерений""" 
+    title = f'{Clorinesalts.objects.get(pk=str).name}, п. {Clorinesalts.objects.get(pk=str).lot}'
+    if request.method == "POST":
+        form = SeriaUpdateForm(request.POST, request.FILES,  instance=Clorinesalts.objects.get(pk=str))
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.save()
+            return redirect(f'/attestationJ/clorinesalts/attestation/{str}/')  
+    else:
+        form = SeriaUpdateForm(instance=Clorinesalts.objects.get(pk=str))
+    data = {'form': form, 'title': title
+            }
+    return render(request, 'equipment/reg.html', data)
 
 @login_required
 def RegDPKView(request):
