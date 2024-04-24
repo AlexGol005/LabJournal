@@ -6,8 +6,6 @@ from .models import ClorinesaltsCV, Clorinesalts
 
 @receiver(post_save, sender=Clorinesalts)
 def create_cv(sender, instance, created, **kwargs):
-    if created:
-        ClorinesaltsCV.objects.create(clorinesalts=instance)
-
+    pass
 
 
