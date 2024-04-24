@@ -29,7 +29,7 @@
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspСтр.&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspСтр.{{ note.pk }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		</tr>
 		<tr>
 			<th colspan="6">Определение содержания хлористых солей в нефтепродуктах по {{ note.ndocument }}</th>
@@ -40,27 +40,29 @@
                 Дата</th>
 			<th>Наименование</th>
 			<th>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspПартия&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>
-		</tr>
-				<tr>
-			<th>№ флакона</th>
-			<th>Номер серии измерений</th>
-			<th>Цель измерений</th>
-		</tr>
-		<tr>
-			<td>{{note.date|date:"d.m.Y"}}</td>
+			</tr>
+		<td>{{note.date|date:"d.m.Y"}}</td>
 			<td> {% if note.name != 'другое' %}
                 {{ note.name}}({{ note.index}})
                 {% elif note.name == 'другое' %}
                 {{ note.index}}
                 {% endif %}
-
-            </td>
-			<td>{{ note.lot}}</td>
+				<td>{{ note.lot}}</td>
+		<tr>
+			<th>№ флакона</th>
+			<th>Номер серии измерений</th>
+			<th>Цель измерений</th>
+		</tr>
+		<tr>
+			
+</tr>
+         <tr>   
+			
 			<td>{{ note.numberexample}}</td>
 			<td>{{ note.seria}}</td>
 			<td>{{ note.aim}}</td>
 		</tr>
-		<tr>
+	
 			
 		<tr>
 			<th>X1, мг/л</th>
@@ -69,10 +71,6 @@
 			<td colspan="2">{{ note.x2|default_if_none:" "}}</td>
 						<th>Xср, мг/л</th>
 			<td colspan="2">{{ note.x_avg|default_if_none:" "}}</td>
-		</tr>
-		<tr>
-			<th colspan="3">Сходимость по ГОСТ, мг/л</th>
-			<th colspan="3">Разница между измерениями, мг/л</th>
 		</tr>
 		<tr>
 			<td colspan="3">r, мг/л </td>
@@ -84,7 +82,7 @@
 			<td colspan="3">{{ note.R}}</td>
 			<td colspan="3">{{ note.CD}}</td>
 		</tr>
-				</tr>
+				
 				<tr>
 			<td colspan="3">{{ note.equipment1}} </td>
 
@@ -105,6 +103,7 @@
                  </div>
             </td>
 		</tr>
+			<tr>
             <td colspan="3">Исполнитель: {{ note.performer}}</td>
 			<td colspan="2">
                  
@@ -120,7 +119,7 @@
                 {% endif %}</td>
 		</tr>
 			<tr>
-				{{ note.maincomment }}
+				{{ note.maincomment|default_if_none:" " }}
 			</tr>
 	</tbody>
 </table>
