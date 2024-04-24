@@ -255,11 +255,11 @@ class Clorinesalts(models.Model):
     def save(self, *args, **kwargs):
         for i in range(5):
             if self.name == MATERIAL[i][0]:
-                          self.relerror = relerroroptional[i]
+                self.relerror = relerroroptional[i]
         self.room = Rooms.objects.get(roomnumber='474')
         # определяем сходимость, воспроизводимость и CD, соответствующие диапазону, сначала вычисляем среднее:
         x_avg = get_avg(self.x1, self.x2, 4)
-        abserror1 = (Decimal(x_avg) * Decimal(self.relerror)) / Decimal(100)
+        abserror1 = x_avg * Decimal(self.relerror)) / Decimal(100)
         abserror = mrerrow(Decimal(abserror1))
         self.x_avg = numberDigits(x_avg, abserror)
         for i in range(4):
