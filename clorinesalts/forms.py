@@ -76,9 +76,13 @@ class StrJournalCreationForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
-
             Row(Column('date', css_class='form-group col-md-2 mb-0'),
-                Column('name', css_class='form-group col-md-1 mb-0'),
+                css_class='form-row'
+            ),
+
+
+            Row(
+                Column('name', css_class='form-group col-md-3 mb-0'),
                 Column('index', css_class='form-group col-md-8 mb-0'),
                 css_class='form-row'
             ),
