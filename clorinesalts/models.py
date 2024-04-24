@@ -239,7 +239,8 @@ class Clorinesalts(models.Model):
 
     r = models.CharField('Воспроизводимость, мг/л', max_length=90, null=True, blank=True)
     CD = models.CharField('Критическая разность, мг/л', max_length=90, null=True, blank=True)
-    relerror = models.CharField('Погрешность относительная 9описание типа)', max_length=90, null=True, blank=True)
+    relerror = models.CharField('Погрешность относительная (описание типа)', max_length=90, null=True, blank=True)
+    maincomment = models.CharField('Комментарии', max_length=6000, null=True, blank=True)
 
     # order_cv_value_begin = models.CharField('Диапазон по заказу от, мг/л', max_length=90, null=True, blank=True)
     # order_cv_value_end = models.CharField('Диапазон по заказу до, мг/л', max_length=90, null=True, blank=True)
