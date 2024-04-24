@@ -65,6 +65,8 @@ class StrJournalCreationForm(forms.ModelForm):
     equipment1 = forms.ChoiceField(label='Номер бюретки', required=True,
                                   choices=buroptional,
                                   widget=forms.Select(attrs={'class': 'form-control'}))
+    maincomment = forms.CharField(label='Комментарий', required=False,
+                                   widget=forms.Textarea(attrs={'class': 'form-control'}))
 
 
     def __init__(self, *args, **kwargs):
