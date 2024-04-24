@@ -21,7 +21,7 @@
     <table class="table table-bordered background-color">
 	<tbody>
 		<tr>
-			<td colspan="9">ХС-ГОСТ 21534(А)-{{ note.date|date:"Y"}}&nbsp;&nbsp;  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+			<td colspan="12">ХС-ГОСТ 21534(А)-{{ note.date|date:"Y"}}&nbsp;&nbsp;  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
@@ -121,7 +121,7 @@
                 {% endif %}</td>
 		</tr>
 			<tr><td colspan="9">
-				{{ note.maincomment|default_if_none:" " }}
+				{{ note.maincomment|default_if_none:" " }} {{ self.relerror }}
 			</td></tr>
 	</tbody>
 </table>
