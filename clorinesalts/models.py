@@ -203,7 +203,7 @@ class Clorinesalts(models.Model):
         x_avg = get_avg(self.x1, self.x2, 4)
         abserror1 = Decimal(x_avg) * Decimal(self.relerror) / Decimal(100)
         self.abserror = mrerrow(Decimal(abserror1))
-        self.x_avg = numberDigits(x_avg, abserror)
+        self.x_avg = numberDigits(x_avg, self.abserror)
         for i in range(4):
                if self.range == CHOICES[i][0]:
                    self.repr1 = roptional[i][0]
