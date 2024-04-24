@@ -185,7 +185,7 @@ class Clorinesalts(models.Model):
 
     # exp = models.IntegerField('Срок годности измерения, месяцев', blank=True, null=True, default=24)
     # date_exp = models.DateField('Измерение годно до', blank=True, null=True)
-    r = models.CharField('Повторяемость, мг/дм3', max_length=90, null=True, blank=True)
+
 
     # aliquotvolume = models.DecimalField('Аликвота пробы, мл', max_digits=3, decimal_places=0, null=True, blank=True)
     # solventvolume = models.DecimalField('Объём растворителя, мл', max_digits=3, decimal_places=0, null=True, blank=True)
@@ -236,8 +236,8 @@ class Clorinesalts(models.Model):
     resultMeas = models.CharField('Результат измерений уд/неуд', max_length=100, default='неудовлетворительно',
                                   null=True, blank=True)
     cause = models.CharField('Причина', max_length=100, default='', null=True, blank=True)
-    r1 = models.CharField('Повторяемость, мг/л', max_length=90, null=True, blank=True)
-    R2 = models.CharField('Воспроизводимость, мг/л', max_length=90, null=True, blank=True)
+    repr1 = models.CharField('Повторяемость, мг/л', max_length=90, null=True, blank=True)
+    Rep2 = models.CharField('Воспроизводимость, мг/л', max_length=90, null=True, blank=True)
     CD1 = models.CharField('Критическая разность, мг/л', max_length=90, null=True, blank=True)
     relerror = models.CharField('Погрешность относительная (описание типа)', max_length=90, null=True, blank=True)
     maincomment = models.CharField('Комментарии', max_length=6000, null=True, blank=True)
@@ -264,8 +264,8 @@ class Clorinesalts(models.Model):
         self.x_avg = numberDigits(x_avg, abserror)
         for i in range(4):
                if self.range == CHOICES[i][0]:
-                   self.r1 = roptional[i][0]
-                   self.R2 = Roptional[i][0]
+                   self.repr1 = roptional[i][0]
+                   self.Rep2 = Roptional[i][0]
                    self.CD1 = CDoptional[i][0]
 
 
