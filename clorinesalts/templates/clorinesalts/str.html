@@ -27,8 +27,6 @@
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspСтр.{{ note.pk }}&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		</tr>
 		<tr>
@@ -42,11 +40,11 @@
 			<th colspan="3">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspПартия&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</th>
 			</tr>
 		<td colspan="3">{{note.date|date:"d.m.Y"}}</td>
-			<td> {% if note.name != 'другое' %}
+			<td colspan="3"> {% if note.name != 'другое' %}
                 {{ note.name}}({{ note.index}})
                 {% elif note.name == 'другое' %}
                 {{ note.index}}
-                {% endif %}
+                {% endif %} </td>
 				<td  colspan="3">{{ note.lot}}</td>
 		<tr>
 			<th colspan="3">№ флакона</th>
@@ -65,24 +63,24 @@
 	
 			
 		<tr>
-			<td colspan="3">Х1, мг/л </td>
-			<td colspan="3">Х2, мг/л</td>
-			<td colspan="3">Хсред, мг/л</td>
+			<th colspan="3">Х1, мг/л </th>
+			<th colspan="3">Х2, мг/л</th>
+			<th colspan="3">Хсред, мг/л</th>
 		</tr>
 						<tr>
-			<th colspan="3">{{ note.x1}} </td>
-			<th colspan="3">{{ note.x2}}</td>
-			<th colspan="3">{{ note.x_avg}}</td>
+			<td colspan="3">{{ note.x1}} </td>
+			<td colspan="3">{{ note.x2}}</td>
+			<td colspan="3">{{ note.x_avg}}</td>
 		</tr>
 		<tr>
-			<td colspan="3">r, мг/л </td>
-			<td colspan="3">R, мг/л</td>
-			<td colspan="3">CD, мг/л</td>
+			<th colspan="3">r, мг/л </th>
+			<th colspan="3">R, мг/л</th>
+			<th colspan="3">CD, мг/л</th>
 		</tr>
 				<tr>
-			<th colspan="3">{{ note.repr1}} </td>
-			<th colspan="3">{{ note.Rep2}}</td>
-			<th colspan="3">{{ note.CD1}}</td>
+			<td colspan="3">{{ note.repr1}} </td>
+			<td colspan="3">{{ note.Rep2}}</td>
+			<td colspan="3">{{ note.CD1}}</td>
 		</tr>
 				
 				<tr>
@@ -121,7 +119,7 @@
                 {% endif %}</td>
 		</tr>
 			<tr><td colspan="9">
-				{{ note.maincomment|default_if_none:" " }} {{ self.relerror }}
+				{{ note.maincomment|default_if_none:" " }} {{ note.relerror }}
 			</td></tr>
 	</tbody>
 </table>
