@@ -259,7 +259,7 @@ class Clorinesalts(models.Model):
         self.room = Rooms.objects.get(roomnumber='474')
         # определяем сходимость, воспроизводимость и CD, соответствующие диапазону, сначала вычисляем среднее:
         x_avg = get_avg(self.x1, self.x2, 4)
-        abserror1 = Decimal(5)
+        abserror1 = (Decimal(x_avg) * Decimal(self.relerror)) / Decimal(100)
         abserror = mrerrow(Decimal(abserror1))
         self.x_avg = numberDigits(x_avg, abserror)
         for i in range(4):
@@ -272,10 +272,10 @@ class Clorinesalts(models.Model):
 
         # сравниваем х1-х2 со сходимостью и комментируем результат измерений
         self.factconvergence = (self.x1 - self.x2).copy_abs().quantize(Decimal('1.00'), ROUND_HALF_UP)
-        if self.factconvergence > Decimal(self.r):
+        if self.factconvergence > Decimal(self.repr1):
             self.resultMeas = 'Неудовлетворительно'
             self.cause = '|Х1 - Х2| > r'
-        if self.factconvergence <= Decimal(self.r):
+        if self.factconvergence <= Decimal(self.repr1):
             self.resultMeas = 'Удовлетворительно'
         super(Clorinesalts, self).save(*args, **kwargs)
 
