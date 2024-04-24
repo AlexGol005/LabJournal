@@ -24,7 +24,7 @@ class SeriaUpdateForm(forms.ModelForm):
                                                         'placeholder': ''}))
 
     class Meta:
-        model = clorinesalts
+        model = Clorinesalts
         fields = ['seria']
 
 class StrJournalCreationForm(forms.ModelForm):
