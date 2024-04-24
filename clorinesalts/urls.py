@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 
 from . import views
-from .views import URL
+from .j_constants import *
 
 
 urlpatterns = [
@@ -37,4 +37,5 @@ urlpatterns = [
     path(r'^export2/xls/$/<int:pk>', views.export_Clorinesalts_xls, name='export_Clorinesalts_xls'),
     path('seriaupdate/<str:str>', views.SeriaUpdate, name='seriaupdate' + 'str'),
     path(r'^export1/xls/$/<int:pk>', views.export_protocol_xls, name='export_clorinesalts_protocol_xls'),
+    path('protocolbutton/<slug:pk>', views.ProtocolbuttonView.as_view(), name=URL + 'protocolbutton'),
 ]
