@@ -236,9 +236,8 @@ class Clorinesalts(models.Model):
     resultMeas = models.CharField('Результат измерений уд/неуд', max_length=100, default='неудовлетворительно',
                                   null=True, blank=True)
     cause = models.CharField('Причина', max_length=100, default='', null=True, blank=True)
-
-    r = models.CharField('Повторяемость', мг/л', max_length=90, null=True, blank=True)
-    R = models.CharField('Воспроизводимость', мг/л', max_length=90, null=True, blank=True)
+    r = models.CharField('Повторяемость, мг/л', max_length=90, null=True, blank=True)
+    R = models.CharField('Воспроизводимость, мг/л', max_length=90, null=True, blank=True)
     CD = models.CharField('Критическая разность, мг/л', max_length=90, null=True, blank=True)
     relerror = models.CharField('Погрешность относительная (описание типа)', max_length=90, null=True, blank=True)
     maincomment = models.CharField('Комментарии', max_length=6000, null=True, blank=True)
