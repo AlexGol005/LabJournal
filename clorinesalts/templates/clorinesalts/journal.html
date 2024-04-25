@@ -40,7 +40,6 @@
             <th> <div style="text-align: center;"> X2  </div></th>
             <th> <div style="text-align: center;"> Xсред  </div></th>
             <th> <div style="text-align: center;"> См.  </div></th>
-            <th> <div> exel  </div></th>
         </tr>
     </thead>
     <tbody>
@@ -74,7 +73,6 @@
             {% endif %}
         </td>
         <td><a href="/attestationJ/{{ URL }}/attestation/{{ obj.id }}/"  class="btn btn-outline-warning mt-3">см.</a></td>
-        <td><a href="{% url 'export_Clorinesalts_xls' obj.pk %}"  class="btn btn-outline-warning mt-3">exel {{ obj.id }}</a></td>
     </tr>
         {% endif %}
     {% endfor %}
