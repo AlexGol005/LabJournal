@@ -582,41 +582,11 @@ style4.alignment = al1
 def export_protocol_xls(request, pk):
     """представление для выгрузки протокола испытаний в ексель"""
     company = CompanyCard.objects.get(pk=1)
-    note = ViscosityMJL.objects.\
+    note = Clorinesalts.objects.\
         annotate(name_rm=Concat(Value('СО '), 'name', Value(' , партия '), 'lot')).\
-        annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')). \
-        annotate(equipment_set=Concat('equipment1__charakters__name',
-                                        Value(' тип '), 'equipment1__charakters__typename',
-                                        Value(' , зав. № '), 'equipment1__equipment__lot',
-                                        Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
-                                        Value(' от '), 'equipment1__newdate',
-                                        Value(' действительно до '), 'equipment1__newdatedead',
-                                        Value('; \n'),
-                                        )). \
-        annotate(equipment_set1=Concat('equipment2__charakters__name',                                        
-                                        Value(' тип '), 'equipment2__charakters__typename',
-                                        Value(' , зав. № '), 'equipment2__equipment__lot',
-                                        Value(', свидетельство о поверке № '), 'equipment2__newcertnumber',
-                                        Value(' от '), 'equipment2__newdate',
-                                        Value(' действительно до '), 'equipment2__newdatedead',
-                                        )). \
-        annotate(equipment_set2=Concat('equipment3__charakters__name',
-                                       Value(' тип '), 'equipment3__charakters__typename',
-                                       Value(' , зав. № '), 'equipment3__equipment__lot',
-                                       Value(', свидетельство о поверке № '), 'equipment3__newcertnumber',
-                                       Value(' от '), 'equipment3__newdate',
-                                       Value(' действительно до '), 'equipment3__newdatedead',
-                                       Value('; \n'),
-                                       )). \
-        annotate(equipment_set3=Concat('equipment4__charakters__name',
-                                       Value(' тип '), 'equipment4__charakters__typename',
-                                       Value(' , зав. № '), 'equipment4__equipment__lot',
-                                       Value(', свидетельство о поверке № '), 'equipment4__newcertnumber',
-                                       Value(' от '), 'equipment4__newdate',
-                                       # Value(', '),
-                                       Value(' действительно до '), 'equipment4__newdatedead',
-                                       )). \
-        get(pk=pk)
+        annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')).get(pk=pk)
+        
+        
 
     meteo = MeteorologicalParameters.objects. \
         annotate(equipment_meteo=Concat('equipment1__charakters__name',
