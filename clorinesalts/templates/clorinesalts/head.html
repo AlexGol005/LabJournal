@@ -1,36 +1,6 @@
 {% extends 'main/Journal.html' %}
 {% load static %}
 {% block uniccontent %}
-    <div style="text-align: center;"><h6>Этикетки на растворы</h6></div>
-<div style="text-align: center;"><a href="{% url 'clorinesaltsbottles' %}" class="btn btn-info mt-3">Этикетки</a></div>
-<br>
+   
 
-<div style="text-align: center;"><h5>Титрант</h5></div>
-<div style="text-align: center;"><h6>Приготовление</h6></div>
-<div style="text-align: center;"><a href="{% url 'titranthgreg' %}" class="btn btn-info mt-3 mr-3" style="width: 260px">Внести Hg(NO<sub>3</sub>)<sub>2</sub></a>
-<a href="{% url 'allhg' %}" class="btn btn-info mt-3" style="width: 260px">Смотреть партии Hg(NO<sub>3</sub>)<sub>2</sub></a>
-</div>
-<br>
-<div style="text-align: center;"><h6>Установка титра</h6></div>
-
-<div style="text-align: center;"><a href="{% url 'gettitrhgreg' %}" class="btn btn-info mt-3 mr-3 "style="width: 260px">Внести титр Hg(NO<sub>3</sub>)<sub>2</sub></a>
-<a href="{% url 'allhgtitr' %}" class="btn btn-info mt-3" style="width: 260px">Смотреть титры Hg(NO<sub>3</sub>)<sub>2</sub></a>
-</div>
-<br>
-<div style="text-align: center;"><h5>Индикатор</h5></div>
-<div style="text-align: center;"><a href="{% url 'dpkreg' %}" class="btn btn-info  mt-3">Внести индикатор</a></div>
-<br>
-<div style="text-align: center;"><h4>Расчёт АЗ <sup>*</sup></h4></div>
-<div style="text-align: center;"><a href="{% url 'clorinesaltsallcv' %}" class="btn btn-info mt-3">Смотреть расчёты аттестованных значений</a></div>
-<br>
-
-
-<div style="text-align: center;"><img src="{% static 'main/img/clorinesalts.jpg' %}"
-                              alt="ХС"></div>
-
-<br>
-<br>
-   <i> *Переход к форме для расчёта - в записи об аттестации</i>
-<br>
-<br>
 {% endblock %}
