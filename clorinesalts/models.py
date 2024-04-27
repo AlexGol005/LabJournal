@@ -155,7 +155,7 @@ class IndicatorDFK(models.Model):
         verbose_name_plural = 'Индикатор ДФК'
 
 class Clorinesalts(models.Model):
-    ndocument = models.CharField('Метод испытаний', max_length=100, choices=DOCUMENTS, default='ГОСТ 21534 (Метод А)',
+    ndocument = models.CharField('Метод испытаний', max_length=100, choices=DOCUMENTS,  null=True,
                                  blank=True)
     date = models.DateField('Дата', blank=True)
     performer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='performercs', blank=True)
@@ -198,6 +198,7 @@ class Clorinesalts(models.Model):
             if self.name == MATERIAL[i][0]:
                 self.relerror = relerroroptional[i][0]
         self.room = Rooms.objects.get(roomnumber='474')
+        self.ndocument = DOCUMENTS[0][0]
         # определяем сходимость, воспроизводимость и CD, соответствующие диапазону, сначала вычисляем среднее:
         x_avg = get_avg(self.x1, self.x2, 4)
         abserror1 = Decimal(x_avg) * Decimal(self.relerror) / Decimal(100)
