@@ -8,14 +8,14 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, HTML
 
 from clorinesalts.models import Clorinesalts, CommentsClorinesalts, IndicatorDFK, TitrantHg, GetTitrHg, DOCUMENTS, \
-    MATERIAL, CHOICES, SOLVENTS, BEHAVIOUR, ClorinesaltsCV, TYPE, CommentsClorinesaltsCV
+     CHOICES, SOLVENTS, BEHAVIOUR, ClorinesaltsCV, TYPE, CommentsClorinesaltsCV
 from .j_constants import *
 from textconstants import *
 from equipment.models import MeasurEquipment, Rooms
 
 MODEL = Clorinesalts
 COMMENTMODEL = CommentsClorinesalts
-MATERIAL1 = MATERIAL[0:-1]
+
 
 
 class SearchSeriaForm(forms.Form):
@@ -190,7 +190,7 @@ class SearchForm(forms.Form):
     """форма для поиска по полям журнала ГСО, партия"""
     """при копировании поменять поля на нужные"""
     name = forms.ChoiceField(label='Наименование', required=True,
-                             choices=MATERIAL1,
+                             choices=MATERIAL,
                              widget=forms.Select(attrs={'class': 'form-control'}))
     index = forms.CharField(label='Индекс', initial='100',
                               help_text='Для СС-ТН: Х, ХПВ или ХПВС;'
