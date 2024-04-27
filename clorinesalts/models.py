@@ -225,8 +225,8 @@ class Clorinesalts(models.Model):
         if self.factconvergence <= Decimal(self.repr1):
             self.resultMeas = 'Удовлетворительно'
 
-        repr1comma = self.repr1.replace('.',',')
-        factconvergencecomma = str(self.factconvergence).replace('.',',')
+        self.repr1comma = self.repr1.replace('.',',')
+        self.factconvergencecomma = str(self.factconvergence).replace('.',',')
         super(Clorinesalts, self).save(*args, **kwargs)
 
 
