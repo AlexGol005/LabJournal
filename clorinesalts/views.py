@@ -605,7 +605,7 @@ def export_protocol_xls(request, pk):
     """представление для выгрузки протокола испытаний в ексель"""
     company = CompanyCard.objects.get(pk=1)
     note = Clorinesalts.objects.\
-        annotate(name_rm=Concat(Value('СО '), 'name', Value(' , партия '), 'lot')).\
+        annotate(name_rm=Concat(Value('СО '), 'name', Value(' /('), 'index', Value(' /), партия '), 'lot')).\
         annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')).get(pk=pk)
         
         
@@ -1209,7 +1209,7 @@ def export_protocol_xls(request, pk):
         columns = [
         'Аттестуемая характеристика',
         'Аттестуемая характеристика',
-        'Т °C',
+        'Номер экземпляра',
         'Измеренное значение Х1, мг/дм3 ',
         'Измеренное значение Х2, мг/дм3 ',
         'Измеренное значение Хср, мг/дм3 ',
@@ -1233,7 +1233,7 @@ def export_protocol_xls(request, pk):
         columns = [
             attcharacteristic,
             attcharacteristic,
-            attcharacteristic,
+            note.numberexample,
             x1,
             x2,
             measureresult,
