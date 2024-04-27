@@ -47,12 +47,112 @@ TYPE = (('расчёт АЗ', 'расчёт АЗ'),
 EXP = 24  #срок годности АЗ хлористых солей в месяцах
 
 # оригинальные модели для методов с титрованием
-class IndicatorDFK(models.Model):
-           pass
 class TitrantHg(models.Model):
-           pass
+    '''приготовление раствора титранта'''
+    date = models.DateField('Дата', auto_now_add=True, blank=True)
+    lot = models.IntegerField('Партия титранта нитрата ртути', null=True, blank=True, unique=True)
+    performer = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name='performerHg', blank=True)
+    lotreakt1 = models.CharField('Партия и производитель нитрата ртути', max_length=90, null=True, blank=True)
+    lotreakt2 = models.CharField('Партия и производитель дистиллированной воды', max_length=90, null=True, blank=True)
+    lotreakt3 = models.CharField('Партия и производитель азотной кислоты', max_length=90, null=True, blank=True)
+    massHgNO3 = models.DecimalField('Масса нитрата ртути', max_digits=3, decimal_places=2, null=True, blank=True)
+    volumeH2O = models.DecimalField('Вместимость колбы, мл', max_digits=4, decimal_places=0, null=True, blank=True)
+    volumeHNO3 = models.DecimalField('Объём раствора азотной кислоты, мл', max_digits=3, decimal_places=1, null=True, blank=True)
+    availablity = models.CharField('Наличие', max_length=90, default='В наличии', null=True, blank=True)
+
+
+    def __str__(self):
+        return f'Hg(NO3)2 р-р, п. {self.pk}'
+
+    def get_absolute_url(self):
+        """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
+        return reverse('titranthg', kwargs={'pk': self.pk})
+
+    class Meta:
+        verbose_name = 'Hg(NO3)2 титрант'
+        verbose_name_plural = 'Hg(NO3)2 титрант'
+
+
 class GetTitrHg(models.Model):
-           pass
+    date = models.DateField('Дата установки титра', auto_now_add=True, db_index=True, blank=True)
+    datedead = models.DateField('Дата окончания срока годности титра', blank=True,  null=True)
+    performer = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name='performerHgTitr', blank=True)
+    lot = models.ForeignKey(TitrantHg, verbose_name='Партия титранта нитрата ртути', blank=True, on_delete=models.PROTECT)
+    backvolume = models.DecimalField('Объём холостой пробы, мл', max_digits=4, decimal_places=2,
+                                     null=True, blank=True)
+    volumeNaCl = models.CharField('Объём 0,01М NaCl', max_length=100, default='10', blank=True)
+    massaNaCl = models.DecimalField('Масса NaCl', max_length=100, max_digits=5, decimal_places=3, blank=True)
+    volumeHGNO1 = models.DecimalField('Объём Hg(NO3)2 - 1', max_digits=4, decimal_places=2, null=True, blank=True)
+    volumeHGNO2 = models.DecimalField('Объём Hg(NO3)2 - 2', max_digits=4, decimal_places=2, null=True, blank=True)
+    volumeHGNO3 = models.DecimalField('Объём Hg(NO3)2 - 3', max_digits=4, decimal_places=2, null=True, blank=True)
+    titr1 = models.DecimalField('титр 1', max_digits=5, decimal_places=4, null=True, blank=True)
+    titr2 = models.DecimalField('титр 2', max_digits=5, decimal_places=4, null=True, blank=True)
+    titr3 = models.DecimalField('титр 3', max_digits=5, decimal_places=4, null=True, blank=True)
+    ndockrit = models.DecimalField('критерий для титра из НД', max_digits=4, decimal_places=3, default=TITRKRIT)
+    krit = models.DecimalField('критерий факт', max_digits=5, decimal_places=3, null=True, blank=True)
+    titr = models.DecimalField('титр', max_digits=5, decimal_places=4, null=True, blank=True)
+    resultMeas = models.CharField('Результат уд/неуд', max_length=100, default='неудовлетворительно',
+                                  null=True, blank=True)
+    cause = models.CharField('Причина', max_length=100, default='', null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+
+        # self.massaNaCl = Decimal(self.volumeNaCl) * Decimal(M_NaCl)
+        self.massaNaCl = Decimal('5.844')
+        clearvolumeHGNO1 = self.volumeHGNO1 - self.backvolume
+        clearvolumeHGNO2 = self.volumeHGNO2 - self.backvolume
+        clearvolumeHGNO3 = self.volumeHGNO3 - self.backvolume
+        self.titr1 = (self.massaNaCl / clearvolumeHGNO1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
+        self.titr2 = (self.massaNaCl / clearvolumeHGNO2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
+        self.titr3 = (self.massaNaCl / clearvolumeHGNO3).quantize(Decimal('1.0000'), ROUND_HALF_UP)
+        a = max(self.titr1, self.titr2, self.titr3)
+        b = min(self.titr1, self.titr2, self.titr3)
+        self.krit = (a - b).copy_abs()
+        if self.krit > self.ndockrit:
+            self.resultMeas = 'Неудовлетворительно:'
+            self.cause = f'Tmax - Tmin > {TITRKRIT}'
+        if self.krit <= self.ndockrit:
+            self.resultMeas = 'Удовлетворительно:'
+            self.cause = f'Tmax - Tmin <= {TITRKRIT}'
+            self.datedead = date.today() + timedelta(days=14)
+            self.titr = Decimal(((self.titr1 + self.titr2 + self.titr3) / Decimal('3')).quantize(Decimal('1.0000'), ROUND_HALF_UP))
+        super(GetTitrHg, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f'Hg(NO3)2, п {self.lot},  T: {self.titr} мг/л'
+
+    def get_absolute_url(self):
+        """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
+        return reverse('gettitrhg', kwargs={'pk': self.pk})
+
+    class Meta:
+        verbose_name = 'Hg(NO3)2 титр'
+        verbose_name_plural = 'Hg(NO3)2 титр'
+
+
+class IndicatorDFK(models.Model):
+    date = models.DateField('Дата', auto_now_add=True, db_index=True, blank=True)
+    performer = models.ForeignKey(User, on_delete=models.PROTECT, null=True, related_name='performerDFK', blank=True)
+    datedead = models.DateField('Дата окончания срока годности', blank=True)
+    lotreakt1 = models.CharField('Партия и производитель ДФК', max_length=90, null=True, blank=True)
+    lotreakt2 = models.CharField('Партия и производитель спирта', max_length=90, null=True, blank=True)
+    mass = models.DecimalField('Масса ДФК', max_digits=3, decimal_places=2,  null=True, blank=True)
+    volume = models.DecimalField('Вместимость колбы, мл', max_digits=3, decimal_places=0, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.datedead = date.today() + timedelta(days=30 * 2)
+        super(IndicatorDFK, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f'Индикатор ДФК, изготовлен: {self.date}'
+
+    def get_absolute_url(self):
+        """ Создание юрл объекта для перенаправления из вьюшки создания объекта на страничку с созданным объектом """
+        return reverse('dpk', kwargs={'pk': self.pk})
+
+    class Meta:
+        verbose_name = 'Индикатор ДФК'
+        verbose_name_plural = 'Индикатор ДФК'
 
 class Clorinesalts(models.Model):
     ndocument = models.CharField('Метод испытаний', max_length=100, choices=DOCUMENTS, default='ГОСТ 21534 (Метод А)',
