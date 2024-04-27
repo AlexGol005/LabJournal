@@ -51,6 +51,8 @@ class IndicatorDFK(models.Model):
            pass
 class TitrantHg(models.Model):
            pass
+class GetTitrHg(models.Model):
+           pass
 
 class Clorinesalts(models.Model):
     ndocument = models.CharField('Метод испытаний', max_length=100, choices=DOCUMENTS, default='ГОСТ 21534 (Метод А)',
