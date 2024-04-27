@@ -191,6 +191,7 @@ class Clorinesalts(models.Model):
     room = models.ForeignKey(Rooms, verbose_name='Номер комнаты', null=True,
                                             on_delete=models.PROTECT,  blank=True)
     repr1comma = models.CharField('Повторяемость запятая, мг/л', max_length=90, null=True, blank=True)
+    factconvergencecomma = models.CharField('Расхождение между результатами Х1-Х2, мг/л', max_length=90, null=True, blank=True)
   
 
 
@@ -225,6 +226,7 @@ class Clorinesalts(models.Model):
             self.resultMeas = 'Удовлетворительно'
 
         repr1comma = self.repr1.replace('.',',')
+        factconvergencecomma = self.factconvergencecomma.replace('.',',')
         super(Clorinesalts, self).save(*args, **kwargs)
 
 
