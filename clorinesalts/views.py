@@ -820,8 +820,8 @@ def export_protocol_xls(request, pk):
         '',
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style4)
-        ws.merge(8, 8, 3, 4, style4)
+        ws.write(row_num, col_num, columns[col_num], style6)
+        ws.merge(8, 8, 3, 4, style6)
 
     row_num = 9
     columns = [
