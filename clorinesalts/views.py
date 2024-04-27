@@ -1225,14 +1225,14 @@ def export_protocol_xls(request, pk):
         ws.row(row_num).height = 1050
     
         row_num +=1
-        v1 = Decimal(note.viscosity1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
-        v2 = Decimal(note.viscosity2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
+        x1 = Decimal(note.x1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
+        x2 = Decimal(note.x2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
         columns = [
             attcharacteristic,
             attcharacteristic,
             attcharacteristic,
-            v1,
-            v2,
+            x1,
+            x2,
             measureresult,
             note.accMeasurement,
             note.kriteriy,
