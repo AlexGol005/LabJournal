@@ -605,7 +605,7 @@ def export_protocol_xls(request, pk):
     """представление для выгрузки протокола испытаний в ексель"""
     company = CompanyCard.objects.get(pk=1)
     note = Clorinesalts.objects.\
-        annotate(name_rm=Concat(Value('СО '), 'name', Value('('), 'index', Value(' ), партия '), 'lot')).\
+        annotate(name_rm=Concat(Value('СО '), 'name', Value('('), 'index', Value('), партия '), 'lot')).\
         annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')).get(pk=pk)
         
         
@@ -814,13 +814,14 @@ def export_protocol_xls(request, pk):
         '',
         ' ',
         f' по {shortdoc}',
-        '',
+        f' по {shortdoc}',
         '',
         '',
         '',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style4)
+        ws.merge(8, 8, 3, 4, style4)
 
     row_num = 9
     columns = [
