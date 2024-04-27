@@ -599,13 +599,13 @@ style4.alignment = al1
 
 
 
-
+# флажок
 
 def export_protocol_xls(request, pk):
     """представление для выгрузки протокола испытаний в ексель"""
     company = CompanyCard.objects.get(pk=1)
     note = Clorinesalts.objects.\
-        annotate(name_rm=Concat(Value('СО '), 'name', Value(' /('), 'index', Value(' /), партия '), 'lot')).\
+        annotate(name_rm=Concat(Value('СО '), 'name', Value('('), 'index', Value(' ), партия '), 'lot')).\
         annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')).get(pk=pk)
         
         
@@ -634,6 +634,7 @@ def export_protocol_xls(request, pk):
             constit = constitoptional[i]
 
     ndocument = note.ndocument
+    shortdoc = shortdoc
 
     for i in range(len(aimoptional)):
         if note.aim == aimoptional[i][0]:
@@ -812,7 +813,7 @@ def export_protocol_xls(request, pk):
         '',
         '',
         ' ',
-        f' по {note.ndocument}',
+        f' по {shortdoc}',
         '',
         '',
         '',
@@ -1158,11 +1159,10 @@ def export_protocol_xls(request, pk):
         '12 Результаты испытаний:  ',
         '12 Результаты испытаний:  ',
         'приведены в таблице 1  ',
-        f'В соответствии с {note.ndocument}  ',
-        f'В соответствии с {note.ndocument}  ',
-        f'В соответствии с {note.ndocument}  ',
-        f'В соответствии с {note.ndocument}  ',
-        f'В соответствии с {note.ndocument}  ',
+        f'В соответствии с {shortdoc}  ',
+        f'В соответствии с {shortdoc}  ',
+        f'В соответствии с {shortdoc}  ',
+        f'В соответствии с {shortdoc}  ',
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
