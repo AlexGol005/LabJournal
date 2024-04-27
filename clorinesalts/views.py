@@ -1298,7 +1298,7 @@ def export_protocol_xls(request, pk):
 
         row_num2 = count1 + 2
         columns = [
-        note.kriteriy,
+        note.repr1comma,
         ]
         for col_num in range(1):
             ws.write(row_num2, col_num + 7, columns[col_num], style8)
