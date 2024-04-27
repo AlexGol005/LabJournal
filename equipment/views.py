@@ -971,16 +971,16 @@ def EquipmentReg(request):
                         order.exnumber = d
                     except:
                         order.exnumber = str(order.exnumber) + 'В001'
-                if order.kategory == 'ИО' or order.kategory == 'СИ':
-                    try:
-                        a = Equipment.objects.exclude(kategory='ВО').\
-                            filter(exnumber__startswith=order.exnumber).last().exnumber
-                        b = int(str(a)[-3::]) + 1
-                        c = str(b).rjust(3, '0')
-                        d = str(order.exnumber) + c
-                        order.exnumber = d
-                    except:
-                        order.exnumber = str(order.exnumber) + '001'
+                # if order.kategory == 'ИО' or order.kategory == 'СИ':
+                    # try:
+                        # a = Equipment.objects.exclude(kategory='ВО').\
+                            # filter(exnumber__startswith=order.exnumber).last().exnumber
+                        # b = int(str(a)[-3::]) + 1
+                        # c = str(b).rjust(3, '0')
+                        # d = str(order.exnumber) + c
+                        # order.exnumber = d
+                    # except:
+                        # order.exnumber = str(order.exnumber) + '001'
                 order.yearintoservice = now.year
                 order.save()
                 if order.kategory == 'СИ':
