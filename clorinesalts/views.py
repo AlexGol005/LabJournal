@@ -631,13 +631,13 @@ def export_protocol_xls(request, pk):
 
     for i in range(len(MATERIAL)):
         if note.name == MATERIAL[i][0]:
-            note.constit = constitoptional[i]
+            constit = constitoptional[i]
 
     ndocument = note.ndocument
 
     for i in range(len(aimoptional)):
         if note.aim == aimoptional[i][0]:
-            note.constit = conclusionoptional[i]
+            conclusion = conclusionoptional[i]
     
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}_protocol.xls"'
