@@ -628,7 +628,12 @@ def export_protocol_xls(request, pk):
                                         )).\
         get(date__exact=note.date, roomnumber__roomnumber__exact=note.room)
 
-
+    x1 = Decimal(note.x1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
+    x2 = Decimal(note.x2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
+    measureresult = note.x_avg.replace('.',',')
+    acc = str(Decimal(note.factconvergence).quantize(Decimal('1.0'), ROUND_HALF_UP)).replace('.',',')
+    r = str(note.repr1).replace('.',',')
+    
     for i in range(len(MATERIAL)):
         if note.name == MATERIAL[i][0]:
             constit = constitoptional[i]
@@ -1226,11 +1231,7 @@ def export_protocol_xls(request, pk):
         ws.row(row_num).height = 1050
     
         row_num +=1
-        x1 = Decimal(note.x1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
-        x2 = Decimal(note.x2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
-        measureresult = note.x_avg.replace('.',',')
-        acc = str(Decimal(note.factconvergence).quantize(Decimal('1.0'), ROUND_HALF_UP)).replace('.',',')
-        r = str(note.repr1).replace('.',',')
+    
         columns = [
             attcharacteristic,
             attcharacteristic,
@@ -1276,8 +1277,8 @@ def export_protocol_xls(request, pk):
         'numberexample',
         'x1',
         'x2',    
-        'x_avg',
-        'accMeasurement',
+        measureresult,
+        acc,
         )
         
         for row in qseria:
