@@ -1089,12 +1089,9 @@ def export_protocol_xls(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(row_num, row_num, 2, 7, style7)
 
-    if note.ndocument == 'МИ-02-2018':
-        normdocument = ndocumentoptional[0][1]
-    if note.ndocument == 'ГОСТ 33-2016':
-        normdocument = ndocumentoptional[2][1]
-    if note.ndocument != 'ГОСТ 33-2016' and  note.ndocument != 'МИ-02-2018':
-        normdocument = ndocumentoptional[1][1]
+
+    normdocument = note.ndocument
+
 
     row_num +=1
     columns = [
