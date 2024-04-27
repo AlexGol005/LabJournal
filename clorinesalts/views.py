@@ -13,6 +13,7 @@ from django.views import View
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from xlwt import Borders, Alignment
+from django.db.models.functions import Concat
 
 from jouViscosity.models import CvKinematicviscosityVG, CvDensityDinamicVG
 from main.models import AttestationJ
