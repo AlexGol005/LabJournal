@@ -634,7 +634,7 @@ def export_protocol_xls(request, pk):
             constit = constitoptional[i]
 
     ndocument = note.ndocument
-    shortdoc = shortdoc
+    shortdoc = shortdocs
 
     for i in range(len(aimoptional)):
         if note.aim == aimoptional[i][0]:
