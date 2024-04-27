@@ -1227,7 +1227,7 @@ def export_protocol_xls(request, pk):
         row_num +=1
         x1 = Decimal(note.x1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
         x2 = Decimal(note.x2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
-        measureresult = x_avg.replace('.',',')
+        measureresult = note.x_avg.replace('.',',')
         columns = [
             attcharacteristic,
             attcharacteristic,
