@@ -226,7 +226,7 @@ class Clorinesalts(models.Model):
             self.resultMeas = 'Удовлетворительно'
 
         repr1comma = self.repr1.replace('.',',')
-        factconvergencecomma = self.factconvergencecomma.replace('.',',')
+        factconvergencecomma = self.factconvergence.replace('.',',')
         super(Clorinesalts, self).save(*args, **kwargs)
 
 
