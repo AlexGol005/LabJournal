@@ -1228,6 +1228,8 @@ def export_protocol_xls(request, pk):
         x1 = Decimal(note.x1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
         x2 = Decimal(note.x2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
         measureresult = note.x_avg.replace('.',',')
+        acc = str(note.factconvergence).replace('.',',')
+        r = str(note.repr1).replace('.',',')
         columns = [
             attcharacteristic,
             attcharacteristic,
@@ -1235,8 +1237,8 @@ def export_protocol_xls(request, pk):
             x1,
             x2,
             measureresult,
-            note.factconvergence,
-            note.repr1,
+            acc,
+            r,
         ]
         for col_num in range(2):
             ws.write(row_num, col_num, columns[col_num], style8)
