@@ -606,32 +606,17 @@ def export_protocol_xls(request, pk):
                                         )).\
         get(date__exact=note.date, roomnumber__roomnumber__exact=note.room)
 
-    if note.name[0:2] == 'ВЖ':
-        constit = constitoptional[0]
-    if note.name[0:2] == 'CC':
-        constit = constitoptional[1]
-    if note.name[0:2] == 'ТМ':
-        constit = constitoptional[2]
-    if note.name[0:2] != 'ВЖ' and note.name[0:2] != 'СС' and note.name[0:2] != 'TM':
-        constit = constitoptional[3]
-        
-    ndocument = note.ndocument
-    
-    if note.aim == aimoptional[1][1]:
-        measureresult = str(note.certifiedValue_text).replace('.',',')
-    if note.aim != aimoptional[1][1]:
-        measureresult = note.certifiedValue
-    if note.aim == aimoptional[0][1]:
-       conclusion = conclusionoptional[0]
-    if note.aim == aimoptional[1][1]:
-       conclusion = conclusionoptional[1]
-    if note.aim == aimoptional[2][1]:
-       conclusion = conclusionoptional[2]
-    if note.aim == aimoptional[3][1]:
-       conclusion = conclusionoptional[3]
-    if note.aim == aimoptional[4][1]:
-       conclusion = conclusionoptional[4]
 
+    for i in range(len(MATERIAL)):
+        if self.name == MATERIAL[i][0]:
+            self.constit = constitoptional[i]
+
+    ndocument = note.ndocument
+
+    for i in range(len(aimoptional)):
+        if self.aim == aimoptional[i][0]:
+            self.constit = conclusionoptional[i]
+    
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}_protocol.xls"'
     wb = xlwt.Workbook()
@@ -1111,12 +1096,12 @@ def export_protocol_xls(request, pk):
     columns = [
         '10 Средства измерений:  ',
         '10 Средства измерений:  ',
-        note.equipment_set,
-        note.equipment_set,
-        note.equipment_set,
-        note.equipment_set,
-        note.equipment_set,
-        note.equipment_set,
+        note.equipment1,
+        note.equipment1,
+        note.equipment1,
+        note.equipment1,
+        note.equipment1,
+        note.equipment1,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1126,64 +1111,6 @@ def export_protocol_xls(request, pk):
         ws.merge(row_num, row_num, 2, 7, style7)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 400
-
-    row_num +=1
-    columns = [
-        '',
-        '',
-        note.equipment_set1,
-        note.equipment_set1,
-        note.equipment_set1,
-        note.equipment_set1,
-        note.equipment_set1,
-        note.equipment_set1,
-    ]
-    for col_num in range(2):
-        ws.write(row_num, col_num, columns[col_num], style6)
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, row_num, 2, 7, style7)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 400
-
-    row_num +=1
-    columns = [
-        '',
-        '',
-        note.equipment_set2,
-        note.equipment_set2,
-        note.equipment_set2,
-        note.equipment_set2,
-        note.equipment_set2,
-        note.equipment_set2,
-    ]
-    for col_num in range(2):
-        ws.write(row_num, col_num, columns[col_num], style6)
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, row_num, 2, 7, style7)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 400
-
-    row_num +=1
-    columns = [
-        '',
-        '',
-        note.equipment_set3,
-        note.equipment_set3,
-        note.equipment_set3,
-        note.equipment_set3,
-        note.equipment_set3,
-        note.equipment_set3,
-    ]
-    for col_num in range(2):
-        ws.write(row_num, col_num, columns[col_num], style6)
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, row_num, 2, 7, style7)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 400
-
 
     row_num +=1
     columns = [
@@ -1262,11 +1189,11 @@ def export_protocol_xls(request, pk):
         'Аттестуемая характеристика',
         'Аттестуемая характеристика',
         'Т °C',
-        'Измеренное значение Х1, мм2/с ',
-        'Измеренное значение Х2, мм2/с ',
-        'Измеренное значение Хср, мм2/с ',
-        'Оценка приемлемости измерений, % отн. ',
-        'Норматив контроля, r, % отн. ',
+        'Измеренное значение Х1, мг/дм3 ',
+        'Измеренное значение Х2, мг/дм3 ',
+        'Измеренное значение Хср, мг/дм3 ',
+        'Оценка приемлемости измерений, мг/дм3. ',
+        'Норматив контроля, r,мг/дм3 ',
         ]
         for col_num in range(2):
             ws.write(row_num, col_num, columns[col_num], style9)
@@ -1282,7 +1209,7 @@ def export_protocol_xls(request, pk):
         columns = [
             attcharacteristic,
             attcharacteristic,
-            note.temperature,
+            attcharacteristic,
             v1,
             v2,
             measureresult,
@@ -1304,11 +1231,11 @@ def export_protocol_xls(request, pk):
         'Характеристика',
         'Характеристика',
         'Номер экземпляра СО',
-        'Измеренное значение Х1, мм2/с ',
-        'Измеренное значение Х2, мм2/с ',
-        'Измеренное значение Хср, мм2/с ',
-        'Оценка приемлемости измерений, % отн. ',
-        'Норматив контроля, r, % отн.',
+        'Измеренное значение Х1, мг/дм3 ',
+        'Измеренное значение Х2, мг/дм3 ',
+        'Измеренное значение Хср, мг/дм3 ',
+        'Оценка приемлемости измерений, мг/дм3 ',
+        'Норматив контроля, r, мг/дм3',
         ]
         for col_num in range(2):
             ws.write(row_num, col_num, columns[col_num], style9)
@@ -1319,12 +1246,12 @@ def export_protocol_xls(request, pk):
         ws.row(row_num).height = 1050
 
         a = note.seria
-        qseria = ViscosityMJL.objects.all().filter(seria=a). \
+        qseria = Clorinesalts.objects.all().filter(seria=a). \
         values_list(
         'numberexample',
-        'viscosity1',
-        'viscosity2',    
-        'certifiedValue',
+        'x1',
+        'x2',    
+        'x_avg',
         'accMeasurement',
         )
         
@@ -1336,8 +1263,8 @@ def export_protocol_xls(request, pk):
             
         row_num1 = count1 + 2
         columns = [
-        f'Кинематическая вязкость, мм2/с при {note.temperature} °С',
-        f'Кинематическая вязкость, мм2/с при {note.temperature} °С',
+        attcharacteristic,
+        attcharacteristic,
         ]
         for col_num in range(2):
             ws.write(row_num1, col_num, columns[col_num], style8)
