@@ -1235,8 +1235,8 @@ def export_protocol_xls(request, pk):
             x1,
             x2,
             measureresult,
-            note.accMeasurement,
-            note.kriteriy,
+            note.factconvergence,
+            note.repr1,
         ]
         for col_num in range(2):
             ws.write(row_num, col_num, columns[col_num], style8)
