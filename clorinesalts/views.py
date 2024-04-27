@@ -550,6 +550,10 @@ brd1.right = 1
 brd1.top = 1
 brd1.bottom = 1
 
+al2 = Alignment()
+al2.horz = Alignment.HORZ_RIGHT
+al2.vert = Alignment.VERT_CENTER
+
 al1 = Alignment()
 al1.horz = Alignment.HORZ_CENTER
 al1.vert = Alignment.VERT_CENTER
@@ -718,6 +722,8 @@ def export_protocol_xls(request, pk):
     style11.alignment.wrap = 1
     style11.borders = b1
     style11.num_format_str = '0.00'
+
+
 
     row_num = 4
     columns = [
