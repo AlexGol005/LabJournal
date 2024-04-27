@@ -1278,7 +1278,7 @@ def export_protocol_xls(request, pk):
         'x1',
         'x2',    
         'x_avg',
-        'repr1comma',
+        'factconvergencecomma',
         )
         
         for row in qseria:
