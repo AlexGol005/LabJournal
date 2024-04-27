@@ -47,7 +47,8 @@ TYPE = (('расчёт АЗ', 'расчёт АЗ'),
 EXP = 24  #срок годности АЗ хлористых солей в месяцах
 
 # оригинальные модели для методов с титрованием
-
+class IndicatorDFK(models.Model):
+           pass
 
 class Clorinesalts(models.Model):
     ndocument = models.CharField('Метод испытаний', max_length=100, choices=DOCUMENTS, default='ГОСТ 21534 (Метод А)',
