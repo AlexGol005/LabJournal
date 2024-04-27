@@ -174,7 +174,7 @@ class Clorinesalts(models.Model):
 
     x1 = models.DecimalField('X1', max_digits=8, decimal_places=4, null=True, blank=True)
     x2 = models.DecimalField('X2', max_digits=8, decimal_places=4, null=True, blank=True)
-    x_avg = models.CharField('X2',  max_length=100, null=True, blank=True)
+    x_avg = models.CharField('Xср',  max_length=100, null=True, blank=True)
     factconvergence = models.CharField('Расхождение между результатами Х1-Х2, мг/л', max_length=90, null=True, blank=True)
     resultMeas = models.CharField('Результат измерений уд/неуд', max_length=100, default='неудовлетворительно',
                                   null=True, blank=True)
@@ -190,6 +190,8 @@ class Clorinesalts(models.Model):
                                   blank=True, null=True)
     room = models.ForeignKey(Rooms, verbose_name='Номер комнаты', null=True,
                                             on_delete=models.PROTECT,  blank=True)
+    repr1comma = models.CharField('Повторяемость запятая, мг/л', max_length=90, null=True, blank=True)
+  
 
 
 
@@ -204,6 +206,7 @@ class Clorinesalts(models.Model):
         abserror1 = Decimal(x_avg) * Decimal(self.relerror) / Decimal(100)
         self.abserror = mrerrow(Decimal(abserror1))
         x_avg = numberDigits(x_avg, self.abserror)
+               
         self.x_avg = str(x_avg).replace('.',',')
         for i in range(4):
                if self.range == CHOICES[i][0]:
@@ -220,6 +223,8 @@ class Clorinesalts(models.Model):
             self.cause = '|Х1 - Х2| > r'
         if self.factconvergence <= Decimal(self.repr1):
             self.resultMeas = 'Удовлетворительно'
+
+        repr1comma = self.repr1.replace('.',',')
         super(Clorinesalts, self).save(*args, **kwargs)
 
 
