@@ -206,9 +206,9 @@ class Clorinesalts(models.Model):
         x_avg = get_avg(self.x1, self.x2, 4)
         abserror1 = Decimal(x_avg) * Decimal(self.relerror) / Decimal(100)
         self.abserror = mrerrow(Decimal(abserror1))
-        x_avg = numberDigits(x_avg, self.abserror)
+        x_avg = Decimal(x_avg).quantize(Decimal('1.0'), ROUND_HALF_UP)
                
-        self.x_avg = str(x_avg).replace('.',',')
+        self.x_avg = str(x_avg).replace('.',',') 
         for i in range(4):
                if self.range == CHOICES[i][0]:
                    self.repr1 = roptional[i][0]
