@@ -218,7 +218,7 @@ class Clorinesalts(models.Model):
                    self.Rep2 = Roptional[i][0]
                    self.CD1 = CDoptional[i][0]
                    sigma_pr = sigma_pr_optional[i][0]
-                   uncertainty_measuremetod = get_ex_uncertainty_measuremetod(2, sigma_pr, self.Rep2)
+                   uncertainty_measuremetod = get_ex_uncertainty_measuremetod(sigma_pr, self.Rep2)
                    self.crit_K = get_crit_K(self.abserror, uncertainty_measuremetod)
                           
 
