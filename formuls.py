@@ -87,9 +87,9 @@ def get_ex_uncertainty_measuremetod(k=2, sigma_pr, reproductivity):
     uncertainty_measuremetod = Decimal(k) * ((Decimal(reproductivity)/Decimal(2.77))^Decimal(2) + Decimal(sigma_pr)^Decimal(2)))^(Decimal(0.5))
     return uncertainty_measuremetod
 
-def get_crit_K(k=2, uncertainty_rm, uncertainty_measuremetod):
-    '''считает расширенную неопределенность методики измерений исходя из коэф охвата и неопределенности СО и методики'''
-    crit_K = ((Decimal(k) * Decimal(uncertainty_rm))^Decimal(2) + uncertainty_measuremetod^Decimal(2))^(Decimal(0.5)
+def get_crit_K(uncertainty_rm, uncertainty_measuremetod):
+    '''критерий К исходя  из неопределенности СО и методики'''
+    crit_K = (Decimal(uncertainty_rm)^Decimal(2) + uncertainty_measuremetod^Decimal(2))^(Decimal(0.5)
     return crit_K
 
 
