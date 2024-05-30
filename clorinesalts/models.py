@@ -10,7 +10,7 @@ from jouPetroleumChlorineImpurityWater.models import LotSSTN, SSTN, SSTNrange, C
 from jougascondensate.models import LotGKCS, GKCS, GKCSrange, CVclorinesaltsGKCS
 
 from metods import get_avg, get_acc_measurement, get_abserror
-from formuls import mrerrow, numberDigits
+from formuls import *
 from .j_constants import *
 from textconstants import *
 from equipment.models import MeasurEquipment, Rooms
@@ -217,7 +217,11 @@ class Clorinesalts(models.Model):
                    self.repr1 = roptional[i][0]
                    self.Rep2 = Roptional[i][0]
                    self.CD1 = CDoptional[i][0]
-                   self.crit_K = crit_Koptional[i][0]
+                   sigma_pr = sigma_pr_optional[i][0]
+                   uncertainty_measuremetod = get_ex_uncertainty_measuremetod(2, sigma_pr, self.Rep2)
+                   self.crit_K = get_crit_K(self.abserror, uncertainty_measuremetod)
+                          
+
 
 
 
