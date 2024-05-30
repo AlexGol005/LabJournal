@@ -1281,7 +1281,7 @@ def export_protocol_xls(request, pk):
             x1,
             x2,
             measureresult,
-            acc,
+            note.cv_convergence,
             crit_K,
         ]
         for col_num in range(2):
