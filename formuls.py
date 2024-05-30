@@ -82,7 +82,7 @@ def  numberDigits(avg: Decimal, abserror: Decimal) -> Decimal:
         certifiedValue = avg.quantize(Decimal(k), ROUND_HALF_UP)
         return certifiedValue
 
-def get_ex_uncertainty_measuremetod(k=2, sigma_pr, reproductivity):
+def get_ex_uncertainty_measuremetod(sigma_pr, reproductivity, k=2):
     '''считает расширенную неопределенность методики измерений исходя из к-коэф охвата, показателя правильности методики, воспроизводимости'''
     uncertainty_measuremetod = Decimal(k) * ((Decimal(reproductivity)/Decimal(2.77))^Decimal(2) + Decimal(sigma_pr)^Decimal(2)))^(Decimal(0.5))
     return uncertainty_measuremetod
