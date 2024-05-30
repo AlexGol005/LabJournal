@@ -969,7 +969,7 @@ def export_protocol_xls(request, pk):
         ws.merge(row_num, row_num, 2, 7, style7)
 
     row_num +=1
-    r = row_num + 1
+    rx = row_num + 1
     columns = [
         '',
         '7.1 Условия проведения \n измерений соответствуют требованиям рабочей \n эксплуатации средств измерений:',
@@ -982,7 +982,7 @@ def export_protocol_xls(request, pk):
     ]
     for col_num in range(1, 2):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, r, 1, 1, style7)
+        ws.merge(row_num, rx, 1, 1, style7)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(row_num, row_num, 2, 7, style7)
@@ -1209,7 +1209,7 @@ def export_protocol_xls(request, pk):
 
 
 
-    if note.seria == False or note.seria == '0':
+    if (note.seria == False or note.seria == '0') and note.aim != 'Мониторинг стабильности':
 
         row_num +=1
         columns = [
@@ -1249,6 +1249,49 @@ def export_protocol_xls(request, pk):
             ws.write(row_num, col_num, columns[col_num], style11)
         for col_num in range(3, len(columns)):
             ws.write(row_num, col_num, columns[col_num], style8)
+
+
+    if (note.seria == False or note.seria == '0') and note.aim == 'Мониторинг стабильности':
+
+        row_num +=1
+        columns = [
+        'Аттестуемая характеристика',
+        'Аттестуемая характеристика',
+        'Аттестованное значение, Хатт, мг/дм3',
+        'Измеренное значение Х1, мг/дм3 ',
+        'Измеренное значение Х2, мг/дм3 ',
+        'Измеренное значение Хср, мг/дм3 ',
+        'Разница между Хср и Хатт, мг/дм3. ',
+        'Норматив контроля, К, мг/дм3 ',
+        ]
+        for col_num in range(2):
+            ws.write(row_num, col_num, columns[col_num], style9)
+            ws.merge(row_num, row_num, 0, 1, style9)
+        for col_num in range(1, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style9)
+        ws.row(row_num).height_mismatch = True
+        ws.row(row_num).height = 1050
+    
+        row_num +=1
+    
+        columns = [
+            attcharacteristic,
+            attcharacteristic,
+            note.numberexample,
+            x1,
+            x2,
+            measureresult,
+            acc,
+            crit_K,
+        ]
+        for col_num in range(2):
+            ws.write(row_num, col_num, columns[col_num], style8)
+            ws.merge(row_num, row_num, 0, 1, style8)
+        for col_num in range(2, 3):
+            ws.write(row_num, col_num, columns[col_num], style11)
+        for col_num in range(3, len(columns)):
+            ws.write(row_num, col_num, columns[col_num], style8)
+
 
     if  note.seria != '0':
 
