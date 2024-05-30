@@ -175,13 +175,16 @@ class Clorinesalts(models.Model):
     x1 = models.DecimalField('X1', max_digits=8, decimal_places=4, null=True, blank=True)
     x2 = models.DecimalField('X2', max_digits=8, decimal_places=4, null=True, blank=True)
     x_avg = models.CharField('Xср',  max_length=100, null=True, blank=True)
+    x_cv = models.CharField('Xаз',  max_length=100, null=True, blank=True)
     factconvergence = models.CharField('Расхождение между результатами Х1-Х2, мг/л', max_length=90, null=True, blank=True)
+    cv_convergence = models.CharField('Расхождение между результатами Хср-Хаз, мг/л', max_length=90, null=True, blank=True)
     resultMeas = models.CharField('Результат измерений уд/неуд', max_length=100, default='неудовлетворительно',
                                   null=True, blank=True)
     cause = models.CharField('Причина', max_length=100, default='', null=True, blank=True)
     repr1 = models.CharField('Повторяемость, мг/л', max_length=90, null=True, blank=True)
     Rep2 = models.CharField('Воспроизводимость, мг/л', max_length=90, null=True, blank=True)
     CD1 = models.CharField('Критическая разность, мг/л', max_length=90, null=True, blank=True)
+    crit_K = models.CharField('Критерий К, мг/л', max_length=90, null=True, blank=True)
     relerror = models.CharField('Погрешность относительная (описание типа)', max_length=90, null=True, blank=True)
     abserror = models.CharField('Погрешность абсолютная', max_length=90, null=True, blank=True)
     maincomment = models.CharField('Комментарии', max_length=6000, null=True, blank=True)
@@ -214,6 +217,7 @@ class Clorinesalts(models.Model):
                    self.repr1 = roptional[i][0]
                    self.Rep2 = Roptional[i][0]
                    self.CD1 = CDoptional[i][0]
+                   self.crit_K = crit_Koptional[i][0]
 
 
 
@@ -224,6 +228,8 @@ class Clorinesalts(models.Model):
             self.cause = '|Х1 - Х2| > r'
         if self.factconvergence <= Decimal(self.repr1):
             self.resultMeas = 'Удовлетворительно'
+        if x_cv:
+            self.cv_convergence = (self.x_avg - self.x_cv).copy_abs().quantize(Decimal('1.00'), ROUND_HALF_UP)
 
         self.repr1comma = self.repr1.replace('.',',')
         self.factconvergencecomma = str(self.factconvergence).replace('.',',')
