@@ -233,7 +233,7 @@ class Clorinesalts(models.Model):
         if self.factconvergence <= Decimal(self.repr1):
             self.resultMeas = 'Удовлетворительно'
         if self.x_cv:
-            self.cv_convergence = str((Decimal(self.x_avg) - Decimal(self.x_cv)).copy_abs().quantize(Decimal('1.00'), ROUND_HALF_UP))
+            self.cv_convergence = str((Decimal(x_avg) - Decimal(self.x_cv)).copy_abs().quantize(Decimal('1.00'), ROUND_HALF_UP))
 
         self.repr1comma = self.repr1.replace('.',',')
         self.factconvergencecomma = str(self.factconvergence).replace('.',',')
