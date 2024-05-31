@@ -220,7 +220,7 @@ class Clorinesalts(models.Model):
                    sigma_pr = sigma_pr_optional[i][0]
                    uncertainty_measuremetod = get_ex_uncertainty_measuremetod(sigma_pr, self.Rep2)
                    self.crit_K = get_crit_K(self.abserror, uncertainty_measuremetod)
-                   self.crit_K = str(self.crit_K)replace('.',',')
+                   self.crit_K = str(self.crit_K).replace('.',',')
                           
 
 
