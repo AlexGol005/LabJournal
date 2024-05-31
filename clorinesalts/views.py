@@ -1282,7 +1282,7 @@ def export_protocol_xls(request, pk):
             x2,
             measureresult,
             note.cv_convergence,
-            crit_K,
+            note.crit_K,
         ]
         for col_num in range(2):
             ws.write(row_num, col_num, columns[col_num], style8)
