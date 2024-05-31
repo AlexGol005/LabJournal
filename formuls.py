@@ -89,7 +89,7 @@ def get_ex_uncertainty_measuremetod(sigma_pr, reproductivity, k=2):
 
 def get_crit_K(uncertainty_rm, uncertainty_measuremetod):
     '''критерий К исходя  из неопределенности СО и методики'''
-    crit_K = (Decimal(uncertainty_rm)**Decimal(2) + uncertainty_measuremetod**Decimal(2))**Decimal(0.5)
+    crit_K = ((Decimal(uncertainty_rm)**Decimal(2) + uncertainty_measuremetod**Decimal(2))**Decimal(0.5)).quantize(Decimal('1.0'), ROUND_HALF_UP)
     return crit_K
 
 
