@@ -638,8 +638,8 @@ def export_protocol_xls(request, pk):
         if note.name == MATERIAL[i][0]:
             constit = constitoptional[i]
 
-    ndocument = note.ndocument
-    shortdoc = shortdocs
+   
+ 
 
     for i in range(len(aimoptional)):
         if note.aim == aimoptional[i][0]:
@@ -1097,8 +1097,7 @@ def export_protocol_xls(request, pk):
         ws.merge(row_num, row_num, 2, 7, style7)
 
 
-    normdocument = note.ndocument
-
+ 
 
     row_num +=1
     columns = [
@@ -1277,7 +1276,7 @@ def export_protocol_xls(request, pk):
         columns = [
             attcharacteristic,
             attcharacteristic,
-            note.crit_K,
+            note.x_cv,
             x1,
             x2,
             measureresult,
