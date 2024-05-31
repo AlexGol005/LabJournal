@@ -1104,12 +1104,12 @@ def export_protocol_xls(request, pk):
     columns = [
         '9 Метод измерений/методика \n измерений:  ',
         '9 Метод измерений/методика \n измерений:  ',
-        normdocument,
-        normdocument,
-        normdocument,
-        normdocument,
-        normdocument,
-        normdocument,
+        note.ndocument,
+        note.ndocument,
+        note.ndocument,
+        note.ndocument,
+        note.ndocument,
+        note.ndocument,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1144,12 +1144,12 @@ def export_protocol_xls(request, pk):
     columns = [
         '11 Обработка результатов испытаний:  ',
         '11 Обработка результатов испытаний:  ',
-        f'В соответствии с {normdocument}',
-        f'В соответствии с {normdocument}',
-        f'В соответствии с {normdocument}',
-        f'В соответствии с {normdocument}',
-        f'В соответствии с {normdocument}',
-        f'В соответствии с {normdocument}',
+        f'В соответствии с {note.ndocument}',
+        f'В соответствии с {note.ndocument}',
+        f'В соответствии с {note.ndocument}',
+        f'В соответствии с {note.ndocument}',
+        f'В соответствии с {note.ndocument}',
+        f'В соответствии с {note.ndocument}',
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1165,10 +1165,10 @@ def export_protocol_xls(request, pk):
         '12 Результаты испытаний:  ',
         '12 Результаты испытаний:  ',
         'приведены в таблице 1  ',
-        f'В соответствии с {shortdoc}  ',
-        f'В соответствии с {shortdoc}  ',
-        f'В соответствии с {shortdoc}  ',
-        f'В соответствии с {shortdoc}  ',
+        f'В соответствии с {note.ndocument}  ',
+        f'В соответствии с {note.ndocument}  ',
+        f'В соответствии с {note.ndocument}  ',
+        f'В соответствии с {note.ndocument}  ',
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -1277,7 +1277,7 @@ def export_protocol_xls(request, pk):
         columns = [
             attcharacteristic,
             attcharacteristic,
-            note.numberexample,
+            note.crit_K,
             x1,
             x2,
             measureresult,
