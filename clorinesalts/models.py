@@ -200,7 +200,6 @@ class Clorinesalts(models.Model):
             if self.name == MATERIAL[i][0]:
                 self.relerror = relerroroptional[i][0]
         self.room = Rooms.objects.get(roomnumber='474')
-        self.ndocument = DOCUMENTS[0][0]
         # определяем сходимость, воспроизводимость и CD, соответствующие диапазону, сначала вычисляем среднее:
         x_avg = get_avg(self.x1, self.x2, 4)
         abserror1 = Decimal(x_avg) * Decimal(self.relerror) / Decimal(100)
@@ -234,6 +233,7 @@ class Clorinesalts(models.Model):
 
         self.repr1comma = self.repr1.replace('.',',')
         self.factconvergencecomma = str(self.factconvergence).replace('.',',')
+        self.x_cv = str(self.x_cv).replace('.',',')
         super(Clorinesalts, self).save(*args, **kwargs)
 
 
