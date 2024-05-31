@@ -7,8 +7,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, HTML
 
-from clorinesalts.models import Clorinesalts, CommentsClorinesalts, IndicatorDFK, TitrantHg, GetTitrHg, DOCUMENTS, \
-     CHOICES, SOLVENTS, BEHAVIOUR, ClorinesaltsCV, TYPE, CommentsClorinesaltsCV
+from clorinesalts.models import *
 from .j_constants import *
 from textconstants import *
 from equipment.models import MeasurEquipment, Rooms
