@@ -172,8 +172,8 @@ class Clorinesalts(models.Model):
     seria = models.CharField('Номер серии измерений (для однородности)', max_length=100, default='0', null=True)
 
 
-    x1 = models.DecimalField('X1', max_digits=8, decimal_places=4, null=True, blank=True)
-    x2 = models.DecimalField('X2', max_digits=8, decimal_places=4, null=True, blank=True)
+    x1 = models.DecimalField('X1', max_digits=8, decimal_places=1, null=True, blank=True)
+    x2 = models.DecimalField('X2', max_digits=8, decimal_places=1, null=True, blank=True)
     x_avg = models.CharField('Xср',  max_length=100, null=True, blank=True)
     x_cv = models.CharField('Xаз',  max_length=100, null=True, blank=True)
     factconvergence = models.CharField('Расхождение между результатами Х1-Х2, мг/л', max_length=90, null=True, blank=True)
