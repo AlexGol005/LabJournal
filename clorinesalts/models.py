@@ -155,7 +155,7 @@ class IndicatorDFK(models.Model):
         verbose_name_plural = 'Индикатор ДФК'
 
 class Clorinesalts(models.Model):
-    ndocument = models.CharField('Метод испытаний', max_length=100, choices=DOCUMENTS,  null=True,
+    ndocument = models.CharField('Метод испытаний', max_length=100, default=metodic,  null=True,
                                  blank=True)
     date = models.DateField('Дата', blank=True)
     performer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='performercs', blank=True)
@@ -220,6 +220,7 @@ class Clorinesalts(models.Model):
                    sigma_pr = sigma_pr_optional[i][0]
                    uncertainty_measuremetod = get_ex_uncertainty_measuremetod(sigma_pr, self.Rep2)
                    self.crit_K = get_crit_K(self.abserror, uncertainty_measuremetod)
+                   self.crit_K = str(self.crit_K)replace('.',',')
                           
 
 
@@ -233,7 +234,7 @@ class Clorinesalts(models.Model):
         if self.factconvergence <= Decimal(self.repr1):
             self.resultMeas = 'Удовлетворительно'
         if self.x_cv:
-            self.cv_convergence = str((Decimal(x_avg) - Decimal(self.x_cv)).copy_abs().quantize(Decimal('1.00'), ROUND_HALF_UP))
+            self.cv_convergence = str((Decimal(x_avg) - Decimal(self.x_cv)).copy_abs().quantize(Decimal('1.0'), ROUND_HALF_UP)).replace('.',',')
 
         self.repr1comma = self.repr1.replace('.',',')
         self.factconvergencecomma = str(self.factconvergence).replace('.',',')
