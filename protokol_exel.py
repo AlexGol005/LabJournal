@@ -196,7 +196,8 @@ def export_protocol_xls_template(request, pk):
 
 
   
-
+    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
+    ws.insert_bitmap('logo.bmp', 0, 0)
     sheet = wb.get_sheet(0)
     sheet.header_str = b'1'
     sheet.footer_str = b' '
@@ -227,8 +228,7 @@ def export_protocol_xls_template(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 900
 
-    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
-    ws.insert_bitmap('logo.bmp', 0, 0)
+
 
     row_num +=1
     columns = [
