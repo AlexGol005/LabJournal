@@ -179,7 +179,7 @@ def export_protocol_xls_template(request, pk):
     
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}_protocol.xls"'
-    wb = xlwt.Workbook()
+    wb = xlwt.Workbook(encoding='utf-8)
     ws = wb.add_sheet('protocol', cell_overwrite_ok=True)
 
     ws.col(0).width = 400
@@ -199,26 +199,23 @@ def export_protocol_xls_template(request, pk):
     sheet.footer_str = b' '
 
 
-    row_num = 4
+    row_num = 1
     columns = [
-        sertificat9001,
-        sertificat9001,
-        sertificat9001,
-        sertificat9001,
+        '',
+        '',
+        '',
+        '',
         '',
         affirmationprod,
         affirmationprod,
     ]
-    for col_num in range(3):
-        ws.write(row_num, col_num, columns[col_num], style1)
-        ws.merge(4, 4, 0, 3, style1)
     for col_num in range(6, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(4, 4, 6, 7, style2)
-    ws.row(4).height_mismatch = True
-    ws.row(4).height = 900
+        ws.merge(row_num, row_num, 6, 7, style2)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 900
 
-    row_num = 5
+    row_num +=1
     columns = [
         '',
         '',
@@ -233,7 +230,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], style3)
         ws.merge(row_num, row_num, 6, 7, style3)
 
-    row_num = 6
+    row_num +=1
     columns = [
         nameprot,
         nameprot,
@@ -249,7 +246,7 @@ def export_protocol_xls_template(request, pk):
         ws.merge(row_num, row_num, 0, 3, style4)
 
 
-    row_num = 7
+    row_num += 1
     dp = get_datenow()
     columns = [
         f'от   {dp}',
@@ -263,9 +260,9 @@ def export_protocol_xls_template(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style5)
-        ws.merge(7, 7, 0, 3, style5)
+        ws.merge(row_num, row_num, 0, 3, style5)
 
-    row_num = 8
+    row_num +=1
     columns = [
         '',
         '',
@@ -278,9 +275,9 @@ def export_protocol_xls_template(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(8, 8, 3, 4, style6)
+        ws.merge(row_num, row_num, 3, 4, style6)
 
-    row_num = 9
+    row_num +=1
     columns = [
         '1 Наименование объекта/образца испытаний:',
         '1 Наименование объекта/образца испытаний:',
@@ -293,14 +290,14 @@ def export_protocol_xls_template(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(9, 9, 0, 1, style6)
+        ws.merge(row_num, row_num, 0, 1, style6)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(9, 9, 2, 7, style7)
-    ws.row(9).height_mismatch = True
-    ws.row(9).height = 500
+        ws.merge(row_num, row_num, 2, 7, style7)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
 
-    row_num = 10
+    row_num +=1
     columns = [
         '2 Изготовитель материала СО: ',
         '2 Изготовитель материала СО: ',
@@ -313,12 +310,12 @@ def export_protocol_xls_template(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(10, 10, 0, 1, style6)
+        ws.merge(row_num, row_num, 0, 1, style6)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(10, 10, 2, 7, style7)
+        ws.merge(row_num, row_num, 2, 7, style7)
 
-    row_num = 11
+    row_num +=1
     columns = [
         '3 Испытатель: ',
         '3 Испытатель: ',
@@ -331,14 +328,14 @@ def export_protocol_xls_template(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(11, 11, 0, 1, style6)
+        ws.merge(row_num, row_num, 0, 1, style6)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(11, 11, 2, 7, style7)
+        ws.merge(row_num, row_num, 2, 7, style7)
         
     
     
-    row_num = 12
+    row_num ==1
     columns = [
         '4 Идентификационные данные объектов/образцов:',
         '4 Идентификационные данные объектов/образцов: ',
@@ -351,14 +348,14 @@ def export_protocol_xls_template(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(12, 12, 0, 1, style6)
+        ws.merge(row_num, row_num, 0, 1, style6)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(12, 12, 2, 7, style7)
-    ws.row(12).height_mismatch = True
-    ws.row(12).height = 600
+        ws.merge(row_num, row_num, 2, 7, style7)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 600
 
-    row_num = 13
+    row_num +=1
     columns = [
         '5 Дата отбора проб:',
         '5 Дата отбора проб: ',
@@ -371,12 +368,12 @@ def export_protocol_xls_template(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(13, 13, 0, 1, style6)
+        ws.merge(row_num, row_num, 0, 1, style6)
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(13, 13, 2, 7, style7)
+        ws.merge(row_num, row_num, 2, 7, style7)
 
-    row_num = 14
+    row_num +=1
     columns = [
         '6 Дата и место проведения испытаний:',
         '6 Дата и место проведения испытаний: ',
@@ -389,18 +386,18 @@ def export_protocol_xls_template(request, pk):
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(14, 14, 0, 1, style6)
+        ws.merge(row_num, row_num, 0, 1, style6)
     for col_num in range(2, 3):
         ws.write(row_num, col_num, columns[col_num], style7)
     for col_num in range(3, 6):
         ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(14, 14, 3, 5, style7)
+        ws.merge(row_num, row_num, 3, 5, style7)
     for col_num in range(6, 7):
         ws.write(row_num, col_num, columns[col_num], style2)
     for col_num in range(7, 8):
         ws.write(row_num, col_num, columns[col_num], style7)
-    ws.row(14).height_mismatch = True
-    ws.row(14).height = 500
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
 
     row_num +=1
     columns = [
