@@ -26,84 +26,84 @@ from clorinesalts.j_constants import *
 
 Model=Clorinesalts
 #стили ячеек
-    style1 = xlwt.XFStyle()
-    style1.font.height = 20 * 8
-    style1.font.name = 'Times New Roman'
-    style1.alignment = al1
-    style1.alignment.wrap = 1
+style1 = xlwt.XFStyle()
+style1.font.height = 20 * 8
+style1.font.name = 'Times New Roman'
+style1.alignment = al1
+style1.alignment.wrap = 1
 
-    style2 = xlwt.XFStyle()
-    style2.font.height = 20 * 8
-    style2.font.name = 'Times New Roman'
-    style2.alignment = al2
-    style2.alignment.wrap = 1
+style2 = xlwt.XFStyle()
+style2.font.height = 20 * 8
+style2.font.name = 'Times New Roman'
+style2.alignment = al2
+style2.alignment.wrap = 1
 
-    style3 = xlwt.XFStyle()
-    style3.font.height = 20 * 8
-    style3.font.name = 'Times New Roman'
-    style3.alignment = al2
-    style3.alignment.wrap = 1
-    style3.num_format_str = 'DD.MM.YYYY г.'
+style3 = xlwt.XFStyle()
+style3.font.height = 20 * 8
+style3.font.name = 'Times New Roman'
+style3.alignment = al2
+style3.alignment.wrap = 1
+style3.num_format_str = 'DD.MM.YYYY г.'
 
-    style4 = xlwt.XFStyle()
-    style4.font.height = 20 * 8
-    style4.font.name = 'Times New Roman'
-    style4.alignment = al2
-    style4.alignment.wrap = 1
-    style4.font.bold = True
+style4 = xlwt.XFStyle()
+style4.font.height = 20 * 8
+style4.font.name = 'Times New Roman'
+style4.alignment = al2
+style4.alignment.wrap = 1
+style4.font.bold = True
 
-    style5 = xlwt.XFStyle()
-    style5.font.height = 20 * 8
-    style5.font.name = 'Times New Roman'
-    style5.alignment = al2
-    style5.alignment.wrap = 1
-    style5.num_format_str = 'DD.MM.YYYY г.'
-    style5.font.bold = True
+style5 = xlwt.XFStyle()
+style5.font.height = 20 * 8
+style5.font.name = 'Times New Roman'
+style5.alignment = al2
+style5.alignment.wrap = 1
+style5.num_format_str = 'DD.MM.YYYY г.'
+style5.font.bold = True
 
-    style6 = xlwt.XFStyle()
-    style6.font.height = 20 * 8
-    style6.font.name = 'Times New Roman'
-    style6.alignment = al3
-    style6.alignment.wrap = 1
-    style6.font.bold = True
+style6 = xlwt.XFStyle()
+style6.font.height = 20 * 8
+style6.font.name = 'Times New Roman'
+style6.alignment = al3
+style6.alignment.wrap = 1
+style6.font.bold = True
 
-    style7 = xlwt.XFStyle()
-    style7.font.height = 20 * 8
-    style7.font.name = 'Times New Roman'
-    style7.alignment = al3
-    style7.alignment.wrap = 1
-    style7.num_format_str = 'DD.MM.YYYY г.'
+style7 = xlwt.XFStyle()
+style7.font.height = 20 * 8
+style7.font.name = 'Times New Roman'
+style7.alignment = al3
+style7.alignment.wrap = 1
+style7.num_format_str = 'DD.MM.YYYY г.'
 
-    style8 = xlwt.XFStyle()
-    style8.font.height = 20 * 8
-    style8.font.name = 'Times New Roman'
-    style8.alignment = al1
-    style8.alignment.wrap = 1
-    style8.borders = b1
-    style5.num_format_str = '0.0000'
+style8 = xlwt.XFStyle()
+style8.font.height = 20 * 8
+style8.font.name = 'Times New Roman'
+style8.alignment = al1
+style8.alignment.wrap = 1
+style8.borders = b1
+style5.num_format_str = '0.0000'
 
-    style9 = xlwt.XFStyle()
-    style9.font.height = 20 * 8
-    style9.font.name = 'Times New Roman'
-    style9.alignment = al1
-    style9.alignment.wrap = 1
-    style9.borders = b1
-    style9.font.bold = True
+style9 = xlwt.XFStyle()
+style9.font.height = 20 * 8
+style9.font.name = 'Times New Roman'
+style9.alignment = al1
+style9.alignment.wrap = 1
+style9.borders = b1
+style9.font.bold = True
 
-    style10 = xlwt.XFStyle()
-    style10.font.height = 20 * 8
-    style10.font.name = 'Times New Roman'
-    style10.alignment = al1
-    style10.alignment.wrap = 1
-    style10.borders = b2
+style10 = xlwt.XFStyle()
+style10.font.height = 20 * 8
+style10.font.name = 'Times New Roman'
+style10.alignment = al1
+style10.alignment.wrap = 1
+style10.borders = b2
 
-    style11 = xlwt.XFStyle()
-    style11.font.height = 20 * 8
-    style11.font.name = 'Times New Roman'
-    style11.alignment = al1
-    style11.alignment.wrap = 1
-    style11.borders = b1
-    style11.num_format_str = '0.00'
+style11 = xlwt.XFStyle()
+style11.font.height = 20 * 8
+style11.font.name = 'Times New Roman'
+style11.alignment = al1
+style11.alignment.wrap = 1
+style11.borders = b1
+style11.num_format_str = '0.00'
 
 
 def export_protocol_xls_template(request, pk):
