@@ -30,6 +30,8 @@ from .j_constants import *
 from utils import *
 from textconstants import *
 
+from protokol_exel import *
+
 JOURNAL = AttestationJ
 MODEL = Clorinesalts
 COMMENTMODEL = CommentsClorinesalts
