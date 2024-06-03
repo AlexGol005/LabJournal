@@ -182,7 +182,7 @@ def export_protocol_xls_template(request, pk):
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('protocol', cell_overwrite_ok=True)
 
-    ws.col(0).width = 600
+    ws.col(0).width = 1000
     ws.col(1).width = 6000
     ws.col(2).width = 3500
     ws.col(3).width = 3500
@@ -191,15 +191,21 @@ def export_protocol_xls_template(request, pk):
     ws.col(6).width = 2700
     ws.col(7).width = 3900
     ws.col(8).width = 3900
+    ws.col(9).width = 3900
+    ws.col(10).width = 3900
+    ws.col(11).width = 3900
+    ws.col(12).width = 3900
+    ws.col(13).width = 3900
 
 
+    
 
 
-  
-
-    sheet = wb.get_sheet(0)
-    sheet.header_str = b'1'
-    sheet.footer_str = b' '
+    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
+    ws.insert_bitmap('logo.bmp', 0, 0)
+    ws.left_margin = 0
+    ws.header_str = b'&F c. &P  '
+    ws.footer_str = b' '
 
 
     row_num = 1
@@ -214,22 +220,18 @@ def export_protocol_xls_template(request, pk):
         '',
         '',
         '',
-        'М.П.',
+        '',
         '',
         affirmationprod,
         affirmationprod,
     ]
     l = len(columns) - 1
-    for col_num in range(10, 11):
-        ws.write(row_num, col_num, columns[col_num], style2)
     for col_num in range(12, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
         ws.merge(row_num, row_num, 12, l , style2)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 900
 
-    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
-    ws.insert_bitmap('logo.bmp', 0, 0)
 
     row_num +=1
     columns = [
@@ -243,11 +245,13 @@ def export_protocol_xls_template(request, pk):
         '',
         '',
         '',
-        '',
+        'М.П.',
         '',
         fordate,
         fordate,
         ]
+    for col_num in range(10, 11):
+        ws.write(row_num, col_num, columns[col_num], style2)
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
         ws.merge(row_num, row_num, 12, l, style2)
@@ -258,14 +262,20 @@ def export_protocol_xls_template(request, pk):
         nameprot,
         nameprot,
         nameprot,
-        '',
-        '',
-        '',
-        '',
+        nameprot,
+        nameprot,
+        nameprot,
+        nameprot,
+        nameprot,
+        nameprot,
+        nameprot,
+        nameprot,
+        nameprot,
+        nameprot,
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style4)
-        ws.merge(row_num, row_num, 0, 3, style4)
+        ws.merge(row_num, row_num, 0, l, style4)
 
 
     row_num += 1
@@ -275,29 +285,41 @@ def export_protocol_xls_template(request, pk):
         f'от   {dp}',
         f'от   {dp}',
         f'от   {dp}',
-        '',
-        '',
-        '',
-        '',
+        f'от   {dp}',
+        f'от   {dp}',
+        f'от   {dp}',
+        f'от   {dp}',
+        f'от   {dp}',
+        f'от   {dp}',
+        f'от   {dp}',
+        f'от   {dp}',
+        f'от   {dp}',
+        f'от   {dp}',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style5)
-        ws.merge(row_num, row_num, 0, 3, style5)
+        ws.merge(row_num, row_num, 0, l, style4)
 
     row_num +=1
     columns = [
-        '',
-        '',
-        ' ',
-        f' по 21534-2021',
-        f' по 21534-2021',
-        '',
-        '',
-        '',
+        note.name_rm,
+        note.name_rm,
+        note.name_rm,
+        note.name_rm,
+        note.name_rm,
+        note.name_rm,
+        note.name_rm,
+        note.name_rm,
+        note.name_rm,
+        note.name_rm,
+        note.name_rm,
+        note.name_rm,
+        note.name_rm,
+        note.name_rm,
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(row_num, row_num, 3, 4, style6)
+        ws.merge(row_num, row_num, 0, l, style4)
 
     row_num +=1
     columns = [
