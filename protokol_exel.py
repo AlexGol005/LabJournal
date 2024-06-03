@@ -26,6 +26,18 @@ from clorinesalts.j_constants import *
 
 Model=Clorinesalts
 #стили ячеек
+al2 = Alignment()
+al2.horz = Alignment.HORZ_RIGHT
+al2.vert = Alignment.VERT_CENTER
+
+al1 = Alignment()
+al1.horz = Alignment.HORZ_CENTER
+al1.vert = Alignment.VERT_CENTER
+
+al3 = Alignment()
+al3.horz = Alignment.HORZ_LEFT
+al3.vert = Alignment.VERT_CENTER
+
 style1 = xlwt.XFStyle()
 style1.font.height = 20 * 8
 style1.font.name = 'Times New Roman'
