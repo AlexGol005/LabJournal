@@ -537,11 +537,13 @@ def export_protocol_xls_template(request, pk):
         'давление, кПа',
     ]
     hei = row_num + 6
+    hei = row_num + 4
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
         ws.merge(row_num, hei, 0, 1, styleNBE)
     for col_num in range(1, 2):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
+        ws.merge(row_num, hei1, 0, 1, styleNBE)
     for col_num in range(2, len(columns)):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 2, l, styleNBL)
@@ -550,7 +552,7 @@ def export_protocol_xls_template(request, pk):
 
 
 
-    row_num +=1
+    row_num +=7
     columns = [
         '3 Испытатель: ',
         '3 Испытатель: ',
@@ -570,25 +572,7 @@ def export_protocol_xls_template(request, pk):
         
     
     
-    row_num ==1
-    columns = [
-        '4 Идентификационные данные объектов/образцов:',
-        '4 Идентификационные данные объектов/образцов: ',
-        constit,
-        constit,
-        constit,
-        constit,
-        constit,
-        constit,
-    ]
-    for col_num in range(2):
-        ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(row_num, row_num, 0, 1, style6)
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, row_num, 2, 7, style7)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 600
+
 
     row_num +=1
     columns = [
