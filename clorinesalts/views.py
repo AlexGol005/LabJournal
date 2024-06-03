@@ -24,7 +24,6 @@ from .forms import*
 from textconstants import *
 from equipment.models import CompanyCard
 from metods import *
-from .forms import *
 from utils_forms import*
 from .models import *
 from .j_constants import *
