@@ -537,7 +537,7 @@ def export_protocol_xls_template(request, pk):
         'давление, кПа',
     ]
     hei = row_num + 6
-    hei = row_num + 4
+    hei1 = row_num + 4
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
         ws.merge(row_num, hei, 0, 1, styleNBE)
