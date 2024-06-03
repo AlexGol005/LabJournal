@@ -192,8 +192,12 @@ def export_protocol_xls_template(request, pk):
     ws.col(7).width = 3900
     ws.col(8).width = 3900
 
-    Image.open(company.imglogoadress.path).convert("RGB").save('logo.bmp')
-    ws.insert_bitmap('logo.bmp', 0, 2)
+
+
+    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
+    ws.insert_bitmap('logo.bmp', 0, 0)
+  
+
     sheet = wb.get_sheet(0)
     sheet.header_str = b'1'
     sheet.footer_str = b' '
