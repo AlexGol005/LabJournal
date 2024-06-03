@@ -2,7 +2,7 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
 
-from protokol_exel.py import *
+from protokol_exel import *
 from . import views
 from .j_constants import *
 
