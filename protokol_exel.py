@@ -53,15 +53,40 @@ al1 = Alignment()
 al1.horz = Alignment.HORZ_CENTER
 al1.vert = Alignment.VERT_CENTER
 
+#содержимое ячейки слева
 al3 = Alignment()
 al3.horz = Alignment.HORZ_LEFT
 al3.vert = Alignment.VERT_CENTER
 
+#простой шрифт, без границ, выравнивание по центру
 styleNnBE = xlwt.XFStyle()
 styleNnBE.font.height = 20 * 8
 styleNnBE.font.name = 'Times New Roman'
 styleNnBE.alignment = al1
 styleNnBE.alignment.wrap = 1
+
+#простой шрифт, без границ, выравнивание по левому краю
+styleNnBL = xlwt.XFStyle()
+styleNnBL.font.height = 20 * 8
+styleNnBL.font.name = 'Times New Roman'
+styleNnBL.alignment = al3
+styleNnBL.alignment.wrap = 1
+
+#простой шрифт, обычная граница, выравнивание по центру
+styleNBE = xlwt.XFStyle()
+styleNBE.font.height = 20 * 8
+styleNBE.font.name = 'Times New Roman'
+styleNBE.alignment = al1
+styleNBE.alignment.wrap = 1
+styleNBE.borders = b1
+
+#простой шрифт, обычная граница, выравнивание по левому краю
+styleNBL = xlwt.XFStyle()
+styleNBL.font.height = 20 * 8
+styleNBL.font.name = 'Times New Roman'
+styleNBL.alignment = al3
+styleNBL.alignment.wrap = 1
+styleNBL.borders = b1
 
 
 style1 = xlwt.XFStyle()
@@ -235,8 +260,8 @@ def export_protocol_xls_template(request, pk):
     ]
     l = len(columns) - 1
     for col_num in range(12, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], styleNnBE)
-        ws.merge(row_num, row_num, 12, l , styleNnBE)
+        ws.write(row_num, col_num, columns[col_num], styleNnBL)
+        ws.merge(row_num, row_num, 12, l , styleNnBL)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 900
 
@@ -305,8 +330,8 @@ def export_protocol_xls_template(request, pk):
         f'от   {dp}',
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style5)
-        ws.merge(row_num, row_num, 0, l, style4)
+        ws.write(row_num, col_num, columns[col_num], styleNnBE)
+        ws.merge(row_num, row_num, 0, l, styleNnBE)
 
     row_num +=1
     columns = [
@@ -326,26 +351,22 @@ def export_protocol_xls_template(request, pk):
         note.name_rm,
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(row_num, row_num, 0, l, style4)
+        ws.write(row_num, col_num, columns[col_num], styleNnBE)
+        ws.merge(row_num, row_num, 0, l, styleNnBE)
 
     row_num +=1
     columns = [
-        '1 Наименование объекта/образца испытаний:',
-        '1 Наименование объекта/образца испытаний:',
-        note.name_rm,
-        note.name_rm,
-        note.name_rm,
-        note.name_rm,
-        note.name_rm,
-        note.name_rm,
+        '1',
+        'Полное наименование организации',
+        'Общество с ограниченной ответственностью “Петроаналитика” (ООО "Петроаналитика")'
     ]
-    for col_num in range(2):
-        ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(row_num, row_num, 0, 1, style6)
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, row_num, 2, 7, style7)
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], styleNBE)
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+        ws.merge(row_num, row_num, 2, l, styleNBL)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
 
