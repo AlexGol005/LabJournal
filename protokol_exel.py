@@ -220,11 +220,12 @@ def export_protocol_xls_template(request, pk):
         affirmationprod,
         affirmationprod,
     ]
+    l = len(columns) - 1
     for col_num in range(10, 11):
         ws.write(row_num, col_num, columns[col_num], style2)
     for col_num in range(12, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(row_num, row_num, 12, len(columns) - 1, style2)
+        ws.merge(row_num, row_num, 12, l , style2)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 900
 
@@ -243,7 +244,7 @@ def export_protocol_xls_template(request, pk):
         ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(row_num, row_num, 12, len(columns) - 1, style2)
+        ws.merge(row_num, row_num, 12, l, style2)
 
     row_num +=2
     columns = [
