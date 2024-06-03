@@ -217,18 +217,18 @@ def export_protocol_xls_template(request, pk):
 
     ws.col(0).width = 1700
     ws.col(1).width = 5000
-    ws.col(2).width = 3500
-    ws.col(3).width = 3500
-    ws.col(4).width = 2700
-    ws.col(5).width = 2700
-    ws.col(6).width = 2700
-    ws.col(7).width = 3900
-    ws.col(8).width = 3900
-    ws.col(9).width = 3900
-    ws.col(10).width = 3900
-    ws.col(11).width = 3900
-    ws.col(12).width = 3900
-    ws.col(13).width = 3900
+    ws.col(2).width = 3000
+    ws.col(3).width = 3000
+    ws.col(4).width = 3000
+    ws.col(5).width = 3000
+    ws.col(6).width = 3000
+    ws.col(7).width = 3000
+    ws.col(8).width = 3000
+    ws.col(9).width = 3000
+    ws.col(10).width = 3000
+    ws.col(11).width = 3000
+    ws.col(12).width = 3500
+    ws.col(13).width = 3500
 
 
     
@@ -484,9 +484,9 @@ def export_protocol_xls_template(request, pk):
 
     row_num +=1
     columns = [
-        '10',
-        'Отбор проб',
-        'не проводился',
+        '9',
+        'Описание объекта/образца испытаний',
+        constit,
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
@@ -501,7 +501,7 @@ def export_protocol_xls_template(request, pk):
     row_num +=1
     columns = [
         '10',
-        'Отбор проб',
+        'Метод испытаний',
         'не проводился',
     ]
     for col_num in range(1):
