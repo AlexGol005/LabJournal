@@ -484,9 +484,9 @@ def export_protocol_xls_template(request, pk):
 
     row_num +=1
     columns = [
-        '9',
-        'Описание объекта/образца испытаний',
-         constit'
+        '10',
+        'Отбор проб',
+        'не проводился',
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
