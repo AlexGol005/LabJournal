@@ -182,7 +182,7 @@ def export_protocol_xls_template(request, pk):
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('protocol', cell_overwrite_ok=True)
 
-    ws.col(0).width = 400
+    ws.col(0).width = 600
     ws.col(1).width = 6000
     ws.col(2).width = 3500
     ws.col(3).width = 3500
@@ -196,8 +196,7 @@ def export_protocol_xls_template(request, pk):
 
 
   
-    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
-    ws.insert_bitmap('logo.bmp', 0, 0)
+
     sheet = wb.get_sheet(0)
     sheet.header_str = b'1'
     sheet.footer_str = b' '
@@ -229,10 +228,17 @@ def export_protocol_xls_template(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 900
 
-
+    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
+    ws.insert_bitmap('logo.bmp', 0, 0)
 
     row_num +=1
     columns = [
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
         '',
         '',
         '',
