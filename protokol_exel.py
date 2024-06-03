@@ -194,8 +194,7 @@ def export_protocol_xls_template(request, pk):
 
 
 
-    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
-    ws.insert_bitmap('logo.bmp', 0, 0)
+
   
 
     sheet = wb.get_sheet(0)
@@ -220,13 +219,16 @@ def export_protocol_xls_template(request, pk):
         affirmationprod,
         affirmationprod,
     ]
-    for col_num in range(10, 10):
+    for col_num in range(10, 11):
         ws.write(row_num, col_num, columns[col_num], style2)
     for col_num in range(12, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(row_num, row_num, 12, len(columns), style2)
+        ws.merge(row_num, row_num, 12, len(columns) - 1, style2)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 900
+
+    Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
+    ws.insert_bitmap('logo.bmp', 0, 0)
 
     row_num +=1
     columns = [
@@ -240,10 +242,10 @@ def export_protocol_xls_template(request, pk):
         fordate,
         ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style3)
-        ws.merge(row_num, row_num, 6, 7, style3)
+        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.merge(row_num, row_num, 12, len(columns) - 1, style2)
 
-    row_num +=1
+    row_num +=2
     columns = [
         nameprot,
         nameprot,
