@@ -501,7 +501,7 @@ def export_protocol_xls_template(request, pk):
     row_num +=1
     columns = [
         '10',
-        'Метод испытаний',
+        'Отбор проб',
         'не проводился',
     ]
     for col_num in range(1):
@@ -534,10 +534,12 @@ def export_protocol_xls_template(request, pk):
     columns = [
         '12',
         'Условия проведения испытаний',
-         note.ndocument,
+        'давление, кПа',
     ]
+    hei = row_num + 6
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
+        ws.merge(row_num, hei, 0, 1, styleNBE)
     for col_num in range(1, 2):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
     for col_num in range(2, len(columns)):
