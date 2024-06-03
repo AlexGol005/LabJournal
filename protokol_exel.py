@@ -48,6 +48,7 @@ al2 = Alignment()
 al2.horz = Alignment.HORZ_RIGHT
 al2.vert = Alignment.VERT_CENTER
 
+#содержимое ячейки в центре
 al1 = Alignment()
 al1.horz = Alignment.HORZ_CENTER
 al1.vert = Alignment.VERT_CENTER
@@ -55,6 +56,13 @@ al1.vert = Alignment.VERT_CENTER
 al3 = Alignment()
 al3.horz = Alignment.HORZ_LEFT
 al3.vert = Alignment.VERT_CENTER
+
+styleNnBE = xlwt.XFStyle()
+styleNnBE.font.height = 20 * 8
+styleNnBE.font.name = 'Times New Roman'
+styleNnBE.alignment = al1
+styleNnBE.alignment.wrap = 1
+
 
 style1 = xlwt.XFStyle()
 style1.font.height = 20 * 8
@@ -227,8 +235,8 @@ def export_protocol_xls_template(request, pk):
     ]
     l = len(columns) - 1
     for col_num in range(12, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(row_num, row_num, 12, l , style2)
+        ws.write(row_num, col_num, columns[col_num], styleNnBE)
+        ws.merge(row_num, row_num, 12, l , styleNnBE)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 900
 
@@ -251,10 +259,10 @@ def export_protocol_xls_template(request, pk):
         fordate,
         ]
     for col_num in range(10, 11):
-        ws.write(row_num, col_num, columns[col_num], style2)
+        ws.write(row_num, col_num, columns[col_num], styleNnBE)
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style2)
-        ws.merge(row_num, row_num, 12, l, style2)
+        ws.write(row_num, col_num, columns[col_num], styleNnBE)
+        ws.merge(row_num, row_num, 12, l, styleNnBE)
 
     row_num +=2
     columns = [
@@ -274,8 +282,8 @@ def export_protocol_xls_template(request, pk):
         nameprot,
     ]
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style4)
-        ws.merge(row_num, row_num, 0, l, style4)
+        ws.write(row_num, col_num, columns[col_num], styleNnBE)
+        ws.merge(row_num, row_num, 0, l, styleNnBE)
 
 
     row_num += 1
