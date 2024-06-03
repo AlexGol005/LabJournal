@@ -215,8 +215,8 @@ def export_protocol_xls_template(request, pk):
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('protocol', cell_overwrite_ok=True)
 
-    ws.col(0).width = 1000
-    ws.col(1).width = 6000
+    ws.col(0).width = 1700
+    ws.col(1).width = 5000
     ws.col(2).width = 3500
     ws.col(3).width = 3500
     ws.col(4).width = 2700
@@ -286,7 +286,7 @@ def export_protocol_xls_template(request, pk):
     for col_num in range(10, 11):
         ws.write(row_num, col_num, columns[col_num], styleNnBE)
     for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], styleNnBE)
+        ws.write(row_num, col_num, columns[col_num], styleNnBL)
         ws.merge(row_num, row_num, 12, l, styleNnBE)
 
     row_num +=2
@@ -372,21 +372,181 @@ def export_protocol_xls_template(request, pk):
 
     row_num +=1
     columns = [
-        '2 Изготовитель материала СО: ',
-        '2 Изготовитель материала СО: ',
-        'ООО "Петроаналитика" ',
-        'ООО "Петроаналитика" ',
-        'ООО "Петроаналитика" ',
-        'ООО "Петроаналитика" ',
-        'ООО "Петроаналитика" ',
-        'ООО "Петроаналитика" ',
+        '2',
+        'Номер аттестата аккредитации и сертификата',
+        'Сертификат № QMS44386 на соответствие требованиям ISO 9001:2015 и сертификат № Q-A01.19.02b на соответствие требованиям ГОСТ Р ИСО 9001–2015, выданные органом по сертификации систем менеджмента качества ООО «АСЕРТ Бюро» '
     ]
-    for col_num in range(2):
-        ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(row_num, row_num, 0, 1, style6)
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, row_num, 2, 7, style7)
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], styleNBE)
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+        ws.merge(row_num, row_num, 2, l, styleNBL)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num +=1
+    columns = [
+        '3',
+        'Юридический адрес',
+        '190020, Российская Федерация, город Санкт-Петербург, улица Бумажная, дом 17, литер А, офис 472 '
+    ]
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], styleNBE)
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+        ws.merge(row_num, row_num, 2, l, styleNBL)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num +=1
+    columns = [
+        '4',
+        'Почтовый адрес',
+        '190020, Российская Федерация, город Санкт-Петербург, улица Бумажная, дом 17, литер А, офис 472 '
+    ]
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], styleNBE)
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+        ws.merge(row_num, row_num, 2, l, styleNBL)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num +=1
+    columns = [
+        '5',
+        'Контактный телефон/факс',
+        '+7 (812) 447-95-10'
+    ]
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], styleNBE)
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+        ws.merge(row_num, row_num, 2, l, styleNBL)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num +=1
+    columns = [
+        '6',
+        'E-mail',
+        'info@petroanalytica.ru'
+    ]
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], styleNBE)
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+        ws.merge(row_num, row_num, 2, l, styleNBL)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num +=1
+    columns = [
+        '7',
+        'Заказчик',
+        'Общество с ограниченной ответственностью “Петроаналитика”'
+    ]
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], styleNBE)
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+        ws.merge(row_num, row_num, 2, l, styleNBL)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num +=1
+    columns = [
+        '8',
+        'Дата и место проведения испытаний',
+        f'{note.date}, {company.adress}, п. {note.room.roomnumber}'
+    ]
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], styleNBE)
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+        ws.merge(row_num, row_num, 2, l, styleNBL)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num +=1
+    columns = [
+        '9',
+        'Описание объекта/образца испытаний',
+        constit'
+    ]
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], styleNBE)
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+        ws.merge(row_num, row_num, 2, l, styleNBL)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num +=1
+    columns = [
+        '10',
+        'Отбор проб',
+        'не проводился',
+    ]
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], styleNBE)
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+        ws.merge(row_num, row_num, 2, l, styleNBL)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num +=1
+    columns = [
+        '11',
+        'Метод испытаний',
+         note.ndocument,
+    ]
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], styleNBE)
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+        ws.merge(row_num, row_num, 2, l, styleNBL)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num +=1
+    columns = [
+        '12',
+        'Условия проведения испытаний',
+         note.ndocument,
+    ]
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], styleNBE)
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+        ws.merge(row_num, row_num, 2, l, styleNBL)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+
 
     row_num +=1
     columns = [
