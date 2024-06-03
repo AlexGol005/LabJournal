@@ -2,7 +2,7 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
 
-
+from protokol_exel.py import *
 from . import views
 from .j_constants import *
 
@@ -33,6 +33,6 @@ urlpatterns = [
     path('attestationcv/', login_required(views.AllStrCVView.as_view()), name=URL + 'allcv'),
     path('clorinesaltsbottles/', views.BottlesView.as_view(), name=URL + 'bottles'),
     path('seriaupdate/<str:str>', views.SeriaUpdate, name='seriaupdate' + 'str'),
-    path(r'^export1/xls/$/<int:pk>', views.export_protocol_xls, name='export_clorinesalts_protocol_xls'),
+    path(r'^export1/xls/$/<int:pk>', views.export_protocol_xls_template, name='export_clorinesalts_protocol_xls'),
     path('protocolbutton/<slug:pk>', views.ProtocolbuttonView.as_view(), name=URL + 'protocolbutton'),
 ]
