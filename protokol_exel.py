@@ -26,6 +26,24 @@ from clorinesalts.j_constants import *
 
 Model=Clorinesalts
 #стили ячеек
+brd1 = Borders()
+brd1.left = 1
+brd1.right = 1
+brd1.top = 1
+brd1.bottom = 1
+
+b1 = Borders()
+b1.left = 1
+b1.right = 1
+b1.top = 1
+b1.bottom = 1
+
+b2 = Borders()
+b2.left = 6
+b2.right = 6
+b2.bottom = 6
+b2.top = 6
+
 al2 = Alignment()
 al2.horz = Alignment.HORZ_RIGHT
 al2.vert = Alignment.VERT_CENTER
