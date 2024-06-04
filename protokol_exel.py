@@ -745,7 +745,6 @@ def export_protocol_xls_template(request, pk):
         row_num +=1
         columns = [
         '№',
-        'Наименование объекта/образца испытаний',
         'Номер экземпляра',
         'Показатель, ед. изм',
         'Метод испытаний',
@@ -762,7 +761,6 @@ def export_protocol_xls_template(request, pk):
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], styleNBE)
-            ws.merge(row_num, row_num, 0, 1, style9)
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 1050
 
@@ -770,16 +768,22 @@ def export_protocol_xls_template(request, pk):
         qseria = Clorinesalts.objects.all().filter(seria=a). \
         values_list(
         'numberexample',
+        'numberexample',
+        'ndocument',
         'x1',
-        'x2',    
+        'x1', 
+        'x2', 
         'x_avg',
-        'factconvergencecomma',
+        'x_avg',
+        'x_avg',
+        'repr1comma',
+        'Rep2'
         )
         
         for row in qseria:
             row_num += 1
-            for col_num in range(2, 4):
-                ws.write(row_num, col_num + 2, row[col_num], style8)
+            for col_num in range(2, l):
+                ws.write(row_num, col_num + 2, row[col_num], styleNBE)
         counthe = row_num
             
         row_num1 = count1 + 2
@@ -820,7 +824,7 @@ def export_protocol_xls_template(request, pk):
         ws.merge(row_num, row_num, 2, l, styleNnBL)
 
 
-    row_num +=1
+    row_num +=2
     columns = [
         company.prohibitet
     ]
@@ -830,7 +834,7 @@ def export_protocol_xls_template(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 700
 
-    row_num +=1
+    row_num +=2
     columns = [
         'Исполнитель:'
     ]
@@ -866,6 +870,16 @@ def export_protocol_xls_template(request, pk):
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], styleKnBE)
         ws.merge(row_num, row_num, 0, l, styleKnBE)
+
+    row_num +=3
+    columns = [
+        f'Страница №2\nВсего страниц 2',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNnBR)
+        ws.merge(row_num, row_num, 0, l, styleNnBR)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 700
 
     wb.save(response)
     return response
