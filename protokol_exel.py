@@ -527,8 +527,8 @@ def export_protocol_xls_template(request, pk):
         'давление, кПа',
         'давление',
     ]
-    hei = row_num + 3
-    hei1 = row_num + 4
+    hei = row_num + 2
+    hei1 = row_num + 3
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
         ws.merge(row_num, hei1, 0, 0, styleNBE)
@@ -608,7 +608,7 @@ def export_protocol_xls_template(request, pk):
 
 
 
-    row_num +=7
+    row_num +=9
     columns = [
         '3 Испытатель: ',
         '3 Испытатель: ',
@@ -621,7 +621,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(row_num, row_num, 2, 7, style7)
 
-    row_num +=1
+    row_num +=2
     columns = [
         f'Результаты испытаний {note.name_rm}',
     ]
