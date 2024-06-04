@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 from xlwt import Borders, Alignment
 from django.db.models.functions import Concat
 from django.db.models import Value
+
 from metods import *
 
 from equipment.models import *
@@ -238,20 +239,20 @@ def export_protocol_xls_template(request, pk):
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('protocol', cell_overwrite_ok=True)
 
-    ws.col(0).width = 1200
-    ws.col(1).width = 5000
+    ws.col(0).width = 1000
+    ws.col(1).width = 4000
     ws.col(2).width = 3000
     ws.col(3).width = 3000
-    ws.col(4).width = 5000
-    ws.col(5).width = 5000
+    ws.col(4).width = 2000
+    ws.col(5).width = 2000
     ws.col(6).width = 2000
     ws.col(7).width = 2000
     ws.col(8).width = 2000
     ws.col(9).width = 2000
     ws.col(10).width = 2000
     ws.col(11).width = 2000
-    ws.col(12).width = 2000
-    ws.col(13).width = 2000
+    ws.col(12).width = 3000
+    ws.col(13).width = 3000
 
 
     Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
@@ -480,11 +481,12 @@ def export_protocol_xls_template(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 400
 
+    date_isp = get_dateformat(note.date)
     row_num +=1
     columns = [
         '8',
         'Дата и место проведения испытаний',
-        f'{note.date}, {company.adress}, п. {note.room.roomnumber}'
+        f'{date_isp}, {company.adress}, п. {note.room.roomnumber}'
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
