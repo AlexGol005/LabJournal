@@ -58,6 +58,11 @@ al3 = Alignment()
 al3.horz = Alignment.HORZ_LEFT
 al3.vert = Alignment.VERT_CENTER
 
+#содержимое ячейки справа
+alr = Alignment()
+alr.horz = Alignment.HORZ_RIGHT
+alr.vert = Alignment.VERT_CENTER
+
 #простой шрифт, без границ, выравнивание по центру
 styleNnBE = xlwt.XFStyle()
 styleNnBE.font.height = 20 * 8
@@ -71,6 +76,13 @@ styleNnBL.font.height = 20 * 8
 styleNnBL.font.name = 'Times New Roman'
 styleNnBL.alignment = al3
 styleNnBL.alignment.wrap = 1
+
+#простой шрифт, без границ, выравнивание по правому краю
+styleNnBR = xlwt.XFStyle()
+styleNnBR.font.height = 20 * 8
+styleNnBR.font.name = 'Times New Roman'
+styleNnBR.alignment = alr
+styleNnBR.alignment.wrap = 1
 
 #простой шрифт, обычная граница, выравнивание по центру
 styleNBE = xlwt.XFStyle()
@@ -592,7 +604,7 @@ def export_protocol_xls_template(request, pk):
     columns = [
         '12',
         'Средства измерения, использующиеся для мониторинга условий проведения испытаний',
-        f'{meteo.equipment_meteo};\n{meteo.equipment_meteo1}.',
+        f'{meteo.equipment_meteo}\n{meteo.equipment_meteo1}.',
     ]
     hei = row_num + 3
     hei1 = row_num + 4
@@ -619,6 +631,15 @@ def export_protocol_xls_template(request, pk):
         ws.merge(row_num, row_num, 2, l, styleNBL)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
+
+    row_num +=3
+    columns = [
+        f'Страница №1\nВсего страниц 2',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNnBR)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 700
  
 
 
@@ -630,11 +651,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
         ws.merge(row_num, row_num, 0, l, styleNBE)
         
-   
 
-
-    
-  
 
     row_num +=1
     columns = [
@@ -746,20 +763,25 @@ def export_protocol_xls_template(request, pk):
 
         row_num +=1
         columns = [
-        'Характеристика',
-        'Характеристика',
-        'Номер экземпляра СО',
-        'Измеренное значение Х1, мг/дм3 ',
-        'Измеренное значение Х2, мг/дм3 ',
-        'Измеренное значение Хср, мг/дм3 ',
-        'Оценка приемлемости измерений, мг/дм3 ',
-        'Норматив контроля, r, мг/дм3',
+        '№',
+        'Наименование объекта/образца испытаний',
+        'Номер экземпляра',
+        'Показатель, ед. изм',
+        'Метод испытаний',
+        'Используемое оборудование и средства измерений (основные), информация об их поверке/аттестации/ калибровке (градуировке) с указанием стандартных образцов и эталонов, примененных для этой цели (метрологическая прослеживаемость результатов измерений)',
+        'Результат измерений,
+        'X1',
+        'X2',
+        'Xср',
+        'Характеристика погрешности метода испытаний (при P=0,95)',
+        'Характеристика расширенной неопределенности измерений (при k=2, P=0,95)',
+        'Характеристики прецизионности: повторяемость r',
+        'Характеристики прецизионности: воспроизводимость R'
+        
         ]
-        for col_num in range(2):
-            ws.write(row_num, col_num, columns[col_num], style9)
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], styleNBE)
             ws.merge(row_num, row_num, 0, 1, style9)
-        for col_num in range(1, len(columns)):
-            ws.write(row_num, col_num, columns[col_num], style9)
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 1050
 
@@ -775,7 +797,7 @@ def export_protocol_xls_template(request, pk):
         
         for row in qseria:
             row_num += 1
-            for col_num in range(0, 5):
+            for col_num in range(2, l):
                 ws.write(row_num, col_num + 2, row[col_num], style8)
         counthe = row_num
             
@@ -798,7 +820,7 @@ def export_protocol_xls_template(request, pk):
 
 
 
-    row_num +=1
+    row_num +=2
     columns = [
         'Дополнительные сведения: ',
         'Дополнительные сведения: ',
@@ -825,7 +847,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNdBE)
         ws.merge(row_num, row_num, 0, l, styleNdBE)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 1000
+    ws.row(row_num).height = 700
 
     row_num +=1
     columns = [
