@@ -797,7 +797,7 @@ def export_protocol_xls_template(request, pk):
         
         for row in qseria:
             row_num += 1
-            for col_num in range(2, l):
+            for col_num in range(2, 4):
                 ws.write(row_num, col_num + 2, row[col_num], style8)
         counthe = row_num
             
