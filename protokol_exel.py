@@ -592,7 +592,7 @@ def export_protocol_xls_template(request, pk):
     columns = [
         '12',
         'Средства измерения, использующиеся для мониторинга условий проведения испытаний',
-        f'{meteo.equipment_meteo}; {\n} {meteo.equipment_meteo1}.,
+        f'{meteo.equipment_meteo}; {\n} {meteo.equipment_meteo1}.',
     ]
     hei = row_num + 3
     hei1 = row_num + 4
