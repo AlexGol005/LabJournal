@@ -259,9 +259,10 @@ def export_protocol_xls_template(request, pk):
         affirmationprod,
     ]
     l = len(columns) - 1
+    af = len(columns) - 2
     for col_num in range(12, len(columns)):
         ws.write(row_num, col_num, columns[col_num], styleNnBL)
-        ws.merge(row_num, row_num, 12, l , styleNnBL)
+        ws.merge(row_num, row_num, af, l , styleNnBL)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 900
 
@@ -283,11 +284,13 @@ def export_protocol_xls_template(request, pk):
         fordate,
         fordate,
         ]
+    mp = len(columns) - 4
+    mp1 = mp + 1
     for col_num in range(10, 11):
         ws.write(row_num, col_num, columns[col_num], styleNnBE)
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], styleNnBL)
-        ws.merge(row_num, row_num, 12, l, styleNnBE)
+        ws.merge(row_num, row_num, af, l, styleNnBE)
 
     row_num +=2
     columns = [
@@ -536,14 +539,14 @@ def export_protocol_xls_template(request, pk):
         'Условия проведения испытаний',
         'давление, кПа',
     ]
-    hei = row_num + 6
+    hei = row_num + 5
     hei1 = row_num + 4
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
-        ws.merge(row_num, hei, 0, 1, styleNBE)
+        ws.merge(row_num, hei, 0, 0, styleNBE)
     for col_num in range(1, 2):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
-        ws.merge(row_num, hei1, 0, 1, styleNBE)
+        ws.merge(row_num, hei1, 1, 1, styleNBE)
     for col_num in range(2, len(columns)):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 2, l, styleNBL)
