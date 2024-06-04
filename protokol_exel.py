@@ -765,7 +765,7 @@ def export_protocol_xls_template(request, pk):
             ws.write(row_num, col_num, columns[col_num], styleNBE)
             ws.merge(row_num, row_num, 4, 5, styleNBE)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 1100
+        ws.row(row_num).height = 1400
 
         a = note.seria
         qseria = Clorinesalts.objects.all().filter(seria=a). \
