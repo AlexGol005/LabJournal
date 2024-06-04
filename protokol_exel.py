@@ -339,19 +339,6 @@ def export_protocol_xls_template(request, pk):
     row_num +=1
     columns = [
         note.name_rm,
-        note.name_rm,
-        note.name_rm,
-        note.name_rm,
-        note.name_rm,
-        note.name_rm,
-        note.name_rm,
-        note.name_rm,
-        note.name_rm,
-        note.name_rm,
-        note.name_rm,
-        note.name_rm,
-        note.name_rm,
-        note.name_rm,
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], styleNnBE)
@@ -538,21 +525,86 @@ def export_protocol_xls_template(request, pk):
         '12',
         'Условия проведения испытаний',
         'давление, кПа',
+        'давление',
     ]
-    hei = row_num + 5
+    hei = row_num + 3
     hei1 = row_num + 4
-    hei2 = row_num + 3
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
-        ws.merge(row_num, hei, 0, 0, styleNBE)
+        ws.merge(row_num, hei1, 0, 0, styleNBE)
     for col_num in range(1, 2):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
-        ws.merge(row_num, hei2, 1, 1, styleNBE)
+        ws.merge(row_num, hei, 1, 1, styleNBE)
+    for col_num in range(2, 3):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+    for col_num in range(3, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+        ws.merge(row_num, row_num, 3, l, styleNBL)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num +=1
+    columns = [
+        '12',
+        'Условия проведения испытаний',
+        'температура, °С',
+        'f'
+    ]
+    for col_num in range(2, 3):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+    for col_num in range(3, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+        ws.merge(row_num, row_num, 3, l, styleNBL)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num +=1
+    columns = [
+        '12',
+        'Условия проведения испытаний',
+        'влажность, %',
+        'wwer'
+    ]
+    for col_num in range(2, 3):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+    for col_num in range(3, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+        ws.merge(row_num, row_num, 3, l, styleNBL)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+
+    row_num +=1
+    columns = [
+        '12',
+        'Средства измерения, использующиеся для мониторинга условий проведения испытаний',
+        'ch ch',
+    ]
+    hei = row_num + 3
+    hei1 = row_num + 4
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
     for col_num in range(2, len(columns)):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 2, l, styleNBL)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 500
+
+    row_num +=1
+    columns = [
+        '13',
+        'Испытатель',
+        note.performer_rm
+    ]
+    for col_num in range(1):
+        ws.write(row_num, col_num, columns[col_num], styleNBE)
+    for col_num in range(1, 2):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+    for col_num in range(2, len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNBL)
+        ws.merge(row_num, row_num, 2, l, styleNBL)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 500
+ 
 
 
 
@@ -560,12 +612,7 @@ def export_protocol_xls_template(request, pk):
     columns = [
         '3 Испытатель: ',
         '3 Испытатель: ',
-        note.performer_rm,
-        note.performer_rm,
-        note.performer_rm,
-        note.performer_rm,
-        note.performer_rm,
-        note.performer_rm,
+        f'{note.performer.profile.userposition} {note.performer_rm}',
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], style6)
@@ -573,6 +620,14 @@ def export_protocol_xls_template(request, pk):
     for col_num in range(1, len(columns)):
         ws.write(row_num, col_num, columns[col_num], style7)
         ws.merge(row_num, row_num, 2, 7, style7)
+
+    row_num +=1
+    columns = [
+        f'Результаты испытаний {note.name_rm}',
+    ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNBE)
+        ws.merge(row_num, row_num, 0, l, styleNBE)
         
     
     
