@@ -91,7 +91,7 @@ styleNBL.borders = b1
 #простой шрифт, двойная граница, выравнивание по центру
 styleNdBE = xlwt.XFStyle()
 styleNdBE.font.height = 20 * 8
-stylstyleNdBEe10.font.name = 'Times New Roman'
+styleNdBE.font.name = 'Times New Roman'
 styleNdBE.alignment = al1
 styleNdBE.alignment.wrap = 1
 styleNdBE.borders = b2
