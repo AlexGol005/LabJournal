@@ -243,8 +243,8 @@ def export_protocol_xls_template(request, pk):
     ws.col(1).width = 5000
     ws.col(2).width = 3000
     ws.col(3).width = 3000
-    ws.col(4).width = 3500
-    ws.col(5).width = 3500
+    ws.col(4).width = 3200
+    ws.col(5).width = 3200
     ws.col(6).width = 2000
     ws.col(7).width = 2000
     ws.col(8).width = 2000
