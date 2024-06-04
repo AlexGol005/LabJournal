@@ -768,13 +768,9 @@ def export_protocol_xls_template(request, pk):
         qseria = Clorinesalts.objects.all().filter(seria=a). \
         values_list(
         'numberexample',
-        'numberexample',
         'ndocument',
-        'x1',
         'x1', 
         'x2', 
-        'x_avg',
-        'x_avg',
         'x_avg',
         'repr1comma',
         'Rep2'
