@@ -313,9 +313,9 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNnBL)
         ws.merge(row_num, row_num, af, l, styleNnBE)
 
-    # ws.insert_bitmap('logo.bmp', 0, 0)
-    ws.insert_bitmap('logo.bmp', 0, 8)
-    ws.col(5).width = 8 * 256
+
+    ws.insert_bitmap('logo.bmp', 0, 0)
+    ws.col(1).width = 8 * 256
 
     row_num +=2
     columns = [
