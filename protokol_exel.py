@@ -746,6 +746,7 @@ def export_protocol_xls_template(request, pk):
         '№',
         'Номер экземпляра',
         'Показатель, ед. изм',
+        'Показатель, ед. изм',
         'Метод испытаний',
         'Используемое оборудование и средства измерений (основные), информация об их поверке/аттестации/ калибровке (градуировке) с указанием стандартных образцов и эталонов, примененных для этой цели (метрологическая прослеживаемость результатов измерений)',
         'Результат измерений',
@@ -760,9 +761,9 @@ def export_protocol_xls_template(request, pk):
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], styleNBE)
-            ws.merge(row_num, row_num, 2, 5, styleNBE)
+            ws.merge(row_num, row_num, 1, 2, styleNBE)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 1050
+        ws.row(row_num).height = 1100
 
         a = note.seria
         qseria = Clorinesalts.objects.all().filter(seria=a). \
