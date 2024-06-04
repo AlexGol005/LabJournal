@@ -243,15 +243,15 @@ def export_protocol_xls_template(request, pk):
     ws.col(2).width = 3000
     ws.col(3).width = 3000
     ws.col(4).width = 5000
-    ws.col(5).width = 1500
-    ws.col(6).width = 1500
-    ws.col(7).width = 1500
-    ws.col(8).width = 1500
-    ws.col(9).width = 1500
-    ws.col(10).width = 1500
-    ws.col(11).width = 1500
-    ws.col(12).width = 3500
-    ws.col(13).width = 3500
+    ws.col(5).width = 5000
+    ws.col(6).width = 2000
+    ws.col(7).width = 2000
+    ws.col(8).width = 2000
+    ws.col(9).width = 2000
+    ws.col(10).width = 2000
+    ws.col(11).width = 2000
+    ws.col(12).width = 2000
+    ws.col(13).width = 2000
 
 
     Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
@@ -746,8 +746,8 @@ def export_protocol_xls_template(request, pk):
         '№',
         'Номер экземпляра',
         'Показатель, ед. изм',
-        'Показатель, ед. изм',
         'Метод испытаний',
+        'Используемое оборудование и средства измерений (основные), информация об их поверке/аттестации/ калибровке (градуировке) с указанием стандартных образцов и эталонов, примененных для этой цели (метрологическая прослеживаемость результатов измерений)',
         'Используемое оборудование и средства измерений (основные), информация об их поверке/аттестации/ калибровке (градуировке) с указанием стандартных образцов и эталонов, примененных для этой цели (метрологическая прослеживаемость результатов измерений)',
         'Результат измерений',
         'X1',
@@ -761,7 +761,7 @@ def export_protocol_xls_template(request, pk):
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], styleNBE)
-            ws.merge(row_num, row_num, 1, 2, styleNBE)
+            ws.merge(row_num, row_num, 4, 5, styleNBE)
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 1100
 
