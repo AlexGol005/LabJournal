@@ -314,8 +314,8 @@ def export_protocol_xls_template(request, pk):
         ws.merge(row_num, row_num, af, l, styleNnBE)
 
 
-    ws.insert_bitmap('logo.bmp', 0, 0)
-    ws.col(1).width = 8 * 256
+    ws.insert_bitmap('logo.bmp', 0, 0, 6, 4)
+
 
     row_num +=2
     columns = [
