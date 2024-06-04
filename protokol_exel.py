@@ -238,29 +238,26 @@ def export_protocol_xls_template(request, pk):
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('protocol', cell_overwrite_ok=True)
 
-    ws.col(0).width = 1400
+    ws.col(0).width = 1200
     ws.col(1).width = 5000
-    ws.col(2).width = 3000
-    ws.col(3).width = 3000
+    ws.col(2).width = 2000
+    ws.col(3).width = 2000
     ws.col(4).width = 5000
-    ws.col(5).width = 1900
+    ws.col(5).width = 2000
     ws.col(6).width = 1900
     ws.col(7).width = 1900
     ws.col(8).width = 1900
     ws.col(9).width = 1900
-    ws.col(10).width = 3000
-    ws.col(11).width = 3000
+    ws.col(10).width = 2000
+    ws.col(11).width = 2000
     ws.col(12).width = 3500
     ws.col(13).width = 3500
-
-
-    
 
 
     Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
     ws.insert_bitmap('logo.bmp', 0, 0)
     ws.left_margin = 0
-    ws.header_str = b'&F c. &P  '
+    ws.header_str = b''
     ws.footer_str = b' '
 
 
@@ -761,6 +758,7 @@ def export_protocol_xls_template(request, pk):
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], styleNBE)
+            ws.merge(row_num, row_num, 2, 5, styleNBE)
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 1050
 
@@ -776,8 +774,8 @@ def export_protocol_xls_template(request, pk):
         'Rep2'
         )
         
-        for row in qseria:
-            row_num += 1
+        row_num += 1
+        for row in qseria:   
             for col_num in range(8):
                 ws.write(row_num, col_num, columns[col_num], styleNBE)
 
