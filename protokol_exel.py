@@ -778,11 +778,10 @@ def export_protocol_xls_template(request, pk):
         
         for row in qseria:
             row_num += 1
-            for col_num in range(2, l):
-                ws.write(row_num, col_num + 2, row[col_num], styleNBE)
-        counthe = row_num
-            
-        row_num1 = count1 + 2
+            for col_num in range(8):
+                ws.write(row_num, col_num, columns[col_num], styleNBE)
+
+        row_num1 = count1 + 8
         columns = [
         attcharacteristic,
         attcharacteristic,
@@ -791,7 +790,7 @@ def export_protocol_xls_template(request, pk):
             ws.write(row_num1, col_num, columns[col_num], style8)
             ws.merge(row_num1, counthe, 0, 1, style8)
 
-        row_num2 = count1 + 2
+        row_num2 = count1 + 8
         columns = [
         note.repr1comma,
         ]
