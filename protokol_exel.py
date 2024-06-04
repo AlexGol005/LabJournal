@@ -366,6 +366,8 @@ def export_protocol_xls_template(request, pk):
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], styleNnBE)
         ws.merge(row_num, row_num, 0, l, styleNnBE)
+    ws.row(row_num).height_mismatch = True
+    ws.row(row_num).height = 400
 
     row_num +=1
     columns = [
@@ -381,7 +383,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 2, l, styleNBL)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+    ws.row(row_num).height = 400
 
     row_num +=1
     columns = [
@@ -397,7 +399,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 2, l, styleNBL)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+    ws.row(row_num).height = 400
 
     row_num +=1
     columns = [
@@ -413,7 +415,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 2, l, styleNBL)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+    ws.row(row_num).height = 400
 
     row_num +=1
     columns = [
@@ -429,7 +431,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 2, l, styleNBL)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+    ws.row(row_num).height = 400
 
     row_num +=1
     columns = [
@@ -445,7 +447,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 2, l, styleNBL)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+    ws.row(row_num).height = 400
 
     row_num +=1
     columns = [
@@ -461,7 +463,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 2, l, styleNBL)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+    ws.row(row_num).height = 400
 
     row_num +=1
     columns = [
@@ -477,7 +479,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 2, l, styleNBL)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+    ws.row(row_num).height = 400
 
     row_num +=1
     columns = [
@@ -493,7 +495,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 2, l, styleNBL)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+    ws.row(row_num).height = 400
 
     row_num +=1
     columns = [
@@ -509,7 +511,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 2, l, styleNBL)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+    ws.row(row_num).height = 400
 
     row_num +=1
     columns = [
@@ -525,7 +527,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 2, l, styleNBL)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+    ws.row(row_num).height = 400
 
     row_num +=1
     columns = [
@@ -541,7 +543,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 2, l, styleNBL)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+    ws.row(row_num).height = 400
 
     pressure = str(meteo.pressure).replace('.', ',')
     humidity = str(meteo.humidity).replace('.', ',')
@@ -568,7 +570,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 3, l, styleNBL)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+    ws.row(row_num).height = 400
 
     row_num +=1
     columns = [
@@ -583,7 +585,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 3, l, styleNBL)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+    ws.row(row_num).height = 400
 
     row_num +=1
     columns = [
@@ -598,7 +600,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 3, l, styleNBL)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+    ws.row(row_num).height = 400
 
     row_num +=1
     columns = [
@@ -614,7 +616,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 2, l, styleNBL)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 1000
+    ws.row(row_num).height = 900
 
     row_num +=1
     columns = [
@@ -630,7 +632,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 2, l, styleNBL)
     ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 500
+    ws.row(row_num).height = 300
 
     row_num +=3
     columns = [
@@ -638,6 +640,7 @@ def export_protocol_xls_template(request, pk):
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], styleNnBR)
+        ws.merge(row_num, row_num, 0, l, styleNnBR)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 700
  
@@ -651,28 +654,6 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
         ws.merge(row_num, row_num, 0, l, styleNBE)
         
-
-
-    row_num +=1
-    columns = [
-        '10 Средства измерений:  ',
-        '10 Средства измерений:  ',
-        note.equipment1,
-        note.equipment1,
-        note.equipment1,
-        note.equipment1,
-        note.equipment1,
-        note.equipment1,
-    ]
-    for col_num in range(2):
-        ws.write(row_num, col_num, columns[col_num], style6)
-        ws.merge(row_num, row_num, 0, 1, style6)
-    for col_num in range(1, len(columns)):
-        ws.write(row_num, col_num, columns[col_num], style7)
-        ws.merge(row_num, row_num, 2, 7, style7)
-    ws.row(row_num).height_mismatch = True
-    ws.row(row_num).height = 400
-
     count1=row_num
 
     if (note.seria == False or note.seria == '0') and note.aim != 'Мониторинг стабильности':
