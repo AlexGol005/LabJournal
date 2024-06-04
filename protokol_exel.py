@@ -240,7 +240,7 @@ def export_protocol_xls_template(request, pk):
     ws = wb.add_sheet('protocol', cell_overwrite_ok=True)
 
     ws.col(0).width = 1000
-    ws.col(1).width = 4600
+    ws.col(1).width = 5000
     ws.col(2).width = 3000
     ws.col(3).width = 3000
     ws.col(4).width = 2000
