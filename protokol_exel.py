@@ -260,7 +260,7 @@ def export_protocol_xls_template(request, pk):
     ]
     l = len(columns) - 1
     af = len(columns) - 2
-    for col_num in range(12, len(columns)):
+    for col_num in range(af, len(columns)):
         ws.write(row_num, col_num, columns[col_num], styleNnBL)
         ws.merge(row_num, row_num, af, l , styleNnBL)
     ws.row(row_num).height_mismatch = True
@@ -286,9 +286,9 @@ def export_protocol_xls_template(request, pk):
         ]
     mp = len(columns) - 4
     mp1 = mp + 1
-    for col_num in range(10, 11):
+    for col_num in range(mp, mp1):
         ws.write(row_num, col_num, columns[col_num], styleNnBE)
-    for col_num in range(len(columns)):
+    for col_num in range(af, len(columns)):
         ws.write(row_num, col_num, columns[col_num], styleNnBL)
         ws.merge(row_num, row_num, af, l, styleNnBE)
 
@@ -541,12 +541,13 @@ def export_protocol_xls_template(request, pk):
     ]
     hei = row_num + 5
     hei1 = row_num + 4
+    hei2 = row_num + 3
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
         ws.merge(row_num, hei, 0, 0, styleNBE)
     for col_num in range(1, 2):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
-        ws.merge(row_num, hei1, 1, 1, styleNBE)
+        ws.merge(row_num, hei2, 1, 1, styleNBE)
     for col_num in range(2, len(columns)):
         ws.write(row_num, col_num, columns[col_num], styleNBL)
         ws.merge(row_num, row_num, 2, l, styleNBL)
