@@ -240,22 +240,22 @@ def export_protocol_xls_template(request, pk):
 
     ws.col(0).width = 1200
     ws.col(1).width = 5000
-    ws.col(2).width = 2000
-    ws.col(3).width = 2000
+    ws.col(2).width = 3000
+    ws.col(3).width = 3000
     ws.col(4).width = 5000
-    ws.col(5).width = 2000
-    ws.col(6).width = 1900
-    ws.col(7).width = 1900
-    ws.col(8).width = 1900
-    ws.col(9).width = 1900
-    ws.col(10).width = 2000
-    ws.col(11).width = 2000
+    ws.col(5).width = 1500
+    ws.col(6).width = 1500
+    ws.col(7).width = 1500
+    ws.col(8).width = 1500
+    ws.col(9).width = 1500
+    ws.col(10).width = 1500
+    ws.col(11).width = 1500
     ws.col(12).width = 3500
     ws.col(13).width = 3500
 
 
     Image.open(company.imglogoadress_mini.path).convert("RGB").save('logo.bmp')
-    ws.insert_bitmap('logo.bmp', 0, 0)
+    
     ws.left_margin = 0
     ws.header_str = b''
     ws.footer_str = b' '
@@ -311,6 +311,8 @@ def export_protocol_xls_template(request, pk):
     for col_num in range(af, len(columns)):
         ws.write(row_num, col_num, columns[col_num], styleNnBL)
         ws.merge(row_num, row_num, af, l, styleNnBE)
+
+    ws.insert_bitmap('logo.bmp', 0, 0)
 
     row_num +=2
     columns = [
@@ -766,22 +768,34 @@ def export_protocol_xls_template(request, pk):
         qseria = Clorinesalts.objects.all().filter(seria=a). \
         values_list(
         'numberexample',
-        'ndocument',
-        'x1', 
-        'x2', 
+        'x1',
+        'x2',    
         'x_avg',
-        'repr1comma',
-        'Rep2'
+        'factconvergencecomma',
         )
         
-        row_num += 1
-        for row in qseria:   
-            for col_num in range(8):
-                ws.write(row_num, col_num, columns[col_num], styleNBE)
+        for row in qseria:
+            row_num += 1
+            for col_num in range(0, 5):
+                ws.write(row_num, col_num + 2, row[col_num], style8)
+        counthe = row_num
+            
+        row_num1 = count1 + 2
+        columns = [
+        attcharacteristic,
+        attcharacteristic,
+        ]
+        for col_num in range(2):
+            ws.write(row_num1, col_num, columns[col_num], style8)
+            ws.merge(row_num1, counthe, 0, 1, style8)
 
-
-
-
+        row_num2 = count1 + 2
+        columns = [
+        note.repr1comma,
+        ]
+        for col_num in range(1):
+            ws.write(row_num2, col_num + 7, columns[col_num], style8)
+            ws.merge(row_num2, counthe, 7, 7, style8)
 
     row_num +=2
     columns = [
