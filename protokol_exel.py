@@ -656,6 +656,8 @@ def export_protocol_xls_template(request, pk):
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 400
 
+    count1=row_num
+
     if (note.seria == False or note.seria == '0') and note.aim != 'Мониторинг стабильности':
 
         row_num +=1
