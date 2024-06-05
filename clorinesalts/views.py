@@ -51,6 +51,10 @@ class Constants:
     SearchSeriaForm = SearchSeriaForm
     SearchDateForm = SearchDateForm
 
+def export_protocol_xls_template_1(MODEL):
+    export_protocol_xls_template(request, pk)
+
+
 
 class ProtocolbuttonView(Constants, ProtocolbuttonView):
     """ Выводит кнопку для формирования протокола """
