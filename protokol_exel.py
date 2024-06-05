@@ -762,6 +762,15 @@ def export_protocol_xls_template(request, pk):
         for col_num in range(1):
             for row_num in range(row_num, 10):
                 ws.write(row_num, col_num, f'{row_num}', styleNBE)
+
+        row_num +=2
+        columns = [
+        attcharacteristic,
+        ]
+        for col_num in range(1):
+            ws.write(row_num, col_num+4, columns[col_num], styleNBE)
+            ws.merge(row_num, row_quantity, 0, 0, styleNBE)
+
         
 
     
