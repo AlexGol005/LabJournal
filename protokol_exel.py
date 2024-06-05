@@ -141,6 +141,21 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
     equipment_list = []
     if note.equipment_text:
         equipment_list.append(note.equipment_text)
+        equipment_list.append(note.equipment_text)
+    if note.equipment1:
+        note_e1 = ViscosityMJL.objects.\
+        annotate(equipment1=Concat('equipment1__charakters__name',
+                                        Value(' тип '), 'equipment1__charakters__typename',
+                                        Value(' , зав. № '), 'equipment1__equipment__lot',
+                                        Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
+                                        Value(' от '), 'equipment1__newdate',
+                                        Value(' действительно до '), 'equipment1__newdatedead',
+                                        Value('; \n'),
+                                        )).get(pk=num)
+        equipment_list.append(note_e1.equipment1)
+        
+    equipment_set = '; '.join(equipment_list)
+        
     equipment_set = '; '.join(equipment_list)
     
     x1 = Decimal(note.x1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
