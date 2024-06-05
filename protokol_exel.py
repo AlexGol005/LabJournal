@@ -749,14 +749,17 @@ def export_protocol_xls_template(request, pk):
         qseria1 = Clorinesalts.objects.all().filter(seria=a). \
         values_list(
         'numberexample',
+        'x1',
+        'x2',
+        'x_avg',
         )
         
         for row in qseria1:
-            row_quantity = 0
             row_num += 1
             for col_num in range(0, 1):
                 ws.write(row_num, col_num + 1, row[col_num], styleNBE)
-                row_quantity += 1
+            for col_num in range(1, 4):
+                ws.write(row_num, col_num + 4, row[col_num], styleNBE)
             counthe = row_num
                 
             
