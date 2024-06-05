@@ -139,10 +139,12 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
         get(date__exact=note.date, roomnumber__roomnumber__exact=note.room)
     
     equipment_list = []
-    if note.equipment_text:
+    try note.equipment_text:
         equipment_list.append(note.equipment_text)
-        equipment_list.append(note.equipment_text)
-    if note.equipment1:
+        
+    except:
+        pass
+    try note.equipment1:
         note_e1 = ViscosityMJL.objects.\
         annotate(equipment1=Concat('equipment1__charakters__name',
                                         Value(' тип '), 'equipment1__charakters__typename',
@@ -153,10 +155,12 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
                                         Value('; \n'),
                                         )).get(pk=num)
         equipment_list.append(note_e1.equipment1)
+        except:
+            pass
         
     equipment_set = '; '.join(equipment_list)
         
-    equipment_set = '; '.join(equipment_list)
+
     
     x1 = Decimal(note.x1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
     x2 = Decimal(note.x2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
