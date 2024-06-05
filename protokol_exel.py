@@ -320,19 +320,6 @@ def export_protocol_xls_template(request, pk):
     row_num +=2
     columns = [
         nameprot,
-        nameprot,
-        nameprot,
-        nameprot,
-        nameprot,
-        nameprot,
-        nameprot,
-        nameprot,
-        nameprot,
-        nameprot,
-        nameprot,
-        nameprot,
-        nameprot,
-        nameprot,
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], styleNnBE)
@@ -342,19 +329,6 @@ def export_protocol_xls_template(request, pk):
     row_num += 1
     dp = get_datenow()
     columns = [
-        f'от   {dp}',
-        f'от   {dp}',
-        f'от   {dp}',
-        f'от   {dp}',
-        f'от   {dp}',
-        f'от   {dp}',
-        f'от   {dp}',
-        f'от   {dp}',
-        f'от   {dp}',
-        f'от   {dp}',
-        f'от   {dp}',
-        f'от   {dp}',
-        f'от   {dp}',
         f'от   {dp}',
     ]
     for col_num in range(len(columns)):
@@ -770,38 +744,17 @@ def export_protocol_xls_template(request, pk):
         ws.row(row_num).height = 1400
 
         a = note.seria
-        qseria = Clorinesalts.objects.all().filter(seria=a). \
+        qseria1 = Clorinesalts.objects.all().filter(seria=a). \
         values_list(
         'numberexample',
-        'x1',
-        'x2',    
-        'x_avg',
-        'factconvergencecomma',
         )
         
-        for row in qseria:
+        for row in qseria1:
             row_num += 1
-            for col_num in range(0, 5):
-                ws.write(row_num, col_num + 2, row[col_num], style8)
-        counthe = row_num
-            
-        row_num1 = count1 + 2
-        columns = [
-        attcharacteristic,
-        attcharacteristic,
-        ]
-        for col_num in range(2):
-            ws.write(row_num1, col_num, columns[col_num], style8)
-            ws.merge(row_num1, counthe, 0, 1, style8)
+            for col_num in range(1, 2):
+                ws.write(row_num, col_num + 2, row[col_num], styleNBE)
 
-        row_num2 = count1 + 2
-        columns = [
-        note.repr1comma,
-        ]
-        for col_num in range(1):
-            ws.write(row_num2, col_num + 7, columns[col_num], style8)
-            ws.merge(row_num2, counthe, 7, 7, style8)
-
+    
     row_num +=2
     columns = [
         'Дополнительные сведения: ',
