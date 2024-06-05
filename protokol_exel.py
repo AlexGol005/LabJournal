@@ -759,7 +759,7 @@ def export_protocol_xls_template(request, pk):
             for col_num in range(0, 1):
                 ws.write(row_num, col_num + 1, row[col_num], styleNBE)
             for col_num in range(1, 4):
-                ws.write(row_num, col_num + 4, row[col_num], styleNBE)
+                ws.write(row_num, col_num + 6, row[col_num], styleNBE)
             counthe = row_num
                 
             
