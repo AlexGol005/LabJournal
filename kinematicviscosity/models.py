@@ -105,6 +105,14 @@ class ViscosityMJL(models.Model):
                                   blank=True, null=True)
     numberexample = models.CharField('Номер(а) экземпляра', max_length=100, default=' ', null=True,  blank=True)
     seria = models.CharField('Номер серии измерений (для однородности)', max_length=100, default='0', null=True)
+    index = models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
+    x1 = models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
+    x2 = models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
+    x_avg = models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
+    repr1= models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
+    factconvergence= models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
+    repr1comma= models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
+    Rep2= models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
 
 
     def save(self, *args, **kwargs):
