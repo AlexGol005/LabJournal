@@ -807,4 +807,3 @@ def export_protocol_xls_template(pk, MATERIAL, MODEL, constitoptional, aimoption
     ws.row(row_num).height = 700
 
     wb.save(response)
-    return response
