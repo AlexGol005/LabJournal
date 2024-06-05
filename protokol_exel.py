@@ -864,7 +864,7 @@ def export_protocol_xls_template(request, pk):
         ws.write(row_num, col_num, columns[col_num], styleKnBE)
         ws.merge(row_num, row_num, 0, l, styleKnBE)
 
-    row_num +=15
+    row_num +=12
     columns = [
         f'Страница №2\nВсего страниц 2',
     ]
