@@ -37,6 +37,7 @@ class Constants:
 # конец блока для всех журналов
 
 def export_protocol_xls_template_1(request, pk):
+    pk=pk
     response = export_protocol_xls_template(pk, MATERIAL, MODEL, constitoptional, aimoptional, conclusionoptional, attcharacteristic)
     return response
 
