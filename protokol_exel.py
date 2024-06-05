@@ -682,7 +682,7 @@ def export_protocol_xls_template(pk, MATERIAL, MODEL, constitoptional, aimoption
         
         
         a = note.seria
-        qseria1 = Clorinesalts.objects.all().filter(seria=a). \
+        qseria1 = MODEL.objects.all().filter(seria=a). \
         values_list(
         'numberexample',
         'x1',
