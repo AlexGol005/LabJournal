@@ -767,8 +767,8 @@ def export_protocol_xls_template(request, pk):
         attcharacteristic,
         ]
         for col_num in range(2):
-            ws.write(row_num1, col_num, columns[col_num], styleNBE)
-            ws.merge(row_num1, counthe, 0, 1, styleNBE)
+            ws.write(row_num1, col_num + 2, columns[col_num], styleNBE)
+            ws.merge(row_num1, counthe, 0, 0, styleNBE)
 
 
         
