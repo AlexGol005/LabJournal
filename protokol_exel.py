@@ -139,12 +139,14 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
         get(date__exact=note.date, roomnumber__roomnumber__exact=note.room)
     
     equipment_list = []
-    try note.equipment_text:
+    try: 
+        note.equipment_text
         equipment_list.append(note.equipment_text)
         
     except:
         pass
-    try note.equipment1:
+    try:
+        note.equipment1
         note_e1 = ViscosityMJL.objects.\
         annotate(equipment1=Concat('equipment1__charakters__name',
                                         Value(' тип '), 'equipment1__charakters__typename',
