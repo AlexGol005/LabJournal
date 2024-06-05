@@ -20,13 +20,6 @@ from equipment.models import *
 from utils import *
 from textconstants import *
 
-
-
-
-
-
-
-Model=Clorinesalts
 #стили ячеек
 brd1 = Borders()
 brd1.left = 1
