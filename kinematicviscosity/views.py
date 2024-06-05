@@ -19,7 +19,7 @@ from .j_constants import *
 from utils import *
 from textconstants import *
 from .constvisc import *
-
+from protokol_exel import *
 MODEL = ViscosityMJL
 COMMENTMODEL = Comments
 
