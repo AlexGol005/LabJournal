@@ -748,6 +748,10 @@ def export_protocol_xls_template(request, pk):
         qseria1 = Clorinesalts.objects.all().filter(seria=a). \
         values_list(
         'numberexample',
+        'numberexample',
+        'numberexample',
+        'numberexample',
+        'numberexample',
         )
         
         for row in qseria1:
