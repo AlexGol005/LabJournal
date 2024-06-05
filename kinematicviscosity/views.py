@@ -36,7 +36,7 @@ class Constants:
     SearchDateForm = SearchDateForm
 # конец блока для всех журналов
 
-def export_protocol_xls_template_1(request, pk):
+def export_protocol_xls_template_1(request, pk, MATERIAL, MODEL, constitoptional, aimoptional, conclusionoptional, attcharacteristic):
     response = export_protocol_xls_template(request, pk, MATERIAL, MODEL, constitoptional, aimoptional, conclusionoptional, attcharacteristic)
     return response
 
