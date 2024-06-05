@@ -745,10 +745,8 @@ def export_protocol_xls_template(request, pk):
         ws.row(row_num).height = 1400
 
         
-        a = row_num
-        for col_num in range(1):
-            for row_num in range(row_num, a + 1):
-                ws.write(row_num, col_num, f'{row_num - 3}', styleNBE)
+        begin = row_num + 1
+
         
         
         a = note.seria
@@ -768,7 +766,10 @@ def export_protocol_xls_template(request, pk):
                 ws.write(row_num, col_num + 6, row[col_num], styleNBE)
             counthe = row_num
                 
-            
+        for col_num in range(1):
+            for row_num in range(begin, counthe):
+                ws.write(row_num, col_num, f'{row_num - 25}', styleNBE) 
+                
         Rep2 = str(note.Rep2).replace('.',',')
         row_num1 = count1 + 2
         columns = [
