@@ -137,7 +137,9 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
                                         Value(' действительно до '), 'equipment2__newdatedead',
                                         )).\
         get(date__exact=note.date, roomnumber__roomnumber__exact=note.room)
+    
 
+   
     x1 = Decimal(note.x1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
     x2 = Decimal(note.x2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
     measureresult = note.x_avg.replace('.',',')
