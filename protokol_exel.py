@@ -657,8 +657,8 @@ def export_protocol_xls_template(request, pk):
         row_num +=1
     
         columns = [
-            attcharacteristic,
-            attcharacteristic,
+            f'{attcharacteristic}, мг/дм3',
+            f'{attcharacteristic}, мг/дм3',
             note.numberexample,
             x1,
             x2,
