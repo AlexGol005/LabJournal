@@ -145,7 +145,7 @@ def export_protocol_xls_template(pk, MATERIAL, MODEL, constitoptional, aimoption
     r = str(note.repr1).replace('.',',')
     
     for i in range(len(MATERIAL)):
-        if note.name == MATERIAL[i][0]:
+        if str(note.name)[0:3] == MATERIAL[i][0]:
             constit = constitoptional[i]
 
 
