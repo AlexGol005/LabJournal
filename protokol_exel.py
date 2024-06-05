@@ -728,7 +728,7 @@ def export_protocol_xls_template(request, pk):
         'Метод испытаний',
         'Используемое оборудование и средства измерений (основные), информация об их поверке/аттестации/ калибровке (градуировке) с указанием стандартных образцов и эталонов, примененных для этой цели (метрологическая прослеживаемость результатов измерений)',
         'Используемое оборудование и средства измерений (основные), информация об их поверке/аттестации/ калибровке (градуировке) с указанием стандартных образцов и эталонов, примененных для этой цели (метрологическая прослеживаемость результатов измерений)',
-        'Результат измерений',
+        'Используемое оборудование и средства измерений (основные), информация об их поверке/аттестации/ калибровке (градуировке) с указанием стандартных образцов и эталонов, примененных для этой цели (метрологическая прослеживаемость результатов измерений)',
         'X1',
         'X2',
         'Xср',
@@ -740,7 +740,7 @@ def export_protocol_xls_template(request, pk):
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], styleNBE)
-            ws.merge(row_num, row_num, 4, 5, styleNBE)
+            ws.merge(row_num, row_num, 4, 6, styleNBE)
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 1400
 
@@ -760,17 +760,28 @@ def export_protocol_xls_template(request, pk):
             counthe = row_num
                 
             
-
+        Rep2 = str(note.Rep2).replace('.',',')
         row_num1 = count1 + 2
         columns = [
         attcharacteristic,
         note.ndocument,
         note.equipment1,
-        
+        '-',
+        '-',
+        note.repr1comma, 
+        Rep2         
         ]
         for col_num in range(3):
             ws.write(row_num1, col_num + 2, columns[col_num], styleNBE)
             ws.merge(row_num1, counthe, 2, 2, styleNBE)
+            ws.merge(row_num1, counthe, 3, 3, styleNBE)
+            ws.merge(row_num1, counthe, 4, 6, styleNBE)
+        for col_num in range(4, 7):
+            ws.write(row_num1, col_num + 7, columns[col_num], styleNBE)
+            ws.merge(row_num1, counthe, 7, 7, styleNBE)
+            ws.merge(row_num1, counthe, 8, 8, styleNBE)
+            ws.merge(row_num1, counthe, 9, 9, styleNBE)
+            ws.merge(row_num1, counthe, 10, 10, styleNBE)
 
 
         
