@@ -138,8 +138,11 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
                                         )).\
         get(date__exact=note.date, roomnumber__roomnumber__exact=note.room)
     
-
-   
+    equipment_list = []
+    if note.equipment_text:
+        equipment_list.append(note.equipment_text)
+    equipment_set = '; '.join(equipment_list)
+    
     x1 = Decimal(note.x1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
     x2 = Decimal(note.x2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
     measureresult = note.x_avg.replace('.',',')
@@ -587,9 +590,9 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
             note.numberexample,
             f'{attcharacteristic}, мг/дм3',
             note.ndocument,
-            note.equipment1,
-            note.equipment1,
-            note.equipment1,
+            equipment_set,
+            equipment_set,
+            equipment_set,
             x1,
             x2,
             note.x_avg,
@@ -636,9 +639,9 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
             note.numberexample,
             f'{attcharacteristic}, мг/дм3',
             note.ndocument,
-            note.equipment1,
-            note.equipment1,
-            note.equipment1,
+            equipment_set,
+            equipment_set,
+            equipment_set,
             x1,
             x2,
             note.x_avg,
@@ -710,7 +713,7 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
         columns = [
         f'{attcharacteristic}, мг/дм3',
         note.ndocument,
-        note.equipment1,
+        equipment_set,
         '-',
         '-',
         note.repr1comma, 
