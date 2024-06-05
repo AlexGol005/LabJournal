@@ -743,6 +743,7 @@ def export_protocol_xls_template(request, pk):
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 1400
 
+        
         a = note.seria
         qseria1 = Clorinesalts.objects.all().filter(seria=a). \
         values_list(
@@ -751,8 +752,8 @@ def export_protocol_xls_template(request, pk):
         
         for row in qseria1:
             row_num += 1
-            for col_num in range(1, 1):
-                ws.write(row_num, col_num, row[col_num], styleNBE)
+            for col_num in range(1, 2):
+                ws.write(row_num, col_num + 1, row[col_num], styleNBE)
 
     
     row_num +=2
