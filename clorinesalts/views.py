@@ -52,7 +52,7 @@ class Constants:
     SearchDateForm = SearchDateForm
 
 def export_protocol_xls_template_1(request, pk):
-    MODEL = MODEL
+    MODEL = Clorinesalts
     pk=pk
     export_protocol_xls_template(request, pk, MODEL)
 
