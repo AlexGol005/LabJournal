@@ -747,7 +747,7 @@ def export_protocol_xls_template(request, pk):
         
         a = row_num
         for col_num in range(1):
-            for row_num in range(4, a + 1):
+            for row_num in range(row_num, a + 1):
                 ws.write(row_num, col_num, f'{row_num - 3}', styleNBE)
         
         
