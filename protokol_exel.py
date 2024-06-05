@@ -632,47 +632,55 @@ def export_protocol_xls_template(request, pk):
         ws.merge(row_num, row_num, 0, l, styleNBE)
         
     count1=row_num
+    Rep2 = str(note.Rep2).replace('.',',')
 
     if (note.seria == False or note.seria == '0') and note.aim != 'Мониторинг стабильности':
 
         row_num +=1
         columns = [
-        'Аттестуемая характеристика',
-        'Аттестуемая характеристика',
+        '№',
         'Номер экземпляра',
-        'Измеренное значение Х1, мг/дм3 ',
-        'Измеренное значение Х2, мг/дм3 ',
-        'Измеренное значение Хср, мг/дм3 ',
-        'Оценка приемлемости измерений, мг/дм3. ',
-        'Норматив контроля, r,мг/дм3 ',
+        'Показатель, ед. изм',
+        'Метод испытаний',
+        'Используемое оборудование и средства измерений (основные), информация об их поверке/аттестации/ калибровке (градуировке) с указанием стандартных образцов и эталонов, примененных для этой цели (метрологическая прослеживаемость результатов измерений)',
+        'Используемое оборудование и средства измерений (основные), информация об их поверке/аттестации/ калибровке (градуировке) с указанием стандартных образцов и эталонов, примененных для этой цели (метрологическая прослеживаемость результатов измерений)',
+        'Используемое оборудование и средства измерений (основные), информация об их поверке/аттестации/ калибровке (градуировке) с указанием стандартных образцов и эталонов, примененных для этой цели (метрологическая прослеживаемость результатов измерений)',
+        'X1',
+        'X2',
+        'Xср',
+        'Характеристика погрешности метода испытаний (при P=0,95)',
+        'Характеристика расширенной неопределенности измерений (при k=2, P=0,95)',
+        'Характеристики прецизионности: повторяемость r',
+        'Характеристики прецизионности: воспроизводимость R'        
         ]
-        for col_num in range(2):
-            ws.write(row_num, col_num, columns[col_num], style9)
-            ws.merge(row_num, row_num, 0, 1, style9)
-        for col_num in range(1, len(columns)):
-            ws.write(row_num, col_num, columns[col_num], style9)
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], styleNBE)
+            ws.merge(row_num, row_num, 4, 6, styleNBE)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 1050
-    
+        ws.row(row_num).height = 1400
+
         row_num +=1
     
         columns = [
-            f'{attcharacteristic}, мг/дм3',
-            f'{attcharacteristic}, мг/дм3',
+            '1',
             note.numberexample,
+            f'{attcharacteristic}, мг/дм3',
+            note.ndocument,
+            note.equipment1,
+            note.equipment1,
+            note.equipment1,
             x1,
             x2,
-            measureresult,
-            acc,
-            r,
+            x_avg,
+            '-',
+            '-',
+            note.repr1comma, 
+            Rep2 
         ]
-        for col_num in range(2):
-            ws.write(row_num, col_num, columns[col_num], style8)
-            ws.merge(row_num, row_num, 0, 1, style8)
-        for col_num in range(2, 3):
-            ws.write(row_num, col_num, columns[col_num], style11)
-        for col_num in range(3, len(columns)):
-            ws.write(row_num, col_num, columns[col_num], style8)
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], styleNBE)
+            ws.merge(row_num, row_num, 4, 6, styleNBE)
+
 
 
     if (note.seria == False or note.seria == '0') and note.aim == 'Мониторинг стабильности':
@@ -735,8 +743,7 @@ def export_protocol_xls_template(request, pk):
         'Характеристика погрешности метода испытаний (при P=0,95)',
         'Характеристика расширенной неопределенности измерений (при k=2, P=0,95)',
         'Характеристики прецизионности: повторяемость r',
-        'Характеристики прецизионности: воспроизводимость R'
-        
+        'Характеристики прецизионности: воспроизводимость R'        
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], styleNBE)
@@ -774,7 +781,7 @@ def export_protocol_xls_template(request, pk):
         Rep2 = str(note.Rep2).replace('.',',')
         row_num1 = count1 + 2
         columns = [
-        attcharacteristic,
+        f'{attcharacteristic}, мг/дм3',
         note.ndocument,
         note.equipment1,
         '-',
