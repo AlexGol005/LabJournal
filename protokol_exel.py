@@ -745,6 +745,12 @@ def export_protocol_xls_template(request, pk):
         ws.row(row_num).height = 1400
 
         
+        a = row_num
+        for col_num in range(1):
+            for row_num in range(4, a + 1):
+                ws.write(row_num, col_num, f'{row_num - 3}', style20)
+        
+        
         a = note.seria
         qseria1 = Clorinesalts.objects.all().filter(seria=a). \
         values_list(
