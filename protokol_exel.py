@@ -776,12 +776,12 @@ def export_protocol_xls_template(request, pk):
             ws.merge(row_num1, counthe, 2, 2, styleNBE)
             ws.merge(row_num1, counthe, 3, 3, styleNBE)
             ws.merge(row_num1, counthe, 4, 6, styleNBE)
-        for col_num in range(4, 7):
+        for col_num in range(3, 7):
             ws.write(row_num1, col_num + 7, columns[col_num], styleNBE)
-            ws.merge(row_num1, counthe, 7, 7, styleNBE)
-            ws.merge(row_num1, counthe, 8, 8, styleNBE)
-            ws.merge(row_num1, counthe, 9, 9, styleNBE)
             ws.merge(row_num1, counthe, 10, 10, styleNBE)
+            ws.merge(row_num1, counthe, 11, 11, styleNBE)
+            ws.merge(row_num1, counthe, 12, 12, styleNBE)
+            ws.merge(row_num1, counthe, 13, 13, styleNBE)
 
 
         
