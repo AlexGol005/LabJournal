@@ -766,9 +766,10 @@ def export_protocol_xls_template(request, pk):
                 ws.write(row_num, col_num + 6, row[col_num], styleNBE)
             counthe = row_num
                 
+        endy = counthe + 1
         for col_num in range(1):
-            for row_num in range(begin, counthe):
-                ws.write(row_num, col_num, f'{row_num - 25}', styleNBE) 
+            for row_num in range(begin, endy):
+                ws.write(row_num, col_num, f'{row_num - 28}', styleNBE) 
                 
         Rep2 = str(note.Rep2).replace('.',',')
         row_num1 = count1 + 2
@@ -797,7 +798,7 @@ def export_protocol_xls_template(request, pk):
         
 
     
-    row_num +=2
+    row_num +=3
     columns = [
         'Дополнительные сведения: ',
         'Дополнительные сведения: ',
