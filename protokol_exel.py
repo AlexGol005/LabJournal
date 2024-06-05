@@ -748,15 +748,11 @@ def export_protocol_xls_template(request, pk):
         qseria1 = Clorinesalts.objects.all().filter(seria=a). \
         values_list(
         'numberexample',
-        'numberexample',
-        'numberexample',
-        'numberexample',
-        'numberexample',
         )
         
         for row in qseria1:
             row_num += 1
-            for col_num in range(0, 5):
+            for col_num in range(0, 0):
                 ws.write(row_num, col_num + 1, row[col_num], styleNBE)
 
     
