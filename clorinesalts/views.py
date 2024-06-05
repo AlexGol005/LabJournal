@@ -51,9 +51,7 @@ class Constants:
     SearchSeriaForm = SearchSeriaForm
     SearchDateForm = SearchDateForm
 
-def export_protocol_xls_template_1(request, pk, MATERIAL, MODEL):
-    MATERIAL = MATERIAL
-    MODEL = MODEL
+def export_protocol_xls_template_1(request, pk):
     export_protocol_xls_template(request, pk, MATERIAL, MODEL)
 
 
