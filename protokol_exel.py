@@ -24,7 +24,7 @@ from textconstants import *
 from clorinesalts.models import Clorinesalts
 from clorinesalts.j_constants import *
 MODEL=Clorinesalts
-note = MODEL.objects.\
+note = ViscosityMJL.objects.\
     annotate(name_rm=Concat(Value('СО '), 'name', Value('('), 'index', Value('), партия '), 'lot')).\
     annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')).get(pk=pk)
 name_rm = note.name_rm
