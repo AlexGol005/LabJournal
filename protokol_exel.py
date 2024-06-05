@@ -764,11 +764,13 @@ def export_protocol_xls_template(request, pk):
         row_num1 = count1 + 2
         columns = [
         attcharacteristic,
-        attcharacteristic,
+        note.ndocument,
+        note.equipment1,
+        
         ]
-        for col_num in range(2):
+        for col_num in range(3):
             ws.write(row_num1, col_num + 2, columns[col_num], styleNBE)
-            ws.merge(row_num1, counthe, 0, 0, styleNBE)
+            ws.merge(row_num1, counthe, 2, 2, styleNBE)
 
 
         
