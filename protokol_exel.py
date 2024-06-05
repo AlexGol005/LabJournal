@@ -779,12 +779,12 @@ def export_protocol_xls_template(request, pk, MATERIAL, MODEL, constitoptional, 
     ]
     for col_num in range(3):
         ws.write(row_num, col_num, columns[col_num], styleNnBL)
-        ws.merge(row_num, row_num, 0, 2, style2)
+        ws.merge(row_num, row_num, 0, 2, styleNnBL)
     for col_num in range(3, 4):
         ws.write(row_num, col_num, columns[col_num], styleNnBL)
     for col_num in range(4, len(columns)):
         ws.write(row_num, col_num, columns[col_num], styleNnBL)
-        ws.merge(row_num, row_num, 4, 7, style7)
+        ws.merge(row_num, row_num, 4, 7, styleNnBL)
     ws.row(row_num).height_mismatch = True
     ws.row(row_num).height = 600
 
