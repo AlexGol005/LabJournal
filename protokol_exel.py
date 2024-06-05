@@ -24,6 +24,11 @@ from textconstants import *
 from clorinesalts.models import Clorinesalts
 from clorinesalts.j_constants import *
 
+note = Model.objects.\
+    annotate(name_rm=Concat(Value('СО '), 'name', Value('('), 'index', Value('), партия '), 'lot')).\
+    annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')).get(pk=pk)
+name_rm = note.name_rm
+
 
 Model=Clorinesalts
 #стили ячеек
@@ -118,89 +123,11 @@ styleKnBE.alignment = al1
 styleKnBE.alignment.wrap = 1
 
 
-style1 = xlwt.XFStyle()
-style1.font.height = 20 * 8
-style1.font.name = 'Times New Roman'
-style1.alignment = al1
-style1.alignment.wrap = 1
-
-style2 = xlwt.XFStyle()
-style2.font.height = 20 * 8
-style2.font.name = 'Times New Roman'
-style2.alignment = al2
-style2.alignment.wrap = 1
-
-style3 = xlwt.XFStyle()
-style3.font.height = 20 * 8
-style3.font.name = 'Times New Roman'
-style3.alignment = al2
-style3.alignment.wrap = 1
-style3.num_format_str = 'DD.MM.YYYY г.'
-
-style4 = xlwt.XFStyle()
-style4.font.height = 20 * 8
-style4.font.name = 'Times New Roman'
-style4.alignment = al2
-style4.alignment.wrap = 1
-style4.font.bold = True
-
-style5 = xlwt.XFStyle()
-style5.font.height = 20 * 8
-style5.font.name = 'Times New Roman'
-style5.alignment = al2
-style5.alignment.wrap = 1
-style5.num_format_str = 'DD.MM.YYYY г.'
-style5.font.bold = True
-
-style6 = xlwt.XFStyle()
-style6.font.height = 20 * 8
-style6.font.name = 'Times New Roman'
-style6.alignment = al3
-style6.alignment.wrap = 1
-style6.font.bold = True
-
-style7 = xlwt.XFStyle()
-style7.font.height = 20 * 8
-style7.font.name = 'Times New Roman'
-style7.alignment = al3
-style7.alignment.wrap = 1
-style7.num_format_str = 'DD.MM.YYYY г.'
-
-style8 = xlwt.XFStyle()
-style8.font.height = 20 * 8
-style8.font.name = 'Times New Roman'
-style8.alignment = al1
-style8.alignment.wrap = 1
-style8.borders = b1
-style5.num_format_str = '0.0000'
-
-style9 = xlwt.XFStyle()
-style9.font.height = 20 * 8
-style9.font.name = 'Times New Roman'
-style9.alignment = al1
-style9.alignment.wrap = 1
-style9.borders = b1
-style9.font.bold = True
-
-
-
-style11 = xlwt.XFStyle()
-style11.font.height = 20 * 8
-style11.font.name = 'Times New Roman'
-style11.alignment = al1
-style11.alignment.wrap = 1
-style11.borders = b1
-style11.num_format_str = '0.00'
 
 
 def export_protocol_xls_template(request, pk):
     """представление для выгрузки протокола испытаний в ексель"""
-    company = CompanyCard.objects.get(pk=1)
-    note = Model.objects.\
-        annotate(name_rm=Concat(Value('СО '), 'name', Value('('), 'index', Value('), партия '), 'lot')).\
-        annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')).get(pk=pk)
-              
-
+    company = CompanyCard.objects.get(pk=1)              
     meteo = MeteorologicalParameters.objects. \
         annotate(equipment_meteo=Concat('equipment1__charakters__name',
                                         Value(' тип '), 'equipment1__charakters__typename',
@@ -669,8 +596,8 @@ def export_protocol_xls_template(request, pk):
             note.equipment1,
             note.equipment1,
             note.equipment1,
-            note.x1,
-            note.x2,
+            x1,
+            x2,
             note.x_avg,
             '-',
             '-',
@@ -687,42 +614,48 @@ def export_protocol_xls_template(request, pk):
 
         row_num +=1
         columns = [
-        'Аттестуемая характеристика',
-        'Аттестуемая характеристика',
-        'Аттестованное значение, Хатт, мг/дм3',
-        'Измеренное значение Х1, мг/дм3 ',
-        'Измеренное значение Х2, мг/дм3 ',
-        'Измеренное значение Хср, мг/дм3 ',
-        'Разница между Хср и Хатт, мг/дм3. ',
-        'Норматив контроля, К, мг/дм3 ',
+        '№',
+        'Номер экземпляра',
+        'Показатель, ед. изм',
+        'Метод испытаний',
+        'Используемое оборудование и средства измерений (основные), информация об их поверке/аттестации/ калибровке (градуировке) с указанием стандартных образцов и эталонов, примененных для этой цели (метрологическая прослеживаемость результатов измерений)',
+        'Используемое оборудование и средства измерений (основные), информация об их поверке/аттестации/ калибровке (градуировке) с указанием стандартных образцов и эталонов, примененных для этой цели (метрологическая прослеживаемость результатов измерений)',
+        'Используемое оборудование и средства измерений (основные), информация об их поверке/аттестации/ калибровке (градуировке) с указанием стандартных образцов и эталонов, примененных для этой цели (метрологическая прослеживаемость результатов измерений)',
+        'X1',
+        'X2',
+        'Xср',
+        'Хаз',
+        'К критерий'
+        'Характеристики прецизионности: повторяемость r',
+        'Характеристики прецизионности: воспроизводимость R'        
         ]
-        for col_num in range(2):
-            ws.write(row_num, col_num, columns[col_num], style9)
-            ws.merge(row_num, row_num, 0, 1, style9)
-        for col_num in range(1, len(columns)):
-            ws.write(row_num, col_num, columns[col_num], style9)
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], styleNBE)
+            ws.merge(row_num, row_num, 4, 6, styleNBE)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 1050
-    
+        ws.row(row_num).height = 1400
+
         row_num +=1
     
         columns = [
-            attcharacteristic,
-            attcharacteristic,
-            note.x_cv,
+            '1',
+            note.numberexample,
+            f'{attcharacteristic}, мг/дм3',
+            note.ndocument,
+            note.equipment1,
+            note.equipment1,
+            note.equipment1,
             x1,
             x2,
-            measureresult,
-            note.cv_convergence,
-            note.crit_K,
+            note.x_avg,
+            '-',
+            '-',
+            note.repr1comma, 
+            Rep2 
         ]
-        for col_num in range(2):
-            ws.write(row_num, col_num, columns[col_num], style8)
-            ws.merge(row_num, row_num, 0, 1, style8)
-        for col_num in range(2, 3):
-            ws.write(row_num, col_num, columns[col_num], style11)
-        for col_num in range(3, len(columns)):
-            ws.write(row_num, col_num, columns[col_num], style8)
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], styleNBE)
+            ws.merge(row_num, row_num, 4, 6, styleNBE)
 
     count1=row_num
     
