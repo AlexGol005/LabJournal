@@ -114,11 +114,11 @@ styleKnBE.alignment.wrap = 1
 
 
 
-def export_protocol_xls_template(pk, MATERIAL, MODEL, constitoptional, aimoptional, conclusionoptional, attcharacteristic)
+def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptional, conclusionoptional, attcharacteristic)
     """представление для выгрузки протокола испытаний в ексель"""
     note = MODEL.objects.\
     annotate(name_rm=Concat(Value('СО '), 'name', Value('('), 'index', Value('), партия '), 'lot')).\
-    annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')).get(pk=pk)
+    annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')).get(pk=num)
     company = CompanyCard.objects.get(pk=1)              
     meteo = MeteorologicalParameters.objects. \
         annotate(equipment_meteo=Concat('equipment1__charakters__name',
