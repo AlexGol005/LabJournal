@@ -751,10 +751,13 @@ def export_protocol_xls_template(request, pk):
         )
         
         for row in qseria1:
+            row_quantity = 0
             row_num += 1
             for col_num in range(0, 1):
                 ws.write(row_num, col_num + 1, row[col_num], styleNBE)
-            row_quantity = row_num
+                row_quantity += 1
+                
+            
         row_num = row_num - row_quantity
         for col_num in range(1):
             for row_num in range(row_num, 10):
