@@ -53,6 +53,7 @@ class Constants:
 
 def export_protocol_xls_template_1(request, pk):
     export_protocol_xls_template(request, pk, MATERIAL, MODEL, constitoptional, aimoptional, conclusionoptional, attcharacteristic)
+    return response
 
 
 
