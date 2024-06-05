@@ -22,6 +22,7 @@ from textconstants import *
 
 #задать: Model
 from clorinesalts.models import Clorinesalts
+from kinematicviscosity.models import ViscosityMJL
 from clorinesalts.j_constants import *
 MODEL=Clorinesalts
 note = ViscosityMJL.objects.\
