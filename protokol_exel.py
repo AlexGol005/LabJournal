@@ -114,7 +114,7 @@ styleKnBE.alignment.wrap = 1
 
 
 
-def export_protocol_xls_template(MODEL):
+def export_protocol_xls_template(request, pk, MODEL):
     """представление для выгрузки протокола испытаний в ексель"""
     note = MODEL.objects.\
     annotate(name_rm=Concat(Value('СО '), 'name', Value('('), 'index', Value('), партия '), 'lot')).\
