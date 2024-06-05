@@ -20,15 +20,10 @@ from equipment.models import *
 from utils import *
 from textconstants import *
 
-#задать: Model
-from clorinesalts.models import Clorinesalts
-from kinematicviscosity.models import ViscosityMJL
-from clorinesalts.j_constants import *
-MODEL=Clorinesalts
-note = ViscosityMJL.objects.\
-    annotate(name_rm=Concat(Value('СО '), 'name', Value('('), 'index', Value('), партия '), 'lot')).\
-    annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')).get(pk=pk)
-name_rm = note.name_rm
+
+
+
+
 
 
 Model=Clorinesalts
@@ -128,6 +123,9 @@ styleKnBE.alignment.wrap = 1
 
 def export_protocol_xls_template(request, pk):
     """представление для выгрузки протокола испытаний в ексель"""
+    note = MODEL.objects.\
+    annotate(name_rm=Concat(Value('СО '), 'name', Value('('), 'index', Value('), партия '), 'lot')).\
+    annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')).get(pk=pk)
     company = CompanyCard.objects.get(pk=1)              
     meteo = MeteorologicalParameters.objects. \
         annotate(equipment_meteo=Concat('equipment1__charakters__name',
