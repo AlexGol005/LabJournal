@@ -716,7 +716,8 @@ def export_protocol_xls_template(request, pk):
         for col_num in range(3, len(columns)):
             ws.write(row_num, col_num, columns[col_num], style8)
 
-
+    count1=row_num
+    
     if  note.seria != '0':
 
         row_num +=1
@@ -756,20 +757,19 @@ def export_protocol_xls_template(request, pk):
             for col_num in range(0, 1):
                 ws.write(row_num, col_num + 1, row[col_num], styleNBE)
                 row_quantity += 1
+            counthe = row_num
                 
             
-        row_num = row_num - row_quantity
-        for col_num in range(1):
-            for row_num in range(row_num, 10):
-                ws.write(row_num, col_num, f'{row_num}', styleNBE)
 
-        row_num +=2
+        row_num1 = count1 + 2
         columns = [
         attcharacteristic,
+        attcharacteristic,
         ]
-        for col_num in range(1):
-            ws.write(row_num, col_num+4, columns[col_num], styleNBE)
-            ws.merge(row_num, row_quantity, 0, 0, styleNBE)
+        for col_num in range(2):
+            ws.write(row_num1, col_num, columns[col_num], styleNBE)
+            ws.merge(row_num1, counthe, 0, 1, styleNBE)
+
 
         
 
