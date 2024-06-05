@@ -23,7 +23,7 @@ from textconstants import *
 #задать: Model
 from clorinesalts.models import Clorinesalts
 from clorinesalts.j_constants import *
-Model=0
+Model=Clorinesalts
 note = Model.objects.\
     annotate(name_rm=Concat(Value('СО '), 'name', Value('('), 'index', Value('), партия '), 'lot')).\
     annotate(performer_rm=Concat('performer__profile__userposition', Value(' '), 'performer__username')).get(pk=pk)
