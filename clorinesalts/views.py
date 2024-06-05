@@ -53,6 +53,7 @@ class Constants:
 
 def export_protocol_xls_template_1(request, pk):
     MODEL = Clorinesalts
+    MATERIAL = MATERIAL
     pk=pk
     export_protocol_xls_template(request, pk, MODEL)
 
