@@ -38,7 +38,7 @@ class Constants:
 
 def export_protocol_xls_template_1(request, pk):
     num = pk
-    response = export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptional, conclusionoptional, attcharacteristic)
+    response = export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimoptional, conclusionoptional, attcharacteristic)
     return response
 
 def SeriaUpdate(request, str):
