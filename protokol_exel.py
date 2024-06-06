@@ -150,8 +150,8 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
         pass
     try:
         note.equipment1
-        note_e1 = ViscosityMJL.objects.\
-        annotate(equipment1=Concat('equipment1__charakters__name',
+        e1 = MODEL.objects.\
+        annotate(eq1=Concat('equipment1__charakters__name',
                                         Value(' тип '), 'equipment1__charakters__typename',
                                         Value(' , зав. № '), 'equipment1__equipment__lot',
                                         Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
@@ -159,7 +159,7 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
                                         Value(' действительно до '), 'equipment1__newdatedead',
                                         Value('; \n'),
                                         )).get(pk=num)
-        equipment_list.append(note_e1.equipment1)
+        equipment_list.append(e1.eq1)
     except:
         pass
         
