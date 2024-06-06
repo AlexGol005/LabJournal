@@ -639,6 +639,8 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
         'Номер экземпляра',
         'Показатель, ед. изм',
         'Метод испытаний',
+         eq_title,
+        eq_title,
         eq_title,
         'X1',
         'X2',
@@ -650,8 +652,9 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], styleNBE)
+            ws.merge(row_num, row_num, 4, 6, styleNBE)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 4400
+        ws.row(row_num).height = 1400
 
         row_num +=1
     
@@ -673,6 +676,7 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], styleNBE)
+            ws.merge(row_num, row_num, 4, 6, styleNBE)
 
 
     count1=row_num
