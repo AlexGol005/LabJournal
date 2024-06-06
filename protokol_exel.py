@@ -205,7 +205,7 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
     except:
         pass
         
-    equipment_set = '; '.join(equipment_list)
+    equipment_set = ' '.join(equipment_list)
         
 
     
