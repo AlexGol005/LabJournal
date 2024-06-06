@@ -139,6 +139,7 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
         get(date__exact=note.date, roomnumber__roomnumber__exact=note.room)
     
     crit_K = note.crit_K
+    ac = 'АЗ'
     equipment_list = []
     try: 
         note.equipment_text
@@ -638,12 +639,11 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
         'Показатель, ед. изм',
         'Метод испытаний',
         'Используемое оборудование и средства измерений (основные), информация об их поверке/аттестации/ калибровке (градуировке) с указанием стандартных образцов и эталонов, примененных для этой цели (метрологическая прослеживаемость результатов измерений)',
-        'Используемое оборудование и средства измерений (основные), информация об их поверке/аттестации/ калибровке (градуировке) с указанием стандартных образцов и эталонов, примененных для этой цели (метрологическая прослеживаемость результатов измерений)',
-        'К критерий',
         'X1',
         'X2',
         'Xср',
         'Хаз',
+        'К критерий',        
         'Характеристика погрешности метода испытаний (при P=0,95)',
         'Характеристика расширенной неопределенности измерений (при k=2, P=0,95)',
         'Характеристики прецизионности: повторяемость r',
@@ -651,7 +651,6 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], styleNBE)
-            ws.merge(row_num, row_num, 4, 5, styleNBE)
         ws.row(row_num).height_mismatch = True
         ws.row(row_num).height = 1400
 
@@ -663,11 +662,12 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
             f'{attcharacteristic}, мг/дм3',
             note.ndocument,
             equipment_set,
-            equipment_set,
-            crit_K,
+            equipment_set,          
             x1,
             x2,
             note.x_avg,
+            ac,
+            crit_K,
             '-',
             '-',
             note.repr1comma, 
