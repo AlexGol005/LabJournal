@@ -171,7 +171,7 @@ class Clorinesalts(models.Model):
     x1 = models.DecimalField('X1', max_digits=8, decimal_places=1, null=True, blank=True)
     x2 = models.DecimalField('X2', max_digits=8, decimal_places=1, null=True, blank=True)
     x_avg = models.CharField('Xср',  max_length=100, null=True, blank=True)
-    x_cv = models.CharField('Xаз',  max_length=100, null=True, blank=True)
+    oldCertifiedValue = models.CharField('Xаз',  max_length=100, null=True, blank=True)
     factconvergence = models.CharField('Расхождение между результатами Х1-Х2, мг/л', max_length=90, null=True, blank=True)
     cv_convergence = models.CharField('Расхождение между результатами Хср-Хаз, мг/л', max_length=90, null=True, blank=True)
     resultMeas = models.CharField('Результат измерений уд/неуд', max_length=100, default='неудовлетворительно',
@@ -228,12 +228,12 @@ class Clorinesalts(models.Model):
             self.cause = '|Х1 - Х2| > r'
         if self.factconvergence <= Decimal(self.repr1):
             self.resultMeas = 'Удовлетворительно'
-        if self.x_cv:
-            self.cv_convergence = str((Decimal(x_avg) - Decimal(self.x_cv)).copy_abs().quantize(Decimal('1.0'), ROUND_HALF_UP)).replace('.',',')
+        if self.oldCertifiedValue:
+            self.cv_convergence = str((Decimal(x_avg) - Decimal(self.oldCertifiedValue)).copy_abs().quantize(Decimal('1.0'), ROUND_HALF_UP)).replace('.',',')
 
         self.repr1comma = self.repr1.replace('.',',')
         self.factconvergencecomma = str(self.factconvergence).replace('.',',')
-        self.x_cv = str(self.x_cv).replace('.',',')
+        self.oldCertifiedValue = str(self.oldCertifiedValue).replace('.',',')
         super(Clorinesalts, self).save(*args, **kwargs)
 
 
