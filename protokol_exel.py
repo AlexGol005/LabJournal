@@ -162,6 +162,48 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
         equipment_list.append(e1.eq1)
     except:
         pass
+    try:
+        note.equipment2
+        e2 = MODEL.objects.\
+        annotate(eq2=Concat('equipment2__charakters__name',
+                                        Value(' тип '), 'equipment1__charakters__typename',
+                                        Value(' , зав. № '), 'equipment1__equipment__lot',
+                                        Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
+                                        Value(' от '), 'equipment1__newdate',
+                                        Value(' действительно до '), 'equipment1__newdatedead',
+                                        Value('; \n'),
+                                        )).get(pk=num)
+        equipment_list.append(e2.eq2)
+    except:
+        pass
+    try:
+        note.equipment3
+        e3 = MODEL.objects.\
+        annotate(eq3=Concat('equipment3__charakters__name',
+                                        Value(' тип '), 'equipment1__charakters__typename',
+                                        Value(' , зав. № '), 'equipment1__equipment__lot',
+                                        Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
+                                        Value(' от '), 'equipment1__newdate',
+                                        Value(' действительно до '), 'equipment1__newdatedead',
+                                        Value('; \n'),
+                                        )).get(pk=num)
+        equipment_list.append(e3.eq3)
+    except:
+        pass
+    try:
+        note.equipment4
+        e4 = MODEL.objects.\
+        annotate(eq4=Concat('equipment4__charakters__name',
+                                        Value(' тип '), 'equipment1__charakters__typename',
+                                        Value(' , зав. № '), 'equipment1__equipment__lot',
+                                        Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
+                                        Value(' от '), 'equipment1__newdate',
+                                        Value(' действительно до '), 'equipment1__newdatedead',
+                                        Value('; \n'),
+                                        )).get(pk=num)
+        equipment_list.append(e4.eq4)
+    except:
+        pass
         
     equipment_set = '; '.join(equipment_list)
         
