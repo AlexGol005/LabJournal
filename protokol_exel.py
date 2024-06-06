@@ -139,13 +139,20 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
         get(date__exact=note.date, roomnumber__roomnumber__exact=note.room)
     
     crit_K = note.crit_K
-    ac = 'АЗ'
-    eq_title = 'Используемое оборудование и средства измерений (основные), информация об их поверке/аттестации/ калибровке (градуировке) с указанием стандартных образцов и эталонов, примененных для этой цели (метрологическая прослеживаемость результатов измерений)',
+
+    
+    if str(note.name).includes("("):
+        name_rm = f'{note.name}, партия {note.lot}'
+    else:
+        name_rm = note.name_rm
+        
+    ac = note.oldCertifiedValue
+
+    
     equipment_list = []
     try: 
         note.equipment_text
-        equipment_list.append(note.equipment_text)
-        
+        equipment_list.append(note.equipment_text)        
     except:
         pass
     try:
@@ -215,8 +222,8 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
     acc = str(Decimal(note.factconvergence).quantize(Decimal('1.0'), ROUND_HALF_UP)).replace('.',',')
     r = str(note.repr1).replace('.',',')
     
-    for i in range(len(MATERIAL)):
-        if str(note.name)[0:2] == MATERIAL[i][0]:
+    for i in range(len(MATERIAL1)):
+        if str(note.name)[0:2] == MATERIAL1[i][0]:
             constit = constitoptional[i]
 
 
@@ -327,7 +334,7 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
 
     row_num +=1
     columns = [
-        note.name_rm,
+        name_rm,
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], styleNnBE)
@@ -355,7 +362,8 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
     columns = [
         '2',
         'Номер аттестата аккредитации и сертификата',
-        'Сертификат № QMS44386 на соответствие требованиям ISO 9001:2015 и сертификат № Q-A01.19.02b на соответствие требованиям ГОСТ Р ИСО 9001–2015, выданные органом по сертификации систем менеджмента качества ООО «АСЕРТ Бюро» '
+        acc_and_cert
+        
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
@@ -371,7 +379,7 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
     columns = [
         '3',
         'Юридический адрес',
-        '190020, Российская Федерация, город Санкт-Петербург, улица Бумажная, дом 17, литер А, офис 472 '
+        adress
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
@@ -387,7 +395,7 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
     columns = [
         '4',
         'Почтовый адрес',
-        '190020, Российская Федерация, город Санкт-Петербург, улица Бумажная, дом 17, литер А, офис 472 '
+        adress
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
@@ -403,7 +411,7 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
     columns = [
         '5',
         'Контактный телефон/факс',
-        '+7 (812) 447-95-10'
+        telefon
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
@@ -419,7 +427,7 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
     columns = [
         '6',
         'E-mail',
-        'info@petroanalytica.ru'
+        email
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
