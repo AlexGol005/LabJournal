@@ -675,7 +675,7 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], styleNBE)
-            ws.merge(row_num, row_num, 4, 5, styleNBE)
+
 
     count1=row_num
     
