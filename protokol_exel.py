@@ -138,6 +138,7 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
                                         )).\
         get(date__exact=note.date, roomnumber__roomnumber__exact=note.room)
     
+    crit_K = note.crit_K
     equipment_list = []
     try: 
         note.equipment_text
