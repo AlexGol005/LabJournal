@@ -652,7 +652,7 @@ def export_protocol_xls_template(num, MATERIAL, MODEL, constitoptional, aimoptio
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], styleNBE)
         ws.row(row_num).height_mismatch = True
-        ws.row(row_num).height = 1400
+        ws.row(row_num).height = 4400
 
         row_num +=1
     
