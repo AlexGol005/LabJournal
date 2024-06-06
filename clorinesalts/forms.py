@@ -87,7 +87,7 @@ class StrJournalCreationForm(forms.ModelForm):
                                          widget=forms.TextInput(attrs={'class': 'form-control',
                                                                        'placeholder': 'X2, мг/л'}
                                                                 ))
-    x_cv = forms.DecimalField(label='АЗ, мг/л',
+    oldCertifiedValue = forms.DecimalField(label='АЗ, мг/л',
                                          max_digits=10, decimal_places=5, required=False,
                                          widget=forms.TextInput(attrs={'class': 'form-control',
                                                                        'placeholder': 'АЗ, мг/л'}
@@ -127,7 +127,7 @@ class StrJournalCreationForm(forms.ModelForm):
             Row(
                 Column('x1', css_class='form-group col-md-6 mb-0'),
                 Column('x2', css_class='form-group col-md-6 mb-0'),
-                Column('x_cv', css_class='form-group col-md-6 mb-0'),
+                Column('oldCertifiedValue', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -154,7 +154,7 @@ class StrJournalCreationForm(forms.ModelForm):
         model = MODEL
         fields = ['index', 'numberexample',
                   'name', 'lot', 'aim',
-                  'range', 'x1', 'x2', 'equipment1', 'maincomment', 'date', 'seria', 'x_cv'
+                  'range', 'x1', 'x2', 'equipment1', 'maincomment', 'date', 'seria', 'oldCertifiedValue'
                   ]
 
 
