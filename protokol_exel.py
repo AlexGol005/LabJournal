@@ -141,7 +141,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     crit_K = note.crit_K
 
     
-    if str(note.name).includes("("):
+    if str(note.name).find("(") != -1:
         name_rm = f'{note.name}, партия {note.lot}'
     else:
         name_rm = note.name_rm
