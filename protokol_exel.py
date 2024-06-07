@@ -149,6 +149,8 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     ac = note.oldCertifiedValue
 
     
+
+    
     equipment_list = []
     try: 
         note.equipment_text
@@ -215,10 +217,17 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     equipment_set = ' '.join(equipment_list)
         
 
-    
-    x1 = Decimal(note.x1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
-    x2 = Decimal(note.x2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
-    measureresult = note.x_avg.replace('.',',')
+    try note.note.x1:
+        if note.x1:
+            x1 = Decimal(note.x1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
+            x2 = Decimal(note.x2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
+            measureresult = note.x_avg.replace('.',',')
+    except:
+        x1 = 'xx1'
+        x2 = 'xx2'
+        measureresult = 'ff'
+
+
     acc = str(Decimal(note.factconvergence).quantize(Decimal('1.0'), ROUND_HALF_UP)).replace('.',',')
     r = str(note.repr1).replace('.',',')
     
