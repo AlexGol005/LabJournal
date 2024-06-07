@@ -624,7 +624,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
 
     row_num +=2
     columns = [
-        f'Результаты испытаний {note.name_rm}',
+        f'Результаты испытаний {name_rm}',
     ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
