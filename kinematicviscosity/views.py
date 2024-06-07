@@ -254,7 +254,7 @@ def filterview(request, pk):
         objects = objects.filter(performer=request.user).filter(fixation__exact=True).order_by('-pk')
     elif pk == 7:
         objects = objects.filter(performer=request.user).filter(fixation__exact=True).filter(
-            date__gte=datetime.datetime.now()).order_by('-pk')
+            date__gte=datetime.now()).order_by('-pk')
     return render(request, URL + "/journal.html", {'objects': objects, 'journal': journal, 'formSM': formSM, 'URL': URL, 'formS': formS,
                                                    'formdate': formdate})
 
