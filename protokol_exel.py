@@ -142,10 +142,9 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
 
     ert = str(note.name).find("(")
     if ert != -1:
-        # name_rm = f'{note.name}, партия {note.lot}'
-        name_rm = ert
+        name_rm = f'{note.name}, партия {note.lot}'
     else:
-        name_rm = f'{note.name_rm} ert'
+        name_rm = note.name_rm}
         
     ac = note.oldCertifiedValue
 
