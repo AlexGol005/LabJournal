@@ -144,7 +144,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     if ert != -1:
         name_rm = f'{note.name}, партия {note.lot}'
     else:
-        name_rm = note.name_rm}
+        name_rm = note.name_rm
         
     ac = note.oldCertifiedValue
 
