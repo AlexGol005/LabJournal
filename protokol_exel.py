@@ -847,12 +847,12 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     columns = [
         'Дополнительные сведения: ',
         'Дополнительные сведения: ',
-        note.aim,
-        note.aim,
-        note.aim,
-        note.aim,
-        note.aim,
-        note.aim,
+        aim,
+        aim,
+        aim,
+        aim,
+        aim,
+        aim,
     ]
     for col_num in range(2):
         ws.write(row_num, col_num, columns[col_num], styleNnBL)
