@@ -20,6 +20,8 @@ from equipment.models import *
 from utils import *
 from textconstants import *
 
+from kinematicviscosity.constvisc import ndocumentoptional
+
 #стили ячеек
 brd1 = Borders()
 brd1.left = 1
