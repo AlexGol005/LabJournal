@@ -902,7 +902,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         ws.write(row_num, col_num, columns[col_num], styleKnBE)
         ws.merge(row_num, row_num, 0, l, styleKnBE)
 
-    row_num +=12
+    row_num +=7
     columns = [
         f'Страница №2\nВсего страниц 2',
     ]
