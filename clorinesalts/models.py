@@ -184,8 +184,11 @@ class Clorinesalts(models.Model):
     relerror = models.CharField('Погрешность относительная (описание типа)', max_length=90, null=True, blank=True)
     abserror = models.CharField('Погрешность абсолютная', max_length=90, null=True, blank=True)
     maincomment = models.CharField('Комментарии', max_length=6000, null=True, blank=True)
-    equipment_text = models.CharField('Бюретка', max_length=500, choices=buroptional,
+    equipment_text1 = models.CharField('Бюретка', max_length=500, choices=buroptional,
                                   default=buroptional[0][0],
+                                  blank=True, null=True)
+    equipment_text2 = models.CharField('Бюретка', max_length=500, 
+                                  default=GSO,
                                   blank=True, null=True)
     room = models.ForeignKey(Rooms, verbose_name='Номер комнаты', null=True,
                                             on_delete=models.PROTECT,  blank=True)
