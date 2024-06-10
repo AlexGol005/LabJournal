@@ -25,7 +25,7 @@ class ViscosityMJL(models.Model):
     name = models.CharField('Наименование', max_length=100, default='0', null=True)
     lot = models.CharField('Партия', max_length=100, null=True)
     ndocument = models.CharField('Метод испытаний', max_length=100, choices=ndocumentoptional,
-                                 default=ndocumentoptional[0][0],
+                                 default=ndocumentoptional[0][1],
                                  blank=True, null=True)
     relerror = models.DecimalField('Относительная  погрешность', max_digits=3, decimal_places=1, null=True,
                                    default=RELERROR)
