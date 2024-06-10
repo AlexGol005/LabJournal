@@ -225,14 +225,25 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
 
     try:
         note.x1
-        if note.x1:
+        if note.x1 and note.x1 !=0 and note.x1 !='0':
             x1 = Decimal(note.x1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
             x2 = Decimal(note.x2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
             measureresult = str(note.x_avg).replace('.',',')
+        elif:
+            x1 = str(note.viscosity1).replace('.',',')
+            x2 = str(note.viscosity2).replace('.',',')
+            measureresult = str(note.certifiedValue_text).replace('.',',')
+        else:
+            x1 = 'x1'
+            x2='x2'
+            measureresult = 'measureresult'            
     except:
-        x1 = note.viscosity1
-        x2 = note.viscosity2
-        measureresult = note.certifiedValue_text
+        pass
+        
+    ndocument = note.ndocument  
+    for i in range(len(ndocumentoptional))
+        if note.ndocument = ndocumentoptional[i][0]
+            ndocument = ndocumentoptional[i][1]
 
 
     acc = str(Decimal(note.factconvergence).quantize(Decimal('1.0'), ROUND_HALF_UP)).replace('.',',')
@@ -524,7 +535,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     columns = [
         '11',
         'Метод испытаний',
-         note.ndocument,
+         ndocument,
     ]
     for col_num in range(1):
         ws.write(row_num, col_num, columns[col_num], styleNBE)
