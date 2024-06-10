@@ -690,7 +690,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
             '1',
             note.numberexample,
             f'{attcharacteristic}, мг/дм3',
-            note.ndocument,
+            ndocument,
             equipment_set,
             equipment_set,
             equipment_set,
