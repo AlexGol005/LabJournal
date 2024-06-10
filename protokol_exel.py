@@ -148,6 +148,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         
     ac = note.oldCertifiedValue
 
+  
     
 
     
@@ -223,15 +224,15 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         
 
     try:
-        note.note.x1
+        note.x1
         if note.x1:
             x1 = Decimal(note.x1).quantize(Decimal('1.0000'), ROUND_HALF_UP)
             x2 = Decimal(note.x2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
-            measureresult = note.x_avg.replace('.',',')
+            measureresult = str(note.x_avg).replace('.',',')
     except:
-        x1 = 'xx1'
-        x2 = 'xx2'
-        measureresult = 'ff'
+        x1 = note.viscosity1
+        x2 = note.viscosity2
+        measureresult = note.certifiedValue_text
 
 
     acc = str(Decimal(note.factconvergence).quantize(Decimal('1.0'), ROUND_HALF_UP)).replace('.',',')
