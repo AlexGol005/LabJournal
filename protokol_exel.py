@@ -153,8 +153,13 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     
     equipment_list = []
     try: 
-        note.equipment_text
-        equipment_list.append(note.equipment_text)        
+        note.equipment_text1
+        equipment_list.append(note.equipment_text1)        
+    except:
+        pass
+    try: 
+        note.equipment_text2
+        equipment_list.append(note.equipment_text2)        
     except:
         pass
     try:
