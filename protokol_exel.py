@@ -151,11 +151,6 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     ac = note.oldCertifiedValue
 
 
-
-  
-    
-
-    
     equipment_list = []
     try: 
         note.equipment_text1
