@@ -240,7 +240,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         
     ndocument = note.ndocument  
     for i in range(len(ndocumentoptional)):
-        if note.ndocument = ndocumentoptional[i][0]:
+        if note.ndocument == ndocumentoptional[i][0]:
             ndocument = ndocumentoptional[i][1]
 
 
