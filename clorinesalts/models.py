@@ -157,6 +157,8 @@ class Clorinesalts(models.Model):
     performer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='performercs', blank=True)
     name = models.CharField('Наименование', max_length=100, choices=MATERIAL, default='СС-ТН-ПА-1',
                                  blank=True)
+    units = models.CharField('Единицы измерения', max_length=100, default='мг/дм3',
+                                 blank=True)
     index = models.CharField('Другое или индекс СО', max_length=100, null=True, blank=True)
     lot = models.CharField('Партия', max_length=90, null=True, blank=True)
     range = models.CharField('Диапазон содержания хлористых солей', max_length=3000, choices=CHOICES,
