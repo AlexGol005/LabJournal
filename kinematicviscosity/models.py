@@ -23,6 +23,8 @@ class ViscosityMJL(models.Model):
     performer = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     date = models.DateField('Дата', auto_now_add=True, db_index=True)
     name = models.CharField('Наименование', max_length=100, default='0', null=True)
+    units = models.CharField('Единицы измерения', max_length=100, default='мм2/дм3',
+                                 blank=True)
     lot = models.CharField('Партия', max_length=100, null=True)
     ndocument = models.CharField('Метод испытаний', max_length=100, choices=ndocumentoptional,
                                  default=ndocumentoptional[0][1],
