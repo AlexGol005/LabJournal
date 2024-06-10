@@ -240,10 +240,17 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
             x2='x2'
             measureresult = 'measureresult'  
         
+    aim = note.aim
     ndocument = note.ndocument  
+    try:
+        note.viscosity1
+        aim = f'{note.aim}. Температура измерений {note.temperature} °С'
+    except:
+        pass
     for i in range(len(ndocumentoptional)):
         if note.ndocument == ndocumentoptional[i][0]:
             ndocument = ndocumentoptional[i][1]
+            
 
 
     acc = str(Decimal(note.factconvergence).quantize(Decimal('1.0'), ROUND_HALF_UP)).replace('.',',')
