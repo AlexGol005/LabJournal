@@ -150,6 +150,8 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         
     ac = note.oldCertifiedValue
 
+
+
   
     
 
@@ -234,7 +236,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         else:
             x1 = str(Decimal(note.viscosity1).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
             x2 = str(Decimal(note.viscosity2).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
-            measureresult = str(note.certifiedValue_text).replace('.',',')
+            measureresult = str(str(note.certifiedValue_text).replace('.',','))
     except:
             x1 = 'x1'
             x2='x2'
@@ -264,6 +266,13 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     for i in range(len(aimoptional)):
         if note.aim == aimoptional[i][0]:
             conclusion = conclusionoptional[i]
+
+    units = note.units
+    if not note.units:
+        if attcharacteristic == 'Содержание хлористых солей':
+            units = 'мг/дм3'
+        if attcharacteristic == 'Кинематическая вязкость':
+            units = 'мм2/с'
     
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}_protocol.xls"'
@@ -696,7 +705,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         columns = [
             '1',
             note.numberexample,
-            f'{attcharacteristic}, мг/дм3',
+            f'{attcharacteristic}, {units}',
             ndocument,
             equipment_set,
             equipment_set,
