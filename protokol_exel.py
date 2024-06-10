@@ -232,9 +232,9 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
             x2 = Decimal(note.x2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
             measureresult = str(note.x_avg).replace('.',',')
         else:
-            x1 = str(note.viscosity1).replace('.',',')
-            x2 = str(note.viscosity2).replace('.',',')
-            measureresult = str(note.certifiedValue_text).replace('.',',')
+            x1 = str(Decimal(note.viscosity1).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+            x2 = str(Decimal(note.viscosity2).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+            measureresult = str(note.certifiedValue).replace('.',',')
     except:
             x1 = 'x1'
             x2='x2'
@@ -696,7 +696,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
             equipment_set,
             x1,
             x2,
-            note.x_avg,
+            measureresult,
             '-',
             '-',
             note.repr1comma, 
@@ -745,7 +745,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
             equipment_set,
             x1,
             x2,
-            note.x_avg,
+            measureresult,
             ac,
             crit_K,
             note.repr1comma, 
