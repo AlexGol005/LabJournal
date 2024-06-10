@@ -92,7 +92,7 @@ class StrJournalCreationForm(forms.ModelForm):
                                          widget=forms.TextInput(attrs={'class': 'form-control',
                                                                        'placeholder': 'АЗ, мг/л'}
                                                                 ))
-    equipment1 = forms.ChoiceField(label='Номер бюретки', required=True,
+    equipment_text1 = forms.ChoiceField(label='Номер бюретки', required=True,
                                   choices=buroptional,
                                   widget=forms.Select(attrs={'class': 'form-control'}))
     maincomment = forms.CharField(label='Комментарий', required=False,
@@ -131,7 +131,7 @@ class StrJournalCreationForm(forms.ModelForm):
                 css_class='form-row'
             ),
             Row(
-                Column('equipment1', css_class='form-group col-md-10 mb-0'),
+                Column('equipment_text1', css_class='form-group col-md-10 mb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -154,7 +154,7 @@ class StrJournalCreationForm(forms.ModelForm):
         model = MODEL
         fields = ['index', 'numberexample',
                   'name', 'lot', 'aim',
-                  'range', 'x1', 'x2', 'equipment1', 'maincomment', 'date', 'seria', 'oldCertifiedValue'
+                  'range', 'x1', 'x2', 'equipment_text1', 'maincomment', 'date', 'seria', 'oldCertifiedValue'
                   ]
 
 
