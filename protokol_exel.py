@@ -140,7 +140,10 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
                                         )).\
         get(date__exact=note.date, roomnumber__roomnumber__exact=note.room)
     
-    crit_K = note.crit_K
+    crit_K = note.crit_K 
+    
+    repeatability = str(note.repr1).replace('.','.')
+    Reproducibility = str(note.Rep2).replace('.','.')
 
     ert = str(note.name).find("(")
     if ert != -1:
