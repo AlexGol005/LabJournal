@@ -179,11 +179,7 @@ class ViscosityMJL(models.Model):
             self.kriteriy = Decimal(0.3)
         if self.constit == 'по ГОСТ 33':
             self.kriteriy = Decimal(0.35)
-        self.repr1 = Decimal(self.viscosityAVG)*Decimal(self.kriteriy)/ Decimal(100)
-        if self.constit == 'по ГОСТ 33':
-            self.Rep2 = Decimal(self.viscosityAVG)*Decimal(0,72)/ Decimal(100)
-        else:
-            self.Rep2 = Decimal(self.repr1) * Decimal(2)
+
         
         if Decimal(self.accMeasurement).quantize(Decimal('1.0'), ROUND_HALF_UP) <= self.kriteriy:
             self.resultMeas = 'удовлетворительно'
@@ -194,6 +190,13 @@ class ViscosityMJL(models.Model):
         if self.resultMeas == 'удовлетворительно':
             self.abserror = mrerrow((Decimal(self.relerror) * self.viscosityAVG) / Decimal(100))
             self.certifiedValue = numberDigits(self.viscosityAVG, self.abserror)
+        self.repr1 = Decimal(self.viscosityAVG)*Decimal(self.kriteriy)/ Decimal(100)
+        self.repr1 = numberDigits(self.repr1, self.abserror)
+        if self.constit == 'по ГОСТ 33':
+            self.Rep2 = Decimal(self.viscosityAVG)*Decimal(0,72)/ Decimal(100)
+            self.Rep2 = numberDigits(self.Rep2, self.abserror)
+        else:
+            self.Rep2 = Decimal(self.repr1) * Decimal(2)
             self.certifiedValue_text = self.certifiedValue
         if self.oldCertifiedValue and self.certifiedValue:
             self.oldCertifiedValue = self.oldCertifiedValue.replace(',', '.')
