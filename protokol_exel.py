@@ -831,7 +831,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         equipment_set,
         '-',
         '-',
-        repeatability 
+        repeatability, 
         Reproducibility       
         ]
         for col_num in range(3):
