@@ -110,7 +110,12 @@ class ViscosityMJL(models.Model):
     repr1 = models.CharField('Повторяемость, мм2/с', max_length=90, null=True, blank=True)
     Rep2 = models.CharField('Воспроизводимость, мм2/с', max_length=90, null=True, blank=True)
     crit_K = models.CharField('Критерий К, мг/л', max_length=90, null=True, blank=True)
-    index = models.CharField('костыль 1-индекс', max_length=90, null=True, blank=True)
+    index = models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
+    x1 = models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
+    x2 = models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
+    x_avg = models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
+    factconvergence= models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
+    repr1comma= models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
 
 
     def save(self, *args, **kwargs):
