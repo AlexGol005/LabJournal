@@ -713,8 +713,8 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
             measureresult,
             '-',
             '-',
-            note.repr1comma, 
-            Rep2 
+            repeatability, 
+            Reproducibility  
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], styleNBE)
@@ -762,8 +762,8 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
             measureresult,
             ac,
             crit_K,
-            note.repr1comma, 
-            Rep2 
+            repeatability, 
+            Reproducibility  
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], styleNBE)
@@ -823,7 +823,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
             for row_num in range(begin, endy):
                 ws.write(row_num, col_num, f'{row_num - 28}', styleNBE) 
                 
-        Rep2 = str(note.Rep2).replace('.',',')
+   
         row_num1 = count1 + 2
         columns = [
         f'{attcharacteristic}, мг/дм3',
@@ -831,8 +831,8 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         equipment_set,
         '-',
         '-',
-        note.repr1comma, 
-        Rep2         
+        repeatability 
+        Reproducibility       
         ]
         for col_num in range(3):
             ws.write(row_num1, col_num + 2, columns[col_num], styleNBE)
