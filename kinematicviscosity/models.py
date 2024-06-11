@@ -107,12 +107,6 @@ class ViscosityMJL(models.Model):
                                   blank=True, null=True)
     numberexample = models.CharField('Номер(а) экземпляра', max_length=100, default=' ', null=True,  blank=True)
     seria = models.CharField('Номер серии измерений (для однородности)', max_length=100, default='0', null=True)
-    index = models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
-    x1 = models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
-    x2 = models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
-    x_avg = models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
-    factconvergence= models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
-    repr1comma= models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
     repr1 = models.CharField('Повторяемость, мм2/с', max_length=90, null=True, blank=True)
     Rep2 = models.CharField('Воспроизводимость, мм2/с', max_length=90, null=True, blank=True)
     crit_K = models.CharField('Критерий К, мг/л', max_length=90, null=True, blank=True)
@@ -183,7 +177,7 @@ class ViscosityMJL(models.Model):
         if self.constit == 'по ГОСТ 33':
             self.Rep2 = Decimal(self.viscosityAVG)*Decimal(0,72)/ Decimal(100)
         else:
-            self.Rep2 = Decimal(self.repr1) * Decimal(100)
+            self.Rep2 = Decimal(self.repr1) * Decimal(2)
         
         if Decimal(self.accMeasurement).quantize(Decimal('1.0'), ROUND_HALF_UP) <= self.kriteriy:
             self.resultMeas = 'удовлетворительно'
