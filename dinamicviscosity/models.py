@@ -175,6 +175,8 @@ class Dinamicviscosity(models.Model):
                         self.abserror = mrerrow(
                             (Decimal(self.relerror) * self.dinamicviscosity_not_rouned) / Decimal(100))
                         self.certifiedValue = numberDigits(self.dinamicviscosity_not_rouned, self.abserror)
+                        self.repr1 = Decimal(self.certifiedValue)*Decimal(self.kriteriy)/ Decimal(100)
+                        self.Rep2 = self.repr1 *  Decimal(2)
                 if self.accMeasurement > self.kriteriy:
                     self.resultMeas = 'неудовлетворительно'
                     self.cause = 'Δ > r'
