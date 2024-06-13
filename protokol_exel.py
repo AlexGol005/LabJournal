@@ -294,7 +294,41 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     if equipment_set7:
         equipment_list.append(equipment_set7)
 
-        
+    #костыль для динамики
+    if note.equipment == 'денсиметром':
+        e100 = MODEL.objects.\
+        annotate(eq1=Concat('equipment100__charakters__name',
+                                        Value(' тип '), 'equipment100__charakters__typename',
+                                        Value(' , зав. № '), 'equipment100__equipment__lot',
+                                        Value(', свидетельство о поверке № '), 'equipment100__newcertnumber',
+                                        Value(' от '), 'equipment100__newdate',
+                                        Value(' действительно до '), 'equipment100__newdatedead',
+                                        Value('; \n'),
+                                        )).get(pk=num)
+        equipment_list.append(e100.eq1)
+    if note.equipment == 'пикнометром':
+        e101 = MODEL.objects.\
+        annotate(eq1=Concat('equipment101__charakters__name',
+                                        Value(' тип '), 'equipment101__charakters__typename',
+                                        Value(' , зав. № '), 'equipment101__equipment__lot',
+                                        Value(', свидетельство о поверке № '), 'equipment101__newcertnumber',
+                                        Value(' от '), 'equipment101__newdate',
+                                        Value(' действительно до '), 'equipment101__newdatedead',
+                                        Value('; \n'),
+                                        )).get(pk=num)
+        equipment_list.append(e101.eq1)
+        e102 = MODEL.objects.\
+        annotate(eq1=Concat('equipment101__charakters__name',
+                                        Value(' тип '), 'equipment102__charakters__typename',
+                                        Value(' , зав. № '), 'equipment102__equipment__lot',
+                                        Value(', свидетельство о поверке № '), 'equipment102__newcertnumber',
+                                        Value(' от '), 'equipment102__newdate',
+                                        Value(' действительно до '), 'equipment102__newdatedead',
+                                        Value('; \n'),
+                                        )).get(pk=num)
+        equipment_list.append(e102.eq1)
+    
+    
     equipment_set = ' '.join(equipment_list)
 
 
@@ -811,6 +845,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], styleNBE)
             ws.merge(row_num, row_num, 4, 6, styleNBE)
+            
     if  attcharacteristic == 'Динамическая вязкость':
         row_num +=1
         columns = [
@@ -831,8 +866,8 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], styleNnBE)
-            ws.merge(row_num, row_num, 1, 9, styleNnBE)
-            ws.merge(row_num, row_num, 10, 14, styleNnBE)
+            ws.merge(row_num, row_num, 0, 9, styleNnBE)
+            ws.merge(row_num, row_num, 10, 13, styleNnBE)
 
     if (note.seria == False or note.seria == '0') and note.aim == 'Мониторинг стабильности':
 
