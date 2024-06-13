@@ -357,6 +357,8 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
             units = 'мг/дм3'
         if attcharacteristic == 'Кинематическая вязкость':
             units = 'мм2/с'
+        if attcharacteristic == 'Динамическая вязкость':
+            units = 'мПа * с'
     
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}_protocol.xls"'
@@ -805,8 +807,28 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], styleNBE)
             ws.merge(row_num, row_num, 4, 6, styleNBE)
-
-
+    if  attcharacteristic == 'Динамическая вязкость':
+        row_num +=1
+        columns = [
+        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
+        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
+        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
+        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
+        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
+        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
+        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
+        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
+        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
+        f'плотность: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
+        f'плотность: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
+        f'плотность: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
+        f'плотность: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
+        f'плотность: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
+        ]
+        for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], styleNnBE)
+        ws.merge(row_num, row_num, 1, 9, styleNnBE)
+        ws.merge(row_num, row_num, 10, 14, styleNnBE)
 
     if (note.seria == False or note.seria == '0') and note.aim == 'Мониторинг стабильности':
 
