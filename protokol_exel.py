@@ -335,9 +335,9 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
             x2 = Decimal(note.x2).quantize(Decimal('1.0000'), ROUND_HALF_UP)
             measureresult = str(note.x_avg).replace('.',',')
         else:
-            x1 = str(Decimal(note.viscosity1).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
-            x2 = str(Decimal(note.viscosity2).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
-            measureresult = str(str(note.certifiedValue_text).replace('.',','))
+            x1 = 'h'
+            x2 = 'hh'
+            measureresult = 'gk'
     except:
         pass
     try:
