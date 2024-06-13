@@ -684,7 +684,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         row_num +=1
         columns = [
         '№',
-        'Номер экземпляра',
+        'Наименование объекта/образца испытаний  (Номер экземпляра, номер партии)',
         'Показатель, ед. изм',
         'Метод испытаний',
         eq_title,
@@ -708,7 +708,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     
         columns = [
             '1',
-            note.numberexample,
+            f'СО {name_rm}, флакон № {note.numberexample}',
             f'{attcharacteristic}, {units}',
             ndocument,
             equipment_set,
@@ -733,7 +733,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         row_num +=1
         columns = [
         '№',
-        'Номер экземпляра',
+        'Наименование объекта/образца испытаний  (Номер экземпляра, номер партии)',
         'Показатель, ед. изм',
         'Метод испытаний',
          eq_title,
@@ -757,8 +757,8 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     
         columns = [
             '1',
-            note.numberexample,
-            f'{attcharacteristic}, мг/дм3',
+            f'СО {name_rm}, флакон № {note.numberexample}',
+            f'{attcharacteristic}, {units}',
             note.ndocument,
             equipment_set, 
             equipment_set,
@@ -832,7 +832,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
    
         row_num1 = count1 + 2
         columns = [
-        f'{attcharacteristic}, мг/дм3',
+        f'{attcharacteristic}, {units}',
         note.ndocument,
         equipment_set,
         '-',
