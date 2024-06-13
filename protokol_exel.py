@@ -322,7 +322,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     try:
         note.density_avg
         x1 = vd1
-        x1 = vd2
+        x2 = vd2
         measureresult = d
     except:
         pass
