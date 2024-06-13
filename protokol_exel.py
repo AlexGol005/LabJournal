@@ -221,7 +221,6 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         #конец поиск х1 и х2 по кинематике - костыль для динамики
     except:
         pass
-    
     equipment_list = []
     try: 
         note.equipment_text1
