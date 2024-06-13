@@ -322,7 +322,8 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
                 e103 = note.equipment103
                 equipment_list.append(e103)
     
-    
+    except:
+        pass
     equipment_set = ' '.join(equipment_list)
 
 
