@@ -283,6 +283,8 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
                                         Value('; \n'),
                                         )).get(pk=num)
         equipment_list.append(e4.eq4)
+    except:
+        pass
     if equipment_set5:
         equipment_list.append(equipment_set5)
     if equipment_set6:
