@@ -22,6 +22,7 @@ from kinematicviscosity.constvisc import *
 from utils import *
 from metods import *
 from textconstants import *
+from protokol_exel import *
 
 
 MODEL = Dinamicviscosity
@@ -37,6 +38,12 @@ class Constants:
     SearchForm = SearchForm
     SearchDateForm = SearchDateForm
 # конец блока для всех журналов
+
+def export_protocol_xls_template_1(request, pk):
+    num = pk
+    response = export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimoptional, conclusionoptional, attcharacteristic)
+    return response
+
 
 # блок стандартных 'View' но с индивидуальностями,  возможно унаследованных от стандартных классов из модуля utils
 class PicnometerView(TemplateView):
