@@ -236,9 +236,14 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
             x2 = str(Decimal(note.viscosity2).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
             measureresult = str(str(note.certifiedValue_text).replace('.',','))
     except:
-            x1 = 'x1'
-            x2='x2'
-            measureresult = 'measureresult'  
+            try note.viscosity1:
+                x1 = str(Decimal(note.viscosity1).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+                x2 = str(Decimal(note.viscosity2).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
+                measureresult = str(str(note.certifiedValue_text).replace('.',','))
+            except:
+                x1 = 'x1'
+                x2='x2'
+                measureresult = 'measureresult'  
         
     aim = note.aim
     ndocument = note.ndocument  
