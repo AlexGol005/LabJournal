@@ -170,6 +170,8 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         vd2 = ser.viscosity2 * note.density2
         vd2 = str(Decimal(vd2).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
         d = str(note.certifiedValue).replace('.',',')
+    except:
+        pass
 
     if Decimal(ser.certifiedValue_text) <= 2:
         exnumber_viscosimeter1 = exnumber_viscosimeter1_set[1]
