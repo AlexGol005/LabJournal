@@ -86,6 +86,7 @@ class Dinamicviscosity(models.Model):
                                     on_delete=models.PROTECT, blank=True, related_name='equipment3dinamic')
     equipment102 = models.ForeignKey(MeasurEquipment, verbose_name='Пикнометр', null=True,
                                     on_delete=models.PROTECT, blank=True, related_name='equipment4dinamic')
+    equipment103 = models.CharField('Пикнометр', max_length=3000, null=True, default=picnometer, blank=True)
     aim = models.CharField('Цель испытаний', max_length=100, choices=aimoptional,
                                   default=aimoptional[0][0],
                                   blank=True, null=True)
@@ -111,7 +112,7 @@ class Dinamicviscosity(models.Model):
         self.equipment4 = MeasurEquipment.objects.get(equipment__exnumber=piknometer)
         if self.equipment == 'денсиметром':
             self.room = Rooms.objects.get(roomnumber='249')
-        if self.equipment != 'денсиметром':
+        if self.equipment != 'пикнометром':
             self.room = Rooms.objects.get(roomnumber='474')
 
         
