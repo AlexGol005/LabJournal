@@ -789,6 +789,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         eq_title,
         eq_title,
         eq_title,
+        'X1',
         'X2',
         'Xср',
         'Характеристика погрешности метода испытаний (при P=0,95)',
