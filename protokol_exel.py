@@ -367,6 +367,11 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         aim = f'{note.aim}. Температура измерений {note.temperature} °С'
     except:
         pass
+    try:
+        note.density1
+        aim = f'{note.aim}. Температура измерений {note.temperature} °С'
+    except:
+        pass
     for i in range(len(ndocumentoptional)):
         if note.ndocument == ndocumentoptional[i][0]:
             ndocument = ndocumentoptional[i][1]
