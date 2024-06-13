@@ -934,9 +934,8 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         
         begin = row_num + 1
 
-        
-        if attcharacteristic != 'Кинематическая вязкость':
-            a = note.seria
+        a = note.seria
+        if attcharacteristic != 'Кинематическая вязкость':            
             qseria1 = MODEL.objects.all().filter(seria=a). \
             values_list(
             'numberexample',
@@ -945,7 +944,6 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
             'x_avg',
             )
         if attcharacteristic == 'Кинематическая вязкость':
-            a = note.seria
             qseria1 = MODEL.objects.all().filter(seria=a). \
             values_list(
             'numberexample',
@@ -964,15 +962,6 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
             counthe = row_num
 
 
-        for row in qseria1:
-            row_num += 1
-            for col_num in range(0, 1):
-                ws.write(row_num, col_num + 1, row[col_num], styleNBE)
-            for col_num in range(1, 4):
-                ws.write(row_num, col_num + 6, row[col_num], styleNBE)
-            ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 600
-            counthe = row_num
                 
         endy = counthe + 1
         for col_num in range(1):
