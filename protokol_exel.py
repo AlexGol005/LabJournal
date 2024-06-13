@@ -958,7 +958,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
             for col_num in range(1, 4):
                 ws.write(row_num, col_num + 6, row[col_num], styleNBE)
             ws.row(row_num).height_mismatch = True
-            ws.row(row_num).height = 600
+            ws.row(row_num).height = 800
             counthe = row_num
 
 
@@ -972,7 +972,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         row_num1 = count1 + 2
         columns = [
         f'{attcharacteristic}, {units}',
-        note.ndocument,
+        ndocument,
         equipment_set,
         '-',
         '-',
