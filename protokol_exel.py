@@ -320,10 +320,10 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         equipment_list.append(e101.eq1)
         if not note.equipment103:
             e103 = 'Пикнометр ПЖ2-100-КШ 7/16 по ГОСТ 22524.'
-            equipment_list.append(e103.eq1)
+            equipment_list.append(e103)
         else: 
             e103 = note.equipment103
-            equipment_list.append(e103.eq1)
+            equipment_list.append(e103)
     
     
     equipment_set = ' '.join(equipment_list)
@@ -844,7 +844,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
             ws.merge(row_num, row_num, 4, 6, styleNBE)
             
     if  attcharacteristic == 'Динамическая вязкость':
-        row_num +=1
+        row_num +=2
         columns = [
         f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
         f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
