@@ -828,9 +828,9 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         f'плотность: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
         ]
         for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], styleNnBE)
-        ws.merge(row_num, row_num, 1, 9, styleNnBE)
-        ws.merge(row_num, row_num, 10, 14, styleNnBE)
+            ws.write(row_num, col_num, columns[col_num], styleNnBE)
+            ws.merge(row_num, row_num, 1, 9, styleNnBE)
+            ws.merge(row_num, row_num, 10, 14, styleNnBE)
 
     if (note.seria == False or note.seria == '0') and note.aim == 'Мониторинг стабильности':
 
