@@ -156,6 +156,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         #ниже поиск х1 и х2 по кинематике - костыль для динамики
     try:
         note.density_avg
+        from kinematicviscosity.models import ViscosityMJL
         ser = ViscosityMJL.objects.filter(fixation=True).filter(certifiedValue_text=note.kinematicviscosity).\
                 filter(lot=note.lot).filter(temperature=note.temperature).filter(name=note.name).last() 
         vk1 = str(Decimal(ser.viscosity1 ).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
