@@ -318,7 +318,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
                                         Value('; \n'),
                                         )).get(pk=num)
         equipment_list.append(e101.eq1)
-        if not note.equipment103
+        if not note.equipment103:
             e103 = 'Пикнометр ПЖ2-100-КШ 7/16 по ГОСТ 22524.'
             equipment_list.append(e103.eq1)
         else: 
