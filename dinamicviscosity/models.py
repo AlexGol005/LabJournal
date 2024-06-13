@@ -26,6 +26,8 @@ class Dinamicviscosity(models.Model):
     performerdensity = models.ForeignKey(User, verbose_name='Плотность измерил', on_delete=models.CASCADE, null=True, related_name='performerdensity', blank=True)
     name = models.CharField('Наименование', max_length=100, default='0', null=True, blank=True)
     lot = models.CharField('Партия', max_length=100, null=True, blank=True)
+    units = models.CharField('Единицы измерения', max_length=100, default='мПа * с',
+                                 blank=True)
     constit = models.CharField('Состав пробы', max_length=300, choices=CHOICES, default='Проба содержит октол/нефть', null=True,  blank=True)
     ndocument = models.CharField('Метод испытаний', max_length=100, choices=DOCUMENTS, default='МИ-02-2018', blank=True)
     temperature = models.DecimalField('Температура, ℃', max_digits=5, decimal_places=2, default='0', null=True,
@@ -88,6 +90,12 @@ class Dinamicviscosity(models.Model):
                                   default=aimoptional[0][0],
                                   blank=True, null=True)
     numberexample = models.CharField('Номер(а) экземпляра', max_length=100, default=' ', null=True)
+    index = models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
+    x1 = models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
+    x2 = models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
+    x_avg = models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
+    factconvergence= models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
+    repr1comma= models.CharField('ggg', max_length=100, default='0', null=True,  blank=True)
 
 
     def save(self, *args, **kwargs):
