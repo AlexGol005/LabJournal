@@ -153,10 +153,11 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         
     ac = note.oldCertifiedValue
 
-        #ниже поиск х1 и х2 по кинематике - костыль для динамики
+    #ниже поиск х1 и х2 по кинематике - костыль для динамики
     try:
         note.density_avg
         from kinematicviscosity.models import ViscosityMJL
+        from kinematicviscosity.constvisc import exnumber_viscosimeter1_set, exnumber_viscosimeter2_set  
         ser = ViscosityMJL.objects.filter(fixation=True).filter(certifiedValue_text=note.kinematicviscosity).\
                 filter(lot=note.lot).filter(temperature=note.temperature).filter(name=note.name).last() 
         vk1 = str(Decimal(ser.viscosity1 ).quantize(Decimal('1.0000'), ROUND_HALF_UP)).replace('.',',')
