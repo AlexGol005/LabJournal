@@ -308,8 +308,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         equipment_list.append(e100.eq1)
     if note.equipment == 'пикнометром':
         e101 = MODEL.objects.\
-        annotate(eq1=Concat('equipment101__charakters__name',
-                                        Value('; \n'),
+        annotate(eq1=Concat(Value('\n'), 'equipment101__charakters__name',                                        
                                         Value(' тип '), 'equipment101__charakters__typename',
                                         Value(' , зав. № '), 'equipment101__equipment__lot',
                                         Value(', свидетельство о поверке № '), 'equipment101__newcertnumber',
@@ -849,8 +848,8 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         f'Вязкость кинематическая: X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; плотность: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
         ]
         for col_num in range(len(columns)):
-            ws.write(row_num, col_num, columns[col_num], styleNnBE)
-            ws.merge(row_num, row_num, 0, 13, styleNnBE)
+            ws.write(row_num, col_num, columns[col_num], styleNnBL)
+            ws.merge(row_num, row_num, 0, 13, styleNnBL)
 
 
     if (note.seria == False or note.seria == '0') and note.aim == 'Мониторинг стабильности':
