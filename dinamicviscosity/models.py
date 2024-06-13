@@ -99,6 +99,7 @@ class Dinamicviscosity(models.Model):
     crit_K = models.CharField('Критерий К', max_length=90, null=True, blank=True)
     repr1 = models.CharField('Повторяемость, мм2/с', max_length=90, null=True, blank=True)
     Rep2 = models.CharField('Воспроизводимость, мм2/с', max_length=90, null=True, blank=True)
+    oldCertifiedValue = models.CharField('Предыдущее аттестованное значение',  null=True, blank=True, max_length=300, default='')
 
 
     def save(self, *args, **kwargs):
