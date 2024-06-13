@@ -944,7 +944,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
             'x2',
             'x_avg',
             )
-        if attcharacteristic != 'Кинематическая вязкость':
+        if attcharacteristic == 'Кинематическая вязкость':
             a = note.seria
             qseria1 = MODEL.objects.all().filter(seria=a). \
             values_list(
