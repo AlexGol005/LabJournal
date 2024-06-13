@@ -142,8 +142,8 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     
     crit_K = note.crit_K 
     
-    repeatability = str(note.repr1).replace('.','.')
-    Reproducibility = str(note.Rep2).replace('.','.')
+    repeatability = str(note.repr1).replace('.',',')
+    Reproducibility = str(note.Rep2).replace('.',',')
 
     ert = str(note.name).find("(")
     if ert != -1:
@@ -951,7 +951,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
             'numberexample',
             'viscosity1',
             'viscosity2',
-            'certifiedValue_text',
+            'certifiedValue',
             )
         for row in qseria1:
             row_num += 1
