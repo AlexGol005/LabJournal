@@ -281,7 +281,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = f'attachment; filename="{note.pk}_protocol.xls"'
     wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('protocol', cell_overwrite_ok=True)
+    ws = wb.add_sheet('1', cell_overwrite_ok=True)
 
     ws.col(0).width = 1000
     ws.col(1).width = 5000
