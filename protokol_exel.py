@@ -846,25 +846,12 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     if  attcharacteristic == 'Динамическая вязкость':
         row_num +=2
         columns = [
-        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
-        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
-        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
-        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
-        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
-        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
-        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
-        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
-        f'Вязкость кинематическая X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; ',
-        f'плотность: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
-        f'плотность: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
-        f'плотность: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
-        f'плотность: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
-        f'плотность: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
+        f'Вязкость кинематическая: X1 = {vk1} мм2/с,  X2 = {vk2} мм2/с; плотность: X1 = {d1} г/см3,  X2 = {d2} г/см3. ',
         ]
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], styleNnBE)
-            ws.merge(row_num, row_num, 0, 9, styleNnBE)
-            ws.merge(row_num, row_num, 10, 13, styleNnBE)
+            ws.merge(row_num, row_num, 0, 13, styleNnBE)
+
 
     if (note.seria == False or note.seria == '0') and note.aim == 'Мониторинг стабильности':
 
