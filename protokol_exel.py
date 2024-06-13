@@ -291,9 +291,11 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
 
 
     #костыль для динамики
-    if note.equipment == 'денсиметром':
-        e100 = MODEL.objects.\
-        annotate(eq1=Concat('equipment100__charakters__name',
+    try:
+        note.equipment
+        if note.equipment == 'денсиметром':
+            e100 = MODEL.objects.\
+            annotate(eq1=Concat('equipment100__charakters__name',
                                         Value(' тип '), 'equipment100__charakters__typename',
                                         Value(' , зав. № '), 'equipment100__equipment__lot',
                                         Value(', свидетельство о поверке № '), 'equipment100__newcertnumber',
@@ -301,10 +303,10 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
                                         Value(' действительно до '), 'equipment100__newdatedead',
                                         Value('; \n'),
                                         )).get(pk=num)
-        equipment_list.append(e100.eq1)
-    if note.equipment == 'пикнометром':
-        e101 = MODEL.objects.\
-        annotate(eq1=Concat(Value('\n'), 'equipment101__charakters__name',                                        
+            equipment_list.append(e100.eq1)
+        if note.equipment == 'пикнометром':
+            e101 = MODEL.objects.\
+            annotate(eq1=Concat(Value('\n'), 'equipment101__charakters__name',                                        
                                         Value(' тип '), 'equipment101__charakters__typename',
                                         Value(' , зав. № '), 'equipment101__equipment__lot',
                                         Value(', свидетельство о поверке № '), 'equipment101__newcertnumber',
@@ -312,13 +314,13 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
                                         Value(' действительно до '), 'equipment101__newdatedead',
                                         Value('; \n'),
                                         )).get(pk=num)
-        equipment_list.append(e101.eq1)
-        if not note.equipment103:
-            e103 = 'Пикнометр ПЖ2-100-КШ 7/16 по ГОСТ 22524.'
-            equipment_list.append(e103)
-        else: 
-            e103 = note.equipment103
-            equipment_list.append(e103)
+            equipment_list.append(e101.eq1)
+            if not note.equipment103:
+                e103 = 'Пикнометр ПЖ2-100-КШ 7/16 по ГОСТ 22524.'
+                equipment_list.append(e103)
+            else: 
+                e103 = note.equipment103
+                equipment_list.append(e103)
     
     
     equipment_set = ' '.join(equipment_list)
