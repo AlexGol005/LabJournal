@@ -191,7 +191,11 @@ class ViscosityMJL(models.Model):
             self.abserror = mrerrow((Decimal(self.relerror) * self.viscosityAVG) / Decimal(100))
             self.certifiedValue = numberDigits(self.viscosityAVG, self.abserror)
         self.repr1 = Decimal(self.viscosityAVG)*Decimal(self.kriteriy)/ Decimal(100)
-        self.repr1 = numberDigits(self.repr1, self.abserror)
+        try: 
+            self.self.repr1
+            self.repr1 = numberDigits(self.repr1, self.abserror)
+        except:
+            pass
         if self.constit == 'по ГОСТ 33':
             self.Rep2 = Decimal(self.viscosityAVG)*Decimal(0,72)/ Decimal(100)
             self.Rep2 = numberDigits(self.Rep2, self.abserror)
