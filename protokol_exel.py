@@ -175,6 +175,11 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     except:
         vk1 = 14
         vk2 = 50
+        d1 = note.density_avg
+        d2 = 1
+        vd1 =0
+        vd2=5
+        d=6
     try:
         if Decimal(ser.certifiedValue_text) <= 2:
             exnumber_viscosimeter1 = exnumber_viscosimeter1_set[1]
