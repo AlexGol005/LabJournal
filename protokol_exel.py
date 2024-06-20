@@ -175,7 +175,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     except:
         vk1 = 14
         vk2 = 50
-        d1 = note.density_avg
+        d1 = 1
         d2 = 1
         vd1 =0
         vd2=5
