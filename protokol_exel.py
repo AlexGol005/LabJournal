@@ -227,6 +227,13 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     except:
         pass
     equipment_list = []
+    if equipment_set5:
+        equipment_list.append(equipment_set5)
+    if equipment_set6:
+        equipment_list.append(equipment_set6)
+    if equipment_set7:
+        equipment_list.append(equipment_set7)
+
     try: 
         note.equipment_text1
         equipment_list.append(note.equipment_text1)        
@@ -311,7 +318,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
             equipment_list.append(e100.eq1)
         if note.equipment == 'пикнометром':
             e101 = MODEL.objects.\
-            annotate(eq1=Concat(Value('\n'), 'equipment101__charakters__name',                                        
+            annotate(eq101=Concat(Value('\n'), 'equipment101__charakters__name',                                        
                                         Value(' тип '), 'equipment101__charakters__typename',
                                         Value(' , зав. № '), 'equipment101__equipment__lot',
                                         Value(', свидетельство о поверке № '), 'equipment101__newcertnumber',
@@ -319,7 +326,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
                                         Value(' действительно до '), 'equipment101__newdatedead',
                                         Value('; \n'),
                                         )).get(pk=num)
-            equipment_list.append(e101.eq1)
+            equipment_list.append(e101.eq101)
             if not note.equipment103:
                 e103 = 'Пикнометр ПЖ2-100-КШ 7/16 по ГОСТ 22524.'
                 equipment_list.append(e103)
