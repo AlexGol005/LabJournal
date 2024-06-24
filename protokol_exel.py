@@ -227,12 +227,16 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     except:
         pass
     equipment_list = []
-    if equipment_set5:
-        equipment_list.append(equipment_set5)
-    if equipment_set6:
-        equipment_list.append(equipment_set6)
-    if equipment_set7:
-        equipment_list.append(equipment_set7)
+
+    try:
+        if equipment_set5:
+            equipment_list.append(equipment_set5)
+        if equipment_set6:
+            equipment_list.append(equipment_set6)
+        if equipment_set7:
+            equipment_list.append(equipment_set7)
+    except:
+        pass
 
     try: 
         note.equipment_text1
