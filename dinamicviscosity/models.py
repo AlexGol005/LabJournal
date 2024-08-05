@@ -114,7 +114,7 @@ class Dinamicviscosity(models.Model):
             self.room = Rooms.objects.get(roomnumber='249')
         if self.equipment == 'пикнометром':
             self.room = Rooms.objects.get(roomnumber='474')
-            self.equipment103 = MeasurEquipment.objects.get(equipment__exnumber=piknometer)
+            self.equipment103 = piknometer
 
         
         if self.havedensity and self.density_avg and self.densitydead:
