@@ -109,11 +109,12 @@ class Dinamicviscosity(models.Model):
         self.equipment100 = MeasurEquipment.objects.get(equipment__exnumber=densimeter)
         self.equipment2 = MeasurEquipment.objects.get(equipment__exnumber=termometer)
         self.equipment101 = MeasurEquipment.objects.get(equipment__exnumber=balance)
-        self.equipment103 = MeasurEquipment.objects.get(equipment__exnumber=piknometer)
+        
         if self.equipment == 'денсиметром':
             self.room = Rooms.objects.get(roomnumber='249')
         if self.equipment == 'пикнометром':
             self.room = Rooms.objects.get(roomnumber='474')
+            self.equipment103 = MeasurEquipment.objects.get(equipment__exnumber=piknometer)
 
         
         if self.havedensity and self.density_avg and self.densitydead:
