@@ -399,6 +399,7 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
     for i in range(len(MATERIAL1)):
         if str(note.name)[0:2] == MATERIAL1[i][0]:
             constit = constitoptional[i]
+        else: constit = ''
 
 
     for i in range(len(aimoptional)):
