@@ -197,7 +197,7 @@ class ViscosityMJL(models.Model):
         except:
             pass
         if self.constit == 'по ГОСТ 33':
-            self.Rep2 = Decimal(self.viscosityAVG)*Decimal(0,72)/ Decimal(100)
+            self.Rep2 = Decimal(self.viscosityAVG)*Decimal(0.72)/ Decimal(100)
             self.Rep2 = numberDigits(self.Rep2, self.abserror)
         else:
             self.Rep2 = Decimal(self.repr1) * Decimal(2)
