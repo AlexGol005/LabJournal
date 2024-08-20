@@ -266,11 +266,11 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         note.equipment2
         e2 = MODEL.objects.\
         annotate(eq2=Concat('equipment2__charakters__name',
-                                        Value(' тип '), 'equipment1__charakters__typename',
-                                        Value(' , зав. № '), 'equipment1__equipment__lot',
-                                        Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
-                                        Value(' от '), 'equipment1__newdate',
-                                        Value(' действительно до '), 'equipment1__newdatedead',
+                                        Value(' тип '), 'equipment2__charakters__typename',
+                                        Value(' , зав. № '), 'equipment2__equipment__lot',
+                                        Value(', свидетельство о поверке № '), 'equipment2__newcertnumber',
+                                        Value(' от '), 'equipment2__newdate',
+                                        Value(' действительно до '), 'equipment2__newdatedead',
                                         Value('; \n'),
                                         )).get(pk=num)
         equipment_list.append(e2.eq2)
@@ -280,11 +280,11 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         note.equipment3
         e3 = MODEL.objects.\
         annotate(eq3=Concat('equipment3__charakters__name',
-                                        Value(' тип '), 'equipment1__charakters__typename',
-                                        Value(' , зав. № '), 'equipment1__equipment__lot',
-                                        Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
-                                        Value(' от '), 'equipment1__newdate',
-                                        Value(' действительно до '), 'equipment1__newdatedead',
+                                        Value(' тип '), 'equipment3__charakters__typename',
+                                        Value(' , зав. № '), 'equipment3__equipment__lot',
+                                        Value(', свидетельство о поверке № '), 'equipment3__newcertnumber',
+                                        Value(' от '), 'equipment3__newdate',
+                                        Value(' действительно до '), 'equipment3__newdatedead',
                                         Value('; \n'),
                                         )).get(pk=num)
         equipment_list.append(e3.eq3)
@@ -294,11 +294,11 @@ def export_protocol_xls_template(num, MATERIAL1, MODEL, constitoptional, aimopti
         note.equipment4
         e4 = MODEL.objects.\
         annotate(eq4=Concat('equipment4__charakters__name',
-                                        Value(' тип '), 'equipment1__charakters__typename',
-                                        Value(' , зав. № '), 'equipment1__equipment__lot',
-                                        Value(', свидетельство о поверке № '), 'equipment1__newcertnumber',
-                                        Value(' от '), 'equipment1__newdate',
-                                        Value(' действительно до '), 'equipment1__newdatedead',
+                                        Value(' тип '), 'equipment4__charakters__typename',
+                                        Value(' , зав. № '), 'equipment4__equipment__lot',
+                                        Value(', свидетельство о поверке № '), 'equipment4__newcertnumber',
+                                        Value(' от '), 'equipment4__newdate',
+                                        Value(' действительно до '), 'equipment4__newdatedead',
                                         Value('; \n'),
                                         )).get(pk=num)
         equipment_list.append(e4.eq4)
