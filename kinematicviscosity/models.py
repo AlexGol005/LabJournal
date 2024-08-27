@@ -181,10 +181,10 @@ class ViscosityMJL(models.Model):
             self.kriteriy = Decimal(0.35)
 
         
-        if Decimal(self.accMeasurement).quantize(Decimal('1.00'), ROUND_HALF_UP) <= self.kriteriy:
+        if Decimal(self.accMeasurement).quantize(Decimal('1.00000'), ROUND_HALF_UP) <= self.kriteriy:
             self.resultMeas = 'удовлетворительно'
             self.cause = ''
-        if Decimal(self.accMeasurement).quantize(Decimal('1.00'), ROUND_HALF_UP) > self.kriteriy:
+        if Decimal(self.accMeasurement).quantize(Decimal('1.00000'), ROUND_HALF_UP) > self.kriteriy:
             self.resultMeas = 'неудовлетворительно'
             self.cause = ':  Δ > r'
         if self.resultMeas == 'удовлетворительно':
