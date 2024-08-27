@@ -4,7 +4,7 @@ from django.db import models
 from django.db.models import Max
 from django.urls import reverse
 from django.contrib.auth.models import User
-from decimal import *
+from decimal import * 
 
 from equipment.models import MeasurEquipment, Rooms
 from viscosimeters.models import Viscosimeters, Kalibration
@@ -181,10 +181,10 @@ class ViscosityMJL(models.Model):
             self.kriteriy = Decimal(0.35)
 
         
-        if Decimal(self.accMeasurement).quantize(Decimal('1.0'), ROUND_HALF_UP) <= self.kriteriy:
+        if Decimal(self.accMeasurement).quantize(Decimal('1.00'), ROUND_HALF_UP) <= self.kriteriy:
             self.resultMeas = 'удовлетворительно'
             self.cause = ''
-        if Decimal(self.accMeasurement).quantize(Decimal('1.0'), ROUND_HALF_UP) > self.kriteriy:
+        if Decimal(self.accMeasurement).quantize(Decimal('1.00'), ROUND_HALF_UP) > self.kriteriy:
             self.resultMeas = 'неудовлетворительно'
             self.cause = ':  Δ > r'
         if self.resultMeas == 'удовлетворительно':
