@@ -185,7 +185,8 @@ class ViscosityMJL(models.Model):
             self.resultMeas = 'удовлетворительно'
             self.cause = ''
         if Decimal(self.accMeasurement).quantize(Decimal('1.00000'), ROUND_HALF_UP) > self.kriteriy:
-            self.resultMeas = 'неудовлетворительно, ыек(Decimal(self.accMeasurement).quantize(Decimal('1.00000'), ROUND_HALF_UP))'
+            trr = (Decimal(self.accMeasurement).quantize(Decimal('1.00000'), ROUND_HALF_UP))
+            self.resultMeas = f'неудовлетворительно, {trr}'
             self.cause = ':  Δ > r'
         if self.resultMeas == 'удовлетворительно':
             self.abserror = mrerrow((Decimal(self.relerror) * self.viscosityAVG) / Decimal(100))
