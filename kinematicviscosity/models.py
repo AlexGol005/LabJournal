@@ -214,10 +214,11 @@ class ViscosityMJL(models.Model):
                 if self.name[0:2] == 'ВЖ' and self.deltaOldCertifiedValue <= Decimal(0.48):
                     self.certifiedValue_text = self.oldCertifiedValue
                     self.resultWarning = 'Отличие результата от предыдущего не превышает CD (0,48%). АЗ остается прежним.'
-        if self.constit == 'по ГОСТ 33':
+        if self.constit == 'по ГОСТ 33' and self.resultMeas == 'удовлетворительно':
             self.certifiedValue = Decimal(self.viscosityAVG).quantize(Decimal('1.0000'), ROUND_HALF_UP)
             self.certifiedValue_text = str(self.certifiedValue)
             self.abserror = mrerrow((Decimal(self.relerror) * self.viscosityAVG) / Decimal(100))
+        
     # срок годности
         if self.name[0:2] == 'ВЖ':
             self.date_exp = date.today() + timedelta(days=30*self.exp)
