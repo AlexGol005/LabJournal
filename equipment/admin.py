@@ -1,11 +1,31 @@
 from django.contrib import admin
 from .models import *
 
+from import_export.admin import ImportExportActionModelAdmin
+from import_export import resources
+from import_export import fields
+from import_export.widgets import ForeignKeyWidget
+import tablib
 
+
+# реестр  классы для отображения в админке
+
+# класс для загрузки/выгрузки  типа/модификации
+class MeasurEquipmentCharaktersResource(resources.ModelResource):
+    class Meta:
+        model = MeasurEquipmentCharakters
+        
+# класс подробностей реестр 
+class MeasurEquipmentCharaktersAdmin(ImportExportActionModelAdmin):
+    resource_class = MeasurEquipmentCharaktersResource
+    list_display = ('reestr', 'modificname', 'typename')
+    search_fields = ['reestr',]
+        
+# фиксация формы в админке реестр 
+admin.site.register(MeasurEquipmentCharakters, MeasurEquipmentCharaktersAdmin)
 
 admin.site.register(Manufacturer)
 admin.site.register(Rooms)
-admin.site.register(MeasurEquipmentCharakters)
 admin.site.register(Personchange)
 admin.site.register(MeasurEquipment)
 admin.site.register(CommentsEquipment)
