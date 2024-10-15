@@ -12,9 +12,7 @@ from import_export.admin import ExportActionModelAdmin, ImportExportMixin
 # реестр  классы для отображения в админке
 
 # класс для загрузки/выгрузки  типа/модификации
-class MeasurEquipmentCharaktersResource(ImportExportMixin, resources.ModelResource):
-    to_encoding = 'utf-8-sig'
-    from_encoding = 'utf-8-sig'
+class MeasurEquipmentCharaktersResource(resources.ModelResource):
     class Meta:
         model = MeasurEquipmentCharakters
         
