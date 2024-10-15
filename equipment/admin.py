@@ -6,12 +6,13 @@ from import_export import resources
 from import_export import fields
 from import_export.widgets import ForeignKeyWidget
 import tablib
+from import_export.admin import ExportActionModelAdmin, ExportMixin
 
 
 # реестр  классы для отображения в админке
 
 # класс для загрузки/выгрузки  типа/модификации
-class MeasurEquipmentCharaktersResource(resources.ModelResource):
+class MeasurEquipmentCharaktersResource(ExportMixin, resources.ModelResource):
     to_encoding = 'utf-8'
     from_encoding = 'utf-8'
     class Meta:
