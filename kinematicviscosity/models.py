@@ -180,7 +180,7 @@ class ViscosityMJL(models.Model):
         if self.constit == 'по ГОСТ 33':
             self.kriteriy = Decimal(0.35)
         if self.constit == 'ост. топлива; мазут; при 50 °С':
-            self.kriteriy = Decimal(1.5)
+            pass
 
         
         # if Decimal(self.accMeasurement).quantize(Decimal('1.00000'), ROUND_HALF_UP) <= self.kriteriy:
@@ -195,7 +195,8 @@ class ViscosityMJL(models.Model):
         if self.resultMeas == 'удовлетворительно':
             self.abserror = mrerrow((Decimal(self.relerror) * self.viscosityAVG) / Decimal(100))
             self.certifiedValue = numberDigits(self.viscosityAVG, self.abserror)
-        self.repr1 = Decimal(self.viscosityAVG)*Decimal(self.kriteriy)/ Decimal(100)
+        # self.repr1 = Decimal(self.viscosityAVG)*Decimal(self.kriteriy)/ Decimal(100)
+        self.repr1 = 1
         try: 
             self.repr1
             # self.repr1 = numberDigits(self.repr1, self.abserror)
