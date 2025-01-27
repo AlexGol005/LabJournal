@@ -178,9 +178,9 @@ class ViscosityMJL(models.Model):
         if self.constit == 'другое':
             self.kriteriy = Decimal(0.3)
         if self.constit == 'по ГОСТ 33':
-            self.kriteriy = Decimal(1.5)
+            self.kriteriy = Decimal(0.35)
         if self.constit == 'ост. топлива; мазут; при 50 °С':
-            self.kriteriy = Decimal(0.5)
+            self.kriteriy = Decimal(1.5)
 
         
         if Decimal(self.accMeasurement).quantize(Decimal('1.00000'), ROUND_HALF_UP) <= self.kriteriy:
@@ -224,9 +224,7 @@ class ViscosityMJL(models.Model):
             self.certifiedValue_text = str(self.certifiedValue)
             self.abserror = mrerrow((Decimal(self.relerror) * self.viscosityAVG) / Decimal(100))
         if self.constit == 'ост. топлива; мазут; при 50 °С' and self.resultMeas == 'удовлетворительно':
-            self.certifiedValue = Decimal(self.viscosityAVG).quantize(Decimal('1.0000'), ROUND_HALF_UP)
-            self.certifiedValue_text = str(self.certifiedValue)
-            self.abserror = mrerrow((Decimal(self.relerror) * self.viscosityAVG) / Decimal(100))
+            self.certifiedValue = 1
         
     # срок годности
         if self.name[0:2] == 'ВЖ':
