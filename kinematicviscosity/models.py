@@ -178,7 +178,7 @@ class ViscosityMJL(models.Model):
         if self.constit == 'другое':
             self.kriteriy = Decimal(0.3)
         if self.constit == 'по ГОСТ 33':
-            self.kriteriy = Decimal(0.35)
+            self.kriteriy = Decimal(1.5)
         if self.constit == 'ост. топлива; мазут; при 50 °С':
             self.kriteriy = Decimal(0.5)
 
