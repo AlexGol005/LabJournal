@@ -183,23 +183,21 @@ class ViscosityMJL(models.Model):
             self.kriteriy = Decimal(1.5)
 
         
-        # if Decimal(self.accMeasurement).quantize(Decimal('1.00000'), ROUND_HALF_UP) <= self.kriteriy:
-        #     self.resultMeas = 'удовлетворительно'
-        #     self.cause = ''
-        # if Decimal(self.accMeasurement).quantize(Decimal('1.00000'), ROUND_HALF_UP) > self.kriteriy:
-        #     trr = (Decimal(self.accMeasurement).quantize(Decimal('1.00000'), ROUND_HALF_UP))
-        #     self.resultMeas = 'неудовлетворительно'
-        #     self.cause = ':  Δ > r'
-        self.resultMeas = 'неудовлетворительно'
-        self.cause = ':  Δ > r'
+        if Decimal(self.accMeasurement).quantize(Decimal('1.00000'), ROUND_HALF_UP) <= self.kriteriy:
+            self.resultMeas = 'удовлетворительно'
+            self.cause = ''
+        if Decimal(self.accMeasurement).quantize(Decimal('1.00000'), ROUND_HALF_UP) > self.kriteriy:
+            trr = (Decimal(self.accMeasurement).quantize(Decimal('1.00000'), ROUND_HALF_UP))
+            self.resultMeas = 'неудовлетворительно'
+            self.cause = ':  Δ > r'
         if self.resultMeas == 'удовлетворительно':
             self.abserror = mrerrow((Decimal(self.relerror) * self.viscosityAVG) / Decimal(100))
             self.certifiedValue = numberDigits(self.viscosityAVG, self.abserror)
-        # self.repr1 = Decimal(self.viscosityAVG)*Decimal(self.kriteriy)/ Decimal(100)
-        self.repr1 = 1
+        self.repr1 = Decimal(self.viscosityAVG)*Decimal(self.kriteriy)/ Decimal(100)
+
         try: 
             self.repr1
-            # self.repr1 = numberDigits(self.repr1, self.abserror)
+            self.repr1 = numberDigits(self.repr1, self.abserror)
         except:
             pass
         if self.constit == 'по ГОСТ 33' and self.resultMeas == 'удовлетворительно':
