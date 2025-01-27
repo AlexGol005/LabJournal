@@ -220,6 +220,10 @@ class ViscosityMJL(models.Model):
             self.certifiedValue = Decimal(self.viscosityAVG).quantize(Decimal('1.0000'), ROUND_HALF_UP)
             self.certifiedValue_text = str(self.certifiedValue)
             self.abserror = mrerrow((Decimal(self.relerror) * self.viscosityAVG) / Decimal(100))
+        if self.constit == 'ост. топлива; мазут; при 50 °С' and self.resultMeas == 'удовлетворительно':
+            self.certifiedValue = Decimal(self.viscosityAVG).quantize(Decimal('1.0000'), ROUND_HALF_UP)
+            self.certifiedValue_text = str(self.certifiedValue)
+            self.abserror = mrerrow((Decimal(self.relerror) * self.viscosityAVG) / Decimal(100))
         
     # срок годности
         if self.name[0:2] == 'ВЖ':
