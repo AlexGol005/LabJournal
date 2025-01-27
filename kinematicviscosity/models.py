@@ -202,6 +202,9 @@ class ViscosityMJL(models.Model):
         if self.constit == 'по ГОСТ 33' and self.resultMeas == 'удовлетворительно':
             self.Rep2 = Decimal(self.viscosityAVG)*Decimal(0.72)/ Decimal(100)
             self.Rep2 = numberDigits(self.Rep2, self.abserror)
+        if self.constit == 'пост. топлива; мазут; при 50 °С' and self.resultMeas == 'удовлетворительно':
+            self.Rep2 = Decimal(self.viscosityAVG)*Decimal(7.4)/ Decimal(100)
+            self.Rep2 = numberDigits(self.Rep2, self.abserror)
           
         else:
             self.Rep2 = Decimal(self.repr1) * Decimal(2)
