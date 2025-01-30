@@ -123,7 +123,7 @@ def get_round_significant_figures(value: Decimal, n: int) -> Decimal:
         k = '1.' + j * '0'
         result = Decimal(value).quantize(Decimal(k), ROUND_HALF_UP)
 
-        if value > 1 and point_index > = n:
+        if value > 1 and point_index >= n:
             result = Decimal(value).quantize(Decimal('1'), ROUND_HALF_UP)
 
     return result
