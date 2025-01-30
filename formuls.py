@@ -93,3 +93,72 @@ def get_crit_K(uncertainty_rm, uncertainty_measuremetod):
     return crit_K
 
 
+def get_round_significant_figures(value: Decimal, n: int) -> Decimal:
+    '''округляет число value до n значащих цифер. Значащие цифры числа - это все цифры в его записи, начиная с первой ненулевой слева.'''
+    str_value = str(value)
+    a = str_value.find('.')
+    b = str_value.find(',')
+    
+    if a == -1 and b == -1:
+        result = value
+        
+    if a != -1 or b != -1:
+        if a != -1:
+            point_index = a
+        b != -1:
+            point_index = b 
+        
+        if value < 1 or (value > 1 and point_index < n):
+            i = 0
+            while str_value[i] == 0 or str_value[i] == ',' or str_value[i] == '.':
+                i += 1
+        else:
+            c = str_value[i]
+            d = str_value.find(c)
+        e = d + n + 2
+        str_value_cut = str_value[:e]
+        fractional_part = str_value_cut[point_index+1:]
+        len_fractional_part = len(fractional_part)
+        j = len_fractional_part - 1
+        k = '1.' + j * '0'
+        result = Decimal(value).quantize(Decimal(k), ROUND_HALF_UP)
+
+        if value > 1 and point_index > = n:
+            result = Decimal(value).quantize(Decimal('1'), ROUND_HALF_UP)
+
+    return result
+
+    
+
+                
+                
+            
+        
+        
+        
+            
+
+
+            
+            
+        
+    
+
+
+
+    
+    str_value = str(value)
+    index_of_point = st.find(".")
+    index_after_point = index_of_point + 1
+    if value < 1:
+        len_slice_after_point = n + 2 
+        slice_after_point = str_value[index_after_point : len_slice_after_point]
+        k = '1.' + n * '0'
+        dig_after_point = str(Decimal(slice_after_point).quantize(Decimal(k), ROUND_HALF_UP))
+        result_rounded_value_str = '0' + '.' + dig_after_point
+        result_rounded_value = Decimal(result_rounded_value_str)
+    if value >= 1:
+        
+        
+         
+        
