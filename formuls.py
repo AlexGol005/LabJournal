@@ -107,8 +107,11 @@ def get_round_significant_figures(value: Decimal, n: int) -> Decimal:
             point_index = a
         if b != -1:
             point_index = b 
+
+        if value < 1:
+            pass
         
-        if value < 1 or (value > 1 and point_index < n):
+        if value > 1 and point_index < n:
             i = 0
             while str_value[i] == 0 or str_value[i] == ',' or str_value[i] == '.':
                 i += 1
