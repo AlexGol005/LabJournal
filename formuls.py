@@ -112,9 +112,10 @@ def get_round_significant_figures(value: Decimal, n: int) -> Decimal:
             i = 0
             while str_value[i] == 0 or str_value[i] == ',' or str_value[i] == '.':
                 i += 1
-        else:
-            c = str_value[i]
-            d = str_value.find(c)
+            else:
+                c = str_value[i]
+                d = str_value.find(c)
+        
         e = d + n + 2
         str_value_cut = str_value[:e]
         fractional_part = str_value_cut[point_index+1:]
