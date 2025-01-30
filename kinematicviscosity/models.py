@@ -221,8 +221,8 @@ class ViscosityMJL(models.Model):
                     self.certifiedValue_text = self.oldCertifiedValue
                     self.resultWarning = 'Отличие результата от предыдущего не превышает CD (0,48%). АЗ остается прежним.'
         if (self.constit == 'по ГОСТ 33' and self.resultMeas == 'удовлетворительно') or (self.constit == 'ост. топлива; мазут; при 50 °С' and self.resultMeas == 'удовлетворительно'):
-            # self.certifiedValue = Decimal(self.viscosityAVG).quantize(Decimal('1.0000'), ROUND_HALF_UP)
-            self.certifiedValue = get_round_significant_figures(Decimal(self.viscosityAVG), 4)
+            self.certifiedValue = Decimal(self.viscosityAVG).quantize(Decimal('1.0000'), ROUND_HALF_UP)
+            # self.certifiedValue = get_round_significant_figures(Decimal(self.viscosityAVG), 4)
             self.certifiedValue_text = str(self.certifiedValue)
             self.abserror = mrerrow((Decimal(self.relerror) * self.viscosityAVG) / Decimal(100))
 
