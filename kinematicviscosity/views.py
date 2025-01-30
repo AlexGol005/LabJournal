@@ -11,8 +11,6 @@ from xlwt import Borders, Alignment
 # этот блок нужен для всех журналов
 from equipment.models import CompanyCard
 from metods import *
-
-from formuls import get_round_significant_figures
 from .forms import *
 from utils_forms import*
 from .models import *
