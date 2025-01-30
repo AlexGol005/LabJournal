@@ -105,7 +105,7 @@ def get_round_significant_figures(value: Decimal, n: int) -> Decimal:
     if a != -1 or b != -1:
         if a != -1:
             point_index = a
-        b != -1:
+        if b != -1:
             point_index = b 
         
         if value < 1 or (value > 1 and point_index < n):
@@ -146,19 +146,7 @@ def get_round_significant_figures(value: Decimal, n: int) -> Decimal:
 
 
 
-    
-    str_value = str(value)
-    index_of_point = st.find(".")
-    index_after_point = index_of_point + 1
-    if value < 1:
-        len_slice_after_point = n + 2 
-        slice_after_point = str_value[index_after_point : len_slice_after_point]
-        k = '1.' + n * '0'
-        dig_after_point = str(Decimal(slice_after_point).quantize(Decimal(k), ROUND_HALF_UP))
-        result_rounded_value_str = '0' + '.' + dig_after_point
-        result_rounded_value = Decimal(result_rounded_value_str)
-    if value >= 1:
-        
+
         
          
         
