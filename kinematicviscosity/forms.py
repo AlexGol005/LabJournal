@@ -61,7 +61,7 @@ class StrJournalCreationForm(forms.ModelForm):
     temperatureCheck = forms.BooleanField(label='Температура контролируется внешним поверенным термометром',
                                           required=True)
     ViscosimeterNumber1 = forms.ModelChoiceField(label='вискозиметр № 1', required=True,
-                                  queryset=Viscosimeters.objects.filter(equipmentSM__equipment__status='Э'), order_by(ViscosimeterType__diameter),
+                                  queryset=Viscosimeters.objects.filter(equipmentSM__equipment__status='Э').order_by(ViscosimeterType__diameter),
                                   widget=forms.Select(attrs={'class': 'form-control'}))
     ViscosimeterNumber2 = forms.ModelChoiceField(label='вискозиметр № 2', required=False,
                                                  queryset=Viscosimeters.objects.filter(equipmentSM__equipment__status='Э').order_by(ViscosimeterType__diameter),
