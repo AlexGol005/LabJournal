@@ -62,7 +62,7 @@ class StrJournalCreationForm(forms.ModelForm):
                                           required=True)
     ViscosimeterNumber1 = forms.ModelChoiceField(label='вискозиметр № 1', required=True,
                                   queryset=Viscosimeters.objects.filter(equipmentSM__equipment__status='Э').filter(
-    kalibration__pk__in=Subquery(Kalibration.objects.exclude(value="zero").values('pk'))
+    kalibration__pk__in=Subquery(Kalibration.objects.exclude(value="zero"))
 ),
                                   widget=forms.Select(attrs={'class': 'form-control'}))
     ViscosimeterNumber2 = forms.ModelChoiceField(label='вискозиметр № 2', required=False,
