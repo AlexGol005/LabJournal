@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 
 from equipment.models import Manufacturer, Equipment, MeasurEquipment
-
+from django.db.models import Subquery
 
 class ViscosimeterType(models.Model):
     pairNumber = models.CharField('Номер пары', max_length=100)
