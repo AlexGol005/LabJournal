@@ -139,9 +139,11 @@ class Dinamicviscosity(models.Model):
                     self.kriteriy = Decimal(0.2)
                 if self.constit == 'другое':
                     self.kriteriy = Decimal(0.3)
+                else:
+                    self.kriteriy = Decimal(0.3)
                 self.accMeasurement = get_acc_measurement(self.density1, self.density2)
                 # if self.accMeasurement < self.kriteriy:
-                if self.accMeasurement <= Decimal(0.3):
+                if self.accMeasurement <= self.kriteriy:
                     self.resultMeas = 'удовлетворительно'
                     self.cause = ''
                     self.density_avg = get_avg(self.density1, self.density2, 4)
@@ -154,7 +156,7 @@ class Dinamicviscosity(models.Model):
                         self.abserror = mrerrow(
                             (Decimal(self.relerror) * self.dinamicviscosity_not_rouned) / Decimal(100))
                         self.certifiedValue = numberDigits(self.dinamicviscosity_not_rouned, self.abserror)
-                if self.accMeasurement > Decimal(0.3):
+                if self.accMeasurement > self.kriteriy:
                     self.resultMeas = 'неудовлетворительно'
                     self.cause = 'Δ > r'
             if self.density1 and self.density2:
