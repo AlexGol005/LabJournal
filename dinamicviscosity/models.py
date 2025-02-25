@@ -140,7 +140,8 @@ class Dinamicviscosity(models.Model):
                 if self.constit == 'другое':
                     self.kriteriy = Decimal(0.3)
                 self.accMeasurement = get_acc_measurement(self.density1, self.density2)
-                if self.accMeasurement < self.kriteriy:
+                # if self.accMeasurement < self.kriteriy:
+                if self.accMeasurement < Decimal(0.3):
                     self.resultMeas = 'удовлетворительно'
                     self.cause = ''
                     self.density_avg = get_avg(self.density1, self.density2, 4)
